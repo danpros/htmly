@@ -1,0 +1,6 @@
+{
+    "require": {
+	"dflydev/markdown": "v1.0.2",
+	"suin/php-rss-writer": ">=1.0"
+    }
+}

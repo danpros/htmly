@@ -1,0 +1,1 @@
+Put your theme folder here but don't modify the default theme.
