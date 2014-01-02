@@ -602,7 +602,7 @@ function publisher(){
 
 // Google Analytics
 function analytics(){
-	$analytics = config('google.analytics.js');
+	$analytics = config('google.analytics.id');
 	$script = <<<EOF
         <script type="text/javascript">
           var _gaq = _gaq || [];
