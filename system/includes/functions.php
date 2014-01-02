@@ -600,6 +600,13 @@ function publisher(){
 	}
 }
 
+function analytics(){
+	$analytics = config('google.analytics.js');
+	if (!empty($analytics)) {
+		return $analytics;
+	}
+}
+
 // Menu
 function menu(){
 	$menu = config('blog.menu');
