@@ -16,7 +16,6 @@
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<?php if (analytics() == true):?><?php echo analytics() ?><?php endif;?>	
 </head>
 <body class="<?php echo $bodyclass; ?>">
 	<div itemscope="itemscope" itemtype="http://schema.org/Blog" class="hide">
@@ -41,5 +40,6 @@
 	<section id="content">
 		<?php echo content()?>
 	</section>
+	<?php if (analytics() == true):?><?php echo analytics() ?><?php endif;?>
 </body>
 </html>
