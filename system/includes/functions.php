@@ -57,10 +57,10 @@ function get_posts($page = 1, $perpage = 0){
 	// Create a new instance of the markdown parser
 	$md = new MarkdownParser();
 	
-	foreach($posts as $k=>$v){
+	foreach($posts as $index => $v){
 
 		$post = new stdClass;
-
+		
 		// Extract the date
 		$arr = explode('_', $v);
 		
@@ -91,9 +91,19 @@ function get_posts($page = 1, $perpage = 0){
 		$post->title = str_replace('<h1>','',$arr[0]);
 		$post->body = $arr[1];
 
+		// Get first and last post		
+		if ($index == 0) {
+			$post->cls = 'item first';
+		} 
+		elseif ($index == count($posts) - 1) {
+			$post->cls = 'item last';
+		}
+		else {
+			$post->cls = 'item';
+		}
+
 		$tmp[] = $post;
 	}
-
 	return $tmp;
 }
 
@@ -187,6 +197,17 @@ function get_tag($tag){
 				$arr = explode('</h1>', $content);
 				$post->title = str_replace('<h1>','',$arr[0]);
 				$post->body = $arr[1];
+				
+				// Get first and last post				
+				if ($index  == 0) {
+					$post->cls = 'item first';
+				} 
+				elseif ($index  == count($posts) - 1) {
+					$post->cls = 'item last';
+				}
+				else {
+					$post->cls = 'item';
+				}
 
 				$tmp[] = $post;
 			}
@@ -239,6 +260,17 @@ function get_archive($req){
 			$arr = explode('</h1>', $content);
 			$post->title = str_replace('<h1>','',$arr[0]);
 			$post->body = $arr[1];
+			
+			// Get first and last post
+			if ($index == 0) {
+				$post->cls = 'item first';
+			} 
+			elseif ($index == count($posts) - 1) {
+				$post->cls = 'item last';
+			}
+			else {
+				$post->cls = 'item';
+			}
 
 			$tmp[] = $post;
 		}
@@ -604,16 +636,16 @@ function publisher(){
 function analytics(){
 	$analytics = config('google.analytics.id');
 	$script = <<<EOF
-        <script type="text/javascript">
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', '{$analytics}']);
-          _gaq.push(['_trackPageview']);
-          (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-        </script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', '{$analytics}']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 EOF;
 	if (!empty($analytics)) {
 		return $script;
