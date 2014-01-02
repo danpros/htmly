@@ -1,6 +1,19 @@
 <?php if (!empty($breadcrumb)):?><div class="breadcrumb"><?php echo $breadcrumb ?></div><?php endif;?>
+<?php $i = 0; $len = count($posts);?>
 <?php foreach($posts as $p):?>
-	<div class="post <?php echo $p->cls ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    <?php 
+		if ($i == 0) {
+			$class = 'first';
+		} 
+		elseif ($i == $len - 1) {
+			$class = 'last';
+		}
+		else {
+			$class = '';
+		}
+		$i++;		
+	?>
+	<div class="post <?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
 		<div class="main">
 			<h2 class="title-index" itemprop="name"><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></h2>
 			<div class="date"><span itemprop="datePublished"><?php echo date('d F Y', $p->date)?></span> - Posted in <span itemprop="articleSection"><a href="<?php echo $p->tagurl ?>"><?php echo ucfirst($p->tag) ?></a></span> by <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span><?php if (disqus_count() == true):?> - <span><a href="<?php echo $p->url?>#disqus_thread">Komentar</a></span><?php endif;?></div>
