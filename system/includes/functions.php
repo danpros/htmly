@@ -424,6 +424,18 @@ function get_keyword($keyword){
 			$arr = explode('</h1>', $content);
 			$post->title = str_replace('<h1>','',$arr[0]);
 			$post->body = $arr[1];
+			
+			// Get first and last post
+			if ($index == 0) {
+				$post->cls = 'item first';
+			} 
+			elseif ($index == count($posts) - 1) {
+				$post->cls = 'item last';
+			}
+			else {
+				$post->cls = 'item';
+			}
+			
 			$tmp[] = $post;
 		
 		}
