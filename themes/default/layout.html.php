@@ -18,7 +18,7 @@
 	<![endif]-->
 </head>
 <body class="<?php echo $bodyclass; ?>">
-	<div itemscope="itemscope" itemtype="http://schema.org/Blog" style="display: none;">
+	<div itemscope="itemscope" itemtype="http://schema.org/Blog" class="hide">
 		<meta content="<?php echo config('blog.title') ?>" itemprop="name"/>
 		<meta content="<?php echo config('blog.description')?>" itemprop="description"/>
 	</div>
@@ -40,5 +40,6 @@
 	<section id="content">
 		<?php echo content()?>
 	</section>
+	<?php if (analytics() == true):?><?php echo analytics() ?><?php endif;?>
 </body>
 </html>

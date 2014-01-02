@@ -41,6 +41,11 @@ img {
 	outline: 0 none;
 }
 
+.hide {
+    position: absolute;
+    top: -9999em;
+    left: -9999em; 
+}
 /*----------------------------
 	Headings
 -----------------------------*/
