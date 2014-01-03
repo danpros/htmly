@@ -11,4 +11,4 @@ HTMLy requires PHP 5.3+.
 Copyright / License
 -------------------
 
-Please read [COPYRIGHT.txt](https://github.com/danpros/htmly/blob/master/COPYRIGHT.txt).
+For copyright please read [COPYRIGHT.txt](https://github.com/danpros/htmly/blob/master/COPYRIGHT.txt). Licensed under the GNU General Public License Version 2.0 (or later).
