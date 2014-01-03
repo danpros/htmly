@@ -258,7 +258,7 @@ blockquote {
 -----------------------------*/
 
 aside{
-	position: fixed;
+	position: absolute;
 	width: 250px;
 	height: auto;
 	top: 0;
@@ -316,8 +316,7 @@ aside .menu ul li a:hover{
 }
 
 aside .copyright {
-	position: absolute;
-	bottom: 20px;
+	padding-top:1.2em;
 	color: #888;
 	font: 11px Georgia, sans-serif;
 	font-weight: normal;
