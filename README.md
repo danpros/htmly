@@ -1,4 +1,4 @@
-htmly
+HTMLy
 =====
 
 HTMLy is an open source databaseless bloging platform that prioritizing simplicity and speed.
