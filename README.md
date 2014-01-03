@@ -1,12 +1,22 @@
 HTMLy
 =====
 
-HTMLy is an open source databaseless bloging platform that prioritizing simplicity and speed.
+HTMLy is an open source databaseless bloging platform prioritizing simplicity and speed.
 
 Requirements
 ------------
 
-HTMLy requires PHP 5.3+.
+HTMLy requires PHP 5.3 or greater.
+
+Installations
+-------------
+
+Download the latest version, extract it, then upload the extracted files to your server.
+
+Configurations
+--------------
+
+Change config.ini inside system folder.
 
 Copyright / License
 -------------------
