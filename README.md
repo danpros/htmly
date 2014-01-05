@@ -1,7 +1,7 @@
 HTMLy
 =====
 
-HTMLy is an open source databaseless bloging platform prioritizing simplicity and speed.
+HTMLy is an open source databaseless blogging platform prioritizing simplicity and speed.
 
 Requirements
 ------------
