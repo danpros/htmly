@@ -23,6 +23,14 @@ Demo
 
 Visit the demo blog on [Serverios](http://www.serverios.com).
 
+Credit
+------
+
+People who give references and inspiration for HTMLy:
+* [Martin Angelov](https://github.com/martinaglv)
+
+
+
 Copyright / License
 -------------------
 
