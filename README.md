@@ -18,6 +18,11 @@ Configurations
 
 Change config.ini inside system folder.
 
+Demo
+----
+
+Visit the demo blog on [Serverios](http://www.serverios.com).
+
 Copyright / License
 -------------------
 
