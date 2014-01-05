@@ -405,36 +405,33 @@ function get_author($names, $author){
 
 	foreach($names as $index => $v){
 
-			$post = new stdClass;
+		$post = new stdClass;
 
-			// Extract the array
-			$arr = explode('_', $v);
+		// Extract the array
+		$arr = explode('_', $v);
+		
+		// Replaced string
+		$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+		
+		// Author string
+		$str = explode('/', $replaced);
+		$profile = $str[count($str)-2];
+		
+		if($author === $profile){
+			// Profile URL
+			$url = str_replace($replaced,'',$arr[0]);
+			$post->url = site_url() . 'author/' . $profile;
 			
-			// Replaced string
-			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-			
-			// Author string
-			$str = explode('/', $replaced);
-			$profile = $str[count($str)-2];
-			
-			if($author === $profile){
-				// Profile URL
-				$url = str_replace($replaced,'',$arr[0]);
-				$post->url = site_url() . 'author/' . $profile;
-				
-				// Get the contents and convert it to HTML
-				$content = $md->transformMarkdown(file_get_contents($v));
+			// Get the contents and convert it to HTML
+			$content = $md->transformMarkdown(file_get_contents($v));
 
-				// Extract the title and body
-				$arr = explode('</h1>', $content);
-				$post->title = str_replace('<h1>','',$arr[0]);
-				$post->body = $arr[1];
+			// Extract the title and body
+			$arr = explode('</h1>', $content);
+			$post->title = str_replace('<h1>','',$arr[0]);
+			$post->body = $arr[1];
 
-				$tmp[] = $post;
-			}
-			else {
-				not_found();
-			}
+			$tmp[] = $post;
+		}
 	}
 	
 	return $tmp;
@@ -450,7 +447,9 @@ function find_author($author){
 			// Use the get_spage method to return
 			// a properly parsed object
 			$arr = get_author($names, $author);
-			return $arr[0];
+			if (isset($arr[0])) {
+				return $arr[0];
+			}
 		}
 	}
 
