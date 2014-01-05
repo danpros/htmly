@@ -90,32 +90,17 @@ get('/archive/:req',function($req){
 	}
 	
 	$time = explode('-', $req);
-	
-	if (isset($time[0])) 
-	{
-		$y = 'Y';
-	}
-	else {
-		$y = '';
-	}
-	
-	if (isset($time[1])) 
-	{
-		$m = 'F ';
-	}
-	else {
-		$m = '';
-	}
-	
-	if (isset($time[2])) 
-	{
-		$d = 'd ';
-	}
-	else {
-		$d = '';
-	}
-	
 	$date = strtotime($req);
+	
+	if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
+		$timestamp = date('d F Y', $date);
+	}
+	else if (isset($time[0]) && isset($time[1])) {
+		$timestamp = date('F Y', $date);
+	}		
+	else {
+		$timestamp = $req;
+	}	
 	
 	if(!$date){
 		// a non-existing page
@@ -123,13 +108,13 @@ get('/archive/:req',function($req){
 	}
 	
     render('main',array(
-		'title' => 'Archive - ' . date($d . $m . $y, $date) .' - ' . config('blog.title'),
+		'title' => 'Archive - ' . $timestamp .' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/archive/' . $req,
-		'description' => 'Archive page for ' . date($d . $m . $y, $date) . ' on ' . config('blog.title') . '.',
+		'description' => 'Archive page for ' . $timestamp . ' on ' . config('blog.title') . '.',
 		'bodyclass' => 'inarchive',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Archive for ' . date($d . $m . $y, $date),
+		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Archive for ' . $timestamp,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -226,22 +211,22 @@ get('/:spage', function($spage){
 });
 
 // The author page
-get('/author/' . config('blog.authorid'), function(){
+get('/author/:author', function($author){
 	
-	$user= new stdClass;
+	$post = find_author($author);
 	
-	$user->body = config('blog.authorbio');
-	$user->title = config('blog.author');
-	$user->authorurl = config('site.url') . '/author/' . config('blog.authorid');
-	
+	if(!$post){
+		not_found();
+	}
+
 	render('post',array(
-		'title' => $user->title .' - ' . config('blog.title'),
-		'canonical' => $user->authorurl,
-		'description' => $description = get_description($user->body),
-		'bodyclass' => 'inprofile',
-		'breadcrumb' => '<a href="' . config('site.url') . '">Home</a> &#187; ' . $user->title,
-		'p' => $user,
-		'type' => 'profile',
+		'title' => $post->title .' - ' . config('blog.title'),
+		'canonical' => $post->url,
+		'description' => $description = get_description($post->body),
+		'bodyclass' => 'inpage',
+		'breadcrumb' => '<a href="' . config('site.url') . '">Home</a> &#187; ' . $post->title,
+		'p' => $post,
+		'type' => 'profilepage',
 	));
 
 });

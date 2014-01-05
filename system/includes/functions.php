@@ -18,7 +18,7 @@ function get_post_names(){
 		// Get the names of all the
 		// posts (newest first):
 
-		$_cache = array_reverse(glob('content/blog/*.md'));
+		$_cache = array_reverse(glob('content/*/blog/*.md'));
 	}
 
 	return $_cache;
@@ -34,7 +34,23 @@ function get_spage_names(){
 		// Get the names of all the
 		// static page (newest first):
 
-		$_cache = array_reverse(glob('content/static/*.md'));
+		$_cache = glob('content/*/static/*.md', GLOB_NOSORT);
+	}
+
+	return $_cache;
+}
+
+// Get author bio 
+function get_author_names(){
+
+	static $_cache = array();
+
+	if(empty($_cache)){
+
+		// Get the names of all the
+		// author:
+
+		$_cache = glob('content/*/author.md', GLOB_NOSORT);
 	}
 
 	return $_cache;
@@ -64,21 +80,28 @@ function get_posts($page = 1, $perpage = 0){
 		// Extract the date
 		$arr = explode('_', $v);
 		
+		// Replaced string
+		$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+		
+		// Author string
+		$str = explode('/', $replaced);
+		$author = $str[count($str)-3];
+		
 		// The post author + author url
-		$post->author = config('blog.author');
-		$post->authorurl = site_url() . 'author/' .  config('blog.authorid');
+		$post->author = $author;
+		$post->authorurl = site_url() . 'author/' .  $author;
 		
 		// The post date
-		$post->date = strtotime(str_replace('content/blog/','',$arr[0]));
+		$post->date = strtotime(str_replace($replaced,'',$arr[0]));
 		
 		// The archive per day
-		$post->archive = site_url(). str_replace('content/blog/','archive/',$arr[0]);
+		$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
 
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 		
 		// The post tag
-		$post->tag = str_replace('content/blog/','',$arr[1]);
+		$post->tag = str_replace($replaced,'',$arr[1]);
 		
 		// The post tag url
 		$post->tagurl = site_url(). 'tag/' . $arr[1];
@@ -164,18 +187,25 @@ function get_tag($tag){
 			// Make sure the tag request available
 			if ($tag === $arr[1]) {
 			
+				// Replaced string
+				$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+				
+				// Author string
+				$str = explode('/', $replaced);
+				$author = $str[count($str)-3];
+				
 				// The post author + author url
-				$post->author = config('blog.author');
-				$post->authorurl = site_url() . 'author/' .  config('blog.authorid');
+				$post->author = $author;
+				$post->authorurl = site_url() . 'author/' .  $author;
 				
 				// The post date
-				$post->date = strtotime(str_replace('content/blog/','',$arr[0]));
+				$post->date = strtotime(str_replace($replaced,'',$arr[0]));
 
 				// The post URL
 				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 				
 				// The post tag
-				$post->tag = str_replace('content/blog/','',$arr[1]);
+				$post->tag = str_replace($replaced,'',$arr[1]);
 				
 				// The post tag URL
 				$post->tagurl = site_url(). 'tag/' . $arr[1];
@@ -216,18 +246,25 @@ function get_archive($req){
 			// Extract the date
 			$arr = explode('_', $v);
 			
+			// Replaced string
+			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			
+			// Author string
+			$str = explode('/', $replaced);
+			$author = $str[count($str)-3];
+			
 			// The post author + author url
-			$post->author = config('blog.author');
-			$post->authorurl = site_url() . 'author/' .  config('blog.authorid');
+			$post->author = $author;
+			$post->authorurl = site_url() . 'author/' .  $author;
 			
 			// The post date
-			$post->date = strtotime(str_replace('content/blog/','',$arr[0]));
+			$post->date = strtotime(str_replace($replaced,'',$arr[0]));
 
 			// The post URL
 			$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 			
 			// The post tag
-			$post->tag = str_replace('content/blog/','',$arr[1]);
+			$post->tag = str_replace($replaced,'',$arr[1]);
 			
 			// The post tag URL
 			$post->tagurl = site_url(). 'tag/' . $arr[1];
@@ -257,7 +294,12 @@ function archive_list() {
 	foreach($posts as $index => $v){
 	
 		$arr = explode('_', $v);
-		$date = str_replace('content/blog/','',$arr[0]);
+		
+		// Replaced string
+		$str = $arr[0];
+		$replaced = substr($str, 0,strrpos($str, '/')) . '/';
+		
+		$date = str_replace($replaced,'',$arr[0]);
 		$data = explode('-', $date);
 		$col[] = $data;
 		
@@ -312,8 +354,11 @@ function get_spage($posts, $spage){
 			// Extract the array
 			$arr = explode('_', $v);
 			
+			// Replaced string
+			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			
 			// The static page URL
-			$url = str_replace('content/static/','',$arr[0]);
+			$url = str_replace($replaced,'',$arr[0]);
 			$post->url = site_url() . str_replace('.md','',$url);
 			
 			// Get the contents and convert it to HTML
@@ -350,6 +395,68 @@ function find_spage($spage){
 	return false;
 }
 
+// Return author page
+function get_author($names, $author){
+
+	$tmp = array();
+
+	// Create a new instance of the markdown parser
+	$md = new MarkdownParser();
+
+	foreach($names as $index => $v){
+
+			$post = new stdClass;
+
+			// Extract the array
+			$arr = explode('_', $v);
+			
+			// Replaced string
+			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			
+			// Author string
+			$str = explode('/', $replaced);
+			$profile = $str[count($str)-2];
+			
+			if($author === $profile){
+				// Profile URL
+				$url = str_replace($replaced,'',$arr[0]);
+				$post->url = site_url() . 'author/' . $profile;
+				
+				// Get the contents and convert it to HTML
+				$content = $md->transformMarkdown(file_get_contents($v));
+
+				// Extract the title and body
+				$arr = explode('</h1>', $content);
+				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->body = $arr[1];
+
+				$tmp[] = $post;
+			}
+			else {
+				not_found();
+			}
+	}
+	
+	return $tmp;
+}
+
+// Find static page
+function find_author($author){
+	
+	$names = get_author_names();
+
+	foreach($names as $index => $v){
+		if( strpos($v, $author) !== false && strpos($v, 'author.md') !== false){
+			// Use the get_spage method to return
+			// a properly parsed object
+			$arr = get_author($names, $author);
+			return $arr[0];
+		}
+	}
+
+	return false;
+}
+
 // Return search page
 function get_keyword($keyword){
 
@@ -370,20 +477,25 @@ function get_keyword($keyword){
 			// Extract the date
 			$arr = explode('_', $v);
 			
-			// Make sure the tag request available
+			// Replaced string
+			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			
+			// Author string
+			$str = explode('/', $replaced);
+			$author = $str[count($str)-3];
 			
 			// The post author + author url
-			$post->author = config('blog.author');
-			$post->authorurl = site_url() . 'author/' .  config('blog.authorid');
+			$post->author = $author;
+			$post->authorurl = site_url() . 'author/' .  $author;
 			
 			// The post date
-			$post->date = strtotime(str_replace('content/blog/','',$arr[0]));
+			$post->date = strtotime(str_replace($replaced,'',$arr[0]));
 
 			// The post URL
 			$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 			
 			// The post tag
-			$post->tag = str_replace('content/blog/','',$arr[1]);
+			$post->tag = str_replace($replaced,'',$arr[1]);
 			
 			// The post tag URL
 			$post->tagurl = site_url(). 'tag/' . $arr[1];
@@ -604,16 +716,16 @@ function publisher(){
 function analytics(){
 	$analytics = config('google.analytics.id');
 	$script = <<<EOF
-        <script type="text/javascript">
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', '{$analytics}']);
-          _gaq.push(['_trackPageview']);
-          (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-        </script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', '{$analytics}']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 EOF;
 	if (!empty($analytics)) {
 		return $script;
