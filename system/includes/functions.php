@@ -395,8 +395,68 @@ function find_spage($spage){
 	return false;
 }
 
-// Return author page
-function get_author($names, $author){
+// Return profile page
+function get_profile($profile){
+
+	$posts = get_post_names();
+	$tmp = array();
+
+	// Create a new instance of the markdown parser
+	$md = new MarkdownParser();
+
+	foreach($posts as $index => $v){
+		if( strpos($v, "$profile") !== false){
+
+			$post = new stdClass;
+
+			// Extract the date
+			$arr = explode('_', $v);
+			
+			// Replaced string
+			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			
+			// Author string
+			$str = explode('/', $replaced);
+			$author = $str[count($str)-3];
+			
+			// Make sure the tag request available
+			if ($profile === $author) {
+				
+				// The post author + author url
+				$post->author = $author;
+				$post->authorurl = site_url() . 'author/' .  $author;
+				
+				// The post date
+				$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+
+				// The post URL
+				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
+				
+				// The post tag
+				$post->tag = str_replace($replaced,'',$arr[1]);
+				
+				// The post tag URL
+				$post->tagurl = site_url(). 'tag/' . $arr[1];
+
+				// Get the contents and convert it to HTML
+				$content = $md->transformMarkdown(file_get_contents($v));
+
+				// Extract the title and body
+				$arr = explode('</h1>', $content);
+				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->body = $arr[1];
+
+				$tmp[] = $post;
+			}
+
+		}
+	}
+
+	return $tmp;
+}
+
+// Return author bio
+function get_bio($names, $author){
 
 	$tmp = array();
 
@@ -438,7 +498,7 @@ function get_author($names, $author){
 }
 
 // Find static page
-function find_author($author){
+function bio($author){
 	
 	$names = get_author_names();
 
@@ -446,7 +506,7 @@ function find_author($author){
 		if( strpos($v, $author) !== false && strpos($v, 'author.md') !== false){
 			// Use the get_spage method to return
 			// a properly parsed object
-			$arr = get_author($names, $author);
+			$arr = get_bio($names, $author);
 			if (isset($arr[0])) {
 				return $arr[0];
 			}

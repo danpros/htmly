@@ -157,7 +157,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 	));
 });
 
-// The static page
+// The search page
 get('/search/:keyword', function($keyword){
 
 	$page = from($_GET, 'page');
@@ -211,24 +211,37 @@ get('/:spage', function($spage){
 });
 
 // The author page
-get('/author/:author', function($author){
+get('/author/:profile',function($profile){
+
+	$page = from($_GET, 'page');
+	$page = $page ? (int)$page : 1;
+	$perpage = config('profile.perpage');
+
+	$posts = get_profile($profile);
+	$bio = bio($profile);
 	
-	$post = find_author($author);
+	$total = count($posts);
 	
-	if(!$post){
+	// Extract a specific page with results
+	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+
+	if(empty($posts) || $page < 1){
+		// a non-existing page
 		not_found();
 	}
-
-	render('post',array(
-		'title' => $post->title .' - ' . config('blog.title'),
-		'canonical' => $post->url,
-		'description' => $description = get_description($post->body),
-		'bodyclass' => 'inpage',
-		'breadcrumb' => '<a href="' . config('site.url') . '">Home</a> &#187; ' . $post->title,
-		'p' => $post,
-		'type' => 'profilepage',
+	
+    render('profile',array(
+		'title' => 'Author -  '. $bio->title .' - ' . config('blog.title'),
+    	'page' => $page,
+		'posts' => $posts,
+		'bio' => $bio->body,
+		'name' => $bio->title,
+		'canonical' => config('site.url') . '/author/' . $profile,
+		'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
+		'bodyclass' => 'inprofile',
+		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Profile page for ' . $bio->title,
+		'pagination' => has_pagination($total, $perpage, $page)
 	));
-
 });
 
 // The JSON API
