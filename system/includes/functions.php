@@ -18,7 +18,7 @@ function get_post_names(){
 		// Get the names of all the
 		// posts (newest first):
 
-		$_cache = array_reverse(glob('content/*/blog/*.md'));
+		$_cache = array_reverse(glob('content/*/blog/*.md', GLOB_NOSORT));
 	}
 
 	return $_cache;
@@ -117,6 +117,7 @@ function get_posts($page = 1, $perpage = 0){
 		$tmp[] = $post;
 	}
 
+	krsort($tmp);
 	return $tmp;
 }
 
@@ -226,6 +227,7 @@ function get_tag($tag){
 		}
 	}
 
+	krsort($tmp);
 	return $tmp;
 }
 
@@ -281,6 +283,7 @@ function get_archive($req){
 		}
 	}
 
+	krsort($tmp);
 	return $tmp;
 }
 
@@ -401,6 +404,7 @@ function get_spage($posts, $spage){
 		}
 	}
 
+	krsort($tmp);
 	return $tmp;
 }
 
@@ -480,6 +484,7 @@ function get_profile($profile){
 		}
 	}
 
+	krsort($tmp);
 	return $tmp;
 }
 
@@ -522,6 +527,7 @@ function get_bio($names, $author){
 		}
 	}
 	
+	krsort($tmp);
 	return $tmp;
 }
 
@@ -596,6 +602,7 @@ function get_keyword($keyword){
 		}
 	}
 
+	krsort($tmp);
 	return $tmp;
 }
 

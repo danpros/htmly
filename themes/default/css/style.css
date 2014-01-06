@@ -75,6 +75,30 @@ h2{
 	margin-bottom: 0.5em;
 }
 
+h3{
+	font: 18px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin-bottom: 0.5em;
+}
+
+h4{
+	font: 16px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin-bottom: 0.5em;
+}
+
+h5{
+	font: 14px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin-bottom: 0.5em;
+}
+
+h6{
+	font: 12px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin-bottom: 0.5em;
+}
+
 h1.title-post, h2.title-index{
 	font: 28px 'Open Sans Condensed', sans-serif;
 	line-height: 1.2;
