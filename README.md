@@ -27,7 +27,7 @@ Credit
 ------
 
 People who give references and inspiration for HTMLy:
-* [Martin Angelov](https://github.com/martinaglv)
+* [Martin Angelov](http://tutorialzine.com)
 
 
 

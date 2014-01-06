@@ -316,6 +316,7 @@ function archive_list() {
 	# Most recent year first
 	krsort($by_year);
 	# Iterate for display
+	echo '<h3>Archive</h3>';
 	foreach ($by_year as $year => $months){
 	
 		echo '<span class="year"><a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a></span> ';
@@ -328,7 +329,7 @@ function archive_list() {
 		foreach ($by_month as $month => $count){
 			$name = date('F', mktime(0,0,0,$month,1,2010));
 			echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';
-			echo ' (' . $count . ')</li>';
+			echo ' <span class="count">(' . $count . ')</span></li>';
 			echo '</li>';
 		}
 
@@ -336,6 +337,33 @@ function archive_list() {
 		
 	}
 
+}
+
+// Return tag cloud
+function tag_cloud() {
+
+	$posts = get_post_names();
+	$tags = array();
+	
+	foreach($posts as $index => $v){
+	
+		$arr = explode('_', $v);
+		
+		$data = $arr[1];
+		$tags[] = $data;
+		
+	}
+	
+	$tag_collection = array_count_values($tags);
+	ksort($tag_collection);
+	
+	echo '<h3>Tags</h3>';
+	echo '<ul class="taglist">';
+	foreach ($tag_collection as $tag => $count){
+		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+	}
+	echo '</ul>';
+	
 }
 
 // Return static page
@@ -497,8 +525,8 @@ function get_bio($names, $author){
 	return $tmp;
 }
 
-// Find static page
-function bio($author){
+// Find author bio
+function find_bio($author){
 	
 	$names = get_author_names();
 

@@ -35,6 +35,7 @@
         <div class="social"><?php echo social() ?></div>
 		<?php if (menu() == true):?><div class="menu"><?php echo menu() ?></div><?php endif;?>
 		<div class="archive"><?php echo archive_list()?></div>
+		<div class="tagcloud"><?php echo tag_cloud()?></div>
 		<div class="copyright"><?php echo copyright() ?></div>
 	</aside>
 	<section id="content">

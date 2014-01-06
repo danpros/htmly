@@ -218,7 +218,7 @@ get('/author/:profile',function($profile){
 	$perpage = config('profile.perpage');
 
 	$posts = get_profile($profile);
-	$bio = bio($profile);
+	$bio = find_bio($profile);
 	
 	$total = count($posts);
 	

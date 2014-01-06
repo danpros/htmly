@@ -286,6 +286,11 @@ aside .menu {
 	margin-bottom: 1.2em;
 }
 
+aside h3 {
+	font: normal 16px 'Open Sans Condensed', sans-serif;
+	text-transform: uppercase;
+}
+
 aside .menu ul{
 	font: bold 18px 'Open Sans Condensed', sans-serif;
 	text-transform: uppercase;
@@ -299,14 +304,14 @@ aside .menu ul li a{
 	margin:2px 0 2px 10px;
 }
 
-aside .archive {
-	font-size: 15px;
-	font-family: 'Open Sans Condensed', sans-serif;
+aside .archive, aside .tagcloud {
+	font-size: 14px;
+	font-family: Georgia, sans-serif;
 	margin-bottom: 1.2em;
 	margin-left: 10px;
 }
 
-aside .archive ul li {
+aside .archive ul li, aside .tagcloud ul li {
 	margin-left:30px;
 }
 
@@ -316,7 +321,7 @@ aside .menu ul li a:hover{
 }
 
 aside .copyright {
-	padding-top:1.2em;
+	padding:1.2em 0 65px 0;
 	color: #888;
 	font: 11px Georgia, sans-serif;
 	font-weight: normal;
@@ -507,7 +512,7 @@ aside .copyright p{
 }
 
 .post-list {
-	padding-bottom:1.2em;
+	padding-bottom:2em;
 	border-bottom: solid 1px #dfdfdf;
 	font-size: 12px;
 }
@@ -560,7 +565,7 @@ aside .copyright p{
 		text-align: center;
 	}
 
-	aside .archive, aside .copyright{
+	aside .archive, aside .tagcloud, aside .copyright{
 		display: none;
 	}
 
