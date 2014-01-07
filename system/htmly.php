@@ -59,13 +59,13 @@ get('/tag/:tag',function($tag){
 	}
 	
     render('main',array(
-		'title' => 'Tag - ' . ucfirst($tag) .' - ' . config('blog.title'),
+		'title' => 'Tag - ' . $tag .' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/tag/' . $tag,
-		'description' => 'All posts tagged ' . ucfirst($tag) . ' on '. config('blog.title') . '.',
+		'description' => 'All posts tagged ' . $tag . ' on '. config('blog.title') . '.',
 		'bodyclass' => 'intag',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Posts tagged ' . ucfirst($tag),
+		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Posts tagged ' . $tag,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -150,7 +150,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 		'canonical' => $current->url,
 		'description' => $description = get_description($current->body),
 		'bodyclass' => 'inpost',
-		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">Home</a></span> &#187; <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $current->tagurl .'">' . ucfirst($current->tag) . '</a></span> &#187; ' . $current->title,
+		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">Home</a></span> &#187; <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $current->tagurl .'">' . $current->tag . '</a></span> &#187; ' . $current->title,
 		'prev' => has_prev($prev),
 		'next' => has_next($next),
 		'type' => 'blogpost',
