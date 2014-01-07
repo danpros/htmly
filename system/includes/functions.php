@@ -750,7 +750,7 @@ function social(){
 	}
 	
 	if (!empty($google)) {
-		echo '<a href="' . $google . '" target="_blank" rel="author"><img src="' . site_url() . 'themes/default/img/googleplus.png" width="32" height="32" alt="Google+"/></a>';
+		echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/default/img/googleplus.png" width="32" height="32" alt="Google+"/></a>';
 	}
 	
 	if (!empty($tumblr)) {
