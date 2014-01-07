@@ -18,7 +18,7 @@ function get_post_names(){
 		// Get the names of all the
 		// posts (newest first):
 
-		$_cache = array_reverse(glob('content/*/blog/*.md', GLOB_NOSORT));
+		$_cache = glob('content/*/blog/*.md', GLOB_NOSORT);
 	}
 
 	return $_cache;
@@ -56,6 +56,7 @@ function get_author_names(){
 	return $_cache;
 }
 
+// usort function. Sort by date.
 function cmp($a, $b) {
 	return $a->date == $b->date ? 0 : ( $a->date < $b->date ) ? 1 : -1;
 }
@@ -115,6 +116,10 @@ function get_posts($page = 1, $perpage = 0){
 	}
 	
 	usort($tmp,'cmp');
+	
+	// Extract a specific page with results
+	$tmp = array_slice($tmp, ($page-1) * $perpage, $perpage);
+	
 	return $tmp;
 }
 
@@ -372,7 +377,7 @@ function tag_cloud() {
 	echo '<h3>Tags</h3>';
 	echo '<ul class="taglist">';
 	foreach ($tag_collection as $tag => $count){
-		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . ucfirst($tag) . '</a> <span class="count">(' . $count . ')</span></li>';
 	}
 	echo '</ul>';
 	

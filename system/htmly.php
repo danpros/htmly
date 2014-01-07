@@ -19,10 +19,7 @@ get('/index', function () {
 	$page = $page ? (int)$page : 1;
 	$perpage = config('posts.perpage');
 	
-	$posts = get_posts($page);
-	
-	// Extract a specific page with results
-	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+	$posts = get_posts($page, $perpage);
 	
 	$total = '';
 	
