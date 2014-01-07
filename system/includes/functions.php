@@ -62,78 +62,18 @@ function cmp($a, $b) {
 }
 
 // Return blog post
-function get_posts($page = 1, $perpage = 0){
+function get_posts($posts, $page = 1, $perpage = 0){
 
-	$posts = get_post_names();
-	
-	$tmp = array();
+	if(empty($posts)) {
 
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-	
-	foreach($posts as $k=>$v){
-
-		$post = new stdClass;
-
-		// Extract the date
-		$arr = explode('_', $v);
+		$posts = get_post_names();
 		
-		// Replaced string
-		$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+		$tmp = array();
+
+		// Create a new instance of the markdown parser
+		$md = new MarkdownParser();
 		
-		// Author string
-		$str = explode('/', $replaced);
-		$author = $str[count($str)-3];
-		
-		// The post author + author url
-		$post->author = $author;
-		$post->authorurl = site_url() . 'author/' .  $author;
-		
-		// The post date
-		$post->date = strtotime(str_replace($replaced,'',$arr[0]));
-		
-		// The archive per day
-		$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
-
-		// The post URL
-		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-		
-		// The post tag
-		$post->tag = str_replace($replaced,'',$arr[1]);
-		
-		// The post tag url
-		$post->tagurl = site_url(). 'tag/' . $arr[1];
-
-		// Get the contents and convert it to HTML
-		$content = $md->transformMarkdown(file_get_contents($v));
-
-		// Extract the title and body
-		$arr = explode('</h1>', $content);
-		$post->title = str_replace('<h1>','',$arr[0]);
-		$post->body = $arr[1];
-
-		$tmp[] = $post;
-	}
-	
-	usort($tmp,'cmp');
-	
-	// Extract a specific page with results
-	$tmp = array_slice($tmp, ($page-1) * $perpage, $perpage);
-	
-	return $tmp;
-}
-
-// Find post by year, month and name, previous, and next.
-function find_post($year, $month, $name){
-
-	$posts = get_post_names();
-	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
-	foreach($posts as $index => $v){
-		if( strpos($v, "$year-$month") !== false && strpos($v, $name.'.md') !== false){
+		foreach($posts as $k=>$v){
 
 			$post = new stdClass;
 
@@ -176,10 +116,73 @@ function find_post($year, $month, $name){
 
 			$tmp[] = $post;
 		}
-	}
+		
+		usort($tmp,'cmp');
 
-	usort($tmp,'cmp');
+		
+		// Extract a specific page with results
+		$tmp = array_slice($tmp, ($page-1) * $perpage, $perpage);
+		
+		return $tmp;
+	
+	}
+	else {
+	
+	// Extract a specific page with results
+	$tmp = array_slice($posts, ($page-1) * $perpage, $perpage);
+	
 	return $tmp;
+	
+	}
+}
+
+// Find post by year, month and name, previous, and next.
+function find_post($year, $month, $name){
+
+	$posts = get_posts(null, null, null);
+	$tmp = $posts;
+
+	foreach ($tmp as $index => $v) {
+		$url = $v->url;
+		if (strpos($url, $year . '/' . $month . '/' . $name) !== false) {
+		
+			// Use the get_posts method to return
+			// a properly parsed object
+
+			$ar = get_posts($posts, $index+1,1);
+			$nx = get_posts($posts, $index,1);
+			$pr = get_posts($posts, $index+2,1);
+			
+			if ($index == 0) {
+				if(isset($pr[0])) {
+					return array(
+						'current'=> $ar[0],
+						'prev'=> $pr[0]
+					);
+				}
+				else {
+					return array(
+						'current'=> $ar[0],
+						'prev'=> null
+					);
+				}
+			}
+			elseif (count($posts) == $index+1) {
+				return array(
+					'current'=> $ar[0],
+					'next'=> $nx[0]
+				);
+			}
+			else {
+				return array(
+					'current'=> $ar[0],
+					'next'=> $nx[0],
+					'prev'=> $pr[0]
+				);
+			}
+		
+		}
+	}
 }
 
 // Return tag page
@@ -377,7 +380,7 @@ function tag_cloud() {
 	echo '<h3>Tags</h3>';
 	echo '<ul class="taglist">';
 	foreach ($tag_collection as $tag => $count){
-		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . ucfirst($tag) . '</a> <span class="count">(' . $count . ')</span></li>';
+		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
 	}
 	echo '</ul>';
 	

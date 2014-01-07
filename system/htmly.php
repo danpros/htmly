@@ -19,7 +19,7 @@ get('/index', function () {
 	$page = $page ? (int)$page : 1;
 	$perpage = config('posts.perpage');
 	
-	$posts = get_posts($page, $perpage);
+	$posts = get_posts(null, $page, $perpage);
 	
 	$total = '';
 	
@@ -59,7 +59,7 @@ get('/tag/:tag',function($tag){
 	}
 	
     render('main',array(
-		'title' => ucfirst($tag) .' - ' . config('blog.title'),
+		'title' => 'Tag - ' . ucfirst($tag) .' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/tag/' . $tag,
@@ -122,16 +122,13 @@ get('/archive/:req',function($req){
 // The blog post page
 get('/:year/:month/:name', function($year, $month, $name){
 
-	$page = from($_GET, 'page');
-	$page = $page ? (int)$page : 1;
-	$perpage = 1;
-
 	$post = find_post($year, $month, $name);
 	
-		// Extract a specific page with results
-	$post = array_slice($post, 0, $perpage);
+	$current = $post['current'];
 	
-	$current = $post[0];
+	if(!$current){
+		not_found();
+	}
 	
 	if (array_key_exists('prev', $post)) {
 		$prev = $post['prev'];
@@ -181,7 +178,7 @@ get('/search/:keyword', function($keyword){
 	}
 	
     render('main',array(
-		'title' => 'Search results for: ' . $keyword . ' - ' . config('blog.title'),
+		'title' => 'Search - ' . $keyword . ' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/search/' . $keyword,
@@ -253,7 +250,7 @@ get('/api/json',function(){
 	header('Content-type: application/json');
 
 	// Print the 10 latest posts as JSON
-	echo generate_json(get_posts(1,  config('json.count')));
+	echo generate_json(get_posts(null, 1, config('json.count')));
 });
 
 // Show the RSS feed
@@ -262,7 +259,7 @@ get('/feed/rss',function(){
 	header('Content-Type: application/rss+xml');
 
 	// Show an RSS feed with the 30 latest posts
-	echo generate_rss(get_posts(1, config('rss.count')));
+	echo generate_rss(get_posts(null, 1, config('rss.count')));
 });
 
 
