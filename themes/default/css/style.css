@@ -344,6 +344,10 @@ aside .menu ul li a:hover{
 	color:#fff;
 }
 
+aside .taglist{
+	text-transform: capitalize;
+}
+
 aside .copyright {
 	padding:1.2em 0 65px 0;
 	color: #888;
