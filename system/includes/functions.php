@@ -56,17 +56,14 @@ function get_author_names(){
 	return $_cache;
 }
 
+function cmp($a, $b) {
+	return $a->date == $b->date ? 0 : ( $a->date < $b->date ) ? 1 : -1;
+}
+
 // Return blog post
 function get_posts($page = 1, $perpage = 0){
 
-	if($perpage == 0){
-		$perpage = config('posts.perpage');
-	}
-
 	$posts = get_post_names();
-
-	// Extract a specific page with results
-	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
 	
 	$tmp = array();
 
@@ -116,8 +113,8 @@ function get_posts($page = 1, $perpage = 0){
 
 		$tmp[] = $post;
 	}
-
-	krsort($tmp);
+	
+	usort($tmp,'cmp');
 	return $tmp;
 }
 
@@ -125,47 +122,59 @@ function get_posts($page = 1, $perpage = 0){
 function find_post($year, $month, $name){
 
 	$posts = get_post_names();
+	$tmp = array();
+
+	// Create a new instance of the markdown parser
+	$md = new MarkdownParser();
 
 	foreach($posts as $index => $v){
 		if( strpos($v, "$year-$month") !== false && strpos($v, $name.'.md') !== false){
 
-			// Use the get_posts method to return
-			// a properly parsed object
+			$post = new stdClass;
 
-			$ar = get_posts($index+1,1);
-			$nx = get_posts($index,1);
-			$pr = get_posts($index+2,1);
+			// Extract the date
+			$arr = explode('_', $v);
 			
-			if ($index == 0) {
-				if(isset($pr[0])) {
-					return array(
-						'current'=> $ar[0],
-						'prev'=> $pr[0]
-					);
-				}
-				else {
-					return array(
-						'current'=> $ar[0],
-						'prev'=> null
-					);
-				}
-			}
-			elseif (count($posts) == $index+1) {
-				return array(
-					'current'=> $ar[0],
-					'next'=> $nx[0]
-				);
-			}
-			else {
-				return array(
-					'current'=> $ar[0],
-					'next'=> $nx[0],
-					'prev'=> $pr[0]
-				);
-			}
+			// Replaced string
+			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			
+			// Author string
+			$str = explode('/', $replaced);
+			$author = $str[count($str)-3];
+			
+			// The post author + author url
+			$post->author = $author;
+			$post->authorurl = site_url() . 'author/' .  $author;
+			
+			// The post date
+			$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+			
+			// The archive per day
+			$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
+
+			// The post URL
+			$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
+			
+			// The post tag
+			$post->tag = str_replace($replaced,'',$arr[1]);
+			
+			// The post tag url
+			$post->tagurl = site_url(). 'tag/' . $arr[1];
+
+			// Get the contents and convert it to HTML
+			$content = $md->transformMarkdown(file_get_contents($v));
+
+			// Extract the title and body
+			$arr = explode('</h1>', $content);
+			$post->title = str_replace('<h1>','',$arr[0]);
+			$post->body = $arr[1];
+
+			$tmp[] = $post;
 		}
 	}
-	return false;
+
+	usort($tmp,'cmp');
+	return $tmp;
 }
 
 // Return tag page
@@ -227,7 +236,7 @@ function get_tag($tag){
 		}
 	}
 
-	krsort($tmp);
+	usort($tmp,'cmp');
 	return $tmp;
 }
 
@@ -283,7 +292,7 @@ function get_archive($req){
 		}
 	}
 
-	krsort($tmp);
+	usort($tmp,'cmp');
 	return $tmp;
 }
 
@@ -403,8 +412,7 @@ function get_spage($posts, $spage){
 			$tmp[] = $post;
 		}
 	}
-
-	krsort($tmp);
+	
 	return $tmp;
 }
 
@@ -484,7 +492,7 @@ function get_profile($profile){
 		}
 	}
 
-	krsort($tmp);
+	usort($tmp,'cmp');
 	return $tmp;
 }
 
@@ -602,7 +610,7 @@ function get_keyword($keyword){
 		}
 	}
 
-	krsort($tmp);
+	usort($tmp,'cmp');
 	return $tmp;
 }
 

@@ -21,6 +21,9 @@ get('/index', function () {
 	
 	$posts = get_posts($page);
 	
+	// Extract a specific page with results
+	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+	
 	$total = '';
 	
 	if(empty($posts) || $page < 1){
@@ -122,13 +125,16 @@ get('/archive/:req',function($req){
 // The blog post page
 get('/:year/:month/:name', function($year, $month, $name){
 
+	$page = from($_GET, 'page');
+	$page = $page ? (int)$page : 1;
+	$perpage = 1;
+
 	$post = find_post($year, $month, $name);
 	
-	$current = $post['current'];
+		// Extract a specific page with results
+	$post = array_slice($post, 0, $perpage);
 	
-	if(!$current){
-		not_found();
-	}
+	$current = $post[0];
 	
 	if (array_key_exists('prev', $post)) {
 		$prev = $post['prev'];
