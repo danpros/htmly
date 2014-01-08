@@ -8,7 +8,7 @@
 		<?php if ($type == 'blogpost'):?>
 			<div class="date"><span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this day"><?php echo date('d F Y', $p->date)?></a></span> - Posted in <span itemprop="articleSection"><a href="<?php echo $p->tagurl ?>"><?php echo $p->tag ?></a></span> by <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span> - <span><a href="<?php echo $p->url ?>" rel="permalink">Permalink</a></span></div>
 		<?php endif;?>
-		<div class="teaser-body" itemprop="articleBody">
+		<div class="post-body" itemprop="articleBody">
 			<?php echo $p->body; ?>
 		</div>
 	</div>
