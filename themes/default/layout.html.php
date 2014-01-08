@@ -27,10 +27,10 @@
 		<div class="description"><p><?php echo config('blog.description')?></p></div>
 		<div class="search">
 			<form id="search-form" method="get">
-				<input type="text" class="search-input" name="keyword" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}">
+				<input type="text" class="search-input" name="search" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}">
 				<input type="submit" value="Search" class="search-button">
 			</form>
-			<?php if(isset($_GET['keyword'])) {$url = site_url() . 'search/' . $_GET['keyword']; header ("Location: $url");} ?>
+			<?php if(isset($_GET['search'])) {$url = site_url() . 'search/' . $_GET['search']; header ("Location: $url");} ?>
 		</div>
         <div class="social"><?php echo social() ?></div>
 		<?php if (menu() == true):?><div class="menu"><?php echo menu() ?></div><?php endif;?>

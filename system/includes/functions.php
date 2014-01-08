@@ -660,13 +660,13 @@ function has_pagination($total, $perpage, $page = 1){
 function get_description($text) {
 	
 	$string = explode('</p>', $text);
-	$string = preg_replace('@[\s]{2,}@',' ', strip_tags($string[0] . '</p>'));
+	$string = preg_replace('/[^,;a-zA-Z0-9_-]|[,;]$/s', ' ', strip_tags($string[0] . '</p>'));
 	
 	if (strlen($string) > 1) {
 		return $string;
 	}
 	else {
-		$string = preg_replace('@[\s]{2,}@',' ', strip_tags($text));
+		$string = preg_replace('/[^,;a-zA-Z0-9_-]|[,;]$/s', ' ', strip_tags($text));
 		if (strlen($string) < config('description.char')) {
 			return $string;
 		}
@@ -681,12 +681,12 @@ function get_description($text) {
 function get_teaser($text, $url) {
 	
 	if (strlen(strip_tags($text)) < config('teaser.char')) {
-		$string = preg_replace('@[\s]{2,}@',' ', strip_tags($text));
+		$string = preg_replace('/[^,;a-zA-Z0-9_-]|[,;]$/s', ' ', strip_tags($text));
 		$body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>' ;
 		echo '<p>' . $body . '</p>';
 	}
 	else {
-		$string = preg_replace('@[\s]{2,}@',' ', strip_tags($text));
+		$string = preg_replace('/[^,;a-zA-Z0-9_-]|[,;]$/s', ' ', strip_tags($text));
 		$string = substr($string, 0, strpos($string, ' ', config('teaser.char')));
 		$body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>' ;
 		echo '<p>' . $body . '</p>';

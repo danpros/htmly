@@ -51,13 +51,16 @@ img {
 -----------------------------*/
 
 h1{
-	font: 20px 'Open Sans Condensed', sans-serif;
-	margin-bottom: 1em;
-	line-height: 1.3;
+	font: 28px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin: 0.5em 0;
 }
 
 h1.blog-title {
 	text-transform:uppercase;
+	font: 20px 'Open Sans Condensed', sans-serif;
+	margin-bottom: 1em;
+	line-height: 1.3;
 }
 
 h1.blog-title a {
@@ -67,36 +70,6 @@ h1.blog-title a {
 
 h1.blog-title a:hover {
 	color: #389dc1;
-}
-
-h2{
-	font: 22px 'Open Sans Condensed', sans-serif;
-	line-height: 1.2;
-	margin-bottom: 0.5em;
-}
-
-h3{
-	font: 18px 'Open Sans Condensed', sans-serif;
-	line-height: 1.2;
-	margin-bottom: 0.5em;
-}
-
-h4{
-	font: 16px 'Open Sans Condensed', sans-serif;
-	line-height: 1.2;
-	margin-bottom: 0.5em;
-}
-
-h5{
-	font: 14px 'Open Sans Condensed', sans-serif;
-	line-height: 1.2;
-	margin-bottom: 0.5em;
-}
-
-h6{
-	font: 12px 'Open Sans Condensed', sans-serif;
-	line-height: 1.2;
-	margin-bottom: 0.5em;
 }
 
 h1.title-post, h2.title-index{
@@ -113,6 +86,43 @@ h1.title-post a, h2.title-index a{
 
 h1.title-post a:hover, h2.title-index a:hover {
 	color: #389dc1;
+}
+
+h2{
+	font: 22px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin: 0.5em 0;
+}
+
+h2.title-index{
+	font: 28px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	text-transform:normal;
+	margin:0 0 20px 0;
+}
+
+h3{
+	font: 18px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin: 0.5em 0;
+}
+
+h4{
+	font: 16px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin: 0.5em 0;
+}
+
+h5{
+	font: 14px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin: 0.5em 0;
+}
+
+h6{
+	font: 12px 'Open Sans Condensed', sans-serif;
+	line-height: 1.2;
+	margin: 0.5em 0;
 }
 
 /*----------------------------
@@ -159,6 +169,10 @@ h1.title-post a:hover, h2.title-index a:hover {
 	color:#ccc;
 	margin-left:10px;
 	text-decoration:none;
+}
+
+.body {
+	min-height: 90px;
 }
 
 .infront .post, .intag .post, .inarchive .post, .insearch .post, .inprofile .post{
@@ -539,6 +553,21 @@ aside .copyright p{
 	padding-bottom:2em;
 	border-bottom: solid 1px #dfdfdf;
 	font-size: 12px;
+}
+
+/*----------------------------
+	Author info
+-----------------------------*/
+
+.author-info {
+	font-size: 12px;
+	font-style:italic;
+}
+
+.separator {
+	text-align:left;
+	font-size: 18px;
+	line-height: 1;
 }
 
 /*----------------------------

@@ -18,10 +18,10 @@
 		<h1>Search results not found!</h1>
 		<div class="search">
 			<form id="search-form" method="get">
-				<input type="text" class="search-input" name="keyword" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}">
+				<input type="text" class="search-input" name="search" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}">
 				<input type="submit" value="Search" class="search-button">
 			</form>
-			<?php if(isset($_GET['keyword'])) {$url = site_url() . 'search/' . $_GET['keyword']; header ("Location: $url");} ?>
+			<?php if(isset($_GET['search'])) {$url = site_url() . 'search/' . $_GET['search']; header ("Location: $url");} ?>
 		</div>
 		<p>Please search again, or would you like to try our <a href="<?php echo site_url() ?>">homepage</a> instead?</p>
 	</div>

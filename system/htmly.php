@@ -59,13 +59,13 @@ get('/tag/:tag',function($tag){
 	}
 	
     render('main',array(
-		'title' => 'Tag - ' . $tag .' - ' . config('blog.title'),
+		'title' => 'Posts tagged: ' . $tag .' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/tag/' . $tag,
 		'description' => 'All posts tagged ' . $tag . ' on '. config('blog.title') . '.',
 		'bodyclass' => 'intag',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Posts tagged ' . $tag,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Posts tagged: ' . $tag,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -108,13 +108,13 @@ get('/archive/:req',function($req){
 	}
 	
     render('main',array(
-		'title' => 'Archive - ' . $timestamp .' - ' . config('blog.title'),
+		'title' => 'Archive for: ' . $timestamp .' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/archive/' . $req,
-		'description' => 'Archive page for ' . $timestamp . ' on ' . config('blog.title') . '.',
+		'description' => 'Archive page for: ' . $timestamp . ' on ' . config('blog.title') . '.',
 		'bodyclass' => 'inarchive',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Archive for ' . $timestamp,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Archive for: ' . $timestamp,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -129,6 +129,8 @@ get('/:year/:month/:name', function($year, $month, $name){
 	if(!$current){
 		not_found();
 	}
+	
+	$bio = find_bio($current->author);
 	
 	if (array_key_exists('prev', $post)) {
 		$prev = $post['prev'];
@@ -147,6 +149,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 	render('post',array(
 		'title' => $current->title .' - ' . config('blog.title'),
 		'p' => $current,
+		'authorinfo' => '<div class="author-info"><div class="separator">&rarr;</div><h4><strong>by ' . $bio->title . '</strong></h4>' . $bio->body . '</div>',
 		'canonical' => $current->url,
 		'description' => $description = get_description($current->body),
 		'bodyclass' => 'inpost',
@@ -178,7 +181,7 @@ get('/search/:keyword', function($keyword){
 	}
 	
     render('main',array(
-		'title' => 'Search - ' . $keyword . ' - ' . config('blog.title'),
+		'title' => 'Search results for: ' . $keyword . ' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/search/' . $keyword,
@@ -231,7 +234,7 @@ get('/author/:profile',function($profile){
 	}
 	
     render('profile',array(
-		'title' => 'Author -  '. $bio->title .' - ' . config('blog.title'),
+		'title' => 'Profile for:  '. $bio->title .' - ' . config('blog.title'),
     	'page' => $page,
 		'posts' => $posts,
 		'bio' => $bio->body,
@@ -239,7 +242,7 @@ get('/author/:profile',function($profile){
 		'canonical' => config('site.url') . '/author/' . $profile,
 		'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
 		'bodyclass' => 'inprofile',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Profile page for ' . $bio->title,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Profile for: ' . $bio->title,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
