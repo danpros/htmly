@@ -552,19 +552,51 @@ aside .copyright p{
 }
 
 /*----------------------------
-	Author info
+	Share + Author info
 -----------------------------*/
-
-.author-info {
-	font-size: 12px;
-	font-style:italic;
-}
 
 .separator {
 	text-align:left;
 	font-size: 18px;
 	line-height: 1;
 }
+
+.share-box {
+	margin-bottom: 0.75em;
+}
+
+.author-info {
+	font-size: 12px;
+	font-style:italic;
+	float:left;
+	width: 430px;
+	margin-right: 2em;
+}
+
+.share {
+	font-size: 12px;
+	font-style:italic;
+	width:120px;
+}
+
+.share a {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	margin: 2px;
+	vertical-align: middle;
+	-o-transition: all .3s;
+	-moz-transition: all .3s;
+	-webkit-transition: all .3s;
+	-ms-transition: all .3s;
+	text-indent: -9999em;
+}
+
+.share a.twitter { background: url(../img/share-twitter.png) left top no-repeat; }
+.share a.facebook { background: url(../img/share-facebook.png) left top no-repeat; }
+.share a.googleplus { background: url(../img/share-googleplus.png) left top no-repeat; }
+
+.share a:hover { background-position: left -26px; }
 
 /*----------------------------
 	Media queries
@@ -639,6 +671,16 @@ aside .copyright p{
 	
 	.search {
 		text-align:center;
+	}
+	
+	.author-info {
+		width: 100%;
+	}
+	
+	.share {
+		float:left;
+		width:100%;
+		padding-bottom: 1em;
 	}
 }
 

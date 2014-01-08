@@ -149,7 +149,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 	render('post',array(
 		'title' => $current->title .' - ' . config('blog.title'),
 		'p' => $current,
-		'authorinfo' => '<div class="author-info"><div class="separator">&rarr;</div><h4><strong>by ' . $bio->title . '</strong></h4>' . $bio->body . '</div>',
+		'authorinfo' => '<div class="author-info"><h4>by <strong>' . $bio->title . '</strong></h4>' . $bio->body . '</div>',
 		'canonical' => $current->url,
 		'description' => $description = get_description($current->body),
 		'bodyclass' => 'inpost',

@@ -13,10 +13,20 @@
 		</div>
 	</div>
 	<?php if ($type == 'blogpost'):?>
-		<?php if (config('author.info') == 'true'):?>
-			<?php echo $authorinfo ?>
-		<?php endif;?>
-	<?php endif;?>	
+		<div class="separator">&rarr;</div>
+		<div class="share-box">
+			<?php if (config('author.info') == 'true'):?>
+				<?php echo $authorinfo ?>
+				<style>.share {float:right;}</style>
+			<?php endif;?>
+			<div class="share">
+				<h4>Share this post</h4>
+				<a class="twitter" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title?>">Twitter</a>
+				<a class="facebook" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title?>">Facebook</a>
+				<a class="googleplus" href="https://plus.google.com/share?url=<?php echo $p->url ?>">Google+</a>
+			</div>
+		</div>
+	<?php endif;?>
     <div class="comments border">
 		<?php if ($type == 'blogpost'):?>
 			<?php if (disqus(null, null) == true):?>
