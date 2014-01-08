@@ -17,7 +17,7 @@
 		<div class="main">
 			<h2 class="title-index" itemprop="name"><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></h2>
 			<div class="date"><span itemprop="datePublished"><?php echo date('d F Y', $p->date)?></span> - Posted in <span itemprop="articleSection"><a href="<?php echo $p->tagurl ?>"><?php echo $p->tag ?></a></span> by <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span><?php if (disqus_count() == true):?> - <span><a href="<?php echo $p->url?>#disqus_thread">Comments</a></span><?php endif;?></div>
-			<div class="body" itemprop="articleBody">
+			<div class="post-body" itemprop="articleBody">
 				<?php if (config('img.thumbnail') == 'true'):?>
 					<?php echo get_thumbnail($p->body)?>
 				<?php endif;?>

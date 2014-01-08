@@ -171,10 +171,6 @@ h6{
 	text-decoration:none;
 }
 
-.body {
-	min-height: 90px;
-}
-
 .infront .post, .intag .post, .inarchive .post, .insearch .post, .inprofile .post{
 	border-bottom: 1px solid #dfdfdf;
 	padding: 30px 0 10px 0;
