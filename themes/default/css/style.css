@@ -583,7 +583,8 @@ aside .copyright p{
 	display: inline-block;
 	width: 18px;
 	height: 18px;
-	margin: 2px;
+	margin: 0;
+	padding: 0 5px;
 	vertical-align: middle;
 	-o-transition: all .3s;
 	-moz-transition: all .3s;

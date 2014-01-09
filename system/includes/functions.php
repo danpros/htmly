@@ -15,8 +15,7 @@ function get_post_names(){
 
 	if(empty($_cache)){
 
-		// Get the names of all the
-		// posts (newest first):
+		// Get the names of all the posts
 
 		$_cache = glob('content/*/blog/*.md', GLOB_NOSORT);
 	}
@@ -73,7 +72,7 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		// Create a new instance of the markdown parser
 		$md = new MarkdownParser();
 		
-		foreach($posts as $k=>$v){
+		foreach($posts as $index => $v){
 
 			$post = new stdClass;
 
@@ -128,10 +127,10 @@ function get_posts($posts, $page = 1, $perpage = 0){
 	}
 	else {
 	
-	// Extract a specific page with results
-	$tmp = array_slice($posts, ($page-1) * $perpage, $perpage);
+		// Extract a specific page with results
+		$tmp = array_slice($posts, ($page-1) * $perpage, $perpage);
 	
-	return $tmp;
+		return $tmp;
 	
 	}
 }
@@ -543,7 +542,6 @@ function get_bio($names, $author){
 		}
 	}
 	
-	krsort($tmp);
 	return $tmp;
 }
 
@@ -660,13 +658,15 @@ function has_pagination($total, $perpage, $page = 1){
 function get_description($text) {
 	
 	$string = explode('</p>', $text);
-	$string = preg_replace('/[^,;a-zA-Z0-9_.-]|[,;]$/s', ' ', strip_tags($string[0] . '</p>'));
+	$string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string[0] . '</p>'));
+	$string = ltrim($string);
 	
 	if (strlen($string) > 1) {
 		return $string;
 	}
 	else {
-		$string = preg_replace('/[^,;a-zA-Z0-9_.-]|[,;]$/s', ' ', strip_tags($text));
+		$string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($text));
+		$string = ltrim($string);
 		if (strlen($string) < config('description.char')) {
 			return $string;
 		}
@@ -681,12 +681,12 @@ function get_description($text) {
 function get_teaser($text, $url) {
 	
 	if (strlen(strip_tags($text)) < config('teaser.char')) {
-		$string = preg_replace('/[^,;a-zA-Z0-9_.-]|[,;]$/s', ' ', strip_tags($text));
+		$string = preg_replace('/\s\s+/', ' ', strip_tags($text));
 		$body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>' ;
 		echo '<p>' . $body . '</p>';
 	}
 	else {
-		$string = preg_replace('/[^,;a-zA-Z0-9_.-]|[,;]$/s', ' ', strip_tags($text));
+		$string = preg_replace('/\s\s+/', ' ', strip_tags($text));
 		$string = substr($string, 0, strpos($string, ' ', config('teaser.char')));
 		$body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>' ;
 		echo '<p>' . $body . '</p>';
@@ -698,38 +698,38 @@ function get_teaser($text, $url) {
 function get_thumbnail($text) {
 
 	$default = config('default.thumbnail');
-    $dom = new DOMDocument();
-    $dom->loadHtml($text);
-    $imgTags = $dom->getElementsByTagName('img');
+	$dom = new DOMDocument();
+	$dom->loadHtml($text);
+	$imgTags = $dom->getElementsByTagName('img');
 	$vidTags = $dom->getElementsByTagName('iframe');
-    if ($imgTags->length > 0) {
-        $imgElement = $imgTags->item(0);
+	if ($imgTags->length > 0) {
+		$imgElement = $imgTags->item(0);
 		$imgSource = $imgElement->getAttribute('src');
-        return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
-    }
-    elseif ($vidTags->length > 0) {
-        $vidElement = $vidTags->item(0);
+		return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
+	}
+	elseif ($vidTags->length > 0) {
+		$vidElement = $vidTags->item(0);
 		$vidSource = $vidElement->getAttribute('src');
-        $fetch = explode("embed/", $vidSource);
+		$fetch = explode("embed/", $vidSource);
 		if(isset($fetch[1])) {
 			$vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/default.jpg';
 			return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
 		}
-    }
+	}
 	else {
 		if (!empty($default)) {
 			return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
 		}
-    }
+	}
 	
 }
 
 // Use base64 encode image to speed up page load time.
 function base64_encode_image($filename=string,$filetype=string) {
-    if ($filename) {
-        $imgbinary = fread(fopen($filename, "r"), filesize($filename));
-        return 'data:image/' . $filetype . ';base64,' . base64_encode($imgbinary);
-    }
+	if ($filename) {
+		$imgbinary = fread(fopen($filename, "r"), filesize($filename));
+		return 'data:image/' . $filetype . ';base64,' . base64_encode($imgbinary);
+	}
 }
 
 // Social links

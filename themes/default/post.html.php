@@ -1,6 +1,6 @@
 <?php if (!empty($breadcrumb)):?><div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><?php echo $breadcrumb ?></div><?php endif;?>
 <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
-    <div class="main">
+	<div class="main">
 		<?php if ($type == 'blogpost'):?>
 			<a name="more"></a>
 		<?php endif;?>
@@ -27,7 +27,7 @@
 			</div>
 		</div>
 	<?php endif;?>
-    <div class="comments border">
+	<div class="comments border">
 		<?php if ($type == 'blogpost'):?>
 			<?php if (disqus(null, null) == true):?>
 				<div id="disqus_thread"></div>
