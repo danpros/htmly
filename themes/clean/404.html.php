@@ -6,9 +6,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
 	<title>404 Not Found - <?php echo config('blog.title') ?></title>
-	<link href="<?php echo site_url() ?>themes/default/css/style.css" rel="stylesheet" />
+	<link href="<?php echo site_url() ?>themes/clean/css/style.css" rel="stylesheet" />
 	<!-- Include the Open Sans font -->
-	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400"/>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet" />
 </head>
 <body>
 	<div class="center message">

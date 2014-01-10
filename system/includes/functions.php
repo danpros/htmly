@@ -349,7 +349,6 @@ function archive_list() {
 			$name = date('F', mktime(0,0,0,$month,1,2010));
 			echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';
 			echo ' <span class="count">(' . $count . ')</span></li>';
-			echo '</li>';
 		}
 
 		echo '</ul>';
