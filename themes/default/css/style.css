@@ -97,6 +97,10 @@ h6 {
 	text-align:center;
 }
 
+.hide {
+	display:none;
+}
+
 /*-------------------------
 	Link
 --------------------------*/
@@ -325,6 +329,14 @@ h1.title-post a:hover, h2.title-index a:hover {
 	margin-top:0;
 }
 
+.inprofile .bio {
+	font-size: 14px;
+	font-style:italic;
+	border-bottom: 1px solid #EBF2F6;
+	padding-bottom: 1em;
+	margin-bottom: 2em;
+}
+
 .post-list {
 	font-size: 14px;
 }
@@ -341,6 +353,10 @@ h1.title-post a:hover, h2.title-index a:hover {
 .author-info {
 	width: 540px;
 	float:left;
+}
+
+.author-info p {
+	font-style:italic;
 }
 
 .share {
@@ -672,4 +688,3 @@ h1.title-post a:hover, h2.title-index a:hover {
 	}
 
 }
-
