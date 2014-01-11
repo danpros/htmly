@@ -10,7 +10,7 @@
 
 body {
 	font-family: Georgia, sans-serif, Arial;
-	font-size: 16px;
+	font-size: 17px;
 	line-height: 1.6;
 	color: #343A3F;
 	padding: 0;
@@ -222,6 +222,10 @@ ul li, ol li{
 	padding-top:2px;
 }
 
+#menu ul li:last-child {
+	margin:0;
+} 
+
 /*----------------------------
 	Search form
 -----------------------------*/
@@ -355,6 +359,10 @@ h1.title-post a:hover, h2.title-index a:hover {
 /*-------------------------
 	Share box
 --------------------------*/
+
+.separator {
+	font-size: 20px;
+}
 
 .share-box {
 	font-size: 14px;
