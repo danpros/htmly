@@ -18,6 +18,17 @@ body {
 	font-weight:500;
 }
 
+section, footer, header, aside, nav{
+	display: block;
+}
+
+img {
+    border: 0 none;
+    height: auto;
+    max-width: 100%;
+	outline: 0 none;
+}
+
 /*-------------------------
 	Heading
 --------------------------*/
@@ -688,3 +699,4 @@ h1.title-post a:hover, h2.title-index a:hover {
 	}
 
 }
+

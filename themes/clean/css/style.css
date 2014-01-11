@@ -30,7 +30,7 @@ a:hover{
 	text-decoration:underline;
 }
 
-section, footer, header, aside{
+section, footer, header, aside, nav{
 	display: block;
 }
 
@@ -593,9 +593,9 @@ aside .copyright p{
 	text-indent: -9999em;
 }
 
-.share a.twitter { background: url(../img/share-twitter.png) left top no-repeat; }
-.share a.facebook { background: url(../img/share-facebook.png) left top no-repeat; }
-.share a.googleplus { background: url(../img/share-googleplus.png) left top no-repeat; }
+.share a.twitter { background: url(../../default/img/share-twitter.png) left top no-repeat; }
+.share a.facebook { background: url(../../default/img/share-facebook.png) left top no-repeat; }
+.share a.googleplus { background: url(../../default/img/share-googleplus.png) left top no-repeat; }
 
 .share a:hover { background-position: left -26px; }
 
