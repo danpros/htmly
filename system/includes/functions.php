@@ -31,9 +31,9 @@ function get_spage_names(){
 	if(empty($_cache)){
 
 		// Get the names of all the
-		// static page (newest first):
+		// static page.
 
-		$_cache = glob('content/*/static/*.md', GLOB_NOSORT);
+		$_cache = glob('content/static/*.md', GLOB_NOSORT);
 	}
 
 	return $_cache;
@@ -47,7 +47,7 @@ function get_author_names(){
 	if(empty($_cache)){
 
 		// Get the names of all the
-		// author:
+		// author.
 
 		$_cache = glob('content/*/author.md', GLOB_NOSORT);
 	}
