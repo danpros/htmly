@@ -589,6 +589,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 	
 	#search-form {
 		float:none;
+		padding: 10px 0;
 	}
 	
 	.author-info {
