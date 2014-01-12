@@ -396,15 +396,12 @@ function get_spage($posts, $spage){
 		if( strpos($v, "$spage") !== false && strpos($v, $spage.'.md') !== false){
 
 			$post = new stdClass;
-
-			// Extract the array
-			$arr = explode('_', $v);
 			
 			// Replaced string
-			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
 			
 			// The static page URL
-			$url = str_replace($replaced,'',$arr[0]);
+			$url = str_replace($replaced,'',$v);
 			$post->url = site_url() . str_replace('.md','',$url);
 			
 			// Get the contents and convert it to HTML
@@ -847,6 +844,32 @@ function menu(){
 	if (!empty($menu)) {
 		return $menu;
 	}
+	else {
+		get_menu();
+	}
+}
+
+// Auto generated menu from static page
+function get_menu() {
+
+	$posts = get_spage_names();
+	ksort($posts);
+	
+	echo '<ul>';
+	echo '<li><a href="' . site_url() . '">Home</a></li>';
+	foreach($posts as $index => $v){
+	
+			// Replaced string
+			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+			
+			// The static page URL
+			$title = str_replace($replaced,'',$v);
+			$url = site_url() . str_replace('.md','',$title);
+			echo '<li><a href="' . $url . '">' . ucfirst(str_replace('.md','',$title)) . '</a></li>';
+			
+	}
+	echo '</ul>';
+	
 }
 
 // The not found error
