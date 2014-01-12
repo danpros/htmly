@@ -15,7 +15,6 @@ body {
 	color: #343A3F;
 	padding: 0;
 	margin: 0;
-	word-wrap:break-word;
 }
 
 section, footer, header, aside, nav{
@@ -657,6 +656,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 
 	pre {
 		white-space: pre-wrap;
+		word-wrap:break-word;
 	}
 	
 }

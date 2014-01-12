@@ -1,54 +1,54 @@
-# Requires mod_expires to be enabled. Uncomment to enable mod_expires.
+# Requires mod_expires to be enabled.
 <IfModule mod_expires.c>
 
-  # Uncomment below to activate mode_expires
-  # ExpiresActive on
+  # to activate mode_expires
+  ExpiresActive on
   
-  # ExpiresDefault                                      "access plus 1 month"
+  ExpiresDefault                                      "access plus 60 minutes"
 
-  # For CSS uncomment below
-  # ExpiresByType text/css                              "access plus 1 year"
+  # For CSS
+  ExpiresByType text/css                              "access plus 60 minutes"
 
-  # For Data interchange uncomment below
-  # ExpiresByType application/json                      "access plus 0 seconds"
-  # ExpiresByType application/xml                       "access plus 0 seconds"
-  # ExpiresByType text/xml                              "access plus 0 seconds"
+  # For Data interchange
+  ExpiresByType application/json                      "access plus 0 seconds"
+  ExpiresByType application/xml                       "access plus 0 seconds"
+  ExpiresByType text/xml                              "access plus 0 seconds"
 
-  # For Favicon uncomment below
-  # ExpiresByType image/x-icon                          "access plus 1 week"
+  # For Favicon
+  ExpiresByType image/x-icon                          "access plus 60 minutes"
 
-  # For HTML components (HTCs) uncomment below
-  # ExpiresByType text/x-component                      "access plus 1 month"
+  # For HTML components (HTCs)
+  ExpiresByType text/x-component                      "access plus 60 minutes"
 
-  # For HTML uncomment below
-  # ExpiresByType text/html                             "access plus 0 seconds"
+  # For HTML
+  ExpiresByType text/html                             "access plus 0 seconds"
 
-  # For JavaScript uncomment below
-  # ExpiresByType application/javascript                "access plus 1 year"
+  # For JavaScript
+  ExpiresByType application/javascript                "access plus 60 minutes"
 
-  # For Manifest files uncomment below
-  # ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
-  # ExpiresByType text/cache-manifest                   "access plus 0 seconds"
+  # For Manifest files
+  ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
+  ExpiresByType text/cache-manifest                   "access plus 0 seconds"
 
-  # For Media uncomment below
-  # ExpiresByType audio/ogg                             "access plus 1 month"
-  # ExpiresByType image/gif                             "access plus 1 month"
-  # ExpiresByType image/jpeg                            "access plus 1 month"
-  # ExpiresByType image/png                             "access plus 1 month"
-  # ExpiresByType video/mp4                             "access plus 1 month"
-  # ExpiresByType video/ogg                             "access plus 1 month"
-  # ExpiresByType video/webm                            "access plus 1 month"
+  # For Media
+  ExpiresByType audio/ogg                             "access plus 60 minutes"
+  ExpiresByType image/gif                             "access plus 60 minutes"
+  ExpiresByType image/jpeg                            "access plus 60 minutes"
+  ExpiresByType image/png                             "access plus 60 minutes"
+  ExpiresByType video/mp4                             "access plus 60 minutes"
+  ExpiresByType video/ogg                             "access plus 60 minutes"
+  ExpiresByType video/webm                            "access plus 60 minutes"
 
-  # For Web feeds uncomment below
-  # ExpiresByType application/atom+xml                  "access plus 1 hour"
-  # ExpiresByType application/rss+xml                   "access plus 1 hour"
+  # For Web feeds
+  ExpiresByType application/atom+xml                  "access plus 60 minutes"
+  ExpiresByType application/rss+xml                   "access plus 60 minutes"
 
   # For Web fonts
-  # ExpiresByType application/font-woff                 "access plus 1 month"
-  # ExpiresByType application/vnd.ms-fontobject         "access plus 1 month"
-  # ExpiresByType application/x-font-ttf                "access plus 1 month"
-  # ExpiresByType font/opentype                         "access plus 1 month"
-  # ExpiresByType image/svg+xml                         "access plus 1 month"
+  ExpiresByType application/font-woff                 "access plus 60 minutes"
+  ExpiresByType application/vnd.ms-fontobject         "access plus 60 minutes"
+  ExpiresByType application/x-font-ttf                "access plus 60 minutes"
+  ExpiresByType font/opentype                         "access plus 60 minutes"
+  ExpiresByType image/svg+xml                         "access plus 60 minutes"
 
 </IfModule>
 
