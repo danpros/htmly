@@ -596,7 +596,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 	margin-bottom: 1.2em;
 }
 
-#search-form-404 {
+.search-404 #search-form {
 	float:none;
 }
 

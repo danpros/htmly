@@ -26,11 +26,7 @@
 			<div class="container">
 				<nav id="menu">
 					<?php echo menu() ?>
-					<form id="search-form" method="get">
-						<input type="text" class="search-input" name="search" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}">
-						<input type="submit" value="Search" class="search-button">
-					</form>
-					<?php if(isset($_GET['search'])) {$url = site_url() . 'search/' . $_GET['search']; header ("Location: $url");} ?>
+					<?php echo search() ?>
 				</nav>
 			</div>
 		</div>

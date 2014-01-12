@@ -25,11 +25,7 @@
 		<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo config('blog.title') ?></a></h1>
 		<div class="description"><p><?php echo config('blog.description')?></p></div>
 		<div class="search">
-			<form id="search-form" method="get">
-				<input type="text" class="search-input" name="search" value="Search..." onfocus="if (this.value == 'Search...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search...';}">
-				<input type="submit" value="Search" class="search-button">
-			</form>
-			<?php if(isset($_GET['search'])) {$url = site_url() . 'search/' . $_GET['search']; header ("Location: $url");} ?>
+			<?php echo search() ?>
 		</div>
         <div class="social"><?php echo social() ?></div>
 		<div class="menu"><?php echo menu() ?></div>

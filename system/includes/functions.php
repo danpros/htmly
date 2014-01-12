@@ -510,12 +510,9 @@ function get_bio($names, $author){
 	foreach($names as $index => $v){
 
 		$post = new stdClass;
-
-		// Extract the array
-		$arr = explode('_', $v);
 		
 		// Replaced string
-		$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+		$replaced = substr($v, 0,strrpos($v, '/')) . '/';
 		
 		// Author string
 		$str = explode('/', $replaced);
@@ -523,7 +520,7 @@ function get_bio($names, $author){
 		
 		if($author === $profile){
 			// Profile URL
-			$url = str_replace($replaced,'',$arr[0]);
+			$url = str_replace($replaced,'',$v);
 			$post->url = site_url() . 'author/' . $profile;
 			
 			// Get the contents and convert it to HTML
@@ -849,7 +846,21 @@ function menu(){
 	}
 }
 
-// Auto generated menu from static page
+// Menu
+function search() {
+	echo <<<EOF
+	<form id="search-form" method="get">
+		<input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
+		<input type="submit" value="Search" class="search-button">
+	</form>
+EOF;
+	if(isset($_GET['search'])) {
+		$url = site_url() . 'search/' . $_GET['search']; 
+		header ("Location: $url");
+	}
+}
+
+// Auto generate menu from static page
 function get_menu() {
 
 	$posts = get_spage_names();
@@ -859,13 +870,13 @@ function get_menu() {
 	echo '<li><a href="' . site_url() . '">Home</a></li>';
 	foreach($posts as $index => $v){
 	
-			// Replaced string
-			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+		// Replaced string
+		$replaced = substr($v, 0, strrpos($v, '/')) . '/';
 			
-			// The static page URL
-			$title = str_replace($replaced,'',$v);
-			$url = site_url() . str_replace('.md','',$title);
-			echo '<li><a href="' . $url . '">' . ucfirst(str_replace('.md','',$title)) . '</a></li>';
+		// The static page URL
+		$title = str_replace($replaced,'',$v);
+		$url = site_url() . str_replace('.md','',$title);
+		echo '<li><a href="' . $url . '">' . ucfirst(str_replace('.md','',$title)) . '</a></li>';
 			
 	}
 	echo '</ul>';
