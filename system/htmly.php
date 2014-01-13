@@ -28,8 +28,12 @@ get('/index', function () {
 		not_found();
 	}
 	
+	$tl = config('blog.tagline');
+	
+	if($tl){ $tagline = ' - ' . $tl;} else {$tagline = '';}
+	
     render('main',array(
-		'title' => config('blog.title') .' - '. config('blog.tagline'),
+		'title' => config('blog.title') . $tagline,
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url'),
