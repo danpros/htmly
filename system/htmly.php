@@ -29,6 +29,7 @@ get('/index', function () {
 	}
 	
     render('main',array(
+		'title' => config('blog.title') .' - '. config('blog.tagline'),
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url'),

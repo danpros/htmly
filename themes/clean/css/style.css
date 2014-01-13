@@ -302,7 +302,7 @@ aside{
 	padding-top: 65px;
 }
 
-aside .description p{
+aside .blog-tagline p{
 	font-size: 14px;
 	margin-bottom: 1.2em;
 	color:#787878;
@@ -375,12 +375,10 @@ aside .copyright p{
 	font-family: 'Open Sans Condensed',sans-serif;
 	width:100%;
 	float:left;
-	margin-bottom: 1em;
 }
 
 .related ul {
-	margin-top:0;
-	margin-bottom: 1em;
+	margin:0;
 }
 
 /*----------------------------
@@ -652,7 +650,7 @@ aside .copyright p{
 		text-align: center;
 	}
 
-	aside .description{
+	aside .blog-tagline{
 		margin-bottom: 25px;
 	}
 

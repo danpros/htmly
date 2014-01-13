@@ -27,6 +27,7 @@
 			</div>
 		</div>
 	<?php endif;?>
+	<?php if ($type == 'blogpost'):?><?php echo get_related($p->tag)?><?php endif;?>
 	<div class="comments border">
 		<?php if ($type == 'blogpost'):?>
 			<?php if (disqus(null, null) == true):?>
@@ -34,7 +35,6 @@
 			<?php endif;?>
 		<?php endif;?>
 	</div>
-	<?php if ($type == 'blogpost'):?><?php echo get_related($p->tag)?><?php endif;?>
 	<?php if ($type == 'blogpost'):?>
 		<div class="postnav">
 			<?php if (!empty($next)):?>

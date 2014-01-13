@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo isset($title) ? _h($title) : config('blog.title') ?></title>
+	<title><?php echo $title; ?></title>
 	<link href='<?php echo site_url() ?>favicon.ico' rel='icon' type='image/x-icon'/>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -35,7 +35,7 @@
 				<header id="header">
 					<section id="branding">
 						<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo config('blog.title') ?></a></h1>
-						<div class="description"><p><?php echo config('blog.description')?></p></div>
+						<div class="blog-tagline"><p><?php echo config('blog.tagline')?></p></div>
 					</section>
 				</header>
 			</div>

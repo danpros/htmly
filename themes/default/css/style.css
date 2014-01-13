@@ -443,13 +443,8 @@ h1.title-post a:hover, h2.title-index a:hover {
 	margin-bottom: 1em;
 }
 
-.related h4 {
-	margin-top: 0;
-}
-
 .related ul {
-	margin-top:0;
-	margin-bottom: 1em;
+	margin:0;
 }
 
 /*-------------------------
