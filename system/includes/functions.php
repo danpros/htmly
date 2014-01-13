@@ -613,6 +613,39 @@ function get_keyword($keyword){
 	return $tmp;
 }
 
+// Get related posts
+function get_related($tag) {
+
+	$perpage = config('related.count');
+	$posts = get_tag($tag);
+	$tmp = array();
+	$req = $_SERVER['REQUEST_URI'];
+	
+	foreach ($posts as $post) {
+		$url = $post->url;
+		if( strpos($url, $req) === false){
+			$tmp[] = $post;
+		}
+	}
+	
+	$total = count($tmp);
+	
+	if($total >= 1) {
+	
+		shuffle($tmp);
+		
+		$i = 1;
+		echo '<div class="related"><h4>Related posts</h4><ul>';
+		foreach ($tmp as $post) {
+			echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+			if ($i++ >= $perpage) break;
+		}
+		echo '</ul></div>';
+	}
+	
+}
+
+
 // Helper function to determine whether
 // to show the previous buttons
 function has_prev($prev){
@@ -846,25 +879,11 @@ function menu(){
 	}
 }
 
-// Menu
-function search() {
-	echo <<<EOF
-	<form id="search-form" method="get">
-		<input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
-		<input type="submit" value="Search" class="search-button">
-	</form>
-EOF;
-	if(isset($_GET['search'])) {
-		$url = site_url() . 'search/' . $_GET['search']; 
-		header ("Location: $url");
-	}
-}
-
 // Auto generate menu from static page
 function get_menu() {
 
 	$posts = get_spage_names();
-	ksort($posts);
+	krsort($posts);
 	
 	echo '<ul>';
 	echo '<li><a href="' . site_url() . '">Home</a></li>';
@@ -882,6 +901,21 @@ function get_menu() {
 	echo '</ul>';
 	
 }
+
+// Search form
+function search() {
+	echo <<<EOF
+	<form id="search-form" method="get">
+		<input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
+		<input type="submit" value="Search" class="search-button">
+	</form>
+EOF;
+	if(isset($_GET['search'])) {
+		$url = site_url() . 'search/' . $_GET['search']; 
+		header ("Location: $url");
+	}
+}
+
 
 // The not found error
 function not_found(){

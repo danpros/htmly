@@ -432,6 +432,27 @@ h1.title-post a:hover, h2.title-index a:hover {
 }
 
 /*-------------------------
+	Raleted posts
+--------------------------*/
+
+.related {
+	font-size: 14px;
+	font-family: 'Open Sans',sans-serif;
+	width:100%;
+	float:left;
+	margin-bottom: 1em;
+}
+
+.related h4 {
+	margin-top: 0;
+}
+
+.related ul {
+	margin-top:0;
+	margin-bottom: 1em;
+}
+
+/*-------------------------
 	Pagination + Postnav
 --------------------------*/
 
@@ -449,7 +470,6 @@ h1.title-post a:hover, h2.title-index a:hover {
     border-radius: 3px;
     color: #555555;
     line-height: 1;
-    padding: 10px 20px;
     text-align: center;
 }
 
@@ -461,10 +481,39 @@ h1.title-post a:hover, h2.title-index a:hover {
 .postnav .newer {
 	float:left;
 	margin-right:1em;
+	padding: 10px 15px 10px 25px;
 }
 
 .postnav .older {
 	float:right;
+	padding: 10px 25px 10px 15px;
+}
+
+.postnav .pagination-arrow{
+	display: inline-block;
+	border-radius: 3px;
+	color: #555 !important;
+	text-decoration: none !important;
+	text-transform: none;
+	position: relative;
+}
+
+.postnav .pagination-arrow.newer:before,
+.postnav .pagination-arrow.older:before{
+	content: '';
+	border: 5px solid #555;
+	border-color: transparent #555 transparent transparent;
+	width: 0;
+	height: 0;
+	position: absolute;
+	left: 5px;
+	top: 12px;
+}
+
+.postnav .pagination-arrow.older:before{
+	left:auto;
+	right:5px;
+	border-color: transparent transparent transparent #555;
 }
 
 .pager {

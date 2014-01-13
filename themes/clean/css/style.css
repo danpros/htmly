@@ -366,6 +366,23 @@ aside .copyright p{
 	margin: 5px 0;
 }
 
+/*-------------------------
+	Raleted posts
+--------------------------*/
+
+.related {
+	font-size: 14px;
+	font-family: 'Open Sans Condensed',sans-serif;
+	width:100%;
+	float:left;
+	margin-bottom: 1em;
+}
+
+.related ul {
+	margin-top:0;
+	margin-bottom: 1em;
+}
+
 /*----------------------------
 	Pagination buttons
 -----------------------------*/
