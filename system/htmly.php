@@ -270,6 +270,14 @@ get('/feed/rss',function(){
 	echo generate_rss(get_posts(null, 1, config('rss.count')));
 });
 
+// Show the RSS feed for sitemap
+get('/feed/sitemap',function(){
+
+	header('Content-Type: application/rss+xml');
+
+	// Generate RSS feed for all blog posts
+	echo generate_sitemap(get_posts(null, null, null));
+});
 
 // If we get here, it means that
 // nothing has been matched above

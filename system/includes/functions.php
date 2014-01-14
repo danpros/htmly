@@ -935,11 +935,35 @@ function generate_rss($posts){
 		->appendTo($feed);
 
 	foreach($posts as $p){
-		
 		$item = new Item();
 		$item
 			->title($p->title)
+			->pubDate($p->date)
 			->description($p->body)
+			->url($p->url)
+			->category($p->tag, $p->tagurl)
+			->appendTo($channel);
+	}
+	
+	echo $feed;
+}
+
+// Turn an array of posts into an RSS feed for sitemap
+function generate_sitemap($posts){
+	
+	$feed = new Feed();
+	$channel = new Channel();
+	
+	$channel
+		->title(config('blog.title'))
+		->description(config('blog.description'))
+		->url(site_url())
+		->appendTo($feed);
+
+	foreach($posts as $p){
+		$item = new Item();
+		$item
+			->title($p->title)
 			->url($p->url)
 			->appendTo($channel);
 	}

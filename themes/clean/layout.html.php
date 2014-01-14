@@ -16,8 +16,8 @@
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 </head>
-<body class="<?php echo $bodyclass; ?>">
-	<div itemscope="itemscope" itemtype="http://schema.org/Blog" class="hide">
+<body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
+	<div class="hide">
 		<meta content="<?php echo config('blog.title') ?>" itemprop="name"/>
 		<meta content="<?php echo config('blog.description')?>" itemprop="description"/>
 	</div>
