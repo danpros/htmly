@@ -278,7 +278,7 @@ blockquote:after {
 
 blockquote {
 	font-style: italic;
-	margin-left: 1em;
+	margin: 1em 0 1em 1em;
 }
 
 .credit {
@@ -705,7 +705,7 @@ aside .copyright p{
 -----------------------------*/
 
 .video-wrapper {
-	margin-bottom:1em;
+	margin:1em 0;
 }
 
 @media all and (min-width: 420px) {
