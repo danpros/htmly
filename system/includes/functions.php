@@ -568,54 +568,55 @@ function get_keyword($keyword){
 	
 	$words = explode(' ', $keyword);
 	
-	foreach ($words as $word) {
-		$word = $word;
-	}
-
 	foreach($posts as $index => $v){
 	
 		$content = $md->transformMarkdown(file_get_contents($v));
 		
-		if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){
-		
-			$post = new stdClass;
+		foreach ($words as $word) {
+			if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){
+			
+				$post = new stdClass;
 
-			// Extract the date
-			$arr = explode('_', $v);
-			
-			// Replaced string
-			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-			
-			// Author string
-			$str = explode('/', $replaced);
-			$author = $str[count($str)-3];
-			
-			// The post author + author url
-			$post->author = $author;
-			$post->authorurl = site_url() . 'author/' .  $author;
-			
-			// The post date
-			$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+				// Extract the date
+				$arr = explode('_', $v);
+				
+				// Replaced string
+				$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+				
+				// Author string
+				$str = explode('/', $replaced);
+				$author = $str[count($str)-3];
+				
+				// The post author + author url
+				$post->author = $author;
+				$post->authorurl = site_url() . 'author/' .  $author;
+				
+				// The post date
+				$post->date = strtotime(str_replace($replaced,'',$arr[0]));
 
-			// The post URL
-			$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-			
-			// The post tag
-			$post->tag = str_replace($replaced,'',$arr[1]);
-			
-			// The post tag URL
-			$post->tagurl = site_url(). 'tag/' . $arr[1];
+				// The post URL
+				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
+				
+				// The post tag
+				$post->tag = str_replace($replaced,'',$arr[1]);
+				
+				// The post tag URL
+				$post->tagurl = site_url(). 'tag/' . $arr[1];
 
-			// Extract the title and body
-			$arr = explode('</h1>', $content);
-			$post->title = str_replace('<h1>','',$arr[0]);
-			$post->body = $arr[1];
-			$tmp[] = $post;
-		
+				// Extract the title and body
+				$arr = explode('</h1>', $content);
+				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->body = $arr[1];
+				$tmp[] = $post;
+			
+			}
 		}
 	}
+	
+	$tmp = array_unique($tmp, SORT_REGULAR);
 
 	usort($tmp,'cmp');
+	
 	return $tmp;
 }
 
