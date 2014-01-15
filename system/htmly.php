@@ -7,6 +7,7 @@ date_default_timezone_set('Asia/Jakarta');
 // and our functions.php file
 require 'system/includes/dispatch.php';
 require 'system/includes/functions.php';
+require 'system/includes/opml.php';
 
 // Load the configuration file
 config('source', 'system/config.ini');
@@ -70,7 +71,7 @@ get('/tag/:tag',function($tag){
 		'canonical' => config('site.url') . '/tag/' . $tag,
 		'description' => 'All posts tagged ' . $tag . ' on '. config('blog.title') . '.',
 		'bodyclass' => 'intag',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Posts tagged: ' . $tag,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Posts tagged: ' . $tag,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -119,7 +120,7 @@ get('/archive/:req',function($req){
 		'canonical' => config('site.url') . '/archive/' . $req,
 		'description' => 'Archive page for: ' . $timestamp . ' on ' . config('blog.title') . '.',
 		'bodyclass' => 'inarchive',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Archive for: ' . $timestamp,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Archive for: ' . $timestamp,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -158,7 +159,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 		'canonical' => $current->url,
 		'description' => $description = get_description($current->body),
 		'bodyclass' => 'inpost',
-		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">Home</a></span> &#187; <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $current->tagurl .'">' . $current->tag . '</a></span> &#187; ' . $current->title,
+		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $current->tagurl .'">' . $current->tag . '</a></span> &#187; ' . $current->title,
 		'prev' => has_prev($prev),
 		'next' => has_next($next),
 		'type' => 'blogpost',
@@ -192,7 +193,7 @@ get('/search/:keyword', function($keyword){
 		'canonical' => config('site.url') . '/search/' . $keyword,
 		'description' => 'Search results for: ' . $keyword . ' on '. config('blog.title') . '.',
 		'bodyclass' => 'insearch',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Search results for: ' . $keyword,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Search results for: ' . $keyword,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 
@@ -212,7 +213,7 @@ get('/:spage', function($spage){
 		'canonical' => $post->url,
 		'description' => $description = get_description($post->body),
 		'bodyclass' => 'inpage',
-		'breadcrumb' => '<a href="' . config('site.url') . '">Home</a> &#187; ' . $post->title,
+		'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; ' . $post->title,
 		'p' => $post,
 		'type' => 'staticpage',
 	));
@@ -247,7 +248,7 @@ get('/author/:profile',function($profile){
 		'canonical' => config('site.url') . '/author/' . $profile,
 		'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
 		'bodyclass' => 'inprofile',
-		'breadcrumb' => '<a href="' . config('site.url') .  '">Home</a> &#187; Profile for: ' . $bio->title,
+		'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
 		'pagination' => has_pagination($total, $perpage, $page)
 	));
 });
@@ -277,6 +278,16 @@ get('/feed/sitemap',function(){
 
 	// Generate RSS feed for all blog posts
 	echo generate_sitemap(get_posts(null, null, null));
+});
+
+// Generate OPML file
+get('/feed/opml',function(){
+
+	header('Content-Type: text/xml');
+	
+	// Generate OPML file for the RSS
+	echo generate_opml();
+	
 });
 
 // If we get here, it means that

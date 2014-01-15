@@ -565,12 +565,18 @@ function get_keyword($keyword){
 
 	// Create a new instance of the markdown parser
 	$md = new MarkdownParser();
+	
+	$words = explode(' ', $keyword);
+	
+	foreach ($words as $word) {
+		$word = $word;
+	}
 
 	foreach($posts as $index => $v){
 	
 		$content = $md->transformMarkdown(file_get_contents($v));
 		
-		if(strpos(strtolower(strip_tags($content)), strtolower($keyword)) !== false){
+		if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){
 		
 			$post = new stdClass;
 
@@ -886,7 +892,7 @@ function get_menu() {
 	krsort($posts);
 	
 	echo '<ul>';
-	echo '<li><a href="' . site_url() . '">Home</a></li>';
+	echo '<li><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
 	foreach($posts as $index => $v){
 	
 		// Replaced string
@@ -969,6 +975,33 @@ function generate_sitemap($posts){
 	}
 	
 	echo $feed;
+}
+
+// Function to generate OPML file
+function generate_opml(){
+	
+	$opml_data = array(
+		'head' => array(
+			'title' => config('blog.title') . ' OPML File',
+			'ownerName' => config('blog.title'),
+			'ownerId' => config('site.url')
+			),
+		'body' => array(
+			array(
+				'text' => config('blog.title'),
+				'description' => config('blog.description'),
+				'htmlUrl' => config('site.url'),
+				'language' => 'unknown',
+				'title' => config('blog.title'),
+				'type' => 'rss',
+				'version' => 'RSS2',
+				'xmlUrl' => config('site.url') . '/feed/rss'
+				)
+			)
+		);
+
+	$opml = new OPML($opml_data);
+	echo $opml->render();
 }
 
 // Turn an array of posts into a JSON
