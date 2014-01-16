@@ -52,12 +52,9 @@ get('/tag/:tag',function($tag){
 	$page = $page ? (int)$page : 1;
 	$perpage = config('tag.perpage');
 
-	$posts = get_tag($tag);
+	$posts = get_tag($tag, $page, $perpage);
 	
-	$total = count($posts);
-	
-	// Extract a specific page with results
-	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+	$total = get_count($tag, 'filename');
 
 	if(empty($posts) || $page < 1){
 		// a non-existing page
@@ -83,12 +80,9 @@ get('/archive/:req',function($req){
 	$page = $page ? (int)$page : 1;
 	$perpage = config('archive.perpage');
 
-	$posts = get_archive($req);
+	$posts = get_archive($req, $page, $perpage);
 	
-	$total = count($posts);
-	
-	// Extract a specific page with results
-	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+	$total = get_count($req, 'filename');
 
 	if(empty($posts) || $page < 1){
 		// a non-existing page
@@ -136,7 +130,14 @@ get('/:year/:month/:name', function($year, $month, $name){
 		not_found();
 	}
 	
-	$bio = find_bio($current->author);
+	$bio = get_bio($current->author);
+	
+	if(isset($bio[0])) {
+		$bio = $bio[0];
+	}
+	else {
+		$bio = default_profile($current->author);
+	}
 	
 	if (array_key_exists('prev', $post)) {
 		$prev = $post['prev'];
@@ -200,13 +201,15 @@ get('/search/:keyword', function($keyword){
 });
 
 // The static page
-get('/:spage', function($spage){
+get('/:static', function($static){
 
-	$post = find_spage($spage);
+	$post = get_static_post($static);
 	
 	if(!$post){
 		not_found();
 	}
+	
+	$post = $post[0];
 
 	render('post',array(
 		'title' => $post->title .' - ' . config('blog.title'),
@@ -220,20 +223,25 @@ get('/:spage', function($spage){
 });
 
 // The author page
-get('/author/:profile',function($profile){
+get('/author/:profile', function($profile){
 
 	$page = from($_GET, 'page');
 	$page = $page ? (int)$page : 1;
 	$perpage = config('profile.perpage');
 
-	$posts = get_profile($profile);
-	$bio = find_bio($profile);
+	$posts = get_profile($profile, $page, $perpage);
 	
-	$total = count($posts);
+	$total = get_count($profile, 'dirname');
 	
-	// Extract a specific page with results
-	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
-
+	$bio = get_bio($profile);
+	
+	if(isset($bio[0])) {
+		$bio = $bio[0];
+	}
+	else {
+		$bio = default_profile($profile);
+	}
+	
 	if(empty($posts) || $page < 1){
 		// a non-existing page
 		not_found();

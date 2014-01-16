@@ -8,8 +8,8 @@ use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
 
-// Get blog post
-function get_post_names(){
+// Get blog post path. Unsorted. Mostly used on widget.
+function get_post_unsorted(){
 
 	static $_cache = array();
 
@@ -23,8 +23,32 @@ function get_post_names(){
 	return $_cache;
 }
 
-// Get static page 
-function get_spage_names(){
+// Get blog post with more info about the path. Sorted by filename.
+function get_post_sorted(){
+
+	static $tmp= array();
+	
+	static $_cache = array();
+
+	if(empty($_cache)){
+
+		// Get the names of all the posts
+
+		$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+		
+		foreach($tmp as $file) {
+			$_cache[] = pathinfo($file);
+		}
+		
+	}
+	
+	usort($_cache, "sortfile");
+	
+	return $_cache;
+}
+
+// Get static page path. Unsorted. 
+function get_static_pages(){
 
 	static $_cache = array();
 
@@ -39,7 +63,7 @@ function get_spage_names(){
 	return $_cache;
 }
 
-// Get author bio 
+// Get author bio path. Unsorted. 
 function get_author_names(){
 
 	static $_cache = array();
@@ -55,95 +79,88 @@ function get_author_names(){
 	return $_cache;
 }
 
+// usort function. Sort by filename.
+function sortfile($a, $b) {
+	return $a['filename'] == $b['filename'] ? 0 : ( $a['filename'] < $b['filename'] ) ? 1 : -1;
+}
+
 // usort function. Sort by date.
-function cmp($a, $b) {
+function sortdate($a, $b) {
 	return $a->date == $b->date ? 0 : ( $a->date < $b->date ) ? 1 : -1;
 }
 
-// Return blog post
+// Return blog posts. 
 function get_posts($posts, $page = 1, $perpage = 0){
-
+		
 	if(empty($posts)) {
-
-		$posts = get_post_names();
-		
-		$tmp = array();
-
-		// Create a new instance of the markdown parser
-		$md = new MarkdownParser();
-		
-		foreach($posts as $index => $v){
-
-			$post = new stdClass;
-
-			// Extract the date
-			$arr = explode('_', $v);
-			
-			// Replaced string
-			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-			
-			// Author string
-			$str = explode('/', $replaced);
-			$author = $str[count($str)-3];
-			
-			// The post author + author url
-			$post->author = $author;
-			$post->authorurl = site_url() . 'author/' .  $author;
-			
-			// The post date
-			$post->date = strtotime(str_replace($replaced,'',$arr[0]));
-			
-			// The archive per day
-			$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
-
-			// The post URL
-			$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-			
-			// The post tag
-			$post->tag = str_replace($replaced,'',$arr[1]);
-			
-			// The post tag url
-			$post->tagurl = site_url(). 'tag/' . $arr[1];
-
-			// Get the contents and convert it to HTML
-			$content = $md->transformMarkdown(file_get_contents($v));
-
-			// Extract the title and body
-			$arr = explode('</h1>', $content);
-			$post->title = str_replace('<h1>','',$arr[0]);
-			$post->body = $arr[1];
-
-			$tmp[] = $post;
-		}
-		
-		usort($tmp,'cmp');
-
-		
-		// Extract a specific page with results
-		$tmp = array_slice($tmp, ($page-1) * $perpage, $perpage);
-		
-		return $tmp;
-	
+		$posts = get_post_sorted();
 	}
-	else {
 	
-		// Extract a specific page with results
-		$tmp = array_slice($posts, ($page-1) * $perpage, $perpage);
+	$tmp = array();
 	
-		return $tmp;
+	// Extract a specific page with results
+	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+
+	// Create a new instance of the markdown parser
+	$md = new MarkdownParser();
 	
+	foreach($posts as $index => $v){
+
+		$post = new stdClass;
+		
+		$filepath = $v['dirname'] . '/' . $v['basename'];
+
+		// Extract the date
+		$arr = explode('_', $filepath);
+		
+		// Replaced string
+		$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+		
+		// Author string
+		$str = explode('/', $replaced);
+		$author = $str[count($str)-3];
+		
+		// The post author + author url
+		$post->author = $author;
+		$post->authorurl = site_url() . 'author/' .  $author;
+		
+		// The post date
+		$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+		
+		// The archive per day
+		$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
+
+		// The post URL
+		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
+		
+		// The post tag
+		$post->tag = str_replace($replaced,'',$arr[1]);
+		
+		// The post tag url
+		$post->tagurl = site_url(). 'tag/' . $arr[1];
+
+		// Get the contents and convert it to HTML
+		$content = $md->transformMarkdown(file_get_contents($filepath));
+
+		// Extract the title and body
+		$arr = explode('</h1>', $content);
+		$post->title = str_replace('<h1>','',$arr[0]);
+		$post->body = $arr[1];
+
+		$tmp[] = $post;
 	}
+
+	return $tmp;
 }
 
 // Find post by year, month and name, previous, and next.
 function find_post($year, $month, $name){
 
-	$posts = get_posts(null, null, null);
-	$tmp = $posts;
-
-	foreach ($tmp as $index => $v) {
-		$url = $v->url;
-		if (strpos($url, $year . '/' . $month . '/' . $name) !== false) {
+	$posts = get_post_sorted();
+	
+	foreach ($posts as $index => $v) {
+		$url = $v['basename'];
+		if( strpos($url, "$year-$month") !== false && strpos($url, $name.'.md') !== false){
 		
 			// Use the get_posts method to return
 			// a properly parsed object
@@ -184,323 +201,70 @@ function find_post($year, $month, $name){
 	}
 }
 
-// Return tag page
-function get_tag($tag){
+// Return tag page.
+function get_tag($tag, $page, $perpage){
 
-	$posts = get_post_names();
+	$posts = get_post_sorted();
+	
 	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
-	foreach($posts as $index => $v){
-		if( strpos($v, "$tag") !== false){
-
-			$post = new stdClass;
-
-			// Extract the date
-			$arr = explode('_', $v);
-			
-			// Make sure the tag request available
-			if ($tag === $arr[1]) {
-			
-				// Replaced string
-				$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-				
-				// Author string
-				$str = explode('/', $replaced);
-				$author = $str[count($str)-3];
-				
-				// The post author + author url
-				$post->author = $author;
-				$post->authorurl = site_url() . 'author/' .  $author;
-				
-				// The post date
-				$post->date = strtotime(str_replace($replaced,'',$arr[0]));
-
-				// The post URL
-				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-				
-				// The post tag
-				$post->tag = str_replace($replaced,'',$arr[1]);
-				
-				// The post tag URL
-				$post->tagurl = site_url(). 'tag/' . $arr[1];
-
-				// Get the contents and convert it to HTML
-				$content = $md->transformMarkdown(file_get_contents($v));
-
-				// Extract the title and body
-				$arr = explode('</h1>', $content);
-				$post->title = str_replace('<h1>','',$arr[0]);
-				$post->body = $arr[1];
-
-				$tmp[] = $post;
-			}
-			else {
-				not_found();
-			}
+	
+	foreach ($posts as $index => $v) {
+		$url = $v['filename'];
+		if( strpos($url, "$tag") !== false){
+			$tmp[] = $v;
 		}
 	}
-
-	usort($tmp,'cmp');
-	return $tmp;
+	
+	return $tmp = get_posts($tmp, $page, $perpage);
+	
 }
 
-// Return an archive page
-function get_archive($req){
+// Return archive page.
+function get_archive($req, $page, $perpage){
 
-	$posts = get_post_names();
+	$posts = get_post_sorted();
+	
 	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
-	foreach($posts as $index => $v){
-		if( strpos($v, "$req") !== false){
-
-			$post = new stdClass;
-
-			// Extract the date
-			$arr = explode('_', $v);
-			
-			// Replaced string
-			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-			
-			// Author string
-			$str = explode('/', $replaced);
-			$author = $str[count($str)-3];
-			
-			// The post author + author url
-			$post->author = $author;
-			$post->authorurl = site_url() . 'author/' .  $author;
-			
-			// The post date
-			$post->date = strtotime(str_replace($replaced,'',$arr[0]));
-
-			// The post URL
-			$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-			
-			// The post tag
-			$post->tag = str_replace($replaced,'',$arr[1]);
-			
-			// The post tag URL
-			$post->tagurl = site_url(). 'tag/' . $arr[1];
-
-			// Get the contents and convert it to HTML
-			$content = $md->transformMarkdown(file_get_contents($v));
-
-			// Extract the title and body
-			$arr = explode('</h1>', $content);
-			$post->title = str_replace('<h1>','',$arr[0]);
-			$post->body = $arr[1];
-
-			$tmp[] = $post;
+	
+	foreach ($posts as $index => $v) {
+		$url = $v['filename'];
+		if( strpos($url, "$req") !== false){
+			$tmp[] = $v;
 		}
 	}
-
-	usort($tmp,'cmp');
-	return $tmp;
-}
-
-// Return an archive list, categorized by year and month
-function archive_list() {
-
-	$posts = get_post_names();
-	$by_year = array();
-	$col = array();
 	
-	foreach($posts as $index => $v){
-	
-		$arr = explode('_', $v);
-		
-		// Replaced string
-		$str = $arr[0];
-		$replaced = substr($str, 0,strrpos($str, '/')) . '/';
-		
-		$date = str_replace($replaced,'',$arr[0]);
-		$data = explode('-', $date);
-		$col[] = $data;
-		
-	}
-	
-	foreach ($col as $row){
-	
-		$y = $row['0'];
-		$m = $row['1'];
-		$by_year[$y][] = $m;
-
-	}
-	
-	# Most recent year first
-	krsort($by_year);
-	# Iterate for display
-	echo '<h3>Archive</h3>';
-	foreach ($by_year as $year => $months){
-	
-		echo '<span class="year"><a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a></span> ';
-		echo '(' . count($months) . ')';
-		echo '<ul class="month">';
-
-		# Sort the months
-		ksort($months);
-		$by_month = array_count_values($months);
-		foreach ($by_month as $month => $count){
-			$name = date('F', mktime(0,0,0,$month,1,2010));
-			echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';
-			echo ' <span class="count">(' . $count . ')</span></li>';
-		}
-
-		echo '</ul>';
-		
-	}
-
-}
-
-// Return tag cloud
-function tag_cloud() {
-
-	$posts = get_post_names();
-	$tags = array();
-	
-	foreach($posts as $index => $v){
-	
-		$arr = explode('_', $v);
-		
-		$data = $arr[1];
-		$tags[] = $data;
-		
-	}
-	
-	$tag_collection = array_count_values($tags);
-	ksort($tag_collection);
-	
-	echo '<h3>Tags</h3>';
-	echo '<ul class="taglist">';
-	foreach ($tag_collection as $tag => $count){
-		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
-	}
-	echo '</ul>';
+	return $tmp = get_posts($tmp, $page, $perpage);
 	
 }
 
-// Return static page
-function get_spage($posts, $spage){
+// Return posts list on profile.
+function get_profile($profile, $page, $perpage){
 
+	$posts = get_post_sorted();
+	
 	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
-	foreach($posts as $index => $v){
-		if( strpos($v, "$spage") !== false && strpos($v, $spage.'.md') !== false){
-
-			$post = new stdClass;
-			
-			// Replaced string
-			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
-			
-			// The static page URL
-			$url = str_replace($replaced,'',$v);
-			$post->url = site_url() . str_replace('.md','',$url);
-			
-			// Get the contents and convert it to HTML
-			$content = $md->transformMarkdown(file_get_contents($v));
-
-			// Extract the title and body
-			$arr = explode('</h1>', $content);
-			$post->title = str_replace('<h1>','',$arr[0]);
-			$post->body = $arr[1];
-
-			$tmp[] = $post;
+	
+	foreach ($posts as $index => $v) {
+		$url = $v['dirname'];
+		$str = explode('/', $url);
+		$author = $str[count($str)-2];
+		if($profile === $author){
+			$tmp[] = $v;
 		}
 	}
 	
-	return $tmp;
-}
-
-// Find static page
-function find_spage($spage){
-	
-	$posts = get_spage_names();
-
-	foreach($posts as $index => $v){
-		if( strpos($v, "$spage") !== false && strpos($v, $spage.'.md') !== false){
-	
-			// Use the get_spage method to return
-			// a properly parsed object
-
-			$arr = get_spage($posts, $spage);
-			return $arr[0];
-		}
+	if(empty($tmp)) {
+		not_found();
 	}
-
-	return false;
+	
+	return $tmp = get_posts($tmp, $page, $perpage);
+	
 }
 
-// Return profile page
-function get_profile($profile){
+// Return author bio.
+function get_bio($author){
 
-	$posts = get_post_names();
-	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
-	foreach($posts as $index => $v){
-		if( strpos($v, "$profile") !== false){
-
-			$post = new stdClass;
-
-			// Extract the date
-			$arr = explode('_', $v);
-			
-			// Replaced string
-			$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-			
-			// Author string
-			$str = explode('/', $replaced);
-			$author = $str[count($str)-3];
-			
-			// Make sure the tag request available
-			if ($profile === $author) {
-				
-				// The post author + author url
-				$post->author = $author;
-				$post->authorurl = site_url() . 'author/' .  $author;
-				
-				// The post date
-				$post->date = strtotime(str_replace($replaced,'',$arr[0]));
-
-				// The post URL
-				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-				
-				// The post tag
-				$post->tag = str_replace($replaced,'',$arr[1]);
-				
-				// The post tag URL
-				$post->tagurl = site_url(). 'tag/' . $arr[1];
-
-				// Get the contents and convert it to HTML
-				$content = $md->transformMarkdown(file_get_contents($v));
-
-				// Extract the title and body
-				$arr = explode('</h1>', $content);
-				$post->title = str_replace('<h1>','',$arr[0]);
-				$post->body = $arr[1];
-
-				$tmp[] = $post;
-			}
-
-		}
-	}
-
-	usort($tmp,'cmp');
-	return $tmp;
-}
-
-// Return author bio
-function get_bio($names, $author){
+	$names = get_author_names();
 
 	$tmp = array();
 
@@ -508,7 +272,6 @@ function get_bio($names, $author){
 	$md = new MarkdownParser();
 
 	foreach($names as $index => $v){
-
 		$post = new stdClass;
 		
 		// Replaced string
@@ -538,29 +301,60 @@ function get_bio($names, $author){
 	return $tmp;
 }
 
-// Find author bio
-function find_bio($author){
+function default_profile($author) {
+
+	$tmp = array();
+	$profile = new stdClass;
 	
-	$names = get_author_names();
-
-	foreach($names as $index => $v){
-		if( strpos($v, $author) !== false && strpos($v, 'author.md') !== false){
-			// Use the get_spage method to return
-			// a properly parsed object
-			$arr = get_bio($names, $author);
-			if (isset($arr[0])) {
-				return $arr[0];
-			}
-		}
-	}
-
-	return false;
+	$profile->title = $author;
+	$profile->body = '<p>Just another HTMLy user.</p>';
+	
+	return $tmp[] = $profile;
+	
 }
 
-// Return search page
+// Return static page.
+function get_static_post($static){
+
+	$posts = get_static_pages();
+
+	$tmp = array();
+
+	// Create a new instance of the markdown parser
+	$md = new MarkdownParser();
+
+	foreach($posts as $index => $v){
+		if(strpos($v, $static.'.md') !== false){
+		
+			$post = new stdClass;
+			
+			// Replaced string
+			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+			
+			// The static page URL
+			$url = str_replace($replaced,'',$v);
+			$post->url = site_url() . str_replace('.md','',$url);
+			
+			// Get the contents and convert it to HTML
+			$content = $md->transformMarkdown(file_get_contents($v));
+
+			// Extract the title and body
+			$arr = explode('</h1>', $content);
+			$post->title = str_replace('<h1>','',$arr[0]);
+			$post->body = $arr[1];
+
+			$tmp[] = $post;
+			
+		}
+	}
+	
+	return $tmp;
+}
+
+// Return search page.
 function get_keyword($keyword){
 
-	$posts = get_post_names();
+	$posts = get_post_unsorted();
 	$tmp = array();
 
 	// Create a new instance of the markdown parser
@@ -615,16 +409,16 @@ function get_keyword($keyword){
 	
 	$tmp = array_unique($tmp, SORT_REGULAR);
 
-	usort($tmp,'cmp');
+	usort($tmp,'sortdate');
 	
 	return $tmp;
 }
 
-// Get related posts
+// Get related posts base on post tag.
 function get_related($tag) {
 
 	$perpage = config('related.count');
-	$posts = get_tag($tag);
+	$posts = get_tag($tag, 1, $perpage+1);
 	$tmp = array();
 	$req = $_SERVER['REQUEST_URI'];
 	
@@ -652,6 +446,104 @@ function get_related($tag) {
 	
 }
 
+// Return post count. Matching $var and $str provided.
+function get_count($var, $str) {
+
+	$posts = get_post_sorted();
+	
+	$tmp = array();
+	
+	foreach ($posts as $index => $v) {
+		$url = $v[$str];
+		if( strpos($url, "$var") !== false){
+			$tmp[] = $v;
+		}
+	}
+	
+	return count($tmp);
+	
+}
+
+// Return an archive list, categorized by year and month.
+function archive_list() {
+
+	$posts = get_post_unsorted();
+	$by_year = array();
+	$col = array();
+	
+	foreach($posts as $index => $v){
+	
+		$arr = explode('_', $v);
+		
+		// Replaced string
+		$str = $arr[0];
+		$replaced = substr($str, 0,strrpos($str, '/')) . '/';
+		
+		$date = str_replace($replaced,'',$arr[0]);
+		$data = explode('-', $date);
+		$col[] = $data;
+		
+	}
+	
+	foreach ($col as $row){
+	
+		$y = $row['0'];
+		$m = $row['1'];
+		$by_year[$y][] = $m;
+
+	}
+	
+	# Most recent year first
+	krsort($by_year);
+	# Iterate for display
+	echo '<h3>Archive</h3>';
+	foreach ($by_year as $year => $months){
+	
+		echo '<span class="year"><a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a></span> ';
+		echo '(' . count($months) . ')';
+		echo '<ul class="month">';
+
+		# Sort the months
+		ksort($months);
+		$by_month = array_count_values($months);
+		foreach ($by_month as $month => $count){
+			$name = date('F', mktime(0,0,0,$month,1,2010));
+			echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';
+			echo ' <span class="count">(' . $count . ')</span></li>';
+		}
+
+		echo '</ul>';
+		
+	}
+
+}
+
+// Return tag cloud.
+function tag_cloud() {
+
+	$posts = get_post_unsorted();
+	$tags = array();
+	
+	foreach($posts as $index => $v){
+	
+		$arr = explode('_', $v);
+		
+		$data = $arr[1];
+		$tags[] = $data;
+		
+	}
+	
+	$tag_collection = array_count_values($tags);
+	ksort($tag_collection);
+	
+	echo '<h3>Tags</h3>';
+	echo '<ul class="taglist">';
+	foreach ($tag_collection as $tag => $count){
+		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+	}
+	echo '</ul>';
+	
+}
 
 // Helper function to determine whether
 // to show the previous buttons
@@ -679,7 +571,7 @@ function has_next($next){
 // to show the pagination buttons
 function has_pagination($total, $perpage, $page = 1){
 	if(!$total) {
-		$total = count(get_post_names());
+		$total = count(get_post_unsorted());
 	}
 	return array(
 		'prev'=> $page > 1,
@@ -809,7 +701,7 @@ function copyright(){
 	
 }
 
-// Disqus
+// Disqus on post.
 function disqus($title, $url){
 	$disqus = config('disqus.shortname');
 	$script = <<<EOF
@@ -829,7 +721,7 @@ EOF;
 	}
 }
 
-// Disqus
+// Disqus comment count on teaser
 function disqus_count(){
 	$disqus = config('disqus.shortname');
 	$script = <<<EOF
@@ -847,7 +739,7 @@ EOF;
 	}
 }
 
-// Google Publisher
+// Google Publisher (Google+ page).
 function publisher(){
 	$publisher = config('google.publisher');
 	if (!empty($publisher)) {
@@ -889,7 +781,7 @@ function menu(){
 // Auto generate menu from static page
 function get_menu() {
 
-	$posts = get_spage_names();
+	$posts = get_static_pages();
 	krsort($posts);
 	
 	echo '<ul>';
