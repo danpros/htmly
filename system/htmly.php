@@ -203,6 +203,32 @@ get('/search/:keyword', function($keyword){
 // The static page
 get('/:static', function($static){
 
+	if($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml') {
+	
+		header('Content-Type: text/xml');
+		
+		if ($static === 'sitemap.xml') {
+			generate_sitemap('index');
+		}
+		else if ($static === 'sitemap.base.xml') {
+			generate_sitemap('base');
+		}
+		else if ($static === 'sitemap.post.xml') {
+			generate_sitemap('post');
+		}
+		else if ($static === 'sitemap.static.xml') {
+			generate_sitemap('static');
+		}
+		else if ($static === 'sitemap.tag.xml') {
+			generate_sitemap('tag');
+		}
+		else if ($static === 'sitemap.archive.xml') {
+			generate_sitemap('archive');
+		}
+		
+		die;
+	}
+
 	$post = get_static_post($static);
 	
 	if(!$post){
@@ -277,15 +303,6 @@ get('/feed/rss',function(){
 
 	// Show an RSS feed with the 30 latest posts
 	echo generate_rss(get_posts(null, 1, config('rss.count')));
-});
-
-// Show the RSS feed for sitemap
-get('/feed/sitemap',function(){
-
-	header('Content-Type: application/rss+xml');
-
-	// Generate RSS feed for all blog posts
-	echo generate_sitemap(get_posts(null, null, null));
 });
 
 // Generate OPML file

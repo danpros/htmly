@@ -504,7 +504,7 @@ function archive_list() {
 		echo '<ul class="month">';
 
 		# Sort the months
-		ksort($months);
+		krsort($months);
 		$by_month = array_count_values($months);
 		foreach ($by_month as $month => $count){
 			$name = date('F', mktime(0,0,0,$month,1,2010));
@@ -815,7 +815,6 @@ EOF;
 	}
 }
 
-
 // The not found error
 function not_found(){
 	error(404, render('404', null, false));
@@ -847,27 +846,172 @@ function generate_rss($posts){
 	echo $feed;
 }
 
-// Turn an array of posts into an RSS feed for sitemap
-function generate_sitemap($posts){
+// Return post, tag, archive url. 
+function get_path(){
+		
+	$posts = get_post_sorted();
 	
-	$feed = new Feed();
-	$channel = new Channel();
+	$tmp = array();
 	
-	$channel
-		->title(config('blog.title'))
-		->description(config('blog.description'))
-		->url(site_url())
-		->appendTo($feed);
+	foreach($posts as $index => $v){
 
-	foreach($posts as $p){
-		$item = new Item();
-		$item
-			->title($p->title)
-			->url($p->url)
-			->appendTo($channel);
+		$post = new stdClass;
+		
+		$filepath = $v['dirname'] . '/' . $v['basename'];
+
+		// Extract the date
+		$arr = explode('_', $filepath);
+		
+		// Replaced string
+		$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+		
+		// Author string
+		$str = explode('/', $replaced);
+		$author = $str[count($str)-3];
+		
+		$post->authorurl = site_url() . 'author/' .  $author;
+		
+		// The post date
+		$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+		
+		// The archive per day
+		$post->archiveday = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
+		
+		// The archive per day
+		$post->archivemonth = site_url(). 'archive/' . date('Y-m', $post->date) ;
+		
+		// The archive per day
+		$post->archiveyear = site_url(). 'archive/' . date('Y', $post->date) ;
+
+		// The post URL
+		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
+		
+		// The post tag url
+		$post->tagurl = site_url(). 'tag/' . $arr[1];
+
+		$tmp[] = $post;
+	}
+
+	return $tmp;
+}
+
+// Return static page path.
+function get_static_path(){
+
+	$posts = get_static_pages();
+
+	$tmp = array();
+
+	// Create a new instance of the markdown parser
+	$md = new MarkdownParser();
+
+	foreach($posts as $index => $v){
+		
+		$post = new stdClass;
+		
+		// Replaced string
+		$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+		
+		// The static page URL
+		$url = str_replace($replaced,'',$v);
+		$post->url = site_url() . str_replace('.md','',$url);
+
+		$tmp[] = $post;
+			
 	}
 	
-	echo $feed;
+	return $tmp;
+}
+
+// Generate sitemap.xml.
+function generate_sitemap($str){
+	
+	echo '<?xml version="1.0" encoding="UTF-8"?>';
+	
+	if ($str == 'index') {
+		echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		echo '<sitemap><loc>' . site_url() . 'sitemap.base.xml</loc></sitemap>';
+		echo '<sitemap><loc>' . site_url() . 'sitemap.post.xml</loc></sitemap>';
+		echo '<sitemap><loc>' . site_url() . 'sitemap.static.xml</loc></sitemap>';
+		echo '<sitemap><loc>' . site_url() . 'sitemap.tag.xml</loc></sitemap>';
+		echo '<sitemap><loc>' . site_url() . 'sitemap.archive.xml</loc></sitemap>';		
+		echo '</sitemapindex>';
+	}
+	elseif ($str == 'base') {
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		echo '<url><loc>' . site_url() . '</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>';
+		echo '</urlset>';
+	}
+	elseif ($str == 'post') {
+	
+		$posts = get_path();
+		
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		foreach($posts as $p) {
+			echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+		}
+		echo '</urlset>';
+	}
+	elseif ($str == 'static') {
+	
+		$posts = get_static_path();
+		
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		foreach($posts as $p) {
+			echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+		}
+		echo '</urlset>';
+	}
+	elseif ($str == 'tag') {
+	
+		$posts = get_path();
+		$tag = array();
+		foreach($posts as $p) {
+			$tag[] = $p->tagurl;
+		}
+		$tag = array_unique($tag, SORT_REGULAR);
+		
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		foreach($tag as $t) {
+			echo '<url><loc>' . $t . '</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>';
+		}
+		echo '</urlset>';
+	}
+	elseif ($str == 'archive') {
+	
+		$posts = get_path();
+		$day = array();
+		$month = array();
+		$year = array();
+	
+		foreach($posts as $p) {
+			$day[] = $p->archiveday;
+			$month[] = $p->archivemonth;
+			$year[] = $p->archiveyear;
+			
+		}
+	
+		$day = array_unique($day, SORT_REGULAR);
+		$month = array_unique($month, SORT_REGULAR);
+		$year = array_unique($year, SORT_REGULAR);
+		
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		
+		foreach($day as $d) {
+			echo '<url><loc>' . $d . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+		}
+		
+		foreach($month as $m) {
+			echo '<url><loc>' . $m . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+		}
+		
+		foreach($year as $y) {
+			echo '<url><loc>' . $y . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+		}
+		
+		echo '</urlset>';
+	}
+	
 }
 
 // Function to generate OPML file

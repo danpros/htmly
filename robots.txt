@@ -30,5 +30,3 @@ Disallow: /composer.lock
 Disallow: /composer.phar
 # Paths 
 Disallow: /search/
-
-Sitemap: /feed/sitemap
