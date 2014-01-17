@@ -929,53 +929,69 @@ function generate_sitemap($str){
 	echo '<?xml version="1.0" encoding="UTF-8"?>';
 	
 	if ($str == 'index') {
+	
 		echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		echo '<sitemap><loc>' . site_url() . 'sitemap.base.xml</loc></sitemap>';
 		echo '<sitemap><loc>' . site_url() . 'sitemap.post.xml</loc></sitemap>';
 		echo '<sitemap><loc>' . site_url() . 'sitemap.static.xml</loc></sitemap>';
 		echo '<sitemap><loc>' . site_url() . 'sitemap.tag.xml</loc></sitemap>';
-		echo '<sitemap><loc>' . site_url() . 'sitemap.archive.xml</loc></sitemap>';		
+		echo '<sitemap><loc>' . site_url() . 'sitemap.archive.xml</loc></sitemap>';
+		echo '<sitemap><loc>' . site_url() . 'sitemap.author.xml</loc></sitemap>';		
 		echo '</sitemapindex>';
+		
 	}
 	elseif ($str == 'base') {
+	
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		echo '<url><loc>' . site_url() . '</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>';
 		echo '</urlset>';
+		
 	}
 	elseif ($str == 'post') {
 	
 		$posts = get_path();
 		
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		
 		foreach($posts as $p) {
 			echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
 		}
+		
 		echo '</urlset>';
+		
 	}
 	elseif ($str == 'static') {
 	
 		$posts = get_static_path();
 		
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		
 		foreach($posts as $p) {
 			echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
 		}
+		
 		echo '</urlset>';
+		
 	}
 	elseif ($str == 'tag') {
 	
 		$posts = get_path();
 		$tag = array();
+		
 		foreach($posts as $p) {
 			$tag[] = $p->tagurl;
 		}
+		
 		$tag = array_unique($tag, SORT_REGULAR);
 		
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		
 		foreach($tag as $t) {
 			echo '<url><loc>' . $t . '</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>';
 		}
+		
 		echo '</urlset>';
+		
 	}
 	elseif ($str == 'archive') {
 	
@@ -1010,6 +1026,27 @@ function generate_sitemap($str){
 		}
 		
 		echo '</urlset>';
+		
+	}
+	elseif ($str == 'author') {
+	
+		$posts = get_path();
+		$author = array();
+		
+		foreach($posts as $p) {
+			$author[] = $p->authorurl;
+		}
+		
+		$author = array_unique($author, SORT_REGULAR);
+		
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		
+		foreach($author as $a) {
+			echo '<url><loc>' . $a . '</loc><changefreq>daily</changefreq><priority>0.5</priority></url>';
+		}
+		
+		echo '</urlset>';
+		
 	}
 	
 }

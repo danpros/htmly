@@ -203,7 +203,7 @@ get('/search/:keyword', function($keyword){
 // The static page
 get('/:static', function($static){
 
-	if($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml') {
+	if($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml') {
 	
 		header('Content-Type: text/xml');
 		
@@ -225,8 +225,12 @@ get('/:static', function($static){
 		else if ($static === 'sitemap.archive.xml') {
 			generate_sitemap('archive');
 		}
+		else if ($static === 'sitemap.author.xml') {
+			generate_sitemap('author');
+		}
 		
 		die;
+		
 	}
 
 	$post = get_static_post($static);
