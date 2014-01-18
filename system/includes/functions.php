@@ -3,7 +3,7 @@
 // Change this to your timezone
 date_default_timezone_set('Asia/Jakarta');
 
-use dflydev\markdown\MarkdownParser;
+use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
@@ -100,9 +100,6 @@ function get_posts($posts, $page = 1, $perpage = 0){
 	
 	// Extract a specific page with results
 	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
 	
 	foreach($posts as $index => $v){
 
@@ -140,7 +137,7 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		$post->tagurl = site_url(). 'tag/' . $arr[1];
 
 		// Get the contents and convert it to HTML
-		$content = $md->transformMarkdown(file_get_contents($filepath));
+		$content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
 
 		// Extract the title and body
 		$arr = explode('</h1>', $content);
@@ -268,9 +265,6 @@ function get_bio($author){
 
 	$tmp = array();
 
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
 	foreach($names as $index => $v){
 		$post = new stdClass;
 		
@@ -287,7 +281,7 @@ function get_bio($author){
 			$post->url = site_url() . 'author/' . $profile;
 			
 			// Get the contents and convert it to HTML
-			$content = $md->transformMarkdown(file_get_contents($v));
+			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
 			// Extract the title and body
 			$arr = explode('</h1>', $content);
@@ -320,9 +314,6 @@ function get_static_post($static){
 
 	$tmp = array();
 
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
-
 	foreach($posts as $index => $v){
 		if(strpos($v, $static.'.md') !== false){
 		
@@ -336,7 +327,7 @@ function get_static_post($static){
 			$post->url = site_url() . str_replace('.md','',$url);
 			
 			// Get the contents and convert it to HTML
-			$content = $md->transformMarkdown(file_get_contents($v));
+			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
 			// Extract the title and body
 			$arr = explode('</h1>', $content);
@@ -356,15 +347,12 @@ function get_keyword($keyword){
 
 	$posts = get_post_unsorted();
 	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
 	
 	$words = explode(' ', $keyword);
 	
 	foreach($posts as $index => $v){
 	
-		$content = $md->transformMarkdown(file_get_contents($v));
+		$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 		
 		foreach ($words as $word) {
 			if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){

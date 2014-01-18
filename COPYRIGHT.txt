@@ -21,11 +21,9 @@ license, including:
   Dispatch - Copyright (c) 2014 Jesus A. Domingo <jesus.domingo@gmail.com>
 
   Composer - Copyright (c) 2011 Nils Adermann, Jordi Boggiano
-
-  PHP Markdown & Extra - Copyright (c) 2011 Dragonfly Development Inc. 
   
-  Based on PHP Markdown & Extra - Copyright (c) 2004-2009 Michel Fortin
+  PHP Markdown & Extra - Copyright (c) 2004-2009 Michel Fortin
   
-  Based on Markdown - Copyright (c) 2003-2006 John Gruber
+  Markdown - Copyright (c) 2003-2006 John Gruber
 
   \Suin\RSSWriter - Copyright (c) Suin <https://github.com/suin>
