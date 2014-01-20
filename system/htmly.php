@@ -10,7 +10,7 @@ require 'system/includes/functions.php';
 require 'system/includes/opml.php';
 
 // Load the configuration file
-config('source', 'system/config.ini');
+config('source', 'admin/config.ini');
 
 // The front page of the blog.
 // This will match the root url
