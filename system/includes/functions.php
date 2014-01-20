@@ -207,9 +207,14 @@ function get_tag($tag, $page, $perpage){
 	
 	foreach ($posts as $index => $v) {
 		$url = $v['filename'];
-		if( strpos($url, "$tag") !== false){
+		$str = explode('_', $url);
+		if($tag === $str[1]){
 			$tmp[] = $v;
 		}
+	}
+	
+	if(empty($tmp)) {
+		not_found();
 	}
 	
 	return $tmp = get_posts($tmp, $page, $perpage);
@@ -225,9 +230,14 @@ function get_archive($req, $page, $perpage){
 	
 	foreach ($posts as $index => $v) {
 		$url = $v['filename'];
-		if( strpos($url, "$req") !== false){
+		$str = explode('_', $url);
+		if( strpos($str[0], "$req") !== false ){
 			$tmp[] = $v;
 		}
+	}
+	
+	if(empty($tmp)) {
+		not_found();
 	}
 	
 	return $tmp = get_posts($tmp, $page, $perpage);
@@ -889,9 +899,6 @@ function get_static_path(){
 	$posts = get_static_pages();
 
 	$tmp = array();
-
-	// Create a new instance of the markdown parser
-	$md = new MarkdownParser();
 
 	foreach($posts as $index => $v){
 		

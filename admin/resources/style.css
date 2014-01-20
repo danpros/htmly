@@ -1,0 +1,42 @@
+body {
+	font-size: 16px;
+	font-family: Arial, Verdana;
+	margin:0 auto;
+	padding:0;
+	background: none repeat scroll 0 0 #F9F9F9;
+	width:100%;
+}
+
+.wrapper-outer {
+	float:left;
+	position:relative;
+	width:100%;
+}
+
+.wrapper-inner {
+	margin:0 auto;
+	width:980px;
+}
+
+.nav {
+	width: 96%;
+	padding:2%;
+}
+
+table {
+	border: 1px solid #ccc;
+}
+
+table td {
+	border: 1px solid #ccc;
+	background: #ddd;
+}
+
+@media all and (max-width: 980px) {
+
+	.wrapper-inner {
+		margin:0 auto;
+		width:100%;
+	}
+	
+}
