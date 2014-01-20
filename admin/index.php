@@ -1,4 +1,5 @@
 <?php
+ob_start();
 date_default_timezone_set('Asia/Jakarta');
 require '../system/includes/dispatch.php';
 config('source', '../admin/config.ini');
