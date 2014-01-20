@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 	if(isset($_POST['submit'])) {
 
 		$user = $_POST['user'];

@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 // Get blog post with more info about the path. Sorted by filename.
 function admin_get_post(){
 

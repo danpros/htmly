@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 include 'session.php';
 
 session_destroy();
