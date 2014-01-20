@@ -1,4 +1,5 @@
 <?php 
+ob_start();
 	// Change this to your timezone
 	date_default_timezone_set('Asia/Jakarta');
 	require '../../system/includes/dispatch.php';
