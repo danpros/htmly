@@ -1,9 +1,30 @@
 <?php
-// Change this to your timezone
-date_default_timezone_set('Asia/Jakarta');
-require '../../system/includes/dispatch.php';
-config('source', '../../admin/config.ini');
-include '../includes/session.php';
+	// Change this to your timezone
+	date_default_timezone_set('Asia/Jakarta');
+	require '../../system/includes/dispatch.php';
+	config('source', '../../admin/config.ini');
+	include '../includes/session.php';
+
+	if(isset($_POST['submit'])) {
+		$post_date = date('Y-m-d-H');
+		$post_tag = $_POST['tag'];
+		$post_url = $_POST['url'];
+		$post_content = $_POST['content'];
+	}
+	if(!empty($post_tag) && !empty($post_url) && !empty($post_content)) {
+		$user = $_SESSION['user'];
+		$filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
+		$dir = '../../content/' . $user. '/blog/';
+		if(is_dir($dir)) {
+			file_put_contents($dir . $filename, print_r($post_content, true));
+		}
+		else {
+			mkdir($dir, 0777, true);
+			file_put_contents($dir . $filename, print_r($post_content, true));
+		}
+		header('location: ../index.php');
+	}
+	if (login()) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,37 +39,12 @@ include '../includes/session.php';
 <body>
 <div class="wrapper-outer">
 <div class="wrapper-inner">
-<?php if (login()) { ?>
 	<div class="nav">
-		<a href="<?php echo config('site.url');?>/admin">Admin</a>
-		<a href="../includes/logout.php">Logout</a>
+		<a href="<?php echo config('site.url');?>" target="_blank">Home</a> | 
+		<a href="<?php echo config('site.url');?>/admin">Admin</a> | 
+		<a href="../includes/logout.php">Logout</a> | 
 		<span class="welcome">Welcome <?php echo $_SESSION['user'];?>!</span>
 	</div>
-	
-	<?php
-		if(isset($_POST['submit'])) {
-			$post_date = date('Y-m-d-H');
-			$post_tag = $_POST['tag'];
-			$post_url = $_POST['url'];
-			$post_content = $_POST['content'];
-		}
-		if(!empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-			$user = $_SESSION['user'];
-			$filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
-			$dir = '../../content/' . $user. '/blog/';
-			if(is_dir($dir)) {
-				file_put_contents($dir . $filename, print_r($post_content, true));
-			}
-			else {
-				mkdir($dir, 0777, true);
-				file_put_contents($dir . $filename, print_r($post_content, true));
-			}	
-			header('location: ../index.php');
-		}
-	?>
-<?php } else {?>
-	<?php header('location: ../index.php');?>
-<?php } ?>
 	<div class="wmd-panel">
 		<form method="POST">
 			Tag: <br><input type="text" name="tag"/><br><br>
@@ -78,3 +74,4 @@ include '../includes/session.php';
 </div>	
 </body>
 </html>
+<?php } else {header('location: ../index.php');} ?>
