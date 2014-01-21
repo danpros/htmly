@@ -1,3 +1,0 @@
-# About
-
-About this blog.

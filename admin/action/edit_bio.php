@@ -5,18 +5,27 @@
 	config('source', '../../admin/config.ini');
 	include '../includes/session.php';
 	
-	if(isset($_GET['url'])) {
-		$url = $_GET['url'];
+	if(isset($_SESSION['user'])) {
+		$user = $_SESSION['user'];
 	}
 	else {
 		header('location: ../index.php');
 	}
 	
+	$filename = '../../content/' . $user . '/author.md';
+	
 	if(isset($_POST['submit'])) {
-		$post_content = $_POST['content'];
+		$bio_content = $_POST['content'];
 	}
-	if(!empty($post_content)) {
-		file_put_contents('../'. $url, print_r($post_content, true));
+	if(!empty($bio_content)) {
+		$dir = '../../content/' . $user. '/';
+		if(is_dir($dir)) {
+			file_put_contents($dir . $filename, print_r($bio_content, true));
+		}
+		else {
+			mkdir($dir, 0777, true);
+			file_put_contents($dir . $filename, print_r($bio_content, true));
+		}
 		header('location: ../index.php');		
 	}
 	
@@ -42,15 +51,14 @@
 			<a href="<?php echo config('site.url');?>" target="_blank">Home</a> | 
 			<a href="<?php echo config('site.url');?>/admin">Admin</a> | 
 			<a href="../action/create_post.php">Create post</a> | 
-			<a href="../action/create_page.php">Create page</a> | 
-			<a href="../action/edit_bio.php">Edit bio</a> | 				
+			<a href="../action/create_page.php">Create page</a> |		
 			<a href="../action/logout.php">Logout</a> | 
 			<span class="welcome">Welcome <?php echo $_SESSION['user'];?>!</span>
 		</div>
 		<div class="wmd-panel">
 		<form method="POST">
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
-			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo file_get_contents('../' . $url)?></textarea><br>
+			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php if(file_exists($filename)) { echo file_get_contents($filename);} ?></textarea><br>
 			<input type="submit" name="submit" value="Submit"/>
 		</form>
 		</div>

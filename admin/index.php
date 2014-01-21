@@ -24,7 +24,8 @@
 				<a href="<?php echo config('site.url');?>" target="_blank">Home</a> | 
 				<a href="<?php echo config('site.url');?>/admin">Admin</a> | 
 				<a href="action/create_post.php">Create post</a> | 
-				<a href="action/create_page.php">Create page</a> | 				
+				<a href="action/create_page.php">Create page</a> | 	
+				<a href="action/edit_bio.php">Edit bio</a> | 					
 				<a href="action/logout.php">Logout</a> | 
 				<span class="welcome">Welcome <?php echo $_SESSION['user'];?>!</span>
 			</div>
