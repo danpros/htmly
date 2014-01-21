@@ -26,7 +26,8 @@ get('/index', function () {
 	
 	if(empty($posts) || $page < 1){
 		// a non-existing page
-		not_found();
+		welcome_page();
+		die;
 	}
 	
 	$tl = config('blog.tagline');
