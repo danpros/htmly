@@ -1,13 +1,13 @@
 <?php
 	include '../includes/session.php';
-		
+	include '../includes/user.php';	
 	if(!empty($_REQUEST['user']) && !empty($_REQUEST['password'])) {
 		
 		$user = $_REQUEST['user'];
 		$pass = $_REQUEST['password'];
 		
-		$user_file = '../../admin/users/' . $user . '.txt';
-		$user_pass = @file_get_contents($user_file);
+		$user_file = '../../admin/users/' . $user . '.ini';
+		$user_pass = user('password', $user);
 		
 		if(file_exists($user_file)) {
 			if($pass === $user_pass) {
@@ -46,6 +46,9 @@ EOF;
 			<!DOCTYPE html>
 			<html>
 			<head>
+				<meta charset="utf-8" />
+				<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
 				<title>Admin Panel</title>
 				<link rel="stylesheet" type="text/css" href="../resources/style.css" />
 			</head>

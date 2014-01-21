@@ -6,15 +6,12 @@
 	include '../includes/session.php';
 
 	if(isset($_POST['submit'])) {
-		$post_date = date('Y-m-d-H');
-		$post_tag = $_POST['tag'];
 		$post_url = $_POST['url'];
 		$post_content = $_POST['content'];
 	}
-	if(!empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-		$user = $_SESSION['user'];
-		$filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
-		$dir = '../../content/' . $user. '/blog/';
+	if(!empty($post_url) && !empty($post_content)) {
+		$filename = $post_url . '.md';
+		$dir = '../../content/static/';
 		if(is_dir($dir)) {
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
@@ -29,7 +26,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Create post</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
+	<title>Create page</title>
 	<link rel="stylesheet" type="text/css" href="../resources/style.css" />
 	<link rel="stylesheet" type="text/css" href="../editor/css/editor.css" />
 	<script type="text/javascript" src="../editor/js/Markdown.Converter.js"></script>
@@ -41,13 +41,13 @@
 <div class="wrapper-inner">
 	<div class="nav">
 		<a href="<?php echo config('site.url');?>" target="_blank">Home</a> | 
-		<a href="<?php echo config('site.url');?>/admin">Admin</a> | 
-		<a href="../includes/logout.php">Logout</a> | 
+		<a href="<?php echo config('site.url');?>/admin">Admin</a> |
+		<a href="../action/create_post.php">Create post</a> |		
+		<a href="../action/logout.php">Logout</a> | 
 		<span class="welcome">Welcome <?php echo $_SESSION['user'];?>!</span>
 	</div>
 	<div class="wmd-panel">
 		<form method="POST">
-			Tag: <br><input type="text" name="tag"/><br><br>
 			Url: <br><input type="text" name="url"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
 			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"></textarea><br/>

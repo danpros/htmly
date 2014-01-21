@@ -1,5 +1,8 @@
 <?php
 
+	date_default_timezone_set('Asia/Jakarta');
+	config('source', '../../admin/config.ini');
+
 // Get blog post with more info about the path. Sorted by filename.
 function admin_get_post(){
 
@@ -104,7 +107,7 @@ function get_profile($profile, $page, $perpage){
 	}
 	
 	if(empty($tmp)) {
-		echo '<tr><td>No posts found!</td></tr>';
+		echo '<table><tr><td>No posts found!</td></tr></table>';
 		return;
 	}
 	
@@ -112,20 +115,24 @@ function get_profile($profile, $page, $perpage){
 	
 }
 
-if (isset($_SESSION['user'])) {
+function get_post_list() {
+	if (isset($_SESSION['user'])) {
 
-	$posts = get_profile($_SESSION['user'], null, null);
+		$posts = get_profile($_SESSION['user'], null, null);
 
-	if(!empty($posts)) {
+		if(!empty($posts)) {
 
-		echo '<table>';
-		foreach($posts as $p) {
-			echo '<tr>';
-			echo '<td>' . $p->file . '</td>';
-			echo '<td><form method="GET" action="includes/edit_post.php"><input type="submit" name="submit" value="Edit"/><input type="hidden" name="url" value="' . $p->file . '"/></form></td>';
-			echo '</tr>';
+			echo '<table>';
+			foreach($posts as $p) {
+				echo '<tr>';
+				echo '<td>' . $p->file . '</td>';
+				echo '<td><form method="GET" action="action/edit_post.php"><input type="submit" name="submit" value="Edit"/><input type="hidden" name="url" value="' . $p->file . '"/></form></td>';
+				echo '<td><form method="GET" action="action/delete_post.php"><input type="submit" name="submit" value="Delete"/><input type="hidden" name="url" value="' . $p->file . '"/></form></td>';
+				echo '</tr>';
+			}
+			echo '</table>';
+
 		}
-		echo '</table>';
-
 	}
 }
+?>
