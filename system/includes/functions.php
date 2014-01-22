@@ -912,8 +912,21 @@ function get_path(){
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 		
-		// The post tag url
-		$post->tagurl = site_url(). 'tag/' . $arr[1];
+		$tag = array();
+		$url = array();
+		
+		$t = explode(',', $arr[1]);
+		foreach($t as $tt) {
+			$tag[] = array($tt, site_url(). 'tag/' . $tt);
+		}
+		
+		foreach($tag as $a) {
+			$url[] = $a[1];
+		}
+		
+		$post->tag = implode(', ', $url);
+		
+		$post->tagb = implode(' » ', $url);
 
 		$tmp[] = $post;
 	}
@@ -1002,7 +1015,7 @@ function generate_sitemap($str){
 		$tag = array();
 		
 		foreach($posts as $p) {
-			$tag[] = $p->tagurl;
+			$tag[] = $p->tag;
 		}
 		
 		$tag = array_unique($tag, SORT_REGULAR);
