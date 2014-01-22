@@ -6,7 +6,8 @@
 	include '../includes/session.php';
 
 	if(isset($_POST['submit'])) {
-		$post_url = $_POST['url'];
+		$post_url = preg_replace('/[^A-Za-z0-9,.-]/u', '', $_POST['url']);
+		$post_url = rtrim($post_url, ',\.\-');
 		$post_content = $_POST['content'];
 	}
 	if(!empty($post_url) && !empty($post_content)) {
@@ -57,20 +58,15 @@
 	</div>
 	<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 	<script type="text/javascript">
-	(function () {
-		var converter = Markdown.getSanitizingConverter();
-		
-		converter.hooks.chain("preBlockGamut", function (text, rbg) {
-			return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-				return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-			});
-		});
-		
-		var editor = new Markdown.Editor(converter);
-		
-		editor.run();
-	})();
-	</script>
+		<script type="text/javascript">
+		(function () {
+			var converter = new Markdown.Converter();
+
+			var editor = new Markdown.Editor(converter);
+			
+			editor.run();
+		})();
+		</script>
 </div>
 </div>	
 </body>

@@ -130,11 +130,21 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 		
-		// The post tag
-		$post->tag = str_replace($replaced,'',$arr[1]);
+		$tag = array();
+		$url = array();
 		
-		// The post tag url
-		$post->tagurl = site_url(). 'tag/' . $arr[1];
+		$t = explode(',', $arr[1]);
+		foreach($t as $tt) {
+			$tag[] = array($tt, site_url(). 'tag/' . $tt);
+		}
+		
+		foreach($tag as $a) {
+			$url[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+		}
+		
+		$post->tag = implode(', ', $url);
+		
+		$post->tagb = implode(' » ', $url);
 
 		// Get the contents and convert it to HTML
 		$content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
@@ -208,8 +218,14 @@ function get_tag($tag, $page, $perpage){
 	foreach ($posts as $index => $v) {
 		$url = $v['filename'];
 		$str = explode('_', $url);
-		if($tag === $str[1]){
-			$tmp[] = $v;
+		$mtag = explode(',', $str[1]);
+		$etag = explode(',', $tag);
+		foreach ($mtag as $t) {
+			foreach ($etag as $e) {
+				if($t === $e){
+					$tmp[] = $v;
+				}
+			}
 		}
 	}
 	
@@ -389,11 +405,21 @@ function get_keyword($keyword){
 				// The post URL
 				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 				
-				// The post tag
-				$post->tag = str_replace($replaced,'',$arr[1]);
+				$tag = array();
+				$url = array();
 				
-				// The post tag URL
-				$post->tagurl = site_url(). 'tag/' . $arr[1];
+				$t = explode(',', $arr[1]);
+				foreach($t as $tt) {
+					$tag[] = array($tt, site_url(). 'tag/' . $tt);
+				}
+				
+				foreach($tag as $a) {
+					$url[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+				}
+				
+				$post->tag = implode(', ', $url);
+				
+				$post->tagb = implode(' » ', $url);
 
 				// Extract the title and body
 				$arr = explode('</h1>', $content);
@@ -414,9 +440,8 @@ function get_keyword($keyword){
 
 // Get related posts base on post tag.
 function get_related($tag) {
-
 	$perpage = config('related.count');
-	$posts = get_tag($tag, 1, $perpage+1);
+	$posts = get_tag(strip_tags($tag), 1, $perpage+1);
 	$tmp = array();
 	$req = $_SERVER['REQUEST_URI'];
 	
@@ -527,7 +552,10 @@ function tag_cloud() {
 		$arr = explode('_', $v);
 		
 		$data = $arr[1];
-		$tags[] = $data;
+		$mtag = explode(',', $data);
+		foreach($mtag as $etag) {
+			$tags[] = $etag;
+		}
 		
 	}
 	

@@ -161,7 +161,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 		'canonical' => $current->url,
 		'description' => $description = get_description($current->body),
 		'bodyclass' => 'inpost',
-		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $current->tagurl .'">' . $current->tag . '</a></span> &#187; ' . $current->title,
+		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title,
 		'prev' => has_prev($prev),
 		'next' => has_next($next),
 		'type' => 'blogpost',

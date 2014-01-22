@@ -57,14 +57,8 @@
 		<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 		<script type="text/javascript">
 		(function () {
-			var converter = Markdown.getSanitizingConverter();
-			
-			converter.hooks.chain("preBlockGamut", function (text, rbg) {
-				return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-					return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-				});
-			});
-			
+			var converter = new Markdown.Converter();
+
 			var editor = new Markdown.Editor(converter);
 			
 			editor.run();

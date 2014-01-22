@@ -37,7 +37,7 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
-	<title>Edit post</title>
+	<title>Edit bio</title>
 	<link rel="stylesheet" type="text/css" href="../resources/style.css" />
 	<link rel="stylesheet" type="text/css" href="../editor/css/editor.css" />
 	<script type="text/javascript" src="../editor/js/Markdown.Converter.js"></script>
@@ -65,14 +65,8 @@
 		<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 		<script type="text/javascript">
 		(function () {
-			var converter = Markdown.getSanitizingConverter();
-			
-			converter.hooks.chain("preBlockGamut", function (text, rbg) {
-				return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-					return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-				});
-			});
-			
+			var converter = new Markdown.Converter();
+
 			var editor = new Markdown.Editor(converter);
 			
 			editor.run();

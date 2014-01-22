@@ -32,7 +32,6 @@
 	<link rel="stylesheet" type="text/css" href="../resources/style.css" />
 	<link rel="stylesheet" type="text/css" href="../editor/css/editor.css" />
 	<script type="text/javascript" src="../editor/js/Markdown.Converter.js"></script>
-    <script type="text/javascript" src="../editor/js/Markdown.Sanitizer.js"></script>
     <script type="text/javascript" src="../editor/js/Markdown.Editor.js"></script>
 </head>
 <body>
@@ -57,14 +56,8 @@
 		<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 		<script type="text/javascript">
 		(function () {
-			var converter = Markdown.getSanitizingConverter();
-			
-			converter.hooks.chain("preBlockGamut", function (text, rbg) {
-				return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-					return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-				});
-			});
-			
+			var converter = new Markdown.Converter();
+
 			var editor = new Markdown.Editor(converter);
 			
 			editor.run();
