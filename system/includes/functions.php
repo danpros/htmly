@@ -132,6 +132,7 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		
 		$tag = array();
 		$url = array();
+		$bc = array();
 		
 		$t = explode(',', $arr[1]);
 		foreach($t as $tt) {
@@ -139,12 +140,13 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		}
 		
 		foreach($tag as $a) {
-			$url[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+			$url[] = '<span><a href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+			$bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
 		}
 		
 		$post->tag = implode(', ', $url);
 		
-		$post->tagb = implode(' » ', $url);
+		$post->tagb = implode(' » ', $bc);
 
 		// Get the contents and convert it to HTML
 		$content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
@@ -407,6 +409,7 @@ function get_keyword($keyword){
 				
 				$tag = array();
 				$url = array();
+				$bc = array();
 				
 				$t = explode(',', $arr[1]);
 				foreach($t as $tt) {
@@ -414,12 +417,13 @@ function get_keyword($keyword){
 				}
 				
 				foreach($tag as $a) {
-					$url[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+					$url[] = '<span><a href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+					$bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
 				}
 				
 				$post->tag = implode(', ', $url);
 				
-				$post->tagb = implode(' » ', $url);
+				$post->tagb = implode(' » ', $bc);
 
 				// Extract the title and body
 				$arr = explode('</h1>', $content);
