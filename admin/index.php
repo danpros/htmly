@@ -39,9 +39,9 @@
 			<p>Login Form</p>
 			<form method="POST" action="action/login.php">
 				User:<br>
-				<input type="text" name="user"/><br><br>
+				<input type="text" size="60" maxlength="60" name="user"/><br><br>
 				Pass:<br>
-				<input type="password" name="password"/><br><br>
+				<input type="password" size="60" maxlength="60" name="password"/><br><br>
 				<input type="submit" name="submit" value="Login"/>
 			</form>
 		

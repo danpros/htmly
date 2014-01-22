@@ -40,3 +40,53 @@ table td {
 	}
 	
 }
+
+/*----------------------------
+	Video
+-----------------------------*/
+
+.video-wrapper {
+	margin:1em 0;
+}
+
+@media all and (min-width: 420px) {
+
+	.video-wrapper {
+		padding-top:315px!important;
+		position:relative;
+		width:100%;
+		max-width:420px!important;
+		max-height:315px!important;
+	}
+
+	.video-wrapper iframe, .video-wrapper object, .video-wrapper embed {
+		height: 100%;
+		left: 0;
+		position: absolute;
+		top: 0;
+		max-width:420px!important;
+		width: 100%;
+		max-height:315px!important;
+	}
+
+}
+
+@media all and (max-width: 420px) {
+
+	.video-wrapper {
+		position: relative;
+		padding-bottom: 56.25%;
+		padding-top: 30px;
+		height: 0;
+		overflow: hidden;
+	}
+
+	.video-wrapper iframe, .video-wrapper object, .video-wrapper embed {
+		height: 100%;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+
+}

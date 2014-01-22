@@ -54,8 +54,8 @@
 	</div>
 	<div class="wmd-panel">
 		<form method="POST">
-			Tag: <br><input type="text" name="tag"/><br><br>
-			Url: <br><input type="text" name="url"/><br><br>
+			Tag: <br><input type="text" size="60" maxlength="60" name="tag"/><br><br>
+			Url: <br><input type="text" size="60" maxlength="60" name="url"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
 			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"></textarea><br/>
 			<input type="submit" name="submit" value="Publish"/>

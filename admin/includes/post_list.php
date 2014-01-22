@@ -72,11 +72,21 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
 		
-		// The post tag
-		$post->tag = str_replace($replaced,'',$arr[1]);
+		$tag = array();
+		$url = array();
 		
-		// The post tag url
-		$post->tagurl = site_url(). 'tag/' . $arr[1];
+		$t = explode(',', $arr[1]);
+		foreach($t as $tt) {
+			$tag[] = array($tt, site_url(). 'tag/' . $tt);
+		}
+		
+		foreach($tag as $a) {
+			$url[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+		}
+		
+		$post->tag = implode(', ', $url);
+		
+		$post->tagb = implode(' » ', $url);
 		
 		$post->file = $filepath;
 
@@ -126,8 +136,8 @@ function get_post_list() {
 			foreach($posts as $p) {
 				echo '<tr>';
 				echo '<td>' . $p->file . '</td>';
-				echo '<td><form method="GET" action="action/edit_post.php"><input type="submit" name="submit" value="Edit"/><input type="hidden" name="url" value="' . $p->file . '"/></form></td>';
-				echo '<td><form method="GET" action="action/delete_post.php"><input type="submit" name="submit" value="Delete"/><input type="hidden" name="url" value="' . $p->file . '"/></form></td>';
+				echo '<td><form method="GET" action="action/edit_post.php"><input type="submit" name="submit" value="Edit"/><input type="hidden" name="url" value="../' . $p->file . '"/></form></td>';
+				echo '<td><form method="GET" action="action/delete_post.php"><input type="submit" name="submit" value="Delete"/><input type="hidden" name="url" value="../' . $p->file . '"/></form></td>';
 				echo '</tr>';
 			}
 			echo '</table>';

@@ -50,7 +50,7 @@
 	</div>
 	<div class="wmd-panel">
 		<form method="POST">
-			Url: <br><input type="text" name="url"/><br><br>
+			Url: <br><input type="text" size="60" maxlength="60" name="url"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
 			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"></textarea><br/>
 			<input type="submit" name="submit" value="Publish"/>
@@ -58,15 +58,14 @@
 	</div>
 	<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 	<script type="text/javascript">
-		<script type="text/javascript">
-		(function () {
-			var converter = new Markdown.Converter();
+	(function () {
+		var converter = new Markdown.Converter();
 
-			var editor = new Markdown.Editor(converter);
-			
-			editor.run();
-		})();
-		</script>
+		var editor = new Markdown.Editor(converter);
+		
+		editor.run();
+	})();
+	</script>
 </div>
 </div>	
 </body>

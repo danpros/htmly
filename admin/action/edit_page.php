@@ -12,11 +12,24 @@
 		header('location: ../index.php');
 	}
 	
+	$dir = substr($url, 0, strrpos($url, '/'));
+	$oldurl = str_replace($dir . '/','',$url);
+	$oldmd = str_replace('.md','',$oldurl);
+	
 	if(isset($_POST['submit'])) {
+		$post_url = preg_replace('/[^A-Za-z0-9,.-]/u', '', $_POST['url']);
+		$post_url = rtrim($post_url, ',\.\-');
 		$post_content = $_POST['content'];
 	}
 	if(!empty($post_content)) {
-		file_put_contents('../'. $url, print_r($post_content, true));
+		$newurl = $dir . '/' . $post_url . '.md';
+		if($url === $newurl) {
+			file_put_contents($url, print_r($post_content, true));
+		}
+		else {
+			rename($url, $newurl);
+			file_put_contents($newurl, print_r($post_content, true));
+		}
 		header('location: ../index.php');		
 	}
 	
@@ -49,8 +62,9 @@
 		</div>
 		<div class="wmd-panel">
 		<form method="POST">
+			Url: <br><input type="text" name="url" size="60" maxlength="60" value="<?php echo $oldmd ?>"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
-			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo file_get_contents('../' . $url)?></textarea><br>
+			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo file_get_contents($url)?></textarea><br>
 			<input type="submit" name="submit" value="Submit"/>
 		</form>
 		</div>

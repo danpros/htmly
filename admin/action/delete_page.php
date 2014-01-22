@@ -50,7 +50,7 @@
 		
 		<?php echo '<p>Are you sure want to delete <strong>' . $url . '</strong>?</p>';?>
 		<form method="POST">
-			<input type="hidden" name="delete" value="<?php echo '../' . $url ?>"/><br>
+			<input type="hidden" name="delete" value="<?php echo $url ?>"/><br>
 			<input type="submit" name="submit" value="Delete"/>
 		</form>
 </div>

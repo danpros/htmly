@@ -29,8 +29,8 @@
 		
 			echo '<tr>';
 			echo '<td>' . $v . '</td>';
-			echo '<td><form method="GET" action="action/edit_page.php"><input type="submit" name="submit" value="Edit"/><input type="hidden" name="url" value="' . $v . '"/></form></td>';
-			echo '<td><form method="GET" action="action/delete_page.php"><input type="submit" name="submit" value="Delete"/><input type="hidden" name="url" value="' . $v . '"/></form></td>';
+			echo '<td><form method="GET" action="action/edit_page.php"><input type="submit" name="submit" value="Edit"/><input type="hidden" name="url" value="../' . $v . '"/></form></td>';
+			echo '<td><form method="GET" action="action/delete_page.php"><input type="submit" name="submit" value="Delete"/><input type="hidden" name="url" value="../' . $v . '"/></form></td>';
 			echo '</tr>';
 				
 		}
