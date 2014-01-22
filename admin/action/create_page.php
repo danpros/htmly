@@ -11,6 +11,9 @@
 		$post_content = $_POST['content'];
 	}
 	if(!empty($post_url) && !empty($post_content)) {
+		if(get_magic_quotes_gpc()) {
+			$post_content = stripslashes($post_content);
+		}
 		$filename = $post_url . '.md';
 		$dir = '../../content/static/';
 		if(is_dir($dir)) {

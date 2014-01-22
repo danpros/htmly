@@ -18,6 +18,9 @@
 		$bio_content = $_POST['content'];
 	}
 	if(!empty($bio_content)) {
+		if(get_magic_quotes_gpc()) {
+			$bio_content = stripslashes($bio_content);
+		}
 		$dir = '../../content/' . $user. '/';
 		if(is_dir($dir)) {
 			file_put_contents($dir . $filename, print_r($bio_content, true));

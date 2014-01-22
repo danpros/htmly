@@ -530,9 +530,9 @@ function archive_list() {
 		echo '(' . count($months) . ')';
 		echo '<ul class="month">';
 
-		# Sort the months
-		krsort($months);
 		$by_month = array_count_values($months);
+		# Sort the months
+		krsort($by_month);
 		foreach ($by_month as $month => $count){
 			$name = date('F', mktime(0,0,0,$month,1,2010));
 			echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';

@@ -28,6 +28,9 @@
 		$post_content = $_POST['content'];
 	}
 	if(!empty($post_content)) {
+		if(get_magic_quotes_gpc()) {
+			$post_content = stripslashes($post_content);
+		}
 		$newurl = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
 		if($url === $newurl) {
 			file_put_contents($url, print_r($post_content, true));

@@ -14,6 +14,9 @@
 		$post_content = $_POST['content'];
 	}
 	if(!empty($post_tag) && !empty($post_url) && !empty($post_content)) {
+		if(get_magic_quotes_gpc()) {
+			$post_content = stripslashes($post_content);
+		}
 		$user = $_SESSION['user'];
 		$filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
 		$dir = '../../content/' . $user. '/blog/';
