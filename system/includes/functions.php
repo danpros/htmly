@@ -121,11 +121,15 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		$post->author = $author;
 		$post->authorurl = site_url() . 'author/' .  $author;
 		
+		$dt = str_replace($replaced,'',$arr[0]);
+		$time = new DateTime($dt);
+		$timestamp= $time->format("Y-m-d");
+		
 		// The post date
-		$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+		$post->date = strtotime($timestamp);
 		
 		// The archive per day
-		$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
+		$post->archive = site_url(). 'archive/' . $timestamp ;
 
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
@@ -401,8 +405,12 @@ function get_keyword($keyword){
 				$post->author = $author;
 				$post->authorurl = site_url() . 'author/' .  $author;
 				
+				$dt = str_replace($replaced,'',$arr[0]);
+				$time = new DateTime($dt);
+				$timestamp= $time->format("Y-m-d");
+				
 				// The post date
-				$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+				$post->date = strtotime($timestamp);
 
 				// The post URL
 				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
@@ -901,8 +909,12 @@ function get_path(){
 		
 		$post->authorurl = site_url() . 'author/' .  $author;
 		
+		$dt = str_replace($replaced,'',$arr[0]);
+		$time = new DateTime($dt);
+		$timestamp= $time->format("Y-m-d");
+		
 		// The post date
-		$post->date = strtotime(str_replace($replaced,'',$arr[0]));
+		$post->date = strtotime($timestamp);
 		
 		// The archive per day
 		$post->archiveday = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
