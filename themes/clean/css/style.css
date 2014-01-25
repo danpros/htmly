@@ -649,6 +649,7 @@ aside .copyright p{
 	font-size: 12px;
 	font-style:italic;
 	width:120px;
+	float:right;
 }
 
 .share a {

@@ -17,7 +17,6 @@
 		<div class="share-box">
 			<?php if (config('author.info') == 'true'):?>
 				<?php echo $authorinfo ?>
-				<style>.share {float:right;}</style>
 			<?php endif;?>
 			<div class="share">
 				<h4>Share this post</h4>

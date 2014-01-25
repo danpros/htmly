@@ -1,1 +1,2 @@
+2014-01-26: RC version.
 2014-01-01: Initial release.

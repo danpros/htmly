@@ -223,7 +223,7 @@ th, td {
 th.title {
 	margin:5px 0;
 	font-family: 'Open Sans',sans-serif;
-	font-size:18px;
+	font-size:16px;
 	font-weight:normal;
 }
 
@@ -238,7 +238,7 @@ th {
 	border-bottom: 1px solid #E3E3E3;
 	border-right: 1px solid #E3E3E3;
 	font-family: 'Open Sans',sans-serif;
-	font-size:18px;
+	font-size:16px;
 }
 
 td {
@@ -365,6 +365,7 @@ p, ul {
 	font-size: 14px;
 	color: #A7A7A7;
 	font-weight:normal;
+	margin:1em 0;
 }
 
 h1.blog-title {
@@ -440,6 +441,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 .share {
 	width:140px;
 	margin-right: 1em;
+	float:right;
 }
 
 .share a {
@@ -538,6 +540,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 .postnav .newer {
 	float:left;
 	margin-right:1em;
+	margin-bottom:0.1em;
 	padding: 10px 15px 10px 25px;
 }
 

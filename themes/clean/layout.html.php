@@ -4,9 +4,11 @@
 	<title><?php echo $title; ?></title>
 	<link href='<?php echo site_url() ?>favicon.ico' rel='icon' type='image/x-icon'/>
 	<meta charset="utf-8" />
+	<meta content='htmly' name='generator'/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
 	<meta name="description" content="<?php echo $description; ?>" />
+	<link rel="sitemap" href="<?php echo site_url() ?>sitemap.xml" />
 	<link rel="canonical" href="<?php echo $canonical; ?>" />
 	<link rel="alternate" type="application/rss+xml" title="<?php echo config('blog.title')?> Feed" href="<?php echo site_url()?>feed/rss" />
 	<link href="<?php echo site_url() ?>themes/clean/css/style.css" rel="stylesheet" />
