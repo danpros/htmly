@@ -1,7 +1,7 @@
 <?php
 
 	date_default_timezone_set('Asia/Jakarta');
-	config('source', '../../admin/config.ini');
+	config('source', '../../config/config.ini');
 
 // Get blog post with more info about the path. Sorted by filename.
 function admin_get_post(){

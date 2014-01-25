@@ -2,7 +2,7 @@
 	// Change this to your timezone
 	date_default_timezone_set('Asia/Jakarta');
 	require '../../system/includes/dispatch.php';
-	config('source', '../../admin/config.ini');
+	config('source', '../../config/config.ini');
 	include '../includes/session.php';
 	
 	if(isset($_GET['url'])) {

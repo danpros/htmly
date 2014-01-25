@@ -151,9 +151,21 @@ blockquote {
 	margin: 1em 0 1em 1em;
 }
 
+blockquote p {
+	display:inline;
+}
+
 pre {
 	margin: 1em 0;
 	overflow: auto;
+	background: #F1F1FF;
+}
+
+code {
+    color: #333333;
+    font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
+    font-size: 15px;
+    padding: 5px 10px;
 	background: #F1F1FF;
 }
 
@@ -184,6 +196,56 @@ ul, ol {
 
 ul li, ol li{
 	margin: 0.25em 0;
+}
+
+/*-------------------------
+	Table
+--------------------------*/
+
+table {
+	font-size:12px;
+	border: none;
+	width:100%;
+	color:#333333;
+	border: 1px solid #E3E3E3;
+	margin: 1em 0;
+}
+
+table h2.title {
+	margin:5px 0;
+}
+
+th, td {
+	padding: 5px 10px;
+	border: none;
+}
+
+th.title {
+	margin:5px 0;
+	font-family: 'Open Sans',sans-serif;
+	font-size:18px;
+	font-weight:normal;
+}
+
+td.title {
+	font-weight:normal;
+	background-color: #f6f6f6;
+	font-family: 'Open Sans',sans-serif;
+}
+
+th {
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #E3E3E3;
+	border-right: 1px solid #E3E3E3;
+	font-family: 'Open Sans',sans-serif;
+	font-size:18px;
+}
+
+td {
+	background-color: #fafafa;
+	border: 1px solid #E3E3E3;
+	border-top: none;
+	border-left:none;
 }
 
 /*-------------------------

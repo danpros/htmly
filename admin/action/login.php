@@ -6,7 +6,7 @@
 		$user = $_REQUEST['user'];
 		$pass = $_REQUEST['password'];
 		
-		$user_file = '../../admin/users/' . $user . '.ini';
+		$user_file = '../../config/users/' . $user . '.ini';
 		$user_pass = user('password', $user);
 		
 		if(file_exists($user_file)) {

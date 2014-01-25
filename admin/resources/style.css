@@ -11,6 +11,7 @@ body {
 	float:left;
 	position:relative;
 	width:100%;
+	padding-bottom: 30px;
 }
 
 .wrapper-inner {
@@ -20,16 +21,71 @@ body {
 
 .nav {
 	width: 96%;
-	padding:2%;
+	padding:2% 0;
+	border-bottom: 4px solid #cccccc;
+	margin-bottom: 30px;
 }
+
+/*-------------------------
+	Link
+--------------------------*/
+
+a, a:visited {
+	outline:none;
+	text-decoration:none;
+}
+
+a:hover{
+	text-decoration:underline;
+}
+
+/*-------------------------
+	Table
+--------------------------*/
 
 table {
-	border: 1px solid #ccc;
+	font-size:14px;
+	border: none;
+	color:#333333;
+	border: 1px solid #E3E3E3;
+	margin: 1em 0;
 }
 
-table td {
-	border: 1px solid #ccc;
-	background: #ddd;
+table h2.title {
+	margin:5px 0;
+}
+
+th, td {
+	padding: 5px 10px;
+	border: none;
+}
+
+th.title {
+	margin:5px 0;
+	font-family: Arial,sans-serif;
+	font-size:18px;
+	font-weight:normal;
+}
+
+td.title {
+	font-weight:normal;
+	background-color: #eeeeee;
+	font-family: Arial,sans-serif;
+}
+
+th {
+	background-color: #eeeeee;
+	border-bottom: 1px solid #E3E3E3;
+	border-right: 1px solid #E3E3E3;
+	font-family: Arial,sans-serif;
+	font-size:18px;
+}
+
+td {
+	background-color: #eeeeee;
+	border: 1px solid #E3E3E3;
+	border-top: none;
+	border-left:none;
 }
 
 @media all and (max-width: 980px) {

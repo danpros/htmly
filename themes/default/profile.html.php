@@ -20,7 +20,7 @@
 			$i++;		
 		?>
 	<li>
-		<span><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></span> on <span><?php echo date('d F Y', $p->date)?></span> - Posted in <span><a href="<?php echo $p->tagurl ?>"><?php echo $p->tag ?></a></span>
+		<span><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></span> on <span><?php echo date('d F Y', $p->date)?></span> - Posted in <span><?php echo $p->tag ?></span>
 	</li>
 	<?php endforeach;?>
 </ul>

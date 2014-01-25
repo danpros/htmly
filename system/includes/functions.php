@@ -1135,7 +1135,7 @@ function welcome_page() {
 	echo <<<EOF
 	<div style="font-size:20px;text-align:center;padding:50px 20px;">
 		<h1>Welcome to your new HTMLy-powered blog.</h1>
-		<p>The next thing you will need to do is creating the first account. Please create <strong><em>YourUsername.ini</em></strong> inside <strong><em>admin/users</em></strong> folder and write down your password there:</p>
+		<p>The next thing you will need to do is creating the first account. Please create <strong><em>YourUsername.ini</em></strong> inside <strong><em>config/users</em></strong> folder and write down your password there:</p>
 		<pre><code>password = YourPassword</code></pre>
 		<p>Login to your blog admin panel at <strong><em>www.example.com/admin</em></strong> to creating your first post.</p>
 		<p>This welcome message will disappear after your first post published.</p>

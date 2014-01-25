@@ -1,6 +1,6 @@
 <?php
 	date_default_timezone_set('Asia/Jakarta');
-	config('source', '../../admin/config.ini');
+	config('source', '../../config/config.ini');
 
 	// Get static page path. Unsorted. 
 	function admin_get_static(){

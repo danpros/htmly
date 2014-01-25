@@ -2,7 +2,7 @@
 	// Change this to your timezone
 	date_default_timezone_set('Asia/Jakarta');
 	require '../../system/includes/dispatch.php';
-	config('source', '../../admin/config.ini');
+	config('source', '../../config/config.ini');
 	include '../includes/session.php';
 	
 	if(isset($_GET['url'])) {
@@ -27,7 +27,7 @@
 		$post_url = rtrim($post_url, ',\.\-');
 		$post_content = $_POST['content'];
 	}
-	if(!empty($post_content)) {
+	if(!empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 		if(get_magic_quotes_gpc()) {
 			$post_content = stripslashes($post_content);
 		}

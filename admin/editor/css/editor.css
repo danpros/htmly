@@ -9,9 +9,9 @@ blockquote {
 }
 
 .wmd-panel{
-	width: 46%;
+	width: 44%;
 	float:left;
-	padding:2%;
+	padding-right:20px;
 }
 
 .wmd-button-bar {
@@ -126,6 +126,11 @@ pre code {
 }
 
 @media all and (max-width: 980px) {
+
+	.nav {
+		width: 100%;
+		padding: 2%;
+	}
 
 	.wmd-panel, .wmd-preview { 
 		width: 96%;

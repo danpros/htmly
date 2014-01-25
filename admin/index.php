@@ -1,7 +1,7 @@
 <?php
 	date_default_timezone_set('Asia/Jakarta');
 	require '../system/includes/dispatch.php';
-	config('source', '../admin/config.ini');
+	config('source', '../config/config.ini');
 	include 'includes/session.php';
 	include 'includes/post_list.php';
 	include 'includes/page_list.php';
