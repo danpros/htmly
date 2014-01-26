@@ -157,8 +157,14 @@ function get_posts($posts, $page = 1, $perpage = 0){
 
 		// Extract the title and body
 		$arr = explode('</h1>', $content);
-		$post->title = str_replace('<h1>','',$arr[0]);
-		$post->body = $arr[1];
+		if(isset($arr[1])) {
+			$post->title = str_replace('<h1>','',$arr[0]);
+			$post->body = $arr[1];
+		}
+		else {
+			$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
+			$post->body = $arr[0];
+		}
 
 		$tmp[] = $post;
 	}
@@ -317,8 +323,14 @@ function get_bio($author){
 
 			// Extract the title and body
 			$arr = explode('</h1>', $content);
-			$post->title = str_replace('<h1>','',$arr[0]);
-			$post->body = $arr[1];
+			if(isset($arr[1])) {
+				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->body = $arr[1];
+			}
+			else {
+				$post->title = $author;
+				$post->body = $arr[0];
+			}
 
 			$tmp[] = $post;
 		}
@@ -363,8 +375,14 @@ function get_static_post($static){
 
 			// Extract the title and body
 			$arr = explode('</h1>', $content);
-			$post->title = str_replace('<h1>','',$arr[0]);
-			$post->body = $arr[1];
+			if(isset($arr[1])) {
+				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->body = $arr[1];
+			}
+			else {
+				$post->title = $static;
+				$post->body = $arr[0];
+			}
 
 			$tmp[] = $post;
 			
@@ -435,8 +453,15 @@ function get_keyword($keyword){
 
 				// Extract the title and body
 				$arr = explode('</h1>', $content);
-				$post->title = str_replace('<h1>','',$arr[0]);
-				$post->body = $arr[1];
+				if(isset($arr[1])) {
+					$post->title = str_replace('<h1>','',$arr[0]);
+					$post->body = $arr[1];
+				}
+				else {
+					$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
+					$post->body = $arr[0];
+				}
+				
 				$tmp[] = $post;
 			
 			}
@@ -660,6 +685,7 @@ function get_teaser($text, $url) {
 // Get thumbnail from image and Youtube.
 function get_thumbnail($text) {
 
+	libxml_use_internal_errors(true);
 	$default = config('default.thumbnail');
 	$dom = new DOMDocument();
 	$dom->loadHtml($text);
