@@ -83,12 +83,12 @@
 		</div>
 		<div class="wmd-panel">
 		<form method="POST">
-			Title: <br><input type="text" name="title" size="60" maxlength="60" value="<?php echo $oldtitle?>"/><br><br>
-			Tag: <br><input type="text" name="tag" size="60" maxlength="60" value="<?php echo $oldtag?>"/><br><br>
-			Url: <br><input type="text" name="url" size="60" maxlength="60" value="<?php echo $oldmd ?>"/><br><br>
+			Title: <br><input type="text" name="title" class="text" value="<?php echo $oldtitle?>"/><br><br>
+			Tag: <br><input type="text" name="tag" class="text" value="<?php echo $oldtag?>"/><br><br>
+			Url: <br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
 			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
-			<input type="submit" name="submit" value="Submit"/>
+			<input type="submit" name="submit" class="submit" value="Submit"/>
 		</form>
 		</div>
 		<div id="wmd-preview" class="wmd-panel wmd-preview"></div>

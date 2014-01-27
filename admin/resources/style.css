@@ -26,6 +26,17 @@ body {
 	margin-bottom: 30px;
 }
 
+input.text, input.password {
+	width: 75%;
+}
+
+img {
+    border: 0 none;
+    height: auto;
+    max-width: 100%;
+	outline: 0 none;
+}
+
 /*-------------------------
 	Link
 --------------------------*/

@@ -29,10 +29,10 @@
 						<p>Login Form</p>
 						<form method="POST" action="login.php">
 							User:<br>
-							<input type="text" size="60" maxlength="60" name="user"/><br><br>
+							<input type="text" class="text" name="user"/><br><br>
 							Pass:<br>
-							<input type="password" size="60" maxlength="60" name="password"/><br><br>
-							<input type="submit" name="submit" value="Login"/>
+							<input type="password" class="password" name="password"/><br><br>
+							<input type="submit" name="submit" class="submit" value="Login"/>
 						</form>
 					</div>
 				</div>
@@ -59,10 +59,10 @@ EOF;
 					<p>Login Form</p>
 					<form method="POST" action="login.php">
 						User:<br>
-						<input type="text" size="60" maxlength="60" name="user"/><br><br>
+						<input type="text" class="text" name="user"/><br><br>
 						Pass:<br>
-						<input type="password" size="60" maxlength="60" name="password"/><br><br>
-						<input type="submit" name="submit" value="Login"/>
+						<input type="password" class="password" name="password"/><br><br>
+						<input type="submit" name="submit" class="submit" value="Login"/>
 					</form>
 				</div>
 			</div>

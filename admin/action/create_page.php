@@ -54,11 +54,11 @@
 	</div>
 	<div class="wmd-panel">
 		<form method="POST">
-			Title: <br><input type="text" size="60" maxlength="60" name="title"/><br><br>
-			Url: <br><input type="text" size="60" maxlength="60" name="url"/><br><br>
+			Title: <br><input type="text" class="text" name="title"/><br><br>
+			Url: <br><input type="text" class="text" name="url"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
 			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"></textarea><br/>
-			<input type="submit" name="submit" value="Publish"/>
+			<input type="submit" name="submit" class="submit" value="Publish"/>
 		</form>
 	</div>
 	<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
