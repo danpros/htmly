@@ -6,11 +6,12 @@
 	include '../includes/session.php';
 
 	if(isset($_POST['submit'])) {
+		$post_title = $_POST['title'];
 		$post_url = preg_replace('/[^A-Za-z0-9,.-]/u', '', $_POST['url']);
 		$post_url = rtrim($post_url, ',\.\-');
-		$post_content = $_POST['content'];
+		$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $_POST['content'];
 	}
-	if(!empty($post_url) && !empty($post_content)) {
+	if(!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 		if(get_magic_quotes_gpc()) {
 			$post_content = stripslashes($post_content);
 		}
@@ -53,6 +54,7 @@
 	</div>
 	<div class="wmd-panel">
 		<form method="POST">
+			Title: <br><input type="text" size="60" maxlength="60" name="title"/><br><br>
 			Url: <br><input type="text" size="60" maxlength="60" name="url"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
 			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"></textarea><br/>

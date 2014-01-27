@@ -14,10 +14,22 @@
 	
 	$filename = '../../content/' . $user . '/author.md';
 	
-	if(isset($_POST['submit'])) {
-		$bio_content = $_POST['content'];
+	$content = file_get_contents($filename);
+	$arr = explode('t-->', $content);
+	if(isset($arr[1])) {
+		$oldtitle = ltrim(rtrim(str_replace('<!--t','',$arr[0]), ' '));
+		$oldcontent = ltrim($arr[1]);
 	}
-	if(!empty($bio_content)) {
+	else {
+		$oldtitle = 'Untitled';
+		$oldcontent = ltrim($arr[0]);
+	}
+	
+	if(isset($_POST['submit'])) {
+		$bio_title = $_POST['title'];
+		$bio_content = '<!--t ' . $bio_title . ' t-->' . "\n\n" . $_POST['content'];
+	}
+	if(!empty($bio_title) && !empty($bio_content)) {
 		if(get_magic_quotes_gpc()) {
 			$bio_content = stripslashes($bio_content);
 		}
@@ -60,8 +72,9 @@
 		</div>
 		<div class="wmd-panel">
 		<form method="POST">
+			Title: <br><input type="text" name="title" size="60" maxlength="60" value="<?php echo $oldtitle?>"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
-			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php if(file_exists($filename)) { echo file_get_contents($filename);} ?></textarea><br>
+			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php if(file_exists($filename)) { echo $oldcontent;} ?></textarea><br>
 			<input type="submit" name="submit" value="Submit"/>
 		</form>
 		</div>

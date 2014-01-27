@@ -156,13 +156,13 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		$content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
 
 		// Extract the title and body
-		$arr = explode('</h1>', $content);
+		$arr = explode('t-->', $content);
 		if(isset($arr[1])) {
-			$post->title = str_replace('<h1>','',$arr[0]);
+			$post->title = str_replace('<!--t','',$arr[0]);
 			$post->body = $arr[1];
 		}
 		else {
-			$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
+			$post->title = ' Untitled: ' . date('l jS \of F Y', $post->date);
 			$post->body = $arr[0];
 		}
 
@@ -322,9 +322,9 @@ function get_bio($author){
 			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
 			// Extract the title and body
-			$arr = explode('</h1>', $content);
+			$arr = explode('t-->', $content);
 			if(isset($arr[1])) {
-				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->title = str_replace('<!--t','',$arr[0]);
 				$post->body = $arr[1];
 			}
 			else {
@@ -374,9 +374,9 @@ function get_static_post($static){
 			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
 			// Extract the title and body
-			$arr = explode('</h1>', $content);
+			$arr = explode('t-->', $content);
 			if(isset($arr[1])) {
-				$post->title = str_replace('<h1>','',$arr[0]);
+				$post->title = str_replace('<!--t','',$arr[0]);
 				$post->body = $arr[1];
 			}
 			else {
@@ -452,13 +452,13 @@ function get_keyword($keyword){
 				$post->tagb = implode(' » ', $bc);
 
 				// Extract the title and body
-				$arr = explode('</h1>', $content);
+				$arr = explode('t-->', $content);
 				if(isset($arr[1])) {
-					$post->title = str_replace('<h1>','',$arr[0]);
+					$post->title = str_replace('<!--t','',$arr[0]);
 					$post->body = $arr[1];
 				}
 				else {
-					$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
+					$post->title = ' Untitled: ' . date('l jS \of F Y', $post->date);
 					$post->body = $arr[0];
 				}
 				
