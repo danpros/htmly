@@ -14,15 +14,21 @@
 	
 	$filename = '../../content/' . $user . '/author.md';
 	
+	if(file_exists($filename)) {
 	$content = file_get_contents($filename);
-	$arr = explode('t-->', $content);
-	if(isset($arr[1])) {
-		$oldtitle = ltrim(rtrim(str_replace('<!--t','',$arr[0]), ' '));
-		$oldcontent = ltrim($arr[1]);
+		$arr = explode('t-->', $content);
+		if(isset($arr[1])) {
+			$oldtitle = ltrim(rtrim(str_replace('<!--t','',$arr[0]), ' '));
+			$oldcontent = ltrim($arr[1]);
+		}
+		else {
+			$oldtitle = $user;
+			$oldcontent = ltrim($arr[0]);
+		}
 	}
 	else {
-		$oldtitle = 'Untitled';
-		$oldcontent = ltrim($arr[0]);
+			$oldtitle = $user;
+			$oldcontent = 'Just another HTMLy user.';
 	}
 	
 	if(isset($_POST['submit'])) {
@@ -74,7 +80,7 @@
 		<form method="POST">
 			Title: <br><input type="text" name="title" size="60" maxlength="60" value="<?php echo $oldtitle?>"/><br><br>
 			<div id="wmd-button-bar" class="wmd-button-bar"></div>
-			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php if(file_exists($filename)) { echo $oldcontent;} ?></textarea><br>
+			<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo $oldcontent; ?></textarea><br>
 			<input type="submit" name="submit" value="Submit"/>
 		</form>
 		</div>
