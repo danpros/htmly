@@ -367,12 +367,12 @@ get('/:static', function($static){
 				'bodyclass' => 'inadmin',
 				'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Admin'
 			));
-			die;
 		}
 		else {
 			$login = site_url() . 'login';
 			header("location: $login");
 		}
+		die;
 	}
 	elseif($static === 'login') {
 		config('views.root', 'system/admin/views');
@@ -395,12 +395,12 @@ get('/:static', function($static){
 				'bodyclass' => 'inlogout',
 				'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Logout'
 			));
-			die;
 		}
 		else {
 			$login = site_url() . 'login';
 			header("location: $login");
 		}
+		die;
 	}
 	
 	$post = get_static_post($static);
