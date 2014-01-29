@@ -163,6 +163,27 @@ h6{
     padding: 0 10px;
 }
 
+.tab {
+	width:100%;
+	margin: 0.5em 0 0.5em 0;
+	line-height:1;
+	border-bottom: 1px solid #E4E7EE;
+}
+
+.tab a {
+	background: #E4E7EE;
+    border-radius: 6px 6px 0px 0;
+    color: #555555;
+    text-align: center;
+	padding: 8px 14px;
+	display:inline-block;
+	margin: 0 5px;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: 'Open Sans',sans-serif;
+}
+
+
 /*----------------------------
 	Content & Posts
 -----------------------------*/

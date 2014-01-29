@@ -136,8 +136,17 @@ h6 {
 	padding: 3em 0;
 }
 
+.admin #content-wrapper {
+	background-color: #FAFAFA;
+}
+
 #menu, #header, #content, #footer {
 	width: 700px;
+	margin: 0 auto;
+}
+
+.admin #menu, .admin #header, .admin #content, .admin #footer {
+	width: 980px;
 	margin: 0 auto;
 }
 
@@ -161,6 +170,26 @@ a, a:visited {
 
 a:hover{
 	text-decoration:underline;
+}
+
+.tab {
+	width:100%;
+	margin: 1.5em 0 0 0;
+	line-height:1;
+	border-bottom: 1px solid #E4E7EE;
+}
+
+.tab a {
+	background: #E4E7EE;
+    border-radius: 6px 6px 0px 0;
+    color: #555555;
+    text-align: center;
+	padding: 8px 14px;
+	display:inline-block;
+	margin: 0 5px;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: 'Open Sans',sans-serif;
 }
 
 /*-------------------------
@@ -754,6 +783,11 @@ h1.title-post a:hover, h2.title-index a:hover {
 @media all and (max-width: 700px) {
 
 	#menu, #header, #content, #footer {
+		margin: 0 auto;
+		width: 100%;
+	}
+	
+	.admin #menu, .admin #header, .admin #content, .admin #footer {
 		margin: 0 auto;
 		width: 100%;
 	}

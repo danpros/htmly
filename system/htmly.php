@@ -124,7 +124,7 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 			'p' => $current,
 			'canonical' => $current->url,
 			'description' => $description = get_description($current->body),
-			'bodyclass' => 'inedit',
+			'bodyclass' => 'editpost',
 			'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
 		));
 	}
@@ -142,8 +142,9 @@ post('/:year/:month/:name/edit', function() {
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
+	$destination = from($_GET, 'destination');
 	
-	edit_post($title, $tag, $url, $content, $oldfile);
+	edit_post($title, $tag, $url, $content, $oldfile, $destination);
 	
 });
 
@@ -166,7 +167,7 @@ get('/:year/:month/:name/delete', function($year, $month, $name){
 			'p' => $current,
 			'canonical' => $current->url,
 			'description' => $description = get_description($current->body),
-			'bodyclass' => 'inedit',
+			'bodyclass' => 'deletepost',
 			'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
 		));
 	}
@@ -244,7 +245,7 @@ get('/edit/profile', function(){
 			'title' => 'Edit profile - ' . config('blog.title'),
 			'canonical' => config('site.url') . '/profile',
 			'description' => 'Edit profile.',
-			'bodyclass' => 'inpage',
+			'bodyclass' => 'editprofile',
 			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Edit profile',
 		));
 	}
@@ -299,7 +300,7 @@ get('/admin/posts', function(){
 				'name' => $bio->title,
 				'canonical' => config('site.url') . '/author/' . $profile,
 				'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
-				'bodyclass' => 'inprofile',
+				'bodyclass' => 'userposts',
 				'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
 				'pagination' => has_pagination($total, $perpage, $page)
 			));
@@ -314,7 +315,7 @@ get('/admin/posts', function(){
 			'name' => $bio->title,
 			'canonical' => config('site.url') . '/author/' . $profile,
 			'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
-			'bodyclass' => 'inprofile',
+			'bodyclass' => 'userposts',
 			'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
 			'pagination' => has_pagination($total, $perpage, $page)
 		));
@@ -364,7 +365,7 @@ get('/:static', function($static){
 				'title' => 'Admin - ' . config('blog.title'),
 				'canonical' => config('site.url') . '/admin',
 				'description' => 'Admin page from ' . config('blog.title') . '.',
-				'bodyclass' => 'inadmin',
+				'bodyclass' => 'adminfront',
 				'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Admin'
 			));
 		}
@@ -441,7 +442,7 @@ get('/:static/edit', function($static){
 			'title' => $post->title .' - ' . config('blog.title'),
 			'canonical' => $post->url,
 			'description' => $description = get_description($post->body),
-			'bodyclass' => 'inpage',
+			'bodyclass' => 'editpage',
 			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; ' . $post->title,
 			'p' => $post,
 			'type' => 'staticpage',
@@ -460,8 +461,9 @@ post('/:static/edit', function() {
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
+	$destination = from($_GET, 'destination');
 	
-	edit_page($title, $url, $content, $oldfile);
+	edit_page($title, $url, $content, $oldfile, $destination);
 	
 });
 
@@ -483,7 +485,7 @@ get('/:static/delete', function($static){
 			'title' => $post->title .' - ' . config('blog.title'),
 			'canonical' => $post->url,
 			'description' => $description = get_description($post->body),
-			'bodyclass' => 'inpage',
+			'bodyclass' => 'deletepage',
 			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; ' . $post->title,
 			'p' => $post,
 			'type' => 'staticpage',

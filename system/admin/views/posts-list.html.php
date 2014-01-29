@@ -20,7 +20,7 @@
 		<td><?php echo $p->title ?></td>
 		<td><?php echo date('d F Y', $p->date) ?></td>
 		<td><?php echo $p->tag ?></td>
-		<td><a href="<?php echo $p->url ?>/edit">Edit</a> <a href="<?php echo $p->url ?>/delete">Delete</a></td>
+		<td><a href="<?php echo $p->url ?>/edit?destination=admin/posts">Edit</a> <a href="<?php echo $p->url ?>/delete">Delete</a></td>
 	</tr>
 	<?php endforeach;?>
 </table>

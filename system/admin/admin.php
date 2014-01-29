@@ -33,7 +33,7 @@ function session($user, $pass) {
 		}
 }
 
-function edit_post($title, $tag, $url, $content, $oldfile) {
+function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) {
 
 	$oldurl = explode('_', $oldfile);
 
@@ -56,13 +56,36 @@ function edit_post($title, $tag, $url, $content, $oldfile) {
 			rename($oldfile, $newfile);
 			file_put_contents($newfile, print_r($post_content, true));
 		}
-		$redirect = site_url() . 'admin/posts';
-		header("Location: $redirect");		
+		
+		$replaced = substr($oldurl[0], 0,strrpos($oldurl[0], '/')) . '/';
+		$dt = str_replace($replaced,'',$oldurl[0]);
+		$time = new DateTime($dt);
+		$timestamp= $time->format("Y-m-d");
+		// The post date
+		$postdate = strtotime($timestamp);
+		// The post URL
+		$posturl = site_url().date('Y/m', $postdate).'/'.$url;
+		
+		if($destination == 'admin/posts') {
+			$redirect = site_url() . 'admin/posts';
+			header("Location: $redirect");
+		}
+		elseif($destination == 'admin') {
+			$redirect = site_url() . 'admin';
+			header("Location: $redirect");
+		}
+		elseif ($destination == 'post') {
+			header("Location: $posturl");
+		}
+		else {
+			$redirect = site_url();
+			header("Location: $redirect");
+		}
 	}
 		
 }
 
-function edit_page($title, $url, $content, $oldfile) {
+function edit_page($title, $url, $content, $oldfile, $destination = null) {
 
 	$dir = substr($oldfile, 0, strrpos($oldfile, '/'));
 
@@ -83,8 +106,21 @@ function edit_page($title, $url, $content, $oldfile) {
 			rename($oldfile, $newfile);
 			file_put_contents($newfile, print_r($post_content, true));
 		}
-		$redirect = site_url() . 'admin';
-		header("Location: $redirect");			
+		
+		$posturl = site_url() . $url;
+		
+		if($destination == 'admin') {
+			$redirect = site_url() . 'admin';
+			header("Location: $redirect");
+		}
+		elseif ($destination == 'post') {
+			header("Location: $posturl");
+		}
+		else {
+			$redirect = site_url();
+			header("Location: $redirect");
+		}
+		
 	}
 		
 }
@@ -200,7 +236,7 @@ function get_recent_posts() {
 				echo '<td>' . $p->title . '</td>';
 				echo '<td>' . date('d F Y', $p->date) . '</td>';
 				echo '<td>' . $p->tag . '</td>';
-				echo '<td><a href="' . $p->url . '/edit">Edit</a> <a href="' . $p->url . '/delete">Delete</a></td>';
+				echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
 				echo '</tr>';
 			}
 			echo '</table>';
@@ -220,7 +256,7 @@ function get_recent_pages() {
 		foreach($posts as $p) {
 			echo '<tr>';
 			echo '<td>' . $p->title . '</td>';
-			echo '<td><a href="' . $p->url . '/edit">Edit</a> <a href="' . $p->url . '/delete">Delete</a></td>';
+			echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
 			echo '</tr>';
 		}
 		echo '</table>';
