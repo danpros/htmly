@@ -663,7 +663,8 @@ function get_description($text) {
 			return $string;
 		}
 		else {
-			return $string = substr($string, 0, strpos($string, ' ', config('description.char')));
+			$string = substr($string, 0, config('description.char'));
+			return $string = substr($string, 0, strrpos($string, ' '));
 		}
 	}
 
@@ -679,7 +680,8 @@ function get_teaser($text, $url) {
 	}
 	else {
 		$string = preg_replace('/\s\s+/', ' ', strip_tags($text));
-		$string = substr($string, 0, strpos($string, ' ', config('teaser.char')));
+		$string = substr($string, 0, config('teaser.char'));
+		$string = substr($string, 0, strrpos($string, ' '));
 		$body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>' ;
 		echo '<p>' . $body . '</p>';
 	}
