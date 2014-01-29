@@ -11,14 +11,14 @@
 	<link rel="sitemap" href="<?php echo site_url() ?>sitemap.xml" />
 	<link rel="canonical" href="<?php echo $canonical; ?>" />
 	<link rel="alternate" type="application/rss+xml" title="<?php echo config('blog.title')?> Feed" href="<?php echo site_url()?>feed/rss" />
-	<link href="<?php echo site_url() ?>themes/clean/css/style.css" rel="stylesheet" />
-	<link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet" />
+	<link href="<?php echo site_url() ?>system/admin/views/css/style.css" rel="stylesheet" />
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<?php if (publisher() == true):?><link href="<?php echo publisher() ?>" rel="publisher" /><?php endif;?>
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 </head>
-<body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
+<body itemscope="itemscope" itemtype="http://schema.org/Blog">
 	<div class="hide">
 		<meta content="<?php echo config('blog.title') ?>" itemprop="name"/>
 		<meta content="<?php echo config('blog.description')?>" itemprop="description"/>
@@ -37,21 +37,40 @@
 			</ul>
 		</div>
 	<?php } ?>
-	<aside>
-		<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo config('blog.title') ?></a></h1>
-		<div class="blog-tagline"><p><?php echo config('blog.tagline')?></p></div>
-		<div class="search">
-			<?php echo search() ?>
+	<div id="outer-wrapper">
+		<div id="menu-wrapper">
+			<div class="container">
+				<nav id="menu">
+					<?php echo menu() ?>
+					<?php echo search() ?>
+				</nav>
+			</div>
 		</div>
-        <div class="social"><?php echo social() ?></div>
-		<div class="menu"><?php echo menu() ?></div>
-		<div class="archive"><?php echo archive_list()?></div>
-		<div class="tagcloud"><?php echo tag_cloud()?></div>
-		<div class="copyright"><?php echo copyright() ?></div>
-	</aside>
-	<section id="content">
-		<?php echo content()?>
-	</section>
+		<div id="header-wrapper">
+			<div class="container">
+				<header id="header">
+					<section id="branding">
+						<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo config('blog.title') ?></a></h1>
+						<div class="blog-tagline"><p><?php echo config('blog.tagline')?></p></div>
+					</section>
+				</header>
+			</div>
+		</div>
+		<div id="content-wrapper">
+			<div class="container">
+				<section id="content">
+					<?php echo content()?>
+				</section>
+			</div>
+		</div>
+		<div id="footer-wrapper">
+			<div class="container">
+				<footer id="footer">
+					<div class="copyright"><?php echo copyright() ?></div>
+				</footer>
+			</div>
+		</div>
+	</div>
 	<?php if (analytics() == true):?><?php echo analytics() ?><?php endif;?>
 </body>
 </html>

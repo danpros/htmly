@@ -151,6 +151,8 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		$post->tag = implode(', ', $url);
 		
 		$post->tagb = implode(' » ', $bc);
+		
+		$post->file = $filepath;
 
 		// Get the contents and convert it to HTML
 		$content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
@@ -289,7 +291,7 @@ function get_profile($profile, $page, $perpage){
 	}
 	
 	if(empty($tmp)) {
-		not_found();
+		return;	
 	}
 	
 	return $tmp = get_posts($tmp, $page, $perpage);
@@ -369,6 +371,8 @@ function get_static_post($static){
 			// The static page URL
 			$url = str_replace($replaced,'',$v);
 			$post->url = site_url() . str_replace('.md','',$url);
+			
+			$post->file = $v;
 			
 			// Get the contents and convert it to HTML
 			$content = MarkdownExtra::defaultTransform(file_get_contents($v));

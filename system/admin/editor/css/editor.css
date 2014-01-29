@@ -22,7 +22,7 @@ blockquote {
 }
 
 .wmd-input { 
-	height: 300px;
+	min-height: 300px;
 	width: 96%;
 	background-color: #FFFFFF;
 	border:none;

@@ -23,6 +23,20 @@
 		<meta content="<?php echo config('blog.title') ?>" itemprop="name"/>
 		<meta content="<?php echo config('blog.description')?>" itemprop="description"/>
 	</div>
+	<?php if(login()) {?>
+		<style>	#outer-wrapper{ padding-top:30px;}</style>
+		<div id="toolbar">						
+			<ul>
+				<li><a href="<?php echo site_url() ?>">Home</a></li>
+				<li><a href="<?php echo site_url() ?>admin">Admin</a></li>
+				<li><a href="<?php echo site_url() ?>admin/posts">Posts</a></li>
+				<li><a href="<?php echo site_url() ?>add/post">Add post</a></li>
+				<li><a href="<?php echo site_url() ?>add/page">Add page</a></li>
+				<li><a href="<?php echo site_url() ?>edit/profile">Edit profile</a></li>
+				<li><a href="<?php echo site_url() ?>logout">Logout</a></li>
+			</ul>
+		</div>
+	<?php } ?>
 	<div id="outer-wrapper">
 		<div id="menu-wrapper">
 			<div class="container">

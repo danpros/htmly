@@ -4,6 +4,7 @@
 	<div class="bio" itemprop="description"><?php echo $bio ?></div>
 </div>
 <h2 class="post-index">Posts by this author</h2>
+<?php if(!empty($posts)) {?>
 <ul class="post-list">
 	<?php $i = 0; $len = count($posts);?>
 	<?php foreach($posts as $p):?>
@@ -34,3 +35,4 @@
 		<?php endif;?>
 	</div>
 <?php endif;?>
+<?php } else { echo 'No posts found!'; }?>

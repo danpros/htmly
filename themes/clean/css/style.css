@@ -125,6 +125,44 @@ h6{
 	margin: 0.5em 0;
 }
 
+/*-------------------------
+	Toolbar
+--------------------------*/
+
+#toolbar {
+    background: none repeat scroll 0 0 #666666;
+    box-shadow: 0 3px 20px #000000;
+    color: #CCCCCC;
+	font-family: 'Open Sans',sans-serif;
+    left: 0;
+    margin: 0 -20px;
+    padding: 0 25px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 600;
+	border: 0 none;
+    font-size: 15px;
+    text-align: left;
+    vertical-align: baseline;
+}
+
+#toolbar ul {
+	margin:0;
+}
+
+#toolbar ul li, #toolbar ul li a {
+    float: left;
+	list-style: none outside none;
+}
+#toolbar a {
+    color: #FFFFFF;
+    font-size: 0.846em;
+    text-decoration: none;
+	   border-radius: 10px;
+    padding: 0 10px;
+}
+
 /*----------------------------
 	Content & Posts
 -----------------------------*/

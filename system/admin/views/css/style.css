@@ -61,7 +61,7 @@ h5 {
 h6 {
 	font-size: 12px;
 }
-	
+
 /*-------------------------
 	Toolbar
 --------------------------*/
@@ -134,10 +134,11 @@ h6 {
 	float:left;
 	width: 100%;
 	padding: 3em 0;
+	background-color: #FAFAFA;
 }
 
 #menu, #header, #content, #footer {
-	width: 700px;
+	width: 980px;
 	margin: 0 auto;
 }
 
@@ -147,6 +148,10 @@ h6 {
 
 .hide {
 	display:none;
+}
+
+.wmd-panel {
+	display:table-row;
 }
 
 /*-------------------------
@@ -234,6 +239,10 @@ ul, ol {
 
 ul li, ol li{
 	margin: 0.25em 0;
+}
+
+input.text, input.password {
+	width: 75%;
 }
 
 /*-------------------------
@@ -453,54 +462,6 @@ h1.title-post a:hover, h2.title-index a:hover {
 .post-list {
 	font-size: 14px;
 }
-
-/*-------------------------
-	Share box
---------------------------*/
-
-.separator {
-	font-size: 20px;
-}
-
-.share-box {
-	font-size: 14px;
-	float:left;
-}
-
-.author-info {
-	width: 540px;
-	float:left;
-}
-
-.author-info p {
-	font-style:italic;
-}
-
-.share {
-	width:140px;
-	margin-right: 1em;
-	float:right;
-}
-
-.share a {
-	display: inline-block;
-	width: 18px;
-	height: 18px;
-	margin: 0;
-	padding: 0 5px;
-	vertical-align: middle;
-	-o-transition: all .3s;
-	-moz-transition: all .3s;
-	-webkit-transition: all .3s;
-	-ms-transition: all .3s;
-	text-indent: -9999em;
-}
-
-.share a.twitter { background: url(../img/share-twitter.png) left top no-repeat; }
-.share a.facebook { background: url(../img/share-facebook.png) left top no-repeat; }
-.share a.googleplus { background: url(../img/share-googleplus.png) left top no-repeat; }
-
-.share a:hover { background-position: left -26px; }
 
 /*-------------------------
 	Comments
