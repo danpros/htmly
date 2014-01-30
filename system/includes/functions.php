@@ -36,8 +36,10 @@ function get_post_sorted(){
 
 		$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
 		
-		foreach($tmp as $file) {
-			$_cache[] = pathinfo($file);
+		if (is_array($tmp)) {
+			foreach($tmp as $file) {
+				$_cache[] = pathinfo($file);
+			}
 		}
 		
 	}
