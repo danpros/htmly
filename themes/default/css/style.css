@@ -316,6 +316,8 @@ table {
 	color:#333333;
 	border: 1px solid #E3E3E3;
 	margin: 1em 0;
+	white-space: pre-wrap;
+	word-wrap:break-word;
 }
 
 table h2.title {
@@ -353,6 +355,10 @@ td {
 	border: 1px solid #E3E3E3;
 	border-top: none;
 	border-left:none;
+}
+
+table.post-list td a {
+	margin:0 5px;
 }
 
 /*-------------------------

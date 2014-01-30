@@ -180,20 +180,20 @@ function add_page($title, $url, $content) {
 	
 }
 
-function delete_post($file) {
+function delete_post($file, $destination) {
 	$deleted_content = $file;
 	if(!empty($deleted_content)) {
 		unlink($deleted_content);
-		$redirect = site_url() . 'admin/posts';
+		$redirect = site_url() . $destination;
 		header("Location: $redirect");		
 	}
 }
 
-function delete_page($file) {
+function delete_page($file, $destination) {
 	$deleted_content = $file;
 	if(!empty($deleted_content)) {
 		unlink($deleted_content);
-		$redirect = site_url() . 'admin';
+		$redirect = site_url() . $destination;
 		header("Location: $redirect");		
 	}
 }
@@ -224,23 +224,19 @@ function edit_profile($title, $content, $user) {
 
 function get_recent_posts() {
 	if (isset($_SESSION['user'])) {
-
 		$posts = get_profile($_SESSION['user'], 1, 5);
-
 		if(!empty($posts)) {
-
-			echo '<table>';
+			echo '<table class="post-list">';
 			echo '<tr><th>Title</th><th>Published</th><th>Tag</th><th>Operations</th></tr>';
 			foreach($posts as $p) {
 				echo '<tr>';
-				echo '<td>' . $p->title . '</td>';
+				echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
 				echo '<td>' . date('d F Y', $p->date) . '</td>';
 				echo '<td>' . $p->tag . '</td>';
 				echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
 				echo '</tr>';
 			}
 			echo '</table>';
-
 		}
 	}
 }
@@ -251,12 +247,11 @@ function get_recent_pages() {
 		$posts = get_static_post(null);
 		if(!empty($posts)) {
 			krsort($posts);
-			
-			echo '<table>';
+			echo '<table class="post-list">';
 			echo '<tr><th>Title</th><th>Operations</th></tr>';
 			foreach($posts as $p) {
 				echo '<tr>';
-				echo '<td>' . $p->title . '</td>';
+				echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
 				echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
 				echo '</tr>';
 			}

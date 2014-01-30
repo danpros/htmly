@@ -179,9 +179,10 @@ get('/:year/:month/:name/delete', function($year, $month, $name){
 
 // Get deleted data for blog post
 post('/:year/:month/:name/delete', function() {
+
 	$file = from($_REQUEST, 'file');
-	
-	delete_post($file);
+	$destination = from($_GET, 'destination');	
+	delete_post($file, $destination);
 	
 });
 
@@ -501,8 +502,8 @@ get('/:static/delete', function($static){
 post('/:static/delete', function() {
 
 	$file = from($_REQUEST, 'file');
-	
-	delete_post($file);
+	$destination = from($_GET, 'destination');
+	delete_page($file, $destination);
 	
 });
 
@@ -591,7 +592,7 @@ get('/tag/:tag',function($tag){
     	'page' => $page,
 		'posts' => $posts,
 		'canonical' => config('site.url') . '/tag/' . $tag,
-		'description' => 'All posts tagged ' . $tag . ' on '. config('blog.title') . '.',
+		'description' => 'All posts tagged: ' . $tag . ' on '. config('blog.title') . '.',
 		'bodyclass' => 'intag',
 		'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Posts tagged: ' . $tag,
 		'pagination' => has_pagination($total, $perpage, $page)

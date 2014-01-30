@@ -362,10 +362,10 @@ function default_profile($author) {
 function get_static_post($static){
 
 	$posts = get_static_pages();
+	
+	$tmp = array();
 
 	if(!empty($posts)) {
-
-		$tmp = array();
 
 		foreach($posts as $index => $v){
 			if(strpos($v, $static.'.md') !== false){
@@ -399,16 +399,18 @@ function get_static_post($static){
 				
 			}
 		}
-		
-		return $tmp;
 	
 	}
+	
+	return $tmp;
+	
 }
 
 // Return search page.
 function get_keyword($keyword){
 
 	$posts = get_post_unsorted();
+	
 	$tmp = array();
 	
 	$words = explode(' ', $keyword);
@@ -486,12 +488,10 @@ function get_keyword($keyword){
 		$tmp = array_unique($tmp, SORT_REGULAR);
 	
 		usort($tmp,'sortdate');
+	}
+	
+	return $tmp;
 		
-		return $tmp;
-	}
-	else {
-		return $tmp;
-	}
 }
 
 // Get related posts base on post tag.
@@ -992,23 +992,28 @@ function get_static_path(){
 	$posts = get_static_pages();
 
 	$tmp = array();
+	
+	if(!empty($posts)) {
 
-	foreach($posts as $index => $v){
-		
-		$post = new stdClass;
-		
-		// Replaced string
-		$replaced = substr($v, 0, strrpos($v, '/')) . '/';
-		
-		// The static page URL
-		$url = str_replace($replaced,'',$v);
-		$post->url = site_url() . str_replace('.md','',$url);
-
-		$tmp[] = $post;
+		foreach($posts as $index => $v){
 			
+			$post = new stdClass;
+			
+			// Replaced string
+			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+			
+			// The static page URL
+			$url = str_replace($replaced,'',$v);
+			$post->url = site_url() . str_replace('.md','',$url);
+
+			$tmp[] = $post;
+				
+		}
+	
 	}
 	
 	return $tmp;
+	
 }
 
 // Generate sitemap.xml.
@@ -1054,8 +1059,12 @@ function generate_sitemap($str){
 		
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
-		foreach($posts as $p) {
-			echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+		if(!empty($posts)) {
+		
+			foreach($posts as $p) {
+				echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+			}
+		
 		}
 		
 		echo '</urlset>';

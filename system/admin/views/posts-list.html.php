@@ -17,10 +17,10 @@
 			$i++;		
 		?>
 	<tr>
-		<td><?php echo $p->title ?></td>
+		<td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
 		<td><?php echo date('d F Y', $p->date) ?></td>
 		<td><?php echo $p->tag ?></td>
-		<td><a href="<?php echo $p->url ?>/edit?destination=admin/posts">Edit</a> <a href="<?php echo $p->url ?>/delete">Delete</a></td>
+		<td><a href="<?php echo $p->url ?>/edit?destination=admin/posts">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/posts">Delete</a></td>
 	</tr>
 	<?php endforeach;?>
 </table>
