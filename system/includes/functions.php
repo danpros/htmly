@@ -360,42 +360,46 @@ function get_static_post($static){
 
 	$posts = get_static_pages();
 
-	$tmp = array();
+	if(!empty($posts)) {
 
-	foreach($posts as $index => $v){
-		if(strpos($v, $static.'.md') !== false){
-		
-			$post = new stdClass;
-			
-			// Replaced string
-			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
-			
-			// The static page URL
-			$url = str_replace($replaced,'',$v);
-			$post->url = site_url() . str_replace('.md','',$url);
-			
-			$post->file = $v;
-			
-			// Get the contents and convert it to HTML
-			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
+		$tmp = array();
 
-			// Extract the title and body
-			$arr = explode('t-->', $content);
-			if(isset($arr[1])) {
-				$post->title = str_replace('<!--t','',$arr[0]);
-				$post->body = $arr[1];
+		foreach($posts as $index => $v){
+			if(strpos($v, $static.'.md') !== false){
+			
+				$post = new stdClass;
+				
+				// Replaced string
+				$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+				
+				// The static page URL
+				$url = str_replace($replaced,'',$v);
+				$post->url = site_url() . str_replace('.md','',$url);
+				
+				$post->file = $v;
+				
+				// Get the contents and convert it to HTML
+				$content = MarkdownExtra::defaultTransform(file_get_contents($v));
+
+				// Extract the title and body
+				$arr = explode('t-->', $content);
+				if(isset($arr[1])) {
+					$post->title = str_replace('<!--t','',$arr[0]);
+					$post->body = $arr[1];
+				}
+				else {
+					$post->title = $static;
+					$post->body = $arr[0];
+				}
+
+				$tmp[] = $post;
+				
 			}
-			else {
-				$post->title = $static;
-				$post->body = $arr[0];
-			}
-
-			$tmp[] = $post;
-			
 		}
-	}
+		
+		return $tmp;
 	
-	return $tmp;
+	}
 }
 
 // Return search page.
@@ -854,22 +858,27 @@ function menu(){
 function get_menu() {
 
 	$posts = get_static_pages();
-	krsort($posts);
+
+	if(!empty($posts)) {
+
+		krsort($posts);
+		
+		echo '<ul>';
+		echo '<li><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		foreach($posts as $index => $v){
+		
+			// Replaced string
+			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
+				
+			// The static page URL
+			$title = str_replace($replaced,'',$v);
+			$url = site_url() . str_replace('.md','',$title);
+			echo '<li><a href="' . $url . '">' . ucfirst(str_replace('.md','',$title)) . '</a></li>';
+				
+		}
+		echo '</ul>';
 	
-	echo '<ul>';
-	echo '<li><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
-	foreach($posts as $index => $v){
-	
-		// Replaced string
-		$replaced = substr($v, 0, strrpos($v, '/')) . '/';
-			
-		// The static page URL
-		$title = str_replace($replaced,'',$v);
-		$url = site_url() . str_replace('.md','',$title);
-		echo '<li><a href="' . $url . '">' . ucfirst(str_replace('.md','',$title)) . '</a></li>';
-			
 	}
-	echo '</ul>';
 	
 }
 

@@ -1,3 +1,9 @@
+# Make HTMLy handle any 404 errors.
+ErrorDocument 404 /index.php
+
+# Set the default handler.
+DirectoryIndex index.php index.html index.htm
+
 # Requires mod_expires to be enabled.
 <IfModule mod_expires.c>
 
