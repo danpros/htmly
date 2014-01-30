@@ -294,13 +294,13 @@ get('/admin/posts', function(){
 		
 		if(empty($posts) || $page < 1){
 			render('posts-list',array(
-				'title' => 'Profile for:  '. $bio->title .' - ' . config('blog.title'),
+				'title' => 'All posts by: '. $bio->title .' - ' . config('blog.title'),
 				'page' => $page,
 				'posts' => null,
 				'bio' => $bio->body,
 				'name' => $bio->title,
-				'canonical' => config('site.url') . '/author/' . $profile,
-				'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
+				'canonical' => config('site.url') . '/admin/posts',
+				'description' => 'All posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
 				'bodyclass' => 'userposts',
 				'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
 				'pagination' => has_pagination($total, $perpage, $page)
@@ -309,13 +309,13 @@ get('/admin/posts', function(){
 		}
 		
 		render('posts-list',array(
-			'title' => 'Profile for:  '. $bio->title .' - ' . config('blog.title'),
+			'title' => 'All posts by: '. $bio->title .' - ' . config('blog.title'),
 			'page' => $page,
 			'posts' => $posts,
 			'bio' => $bio->body,
 			'name' => $bio->title,
-			'canonical' => config('site.url') . '/author/' . $profile,
-			'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
+			'canonical' => config('site.url') . '/admin/posts',
+			'description' => 'All posts by ' . $bio->title . ' on ' . config('blog.title') . '.',
 			'bodyclass' => 'userposts',
 			'breadcrumb' => '<a href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
 			'pagination' => has_pagination($total, $perpage, $page)

@@ -305,9 +305,9 @@ function get_bio($author){
 
 	$names = get_author_names();
 	
+	$tmp = array();
+	
 	if(!empty($names)) {
-
-		$tmp = array();
 	
 		foreach($names as $index => $v){
 			$post = new stdClass;
@@ -341,9 +341,9 @@ function get_bio($author){
 				$tmp[] = $post;
 			}
 		}
-		
-		return $tmp;
 	}
+	return $tmp;
+	
 }
 
 function default_profile($author) {
@@ -1091,12 +1091,16 @@ function generate_sitemap($str){
 			$tag[] = site_url() . 'tag/' . $t;
 		}
 		
-		$tag = array_unique($tag, SORT_REGULAR);
-		
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
-		foreach($tag as $t) {
-			echo '<url><loc>' . $t . '</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>';
+		if(isset($tag)) {
+		
+			$tag = array_unique($tag, SORT_REGULAR);
+			
+			foreach($tag as $t) {
+				echo '<url><loc>' . $t . '</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>';
+			}
+		
 		}
 		
 		echo '</urlset>';
