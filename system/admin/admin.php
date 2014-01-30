@@ -64,7 +64,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 		// The post date
 		$postdate = strtotime($timestamp);
 		// The post URL
-		$posturl = site_url().date('Y/m', $postdate).'/'.$url;
+		$posturl = site_url().date('Y/m', $postdate).'/'.$post_url;
 		
 		if($destination == 'admin/posts') {
 			$redirect = site_url() . 'admin/posts';
@@ -107,7 +107,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 			file_put_contents($newfile, print_r($post_content, true));
 		}
 		
-		$posturl = site_url() . $url;
+		$posturl = site_url() . $post_url;
 		
 		if($destination == 'admin') {
 			$redirect = site_url() . 'admin';
