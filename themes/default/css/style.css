@@ -277,7 +277,8 @@ input[type=text]:hover , input[type=password]:hover{
 
 input[type=submit] {
 	padding:4px 6px;
-	font-size: 14px;	
+	font-size: 14px;
+	cursor:pointer;
 }
 
 input.text {
