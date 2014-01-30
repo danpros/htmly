@@ -1,5 +1,5 @@
 body { 
-    font-family: sans-serif;
+    font-family: Georgia, sans-serif;
 }
 
 blockquote {
@@ -15,17 +15,21 @@ blockquote {
 }
 
 .wmd-button-bar {
-	background-color: #FEFEFE;
+	background-color: #FAFAFA;
 	padding: 5px 0;
 	margin-bottom:10px;
 	width: 100%;
+	border: 1px solid #F4F4F4;
+}
+
+.wmd-button-bar:hover {
+	border: 1px solid #CCCCCC;	
 }
 
 .wmd-input { 
 	min-height: 300px;
 	width: 96%;
-	background-color: #FFFFFF;
-	border:none;
+	background-color: #FAFAFA;
 	padding: 2%;
 }
 
@@ -40,7 +44,7 @@ blockquote {
 	position: relative;
 	margin:0px;
 	padding: 0px;  
-	height: 20px;
+	height: 30px;
 }
 
 .wmd-spacer{
@@ -56,8 +60,8 @@ blockquote {
 .wmd-button {
     width: 20px;
     height: 20px;
-    padding-left: 2px;
-    padding-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
     position: absolute;
     display: inline-block;
     list-style: none;

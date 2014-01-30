@@ -130,10 +130,10 @@ h6{
 --------------------------*/
 
 #toolbar {
-    background: none repeat scroll 0 0 #666666;
-    box-shadow: 0 3px 20px #000000;
+    background: #666666;
+    box-shadow: 0 5px 15px #000000;
     color: #CCCCCC;
-	font-family: 'Open Sans',sans-serif;
+	font-family: Georgia, sans-serif;
     left: 0;
     margin: 0 -20px;
     padding: 0 25px;
@@ -145,10 +145,13 @@ h6{
     font-size: 15px;
     text-align: left;
     vertical-align: baseline;
+	height:30px;
 }
 
 #toolbar ul {
 	margin:0;
+	padding-top:5px;
+	padding-left:30px;
 }
 
 #toolbar ul li, #toolbar ul li a {
@@ -159,7 +162,7 @@ h6{
     color: #FFFFFF;
     font-size: 0.846em;
     text-decoration: none;
-	   border-radius: 10px;
+	border-radius: 10px;
     padding: 0 10px;
 }
 

@@ -67,10 +67,10 @@ h6 {
 --------------------------*/
 
 #toolbar {
-    background: none repeat scroll 0 0 #666666;
-    box-shadow: 0 3px 20px #000000;
+    background: #666666;
+    box-shadow: 0 5px 15px #000000;
     color: #CCCCCC;
-	font-family: 'Open Sans',sans-serif;
+	font-family: Georgia, sans-serif;
     left: 0;
     margin: 0 -20px;
     padding: 0 25px;
@@ -82,10 +82,12 @@ h6 {
     font-size: 15px;
     text-align: left;
     vertical-align: baseline;
+	height:30px;
 }
 
 #toolbar ul {
 	margin:0;
+	padding-top:2px;
 }
 
 #toolbar ul li, #toolbar ul li a {
@@ -96,7 +98,7 @@ h6 {
     color: #FFFFFF;
     font-size: 0.846em;
     text-decoration: none;
-	   border-radius: 10px;
+	border-radius: 10px;
     padding: 0 10px;
 }
 
@@ -136,16 +138,12 @@ h6 {
 	padding: 3em 0;
 }
 
-.admin #content-wrapper {
-	background-color: #FAFAFA;
-}
-
 #menu, #header, #content, #footer {
 	width: 700px;
 	margin: 0 auto;
 }
 
-.admin #menu, .admin #header, .admin #content, .admin #footer {
+.admin #content {
 	width: 980px;
 	margin: 0 auto;
 }
@@ -265,6 +263,43 @@ ul li, ol li{
 	margin: 0.25em 0;
 }
 
+input[type=text], input[type=password] {
+	padding:4px 6px;
+	font-size: 14px;
+	background-color: #FAFAFA;
+	border: 1px solid #F4F4F4;
+}
+
+input[type=text]:hover , input[type=password]:hover{
+	background-color: #FAFAFA;
+	border: 1px solid #CCCCCC;	
+}
+
+input[type=submit] {
+	padding:4px 6px;
+	font-size: 14px;	
+}
+
+input.text {
+	width: 75%;
+	padding: 5px;
+	font-size: 14px;
+	background-color: #FAFAFA;
+	border: 1px solid #F4F4F4;
+}
+
+textarea {
+	font-size: 15px;
+	font-family: Georgia, sans-serif;
+	line-height: 1.4;
+	background-color: #FAFAFA;
+	border: 1px solid #F4F4F4;
+}
+
+textarea:hover {
+	border: 1px solid #CCCCCC;		
+}
+
 /*-------------------------
 	Table
 --------------------------*/
@@ -367,7 +402,8 @@ td {
 	margin: 0;
 	padding: 4px 15px;
 	font-size:14px;
-	border:1px solid #0076a3; 
+	border:1px solid #0076a3!important;
+	background: #FFFFFF!important;
 	border-top-left-radius: 5px 5px;
 	border-bottom-left-radius: 5px 5px;
 	width: 120px;
