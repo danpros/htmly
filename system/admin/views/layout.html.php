@@ -24,7 +24,7 @@
 		<meta content="<?php echo config('blog.description')?>" itemprop="description"/>
 	</div>
 	<?php if(login()) {?>
-		<style>	#outer-wrapper{ padding-top:30px;}</style>
+		<style>	#outer-wrapper{ padding-top:30px;} @media all and (max-width: 550px) {#outer-wrapper{ padding-top:60px;}}</style>
 		<div id="toolbar">						
 			<ul>
 				<li><a href="<?php echo site_url() ?>">Home</a></li>

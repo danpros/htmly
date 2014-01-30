@@ -151,7 +151,9 @@ h6{
 #toolbar ul {
 	margin:0;
 	padding-top:5px;
+	padding-bottom:5px;
 	padding-left:30px;
+	float:left;
 }
 
 #toolbar ul li, #toolbar ul li a {

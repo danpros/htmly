@@ -87,12 +87,16 @@ h6 {
 
 #toolbar ul {
 	margin:0;
-	padding-top:2px;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left:30px;
+	float:left;
 }
 
 #toolbar ul li, #toolbar ul li a {
     float: left;
 	list-style: none outside none;
+	margin:0;
 }
 #toolbar a {
     color: #FFFFFF;
