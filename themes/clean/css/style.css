@@ -145,7 +145,7 @@ h6{
     font-size: 15px;
     text-align: left;
     vertical-align: baseline;
-	height:30px;
+	min-height:30px;
 }
 
 #toolbar ul {

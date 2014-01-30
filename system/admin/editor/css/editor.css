@@ -5,7 +5,7 @@ body {
 blockquote {
 	border-left: 2px dotted #888;
 	padding-left: 5px;
-	background: #d0f0ff;
+	background: #F6F7F9;
 }
 
 .wmd-panel{
@@ -15,11 +15,13 @@ blockquote {
 }
 
 .wmd-button-bar {
-	background-color: #FAFAFA;
+	background-color: #F6F7F9;
 	padding: 5px 0;
 	margin-bottom:10px;
 	width: 100%;
-	border: 1px solid #F4F4F4;
+	border: 1px solid #CFDAE5;
+	display:block;
+	float:left;
 }
 
 .wmd-button-bar:hover {
@@ -29,12 +31,11 @@ blockquote {
 .wmd-input { 
 	min-height: 300px;
 	width: 96%;
-	background-color: #FAFAFA;
 	padding: 2%;
 }
 
 .wmd-preview { 
-	background-color: #c0e0ff;
+	background-color: #E4EBF1;
 	width: 46%;
 	float:left;
 	padding:2%;
@@ -42,19 +43,17 @@ blockquote {
 
 .wmd-button-row {
 	position: relative;
-	margin:0px;
-	padding: 0px;  
-	height: 30px;
+	margin: 0px;
+	padding: 0px;
 }
 
 .wmd-spacer{
 	width: 1px; 
 	height: 20px; 
-	margin-left: 14px;
-	position: absolute;
 	background-color: Silver;
-	display: inline-block; 
 	list-style: none;
+	float:left;
+	margin: 0.25em 5px;
 }
 
 .wmd-button {
@@ -62,10 +61,9 @@ blockquote {
     height: 20px;
     padding-left: 5px;
     padding-right: 5px;
-    position: absolute;
-    display: inline-block;
     list-style: none;
     cursor: pointer;
+	float:left;
 }
 
 .wmd-button > span {

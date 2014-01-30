@@ -82,7 +82,7 @@ h6 {
     font-size: 15px;
     text-align: left;
     vertical-align: baseline;
-	height:30px;
+	min-height:30px;
 }
 
 #toolbar ul {
@@ -266,12 +266,12 @@ ul li, ol li{
 input[type=text], input[type=password] {
 	padding:4px 6px;
 	font-size: 14px;
-	background-color: #FAFAFA;
-	border: 1px solid #F4F4F4;
+	background-color: #F6F7F9;
+	border: 1px solid #CFDAE5;
 }
 
 input[type=text]:hover , input[type=password]:hover{
-	background-color: #FAFAFA;
+	background-color: #F6F7F9;
 	border: 1px solid #CCCCCC;	
 }
 
@@ -284,16 +284,16 @@ input.text {
 	width: 75%;
 	padding: 5px;
 	font-size: 14px;
-	background-color: #FAFAFA;
-	border: 1px solid #F4F4F4;
+	background-color: #F6F7F9;
+	border: 1px solid #CFDAE5;
 }
 
 textarea {
 	font-size: 15px;
 	font-family: Georgia, sans-serif;
 	line-height: 1.4;
-	background-color: #FAFAFA;
-	border: 1px solid #F4F4F4;
+	background-color: #F6F7F9;
+	border: 1px solid #CFDAE5;
 }
 
 textarea:hover {
