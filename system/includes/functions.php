@@ -304,43 +304,46 @@ function get_profile($profile, $page, $perpage){
 function get_bio($author){
 
 	$names = get_author_names();
-
-	$tmp = array();
-
-	foreach($names as $index => $v){
-		$post = new stdClass;
-		
-		// Replaced string
-		$replaced = substr($v, 0,strrpos($v, '/')) . '/';
-		
-		// Author string
-		$str = explode('/', $replaced);
-		$profile = $str[count($str)-2];
-		
-		if($author === $profile){
-			// Profile URL
-			$url = str_replace($replaced,'',$v);
-			$post->url = site_url() . 'author/' . $profile;
-			
-			// Get the contents and convert it to HTML
-			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
-
-			// Extract the title and body
-			$arr = explode('t-->', $content);
-			if(isset($arr[1])) {
-				$post->title = str_replace('<!--t','',$arr[0]);
-				$post->body = $arr[1];
-			}
-			else {
-				$post->title = $author;
-				$post->body = $arr[0];
-			}
-
-			$tmp[] = $post;
-		}
-	}
 	
-	return $tmp;
+	if(!empty($names)) {
+
+		$tmp = array();
+	
+		foreach($names as $index => $v){
+			$post = new stdClass;
+			
+			// Replaced string
+			$replaced = substr($v, 0,strrpos($v, '/')) . '/';
+			
+			// Author string
+			$str = explode('/', $replaced);
+			$profile = $str[count($str)-2];
+			
+			if($author === $profile){
+				// Profile URL
+				$url = str_replace($replaced,'',$v);
+				$post->url = site_url() . 'author/' . $profile;
+				
+				// Get the contents and convert it to HTML
+				$content = MarkdownExtra::defaultTransform(file_get_contents($v));
+	
+				// Extract the title and body
+				$arr = explode('t-->', $content);
+				if(isset($arr[1])) {
+					$post->title = str_replace('<!--t','',$arr[0]);
+					$post->body = $arr[1];
+				}
+				else {
+					$post->title = $author;
+					$post->body = $arr[0];
+				}
+	
+				$tmp[] = $post;
+			}
+		}
+		
+		return $tmp;
+	}
 }
 
 function default_profile($author) {
@@ -410,79 +413,85 @@ function get_keyword($keyword){
 	
 	$words = explode(' ', $keyword);
 	
-	foreach($posts as $index => $v){
+	if(!empty($posts)) {
 	
-		$content = MarkdownExtra::defaultTransform(file_get_contents($v));
+		foreach($posts as $index => $v){
 		
-		foreach ($words as $word) {
-			if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){
+			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 			
-				$post = new stdClass;
-
-				// Extract the date
-				$arr = explode('_', $v);
+			foreach ($words as $word) {
+				if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){
 				
-				// Replaced string
-				$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+					$post = new stdClass;
+	
+					// Extract the date
+					$arr = explode('_', $v);
+					
+					// Replaced string
+					$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+					
+					// Author string
+					$str = explode('/', $replaced);
+					$author = $str[count($str)-3];
+					
+					// The post author + author url
+					$post->author = $author;
+					$post->authorurl = site_url() . 'author/' .  $author;
+					
+					$dt = str_replace($replaced,'',$arr[0]);
+					$time = new DateTime($dt);
+					$timestamp= $time->format("Y-m-d");
+					
+					// The post date
+					$post->date = strtotime($timestamp);
+	
+					// The post URL
+					$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
+					
+					$tag = array();
+					$url = array();
+					$bc = array();
+					
+					$t = explode(',', $arr[1]);
+					foreach($t as $tt) {
+						$tag[] = array($tt, site_url(). 'tag/' . $tt);
+					}
+					
+					foreach($tag as $a) {
+						$url[] = '<span><a href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+						$bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
+					}
+					
+					$post->tag = implode(', ', $url);
+					
+					$post->tagb = implode(' » ', $bc);
+	
+					// Extract the title and body
+					$arr = explode('t-->', $content);
+					if(isset($arr[1])) {
+						$post->title = str_replace('<!--t','',$arr[0]);
+						$post->body = $arr[1];
+					}
+					else {
+						$post->title = ' Untitled: ' . date('l jS \of F Y', $post->date);
+						$post->body = $arr[0];
+					}
+					
+					$tmp[] = $post;
 				
-				// Author string
-				$str = explode('/', $replaced);
-				$author = $str[count($str)-3];
-				
-				// The post author + author url
-				$post->author = $author;
-				$post->authorurl = site_url() . 'author/' .  $author;
-				
-				$dt = str_replace($replaced,'',$arr[0]);
-				$time = new DateTime($dt);
-				$timestamp= $time->format("Y-m-d");
-				
-				// The post date
-				$post->date = strtotime($timestamp);
-
-				// The post URL
-				$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-				
-				$tag = array();
-				$url = array();
-				$bc = array();
-				
-				$t = explode(',', $arr[1]);
-				foreach($t as $tt) {
-					$tag[] = array($tt, site_url(). 'tag/' . $tt);
 				}
-				
-				foreach($tag as $a) {
-					$url[] = '<span><a href="' .  $a[1] . '">'. $a[0] .'</a></span>';
-					$bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
-				}
-				
-				$post->tag = implode(', ', $url);
-				
-				$post->tagb = implode(' » ', $bc);
-
-				// Extract the title and body
-				$arr = explode('t-->', $content);
-				if(isset($arr[1])) {
-					$post->title = str_replace('<!--t','',$arr[0]);
-					$post->body = $arr[1];
-				}
-				else {
-					$post->title = ' Untitled: ' . date('l jS \of F Y', $post->date);
-					$post->body = $arr[0];
-				}
-				
-				$tmp[] = $post;
-			
 			}
 		}
+		
+		$tmp = array_unique($tmp, SORT_REGULAR);
+	
+		usort($tmp,'sortdate');
+		
+		return $tmp;
 	}
-	
-	$tmp = array_unique($tmp, SORT_REGULAR);
-
-	usort($tmp,'sortdate');
-	
-	return $tmp;
+	else {
+		return $tmp;
+	}
 }
 
 // Get related posts base on post tag.

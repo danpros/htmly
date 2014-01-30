@@ -249,16 +249,18 @@ function get_recent_posts() {
 function get_recent_pages() {
 	if (isset($_SESSION['user'])) {
 		$posts = get_static_post(null);
-		krsort($posts);
-		
-		echo '<table>';
-		echo '<tr><th>Title</th><th>Operations</th></tr>';
-		foreach($posts as $p) {
-			echo '<tr>';
-			echo '<td>' . $p->title . '</td>';
-			echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
-			echo '</tr>';
+		if(!empty($posts)) {
+			krsort($posts);
+			
+			echo '<table>';
+			echo '<tr><th>Title</th><th>Operations</th></tr>';
+			foreach($posts as $p) {
+				echo '<tr>';
+				echo '<td>' . $p->title . '</td>';
+				echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+				echo '</tr>';
+			}
+			echo '</table>';
 		}
-		echo '</table>';
 	}
 }
