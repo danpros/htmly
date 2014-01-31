@@ -34,7 +34,6 @@
 	Title: <br><input type="text" name="title" class="text" value="<?php echo $oldtitle?>"/><br><br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
-	<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
 	<input type="submit" name="submit" class="submit" value="Submit"/>
 </form>
 </div>

@@ -27,3 +27,9 @@ license, including:
   Markdown - Copyright (c) 2003-2006 John Gruber
 
   \Suin\RSSWriter - Copyright (c) Suin <https://github.com/suin>
+  
+  Showdown code (c) 2007 John Fraser
+  
+  Pagedown modifications and bugfixes (c) 2009 Dana Robinson
+  
+  Pagedown modifications and bugfixes (c) 2009-2013 Stack Exchange Inc.
