@@ -3,14 +3,16 @@ HTMLy
 
 HTMLy is an open source databaseless blogging platform prioritizing simplicity and speed.
 
-Features:
+You do not need to use a VPS to run HTMLy, fairly shared hosting or even a free hosting as long as those hosting already support at least PHP 5.3.
+
+Features
 ---------
 
 - Admin panel
 - Markdown editor with live preview
 - Categorization with tags (multi tags support)
 - Static pages Eg. for contact page
-- Meta canonical, description, and markup for SEO
+- Meta canonical, description, and rich snippets for SEO
 - Pagination
 - Author page
 - Multi author support
@@ -29,7 +31,8 @@ Features:
 - Sitemap.xml
 - Archive and tag cloud widget
 - SEO friendly URL
-- Teaser thumbnail for images and Youtube videos. 
+- Teaser thumbnail for images and Youtube videos
+- Responsive design 
 
 Requirements
 ------------
@@ -100,13 +103,18 @@ So wrap the title with HTML comment with `t` for both side.
 Demo
 ----
 
-Visit the demo blog on [Danlogs](http://www.danlogs.com).
+Visit a real blog powered by HTMLy at [Danlogs](http://www.danlogs.com).
 
 Credit
 ------
 
 People who give references and inspiration for HTMLy:
 * [Martin Angelov](http://tutorialzine.com)
+
+Contribute
+----------
+1. Fork and edit
+2. Submit pull request for consideration
 
 
 Copyright / License
