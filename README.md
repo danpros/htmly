@@ -28,6 +28,7 @@ Features
 - JSON API
 - OPML
 - RSS Feed
+- RSS Import
 - Sitemap.xml
 - Archive and tag cloud widget
 - SEO friendly URL
@@ -42,12 +43,14 @@ HTMLy requires PHP 5.3 or greater.
 Installations
 -------------
 
-Download the latest version, extract it, then upload the extracted files to your server. Make sure the installation folder is writeable by your server.
+Download the latest version, extract it, then upload the extracted files to your server. Make sure the installation folder or at least the `content` folder is writeable by your server. 
+
+If HTMLy uploaded using FTP than sometimes the `content` folder is owned by those FTP user, if so please chmod the `content` folder to 0777 instead.
 
 Configurations
 --------------
 
-Change `config.ini` inside `config` folder, and than create `YourUsername.ini` inside `config/users` folder, write down your password there.
+Rename `config.ini.example` inside `config` folder to `config.ini`, and than create `YourUsername.ini` inside `config/users` folder, write down your password there.
 
 ````
 password = YourPassword
@@ -58,7 +61,7 @@ You can login to admin panel at `www.example.com/login`.
 Both Online or Offline
 ----------------------
 
-In addition to using the built-in editor in the admin panel, you can also write it offline and then upload them into `content/username/blog` folder (the username must match with `YourUsername.ini` above). 
+In addition using the built-in editor in the admin panel, you can also write it offline and then upload them into `content/username/blog` folder (the username must match with `YourUsername.ini` above). 
 
 For static pages you can upload it to `content/static` folder.
 
@@ -68,12 +71,12 @@ File Naming Convention
 When you write a blog post and save it via the admin panel, HTMLy automatically create a .md file extension with the following name, example:
 
 ````
-2014-01-31-12-56_tag1,tag2,tag3_databaseless-blogging-platform.md
+2014-01-31-12-56-40_tag1,tag2,tag3_databaseless-blogging-platform.md
 ````
 
 Here's the explanation (separated by an underscore):
 
-- `2014-01-31-12-56` is the published date. The date format is `yyyy-mm-dd-hh-mm`
+- `2014-01-31-12-56-40` is the published date. The date format is `yyyy-mm-dd-hh-mm-ss`
 - `tag1,tag2,tag3` is the tag, separated by comma
 - `databaseless-blogging-platform` is the URL
 
