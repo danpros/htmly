@@ -33,6 +33,7 @@
 				<li><a href="<?php echo site_url() ?>add/post">Add post</a></li>
 				<li><a href="<?php echo site_url() ?>add/page">Add page</a></li>
 				<li><a href="<?php echo site_url() ?>edit/profile">Edit profile</a></li>
+				<li><a href="<?php echo site_url() ?>admin/import">Import</a></li>
 				<li><a href="<?php echo site_url() ?>logout">Logout</a></li>
 			</ul>
 		</div>

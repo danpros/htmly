@@ -124,14 +124,15 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		$post->authorurl = site_url() . 'author/' .  $author;
 		
 		$dt = str_replace($replaced,'',$arr[0]);
-		$time = new DateTime($dt);
-		$timestamp= $time->format("Y-m-d");
+		$t = str_replace('-', '', $dt);
+		$time = new DateTime($t);
+		$timestamp= $time->format("Y-m-d H:i:s");
 		
 		// The post date
 		$post->date = strtotime($timestamp);
 		
 		// The archive per day
-		$post->archive = site_url(). 'archive/' . $timestamp ;
+		$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
 
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
@@ -162,11 +163,13 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		// Extract the title and body
 		$arr = explode('t-->', $content);
 		if(isset($arr[1])) {
-			$post->title = str_replace('<!--t','',$arr[0]);
+			$title = str_replace('<!--t','',$arr[0]);
+			$title = rtrim(ltrim($title, ' '), ' ');	
+			$post->title = $title;
 			$post->body = $arr[1];
 		}
 		else {
-			$post->title = ' Untitled: ' . date('l jS \of F Y', $post->date);
+			$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
 			$post->body = $arr[0];
 		}
 
@@ -225,9 +228,13 @@ function find_post($year, $month, $name){
 }
 
 // Return tag page.
-function get_tag($tag, $page, $perpage){
+function get_tag($tag, $page, $perpage, $random){
 
 	$posts = get_post_sorted();
+	
+	if($random === true) {
+		shuffle($posts);
+	}
 	
 	$tmp = array();
 	
@@ -329,8 +336,10 @@ function get_bio($author){
 	
 				// Extract the title and body
 				$arr = explode('t-->', $content);
-				if(isset($arr[1])) {
-					$post->title = str_replace('<!--t','',$arr[0]);
+				if(isset($arr[1])) {		
+					$title = str_replace('<!--t','',$arr[0]);
+					$title = rtrim(ltrim($title, ' '), ' ');		
+					$post->title = $title;
 					$post->body = $arr[1];
 				}
 				else {
@@ -387,7 +396,9 @@ function get_static_post($static){
 				// Extract the title and body
 				$arr = explode('t-->', $content);
 				if(isset($arr[1])) {
-					$post->title = str_replace('<!--t','',$arr[0]);
+					$title = str_replace('<!--t','',$arr[0]);
+					$title = rtrim(ltrim($title, ' '), ' ');		
+					$post->title = $title;
 					$post->body = $arr[1];
 				}
 				else {
@@ -441,8 +452,9 @@ function get_keyword($keyword){
 					$post->authorurl = site_url() . 'author/' .  $author;
 					
 					$dt = str_replace($replaced,'',$arr[0]);
-					$time = new DateTime($dt);
-					$timestamp= $time->format("Y-m-d");
+					$t = str_replace('-', '', $dt);
+					$time = new DateTime($t);
+					$timestamp= $time->format("Y-m-d H:i:s");
 					
 					// The post date
 					$post->date = strtotime($timestamp);
@@ -471,11 +483,13 @@ function get_keyword($keyword){
 					// Extract the title and body
 					$arr = explode('t-->', $content);
 					if(isset($arr[1])) {
-						$post->title = str_replace('<!--t','',$arr[0]);
+						$title = str_replace('<!--t','',$arr[0]);
+						$title = rtrim(ltrim($title, ' '), ' ');		
+						$post->title = $title;
 						$post->body = $arr[1];
 					}
 					else {
-						$post->title = ' Untitled: ' . date('l jS \of F Y', $post->date);
+						$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
 						$post->body = $arr[0];
 					}
 					
@@ -497,7 +511,7 @@ function get_keyword($keyword){
 // Get related posts base on post tag.
 function get_related($tag) {
 	$perpage = config('related.count');
-	$posts = get_tag(strip_tags($tag), 1, $perpage+1);
+	$posts = get_tag(strip_tags($tag), 1, $perpage+1, true);
 	$tmp = array();
 	$req = $_SERVER['REQUEST_URI'];
 	
@@ -511,8 +525,6 @@ function get_related($tag) {
 	$total = count($tmp);
 	
 	if($total >= 1) {
-	
-		shuffle($tmp);
 		
 		$i = 1;
 		echo '<div class="related"><h4>Related posts</h4><ul>';
@@ -575,11 +587,32 @@ function archive_list() {
 	# Most recent year first
 	krsort($by_year);
 	# Iterate for display
+	$script = <<<EOF
+if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
+EOF;
+	echo <<<EOF
+	<style>.toggle{font-size:16px;font-family:Georgia, Arial, sans-serif}ul.archivegroup{padding:0;margin:0;}.archivegroup .expanded ul{display:block;}.archivegroup .collapsed ul{display:none;}.archivegroup li.expanded,.archivegroup li.collapsed{list-style:none;}
+	</style>
+EOF;
 	echo '<h3>Archive</h3>';
+	$i = 0; 
+	$len = count($by_year);
 	foreach ($by_year as $year => $months){
-	
-		echo '<span class="year"><a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a></span> ';
-		echo '(' . count($months) . ')';
+		if ($i == 0) {
+			$class = 'expanded';
+			$arrow = '&#9660;';
+		} 
+		else {
+			$class = 'collapsed';
+			$arrow = '&#9658;';
+		}
+		$i++;
+		
+		echo '<ul class="archivegroup">';
+		echo '<li class="' . $class . '">';
+		echo '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
+		echo '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
+		echo '<span class="count">(' . count($months) . ')</span>';
 		echo '<ul class="month">';
 
 		$by_month = array_count_values($months);
@@ -592,9 +625,11 @@ function archive_list() {
 		}
 
 		echo '</ul>';
+		echo '</li>';
+		echo '</ul>';
 		
 	}
-
+	
 }
 
 // Return tag cloud.
@@ -673,7 +708,7 @@ function get_description($text) {
 	}
 	else {
 		$string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($text));
-		$string = ltrim($string);
+		$string = rtrim(ltrim($string), $string);
 		if (strlen($string) < config('description.char')) {
 			return $string;
 		}
@@ -878,11 +913,22 @@ function get_menu() {
 		
 			// Replaced string
 			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
-				
-			// The static page URL
-			$title = str_replace($replaced,'',$v);
-			$url = site_url() . str_replace('.md','',$title);
-			echo '<li><a href="' . $url . '">' . ucfirst(str_replace('.md','',$title)) . '</a></li>';
+			$base = str_replace($replaced,'',$v);
+			$url = site_url() . str_replace('.md','',$base);
+			
+			// Get the contents and convert it to HTML
+			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
+
+			// Extract the title and body
+			$arr = explode('t-->', $content);
+			if(isset($arr[1])) {
+				$title = str_replace('<!--t','',$arr[0]);
+				$title = rtrim(ltrim($title, ' '), ' ');		
+			}
+			else {
+				$title = str_replace('-',' ', str_replace('.md','',$base));
+			}
+			echo '<li><a href="' . $url . '">' . ucwords($title) . '</a></li>';
 				
 		}
 		echo '</ul>';
@@ -924,12 +970,16 @@ function generate_rss($posts){
 
 	foreach($posts as $p){
 		$item = new Item();
+		$tags = explode(',', str_replace(' ', '', strip_tags($p->tag)));
+		foreach($tags as $tag) {
+			$item
+				->category($tag, site_url() . 'tag/' . $tag );
+		}
 		$item
 			->title($p->title)
 			->pubDate($p->date)
 			->description($p->body)
 			->url($p->url)
-			->category($p->tag, $p->tagurl)
 			->appendTo($channel);
 	}
 	
@@ -962,8 +1012,9 @@ function get_path(){
 		$post->authorurl = site_url() . 'author/' .  $author;
 		
 		$dt = str_replace($replaced,'',$arr[0]);
-		$time = new DateTime($dt);
-		$timestamp= $time->format("Y-m-d");
+		$t = str_replace('-', '', $dt);
+		$time = new DateTime($t);
+		$timestamp= $time->format("Y-m-d H:i:s");
 		
 		// The post date
 		$post->date = strtotime($timestamp);

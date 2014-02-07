@@ -50,10 +50,50 @@ get('/index', function () {
 
 // Get submitted login data
 post('/login', function() {
-
+	
 	$user = from($_REQUEST, 'user');
 	$pass = from($_REQUEST, 'password');
-	session($user, $pass);
+	if(!empty($user) && !empty($pass)) {
+	
+		session($user, $pass, null);		
+		$log = session($user, $pass, null);
+		
+		if(!empty($log)) {
+			
+			config('views.root', 'system/admin/views');
+			
+			render('login',array(
+				'error' => '<ul>' . $log . '</ul>',
+				'title' => 'Login - ' . config('blog.title'),
+				'canonical' => config('site.url'),
+				'description' => 'Login page on ' .config('blog.title'),
+				'bodyclass' => 'editprofile',
+				'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Login'
+			));
+		}
+	}
+	else {
+		$message['error'] = '';
+		if(empty($user)) {
+			$message['error'] .= '<li>User field is required.</li>';
+		}
+		if (empty($pass)) {
+			$message['error'] .= '<li>Password field is required.</li>';
+		}
+		
+		config('views.root', 'system/admin/views');
+		
+		render('login',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Login - ' . config('blog.title'),
+			'username' => $user,
+			'password' => $pass,
+			'canonical' => config('site.url'),
+			'description' => 'Login page on ' .config('blog.title'),
+			'bodyclass' => 'editprofile',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Login'
+		));
+	}
 
 });
 
@@ -136,15 +176,49 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 
 // Get edited data for blog post
 post('/:year/:month/:name/edit', function() {
-
+	
 	$title = from($_REQUEST, 'title');
 	$tag = from($_REQUEST, 'tag');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
 	$destination = from($_GET, 'destination');
-	
-	edit_post($title, $tag, $url, $content, $oldfile, $destination);
+	if(!empty($title) && !empty($tag) && !empty($content)) {
+		if(!empty($url)) {
+			edit_post($title, $tag, $url, $content, $oldfile, $destination);
+		}
+		else {
+			$url = $title;
+			edit_post($title, $tag, $url, $content, $oldfile, $destination);
+		}
+	}
+	else {
+		$message['error'] = '';
+		if(empty($title)) {
+			$message['error'] .= '<li>Title field is required.</li>';
+		}
+		if (empty($tag)) {
+			$message['error'] .= '<li>Tag field is required.</li>';
+		}
+		if (empty($content)) {
+			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		config('views.root', 'system/admin/views');
+		
+		render('edit-post',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Edit post - ' . config('blog.title'),
+			'oldfile' => $oldfile,
+			'postTitle' => $title,
+			'postTag' => $tag,
+			'postUrl' => $url,
+			'postContent' => $content,
+			'canonical' => config('site.url'),
+			'description' => 'Adit post on ' .config('blog.title'),
+			'bodyclass' => 'editpost',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Edit post'
+		));
+	}
 	
 });
 
@@ -262,7 +336,30 @@ post('/edit/profile', function() {
 	$user = $_SESSION['user'];
 	$title = from($_REQUEST, 'title');
 	$content = from($_REQUEST, 'content');
-	edit_profile($title, $content, $user);
+	if(!empty($title) && !empty($content)) {
+		edit_profile($title, $content, $user);
+	}
+	else {
+		$message['error'] = '';
+		if(empty($title)) {
+			$message['error'] .= '<li>Title field is required.</li>';
+		}
+		if (empty($content)) {
+			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		config('views.root', 'system/admin/views');
+		
+		render('edit-profile',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Edit profile - ' . config('blog.title'),
+			'postTitle' => $title,
+			'postContent' => $content,
+			'canonical' => config('site.url'),
+			'description' => 'Edit profile on ' .config('blog.title'),
+			'bodyclass' => 'editprofile',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Edit profile'
+		));
+	}
 	
 });
 
@@ -404,24 +501,25 @@ get('/:static', function($static){
 		}
 		die;
 	}
-	
-	$post = get_static_post($static);
-	
-	if(!$post){
-		not_found();
-	}
-	
-	$post = $post[0];
+	else {
+		$post = get_static_post($static);
+		
+		if(!$post){
+			not_found();
+		}
+		
+		$post = $post[0];
 
-	render('post',array(
-		'title' => $post->title .' - ' . config('blog.title'),
-		'canonical' => $post->url,
-		'description' => $description = get_description($post->body),
-		'bodyclass' => 'inpage',
-		'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; ' . $post->title,
-		'p' => $post,
-		'type' => 'staticpage',
-	));
+		render('post',array(
+			'title' => $post->title .' - ' . config('blog.title'),
+			'canonical' => $post->url,
+			'description' => $description = get_description($post->body),
+			'bodyclass' => 'inpage',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; ' . $post->title,
+			'p' => $post,
+			'type' => 'staticpage',
+		));
+	}
 	
 });
 
@@ -463,8 +561,38 @@ post('/:static/edit', function() {
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
 	$destination = from($_GET, 'destination');
-	
-	edit_page($title, $url, $content, $oldfile, $destination);
+	if(!empty($title) && !empty($content)) {
+		if(!empty($url)) {
+			edit_page($title, $url, $content, $oldfile, $destination);
+		}
+		else {
+			$url = $title;
+			edit_page($title, $url, $content, $oldfile, $destination);
+		}
+	}
+	else {
+		$message['error'] = '';
+		if(empty($title)) {
+			$message['error'] .= '<li>Title field is required.</li>';
+		}
+		if (empty($content)) {
+			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		config('views.root', 'system/admin/views');
+		
+		render('edit-page',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Edit page - ' . config('blog.title'),
+			'oldfile' => $oldfile,
+			'postTitle' => $title,
+			'postUrl' => $url,
+			'postContent' => $content,
+			'canonical' => config('site.url'),
+			'description' => 'Edit page on ' .config('blog.title'),
+			'bodyclass' => 'editpage',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Edit page'
+		));
+	}
 	
 });
 
@@ -536,7 +664,40 @@ post('/add/post', function(){
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
 	$user = $_SESSION['user'];
-	add_post($title, $tag, $url, $content, $user);
+	if(!empty($title) && !empty($tag) && !empty($content)) {
+		if(!empty($url)) {
+			add_post($title, $tag, $url, $content, $user);
+		}
+		else {
+			$url = $title;
+			add_post($title, $tag, $url, $content, $user);
+		}
+	}
+	else {
+		$message['error'] = '';
+		if(empty($title)) {
+			$message['error'] .= '<li>Title field is required.</li>';
+		}
+		if (empty($tag)) {
+			$message['error'] .= '<li>Tag field is required.</li>';
+		}
+		if (empty($content)) {
+			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		config('views.root', 'system/admin/views');
+		render('add-post',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Add post - ' . config('blog.title'),
+			'postTitle' => $title,
+			'postTag' => $tag,
+			'postUrl' => $url,
+			'postContent' => $content,
+			'canonical' => config('site.url') . '/add/post',
+			'description' => 'Add post on ' .config('blog.title'),
+			'bodyclass' => 'addpost',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Add post'
+		));
+	}
 	
 });
 
@@ -567,7 +728,100 @@ post('/add/page', function(){
 	$title = from($_REQUEST, 'title');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
-	add_page($title, $url, $content);
+	if(!empty($title) && !empty($content)) {
+		if(!empty($url)) {
+			add_page($title, $url, $content);
+		}
+		else {
+			$url = $title;
+			add_page($title, $url, $content);
+		}
+	}
+	else {
+		$message['error'] = '';
+		if(empty($title)) {
+			$message['error'] .= '<li>Title field is required.</li>';
+		}
+		if (empty($content)) {
+			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		config('views.root', 'system/admin/views');
+		render('add-page',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Add page - ' . config('blog.title'),
+			'postTitle' => $title,
+			'postUrl' => $url,
+			'postContent' => $content,
+			'canonical' => config('site.url') . '/add/page',
+			'description' => 'Add page on ' .config('blog.title'),
+			'bodyclass' => 'addpage',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Add page'
+		));
+	}
+	
+});
+
+// Import page
+get('/admin/import',function(){
+	if(login()) {
+		config('views.root', 'system/admin/views');
+		render('import', array(
+			'title' => 'Import feed - ' . config('blog.title'),
+			'canonical' => config('site.url') . '/import',
+			'description' => 'Import feed to ' . config('blog.title') . '.',
+			'bodyclass' => 'importfeed',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Import feed'
+		));
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+	die;
+});
+
+// Get import post
+post('/admin/import', function() {
+	
+	$url = from($_REQUEST, 'url');
+	$credit = from($_REQUEST, 'credit');
+	if(!empty($url)) {
+	
+		get_feed($url, $credit, null);		
+		$log = get_feed($url, $credit, null);
+		
+		if(!empty($log)) {
+			
+			config('views.root', 'system/admin/views');
+			
+			render('import',array(
+				'error' => '<ul>' . $log . '</ul>',
+				'title' => 'Import feed - ' . config('blog.title'),
+				'canonical' => config('site.url'),
+				'description' => 'Import feed on ' .config('blog.title'),
+				'bodyclass' => 'editprofile',
+				'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Import feed'
+			));
+		}
+	}
+	else {
+		$message['error'] = '';
+		if(empty($url)) {
+			$message['error'] .= '<li>You need to specify the feed url.</li>';
+		}
+		
+		config('views.root', 'system/admin/views');
+		
+		render('import',array(
+			'error' => '<ul>' . $message['error'] . '</ul>',
+			'title' => 'Login - ' . config('blog.title'),
+			'url' => $url,
+			'canonical' => config('site.url'),
+			'description' => 'Login page on ' .config('blog.title'),
+			'bodyclass' => 'editprofile',
+			'breadcrumb' => '<a href="' . config('site.url') . '">' .config('breadcrumb.home'). '</a> &#187; Login'
+		));
+	}
 	
 });
 
@@ -578,7 +832,7 @@ get('/tag/:tag',function($tag){
 	$page = $page ? (int)$page : 1;
 	$perpage = config('tag.perpage');
 
-	$posts = get_tag($tag, $page, $perpage);
+	$posts = get_tag($tag, $page, $perpage, false);
 	
 	$total = get_count($tag, 'filename');
 

@@ -29,12 +29,15 @@
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
+<?php if (isset($error)) { ?>
+	<div class="error-message"><?php echo $error ?></div>
+ <?php } ?>
 <div class="wmd-panel">
 <form method="POST">
-	Title: <br><input type="text" name="title" class="text" value="<?php echo $oldtitle?>"/><br><br>
+	Title <span class="required">*</span> <br><input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" value="<?php echo $oldtitle?>"/><br><br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
-	<textarea id="wmd-input" class="wmd-input" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
-	<input type="submit" name="submit" class="submit" value="Submit"/>
+	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
+	<input type="submit" name="submit" class="submit" value="Save"/>
 </form>
 </div>
 <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
