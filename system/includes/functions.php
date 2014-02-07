@@ -961,6 +961,7 @@ function generate_rss($posts){
 	
 	$feed = new Feed();
 	$channel = new Channel();
+	$rssLength = config('rss.char');
 	
 	$channel
 		->title(config('blog.title'))
@@ -969,6 +970,23 @@ function generate_rss($posts){
 		->appendTo($feed);
 
 	foreach($posts as $p){
+	
+		if(!empty($rssLength)) {
+			if (strlen(strip_tags($p->body)) < config('rss.char')) {
+				$string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
+				$body = $string . '...' . ' <a class="readmore" href="' . $p->url . '#more">more</a>' ;
+			}
+			else {
+				$string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
+				$string = substr($string, 0, config('rss.char'));
+				$string = substr($string, 0, strrpos($string, ' '));
+				$body = $string . '...' . ' <a class="readmore" href="' . $p->url . '#more">more</a>' ;
+			}
+		}
+		else {
+			$body = $p->body;
+		}
+	
 		$item = new Item();
 		$tags = explode(',', str_replace(' ', '', strip_tags($p->tag)));
 		foreach($tags as $tag) {
@@ -978,7 +996,7 @@ function generate_rss($posts){
 		$item
 			->title($p->title)
 			->pubDate($p->date)
-			->description($p->body)
+			->description($body)
 			->url($p->url)
 			->appendTo($channel);
 	}
@@ -1087,7 +1105,7 @@ function generate_sitemap($str){
 	elseif ($str == 'base') {
 	
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-		echo '<url><loc>' . site_url() . '</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>';
+		echo '<url><loc>' . site_url() . '</loc><priority>1.0</priority></url>';
 		echo '</urlset>';
 		
 	}
@@ -1098,7 +1116,7 @@ function generate_sitemap($str){
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
 		foreach($posts as $p) {
-			echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+			echo '<url><loc>' . $p->url . '</loc><priority>0.5</priority></url>';
 		}
 		
 		echo '</urlset>';
@@ -1113,7 +1131,7 @@ function generate_sitemap($str){
 		if(!empty($posts)) {
 		
 			foreach($posts as $p) {
-				echo '<url><loc>' . $p->url . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+				echo '<url><loc>' . $p->url . '</loc><priority>0.5</priority></url>';
 			}
 		
 		}
@@ -1149,7 +1167,7 @@ function generate_sitemap($str){
 			$tag = array_unique($tag, SORT_REGULAR);
 			
 			foreach($tag as $t) {
-				echo '<url><loc>' . $t . '</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>';
+				echo '<url><loc>' . $t . '</loc><priority>0.5</priority></url>';
 			}
 		
 		}
@@ -1178,15 +1196,15 @@ function generate_sitemap($str){
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
 		foreach($day as $d) {
-			echo '<url><loc>' . $d . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+			echo '<url><loc>' . $d . '</loc><priority>0.5</priority></url>';
 		}
 		
 		foreach($month as $m) {
-			echo '<url><loc>' . $m . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+			echo '<url><loc>' . $m . '</loc><priority>0.5</priority></url>';
 		}
 		
 		foreach($year as $y) {
-			echo '<url><loc>' . $y . '</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+			echo '<url><loc>' . $y . '</loc><priority>0.5</priority></url>';
 		}
 		
 		echo '</urlset>';
@@ -1206,7 +1224,7 @@ function generate_sitemap($str){
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
 		foreach($author as $a) {
-			echo '<url><loc>' . $a . '</loc><changefreq>daily</changefreq><priority>0.5</priority></url>';
+			echo '<url><loc>' . $a . '</loc><priority>0.5</priority></url>';
 		}
 		
 		echo '</urlset>';
@@ -1245,16 +1263,4 @@ function generate_opml(){
 // Turn an array of posts into a JSON
 function generate_json($posts){
 	return json_encode($posts);
-}
-
-function welcome_page() {
-	echo <<<EOF
-	<div style="font-size:20px;text-align:center;padding:50px 20px;">
-		<h1>Welcome to your new HTMLy-powered blog.</h1>
-		<p>The next thing you will need to do is creating the first account. Please create <strong><em>YourUsername.ini</em></strong> inside <strong><em>config/users</em></strong> folder and write down your password there:</p>
-		<pre><code>password = YourPassword</code></pre>
-		<p>Login to your blog admin panel at <strong><em>www.example.com/admin</em></strong> to creating your first post.</p>
-		<p>This welcome message will disappear after your first post published.</p>
-	</div>
-EOF;
 }

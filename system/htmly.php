@@ -27,8 +27,15 @@ get('/index', function () {
 	$total = '';
 	
 	if(empty($posts) || $page < 1){
+	
 		// a non-existing page
-		welcome_page();
+		render('no-posts',array(
+			'title' => config('blog.title'),
+			'canonical' => site_url(),
+			'description' => config('blog.description'),
+			'bodyclass' => 'noposts',
+		));
+		
 		die;
 	}
 	

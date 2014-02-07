@@ -34,7 +34,6 @@ tag.perpage = "10"
 archive.perpage = "10"
 search.perpage = "10"
 profile.perpage = "10"
-rss.count = "10"
 json.count = "10"
 
 ; Related posts
@@ -48,6 +47,12 @@ teaser.char = "200"
 
 ; Description char count
 description.char = "150"
+
+;RSS feed count
+rss.count = "10"
+
+;RSS feed description length. If left empty we will use full page.
+rss.char = ""
 
 ; Enable image thumbnail on teaser, the options is "true" and "false". If set to "true", you can specify the default thumbnail also.
 img.thumbnail = "true"
