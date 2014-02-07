@@ -70,6 +70,10 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 			$redirect = site_url() . 'admin/posts';
 			header("Location: $redirect");
 		}
+		else if($destination == 'admin/mine') {
+			$redirect = site_url() . 'admin/mine';
+			header("Location: $redirect");
+		}
 		elseif($destination == 'admin') {
 			$redirect = site_url() . 'admin';
 			header("Location: $redirect");
@@ -152,7 +156,7 @@ function add_post($title, $tag, $url, $content, $user) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
-		$redirect = site_url() . 'admin/posts';
+		$redirect = site_url() . 'admin/mine';
 		header("Location: $redirect");	
 	}
 	
@@ -269,7 +273,7 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
-		$redirect = site_url() . 'admin/posts';
+		$redirect = site_url() . 'admin/mine';
 		header("Location: $redirect");	
 	}
 	
