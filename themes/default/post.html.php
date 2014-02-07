@@ -1,5 +1,5 @@
 <?php if (!empty($breadcrumb)):?><div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><?php echo $breadcrumb ?></div><?php endif;?>
-<?php if(login()): ?><div class="tab"><a href="<?php echo $p->url ?>">View</a><a href="<?php echo $p->url ?>/edit?destination=post">Edit</a></div><?php endif;?>
+<?php if(login()) { echo tab($p);} ?>
 <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
 	<div class="main">
 		<?php if ($type == 'blogpost'):?>

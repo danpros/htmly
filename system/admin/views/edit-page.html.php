@@ -17,7 +17,12 @@
 		$oldcontent = ltrim($arr[0]);
 	}
 	
-	$destination = $_GET['destination'];
+	if(isset($_GET['destination'])) {
+		$destination = $_GET['destination'];
+	}
+	else {
+		$destination = 'admin';
+	}
 	$dir = substr($url, 0, strrpos($url, '/'));
 	$oldurl = str_replace($dir . '/','',$url);
 	$oldmd = str_replace('.md','',$oldurl);

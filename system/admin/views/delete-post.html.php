@@ -1,5 +1,7 @@
 <?php
-	$destination = $_GET['destination'];
+	if(isset($_GET['destination'])) {
+		$destination = $_GET['destination'];
+	}
 	$url = $p->file;
 	$oldurl = explode('_', $url);
 	$oldtag = $oldurl[1];
@@ -15,11 +17,17 @@
 	// The post URL
 	$post = site_url().date('Y/m', $postdate).'/'.$oldmd;
 	
-	if($destination == 'post') {
-		$back = $post;
+	if(isset($destination)) {
+	
+		if($destination == 'post') {
+			$back = $post;
+		}
+		else {
+			$back = site_url() . $destination;
+		}
 	}
 	else {
-		$back = site_url() . $destination;
+		$back = site_url();
 	}
 	
 ?>

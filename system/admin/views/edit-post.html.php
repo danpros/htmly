@@ -25,7 +25,12 @@
 	
 	$oldmd = str_replace('.md','',$oldurl[2]);
 	
-	$destination = $_GET['destination'];
+	if(isset($_GET['destination'])) {
+		$destination = $_GET['destination'];
+	}
+	else {
+		$destination = 'admin';
+	}
 	$replaced = substr($oldurl[0], 0,strrpos($oldurl[0], '/')) . '/';
 	$dt = str_replace($replaced,'',$oldurl[0]);
 	$t = str_replace('-','',$dt);

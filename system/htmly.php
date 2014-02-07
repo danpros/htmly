@@ -155,6 +155,9 @@ get('/:year/:month/:name', function($year, $month, $name){
 // Edit blog post
 get('/:year/:month/:name/edit', function($year, $month, $name){
 
+	$user = $_SESSION['user'];
+	$role = user('role', $user);
+
 	if(login()) {
 
 		config('views.root', 'system/admin/views');
@@ -166,14 +169,26 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 		
 		$current = $post['current'];
 		
-		render('edit-post',array(
-			'title' => $current->title .' - ' . config('blog.title'),
-			'p' => $current,
-			'canonical' => $current->url,
-			'description' => $description = get_description($current->body),
-			'bodyclass' => 'editpost',
-			'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
-		));
+		if($user === $current->author || $role === 'admin') {
+			render('edit-post',array(
+				'title' => $current->title .' - ' . config('blog.title'),
+				'p' => $current,
+				'canonical' => $current->url,
+				'description' => $description = get_description($current->body),
+				'bodyclass' => 'editpost',
+				'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
+			));
+		}
+		else {
+			render('denied',array(
+				'title' => $current->title .' - ' . config('blog.title'),
+				'p' => $current,
+				'canonical' => $current->url,
+				'description' => $description = get_description($current->body),
+				'bodyclass' => 'denied',
+				'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
+			));
+		}
 	}
 	else {
 		$login = site_url() . 'login';
@@ -232,6 +247,10 @@ post('/:year/:month/:name/edit', function() {
 // Delete blog post
 get('/:year/:month/:name/delete', function($year, $month, $name){
 
+	$user = $_SESSION['user'];
+	
+	$role = user('role', $user);
+
 	if(login()) {
 	
 		config('views.root', 'system/admin/views');
@@ -243,14 +262,26 @@ get('/:year/:month/:name/delete', function($year, $month, $name){
 		
 		$current = $post['current'];
 		
-		render('delete-post',array(
-			'title' => $current->title .' - ' . config('blog.title'),
-			'p' => $current,
-			'canonical' => $current->url,
-			'description' => $description = get_description($current->body),
-			'bodyclass' => 'deletepost',
-			'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
-		));
+		if($user === $current->author || $role === 'admin') {
+			render('delete-post',array(
+				'title' => $current->title .' - ' . config('blog.title'),
+				'p' => $current,
+				'canonical' => $current->url,
+				'description' => $description = get_description($current->body),
+				'bodyclass' => 'deletepost',
+				'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
+			));
+		}
+		else {
+			render('denied',array(
+				'title' => $current->title .' - ' . config('blog.title'),
+				'p' => $current,
+				'canonical' => $current->url,
+				'description' => $description = get_description($current->body),
+				'bodyclass' => 'deletepost',
+				'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . config('site.url') .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
+			));
+		}
 	}
 	else {
 		$login = site_url() . 'login';
@@ -370,8 +401,71 @@ post('/edit/profile', function() {
 	
 });
 
+get('/admin/posts', function () {
+
+	$user = $_SESSION['user'];
+	$role = user('role', $user);
+	if(login()) {
+	
+		config('views.root', 'system/admin/views');
+		if($role === 'admin') {
+	
+			config('views.root', 'system/admin/views');
+			$page = from($_GET, 'page');
+			$page = $page ? (int)$page : 1;
+			$perpage = 20;
+			
+			$posts = get_posts(null, $page, $perpage);
+			
+			$total = '';
+			
+			if(empty($posts) || $page < 1){
+			
+				// a non-existing page
+				render('no-posts',array(
+					'title' => config('blog.title'),
+					'canonical' => site_url(),
+					'description' => config('blog.description'),
+					'bodyclass' => 'noposts',
+				));
+				
+				die;
+			}
+			
+			$tl = config('blog.tagline');
+			
+			if($tl){ $tagline = ' - ' . $tl;} else {$tagline = '';}
+			
+			render('posts-list',array(
+				'title' => config('blog.title') . $tagline,
+				'heading' => 'All blog posts',
+				'page' => $page,
+				'posts' => $posts,
+				'canonical' => config('site.url'),
+				'description' => config('blog.description'),
+				'bodyclass' => 'all-posts',
+				'breadcrumb' => '',
+				'pagination' => has_pagination($total, $perpage, $page)
+			));
+		}
+		else {
+			render('denied',array(
+				'title' => config('blog.title'),
+				'canonical' => config('site.url'),
+				'description' => config('blog.description'),
+				'bodyclass' => 'denied',
+				'breadcrumb' => '',
+			));
+		}
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+});
+
 // The author page
-get('/admin/posts', function(){
+get('/admin/mine', function(){
 
 	if(login()) {
 
@@ -397,9 +491,10 @@ get('/admin/posts', function(){
 		}
 		
 		if(empty($posts) || $page < 1){
-			render('posts-list',array(
+			render('user-posts',array(
 				'title' => 'All posts by: '. $bio->title .' - ' . config('blog.title'),
 				'page' => $page,
+				'heading' => 'My posts',
 				'posts' => null,
 				'bio' => $bio->body,
 				'name' => $bio->title,
@@ -412,8 +507,9 @@ get('/admin/posts', function(){
 			die;
 		}
 		
-		render('posts-list',array(
+		render('user-posts',array(
 			'title' => 'All posts by: '. $bio->title .' - ' . config('blog.title'),
+			'heading' => 'My posts',
 			'page' => $page,
 			'posts' => $posts,
 			'bio' => $bio->body,

@@ -769,6 +769,20 @@ function get_thumbnail($text) {
 	
 }
 
+// Return edit tab on post
+function tab($p) {
+	$user = $_SESSION['user'];
+	$role = user('role', $user);
+	if(isset($p->author)) {
+		if ($user === $p->author || $role === 'admin') {
+			echo '<div class="tab"><a href="' . $p->url . '">View</a><a href="' . $p->url .'/edit?destination=post">Edit</a></div>';
+		}
+	}
+	else {
+		echo '<div class="tab"><a href="' . $p->url . '">View</a><a href="' . $p->url .'/edit?destination=post">Edit</a></div>';
+	}
+}
+
 // Use base64 encode image to speed up page load time.
 function base64_encode_image($filename=string,$filetype=string) {
 	if ($filename) {
@@ -1263,4 +1277,25 @@ function generate_opml(){
 // Turn an array of posts into a JSON
 function generate_json($posts){
 	return json_encode($posts);
+}
+
+// Return toolbar
+function toolbar() {
+	$user = $_SESSION['user'];
+	$role = user('role', $user);
+	
+	echo <<<EOF
+<style>	#outer-wrapper{ padding-top:30px;} @media all and (max-width: 550px) {#outer-wrapper{ padding-top:60px;}}</style>
+EOF;
+	echo '<div id="toolbar"><ul>';
+	echo '<li><a href="'.site_url().'admin">Admin</a></li>';
+	if ($role === 'admin') {echo '<li><a href="'.site_url().'admin/posts">Posts</a></li>';}
+	echo '<li><a href="'.site_url().'admin/mine">Mine</a></li>';
+	echo '<li><a href="'.site_url().'add/post">Add post</a></li>';
+	echo '<li><a href="'.site_url().'add/page">Add page</a></li>';
+	echo '<li><a href="'.site_url().'edit/profile">Edit profile</a></li>';
+	echo '<li><a href="'.site_url().'admin/import">Import</a></li>';
+	echo '<li><a href="'.site_url().'logout">Logout</a></li>';
+		
+	echo '</ul></div>';
 }

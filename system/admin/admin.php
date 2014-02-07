@@ -5,7 +5,9 @@ function user($key, $user=null) {
 	static $_config = array();
 	if (file_exists($value)) {
 		$_config = parse_ini_file($value, true);
-		return $_config[$key];
+		if(!empty($_config[$key])) {
+			return $_config[$key];
+		}
 	}
 }
 

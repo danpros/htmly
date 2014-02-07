@@ -1,5 +1,7 @@
 <?php
-	$destination = $_GET['destination'];
+	if(isset($_GET['destination'])) {
+		$destination = $_GET['destination'];
+	}
 	$url = $p->file;
 	
 	$dir = substr($url, 0, strrpos($url, '/'));
@@ -8,11 +10,17 @@
 	
 	$post = site_url() . $oldmd;
 	
-	if($destination == 'post') {
-		$back = $post;
+	if(isset($destination)) {
+	
+		if($destination == 'post') {
+			$back = $post;
+		}
+		else {
+			$back = site_url() . $destination;
+		}
 	}
 	else {
-		$back = site_url() . $destination;
+		$back = site_url();
 	}
 
 ?>
