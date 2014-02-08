@@ -33,6 +33,7 @@ Features
 - SEO friendly URLs
 - Teaser thumbnail for images and Youtube videos
 - Responsive design
+- User role
 
 Requirements
 ------------
@@ -49,6 +50,14 @@ Rename `config.ini.example` inside `config` folder to `config.ini` or you can cr
 ````
 password = YourPassword
 ````
+
+HTMLy support admin user role either, simply add the following to your choosen user:
+
+````
+role = admin
+````
+
+Admin role can edit/delete all users posts.
 
 You can login to admin panel at `www.example.com/login`.
 
