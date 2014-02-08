@@ -613,7 +613,7 @@ get('/:static', function($static){
 		
 		$post = $post[0];
 
-		render('post',array(
+		render('static',array(
 			'title' => $post->title .' - ' . config('blog.title'),
 			'canonical' => $post->url,
 			'description' => $description = get_description($post->body),

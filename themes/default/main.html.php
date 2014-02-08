@@ -3,17 +3,17 @@
 <?php foreach($posts as $p):?>
     <?php 
 		if ($i == 0) {
-			$class = 'first';
+			$class = 'post first';
 		} 
 		elseif ($i == $len - 1) {
-			$class = 'last';
+			$class = 'post last';
 		}
 		else {
-			$class = '';
+			$class = 'post';
 		}
 		$i++;		
 	?>
-	<div class="post <?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+	<div class="<?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
 		<div class="main">
 			<h2 class="title-index" itemprop="name"><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></h2>
 			<div class="date"><span itemprop="datePublished"><?php echo date('d F Y', $p->date)?></span> - Posted in <span itemprop="articleSection"><?php echo $p->tag ?></span> by <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span><?php if (disqus_count() == true):?> - <span><a href="<?php echo $p->url?>#disqus_thread">Comments</a></span><?php endif;?></div>

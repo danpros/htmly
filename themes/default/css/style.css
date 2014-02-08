@@ -786,6 +786,11 @@ h1.title-post a:hover, h2.title-index a:hover {
 	width: 33%;
 }
 
+.archive .toggle {
+	font-family: Georgia,Arial,sans-serif;
+	font-size: 16px;
+}
+
 .social {
 	float:right;
 }

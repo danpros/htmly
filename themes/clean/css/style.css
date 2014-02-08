@@ -473,7 +473,7 @@ aside .archive, aside .tagcloud {
 	margin-left: 10px;
 }
 
-aside .archive ul li, aside .tagcloud ul li {
+aside .archive ul li ul, aside .tagcloud ul li {
 	margin-left:30px;
 }
 

@@ -1,4 +1,4 @@
-; The URL of your blog
+; The URL of your blog. Include the http or https.
 site.url = ""
 
 ; Blog info
@@ -22,7 +22,7 @@ breadcrumb.home = "Home"
 ; Disqus
 disqus.shortname = ""
 
-; Google publisher
+; Google+ publisher
 google.publisher = ""
 
 ; Google analytics
@@ -41,6 +41,9 @@ related.count = "4"
 
 ; Author info on blog post. Set "true" or "false".
 author.info = "true"
+
+; Teaser type: set "trimmed" or "full".
+teaser.type = "trimmed"
 
 ; Teaser char count
 teaser.char = "200"

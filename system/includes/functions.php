@@ -591,7 +591,7 @@ function archive_list() {
 if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
 EOF;
 	echo <<<EOF
-	<style>.toggle{font-size:16px;font-family:Georgia, Arial, sans-serif}ul.archivegroup{padding:0;margin:0;}.archivegroup .expanded ul{display:block;}.archivegroup .collapsed ul{display:none;}.archivegroup li.expanded,.archivegroup li.collapsed{list-style:none;}
+	<style>ul.archivegroup{padding:0;margin:0;}.archivegroup .expanded ul{display:block;}.archivegroup .collapsed ul{display:none;}.archivegroup li.expanded,.archivegroup li.collapsed{list-style:none;}
 	</style>
 EOF;
 	echo '<h3>Archive</h3>';
@@ -722,11 +722,11 @@ function get_description($text) {
 
 // Get the teaser
 function get_teaser($text, $url) {
+
+	$teaserType = config('teaser.type');
 	
-	if (strlen(strip_tags($text)) < config('teaser.char')) {
-		$string = preg_replace('/\s\s+/', ' ', strip_tags($text));
-		$body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>' ;
-		echo '<p>' . $body . '</p>';
+	if (strlen(strip_tags($text)) < config('teaser.char') || $teaserType === 'full') {
+		echo $text;
 	}
 	else {
 		$string = preg_replace('/\s\s+/', ' ', strip_tags($text));
@@ -741,30 +741,39 @@ function get_teaser($text, $url) {
 // Get thumbnail from image and Youtube.
 function get_thumbnail($text) {
 
-	libxml_use_internal_errors(true);
-	$default = config('default.thumbnail');
-	$dom = new DOMDocument();
-	$dom->loadHtml($text);
-	$imgTags = $dom->getElementsByTagName('img');
-	$vidTags = $dom->getElementsByTagName('iframe');
-	if ($imgTags->length > 0) {
-		$imgElement = $imgTags->item(0);
-		$imgSource = $imgElement->getAttribute('src');
-		return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
-	}
-	elseif ($vidTags->length > 0) {
-		$vidElement = $vidTags->item(0);
-		$vidSource = $vidElement->getAttribute('src');
-		$fetch = explode("embed/", $vidSource);
-		if(isset($fetch[1])) {
-			$vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/default.jpg';
-			return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
+	$teaserType = config('teaser.type');
+
+	if (strlen(strip_tags($text)) > config('teaser.char') && $teaserType === 'trimmed') {
+
+		libxml_use_internal_errors(true);
+		$default = config('default.thumbnail');
+		$dom = new DOMDocument();
+		$dom->loadHtml($text);
+		$imgTags = $dom->getElementsByTagName('img');
+		$vidTags = $dom->getElementsByTagName('iframe');
+		if ($imgTags->length > 0) {
+			$imgElement = $imgTags->item(0);
+			$imgSource = $imgElement->getAttribute('src');
+			return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
 		}
+		elseif ($vidTags->length > 0) {
+			$vidElement = $vidTags->item(0);
+			$vidSource = $vidElement->getAttribute('src');
+			$fetch = explode("embed/", $vidSource);
+			if(isset($fetch[1])) {
+				$vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/default.jpg';
+				return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
+			}
+		}
+		else {
+			if (!empty($default)) {
+				return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
+			}
+		}
+		
 	}
 	else {
-		if (!empty($default)) {
-			return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
-		}
+	
 	}
 	
 }

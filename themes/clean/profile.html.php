@@ -10,17 +10,17 @@
 	<?php foreach($posts as $p):?>
 		<?php 
 			if ($i == 0) {
-				$class = 'first';
+				$class = 'item first';
 			} 
 			elseif ($i == $len - 1) {
-				$class = 'last';
+				$class = 'item last';
 			}
 			else {
-				$class = '';
+				$class = 'item';
 			}
 			$i++;		
 		?>
-	<li>
+	<li class="<?php echo $class;?>">
 		<span><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></span> on <span><?php echo date('d F Y', $p->date)?></span> - Posted in <span><?php echo $p->tag ?></span>
 	</li>
 	<?php endforeach;?>
