@@ -925,14 +925,32 @@ function menu(){
 function get_menu() {
 
 	$posts = get_static_pages();
+	$req = $_SERVER['REQUEST_URI'];
 
 	if(!empty($posts)) {
 
 		krsort($posts);
 		
-		echo '<ul>';
-		echo '<li><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		echo '<ul class="nav">';
+		if($req == site_path() . '/') {
+			echo '<li class="item first active"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		}
+		else {
+			echo '<li class="item first"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		}
+		
+		$i = 0; 
+		$len = count($posts);
+		
 		foreach($posts as $index => $v){
+		
+				if ($i == $len - 1) {
+					$class = 'item last';
+				}
+				else {
+					$class = 'item';
+				}
+				$i++;
 		
 			// Replaced string
 			$replaced = substr($v, 0, strrpos($v, '/')) . '/';
@@ -951,7 +969,13 @@ function get_menu() {
 			else {
 				$title = str_replace('-',' ', str_replace('.md','',$base));
 			}
-			echo '<li><a href="' . $url . '">' . ucwords($title) . '</a></li>';
+			
+			if(strpos($req, str_replace('.md','',$base)) !== false){
+				echo '<li class="' . $class . ' active"><a href="' . $url . '">' . ucwords($title) . '</a></li>';
+			}
+			else {
+				echo '<li class="' . $class . '"><a href="' . $url . '">' . ucwords($title) . '</a></li>';
+			}
 				
 		}
 		echo '</ul>';
@@ -1288,23 +1312,18 @@ function generate_json($posts){
 	return json_encode($posts);
 }
 
-// Return toolbar
-function toolbar() {
-	$user = $_SESSION['user'];
-	$role = user('role', $user);
-	
 	echo <<<EOF
-<style>	#outer-wrapper{ padding-top:30px;} @media all and (max-width: 550px) {#outer-wrapper{ padding-top:60px;}}</style>
+	<link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
 EOF;
 	echo '<div id="toolbar"><ul>';
-	echo '<li><a href="'.site_url().'admin">Admin</a></li>';
-	if ($role === 'admin') {echo '<li><a href="'.site_url().'admin/posts">Posts</a></li>';}
-	echo '<li><a href="'.site_url().'admin/mine">Mine</a></li>';
-	echo '<li><a href="'.site_url().'add/post">Add post</a></li>';
-	echo '<li><a href="'.site_url().'add/page">Add page</a></li>';
-	echo '<li><a href="'.site_url().'edit/profile">Edit profile</a></li>';
-	echo '<li><a href="'.site_url().'admin/import">Import</a></li>';
-	echo '<li><a href="'.site_url().'logout">Logout</a></li>';
+	echo '<li><a href="'.$base.'admin">Admin</a></li>';
+	if ($role === 'admin') {echo '<li><a href="'.$base.'admin/posts">Posts</a></li>';}
+	echo '<li><a href="'.$base.'admin/mine">Mine</a></li>';
+	echo '<li><a href="'.$base.'add/post">Add post</a></li>';
+	echo '<li><a href="'.$base.'add/page">Add page</a></li>';
+	echo '<li><a href="'.$base.'edit/profile">Edit profile</a></li>';
+	echo '<li><a href="'.$base.'admin/import">Import</a></li>';
+	echo '<li><a href="'.$base.'logout">Logout</a></li>';
 		
 	echo '</ul></div>';
 }

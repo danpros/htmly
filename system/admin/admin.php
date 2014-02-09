@@ -61,30 +61,21 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 		$t = str_replace('-','',$dt);
 		$time = new DateTime($t);
 		$timestamp= $time->format("Y-m-d");
+		
 		// The post date
 		$postdate = strtotime($timestamp);
+		
 		// The post URL
 		$posturl = site_url().date('Y/m', $postdate).'/'.$post_url;
 		
-		if($destination == 'admin/posts') {
-			$redirect = site_url() . 'admin/posts';
-			header("Location: $redirect");
-		}
-		else if($destination == 'admin/mine') {
-			$redirect = site_url() . 'admin/mine';
-			header("Location: $redirect");
-		}
-		elseif($destination == 'admin') {
-			$redirect = site_url() . 'admin';
-			header("Location: $redirect");
-		}
-		elseif ($destination == 'post') {
+		if ($destination == 'post') {
 			header("Location: $posturl");
 		}
 		else {
-			$redirect = site_url();
+			$redirect = site_url() . $destination;
 			header("Location: $redirect");
 		}
+		
 	}
 		
 }
@@ -115,15 +106,11 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 		
 		$posturl = site_url() . $post_url;
 		
-		if($destination == 'admin') {
-			$redirect = site_url() . 'admin';
-			header("Location: $redirect");
-		}
-		elseif ($destination == 'post') {
+		if ($destination == 'post') {
 			header("Location: $posturl");
 		}
 		else {
-			$redirect = site_url();
+			$redirect = site_url() . $destination;
 			header("Location: $redirect");
 		}
 		
@@ -238,7 +225,7 @@ function edit_profile($title, $content, $user) {
 			mkdir($dir, 0777, true);
 			file_put_contents($filename, print_r($user_content, true));
 		}
-		$redirect = site_url() . 'admin';
+		$redirect = site_url() . 'author/' . $user;
 		header("Location: $redirect");			
 	}
 	
@@ -273,6 +260,7 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
+		
 		$redirect = site_url() . 'admin/mine';
 		header("Location: $redirect");	
 	}
