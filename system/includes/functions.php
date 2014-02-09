@@ -1312,6 +1312,12 @@ function generate_json($posts){
 	return json_encode($posts);
 }
 
+// Return toolbar
+function toolbar() {
+	$user = $_SESSION['user'];
+	$role = user('role', $user);
+	$base = site_url();
+	
 	echo <<<EOF
 	<link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
 EOF;
