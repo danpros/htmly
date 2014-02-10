@@ -1,22 +1,22 @@
 <h2 class="post-index"><?php echo $heading?></h2>
 <?php if(!empty($posts)) {?>
 <table class="post-list">
-	<tr><th>Title</th><th>Published</th><th>Tag</th><th>Operations</th></tr>
+	<tr class="head"><th>Title</th><th>Published</th><th>Tag</th><th>Operations</th></tr>
 	<?php $i = 0; $len = count($posts);?>
 	<?php foreach($posts as $p):?>
 		<?php 
 			if ($i == 0) {
-				$class = 'first';
+				$class = 'item first';
 			} 
 			elseif ($i == $len - 1) {
-				$class = 'last';
+				$class = 'item last';
 			}
 			else {
-				$class = '';
+				$class = 'item';
 			}
 			$i++;		
 		?>
-	<tr>
+	<tr class="<?php echo $class ?>">
 		<td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
 		<td><?php echo date('d F Y', $p->date) ?></td>
 		<td><?php echo $p->tag ?></td>

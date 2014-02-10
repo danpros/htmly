@@ -315,9 +315,20 @@ function get_recent_posts() {
 		$posts = get_profile($_SESSION['user'], 1, 5);
 		if(!empty($posts)) {
 			echo '<table class="post-list">';
-			echo '<tr><th>Title</th><th>Published</th><th>Tag</th><th>Operations</th></tr>';
+			echo '<tr class="head"><th>Title</th><th>Published</th><th>Tag</th><th>Operations</th></tr>';
+			$i = 0; $len = count($posts);
 			foreach($posts as $p) {
-				echo '<tr>';
+				if ($i == 0) {
+					$class = 'item first';
+				} 
+				elseif ($i == $len - 1) {
+					$class = 'item last';
+				}
+				else {
+					$class = 'item';
+				}
+				$i++;
+				echo '<tr class="' . $class . '">';
 				echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
 				echo '<td>' . date('d F Y', $p->date) . '</td>';
 				echo '<td>' . $p->tag . '</td>';
@@ -336,9 +347,20 @@ function get_recent_pages() {
 		if(!empty($posts)) {
 			krsort($posts);
 			echo '<table class="post-list">';
-			echo '<tr><th>Title</th><th>Operations</th></tr>';
+			echo '<tr class="head"><th>Title</th><th>Operations</th></tr>';
+			$i = 0; $len = count($posts);
 			foreach($posts as $p) {
-				echo '<tr>';
+				if ($i == 0) {
+					$class = 'item first';
+				} 
+				elseif ($i == $len - 1) {
+					$class = 'item last';
+				}
+				else {
+					$class = 'item';
+				}
+				$i++;
+				echo '<tr class="' . $class . '">';
 				echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
 				echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
 				echo '</tr>';
