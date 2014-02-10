@@ -28,7 +28,7 @@
 	</div>
 	<?php echo get_related($p->tag)?>
 	<div class="comments border">
-		<?php if (disqus(null, null) == true):?>
+		<?php if (disqus()):?>
 			<div id="disqus_thread"></div>
 		<?php endif;?>
 	</div>
@@ -41,7 +41,7 @@
 			<span><a href="<?php echo ($prev['url']); ?>" class="pagination-arrow older" rel="prev"><?php echo ($prev['title']); ?></a></span>
 		<?php endif;?>
 	</div>
-	<?php if (disqus(null, null) == true):?>
+	<?php if (disqus()):?>
 		<?php echo disqus($p->title, $p->url) ?>
 	<?php endif;?>
 </div>

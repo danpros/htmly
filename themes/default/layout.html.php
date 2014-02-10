@@ -1,19 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo $title; ?></title>
-	<link href='<?php echo site_url() ?>favicon.ico' rel='icon' type='image/x-icon'/>
-	<meta charset="utf-8" />
-	<meta content='htmly' name='generator'/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />
-	<meta name="description" content="<?php echo $description; ?>" />
-	<link rel="sitemap" href="<?php echo site_url() ?>sitemap.xml" />
-	<link rel="canonical" href="<?php echo $canonical; ?>" />
-	<link rel="alternate" type="application/rss+xml" title="<?php echo config('blog.title')?> Feed" href="<?php echo site_url()?>feed/rss" />
+	<?php echo $head_contents ?>
 	<link href="<?php echo site_url() ?>themes/default/css/style.css" rel="stylesheet" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<?php if (publisher() == true):?><link href="<?php echo publisher() ?>" rel="publisher" /><?php endif;?>
+	<?php if (publisher()):?><link href="<?php echo publisher() ?>" rel="publisher" /><?php endif;?>
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -63,6 +54,6 @@
 			</div>
 		</div>
 	</div>
-	<?php if (analytics() == true):?><?php echo analytics() ?><?php endif;?>
+	<?php if (analytics()):?><?php echo analytics() ?><?php endif;?>
 </body>
 </html>

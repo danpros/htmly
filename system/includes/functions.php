@@ -741,39 +741,42 @@ function get_teaser($text, $url) {
 // Get thumbnail from image and Youtube.
 function get_thumbnail($text) {
 
-	$teaserType = config('teaser.type');
+	if (config('img.thumbnail') == 'true') {
 
-	if (strlen(strip_tags($text)) > config('teaser.char') && $teaserType === 'trimmed') {
+		$teaserType = config('teaser.type');
 
-		libxml_use_internal_errors(true);
-		$default = config('default.thumbnail');
-		$dom = new DOMDocument();
-		$dom->loadHtml($text);
-		$imgTags = $dom->getElementsByTagName('img');
-		$vidTags = $dom->getElementsByTagName('iframe');
-		if ($imgTags->length > 0) {
-			$imgElement = $imgTags->item(0);
-			$imgSource = $imgElement->getAttribute('src');
-			return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
-		}
-		elseif ($vidTags->length > 0) {
-			$vidElement = $vidTags->item(0);
-			$vidSource = $vidElement->getAttribute('src');
-			$fetch = explode("embed/", $vidSource);
-			if(isset($fetch[1])) {
-				$vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/default.jpg';
-				return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
+		if (strlen(strip_tags($text)) > config('teaser.char') && $teaserType === 'trimmed') {
+
+			libxml_use_internal_errors(true);
+			$default = config('default.thumbnail');
+			$dom = new DOMDocument();
+			$dom->loadHtml($text);
+			$imgTags = $dom->getElementsByTagName('img');
+			$vidTags = $dom->getElementsByTagName('iframe');
+			if ($imgTags->length > 0) {
+				$imgElement = $imgTags->item(0);
+				$imgSource = $imgElement->getAttribute('src');
+				return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
 			}
+			elseif ($vidTags->length > 0) {
+				$vidElement = $vidTags->item(0);
+				$vidSource = $vidElement->getAttribute('src');
+				$fetch = explode("embed/", $vidSource);
+				if(isset($fetch[1])) {
+					$vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/default.jpg';
+					return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
+				}
+			}
+			else {
+				if (!empty($default)) {
+					return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
+				}
+			}
+			
 		}
 		else {
-			if (!empty($default)) {
-				return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
-			}
-		}
 		
-	}
-	else {
-	
+		}
 	}
 	
 }
@@ -832,7 +835,7 @@ function social(){
 // Copyright
 function copyright(){
 
-	$blogcp = config('blog.copyright');
+	$blogcp = blog_copyright();
 	$credit = 'Proudly powered by <a href="http://www.htmly.com" target="_blank">HTMLy</a>.';
 	
 	if (!empty($blogcp)) {
@@ -845,7 +848,7 @@ function copyright(){
 }
 
 // Disqus on post.
-function disqus($title, $url){
+function disqus($title=null, $url=null){
 	$disqus = config('disqus.shortname');
 	$script = <<<EOF
 	<script type="text/javascript">
@@ -1011,8 +1014,8 @@ function generate_rss($posts){
 	$rssLength = config('rss.char');
 	
 	$channel
-		->title(config('blog.title'))
-		->description(config('blog.description'))
+		->title(blog_title())
+		->description(blog_description())
 		->url(site_url())
 		->appendTo($feed);
 
@@ -1285,20 +1288,20 @@ function generate_opml(){
 	
 	$opml_data = array(
 		'head' => array(
-			'title' => config('blog.title') . ' OPML File',
-			'ownerName' => config('blog.title'),
-			'ownerId' => config('site.url')
+			'title' => blog_title() . ' OPML File',
+			'ownerName' => blog_title(),
+			'ownerId' => site_url() 
 			),
 		'body' => array(
 			array(
-				'text' => config('blog.title'),
-				'description' => config('blog.description'),
-				'htmlUrl' => config('site.url'),
+				'text' => blog_title(),
+				'description' => blog_description(),
+				'htmlUrl' => site_url(),
 				'language' => 'unknown',
-				'title' => config('blog.title'),
+				'title' => blog_title(),
 				'type' => 'rss',
 				'version' => 'RSS2',
-				'xmlUrl' => config('site.url') . '/feed/rss'
+				'xmlUrl' => site_url() . 'feed/rss'
 				)
 			)
 		);
@@ -1310,6 +1313,53 @@ function generate_opml(){
 // Turn an array of posts into a JSON
 function generate_json($posts){
 	return json_encode($posts);
+}
+
+// TRUE if the current page is the front page.
+function is_front() {
+	$req = $_SERVER['REQUEST_URI'];
+	if($req == site_path() . '/') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+// Return blog title
+function blog_title() {
+	return config('blog.title');
+}
+
+// Return blog tagline
+function blog_tagline() {
+	return config('blog.tagline');
+}
+
+// Return blog description
+function blog_description() {
+	return config('blog.description');
+}
+
+// Return blog copyright
+function blog_copyright() {
+	return config('blog.copyright');
+}
+
+function head_contents($title, $description, $canonical) {
+	$output = '';
+	$title = '<title>' . $title . '</title>';
+	$favicon = '<link href="' . site_url() . 'favicon.ico" rel="icon" type="image/x-icon"/>';
+	$charset = '<meta charset="utf-8" />';
+	$generator = '<meta content="htmly" name="generator"/>';
+	$xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
+	$viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />';
+	$description = '<meta name="description" content="'. $description .'"/>';
+	$sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
+	$canonical = '<link rel="canonical" href="' . $canonical . '" />';
+	$feed = '<link rel="alternate" type="application/rss+xml" title="'. blog_title() .' Feed" href="' . site_url() . 'feed/rss" />';
+	$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n";
+	return $output;
 }
 
 // Return toolbar

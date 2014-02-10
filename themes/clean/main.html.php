@@ -18,9 +18,7 @@
 			<h2 class="title-index" itemprop="name"><a href="<?php echo $p->url?>"><?php echo $p->title ?></a></h2>
 			<div class="date"><span itemprop="datePublished"><?php echo date('d F Y', $p->date)?></span> - Posted in <span itemprop="articleSection"><?php echo $p->tag ?></span> by <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span><?php if (disqus_count() == true):?> - <span><a href="<?php echo $p->url?>#disqus_thread">Comments</a></span><?php endif;?></div>
 			<div class="teaser-body" itemprop="articleBody">
-				<?php if (config('img.thumbnail') == 'true'):?>
-					<?php echo get_thumbnail($p->body)?>
-				<?php endif;?>
+				<?php echo get_thumbnail($p->body)?>
 				<?php echo get_teaser($p->body, $p->url)?>
 			</div>
 		</div>
@@ -36,6 +34,6 @@
 		<?php endif;?>
 	</div>
 <?php endif;?>
-<?php if (disqus_count() == true):?>
+<?php if (disqus_count()):?>
 	<?php echo disqus_count() ?>
 <?php endif;?>
