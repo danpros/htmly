@@ -1346,6 +1346,13 @@ function blog_copyright() {
 	return config('blog.copyright');
 }
 
+// Return author info
+function authorinfo($title=null, $body=null) {
+	if (config('author.info') == 'true') {
+		return '<div class="author-info"><h4>by <strong>' . $title . '</strong></h4>' . $body . '</div>';
+	}
+}
+
 function head_contents($title, $description, $canonical) {
 	$output = '';
 	$title = '<title>' . $title . '</title>';

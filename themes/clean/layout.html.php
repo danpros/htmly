@@ -11,13 +11,13 @@
 </head>
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 	<div class="hide">
-		<meta content="<?php echo config('blog.title') ?>" itemprop="name"/>
-		<meta content="<?php echo config('blog.description')?>" itemprop="description"/>
+		<meta content="<?php echo blog_title() ?>" itemprop="name"/>
+		<meta content="<?php echo blog_description() ?>" itemprop="description"/>
 	</div>
 	<?php if(login()) { toolbar();} ?>
 	<aside>
-		<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo config('blog.title') ?></a></h1>
-		<div class="blog-tagline"><p><?php echo config('blog.tagline')?></p></div>
+		<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
+		<div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
 		<div class="search">
 			<?php echo search() ?>
 		</div>

@@ -133,7 +133,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 	render('post',array(
 		'head_contents' => head_contents($current->title .' - ' . blog_title(), $description = get_description($current->body), $current->url),
 		'p' => $current,
-		'authorinfo' => '<div class="author-info"><h4>by <strong>' . $bio->title . '</strong></h4>' . $bio->body . '</div>',
+		'authorinfo' => authorinfo($bio->title, $bio->body),
 		'bodyclass' => 'inpost',
 		'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title,
 		'prev' => has_prev($prev),

@@ -16,9 +16,7 @@
 	</div>
 	<div class="separator">&rarr;</div>
 	<div class="share-box">
-		<?php if (config('author.info') == 'true'):?>
-			<?php echo $authorinfo ?>
-		<?php endif;?>
+		<?php echo $authorinfo ?>
 		<div class="share">
 			<h4>Share this post</h4>
 			<a class="twitter" target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title?>">Twitter</a>
