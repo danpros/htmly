@@ -429,11 +429,8 @@ function get_keyword($keyword){
 	if(!empty($posts)) {
 	
 		foreach($posts as $index => $v){
-		
-			$content = MarkdownExtra::defaultTransform(file_get_contents($v));
-			
 			foreach ($words as $word) {
-				if(strpos(strtolower(strip_tags($content)), strtolower($word)) !== false){
+				if(strpos($v, strtolower($word)) !== false){
 				
 					$post = new stdClass;
 	
@@ -479,6 +476,8 @@ function get_keyword($keyword){
 					$post->tag = implode(', ', $url);
 					
 					$post->tagb = implode(' » ', $bc);
+					
+					$content = MarkdownExtra::defaultTransform(file_get_contents($v));
 	
 					// Extract the title and body
 					$arr = explode('t-->', $content);
