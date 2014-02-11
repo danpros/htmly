@@ -939,12 +939,9 @@ get('/search/:keyword', function($keyword){
 	$page = $page ? (int)$page : 1;
 	$perpage = config('search.perpage');
 
-	$posts = get_keyword($keyword);
+	$posts = get_keyword($keyword, $page, $perpage);
 	
-	$total = count($posts);
-	
-	// Extract a specific page with results
-	$posts = array_slice($posts, ($page-1) * $perpage, $perpage);
+	$total = keyword_count($keyword);
 
 	if(empty($posts) || $page < 1){
 		// a non-existing page

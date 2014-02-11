@@ -418,92 +418,31 @@ function get_static_post($static){
 }
 
 // Return search page.
-function get_keyword($keyword){
+function get_keyword($keyword, $page, $perpage){
 
-	$posts = get_post_unsorted();
+	$posts = get_post_sorted();
 	
 	$tmp = array();
 	
 	$words = explode(' ', $keyword);
 	
-	if(!empty($posts)) {
-	
-		foreach($posts as $index => $v){
-			foreach ($words as $word) {
-				if(strpos($v, strtolower($word)) !== false){
-				
-					$post = new stdClass;
-	
-					// Extract the date
-					$arr = explode('_', $v);
-					
-					// Replaced string
-					$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
-					
-					// Author string
-					$str = explode('/', $replaced);
-					$author = $str[count($str)-3];
-					
-					// The post author + author url
-					$post->author = $author;
-					$post->authorurl = site_url() . 'author/' .  $author;
-					
-					$dt = str_replace($replaced,'',$arr[0]);
-					$t = str_replace('-', '', $dt);
-					$time = new DateTime($t);
-					$timestamp= $time->format("Y-m-d H:i:s");
-					
-					// The post date
-					$post->date = strtotime($timestamp);
-	
-					// The post URL
-					$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
-					
-					$tag = array();
-					$url = array();
-					$bc = array();
-					
-					$t = explode(',', $arr[1]);
-					foreach($t as $tt) {
-						$tag[] = array($tt, site_url(). 'tag/' . $tt);
-					}
-					
-					foreach($tag as $a) {
-						$url[] = '<span><a href="' .  $a[1] . '">'. $a[0] .'</a></span>';
-						$bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' .  $a[1] . '">'. $a[0] .'</a></span>';
-					}
-					
-					$post->tag = implode(', ', $url);
-					
-					$post->tagb = implode(' » ', $bc);
-					
-					$content = MarkdownExtra::defaultTransform(file_get_contents($v));
-	
-					// Extract the title and body
-					$arr = explode('t-->', $content);
-					if(isset($arr[1])) {
-						$title = str_replace('<!--t','',$arr[0]);
-						$title = rtrim(ltrim($title, ' '), ' ');		
-						$post->title = $title;
-						$post->body = $arr[1];
-					}
-					else {
-						$post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
-						$post->body = $arr[0];
-					}
-					
-					$tmp[] = $post;
-				
-				}
+	foreach ($posts as $index => $v) {
+		$arr = explode('_', $v['filename']);
+		$filter = $arr[1] .' '. $arr[2];
+		foreach($words as $word) {
+			if(strpos($filter, strtolower($word)) !== false) {
+				$tmp[] = $v;
 			}
 		}
-		
-		$tmp = array_unique($tmp, SORT_REGULAR);
-	
-		usort($tmp,'sortdate');
 	}
 	
-	return $tmp;
+	if(empty($tmp)) {
+		// a non-existing page
+		render('404-search', null, false);
+		die;
+	}
+	
+	return $tmp = get_posts($tmp, $page, $perpage);
 		
 }
 
@@ -549,6 +488,31 @@ function get_count($var, $str) {
 			$tmp[] = $v;
 		}
 	}
+	
+	return count($tmp);
+	
+}
+
+// Return seaarch result count
+function keyword_count($keyword) {
+
+	$posts = get_post_sorted();
+	
+	$tmp = array();
+	
+	$words = explode(' ', $keyword);
+	
+	foreach ($posts as $index => $v) {
+		$arr = explode('_', $v['filename']);
+		$filter = $arr[1] .' '. $arr[2];
+		foreach($words as $word) {
+			if(strpos($filter, strtolower($word)) !== false) {
+				$tmp[] = $v;
+			}
+		}
+	}
+	
+	$tmp = array_unique($tmp, SORT_REGULAR);
 	
 	return count($tmp);
 	
