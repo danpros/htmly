@@ -379,6 +379,10 @@ table.post-list td a {
 	padding-top:3px;
 }
 
+#menu ul li.active a {
+	text-decoration:underline;
+}
+
 #menu ul li:last-child {
 	margin:0;
 } 

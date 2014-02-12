@@ -62,7 +62,7 @@ img.thumbnail = "true"
 default.thumbnail = ""
 
 ; Set the theme here
-views.root = "themes/default"
+views.root = "themes/logs"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
