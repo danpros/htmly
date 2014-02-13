@@ -271,6 +271,7 @@ ul li, ol li{
 	font-family: 'Open Sans',sans-serif;
 	font-size:15px;
 	text-shadow: 0 1px 0 #ffffff;
+	padding-bottom:7px;
 }
 
 #menu {
@@ -287,7 +288,7 @@ ul li, ol li{
 #menu ul li {
 	padding: 0 10px;
 	float: left;
-	margin:0 0 7px 0;
+	margin:0;
 }
 
 #menu ul li.first {
@@ -367,7 +368,7 @@ ul li, ol li{
 	-webkit-transition:all .218s ease-in;
 	transition:all .218s ease-in;
 	cursor:pointer;
-	height:22px;
+	height:23px;
 	padding: 0 3px;
 }
 

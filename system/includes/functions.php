@@ -312,6 +312,8 @@ function get_bio($author){
 
 	$names = get_author_names();
 	
+	$username = 'config/users/' . $author . '.ini';
+	
 	$tmp = array();
 	
 	if(!empty($names)) {
@@ -351,7 +353,13 @@ function get_bio($author){
 			}
 		}
 	}
-	return $tmp;
+	
+	if(!empty($tmp) || file_exists($username)) {
+		return $tmp;
+	}
+	else {
+		not_found();
+	}
 	
 }
 
