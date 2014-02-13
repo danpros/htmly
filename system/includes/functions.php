@@ -848,6 +848,54 @@ EOF;
 	}
 }
 
+// Disqus recent comments
+function recent_comments(){
+	$disqus = config('disqus.shortname');
+	$script = <<<EOF
+		<script type="text/javascript">
+			var heading ='<h3>Comments</h3>';
+			document.write(heading);
+		</script>
+		<script type="text/javascript" src="http://{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
+		<style>
+			li.dsq-widget-item {
+				border-bottom: 1px solid #ebebeb;
+				margin:0;
+				margin-bottom:10px;
+				padding:0;
+				padding-bottom:10px;
+			}
+			a.dsq-widget-user {
+				font-weight:normal;
+			}
+			img.dsq-widget-avatar {
+				margin-right:10px; 
+			}
+			.dsq-widget-comment {
+				display:block;
+				padding-top:5px;
+			}
+			.dsq-widget-comment p {
+				display:block;
+				margin:0;
+			}
+			p.dsq-widget-meta {
+				padding-top:5px;
+				margin:0;
+			}
+			#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {
+				background: transparent;
+			}
+			#dsq-combo-widget.grey #dsq-combo-tabs li {
+				background: none repeat scroll 0 0 #DDDDDD;
+			}
+		</style>
+EOF;
+	if (!empty($disqus)) {
+		return $script;
+	}
+}
+
 // Google Publisher (Google+ page).
 function publisher(){
 	$publisher = config('google.publisher');

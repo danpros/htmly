@@ -47,6 +47,11 @@
 					<div class="archive">
 						<?php echo archive_list()?>
 					</div>
+					<?php if(disqus()):?>
+						<div class="comments">
+							<?php echo recent_comments() ?>
+						</div>
+					<?php endif;?>
 					<div class="tagcloud">
 						<?php echo tag_cloud()?>
 					</div>

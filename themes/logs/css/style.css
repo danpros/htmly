@@ -585,7 +585,7 @@ ul li, ol li{
 	margin:0;
 }
 
-.about, .social, .archive, .tagcloud {
+.about, .social, .archive, .comments, .tagcloud {
 	margin-bottom:2em;
 }
 
@@ -791,6 +791,11 @@ table.post-list td a {
 		float:left;
 		width:100%;
 		margin-bottom:1em;
+	}
+	
+	pre {
+		white-space: pre-wrap;
+		word-wrap:break-word;
 	}
 	
 }
