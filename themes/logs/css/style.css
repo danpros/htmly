@@ -431,12 +431,6 @@ ul li, ol li{
 	color: #454545;
 }
 
-#main h1, #main h2 {
-	font-size: 28px;
-    line-height: 1.3;
-	font-family: 'Open Sans',sans-serif;
-}
-
 #main h1 a, #main h2 a {
 	border:none;
 }

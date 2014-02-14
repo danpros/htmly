@@ -16,7 +16,8 @@ Features
 - Author page
 - Multi author support
 - Social links
-- Disqus Commenting System
+- Disqus Comments (optional)
+- Facebook Comments (optional)
 - Google Analytics
 - Built-in search
 - Related posts
@@ -33,6 +34,7 @@ Features
 - SEO friendly URLs
 - Teaser thumbnail for images and Youtube videos
 - Responsive design
+- Lightbox
 - User role
 
 Requirements

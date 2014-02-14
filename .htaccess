@@ -10,10 +10,10 @@ DirectoryIndex index.php index.html index.htm
   # to activate mode_expires
   ExpiresActive on
   
-  ExpiresDefault                                      "access plus 60 minutes"
+  ExpiresDefault                                      "access plus 1 month"
 
   # For CSS
-  ExpiresByType text/css                              "access plus 60 minutes"
+  ExpiresByType text/css                              "access plus 1 month"
 
   # For Data interchange
   ExpiresByType application/json                      "access plus 0 seconds"
@@ -21,40 +21,40 @@ DirectoryIndex index.php index.html index.htm
   ExpiresByType text/xml                              "access plus 0 seconds"
 
   # For Favicon
-  ExpiresByType image/x-icon                          "access plus 60 minutes"
+  ExpiresByType image/x-icon                          "access plus 1 year"
 
   # For HTML components (HTCs)
-  ExpiresByType text/x-component                      "access plus 60 minutes"
+  ExpiresByType text/x-component                      "access plus 1 month"
 
   # For HTML
-  ExpiresByType text/html                             "access plus 0 seconds"
+  ExpiresByType text/html                             "access plus 1 month"
 
   # For JavaScript
-  ExpiresByType application/javascript                "access plus 60 minutes"
+  ExpiresByType application/javascript                "access plus 1 month"
 
   # For Manifest files
   ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
   ExpiresByType text/cache-manifest                   "access plus 0 seconds"
 
   # For Media
-  ExpiresByType audio/ogg                             "access plus 60 minutes"
-  ExpiresByType image/gif                             "access plus 60 minutes"
-  ExpiresByType image/jpeg                            "access plus 60 minutes"
-  ExpiresByType image/png                             "access plus 60 minutes"
-  ExpiresByType video/mp4                             "access plus 60 minutes"
-  ExpiresByType video/ogg                             "access plus 60 minutes"
-  ExpiresByType video/webm                            "access plus 60 minutes"
+  ExpiresByType audio/ogg                             "access plus 1 month"
+  ExpiresByType image/gif                             "access plus 1 month"
+  ExpiresByType image/jpeg                            "access plus 1 month"
+  ExpiresByType image/png                             "access plus 1 month"
+  ExpiresByType video/mp4                             "access plus 1 month"
+  ExpiresByType video/ogg                             "access plus 1 month"
+  ExpiresByType video/webm                            "access plus 1 month"
 
   # For Web feeds
-  ExpiresByType application/atom+xml                  "access plus 60 minutes"
-  ExpiresByType application/rss+xml                   "access plus 60 minutes"
+  ExpiresByType application/atom+xml                  "access plus 1 day"
+  ExpiresByType application/rss+xml                   "access plus 1 day"
 
   # For Web fonts
-  ExpiresByType application/font-woff                 "access plus 60 minutes"
-  ExpiresByType application/vnd.ms-fontobject         "access plus 60 minutes"
-  ExpiresByType application/x-font-ttf                "access plus 60 minutes"
-  ExpiresByType font/opentype                         "access plus 60 minutes"
-  ExpiresByType image/svg+xml                         "access plus 60 minutes"
+  ExpiresByType application/font-woff                 "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject         "access plus 1 month"
+  ExpiresByType application/x-font-ttf                "access plus 1 month"
+  ExpiresByType font/opentype                         "access plus 1 month"
+  ExpiresByType image/svg+xml                         "access plus 1 month"
 
 </IfModule>
 

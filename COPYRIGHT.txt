@@ -18,18 +18,20 @@ HTMLy includes works under other copyright notices and distributed
 according to the terms of the GNU General Public License or a compatible
 license, including:
 
-  Dispatch - Copyright (c) 2014 Jesus A. Domingo <jesus.domingo@gmail.com>
+  Dispatch - (c) 2014 Jesus A. Domingo <jesus.domingo@gmail.com>
 
-  Composer - Copyright (c) 2011 Nils Adermann, Jordi Boggiano
+  Composer - (c) 2011 Nils Adermann, Jordi Boggiano
   
-  PHP Markdown & Extra - Copyright (c) 2004-2009 Michel Fortin
+  PHP Markdown & Extra - (c) 2004-2009 Michel Fortin
   
-  Markdown - Copyright (c) 2003-2006 John Gruber
+  Markdown - (c) 2003-2006 John Gruber
 
-  \Suin\RSSWriter - Copyright (c) Suin <https://github.com/suin>
+  \Suin\RSSWriter - (c) Suin <https://github.com/suin>
   
   Showdown code (c) 2007 John Fraser
   
   Pagedown modifications and bugfixes (c) 2009 Dana Robinson
   
   Pagedown modifications and bugfixes (c) 2009-2013 Stack Exchange Inc.
+  
+  Lightbox2 (c) Lokesh Dhakar <lokeshdhakar.com>
