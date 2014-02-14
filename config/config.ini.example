@@ -61,6 +61,9 @@ rss.char = ""
 img.thumbnail = "true"
 default.thumbnail = ""
 
+; Lightbox inline image handling. This can slowdown your page load, especially when Disqus enabled. "on" or "off".
+lightbox = "off"
+
 ; Set the theme here
 views.root = "themes/logs"
 

@@ -1373,7 +1373,10 @@ function authorinfo($title=null, $body=null) {
 }
 
 function head_contents($title, $description, $canonical) {
+
+	$styleImage = config('lightbox');
 	$output = '';
+	
 	$title = '<title>' . $title . '</title>';
 	$favicon = '<link href="' . site_url() . 'favicon.ico" rel="icon" type="image/x-icon"/>';
 	$charset = '<meta charset="utf-8" />';
@@ -1388,8 +1391,16 @@ function head_contents($title, $description, $canonical) {
 	$jquery = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
 	$lightbox = '<script src="' . site_url() . 'system/plugins/lightbox/js/lightbox-2.6.min.js"></script>';
 	$corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
-	$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $lightboxcss ."\n". $jquery ."\n". $lightbox ."\n" .$corejs ."\n";
+	
+	if($styleImage == 'on') {
+		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $lightboxcss ."\n". $jquery ."\n". $lightbox ."\n" .$corejs ."\n";
+	}
+	else {
+		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n";
+	}
+	
 	return $output;
+	
 }
 
 // Return toolbar
