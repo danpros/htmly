@@ -19,8 +19,8 @@ blog.menu = ""
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
 
-; Comment system. Choose "facebook" or "disqus".
-comment.system = "facebook"
+; Comment system. Choose "facebook", "disqus", or "disable".
+comment.system = "disable"
 
 ;Facebook comments
 fb.num = "5"
