@@ -1384,7 +1384,11 @@ function head_contents($title, $description, $canonical) {
 	$sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
 	$canonical = '<link rel="canonical" href="' . $canonical . '" />';
 	$feed = '<link rel="alternate" type="application/rss+xml" title="'. blog_title() .' Feed" href="' . site_url() . 'feed/rss" />';
-	$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n";
+	$lightboxcss = '<link href="' . site_url() . 'system/plugins/lightbox/css/lightbox.css" rel="stylesheet" />';
+	$jquery = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
+	$lightbox = '<script src="' . site_url() . 'system/plugins/lightbox/js/lightbox-2.6.min.js"></script>';
+	$corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
+	$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $lightboxcss ."\n". $jquery ."\n". $lightbox ."\n" .$corejs ."\n";
 	return $output;
 }
 

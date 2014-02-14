@@ -1,3 +1,5 @@
 ;Password
 password = yourpassword
+
+;Role
 role = admin

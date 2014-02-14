@@ -12,7 +12,7 @@ body {
 	line-height: 1.6em;
 	font-family: Georgia, sans-serif;
 	background: #F7F7F7;
-	color: #44444;
+	color: #444444;
 }
 
 section, footer, header, aside, nav{
@@ -70,7 +70,6 @@ h6 {
 --------------------------*/
 
 #cover {
-
 	padding: 0 0 20px 0;
 	float:left;
 	width:100%;
@@ -113,7 +112,6 @@ h6 {
 /*-------------------------
 	Link
 --------------------------*/
-
 
 a {
 	color: #21759B;
@@ -545,12 +543,12 @@ ul li, ol li{
 .border #disqus_thread {
     padding-top: 1.2em;
 }
+
 #disqus_thread {
     float: left;
     font-family: Georgia,Times,Cambria,serif;
     width: 100%;
 }
-
 
 /*-------------------------
 	Sidebar
@@ -562,7 +560,7 @@ ul li, ol li{
 	height:100%;
 	width: 200px;
 	font-size:15px;
-	line-height: 1.5;
+	line-height: 1.4;
 }
 
 #sidebar h2, #sidebar h3, #sidebar h4 {
@@ -579,11 +577,15 @@ ul li, ol li{
 }
 
 #sidebar .archivegroup ul.month {
-	margin-left:1.3em;
+    margin: 0.25em 0 0.25em 1.3em;
 }
 
 #sidebar .archivegroup ul.month li {
 	margin:0;
+}
+
+.archivegroup li.expanded, .archivegroup li.collapsed {
+    margin:0;
 }
 
 .about, .social, .archive, .comments, .tagcloud {
