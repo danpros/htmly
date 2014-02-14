@@ -860,6 +860,7 @@ EOF;
 
 // Disqus recent comments
 function recent_comments(){
+	$comment = config('comment.system');
 	$disqus = config('disqus.shortname');
 	$script = <<<EOF
 		<script type="text/javascript">
