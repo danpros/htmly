@@ -19,7 +19,6 @@
 User-agent: *
 Crawl-delay: 10
 # Directories
-Disallow: /admin/
 Disallow: /config/
 Disallow: /content/
 Disallow: /system/
@@ -32,3 +31,4 @@ Disallow: /composer.lock
 Disallow: /composer.phar
 # Paths 
 Disallow: /search/
+Disallow: /admin/
