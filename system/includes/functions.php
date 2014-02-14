@@ -1398,6 +1398,7 @@ function authorinfo($title=null, $body=null) {
 function head_contents($title, $description, $canonical) {
 
 	$styleImage = config('lightbox');
+	$jq = config('jquery');
 	$output = '';
 	
 	$title = '<title>' . $title . '</title>';
@@ -1419,7 +1420,12 @@ function head_contents($title, $description, $canonical) {
 		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $lightboxcss ."\n". $jquery ."\n". $lightbox ."\n" .$corejs ."\n";
 	}
 	else {
-		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $jquery ."\n";
+		if($jq == 'enable') {
+			$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $jquery ."\n";
+		}
+		else {
+			$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n";
+		}
 	}
 	
 	return $output;

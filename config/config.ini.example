@@ -68,6 +68,9 @@ rss.char = ""
 img.thumbnail = "true"
 default.thumbnail = ""
 
+;Enable or disable jQuery, if Lightbox is "on" then this option ignored.
+jquery = "disable"
+
 ; Lightbox inline image handling. This can slowdown your page load, especially when Disqus enabled. "on" or "off".
 lightbox = "off"
 
