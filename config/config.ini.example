@@ -19,7 +19,14 @@ blog.menu = ""
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
 
-; Disqus
+; Comment system. Choose "facebook" or "disqus".
+comment.system = "facebook"
+
+;Facebook comments
+fb.num = "5"
+fb.color = "light"
+
+; Disqus comments
 disqus.shortname = ""
 
 ; Google+ publisher

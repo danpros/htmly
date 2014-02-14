@@ -540,7 +540,7 @@ ul li, ol li{
 	float:right;
 }
 
-.border #disqus_thread {
+.border .fb-comments, .border #disqus_thread {
     padding-top: 1.2em;
 }
 

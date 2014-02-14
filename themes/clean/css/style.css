@@ -270,8 +270,8 @@ pre code {
 	margin-top: 10px;
 }
 
-.border #disqus_thread {
-	padding-top: 1.2em;
+.border .fb-comments, .border #disqus_thread {
+    padding-top: 1.2em;
 }
 
 #disqus_thread {

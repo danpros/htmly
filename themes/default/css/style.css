@@ -586,8 +586,8 @@ h1.title-post a:hover, h2.title-index a:hover {
 	float:left;
 }
 
-.border #disqus_thread {
-	padding-top: 1.2em;
+.border .fb-comments, .border #disqus_thread {
+    padding-top: 1.2em;
 }
 
 #disqus_thread {

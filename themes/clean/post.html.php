@@ -25,7 +25,10 @@
 		</div>
 	</div>
 	<?php echo get_related($p->tag)?>
-	<div class="comments border">
+	<div id="comments" class="comments border">
+		<?php if (facebook()):?>
+			<div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
+		<?php endif;?>
 		<?php if (disqus()):?>
 			<div id="disqus_thread"></div>
 		<?php endif;?>

@@ -14,6 +14,7 @@
 		<meta content="<?php echo blog_title() ?>" itemprop="name"/>
 		<meta content="<?php echo blog_description() ?>" itemprop="description"/>
 	</div>
+	<?php if(facebook()) { echo facebook();} ?>
 	<?php if(login()) { toolbar();} ?>
 	<aside>
 		<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>

@@ -820,6 +820,7 @@ function copyright(){
 
 // Disqus on post.
 function disqus($title=null, $url=null){
+	$comment = config('comment.system');
 	$disqus = config('disqus.shortname');
 	$script = <<<EOF
 	<script type="text/javascript">
@@ -833,13 +834,14 @@ function disqus($title=null, $url=null){
 		})();
 	</script>
 EOF;
-	if (!empty($disqus)) {
+	if (!empty($disqus) && $comment == 'disqus') {
 		return $script;
 	}
 }
 
 // Disqus comment count on teaser
 function disqus_count(){
+	$comment = config('comment.system');
 	$disqus = config('disqus.shortname');
 	$script = <<<EOF
 	<script type="text/javascript">
@@ -851,7 +853,7 @@ function disqus_count(){
 		})();
 	</script>
 EOF;
-	if (!empty($disqus)) {
+	if (!empty($disqus) && $comment == 'disqus') {
 		return $script;
 	}
 }
@@ -899,9 +901,29 @@ function recent_comments(){
 			}
 		</style>
 EOF;
-	if (!empty($disqus)) {
+	if (!empty($disqus) && $comment == 'disqus') {
 		return $script;
 	}
+}
+
+function facebook() {
+	$comment = config('comment.system');
+	$script = <<<EOF
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+	<style>.fb-comments, .fb_iframe_widget span, .fb-comments iframe {width: 100%!important;}</style>
+EOF;
+
+	if($comment == 'facebook') {
+		return $script;
+	}
+
 }
 
 // Google Publisher (Google+ page).
@@ -1396,7 +1418,7 @@ function head_contents($title, $description, $canonical) {
 		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $lightboxcss ."\n". $jquery ."\n". $lightbox ."\n" .$corejs ."\n";
 	}
 	else {
-		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n";
+		$output .= $title ."\n". $favicon ."\n". $charset ."\n". $generator ."\n". $xua ."\n". $viewport ."\n". $description ."\n". $sitemap ."\n". $canonical ."\n". $feed ."\n". $jquery ."\n";
 	}
 	
 	return $output;
