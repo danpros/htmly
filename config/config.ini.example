@@ -23,6 +23,7 @@ breadcrumb.home = "Home"
 comment.system = "disable"
 
 ;Facebook comments
+fb.appid = ""
 fb.num = "5"
 fb.color = "light"
 

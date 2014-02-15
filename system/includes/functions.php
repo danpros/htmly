@@ -909,19 +909,20 @@ EOF;
 
 function facebook() {
 	$comment = config('comment.system');
+	$appid = config('fb.appid');
 	$script = <<<EOF
 	<div id="fb-root"></div>
 	<script>(function(d, s, id) {
 	  var js, fjs = d.getElementsByTagName(s)[0];
 	  if (d.getElementById(id)) return;
 	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1423304737912599";
+	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={$appid}";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
 	<style>.fb-comments, .fb_iframe_widget span, .fb-comments iframe {width: 100%!important;}</style>
 EOF;
 
-	if($comment == 'facebook') {
+	if(!empty($appid) && $comment == 'facebook') {
 		return $script;
 	}
 
