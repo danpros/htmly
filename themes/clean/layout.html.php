@@ -17,8 +17,11 @@
 	<?php if(facebook()) { echo facebook();} ?>
 	<?php if(login()) { toolbar();} ?>
 	<aside>
-		<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
-		<div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
+		<?php if(is_index()) {?>
+			<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
+		<?php } else {?>
+			<h2 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h2>
+		<?php } ?>
 		<div class="search">
 			<?php echo search() ?>
 		</div>

@@ -20,7 +20,11 @@
 		<div id="header-wrapper">
 			<header id="header" class="responsive">
 				<div id="branding">
-					<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
+					<?php if(is_index()) {?>
+						<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
+					<?php } else {?>
+						<h2 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h2>
+					<?php } ?>
 					<div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
 				</div>
 			</header>

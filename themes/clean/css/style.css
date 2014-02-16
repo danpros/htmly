@@ -56,19 +56,19 @@ h1{
 	margin: 0.5em 0;
 }
 
-h1.blog-title {
+h1.blog-title, h2.blog-title {
 	text-transform:uppercase;
 	font: 20px 'Open Sans Condensed', sans-serif;
 	margin-bottom: 1em;
 	line-height: 1.3;
 }
 
-h1.blog-title a {
+h1.blog-title a, h2.blog-title a {
 	color:#4f4f4f;
 	text-decoration: none;
 }
 
-h1.blog-title a:hover {
+h1.blog-title a:hover, h2.blog-title a:hover {
 	color: #389dc1;
 }
 

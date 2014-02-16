@@ -438,7 +438,7 @@ function get_keyword($keyword, $page, $perpage){
 		$arr = explode('_', $v['filename']);
 		$filter = $arr[1] .' '. $arr[2];
 		foreach($words as $word) {
-			if(strpos($filter, strtolower($word)) !== false) {
+			if(stripos($filter, $word) !== false) {
 				$tmp[] = $v;
 			}
 		}
@@ -533,72 +533,76 @@ function archive_list() {
 	$by_year = array();
 	$col = array();
 	
-	foreach($posts as $index => $v){
+	if(!empty($posts)) {
 	
-		$arr = explode('_', $v);
+		foreach($posts as $index => $v){
 		
-		// Replaced string
-		$str = $arr[0];
-		$replaced = substr($str, 0,strrpos($str, '/')) . '/';
-		
-		$date = str_replace($replaced,'',$arr[0]);
-		$data = explode('-', $date);
-		$col[] = $data;
-		
-	}
-	
-	foreach ($col as $row){
-	
-		$y = $row['0'];
-		$m = $row['1'];
-		$by_year[$y][] = $m;
-
-	}
-	
-	# Most recent year first
-	krsort($by_year);
-	# Iterate for display
-	$script = <<<EOF
-if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
-EOF;
-	echo <<<EOF
-	<style>ul.archivegroup{padding:0;margin:0;}.archivegroup .expanded ul{display:block;}.archivegroup .collapsed ul{display:none;}.archivegroup li.expanded,.archivegroup li.collapsed{list-style:none;}
-	</style>
-EOF;
-	echo '<h3>Archive</h3>';
-	$i = 0; 
-	$len = count($by_year);
-	foreach ($by_year as $year => $months){
-		if ($i == 0) {
-			$class = 'expanded';
-			$arrow = '&#9660;';
-		} 
-		else {
-			$class = 'collapsed';
-			$arrow = '&#9658;';
+			$arr = explode('_', $v);
+			
+			// Replaced string
+			$str = $arr[0];
+			$replaced = substr($str, 0,strrpos($str, '/')) . '/';
+			
+			$date = str_replace($replaced,'',$arr[0]);
+			$data = explode('-', $date);
+			$col[] = $data;
+			
 		}
-		$i++;
 		
-		echo '<ul class="archivegroup">';
-		echo '<li class="' . $class . '">';
-		echo '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
-		echo '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
-		echo '<span class="count">(' . count($months) . ')</span>';
-		echo '<ul class="month">';
+		foreach ($col as $row){
+		
+			$y = $row['0'];
+			$m = $row['1'];
+			$by_year[$y][] = $m;
 
-		$by_month = array_count_values($months);
-		# Sort the months
-		krsort($by_month);
-		foreach ($by_month as $month => $count){
-			$name = date('F', mktime(0,0,0,$month,1,2010));
-			echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';
-			echo ' <span class="count">(' . $count . ')</span></li>';
 		}
-
-		echo '</ul>';
-		echo '</li>';
-		echo '</ul>';
 		
+		# Most recent year first
+		krsort($by_year);
+		# Iterate for display
+		$script = <<<EOF
+	if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
+EOF;
+		echo <<<EOF
+		<style>ul.archivegroup{padding:0;margin:0;}.archivegroup .expanded ul{display:block;}.archivegroup .collapsed ul{display:none;}.archivegroup li.expanded,.archivegroup li.collapsed{list-style:none;}
+		</style>
+EOF;
+		echo '<h3>Archive</h3>';
+		$i = 0; 
+		$len = count($by_year);
+		foreach ($by_year as $year => $months){
+			if ($i == 0) {
+				$class = 'expanded';
+				$arrow = '&#9660;';
+			} 
+			else {
+				$class = 'collapsed';
+				$arrow = '&#9658;';
+			}
+			$i++;
+			
+			echo '<ul class="archivegroup">';
+			echo '<li class="' . $class . '">';
+			echo '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
+			echo '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
+			echo '<span class="count">(' . count($months) . ')</span>';
+			echo '<ul class="month">';
+
+			$by_month = array_count_values($months);
+			# Sort the months
+			krsort($by_month);
+			foreach ($by_month as $month => $count){
+				$name = date('F', mktime(0,0,0,$month,1,2010));
+				echo '<li class="item"><a href="' . site_url() .  'archive/' . $year . '-' . $month . '">' . $name .  '</a>';
+				echo ' <span class="count">(' . $count . ')</span></li>';
+			}
+
+			echo '</ul>';
+			echo '</li>';
+			echo '</ul>';
+			
+		}
+	
 	}
 	
 }
@@ -609,27 +613,31 @@ function tag_cloud() {
 	$posts = get_post_unsorted();
 	$tags = array();
 	
-	foreach($posts as $index => $v){
+	if(!empty($posts)) {
 	
-		$arr = explode('_', $v);
+		foreach($posts as $index => $v){
 		
-		$data = $arr[1];
-		$mtag = explode(',', $data);
-		foreach($mtag as $etag) {
-			$tags[] = $etag;
+			$arr = explode('_', $v);
+			
+			$data = $arr[1];
+			$mtag = explode(',', $data);
+			foreach($mtag as $etag) {
+				$tags[] = $etag;
+			}
+			
 		}
 		
-	}
+		$tag_collection = array_count_values($tags);
+		ksort($tag_collection);
+		
+		echo '<h3>Tags</h3>';
+		echo '<ul class="taglist">';
+		foreach ($tag_collection as $tag => $count){
+			echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+		}
+		echo '</ul>';
 	
-	$tag_collection = array_count_values($tags);
-	ksort($tag_collection);
-	
-	echo '<h3>Tags</h3>';
-	echo '<ul class="taglist">';
-	foreach ($tag_collection as $tag => $count){
-		echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
 	}
-	echo '</ul>';
 	
 }
 
@@ -1237,35 +1245,38 @@ function generate_sitemap($str){
 		$posts = get_post_unsorted();
 		$tags = array();
 		
-		foreach($posts as $index => $v){
-		
-			$arr = explode('_', $v);
+		if(!empty($posts)) {
+			foreach($posts as $index => $v){
 			
-			$data = $arr[1];
-			$mtag = explode(',', $data);
-			foreach($mtag as $etag) {
-				$tags[] = $etag;
+				$arr = explode('_', $v);
+				
+				$data = $arr[1];
+				$mtag = explode(',', $data);
+				foreach($mtag as $etag) {
+					$tags[] = $etag;
+				}
+				
 			}
 			
-		}
-		
-		foreach($tags as $t) {
-			$tag[] = site_url() . 'tag/' . $t;
-		}
-		
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-		
-		if(isset($tag)) {
-		
-			$tag = array_unique($tag, SORT_REGULAR);
-			
-			foreach($tag as $t) {
-				echo '<url><loc>' . $t . '</loc><priority>0.5</priority></url>';
+			foreach($tags as $t) {
+				$tag[] = site_url() . 'tag/' . $t;
 			}
+			
+			echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+			
+			if(isset($tag)) {
+			
+				$tag = array_unique($tag, SORT_REGULAR);
+				
+				foreach($tag as $t) {
+					echo '<url><loc>' . $t . '</loc><priority>0.5</priority></url>';
+				}
+			
+			}
+			
+			echo '</urlset>';
 		
 		}
-		
-		echo '</urlset>';
 		
 	}
 	elseif ($str == 'archive') {
@@ -1362,6 +1373,20 @@ function generate_json($posts){
 function is_front() {
 	$req = $_SERVER['REQUEST_URI'];
 	if($req == site_path() . '/') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+// TRUE if the current page is an index page like frontpage, tag index, archive index and search index.
+function is_index() {
+	$req = $_SERVER['REQUEST_URI'];
+	if(strpos($req, 'archive') !== false || strpos($req, 'tag') !== false || strpos($req, 'search') !== false){
+		return true;
+	}
+	elseif($req == site_path() . '/') {
 		return true;
 	}
 	else {
