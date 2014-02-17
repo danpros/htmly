@@ -30,9 +30,9 @@
 				<header id="header">
 					<section id="branding">
 						<?php if(is_index()) {?>
-							<h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
+							<h1 class="blog-title"><a rel="home" href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
 						<?php } else {?>
-							<h2 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h2>
+							<h2 class="blog-title"><a rel="home" href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h2>
 						<?php } ?>
 						<div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
 					</section>

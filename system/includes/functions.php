@@ -1383,10 +1383,7 @@ function is_front() {
 // TRUE if the current page is an index page like frontpage, tag index, archive index and search index.
 function is_index() {
 	$req = $_SERVER['REQUEST_URI'];
-	if(strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false){
-		return true;
-	}
-	elseif($req == site_path() . '/') {
+	if(strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || $req == site_path() . '/'){
 		return true;
 	}
 	else {
