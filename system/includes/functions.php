@@ -81,6 +81,22 @@ function get_author_names(){
 	return $_cache;
 }
 
+// Get backup file. 
+function get_zip_files(){
+
+	static $_cache = array();
+
+	if(empty($_cache)){
+
+		// Get the names of all the
+		// zip files.
+
+		$_cache = glob('backup/*.zip');
+	}
+
+	return $_cache;
+}
+
 // usort function. Sort by filename.
 function sortfile($a, $b) {
 	return $a['filename'] == $b['filename'] ? 0 : ( $a['filename'] < $b['filename'] ) ? 1 : -1;
@@ -967,8 +983,60 @@ EOF;
 // Menu
 function menu(){
 	$menu = config('blog.menu');
+	$req = $_SERVER['REQUEST_URI'];
+	
 	if (!empty($menu)) {
-		return $menu;
+	
+		$links = explode('|', $menu);
+		
+		echo '<ul class="nav">';
+		if($req == site_path() . '/') {
+			echo '<li class="item first active"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		}
+		else {
+			echo '<li class="item first"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		}
+		
+		$i = 0; 
+		$len = count($links);
+		
+		foreach($links as $link) {
+		
+			if ($i == $len - 1) {
+				$class = 'item last';
+			}
+			else {
+				$class = 'item';
+			}
+			$i++;
+			
+			$anc = explode('->', $link);
+			
+			if(isset($anc[0]) && isset($anc[1])) {
+			
+				if(strpos($link, site_url()) !== false) {
+					$id = substr($link, strrpos($link, '/')+1 );
+					$file = 'content/static/' . $id . '.md';
+					if(file_exists($file)) {
+						if(strpos($req, $id) !== false){
+							echo '<li class="' . $class . ' active"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+						}
+						else {
+							echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+						}
+					}
+					else {
+						echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+					}
+				}
+				else {
+					echo '<li class="' . $class . '"><a target="_blank" href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+				}
+				
+			}
+		}
+		
+		echo '</ul>';
 	}
 	else {
 		get_menu();
@@ -1033,6 +1101,17 @@ function get_menu() {
 				
 		}
 		echo '</ul>';
+	
+	}
+	else {
+	
+		echo '<ul class="nav">';
+		if($req == site_path() . '/') {
+			echo '<li class="item first active"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		}
+		else {
+			echo '<li class="item first"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+		}
 	
 	}
 	
@@ -1369,6 +1448,55 @@ function generate_json($posts){
 	return json_encode($posts);
 }
 
+
+// Create Zip files
+function Zip($source, $destination, $include_dir = false)
+{
+
+    if (!extension_loaded('zip') || !file_exists($source)) {
+        return false;
+    }
+
+    if (file_exists($destination)) {
+        unlink ($destination);
+    }
+
+    $zip = new ZipArchive();
+    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+        return false;
+    }
+
+    if (is_dir($source) === true)
+    {
+
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file)
+        {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+                continue;
+
+            if (is_dir($file) === true)
+            {
+                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+            }
+            else if (is_file($file) === true)
+            {
+                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+            }
+        }
+    }
+    else if (is_file($source) === true)
+    {
+        $zip->addFromString(basename($source), file_get_contents($source));
+    }
+
+    return $zip->close();
+}
+
 // TRUE if the current page is the front page.
 function is_front() {
 	$req = $_SERVER['REQUEST_URI'];
@@ -1472,6 +1600,7 @@ EOF;
 	echo '<li><a href="'.$base.'add/page">Add page</a></li>';
 	echo '<li><a href="'.$base.'edit/profile">Edit profile</a></li>';
 	echo '<li><a href="'.$base.'admin/import">Import</a></li>';
+	echo '<li><a href="'.$base.'admin/backup">Backup</a></li>';
 	echo '<li><a href="'.$base.'logout">Logout</a></li>';
 		
 	echo '</ul></div>';

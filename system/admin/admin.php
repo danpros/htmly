@@ -1,5 +1,6 @@
 <?php
 
+// Return username.ini value
 function user($key, $user=null) {
 	$value = 'config/users/' . $user . '.ini';
 	static $_config = array();
@@ -11,6 +12,7 @@ function user($key, $user=null) {
 	}
 }
 
+// Create a session
 function session($user, $pass, $str = null) {
 		$user_file = 'config/users/' . $user . '.ini';
 		$user_pass = user('password', $user);
@@ -29,6 +31,7 @@ function session($user, $pass, $str = null) {
 		}
 }
 
+// Edit blog posts
 function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) {
 
 	$oldurl = explode('_', $oldfile);
@@ -80,6 +83,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 		
 }
 
+// Edit static page
 function edit_page($title, $url, $content, $oldfile, $destination = null) {
 
 	$dir = substr($oldfile, 0, strrpos($oldfile, '/'));
@@ -118,6 +122,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 		
 }
 
+// Add blog post
 function add_post($title, $tag, $url, $content, $user) {
 
 	$post_date = date('Y-m-d-H-i-s');
@@ -149,6 +154,7 @@ function add_post($title, $tag, $url, $content, $user) {
 	
 }
 
+// Add static page
 function add_page($title, $url, $content) {
 
 	$post_title = $title;
@@ -177,6 +183,7 @@ function add_page($title, $url, $content) {
 	
 }
 
+// Delete blog post
 function delete_post($file, $destination) {
 	$deleted_content = $file;
 	if(!empty($deleted_content)) {
@@ -192,6 +199,7 @@ function delete_post($file, $destination) {
 	}
 }
 
+// Delete static page
 function delete_page($file, $destination) {
 	$deleted_content = $file;
 	if(!empty($deleted_content)) {
@@ -207,6 +215,7 @@ function delete_page($file, $destination) {
 	}
 }
 
+// Edit user profile
 function edit_profile($title, $content, $user) {
 
 	$user_title = $title;
@@ -231,6 +240,7 @@ function edit_profile($title, $content, $user) {
 	
 }
 
+// Import RSS feed
 function migrate($title, $time, $tags, $content, $url, $user, $source) {
 
 	$post_date = date('Y-m-d-H-i-s', $time);
@@ -267,6 +277,7 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 	
 }
 
+// Fetch RSS feed
 function get_feed($feed_url, $credit, $message=null) {  
     $source = file_get_contents($feed_url);
     $feed = new SimpleXmlElement($source);
@@ -310,6 +321,7 @@ function get_feed($feed_url, $credit, $message=null) {
 	
 }  
 
+// Get recent posts by user
 function get_recent_posts() {
 	if (isset($_SESSION['user'])) {
 		$posts = get_profile($_SESSION['user'], 1, 5);
@@ -340,7 +352,7 @@ function get_recent_posts() {
 	}
 }
 
-// Auto generate menu from static page
+// Get all static pages
 function get_recent_pages() {
 	if (isset($_SESSION['user'])) {
 		$posts = get_static_post(null);
@@ -366,6 +378,56 @@ function get_recent_pages() {
 				echo '</tr>';
 			}
 			echo '</table>';
+		}
+	}
+}
+
+// Get all available zip files
+function get_backup_files () {
+	if (isset($_SESSION['user'])) {
+		$files = get_zip_files();
+		if(!empty($files)) {
+			krsort($files);
+			echo '<table class="backup-list">';
+			echo '<tr class="head"><th>Filename</th><th>Date</th><th>Operations</th></tr>';
+			$i = 0; $len = count($files);
+			foreach($files as $file) {
+			
+				if ($i == 0) {
+					$class = 'item first';
+				} 
+				elseif ($i == $len - 1) {
+					$class = 'item last';
+				}
+				else {
+					$class = 'item';
+				}
+				$i++;
+				
+				// Extract the date
+				$arr = explode('_', $file);
+				
+				// Replaced string
+				$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+				
+				$name = str_replace($replaced,'',$file);
+				
+				$date = str_replace('.zip','',$arr[1]);
+				$t = str_replace('-', '', $date);
+				$time = new DateTime($t);
+				$timestamp= $time->format("D, d F Y, H:i:s");
+				
+				$url = site_url() . $file;
+				echo '<tr class="' . $class . '">';
+				echo '<td>' . $name . '</td>';
+				echo '<td>' . $timestamp . '</td>';
+				echo '<td><a target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $file . '"/><input type="submit" name="submit" value="Delete"/></form></td>';
+				echo '</tr>';
+			}
+			echo '</table>';
+		}
+		else {
+			echo 'No available backup!';
 		}
 	}
 }

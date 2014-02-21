@@ -862,6 +862,41 @@ post('/admin/import', function() {
 	
 });
 
+// Backup page
+get('/admin/backup',function(){
+	if(login()) {
+		config('views.root', 'system/admin/views');
+		render('backup', array(
+			'head_contents' => head_contents('Backup content - ' . blog_title(), blog_description(), site_url()),
+			'bodyclass' => 'backup',
+			'breadcrumb' => '<a href="' . site_url() . '">' .config('breadcrumb.home'). '</a> &#187; Backup'
+		));
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+	die;
+});
+
+// Create Zip file
+get('/admin/backup-start',function(){
+	if(login()) {
+		config('views.root', 'system/admin/views');
+		render('backup-start', array(
+			'head_contents' => head_contents('Backup content started - ' . blog_title(), blog_description(), site_url()),
+			'bodyclass' => 'startbackup',
+			'breadcrumb' => '<a href="' . site_url() . '">' .config('breadcrumb.home'). '</a> &#187; Backup started'
+		));
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+	die;
+});
+
+
 // The tag page
 get('/tag/:tag',function($tag){
 
