@@ -36,6 +36,7 @@ Features
 - Responsive design
 - Lightbox
 - User role
+- Online backup
 
 Requirements
 ------------
