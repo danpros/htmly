@@ -891,40 +891,8 @@ function recent_comments(){
 			var heading ='<h3>Comments</h3>';
 			document.write(heading);
 		</script>
-		<script type="text/javascript" src="http://{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
-		<style>
-			li.dsq-widget-item {
-				border-bottom: 1px solid #ebebeb;
-				margin:0;
-				margin-bottom:10px;
-				padding:0;
-				padding-bottom:10px;
-			}
-			a.dsq-widget-user {
-				font-weight:normal;
-			}
-			img.dsq-widget-avatar {
-				margin-right:10px; 
-			}
-			.dsq-widget-comment {
-				display:block;
-				padding-top:5px;
-			}
-			.dsq-widget-comment p {
-				display:block;
-				margin:0;
-			}
-			p.dsq-widget-meta {
-				padding-top:5px;
-				margin:0;
-			}
-			#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {
-				background: transparent;
-			}
-			#dsq-combo-widget.grey #dsq-combo-tabs li {
-				background: none repeat scroll 0 0 #DDDDDD;
-			}
-		</style>
+		<script type="text/javascript" src="//{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
+		<style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
 EOF;
 	if (!empty($disqus) && $comment == 'disqus') {
 		return $script;
@@ -990,31 +958,29 @@ function menu(){
 		$links = explode('|', $menu);
 		
 		echo '<ul class="nav">';
-		if($req == site_path() . '/') {
-			echo '<li class="item first active"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
-		}
-		else {
-			echo '<li class="item first"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
-		}
 		
 		$i = 0; 
 		$len = count($links);
 		
 		foreach($links as $link) {
 		
-			if ($i == $len - 1) {
+			if ($i == 0) {
+				$class = 'item first';
+			} 
+			elseif ($i == $len - 1) {
 				$class = 'item last';
 			}
 			else {
 				$class = 'item';
 			}
-			$i++;
+			
+			$i++;	
 			
 			$anc = explode('->', $link);
 			
 			if(isset($anc[0]) && isset($anc[1])) {
 			
-				if(strpos($link, site_url()) !== false) {
+				if(strpos(rtrim($anc[1],'/').'/', site_url()) !== false) {
 					$id = substr($link, strrpos($link, '/')+1 );
 					$file = 'content/static/' . $id . '.md';
 					if(file_exists($file)) {
@@ -1026,7 +992,14 @@ function menu(){
 						}
 					}
 					else {
-						echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+						if (rtrim($anc[1],'/').'/' == site_url()) {
+							if($req == site_path() . '/') {
+								echo '<li class="' . $class . ' active"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+							}
+							else {
+								echo '<li class="' . $class . '"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
+							}
+						}
 					}
 				}
 				else {
@@ -1112,6 +1085,7 @@ function get_menu() {
 		else {
 			echo '<li class="item first"><a href="' . site_url() . '">' .config('breadcrumb.home'). '</a></li>';
 		}
+		echo '</ul>';
 	
 	}
 	
@@ -1448,53 +1422,48 @@ function generate_json($posts){
 	return json_encode($posts);
 }
 
-
 // Create Zip files
-function Zip($source, $destination, $include_dir = false)
-{
+function Zip($source, $destination, $include_dir = false) {
 
-    if (!extension_loaded('zip') || !file_exists($source)) {
-        return false;
-    }
+	if (!extension_loaded('zip') || !file_exists($source)) {
+		return false;
+	}
 
-    if (file_exists($destination)) {
-        unlink ($destination);
-    }
+	if (file_exists($destination)) {
+		unlink ($destination);
+	}
 
-    $zip = new ZipArchive();
-    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
-        return false;
-    }
+	$zip = new ZipArchive();
+	
+	if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+		return false;
+	}
 
-    if (is_dir($source) === true)
-    {
+	if (is_dir($source) === true) {
 
-        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
 
-        foreach ($files as $file)
-        {
-            $file = str_replace('\\', '/', $file);
+		foreach ($files as $file) {
+			$file = str_replace('\\', '/', $file);
 
-            // Ignore "." and ".." folders
-            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
-                continue;
+			// Ignore "." and ".." folders
+			if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+				continue;
 
-            if (is_dir($file) === true)
-            {
-                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-            }
-            else if (is_file($file) === true)
-            {
-                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
-            }
-        }
-    }
-    else if (is_file($source) === true)
-    {
-        $zip->addFromString(basename($source), file_get_contents($source));
-    }
+			if (is_dir($file) === true) {
+				$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+			}
+			else if (is_file($file) === true) {
+				$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+			}
+		}
+		
+	}
+	else if (is_file($source) === true) {
+		$zip->addFromString(basename($source), file_get_contents($source));
+	}
 
-    return $zip->close();
+	return $zip->close();
 }
 
 // TRUE if the current page is the front page.

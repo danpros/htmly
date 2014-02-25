@@ -43,6 +43,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 	$post_url = preg_replace('/[^A-Za-z0-9 ,.-]/u', '', strtolower($url));
 	$post_url = str_replace(' ', '-',$post_url);
 	$post_url = str_replace('--', '-',$post_url);
+	$post_url = str_replace('--', '-',$post_url);
 	$post_url = rtrim(ltrim($post_url, ',\.\-'), ',\.\-');
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 		
@@ -92,6 +93,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 	$post_url = preg_replace('/[^A-Za-z0-9 ,.-]/u', '', strtolower($url));
 	$post_url = str_replace(' ', '-',$post_url);
 	$post_url = str_replace('--', '-',$post_url);
+	$post_url = str_replace('--', '-',$post_url);
 	$post_url = rtrim(ltrim($post_url, ',\.\-'), ',\.\-');
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 		
@@ -132,6 +134,7 @@ function add_post($title, $tag, $url, $content, $user) {
 	$post_url = preg_replace('/[^A-Za-z0-9 ,.-]/u', '', strtolower($url));
 	$post_url = str_replace(' ', '-',$post_url);
 	$post_url = str_replace('--', '-',$post_url);
+	$post_url = str_replace('--', '-',$post_url);
 	$post_url = rtrim(ltrim($post_url, ' \,\.\-'), ' \,\.\-');
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 	
@@ -160,6 +163,7 @@ function add_page($title, $url, $content) {
 	$post_title = $title;
 	$post_url = preg_replace('/[^A-Za-z0-9 ,.-]/u', '', strtolower($url));
 	$post_url = str_replace(' ', '-',$post_url);
+	$post_url = str_replace('--', '-',$post_url);
 	$post_url = str_replace('--', '-',$post_url);
 	$post_url = rtrim(ltrim($post_url, ',\.\-'), ',\.\-');
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
@@ -250,6 +254,7 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 	$post_url = preg_replace('/[^A-Za-z0-9 ,.-]/u', '', strtolower($url));
 	$post_url = str_replace(' ', '-',$post_url);
 	$post_url = str_replace('--', '-',$post_url);
+	$post_url = str_replace('--', '-',$post_url);
 	$post_url = rtrim(ltrim($post_url, ',\.\-'), ',\.\-');
 	if(!empty($source)) {
 		$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content . "\n\n" . 'Source: <a target="_blank" href="' . $source . '">' . $title . '</a>';
@@ -303,6 +308,7 @@ function get_feed($feed_url, $credit, $message=null) {
 			$user = $_SESSION['user'];
 			$url = preg_replace('/[^A-Za-z0-9 .-]/u', '', strtolower($title));
 			$url = str_replace(' ', '-',$url);
+			$url = str_replace('--', '-',$url);
 			$url = str_replace('--', '-',$url);
 			$url = rtrim($url, ',\.\-');
 			$url = ltrim($url, ',\.\-');
