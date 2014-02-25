@@ -8,7 +8,7 @@
 	<title>Search results not found! - <?php echo blog_title() ?></title>
 	<link href="<?php echo site_url() ?>themes/clean/css/style.css" rel="stylesheet" />
 	<!-- Include the Open Sans font -->
-	<link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet" />
+	<link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet" />
 </head>
 <body>
 	<div class="center message">
