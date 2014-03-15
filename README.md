@@ -82,7 +82,7 @@ url.rewrite-once = (
   "^/(themes|system|vendor)/(.*)" => "$0",
   "^/(.*\.php)" => "$0",
 
-  # Everything else is handles by Wordpress
+  # Everything else is handles by htmly
   "^/(.*)$" => "/index.php/$1"
 )
 ````
