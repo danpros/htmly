@@ -64,6 +64,29 @@ Admin role can edit/delete all users posts.
 
 You can login to admin panel at `www.example.com/login`.
 
+### Lighttpd
+Here a example configuration
+
+````
+$HTTP["url"] =~ "^/config" {
+  url.access-deny = ( "" )
+}
+$HTTP["url"] =~ "^/system/includes" {
+  url.access-deny = ( "" )
+}
+$HTTP["url"] =~ "^/system/admin/views" {
+  url.access-deny = ( "" )
+}
+
+url.rewrite-once = (
+  "^/(themes|system|vendor)/(.*)" => "$0",
+  "^/(.*\.php)" => "$0",
+
+  # Everything else is handles by Wordpress
+  "^/(.*)$" => "/index.php/$1"
+)
+````
+
 Both Online or Offline
 ----------------------
 In addition by using the built-in editor in the admin panel, you can also write it offline and then upload them into `content/username/blog` folder (the username must match with `YourUsername.ini` above). 
