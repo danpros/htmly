@@ -87,6 +87,38 @@ url.rewrite-once = (
 )
 ````
 
+### Nginx
+Here a basic configuration for nginx.
+
+````
+server {
+  listen 80;
+
+  server_name example.com www.example.com;
+  root /usr/share/nginx/html;
+
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log error;
+
+  index index.php;
+
+  location ~ /config/ {
+     deny all;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php;
+  }
+
+  location ~ \.php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+  }
+}
+````
+
 Both Online or Offline
 ----------------------
 In addition by using the built-in editor in the admin panel, you can also write it offline and then upload them into `content/username/blog` folder (the username must match with `YourUsername.ini` above). 
