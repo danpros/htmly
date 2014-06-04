@@ -25,7 +25,7 @@ function session($user, $pass, $str = null) {
 				header('location: admin');
 			}
 			else {
-				return $str = '<li>Your username and password mismatch.</li>';
+				return $str = '<li>X'.$pass.'X - X'.$password.'X - X'.$user_enc.'X</li><li>Your username and password mismatch.</li>';
 			}
 		}
 		else {
@@ -127,9 +127,9 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 }
 
 // Add blog post
-function add_post($title, $tag, $url, $content, $user, $date = date('Y-m-d-H-i-s')) {
+function add_post($title, $tag, $url, $content, $user) {
 
-	$post_date = $date;
+	$post_date = date('Y-m-d-H-i-s');
 	$post_title = $title;
 	$post_tag = preg_replace('/[^A-Za-z0-9,.-]/u', '', $tag);
 	$post_tag = rtrim(ltrim($post_tag, ',\.\-'), ',\.\-');
