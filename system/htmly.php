@@ -147,11 +147,12 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 
 	$user = $_SESSION['user'];
 	$role = user('role', $user);
+	$draft = (strpos(from($_GET, 'destination'),'draft') !== false)?true:false;
 
 	if(login()) {
 
 		config('views.root', 'system/admin/views');
-		$post = find_post($year, $month, $name);
+		$post = find_post($year, $month, $name, $draft);
 		
 		if(!$post){
 			not_found();
@@ -191,6 +192,8 @@ post('/:year/:month/:name/edit', function() {
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
 	$destination = from($_GET, 'destination');
+	$draft = (strpos($destination,'draft') !== false)?true:false;
+
 	if(!empty($title) && !empty($tag) && !empty($content)) {
 		if(!empty($url)) {
 			edit_post($title, $tag, $url, $content, $oldfile, $destination);
@@ -388,7 +391,6 @@ get('/admin/posts', function () {
 			$perpage = 20;
 			
 			$posts = get_posts(null, $page, $perpage);
-			
 			$total = '';
 			
 			if(empty($posts) || $page < 1){
@@ -429,6 +431,63 @@ get('/admin/posts', function () {
 		header("location: $login");
 	}
 });
+
+get('/admin/drafts', function () {
+
+	$user = $_SESSION['user'];
+	$role = user('role', $user);
+	if(login()) {
+	
+		config('views.root', 'system/admin/views');
+		if($role === 'admin') {
+	
+			config('views.root', 'system/admin/views');
+			$page = from($_GET, 'page');
+			$page = $page ? (int)$page : 1;
+			$perpage = 20;
+			
+			$drafts = get_posts(null, $page, $perpage, true);
+			$total = '';
+			
+			if(empty($drafts) || $page < 1){
+			
+				// a non-existing page
+				render('no-posts',array(
+					'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
+					'bodyclass' => 'noposts',
+				));
+				
+				die;
+			}
+			
+			$tl = blog_tagline();
+			
+			if($tl){ $tagline = ' - ' . $tl;} else {$tagline = '';}
+			
+			render('posts-list',array(
+				'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
+				'heading' => 'All blog drafts',
+				'page' => $page,
+				'posts' => $drafts,
+				'bodyclass' => 'all-posts',
+				'breadcrumb' => '',
+				'pagination' => has_pagination($total, $perpage, $page),
+			));
+		}
+		else {
+			render('denied',array(
+				'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
+				'bodyclass' => 'denied',
+				'breadcrumb' => '',
+			));
+		}
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+});
+
 
 // The author page
 get('/admin/mine', function(){
@@ -481,6 +540,65 @@ get('/admin/mine', function(){
 			'bodyclass' => 'userposts',
 			'breadcrumb' => '<a href="' . site_url() .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
 			'pagination' => has_pagination($total, $perpage, $page)
+		));
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+});
+
+get('/admin/minedrafts', function(){
+
+	if(login()) {
+
+		config('views.root', 'system/admin/views');
+
+		$profile = $_SESSION['user'];
+
+		$page = from($_GET, 'page');
+		$page = $page ? (int)$page : 1;
+		$perpage = config('profile.perpage');
+
+		$drafts = get_profile($profile, $page, $perpage, true);
+		
+		$total = get_count($profile, 'dirname');
+		
+		$bio = get_bio($profile);
+		
+		if(isset($bio[0])) {
+			$bio = $bio[0];
+		}
+		else {
+			$bio = default_profile($profile);
+		}
+		
+		if(empty($drafts) || $page < 1){
+			render('user-posts',array(
+				'head_contents' => head_contents('My blog posts - ' . blog_title(), blog_description(), site_url()),
+				'page' => $page,
+				'heading' => 'My drafts',
+				'posts' => null,
+				'bio' => $bio->body,
+				'name' => $bio->title,
+				'bodyclass' => 'userposts',
+				'breadcrumb' => '<a href="' . site_url() .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
+				'pagination' => has_pagination($total, $perpage, $page)
+			));
+			die;
+		}
+		
+		render('user-posts',array(
+			'head_contents' => head_contents('My blog posts - ' . blog_title(), blog_description(), site_url()),
+			'heading' => 'My drafts',
+			'page' => $page,
+			'posts' => $drafts,
+			'bio' => $bio->body,
+			'name' => $bio->title,
+			'bodyclass' => 'userposts',
+			'breadcrumb' => '<a href="' . site_url() .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
+			'pagination' => has_pagination($total, $perpage, $page),
+			'draft' => true
 		));
 	}
 	else {
