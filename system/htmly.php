@@ -399,6 +399,7 @@ get('/admin/posts', function () {
 				render('no-posts',array(
 					'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
 					'bodyclass' => 'noposts',
+					'draft' => false
 				));
 				
 				die;
@@ -415,7 +416,8 @@ get('/admin/posts', function () {
 				'posts' => $posts,
 				'bodyclass' => 'all-posts',
 				'breadcrumb' => '',
-				'pagination' => has_pagination($total, $perpage, $page)
+				'pagination' => has_pagination($total, $perpage, $page),
+				'draft' => false
 			));
 		}
 		else {
@@ -455,6 +457,7 @@ get('/admin/drafts', function () {
 				render('no-posts',array(
 					'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
 					'bodyclass' => 'noposts',
+					'draft' => true,
 				));
 				
 				die;
@@ -525,7 +528,8 @@ get('/admin/mine', function(){
 				'name' => $bio->title,
 				'bodyclass' => 'userposts',
 				'breadcrumb' => '<a href="' . site_url() .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
-				'pagination' => has_pagination($total, $perpage, $page)
+				'pagination' => has_pagination($total, $perpage, $page),
+				'draft' => false
 			));
 			die;
 		}
@@ -583,7 +587,8 @@ get('/admin/minedrafts', function(){
 				'name' => $bio->title,
 				'bodyclass' => 'userposts',
 				'breadcrumb' => '<a href="' . site_url() .  '">' .config('breadcrumb.home'). '</a> &#187; Profile for: ' . $bio->title,
-				'pagination' => has_pagination($total, $perpage, $page)
+				'pagination' => has_pagination($total, $perpage, $page),
+				'draft' => true
 			));
 			die;
 		}

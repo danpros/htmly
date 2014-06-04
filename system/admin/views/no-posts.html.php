@@ -1,1 +1,1 @@
-<h1>No posts found!</h1>
+<h1>No <?php echo ($draft)?'drafts':'posts';?> found!</h1>

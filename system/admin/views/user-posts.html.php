@@ -34,4 +34,4 @@
 		<?php endif;?>
 	</div>
 <?php endif;?>
-<?php } else { echo 'No posts found!'; }?>
+<?php } else { echo 'No '.(($draft)?'drafts':'posts').' found!'; }?>
