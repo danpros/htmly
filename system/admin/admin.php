@@ -16,9 +16,11 @@ function user($key, $user=null) {
 function session($user, $pass, $str = null) {
 		$user_file = 'config/users/' . $user . '.ini';
 		$user_pass = user('password', $user);
-		
+		$user_enc = user('encryption', $user);
+		$password = (strlen($user_enc) > 0 && $user_enc !== 'clear')?hash($user_enc,$pass):$pass;
+
 		if(file_exists($user_file)) {
-			if($pass === $user_pass) {
+			if($password === $user_pass) {
 				$_SESSION['user'] = $user;
 				header('location: admin');
 			}
@@ -125,9 +127,9 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 }
 
 // Add blog post
-function add_post($title, $tag, $url, $content, $user) {
+function add_post($title, $tag, $url, $content, $user, $date = date('Y-m-d-H-i-s')) {
 
-	$post_date = date('Y-m-d-H-i-s');
+	$post_date = $date;
 	$post_title = $title;
 	$post_tag = preg_replace('/[^A-Za-z0-9,.-]/u', '', $tag);
 	$post_tag = rtrim(ltrim($post_tag, ',\.\-'), ',\.\-');
