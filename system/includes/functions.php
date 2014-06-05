@@ -1582,3 +1582,28 @@ EOF;
 		
 	echo '</ul></div>';
 }
+
+//move drafts to posts
+
+function check_drafts_to_posts() {
+	$datacorrente =  date('U'); //strtotime("now");
+	foreach (get_post_sorted(true) as $index => $fileinfo) {
+		/*
+		var_dump($fileinfo);
+		echo '<br>';
+		echo date('Y-m-d-H-m-s');
+		echo '<br>';
+		*/
+		$data = DateTime::createFromFormat('Y-m-d-H-m-s',explode('_',$fileinfo['filename'])[0])->format('U');
+		//echo $datacorrente . " - " . $data;
+		if ($datacorrente >= $data) {
+			$oldfile = $fileinfo['dirname'].'/'.$fileinfo['basename'];
+			$temparray = explode('/',$fileinfo['dirname']);
+			array_shift($temparray);
+			$newfile = 'content/' . implode('/',$temparray) . '/' . $fileinfo['basename'];
+			$contenuto = file_get_contents($oldfile);
+			if (file_put_contents($newfile,$contenuto))
+				unlink($oldfile);
+		}
+	}
+}

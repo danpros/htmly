@@ -22,6 +22,8 @@ get('/index', function () {
 	$page = $page ? (int)$page : 1;
 	$perpage = config('posts.perpage');
 	
+	check_drafts_to_posts();
+
 	$posts = get_posts(null, $page, $perpage);
 	
 	$total = '';
@@ -183,6 +185,7 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 	}
 });
 
+
 // Get edited data for blog post
 post('/:year/:month/:name/edit', function() {
 	
@@ -192,15 +195,16 @@ post('/:year/:month/:name/edit', function() {
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
 	$destination = from($_GET, 'destination');
+	$datetime = from($_REQUEST, 'datetime');
 	$draft = (strpos($destination,'draft') !== false)?true:false;
 
 	if(!empty($title) && !empty($tag) && !empty($content)) {
 		if(!empty($url)) {
-			edit_post($title, $tag, $url, $content, $oldfile, $destination);
+			edit_post($title, $tag, $url, $content, $oldfile, $destination,$datetime);
 		}
 		else {
 			$url = $title;
-			edit_post($title, $tag, $url, $content, $oldfile, $destination);
+			edit_post($title, $tag, $url, $content, $oldfile, $destination,$datetime);
 		}
 	}
 	else {
@@ -272,11 +276,54 @@ get('/:year/:month/:name/delete', function($year, $month, $name){
 	}
 });
 
-// Get deleted data for blog post
-post('/:year/:month/:name/delete', function() {
+// Delete blog post
+get('/:year/:month/:name/deletedraft', function($year, $month, $name){
 
+	$user = $_SESSION['user'];
+	
+	$role = user('role', $user);
+
+	if(login()) {
+	
+		config('views.root', 'system/admin/views');
+		$post = find_post($year, $month, $name, true);
+		
+		if(!$post){
+			not_found();
+		}
+		
+		$current = $post['current'];
+		
+		if($user === $current->author || $role === 'admin') {
+			render('delete-post',array(
+				'head_contents' => head_contents('Delete post - ' . blog_title(), blog_description(), site_url()),
+				'p' => $current,
+				'bodyclass' => 'deletepost',
+				'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
+			));
+		}
+		else {
+			render('denied',array(
+				'head_contents' => head_contents('Delete post - ' . blog_title(), blog_description(), site_url()),
+				'p' => $current,
+				'bodyclass' => 'deletepost',
+				'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() .  '">' .config('breadcrumb.home'). '</a></span> &#187; '. $current->tagb . ' &#187; ' . $current->title
+			));
+		}
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+});
+
+
+
+// Get deleted data for blog post
+post('/:year/:month/:name/deletedraft', function() {
+	$draft = false;
 	$file = from($_REQUEST, 'file');
-	$destination = from($_GET, 'destination');	
+	$destination = from($_GET, 'destination');
 	delete_post($file, $destination);
 	
 });
@@ -475,6 +522,7 @@ get('/admin/drafts', function () {
 				'bodyclass' => 'all-posts',
 				'breadcrumb' => '',
 				'pagination' => has_pagination($total, $perpage, $page),
+				'draft' => true,
 			));
 		}
 		else {
@@ -830,19 +878,19 @@ get('/add/post', function(){
 
 // Get submitted blog post data
 post('/add/post', function(){
-
 	$title = from($_REQUEST, 'title');
 	$tag = from($_REQUEST, 'tag');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
+	$datetime = from($_REQUEST, 'datetime');
 	$user = $_SESSION['user'];
 	if(!empty($title) && !empty($tag) && !empty($content)) {
 		if(!empty($url)) {
-			add_post($title, $tag, $url, $content, $user);
+			add_post($title, $tag, $url, $content, $user,$datetime);
 		}
 		else {
 			$url = $title;
-			add_post($title, $tag, $url, $content, $user);
+			add_post($title, $tag, $url, $content, $user,$datetime);
 		}
 	}
 	else {
@@ -1150,6 +1198,8 @@ get('/feed/opml',function(){
 // nothing has been matched above
 
 get('.*',function(){
+	echo '<hr>';
+	die(var_dump($_GET));
 	not_found();
 });
 

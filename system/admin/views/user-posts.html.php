@@ -17,7 +17,7 @@
 			$i++;		
 		?>
 	<tr class="<?php echo $class ?>">
-		<td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
+		<td><a target="_blank" href="<?php echo $p->url ?><?php if ($draft) { echo '/edit?destination=admin/minedrafts'; } ?>"><?php echo $p->title ?></a></td>
 		<td><?php echo date('d F Y', $p->date) ?></td>
 		<td><?php echo $p->tag ?></td>
 		<td><a href="<?php echo $p->url ?>/edit?destination=admin/mine<?php if ($draft) { echo 'drafts'; } ?>">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/mine<?php if ($draft) { echo 'drafts'; } ?>">Delete</a></td>
