@@ -1,3 +1,4 @@
+2014-06-05: Support for drafts
 2014-06-04: Encryption in username.ini password
 2014-02-25: HTTPS Support
 2014-02-15: HTMLy v1.2
