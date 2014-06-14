@@ -261,6 +261,7 @@ function get_tag($tag, $page, $perpage, $random){
 		$etag = explode(',', $tag);
 		foreach ($mtag as $t) {
 			foreach ($etag as $e) {
+				$e = trim($e);
 				if($t === $e){
 					$tmp[] = $v;
 				}
@@ -271,6 +272,8 @@ function get_tag($tag, $page, $perpage, $random){
 	if(empty($tmp)) {
 		not_found();
 	}
+	
+	$tmp = array_unique($tmp, SORT_REGULAR);
 	
 	return $tmp = get_posts($tmp, $page, $perpage);
 	
@@ -476,7 +479,7 @@ function get_related($tag) {
 	$posts = get_tag(strip_tags($tag), 1, $perpage+1, true);
 	$tmp = array();
 	$req = $_SERVER['REQUEST_URI'];
-	
+
 	foreach ($posts as $post) {
 		$url = $post->url;
 		if( strpos($url, $req) === false){
@@ -1469,7 +1472,7 @@ function Zip($source, $destination, $include_dir = false) {
 // TRUE if the current page is the front page.
 function is_front() {
 	$req = $_SERVER['REQUEST_URI'];
-	if($req == site_path() . '/') {
+	if($req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
 		return true;
 	}
 	else {
@@ -1480,7 +1483,7 @@ function is_front() {
 // TRUE if the current page is an index page like frontpage, tag index, archive index and search index.
 function is_index() {
 	$req = $_SERVER['REQUEST_URI'];
-	if(strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || $req == site_path() . '/'){
+	if(strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || $req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false){
 		return true;
 	}
 	else {
@@ -1516,11 +1519,10 @@ function authorinfo($title=null, $body=null) {
 }
 
 function head_contents($title, $description, $canonical) {
-
 	$styleImage = config('lightbox');
 	$jq = config('jquery');
 	$output = '';
-	
+
 	$title = '<title>' . $title . '</title>';
 	$favicon = '<link href="' . site_url() . 'favicon.ico" rel="icon" type="image/x-icon"/>';
 	$charset = '<meta charset="utf-8" />';
