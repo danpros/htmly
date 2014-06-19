@@ -43,6 +43,9 @@
 	
 	
 ?>
+<link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/jquery.datetimepicker.css" />
+<script src="<?php echo site_url() ?>system/admin/editor/js/jquery-2.1.1.min.js"></script>
+<script src="<?php echo site_url() ?>system/admin/editor/js/jquery.datetimepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css" />
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
@@ -56,6 +59,8 @@
 	Tag <span class="required">*</span> <br><input type="text" name="tag" class="text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error';}} ?>" value="<?php echo $oldtag?>"/><br><br>
 	Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
 	<span class="help">If the url leave empty we will use the post title.</span>
+	<br><br>
+	Date and Time (optional)<br><input id="datetimepicker" type="text" name="datetime" class="text" value="<?php echo $dt;?>" /><br>
 	<br><br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
@@ -72,4 +77,9 @@
 	
 	editor.run();
 })();
+</script>
+<script type="text/javascript">
+jQuery('#datetimepicker').datetimepicker({
+ format:'Y-m-d-H-i-s'
+});
 </script>

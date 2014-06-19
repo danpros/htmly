@@ -17,11 +17,11 @@
 			$i++;		
 		?>
 	<tr class="<?php echo $class ?>">
-		<td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
+		<td><a target="_blank" href="<?php echo $p->url . (($draft)?'/edit?destination=admin/drafts':'');?>"><?php echo $p->title ?></a></td>
 		<td><?php echo date('d F Y', $p->date) ?></td>
 		<td><a target="_blank" href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></td>
 		<td><?php echo $p->tag ?></td>
-		<td><a href="<?php echo $p->url ?>/edit?destination=admin/posts">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/posts">Delete</a></td>
+		<td><a href="<?php echo $p->url ?>/edit?destination=admin/<?php echo ($draft)?'drafts':'posts';?>">Edit</a> <a href="<?php echo $p->url ?>/delete<?php echo ($draft)?'draft':'';?>?destination=admin/<?php echo ($draft)?'drafts':'posts';?>">Delete</a></td>
 	</tr>
 	<?php endforeach;?>
 </table>

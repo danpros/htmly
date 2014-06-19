@@ -9,44 +9,49 @@ use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
 
 // Get blog post path. Unsorted. Mostly used on widget.
-function get_post_unsorted(){
+function get_post_unsorted($draft = false){
 
 	static $_cache = array();
 
 	if(empty($_cache)){
 
 		// Get the names of all the posts
-
-		$_cache = glob('content/*/blog/*.md', GLOB_NOSORT);
+		$folder = ($draft)?'draft/*/blog/*.md':'content/*/blog/*.md';
+		$_cache = glob($folder, GLOB_NOSORT);
 	}
 
 	return $_cache;
 }
 
 // Get blog post with more info about the path. Sorted by filename.
-function get_post_sorted(){
+function get_post_sorted($draft = false){
 
 	static $tmp= array();
 	
 	static $_cache = array();
-
-	if(empty($_cache)){
+	static $_cache_draft = array();
+	
+	if((!$draft && empty($_cache)) || ($draft && empty($_cache_draft))){
 
 		// Get the names of all the posts
-
-		$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+		$folder = (($draft)?'draft/*/blog/*.md':'content/*/blog/*.md');
+		$tmp = glob($folder, GLOB_NOSORT);
 		
 		if (is_array($tmp)) {
 			foreach($tmp as $file) {
-				$_cache[] = pathinfo($file);
+				if ($draft)
+					$_cache_draft[] = pathinfo($file);
+				else
+					$_cache[] = pathinfo($file);
 			}
 		}
 		
 	}
-	
-	usort($_cache, "sortfile");
-	
-	return $_cache;
+	if ($draft)
+		usort($_cache_draft, "sortfile");
+	else
+		usort($_cache, "sortfile");
+	return ($draft)?$_cache_draft:$_cache;
 }
 
 // Get static page path. Unsorted. 
@@ -108,10 +113,9 @@ function sortdate($a, $b) {
 }
 
 // Return blog posts. 
-function get_posts($posts, $page = 1, $perpage = 0){
-		
+function get_posts($posts, $page = 1, $perpage = 0 , $draft = false){
 	if(empty($posts)) {
-		$posts = get_post_sorted();
+		$posts = get_post_sorted($draft);
 	}
 	
 	$tmp = array();
@@ -196,9 +200,9 @@ function get_posts($posts, $page = 1, $perpage = 0){
 }
 
 // Find post by year, month and name, previous, and next.
-function find_post($year, $month, $name){
+function find_post($year, $month, $name,$draft = false){
 
-	$posts = get_post_sorted();
+	$posts = get_post_sorted($draft);
 	
 	foreach ($posts as $index => $v) {
 		$url = $v['basename'];
@@ -303,9 +307,9 @@ function get_archive($req, $page, $perpage){
 }
 
 // Return posts list on profile.
-function get_profile($profile, $page, $perpage){
+function get_profile($profile, $page, $perpage, $draft = false){
 
-	$posts = get_post_sorted();
+	$posts = get_post_sorted($draft);
 	
 	$tmp = array();
 	
@@ -1565,8 +1569,12 @@ function toolbar() {
 EOF;
 	echo '<div id="toolbar"><ul>';
 	echo '<li><a href="'.$base.'admin">Admin</a></li>';
-	if ($role === 'admin') {echo '<li><a href="'.$base.'admin/posts">Posts</a></li>';}
-	echo '<li><a href="'.$base.'admin/mine">Mine</a></li>';
+	if ($role === 'admin') {
+		echo '<li><a href="'.$base.'admin/posts">Posts</a></li>';
+		echo '<li><a href="'.$base.'admin/drafts">Drafts</a></li>';
+	}
+	echo '<li><a href="'.$base.'admin/mine">Mine Posts</a></li>';
+	echo '<li><a href="'.$base.'admin/minedrafts">Mine Drafts</a></li>';
 	echo '<li><a href="'.$base.'add/post">Add post</a></li>';
 	echo '<li><a href="'.$base.'add/page">Add page</a></li>';
 	echo '<li><a href="'.$base.'edit/profile">Edit profile</a></li>';
@@ -1575,4 +1583,29 @@ EOF;
 	echo '<li><a href="'.$base.'logout">Logout</a></li>';
 		
 	echo '</ul></div>';
+}
+
+//move drafts to posts
+
+function check_drafts_to_posts() {
+	$datacorrente =  date('U'); //strtotime("now");
+	foreach (get_post_sorted(true) as $index => $fileinfo) {
+		/*
+		var_dump($fileinfo);
+		echo '<br>';
+		echo date('Y-m-d-H-m-s');
+		echo '<br>';
+		*/
+		$data = DateTime::createFromFormat('Y-m-d-H-m-s',explode('_',$fileinfo['filename'])[0])->format('U');
+		//echo $datacorrente . " - " . $data;
+		if ($datacorrente >= $data) {
+			$oldfile = $fileinfo['dirname'].'/'.$fileinfo['basename'];
+			$temparray = explode('/',$fileinfo['dirname']);
+			array_shift($temparray);
+			$newfile = 'content/' . implode('/',$temparray) . '/' . $fileinfo['basename'];
+			$contenuto = file_get_contents($oldfile);
+			if (file_put_contents($newfile,$contenuto))
+				unlink($oldfile);
+		}
+	}
 }
