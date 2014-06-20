@@ -11,90 +11,127 @@ use \Suin\RSSWriter\Item;
 // Get blog post path. Unsorted. Mostly used on widget.
 function get_post_unsorted(){
 
-	static $_cache = array();
-
-	if(empty($_cache)){
-
-		// Get the names of all the posts
-
-		$_cache = glob('content/*/blog/*.md', GLOB_NOSORT);
+	static $_unsorted = array();
+	
+	if(empty($_unsorted)){
+	
+		$url = 'cache/index/index-unsorted.txt';
+		if (file_exists($url)) {
+			$_unsorted = unserialize(file_get_contents($url));
+		}
+		else {
+			rebuilt_cache('all');
+			$_unsorted = unserialize(file_get_contents($url));
+		}
+		
+		if(empty($_unsorted)){
+			$_unsorted = glob('content/*/blog/*.md', GLOB_NOSORT);
+		}
+		
 	}
 
-	return $_cache;
+	return $_unsorted;
 }
 
 // Get blog post with more info about the path. Sorted by filename.
 function get_post_sorted(){
 
-	static $tmp= array();
+	static $_sorted = array();
 	
-	static $_cache = array();
+	$url = 'cache/index/index-sorted.txt';
+	if (file_exists($url)) {
+		$_sorted = unserialize(file_get_contents($url));
+	}
+	else {
+		rebuilt_cache('all');
+		$_sorted = unserialize(file_get_contents($url));
+	}
 
-	if(empty($_cache)){
-
-		// Get the names of all the posts
-
-		$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
-		
-		if (is_array($tmp)) {
-			foreach($tmp as $file) {
-				$_cache[] = pathinfo($file);
-			}
+	if(empty($_sorted)){
+	
+		$url = 'cache/index/index-sorted.txt';
+		if (file_exists($url)) {
+			$_sorted = unserialize(file_get_contents($url));
+		}
+		else {
+			rebuilt_cache('all');
+			$_sorted = unserialize(file_get_contents($url));
 		}
 		
+		if(empty($_sorted)){
+			$tmp = array();
+			$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+			if (is_array($tmp)) {
+				foreach($tmp as $file) {
+					$_sorted[] = pathinfo($file);
+				}
+			}
+			usort($_sorted, "sortfile");
+		}
 	}
-	
-	usort($_cache, "sortfile");
-	
-	return $_cache;
+
+	return $_sorted;
 }
 
 // Get static page path. Unsorted. 
 function get_static_pages(){
 
-	static $_cache = array();
-
-	if(empty($_cache)){
-
-		// Get the names of all the
-		// static page.
-
-		$_cache = glob('content/static/*.md', GLOB_NOSORT);
+	static $_page = array();
+	
+	if(empty($_page)){
+		$url = 'cache/index/index-page.txt';
+		if (file_exists($url)) {
+			$_page = unserialize(file_get_contents($url));
+		}
+		else {
+			rebuilt_cache('all');
+			$_page = unserialize(file_get_contents($url));
+		}
+		
+		if(empty($_page)){
+			$_page = glob('content/static/*.md', GLOB_NOSORT);
+		}
 	}
 
-	return $_cache;
+	return $_page;
 }
 
 // Get author bio path. Unsorted. 
 function get_author_names(){
 
-	static $_cache = array();
+	static $_author = array();
 
-	if(empty($_cache)){
-
-		// Get the names of all the
-		// author.
-
-		$_cache = glob('content/*/author.md', GLOB_NOSORT);
+	if(empty($_author)){
+		$url = 'cache/index/index-author.txt';
+		if (file_exists($url)) {
+			$_author = unserialize(file_get_contents($url));
+		}
+		else {
+			rebuilt_cache('all');
+			$_author = unserialize(file_get_contents($url));
+		}
+		if(empty($_author)){
+			$_author = glob('content/*/author.md', GLOB_NOSORT);
+		}
 	}
 
-	return $_cache;
+	return $_author;
 }
 
 // Get backup file. 
 function get_zip_files(){
 
-	static $_cache = array();
+	static $_zip = array();
 
-	if(empty($_cache)){
+	if(empty($_zip)){
 
 		// Get the names of all the
 		// zip files.
 
-		$_cache = glob('backup/*.zip');
+		$_zip = glob('backup/*.zip');
 	}
 
-	return $_cache;
+	return $_zip;
 }
 
 // usort function. Sort by filename.
@@ -105,6 +142,82 @@ function sortfile($a, $b) {
 // usort function. Sort by date.
 function sortdate($a, $b) {
 	return $a->date == $b->date ? 0 : ( $a->date < $b->date ) ? 1 : -1;
+}
+
+// Rebuilt cache index
+function rebuilt_cache($type) {
+
+	$dir = 'cache/index';
+	$posts_cache_sorted = array();
+	$posts_cache_unsorted = array();
+	$page_cache = array();
+	$author_cache = array();
+	
+	if(is_dir($dir) === false) {
+		mkdir($dir, 0777, true);
+	}
+	
+	if($type === 'posts') {
+		$posts_cache_unsorted = glob('content/*/blog/*.md', GLOB_NOSORT);
+		$string = serialize($posts_cache_unsorted);
+		file_put_contents('cache/index/index-unsorted.txt', print_r($string, true));
+
+		$tmp= array();
+		$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+		
+		if (is_array($tmp)) {
+			foreach($tmp as $file) {
+				$posts_cache_sorted[] = pathinfo($file);
+			}
+		}
+		usort($posts_cache_sorted, "sortfile");
+		$string = serialize($posts_cache_sorted);
+		file_put_contents('cache/index/index-sorted.txt', print_r($string, true));
+		
+	}
+	
+	elseif ($type === 'page') {
+	
+		$page_cache = glob('content/static/*.md', GLOB_NOSORT);
+		$string = serialize($page_cache);
+		file_put_contents('cache/index/index-page.txt', print_r($string, true));
+		
+	}
+	
+	elseif ($type === 'author') {
+	
+		$author_cache = glob('content/*/author.md', GLOB_NOSORT);
+		$string = serialize($author_cache);
+		file_put_contents('cache/index/index-author.txt', print_r($string, true));
+	
+	}
+	
+	elseif ($type === 'all') {
+	
+		$posts_cache_unsorted = glob('content/*/blog/*.md', GLOB_NOSORT);
+		$string = serialize($posts_cache_unsorted);
+		file_put_contents('cache/index/index-unsorted.txt', print_r($string, true));
+		
+		$tmp= array();
+		$tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+		if (is_array($tmp)) {
+			foreach($tmp as $file) {
+				$posts_cache_sorted[] = pathinfo($file);
+			}
+		}
+		usort($posts_cache_sorted, "sortfile");
+		$string = serialize($posts_cache_sorted);
+		file_put_contents('cache/index/index-sorted.txt', print_r($string, true));
+		
+		$page_cache = glob('content/static/*.md', GLOB_NOSORT);
+		$string = serialize($page_cache);
+		file_put_contents('cache/index/index-page.txt', print_r($string, true));
+		
+		$author_cache = glob('content/*/author.md', GLOB_NOSORT);
+		$string = serialize($author_cache);
+		file_put_contents('cache/index/index-author.txt', print_r($string, true));
+		
+	}
 }
 
 // Return blog posts. 
@@ -1161,7 +1274,7 @@ function generate_rss($posts){
 	echo $feed;
 }
 
-// Return post, archive url. 
+// Return post, archive url for sitemap
 function get_path(){
 		
 	$posts = get_post_sorted();
@@ -1212,7 +1325,7 @@ function get_path(){
 	return $tmp;
 }
 
-// Return static page path.
+// Return static page path for sitemap
 function get_static_path(){
 
 	$posts = get_static_pages();
@@ -1572,6 +1685,7 @@ EOF;
 	echo '<li><a href="'.$base.'edit/profile">Edit profile</a></li>';
 	echo '<li><a href="'.$base.'admin/import">Import</a></li>';
 	echo '<li><a href="'.$base.'admin/backup">Backup</a></li>';
+	echo '<li><a href="'.$base.'admin/rebuilt-cache">Rebuilt cache</a></li>';
 	echo '<li><a href="'.$base.'logout">Logout</a></li>';
 		
 	echo '</ul></div>';

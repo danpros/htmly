@@ -145,10 +145,10 @@ get('/:year/:month/:name', function($year, $month, $name){
 // Edit blog post
 get('/:year/:month/:name/edit', function($year, $month, $name){
 
-	$user = $_SESSION['user'];
-	$role = user('role', $user);
-
 	if(login()) {
+	
+		$user = $_SESSION['user'];
+		$role = user('role', $user);
 
 		config('views.root', 'system/admin/views');
 		$post = find_post($year, $month, $name);
@@ -231,11 +231,10 @@ post('/:year/:month/:name/edit', function() {
 // Delete blog post
 get('/:year/:month/:name/delete', function($year, $month, $name){
 
-	$user = $_SESSION['user'];
-	
-	$role = user('role', $user);
-
 	if(login()) {
+	
+		$user = $_SESSION['user'];
+		$role = user('role', $user);
 	
 		config('views.root', 'system/admin/views');
 		$post = find_post($year, $month, $name);
@@ -887,6 +886,23 @@ get('/admin/backup-start',function(){
 			'head_contents' => head_contents('Backup content started - ' . blog_title(), blog_description(), site_url()),
 			'bodyclass' => 'startbackup',
 			'breadcrumb' => '<a href="' . site_url() . '">' .config('breadcrumb.home'). '</a> &#187; Backup started'
+		));
+	}
+	else {
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
+	die;
+});
+
+// Create Zip file
+get('/admin/rebuilt-cache',function(){
+	if(login()) {
+		config('views.root', 'system/admin/views');
+		render('rebuilt-cache', array(
+			'head_contents' => head_contents('Rebuilt cache started - ' . blog_title(), blog_description(), site_url()),
+			'bodyclass' => 'rebuiltcache',
+			'breadcrumb' => '<a href="' . site_url() . '">' .config('breadcrumb.home'). '</a> &#187; Rebuilt cache started'
 		));
 	}
 	else {

@@ -45,9 +45,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 	$oldurl = explode('_', $oldfile);
 
 	$post_title = $title;
-	$post_tag = preg_replace('/[^A-Za-z0-9,.-]/u', '', $tag);
-	$post_tag = str_replace(' ', '-',$post_tag);
-	$post_tag = rtrim(ltrim($post_tag, ',\.\-'), ',\.\-');
+	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.-]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag)); 
 	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 		
@@ -75,6 +73,8 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 		
 		// The post URL
 		$posturl = site_url().date('Y/m', $postdate).'/'.$post_url;
+		
+		rebuilt_cache('all');
 		
 		if ($destination == 'post') {
 			header("Location: $posturl");
@@ -112,6 +112,8 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 		
 		$posturl = site_url() . $post_url;
 		
+		rebuilt_cache('all');
+		
 		if ($destination == 'post') {
 			header("Location: $posturl");
 		}
@@ -129,8 +131,7 @@ function add_post($title, $tag, $url, $content, $user) {
 
 	$post_date = date('Y-m-d-H-i-s');
 	$post_title = $title;
-	$post_tag = preg_replace('/[^A-Za-z0-9,.-]/u', '', $tag);
-	$post_tag = rtrim(ltrim($post_tag, ',\.\-'), ',\.\-');
+	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.-]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag)); 
 	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 	
@@ -147,6 +148,9 @@ function add_post($title, $tag, $url, $content, $user) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
+		
+		rebuilt_cache('all');
+		
 		$redirect = site_url() . 'admin/mine';
 		header("Location: $redirect");	
 	}
@@ -173,6 +177,9 @@ function add_page($title, $url, $content) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
+		
+		rebuilt_cache('all');
+		
 		$redirect = site_url() . 'admin';
 		header("Location: $redirect");
 	}
@@ -184,6 +191,7 @@ function delete_post($file, $destination) {
 	$deleted_content = $file;
 	if(!empty($deleted_content)) {
 		unlink($deleted_content);
+		rebuilt_cache('all');
 		if($destination == 'post') {
 			$redirect = site_url();
 			header("Location: $redirect");
@@ -200,6 +208,7 @@ function delete_page($file, $destination) {
 	$deleted_content = $file;
 	if(!empty($deleted_content)) {
 		unlink($deleted_content);
+		rebuilt_cache('all');
 		if($destination == 'post') {
 			$redirect = site_url();
 			header("Location: $redirect");
@@ -230,6 +239,7 @@ function edit_profile($title, $content, $user) {
 			mkdir($dir, 0777, true);
 			file_put_contents($filename, print_r($user_content, true));
 		}
+		rebuilt_cache('all');
 		$redirect = site_url() . 'author/' . $user;
 		header("Location: $redirect");			
 	}
@@ -263,7 +273,7 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
-		
+		rebuilt_cache('all');
 		$redirect = site_url() . 'admin/mine';
 		header("Location: $redirect");	
 	}
@@ -290,7 +300,7 @@ function get_feed($feed_url, $credit, $message=null) {
 			$time = new DateTime($entry->pubDate);
 			$timestamp= $time->format("Y-m-d H:i:s");
 			$time = strtotime($timestamp);
-			$tags = strip_tags(preg_replace('/[^A-Za-z0-9,.-]/u', '', $entry->category));
+			$tags = strip_tags(preg_replace(array('/[^a-zA-Z0-9,.-]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($entry->category)));
 			$title = rtrim($entry->title, ' \,\.\-');
 			$title = ltrim($title, ' \,\.\-');
 			$user = $_SESSION['user'];
