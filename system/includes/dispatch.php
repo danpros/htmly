@@ -273,6 +273,15 @@ function content($value = null) {
 
 function render($view, $locals = null, $layout = null) {
 
+  if(!login()) {
+    $c = str_replace('/', '#', str_replace('?', '~', $_SERVER['REQUEST_URI']));
+    $dir = 'cache/page';
+    $cachefile = $dir. '/' . $c . '.cache';
+    if(is_dir($dir) === false) {
+      mkdir($dir, 0777, true);
+    }
+  }
+
   if (is_array($locals) && count($locals)) {
     extract($locals, EXTR_SKIP);
   }
@@ -297,11 +306,19 @@ function render($view, $locals = null, $layout = null) {
 
     ob_start();
     require $layout;
-    echo trim(ob_get_clean());
+	
+    if(!login()) {
+      if (!file_exists($cachefile)) {
+        file_put_contents($cachefile, ob_get_contents());
+      }
+	}
 
+    echo trim(ob_get_clean());
+	  
   } else {
     echo content();
   }
+
 }
 
 function json($obj, $code = 200) {

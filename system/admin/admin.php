@@ -67,7 +67,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 		$t = str_replace('-','',$dt);
 		$time = new DateTime($t);
 		$timestamp= $time->format("Y-m-d");
-		
+
 		// The post date
 		$postdate = strtotime($timestamp);
 		
@@ -75,6 +75,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 		$posturl = site_url().date('Y/m', $postdate).'/'.$post_url;
 		
 		rebuilt_cache('all');
+		clear_post_cache($dt, $post_tag, $post_url, $newfile);
 		
 		if ($destination == 'post') {
 			header("Location: $posturl");
@@ -113,7 +114,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 		$posturl = site_url() . $post_url;
 		
 		rebuilt_cache('all');
-		
+		clear_page_cache($post_url);
 		if ($destination == 'post') {
 			header("Location: $posturl");
 		}
@@ -150,7 +151,7 @@ function add_post($title, $tag, $url, $content, $user) {
 		}
 		
 		rebuilt_cache('all');
-		
+		clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
 		$redirect = site_url() . 'admin/mine';
 		header("Location: $redirect");	
 	}
@@ -179,7 +180,7 @@ function add_page($title, $url, $content) {
 		}
 		
 		rebuilt_cache('all');
-		
+		clear_page_cache($post_url);
 		$redirect = site_url() . 'admin';
 		header("Location: $redirect");
 	}
@@ -189,6 +190,13 @@ function add_page($title, $url, $content) {
 // Delete blog post
 function delete_post($file, $destination) {
 	$deleted_content = $file;
+	
+	// Get cache file
+	$arr = explode('_', $file);
+	$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+	$dt = str_replace($replaced,'',$arr[0]);
+	clear_post_cache($dt, $arr[1], str_replace('.md','',$arr[2]), $file);
+	
 	if(!empty($deleted_content)) {
 		unlink($deleted_content);
 		rebuilt_cache('all');
@@ -206,6 +214,18 @@ function delete_post($file, $destination) {
 // Delete static page
 function delete_page($file, $destination) {
 	$deleted_content = $file;
+	
+	if (!empty($menu)) {
+		foreach(glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
+			unlink($file);
+		}
+	}
+	else {
+		$replaced = substr($file, 0, strrpos($file, '/')) . '/';
+		$url = str_replace($replaced,'',$file);
+		clear_page_cache($url);
+	}
+	
 	if(!empty($deleted_content)) {
 		unlink($deleted_content);
 		rebuilt_cache('all');
@@ -273,8 +293,8 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 			mkdir($dir, 0777, true);
 			file_put_contents($dir . $filename, print_r($post_content, true));
 		}
-		rebuilt_cache('all');
-		$redirect = site_url() . 'admin/mine';
+
+		$redirect = site_url() . 'admin/clear-cache';
 		header("Location: $redirect");	
 	}
 	
@@ -428,5 +448,94 @@ function get_backup_files () {
 		else {
 			echo 'No available backup!';
 		}
+	}
+}
+
+function clear_post_cache($post_date, $post_tag, $post_url, $filename) {
+
+	$b = str_replace('/', '#', site_path() . '/');
+	$t = explode('-', $post_date);
+	$c = explode(',', $post_tag);
+	$p = 'cache/page/'.$b.$t[0].'#'.$t[1].'#'.$post_url.'.cache';
+	
+	// Delete post
+	if (file_exists($p)) {
+		unlink($p);
+	}
+	
+	// Delete homepage
+	$yd = 'cache/page/'.$b.'.cache';
+	if (file_exists($yd)) {
+		unlink($yd);
+	}
+	foreach(glob('cache/page/'.$b.'~*.cache', GLOB_NOSORT) as $file) {
+		unlink($file);
+	}
+	
+	// Delete year
+	$yd = 'cache/page/'.$b.'archive#'.$t[0].'.cache';
+	if (file_exists($yd)) {
+		unlink($yd);
+	}
+	foreach(glob('cache/page/'.$b.'archive#'.$t[0].'~*.cache', GLOB_NOSORT) as $file) {
+		unlink($file);
+	}
+	
+	// Delete year-month
+	$yd = 'cache/page/'.$b.'archive#'.$t[0].'-'.$t[1].'.cache';
+	if (file_exists($yd)) {
+		unlink($yd);
+	}
+	foreach(glob('cache/page/'.$b.'archive#'.$t[0].'-'.$t[1].'~*.cache', GLOB_NOSORT) as $file) {
+		unlink($file);
+	}
+	
+	// Delete year-month-day
+	$yd = 'cache/page/'.$b.'archive#'.$t[0].'-'.$t[1].'-'.$t[2].'.cache';
+	if (file_exists($yd)) {
+		unlink($yd);
+	}
+	foreach(glob('cache/page/'.$b.'archive#'.$t[0].'-'.$t[1].'-'.$t[2].'~*.cache', GLOB_NOSORT) as $file) {
+		unlink($file);
+	}
+	
+	// Delete tag
+	foreach($c as $tag) {
+		$yd = 'cache/page/'.$b.'tag#'.$tag.'.cache';
+		if (file_exists($yd)) {
+			unlink($yd);
+		}
+		foreach(glob('cache/page/'.$b.'tag#'.$tag.'~*.cache', GLOB_NOSORT) as $file) {
+			unlink($file);
+		}
+	}
+	
+	// Delete search
+	foreach(glob('cache/page/'.$b.'search#*.cache', GLOB_NOSORT) as $file) {
+		unlink($file);
+	}
+	
+	
+	// Get cache post author
+	$arr = explode('_', $filename);
+	$replaced = substr($arr[0], 0,strrpos($arr[0], '/')) . '/';
+	$str = explode('/', $replaced);
+	$author = $str[count($str)-3];
+	// Delete author post list cache
+	$a = 'cache/page/'.$b.'author#'.$author.'.cache';
+	if (file_exists($a)) {
+		unlink($a);
+	}
+	foreach(glob('cache/page/'.$b.'author#'.$author.'~*.cache', GLOB_NOSORT) as $file) {
+		unlink($file);
+	}
+	
+}
+
+function clear_page_cache($url) {
+	$b = str_replace('/', '#', site_path() . '/');
+	$p = 'cache/page/'.$b.$url.'.cache';
+	if (file_exists($p)) {
+		unlink($p);
 	}
 }

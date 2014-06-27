@@ -24,6 +24,7 @@ Disallow: /content/
 Disallow: /system/
 Disallow: /themes/
 Disallow: /vendor/
+Disallow: /cache/
 # Files
 Disallow: /changelog.txt
 Disallow: /composer.json

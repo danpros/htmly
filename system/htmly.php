@@ -18,6 +18,10 @@ config('source', 'config/config.ini');
 // This will match the root url
 get('/index', function () {
 
+	if(!login()) {
+		file_cache($_SERVER['REQUEST_URI']);
+	}
+	
 	$page = from($_GET, 'page');
 	$page = $page ? (int)$page : 1;
 	$perpage = config('posts.perpage');
@@ -99,6 +103,10 @@ post('/login', function() {
 // The blog post page
 get('/:year/:month/:name', function($year, $month, $name){
 
+	if(!login()) {
+		file_cache($_SERVER['REQUEST_URI']);
+	}
+
 	$post = find_post($year, $month, $name);
 	
 	$current = $post['current'];
@@ -140,6 +148,7 @@ get('/:year/:month/:name', function($year, $month, $name){
 		'next' => has_next($next),
 		'type' => 'blogpost',
 	));
+	
 });
 
 // Edit blog post
@@ -279,6 +288,10 @@ post('/:year/:month/:name/delete', function() {
 
 // The author page
 get('/author/:profile', function($profile){
+
+	if(!login()) {
+		file_cache($_SERVER['REQUEST_URI']);
+	}
 
 	$page = from($_GET, 'page');
 	$page = $page ? (int)$page : 1;
@@ -560,6 +573,11 @@ get('/:static', function($static){
 		die;
 	}
 	else {
+	
+		if(!login()) {
+			file_cache($_SERVER['REQUEST_URI']);
+		}
+	
 		$post = get_static_post($static);
 		
 		if(!$post){
@@ -895,14 +913,14 @@ get('/admin/backup-start',function(){
 	die;
 });
 
-// Create Zip file
-get('/admin/rebuilt-cache',function(){
+// Delete all cache
+get('/admin/clear-cache',function(){
 	if(login()) {
 		config('views.root', 'system/admin/views');
-		render('rebuilt-cache', array(
-			'head_contents' => head_contents('Rebuilt cache started - ' . blog_title(), blog_description(), site_url()),
-			'bodyclass' => 'rebuiltcache',
-			'breadcrumb' => '<a href="' . site_url() . '">' .config('breadcrumb.home'). '</a> &#187; Rebuilt cache started'
+		render('clear-cache', array(
+			'head_contents' => head_contents('Clearing cache started - ' . blog_title(), blog_description(), site_url()),
+			'bodyclass' => 'clearcache',
+			'breadcrumb' => '<a href="' . site_url() . '">' .config('breadcrumb.home'). '</a> &#187; Clearing cache started'
 		));
 	}
 	else {
@@ -915,6 +933,10 @@ get('/admin/rebuilt-cache',function(){
 
 // The tag page
 get('/tag/:tag',function($tag){
+
+	if(!login()) {
+		file_cache($_SERVER['REQUEST_URI']);
+	}
 
 	$page = from($_GET, 'page');
 	$page = $page ? (int)$page : 1;
@@ -941,6 +963,10 @@ get('/tag/:tag',function($tag){
 
 // The archive page
 get('/archive/:req',function($req){
+
+	if(!login()) {
+		file_cache($_SERVER['REQUEST_URI']);
+	}
 
 	$page = from($_GET, 'page');
 	$page = $page ? (int)$page : 1;
@@ -985,6 +1011,10 @@ get('/archive/:req',function($req){
 
 // The search page
 get('/search/:keyword', function($keyword){
+
+	if(!login()) {
+		file_cache($_SERVER['REQUEST_URI']);
+	}
 
 	$page = from($_GET, 'page');
 	$page = $page ? (int)$page : 1;

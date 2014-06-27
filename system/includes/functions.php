@@ -1685,8 +1685,21 @@ EOF;
 	echo '<li><a href="'.$base.'edit/profile">Edit profile</a></li>';
 	echo '<li><a href="'.$base.'admin/import">Import</a></li>';
 	echo '<li><a href="'.$base.'admin/backup">Backup</a></li>';
-	echo '<li><a href="'.$base.'admin/rebuilt-cache">Rebuilt cache</a></li>';
+	echo '<li><a href="'.$base.'admin/clear-cache">Clear cache</a></li>';
 	echo '<li><a href="'.$base.'logout">Logout</a></li>';
 		
 	echo '</ul></div>';
+}
+
+// File cache 
+function file_cache($request) {
+
+	$c = str_replace('/', '#', str_replace('?', '~', $request));
+	$cachefile = 'cache/page/' . $c . '.cache';
+	
+	if (file_exists($cachefile)) {
+	    header('Content-type: text/html; charset=utf-8');
+		readfile($cachefile);
+		die;
+	}
 }

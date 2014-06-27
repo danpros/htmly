@@ -37,6 +37,7 @@ Features
 - Lightbox
 - User role
 - Online backup
+- File cache
 
 Requirements
 ------------
@@ -107,7 +108,7 @@ server {
   }
 
   location / {
-    try_files $uri $uri/ /index.php;
+    try_files $uri $uri/ /index.php?$args;
   }
 
   location ~ \.php$ {

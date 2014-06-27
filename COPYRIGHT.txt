@@ -35,3 +35,5 @@ license, including:
   Pagedown modifications and bugfixes (c) 2009-2013 Stack Exchange Inc.
   
   Lightbox2 (c) Lokesh Dhakar <lokeshdhakar.com>
+
+  jQuery (c) The jQuery Foundation
