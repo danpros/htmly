@@ -45,8 +45,8 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 	$oldurl = explode('_', $oldfile);
 
 	$post_title = $title;
-	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.-]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag)); 
-	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
+	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag)); 
+	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 		
 	if(!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
@@ -95,7 +95,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 	$dir = substr($oldfile, 0, strrpos($oldfile, '/'));
 
 	$post_title = $title;
-	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
+	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 		
 	if(!empty($post_title) && !empty($post_url) && !empty($post_content)) {
@@ -132,8 +132,8 @@ function add_post($title, $tag, $url, $content, $user) {
 
 	$post_date = date('Y-m-d-H-i-s');
 	$post_title = $title;
-	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.-]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag)); 
-	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
+	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag)); 
+	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 	
 	if(!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
@@ -162,7 +162,7 @@ function add_post($title, $tag, $url, $content, $user) {
 function add_page($title, $url, $content) {
 
 	$post_title = $title;
-	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
+	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
 	
 	if(!empty($post_title) && !empty($post_url) && !empty($post_content)) {
@@ -271,9 +271,8 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 
 	$post_date = date('Y-m-d-H-i-s', $time);
 	$post_title = $title;
-	$post_tag = preg_replace('/[^A-Za-z0-9,.-]/u', '', $tags);
-	$post_tag = rtrim(ltrim($post_tag, ',\.\-'), ',\.\-');
-	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
+	$post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tags));
+	$post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url))); 
 	if(!empty($source)) {
 		$post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content . "\n\n" . 'Source: <a target="_blank" href="' . $source . '">' . $title . '</a>';
 	}
@@ -320,11 +319,11 @@ function get_feed($feed_url, $credit, $message=null) {
 			$time = new DateTime($entry->pubDate);
 			$timestamp= $time->format("Y-m-d H:i:s");
 			$time = strtotime($timestamp);
-			$tags = strip_tags(preg_replace(array('/[^a-zA-Z0-9,.-]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($entry->category)));
+			$tags = strip_tags(preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($entry->category)));
 			$title = rtrim($entry->title, ' \,\.\-');
 			$title = ltrim($title, ' \,\.\-');
 			$user = $_SESSION['user'];
-			$url = strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($title))); 
+			$url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($title))); 
 			if ($credit == 'yes') {
 				$source = $entry->link;
 			}

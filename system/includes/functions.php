@@ -591,7 +591,7 @@ function get_related($tag) {
 	$perpage = config('related.count');
 	$posts = get_tag(strip_tags($tag), 1, $perpage+1, true);
 	$tmp = array();
-	$req = $_SERVER['REQUEST_URI'];
+	$req = urldecode($_SERVER['REQUEST_URI']);
 
 	foreach ($posts as $post) {
 		$url = $post->url;
