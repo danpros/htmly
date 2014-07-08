@@ -1,7 +1,7 @@
 <?php
 
-	if(isset($_SESSION['user'])) {
-		$user = $_SESSION['user'];
+	if(isset($_SESSION[config("site.url")]['user'])) {
+		$user = $_SESSION[config("site.url")]['user'];
 	}
 	
 	$filename = 'content/' . $user . '/author.md';

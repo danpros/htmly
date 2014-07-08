@@ -156,7 +156,7 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 
 	if(login()) {
 	
-		$user = $_SESSION['user'];
+		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
 
 		config('views.root', 'system/admin/views');
@@ -242,7 +242,7 @@ get('/:year/:month/:name/delete', function($year, $month, $name){
 
 	if(login()) {
 	
-		$user = $_SESSION['user'];
+		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
 	
 		config('views.root', 'system/admin/views');
@@ -357,7 +357,7 @@ get('/edit/profile', function(){
 // Get edited data for static page
 post('/edit/profile', function() {
 
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	$title = from($_REQUEST, 'title');
 	$content = from($_REQUEST, 'content');
 	if(!empty($title) && !empty($content)) {
@@ -387,7 +387,7 @@ post('/edit/profile', function() {
 
 get('/admin/posts', function () {
 
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	$role = user('role', $user);
 	if(login()) {
 	
@@ -449,7 +449,7 @@ get('/admin/mine', function(){
 
 		config('views.root', 'system/admin/views');
 
-		$profile = $_SESSION['user'];
+		$profile = $_SESSION[config("site.url")]['user'];
 
 		$page = from($_GET, 'page');
 		$page = $page ? (int)$page : 1;
@@ -729,7 +729,7 @@ post('/add/post', function(){
 	$tag = from($_REQUEST, 'tag');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	if(!empty($title) && !empty($tag) && !empty($content)) {
 		if(!empty($url)) {
 			add_post($title, $tag, $url, $content, $user);

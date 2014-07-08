@@ -19,7 +19,7 @@ function session($user, $pass, $str = null) {
 		
 		if(file_exists($user_file)) {
 			if($pass === $user_pass) {
-				$_SESSION['user'] = $user;
+				$_SESSION[config("site.url")]['user'] = $user;
 				header('location: admin');
 			}
 			else {
@@ -322,7 +322,7 @@ function get_feed($feed_url, $credit, $message=null) {
 			$tags = strip_tags(preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($entry->category)));
 			$title = rtrim($entry->title, ' \,\.\-');
 			$title = ltrim($title, ' \,\.\-');
-			$user = $_SESSION['user'];
+			$user = $_SESSION[config("site.url")]['user'];
 			$url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($title))); 
 			if ($credit == 'yes') {
 				$source = $entry->link;
@@ -341,8 +341,8 @@ function get_feed($feed_url, $credit, $message=null) {
 
 // Get recent posts by user
 function get_recent_posts() {
-	if (isset($_SESSION['user'])) {
-		$posts = get_profile($_SESSION['user'], 1, 5);
+	if (isset($_SESSION[config("site.url")]['user'])) {
+		$posts = get_profile($_SESSION[config("site.url")]['user'], 1, 5);
 		if(!empty($posts)) {
 			echo '<table class="post-list">';
 			echo '<tr class="head"><th>Title</th><th>Published</th><th>Tag</th><th>Operations</th></tr>';
@@ -372,7 +372,7 @@ function get_recent_posts() {
 
 // Get all static pages
 function get_recent_pages() {
-	if (isset($_SESSION['user'])) {
+	if (isset($_SESSION[config("site.url")]['user'])) {
 		$posts = get_static_post(null);
 		if(!empty($posts)) {
 			krsort($posts);
@@ -402,7 +402,7 @@ function get_recent_pages() {
 
 // Get all available zip files
 function get_backup_files () {
-	if (isset($_SESSION['user'])) {
+	if (isset($_SESSION[config("site.url")]['user'])) {
 		$files = get_zip_files();
 		if(!empty($files)) {
 			krsort($files);

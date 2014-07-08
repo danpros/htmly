@@ -894,7 +894,7 @@ function get_thumbnail($text) {
 
 // Return edit tab on post
 function tab($p) {
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	$role = user('role', $user);
 	if(isset($p->author)) {
 		if ($user === $p->author || $role === 'admin') {
@@ -1669,7 +1669,7 @@ function head_contents($title, $description, $canonical) {
 
 // Return toolbar
 function toolbar() {
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	$role = user('role', $user);
 	$base = site_url();
 	
