@@ -8,6 +8,7 @@
 		<input type="text" class="<?php if (isset($username)) { if (empty($username)) { echo 'error';}} ?>" name="user"/><br><br>
 		Password <span class="required">*</span> <br>
 		<input type="password" class="<?php if (isset($password)) { if (empty($password)) { echo 'error';}} ?>" name="password"/><br><br>
+		<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
 		<input type="submit" name="submit" value="Login"/>
 	</form>
 <?php } else {header('location: admin');} ?>

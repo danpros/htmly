@@ -58,9 +58,11 @@ get('/index', function () {
 // Get submitted login data
 post('/login', function() {
 	
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+	
 	$user = from($_REQUEST, 'user');
 	$pass = from($_REQUEST, 'password');
-	if(!empty($user) && !empty($pass)) {
+	if($proper && !empty($user) && !empty($pass)) {
 	
 		session($user, $pass, null);		
 		$log = session($user, $pass, null);
@@ -84,6 +86,9 @@ post('/login', function() {
 		}
 		if (empty($pass)) {
 			$message['error'] .= '<li>Password field is required.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		
 		config('views.root', 'system/admin/views');
@@ -193,6 +198,8 @@ get('/:year/:month/:name/edit', function($year, $month, $name){
 
 // Get edited data for blog post
 post('/:year/:month/:name/edit', function() {
+
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 	
 	$title = from($_REQUEST, 'title');
 	$tag = from($_REQUEST, 'tag');
@@ -200,7 +207,7 @@ post('/:year/:month/:name/edit', function() {
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
 	$destination = from($_GET, 'destination');
-	if(!empty($title) && !empty($tag) && !empty($content)) {
+	if($proper && !empty($title) && !empty($tag) && !empty($content)) {
 		if(!empty($url)) {
 			edit_post($title, $tag, $url, $content, $oldfile, $destination);
 		}
@@ -219,6 +226,9 @@ post('/:year/:month/:name/edit', function() {
 		}
 		if (empty($content)) {
 			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		config('views.root', 'system/admin/views');
 		
@@ -280,10 +290,13 @@ get('/:year/:month/:name/delete', function($year, $month, $name){
 // Get deleted data for blog post
 post('/:year/:month/:name/delete', function() {
 
-	$file = from($_REQUEST, 'file');
-	$destination = from($_GET, 'destination');	
-	delete_post($file, $destination);
-	
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+	if($proper)
+	{
+		$file = from($_REQUEST, 'file');
+		$destination = from($_GET, 'destination');	
+		delete_post($file, $destination);
+	}
 });
 
 // The author page
@@ -356,11 +369,13 @@ get('/edit/profile', function(){
 
 // Get edited data for static page
 post('/edit/profile', function() {
-
+	
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+	
 	$user = $_SESSION[config("site.url")]['user'];
 	$title = from($_REQUEST, 'title');
 	$content = from($_REQUEST, 'content');
-	if(!empty($title) && !empty($content)) {
+	if($proper && !empty($title) && !empty($content)) {
 		edit_profile($title, $content, $user);
 	}
 	else {
@@ -370,6 +385,9 @@ post('/edit/profile', function() {
 		}
 		if (empty($content)) {
 			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		config('views.root', 'system/admin/views');
 		
@@ -627,13 +645,14 @@ get('/:static/edit', function($static){
 
 // Get edited data for static page
 post('/:static/edit', function() {
-
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+	
 	$title = from($_REQUEST, 'title');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
 	$oldfile = from($_REQUEST, 'oldfile');
 	$destination = from($_GET, 'destination');
-	if(!empty($title) && !empty($content)) {
+	if($proper && !empty($title) && !empty($content)) {
 		if(!empty($url)) {
 			edit_page($title, $url, $content, $oldfile, $destination);
 		}
@@ -649,6 +668,9 @@ post('/:static/edit', function() {
 		}
 		if (empty($content)) {
 			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		config('views.root', 'system/admin/views');
 		
@@ -697,10 +719,13 @@ get('/:static/delete', function($static){
 // Get deleted data for static page
 post('/:static/delete', function() {
 
-	$file = from($_REQUEST, 'file');
-	$destination = from($_GET, 'destination');
-	delete_page($file, $destination);
-	
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+	if($proper)
+	{
+		$file = from($_REQUEST, 'file');
+		$destination = from($_GET, 'destination');
+		delete_page($file, $destination);
+	}
 });
 
 // Add blog post
@@ -725,12 +750,14 @@ get('/add/post', function(){
 // Get submitted blog post data
 post('/add/post', function(){
 
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
 	$title = from($_REQUEST, 'title');
 	$tag = from($_REQUEST, 'tag');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
 	$user = $_SESSION[config("site.url")]['user'];
-	if(!empty($title) && !empty($tag) && !empty($content)) {
+	if($proper && !empty($title) && !empty($tag) && !empty($content)) {
 		if(!empty($url)) {
 			add_post($title, $tag, $url, $content, $user);
 		}
@@ -749,6 +776,9 @@ post('/add/post', function(){
 		}
 		if (empty($content)) {
 			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		config('views.root', 'system/admin/views');
 		render('add-post',array(
@@ -787,10 +817,12 @@ get('/add/page', function(){
 // Get submitted static page data
 post('/add/page', function(){
 
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+	
 	$title = from($_REQUEST, 'title');
 	$url = from($_REQUEST, 'url');
 	$content = from($_REQUEST, 'content');
-	if(!empty($title) && !empty($content)) {
+	if($proper && !empty($title) && !empty($content)) {
 		if(!empty($url)) {
 			add_page($title, $url, $content);
 		}
@@ -806,6 +838,9 @@ post('/add/page', function(){
 		}
 		if (empty($content)) {
 			$message['error'] .= '<li>Content field is required.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		config('views.root', 'system/admin/views');
 		render('add-page',array(
@@ -840,6 +875,8 @@ get('/admin/import',function(){
 
 // Get import post
 post('/admin/import', function() {
+
+	$proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 	
 	$url = from($_REQUEST, 'url');
 	$credit = from($_REQUEST, 'credit');
@@ -864,6 +901,9 @@ post('/admin/import', function() {
 		$message['error'] = '';
 		if(empty($url)) {
 			$message['error'] .= '<li>You need to specify the feed url.</li>';
+		}
+		if(! $proper ) {
+			$message['error'] .= '<li>CSRF Token not correct.</li>';
 		}
 		
 		config('views.root', 'system/admin/views');

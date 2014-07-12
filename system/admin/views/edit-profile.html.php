@@ -37,6 +37,7 @@
 	Title <span class="required">*</span> <br><input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" value="<?php echo $oldtitle?>"/><br><br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
+	<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
 	<input type="submit" name="submit" class="submit" value="Save"/>
 </form>
 </div>
