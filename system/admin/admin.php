@@ -189,6 +189,7 @@ function add_page($title, $url, $content) {
 
 // Delete blog post
 function delete_post($file, $destination) {
+	if(!login()) return null;
 	$deleted_content = $file;
 	
 	// Get cache file
@@ -213,6 +214,7 @@ function delete_post($file, $destination) {
 
 // Delete static page
 function delete_page($file, $destination) {
+	if(!login()) return null;
 	$deleted_content = $file;
 	
 	if (!empty($menu)) {
