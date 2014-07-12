@@ -894,7 +894,7 @@ function get_thumbnail($text) {
 
 // Return edit tab on post
 function tab($p) {
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	$role = user('role', $user);
 	if(isset($p->author)) {
 		if ($user === $p->author || $role === 'admin') {
@@ -1669,7 +1669,7 @@ function head_contents($title, $description, $canonical) {
 
 // Return toolbar
 function toolbar() {
-	$user = $_SESSION['user'];
+	$user = $_SESSION[config("site.url")]['user'];
 	$role = user('role', $user);
 	$base = site_url();
 	
@@ -1702,4 +1702,27 @@ function file_cache($request) {
 		readfile($cachefile);
 		die;
 	}
+}
+
+function generate_csrf_token()
+{
+	$_SESSION[config("site.url")]['csrf_token'] = sha1(microtime(true).mt_rand(10000,90000));
+}
+
+function get_csrf()
+{
+	if(! isset($_SESSION[config("site.url")]['csrf_token']) || empty($_SESSION[config("site.url")]['csrf_token']))
+	{
+		generate_csrf_token();
+	}
+	return $_SESSION[config("site.url")]['csrf_token'];
+}
+
+function is_csrf_proper($csrf_token)
+{
+	if($csrf_token == get_csrf())
+	{
+		return true;
+	}
+	return false;
 }
