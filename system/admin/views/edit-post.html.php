@@ -60,6 +60,7 @@
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
 	<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+	<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
 	<input type="submit" name="submit" class="submit" value="Save"/> <a href="<?php echo $delete?>">Delete</a>
 </form>
 </div>

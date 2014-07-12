@@ -1703,3 +1703,26 @@ function file_cache($request) {
 		die;
 	}
 }
+
+function generate_csrf_token()
+{
+	$_SESSION[config("site.url")]['csrf_token'] = sha1(microtime(true).mt_rand(10000,90000));
+}
+
+function get_csrf()
+{
+	if(! isset($_SESSION[config("site.url")]['csrf_token']) || empty($_SESSION[config("site.url")]['csrf_token']))
+	{
+		generate_csrf_token();
+	}
+	return $_SESSION[config("site.url")]['csrf_token'];
+}
+
+function is_csrf_proper($csrf_token)
+{
+	if($csrf_token == get_csrf())
+	{
+		return true;
+	}
+	return false;
+}

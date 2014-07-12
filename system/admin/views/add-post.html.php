@@ -14,6 +14,7 @@
 		<br><br>
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
 		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br/>
+		<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
 		<input type="submit" name="submit" class="submit" value="Publish"/>
 	</form>
 </div>
