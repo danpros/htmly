@@ -6,6 +6,7 @@ date_default_timezone_set('Asia/Jakarta');
 // Explicitly including the dispatch framework,
 // and our functions.php file
 require 'system/includes/dispatch.php';
+require 'system/includes/updater.php';
 require 'system/includes/functions.php';
 require 'system/admin/admin.php';
 require 'system/includes/session.php';
@@ -1107,6 +1108,26 @@ get('/feed/opml',function(){
 	// Generate OPML file for the RSS
 	echo generate_opml();
 	
+});
+
+get('/admin/update/now/:csrf',function($CSRF){
+
+	$proper = is_csrf_proper($CSRF);
+	$updater = new Updater;
+	if( login() && $proper && $updater->updateAble())
+	{
+		$updater->update();
+		config('views.root', 'system/admin/views');
+		render('updated-to', array(
+			'head_contents' => head_contents('Updated - ' . blog_title(), blog_description(), site_url()),
+			'updater' => $updater,
+		));
+	}
+	else
+	{
+		$login = site_url() . 'login';
+		header("location: $login");
+	}
 });
 
 // If we get here, it means that
