@@ -130,11 +130,11 @@ class Updater
 					$dirName = substr($fileName,$cutLength);
 					if(! file_exists($dirName))
 					{
-						//mkdir($dirName);
+						mkdir($dirName);
 					}
 				}
 				else{
-					//copy("zip://".$path."#".$filename, substr($filename,$cutLength));
+					copy("zip://".$path."#".$filename, substr($filename,$cutLength));
 				}
 			}                   
 			$zip->close();
