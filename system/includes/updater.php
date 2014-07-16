@@ -119,7 +119,8 @@ class Updater
 	}
 	protected function unZip()
 	{
-		$path = $this->zipFile;
+		$path = dirname($_SERVER['SCRIPT_FILENAME']) . "/" . $this->zipFile;
+		
 		$zip = new ZipArchive;
 		if ($zip->open($path) === true) {
 			$cutLength = strlen($zip->getNameIndex(0));
@@ -134,7 +135,7 @@ class Updater
 					}
 				}
 				else{
-					copy("zip://".$path."#".$filename, substr($filename,$cutLength));
+					copy("zip://".$path."#".$fileName, substr($fileName,$cutLength));
 				}
 			}                   
 			$zip->close();

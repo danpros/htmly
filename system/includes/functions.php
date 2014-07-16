@@ -1692,7 +1692,7 @@ EOF;
 	echo '<li><a href="'.$base.'admin/clear-cache">Clear cache</a></li>';
 	if( $updater->updateAble())
 	{
-		echo '<li><a href="'.$base.'admin/update/now/' . $CSRF . '">UpdateMe[' . $updater->getName() . ']</a></li>';
+		echo '<li><a href="'.$base.'admin/update/now/' . $CSRF . '">Update to ' . $updater->getName() . '</a></li>';
 	}
 	echo '<li><a href="'.$base.'logout">Logout</a></li>';
 		
