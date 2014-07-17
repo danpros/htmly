@@ -38,7 +38,7 @@ class Updater
 	protected $versionFile = "cache/installedVersion.json";
 	protected $zipFile = "cache/tmpZipFile.zip";
 	
-	protected $infos = [];
+	protected $infos = array();
 	
 	public function __construct()
 	{
@@ -59,10 +59,16 @@ class Updater
 		}
 		else
 		{
-			$fileContent = @file_get_contents($path,false, stream_context_create(['http'=>['header'=>"User-Agent: Awesome-Update-My-Self\r\n"]]));
-			if($fileContent == false)
+			$fileContent = file_get_contents($path,false, stream_context_create(
+				array(
+					'http' => array(
+						'header'=>"User-Agent: Awesome-Update-My-Self\r\n"
+					)
+				)
+			));
+			if($fileContent === false)
 			{
-				return [];
+				return array();
 			}
 			$json = json_decode($fileContent,true);
 			$fileContent = json_encode($json, JSON_PRETTY_PRINT);
@@ -99,10 +105,10 @@ class Updater
 				if($this->unZip())
 				{
 					unlink($this->zipFile);
-					file_put_contents($this->versionFile, json_encode([
+					file_put_contents($this->versionFile, json_encode(array(
 						"id" => $this->infos[0]['id'],
 						"tag_name" => $this->infos[0]['tag_name']
-					], JSON_PRETTY_PRINT));
+					), JSON_PRETTY_PRINT));
 					return true;
 				}
 			}
@@ -126,7 +132,8 @@ class Updater
 			$cutLength = strlen($zip->getNameIndex(0));
 			for($i = 1; $i < $zip->numFiles; $i++) {//iterate throw the Zip
 				$fileName = $zip->getNameIndex($i);
-				if($zip->statIndex($i)["crc"] == 0)
+				$stat = $zip->statIndex($i);
+				if($stat["crc"] == 0)
 				{
 					$dirName = substr($fileName,$cutLength);
 					if(! file_exists($dirName))
