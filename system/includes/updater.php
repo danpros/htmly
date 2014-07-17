@@ -59,7 +59,11 @@ class Updater
 		}
 		else
 		{
-			$fileContent = file_get_contents($path,false, stream_context_create(
+			if(!in_array('https', stream_get_wrappers()))
+			{
+				return array();
+			}
+			$fileContent = @file_get_contents($path,false, stream_context_create(
 				array(
 					'http' => array(
 						'header'=>"User-Agent: Awesome-Update-My-Self\r\n"
@@ -80,6 +84,8 @@ class Updater
 
 	public function updateAble()
 	{
+		if(!in_array('https', stream_get_wrappers()))
+			return false;
 		if(empty($this->infos))
 			return false;
 
