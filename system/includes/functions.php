@@ -1064,6 +1064,15 @@ EOF;
 	}
 }
 
+// Google Web Master Tool
+function wmt(){
+	$wmt_id = config('google.wmt.id');
+	$meta_wmt = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
+	if (!empty($wmt_id)) {
+		return $meta_wmt;
+	}
+}
+
 // Menu
 function menu(){
 	$menu = config('blog.menu');
