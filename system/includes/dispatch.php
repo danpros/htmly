@@ -272,53 +272,51 @@ function content($value = null) {
 }
 
 function render($view, $locals = null, $layout = null) {
-
-  if(!login()) {
-    $c = str_replace('/', '#', str_replace('?', '~', $_SERVER['REQUEST_URI']));
-    $dir = 'cache/page';
-    $cachefile = $dir. '/' . $c . '.cache';
-    if(is_dir($dir) === false) {
-      mkdir($dir, 0777, true);
-    }
-  }
-
-  if (is_array($locals) && count($locals)) {
-    extract($locals, EXTR_SKIP);
-  }
-
-  if (($view_root = config('views.root')) == null)
-    error(500, "[views.root] is not set");
-
-  ob_start();
-  include "{$view_root}/{$view}.html.php";
-  content(trim(ob_get_clean()));
-
-  if ($layout !== false) {
-
-    if ($layout == null) {
-      $layout = config('views.layout');
-      $layout = ($layout == null) ? 'layout' : $layout;
-    }
-
-    $layout = "{$view_root}/{$layout}.html.php";
-
-    header('Content-type: text/html; charset=utf-8');
-
-    ob_start();
-    require $layout;
-	
-    if(!login()) {
-      if (!file_exists($cachefile)) {
-        file_put_contents($cachefile, ob_get_contents());
-      }
+	$login = login();
+	if(!$login) {
+		$c = str_replace('/', '#', str_replace('?', '~', $_SERVER['REQUEST_URI']));
+		$dir = 'cache/page';
+		$cachefile = $dir. '/' . $c . '.cache';
+		if(is_dir($dir) === false) {
+			mkdir($dir, 0777, true);
+		}
 	}
 
-    echo trim(ob_get_clean());
-	  
-  } else {
-    echo content();
-  }
+	if (is_array($locals) && count($locals)) {
+		extract($locals, EXTR_SKIP);
+	}
 
+	if (($view_root = config('views.root')) == null)
+		error(500, "[views.root] is not set");
+
+	ob_start();
+	include "{$view_root}/{$view}.html.php";
+	content(trim(ob_get_clean()));
+
+	if ($layout !== false) {
+
+		if ($layout == null) {
+			$layout = config('views.layout');
+			$layout = ($layout == null) ? 'layout' : $layout;
+		}
+
+		$layout = "{$view_root}/{$layout}.html.php";
+
+		header('Content-type: text/html; charset=utf-8');
+
+		ob_start();
+		require $layout;
+
+		if(!$login) {
+			if (!file_exists($cachefile)) {
+				file_put_contents($cachefile, ob_get_contents());
+		}
+	}
+
+	echo trim(ob_get_clean());
+	} else {
+		echo content();
+	}
 }
 
 function json($obj, $code = 200) {
