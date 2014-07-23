@@ -39,6 +39,8 @@ class Updater {
     protected $context = null;
     
     protected function genCaFile(){
+        if(file_exists("cache/ca_bundle.crt"))
+            return 1;
         //https://github.com/bagder/ca-bundle
         file_put_contents("cache/ca_bundle.crt", "##
 ## ca-bundle.crt -- Bundle of CA Root Certificates
