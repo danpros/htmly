@@ -499,7 +499,7 @@ function flash($key, $msg = null, $now = false) {
 
 function dispatch() {
 
-  $path = $_SERVER['REQUEST_URI'];
+  $path = urldecode($_SERVER['REQUEST_URI']);
   
   if (config('site.url') !== null)
     $path = preg_replace('@^'.preg_quote(site_path()).'@', '', $path);
