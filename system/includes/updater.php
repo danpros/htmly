@@ -3939,7 +3939,7 @@ TZVHO8mvbaG0weyJ9rQPOLXiZNwlz6bb65pcmaHFCN795trV1lpFDMS3wrUU77QR/w4VtfX128a9
             if (!in_array('https', stream_get_wrappers())) {
                 return array();
             }
-            $fileContent = file_get_contents($path, false, $this->context);
+            $fileContent = @file_get_contents($path, false, $this->context);
 
             if ($fileContent === false) {
                 return array();
