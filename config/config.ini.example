@@ -38,6 +38,9 @@ google.publisher = ""
 ; Google analytics
 google.analytics.id = ""
 
+; Google WMT ID verification
+google.wmt.id = ""
+
 ; Pagination, RSS, and JSON
 posts.perpage = "5"
 tag.perpage = "10"
