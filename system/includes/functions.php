@@ -261,7 +261,7 @@ function get_posts($posts, $page = 1, $perpage = 0){
 		$post->date = strtotime($timestamp);
 		
 		// The archive per day
-		$post->archive = site_url(). 'archive/' . date('Y-m-d', $post->date) ;
+		$post->archive = site_url(). 'archive/' . date('Y-m', $post->date) ;
 
 		// The post URL
 		$post->url = site_url().date('Y/m', $post->date).'/'.str_replace('.md','',$arr[2]);
