@@ -2,6 +2,8 @@
 
 `\Suin\RSSWriter` is yet another simple RSS writer library for PHP 5.3 or later. This component is Licensed under MIT license.
 
+This library can also be used to publish Podcasts.
+
 The build status of the current master branch is tracked by Travis CI: [![Build Status](https://secure.travis-ci.org/suin/php-rss-writer.png?branch=master)](http://travis-ci.org/suin/php-rss-writer)
 
 
@@ -18,11 +20,21 @@ $channel
 	->url('http://blog.example.com')
 	->appendTo($feed);
 
+// RSS item
 $item = new Item();
 $item
 	->title("Blog Entry Title")
 	->description("<div>Blog body</div>")
 	->url('http://blog.example.com/2012/08/21/blog-entry/')
+	->appendTo($channel);
+
+// Podcast item
+$item = new Item();
+$item
+	->title("Some Podcast Entry")
+	->description("<div>Podcast body</div>")
+	->url('http://podcast.example.com/2012/08/21/podcast-entry/')
+    ->enclosure('http://link-to-audio-file.com/2013/08/21/podcast.mp3', 4889, 'audio/mpeg')
 	->appendTo($channel);
 
 
