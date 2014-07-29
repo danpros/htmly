@@ -223,6 +223,8 @@ function get_posts($posts, $page = 1, $perpage = 0) {
             $post->body = $arr[0];
         }
 
+        $post->views = get_views($post->file);
+
         $tmp[] = $post;
     }
 
@@ -454,6 +456,8 @@ function get_static_post($static) {
                     $post->title = $static;
                     $post->body = $arr[0];
                 }
+                
+                $post->views = get_views($post->file);
 
                 $tmp[] = $post;
             }
@@ -1547,4 +1551,42 @@ function is_csrf_proper($csrf_token) {
         return true;
     }
     return false;
+}
+
+function add_view($page)
+{
+    $filename = "cache/count.json";
+    $views = array();
+    if(file_exists($filename))
+    {
+        $views = json_decode(file_get_contents($filename),true);
+    }
+    if(isset($views[$page]))
+    {
+        $views[$page]++;
+    }
+    else
+    {
+        $views[$page] = 1;
+    }
+    file_put_contents($filename,json_encode($views));
+}
+
+function get_views($page)
+{
+    static $_views = array();
+    
+    if(empty($_views))
+    {
+        $filename = "cache/count.json";
+        if(file_exists($filename))
+        {
+            $_views = json_decode(file_get_contents($filename),true);
+        }
+    }
+    if(isset($_views[$page]))
+    {
+        return $_views[$page];
+    }
+    return -1;
 }

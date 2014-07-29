@@ -1,7 +1,7 @@
 <h2 class="post-index"><?php echo $heading?></h2>
 <?php if(!empty($posts)) {?>
 <table class="post-list">
-	<tr class="head"><th>Title</th><th>Published</th><th>Author</th><th>Tag</th><th>Operations</th></tr>
+	<tr class="head"><th>Title</th><th>Published</th><th>Views</th><th>Author</th><th>Tag</th><th>Operations</th></tr>
 	<?php $i = 0; $len = count($posts);?>
 	<?php foreach($posts as $p):?>
 		<?php 
@@ -19,6 +19,7 @@
 	<tr class="<?php echo $class ?>">
 		<td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
 		<td><?php echo date('d F Y', $p->date) ?></td>
+		<td><?php echo $p->views ?></td>
 		<td><a target="_blank" href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></td>
 		<td><?php echo $p->tag ?></td>
 		<td><a href="<?php echo $p->url ?>/edit?destination=admin/posts">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/posts">Delete</a></td>
