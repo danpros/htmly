@@ -702,24 +702,13 @@ function has_pagination($total, $perpage, $page = 1) {
 }
 
 // Get the meta description
-function get_description($text) {
+function get_description($string) {
 
-    $string = explode('</p>', $text);
-    $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string[0] . '</p>'));
+    $string = remove_accent($string);
+    $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
     $string = ltrim($string);
-
-    if (strlen($string) > 1) {
-        return $string;
-    } else {
-        $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($text));
-        $string = rtrim(ltrim($string), $string);
-        if (strlen($string) < config('description.char')) {
-            return $string;
-        } else {
-            $string = substr($string, 0, config('description.char'));
-            return $string = substr($string, 0, strrpos($string, ' '));
-        }
-    }
+    $string = substr($string, 0, config('description.char'));
+    return $string = substr($string, 0, strrpos($string, ' '));
 }
 
 // Get the teaser
