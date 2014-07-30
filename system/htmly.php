@@ -1078,6 +1078,34 @@ get('/admin/update/now/:csrf', function($CSRF) {
     }
 });
 
+
+get('/:static/:sub', function($static,$sub) {
+    
+    $father_post = get_static_post($static);
+    if (!$father_post) {
+        not_found();
+    }
+    $post = get_static_sub_post($static,$sub);
+    if (!$post) {
+        not_found();
+    }
+    $post = $post[0];
+    
+    add_view($post->file);
+
+    if (!login()) {
+        file_cache($_SERVER['REQUEST_URI']);
+    }
+
+    render('static-sub', array(
+        'head_contents' => head_contents($post->title . ' - ' . blog_title(), $description = get_description($post->body), $post->url),
+        'bodyclass' => 'inpage',
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
+        'p' => $post,
+        'type' => 'staticpage',
+    ));
+});
+
 // If we get here, it means that
 // nothing has been matched above
 
