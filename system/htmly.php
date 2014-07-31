@@ -115,14 +115,15 @@ get('/:year/:month/:name', function($year, $month, $name) {
     $post = find_post($year, $month, $name);
 
     $current = $post['current'];
-    add_view($current->file);
-
-    if (!login()) {
-        file_cache($_SERVER['REQUEST_URI']);
-    }
 
     if (!$current) {
         not_found();
+    }
+    
+    add_view($current->file);
+    
+    if (!login()) {
+        file_cache($_SERVER['REQUEST_URI']);
     }
 
     $bio = get_bio($current->author);
