@@ -111,19 +111,30 @@ post('/login', function() {
 // The blog post page
 get('/:year/:month/:name', function($year, $month, $name) {
 
+    if(config("views.counter") != "true")
+    {
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }
+    }
 
     $post = find_post($year, $month, $name);
 
     $current = $post['current'];
-    add_view($current->file);
-
-    if (!login()) {
-        file_cache($_SERVER['REQUEST_URI']);
-    }
 
     if (!$current) {
         not_found();
     }
+    
+    if(config("views.counter") == "true")
+    {
+        add_view($current->file);
+
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }
+    }
+
 
     $bio = get_bio($current->author);
 
@@ -567,6 +578,14 @@ get('/:static', function($static) {
         }
         die;
     } else {
+        
+        if( config("views.counter") != "true")
+        {
+            if (!login()) {
+                file_cache($_SERVER['REQUEST_URI']);
+            }
+        }
+        
         $post = get_static_post($static);
 
         if (!$post) {
@@ -574,11 +593,13 @@ get('/:static', function($static) {
         }
 
         $post = $post[0];
-        
-        add_view($post->file);
 
-        if (!login()) {
-            file_cache($_SERVER['REQUEST_URI']);
+        if(config("views.counter") == "true")
+        {
+            add_view($post->file);
+            if (!login()) {
+                file_cache($_SERVER['REQUEST_URI']);
+            }
         }
 
         render('static', array(

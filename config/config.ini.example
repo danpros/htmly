@@ -80,5 +80,8 @@ lightbox = "off"
 ; Set the theme here
 views.root = "themes/logs"
 
+ ;Enable view Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page.
+views.counter = "true"
+
 ; Framework config. No need to edit.
 views.layout = "layout"
