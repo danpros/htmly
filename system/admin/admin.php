@@ -321,7 +321,10 @@ function get_recent_posts() {
         $posts = get_profile($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
             echo '<table class="post-list">';
-            echo '<tr class="head"><th>Title</th><th>Published</th><th>Views</th><th>Tag</th><th>Operations</th></tr>';
+            echo '<tr class="head"><th>Title</th><th>Published</th>';
+            if (config("views.counter") == "true")
+                echo '<th>Views</th>';
+            echo '<th>Tag</th><th>Operations</th></tr>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -336,7 +339,8 @@ function get_recent_posts() {
                 echo '<tr class="' . $class . '">';
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 echo '<td>' . date('d F Y', $p->date) . '</td>';
-                echo '<td>' . $p->views . '</td>';
+                if (config("views.counter") == "true")
+                    echo '<td>' . $p->views . '</td>';
                 echo '<td>' . $p->tag . '</td>';
                 echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
                 echo '</tr>';
@@ -368,7 +372,8 @@ function get_recent_pages() {
                 
                 echo '<tr class="' . $class . '">';
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
-                echo '<td>' . $p->views . '</td>';
+                if (config("views.counter") == "true")
+                    echo '<td>' . $p->views . '</td>';
                 echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
                 echo '</tr>';
                 
@@ -379,7 +384,8 @@ function get_recent_pages() {
                 {
                     echo '<tr class="' . $class . '">';
                     echo '<td> &raquo;<a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></td>';
-                    echo '<td>' . $sp->views . '</td>';
+					if (config("views.counter") == "true")
+						echo '<td>' . $sp->views . '</td>';
                     echo '<td><a href="' . $sp->url . '/edit?destination=admin">Edit</a> <a href="' . $sp->url . '/delete?destination=admin">Delete</a></td>';
                     echo '</tr>';
                 }

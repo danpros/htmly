@@ -256,7 +256,10 @@ function get_posts($posts, $page = 1, $perpage = 0) {
             $post->body = $arr[0];
         }
 
-        $post->views = get_views($post->file);
+        if(config("views.counter"))
+        {
+            $post->views = get_views($post->file);
+        }
 
         $tmp[] = $post;
     }
@@ -490,8 +493,11 @@ function get_static_post($static) {
                     $post->body = $arr[0];
                 }
                 
-                $post->views = get_views($post->file);
-
+                if(config("views.counter"))
+                {
+                    $post->views = get_views($post->file);
+                }
+                
                 $tmp[] = $post;
             }
         }
