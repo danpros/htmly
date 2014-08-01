@@ -20,6 +20,8 @@ class Item implements \Suin\RSSWriter\ItemInterface
 	protected $isPermalink;
 	/** @var int */
 	protected $pubDate;
+    /** @var array */
+    protected $enclosure;
 
 	/**
 	 * Set item title
@@ -91,6 +93,19 @@ class Item implements \Suin\RSSWriter\ItemInterface
 	}
 
 	/**
+	 * Set enclosure 
+	 * @param var $url Url to media file
+     * @param int $length Length in bytes of the media file
+     * @param var $type Media type, default is audio/mpeg
+	 * @return $this
+	 */
+	public function enclosure($url, $length = 0, $type = 'audio/mpeg')
+	{
+		$this->enclosure = array('url' => $url, 'length' => $length, 'type' => $type);
+		return $this;
+	}
+
+	/**
 	 * Append item to the channel
 	 * @param \Suin\RSSWriter\ChannelInterface $channel
 	 * @return $this
@@ -137,6 +152,18 @@ class Item implements \Suin\RSSWriter\ItemInterface
 			$xml->addChild('pubDate', date(DATE_RSS, $this->pubDate));
 		}
 
+
+        if (is_array($this->enclosure) && (count($this->enclosure) == 3))
+		{
+			$element = $xml->addChild('enclosure');
+            $element->addAttribute('url', $this->enclosure['url']);
+            $element->addAttribute('type', $this->enclosure['type']);
+            
+            if ($this->enclosure['length']) 
+            {
+                $element->addAttribute('length', $this->enclosure['length']);
+            }
+		}
 		return $xml;
 	}
 }

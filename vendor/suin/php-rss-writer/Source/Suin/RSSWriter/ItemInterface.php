@@ -52,6 +52,15 @@ interface ItemInterface
 	public function pubDate($pubDate);
 
 	/**
+	 * Set enclosure 
+	 * @param var $url Url to media file
+     * @param int $length Length in bytes of the media file
+     * @param var $type Media type, default is audio/mpeg
+	 * @return $this
+	 */
+	public function enclosure($url, $length = 0, $type = 'audio/mpeg');
+
+	/**
 	 * Append item to the channel
 	 * @param \Suin\RSSWriter\ChannelInterface $channel
 	 * @return $this

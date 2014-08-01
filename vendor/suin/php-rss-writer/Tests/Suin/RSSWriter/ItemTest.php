@@ -88,6 +88,15 @@ class ItemTest extends \XoopsUnit\TestCase
 		$this->assertSame($item, $item->appendTo($channel));
 	}
 
+	public function testEnclosure()
+	{
+		$url = uniqid();
+        $enclosure = array('url' => $url, 'length' => 0, 'type' => 'audio/mpeg');
+		$item = new Item();
+		$this->assertSame($item, $item->enclosure($url));
+		$this->assertAttributeSame($enclosure, 'enclosure', $item);
+	}
+
 	public function testAsXML()
 	{
 		$now = time();
@@ -104,6 +113,10 @@ class ItemTest extends \XoopsUnit\TestCase
 			'guid' => "http://inessential.com/2002/09/01.php#a2",
 			'isPermalink' => true,
 			'pubDate' => $now,
+            'enclosure' => array(
+                'url'    => 'http://link-to-audio-file.com/test.mp3',
+                'length' => 4992,
+                'type'   => 'audio/mpeg')
 		);
 
 		$item = new Item();
@@ -122,6 +135,7 @@ class ItemTest extends \XoopsUnit\TestCase
 			<category domain=\"{$data['categories'][1][1]}\">{$data['categories'][1][0]}</category>
 			<guid isPermaLink=\"true\">{$data['guid']}</guid>
 			<pubDate>{$nowString}</pubDate>
+            <enclosure url=\"{$data['enclosure']['url']}\" length=\"{$data['enclosure']['length']}\" type=\"{$data['enclosure']['type']}\"/>
 		</item>
 		";
 		$this->assertXmlStringEqualsXmlString($expect, $item->asXML()->asXML());
@@ -133,7 +147,7 @@ class ItemTest extends \XoopsUnit\TestCase
 		$nowString = date(DATE_RSS, $now);
 
 		$data = array(
-			'title'       => "日本語",
+			'title'       => "Venice Film Festival",
 			'url'         => 'http://nytimes.com/2004/12/07FEST.html',
 			'description' => "Some of the most heated chatter at the Venice Film Festival this week was about the way that the arrival of the stars at the Palazzo del Cinema was being staged.",
 		);
