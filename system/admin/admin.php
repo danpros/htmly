@@ -374,7 +374,7 @@ function get_recent_pages() {
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+                echo '<td><a href="' . $p->url . '/add?destination=admin">Add Sub</a> <a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
                 echo '</tr>';
                 
                 $shortUrl = substr($p->url,strrpos($p->url, "/") + 1);
@@ -384,8 +384,8 @@ function get_recent_pages() {
                 {
                     echo '<tr class="' . $class . '">';
                     echo '<td> &raquo;<a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></td>';
-					if (config("views.counter") == "true")
-						echo '<td>' . $sp->views . '</td>';
+                    if (config("views.counter") == "true")
+                        echo '<td>' . $sp->views . '</td>';
                     echo '<td><a href="' . $sp->url . '/edit?destination=admin">Edit</a> <a href="' . $sp->url . '/delete?destination=admin">Delete</a></td>';
                     echo '</tr>';
                 }

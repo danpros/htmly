@@ -108,6 +108,24 @@ post('/login', function() {
     }
 });
 
+get("/:static/:sub/edit", function($static,$sub){
+    echo $static,$sub,"edit";
+    die();
+});
+post("/:static/:sub/edit", function($static,$sub){
+    echo $static,$sub,"edit.";
+    die();
+});
+
+get("/:static/:sub/delete", function($static,$sub){
+    echo $static,$sub,"delete";
+    die();
+});
+post("/:static/:sub/delete", function($static,$sub){
+    echo $static,$sub,"delete.";
+    die();
+});
+
 // The blog post page
 get('/:year/:month/:name', function($year, $month, $name) {
 
@@ -1098,6 +1116,14 @@ get('/admin/update/now/:csrf', function($CSRF) {
     }
 });
 
+get('/:static/add', function($static){
+    echo $static,"add";
+    die();
+});
+post('/:static/add', function($static){
+    echo $static,"add.";
+    die();
+});
 
 get('/:static/:sub', function($static,$sub) {
     

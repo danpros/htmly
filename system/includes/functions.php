@@ -1082,6 +1082,22 @@ function menu() {
     }
 }
 
+function get_title_from_file($v)
+{
+    // Get the contents and convert it to HTML
+    $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+
+    // Extract the title and body
+    $arr = explode('t-->', $content);
+    if (isset($arr[1])) {
+        $title = str_replace('<!--t', '', $arr[0]);
+        $title = rtrim(ltrim($title, ' '), ' ');
+    } else {
+        $title = str_replace('-', ' ', str_replace('.md', '', $base));
+    }
+    return $title;
+}
+
 // Auto generate menu from static page
 function get_menu() {
 
@@ -1116,23 +1132,43 @@ function get_menu() {
             $base = str_replace($replaced, '', $v);
             $url = site_url() . str_replace('.md', '', $base);
 
-            // Get the contents and convert it to HTML
-            $content = MarkdownExtra::defaultTransform(file_get_contents($v));
-
-            // Extract the title and body
-            $arr = explode('t-->', $content);
-            if (isset($arr[1])) {
-                $title = str_replace('<!--t', '', $arr[0]);
-                $title = rtrim(ltrim($title, ' '), ' ');
-            } else {
-                $title = str_replace('-', ' ', str_replace('.md', '', $base));
-            }
-
+            $title = get_title_from_file($v);
+                    
             if (strpos($req, str_replace('.md', '', $base)) !== false) {
-                echo '<li class="' . $class . ' active"><a href="' . $url . '">' . ucwords($title) . '</a></li>';
+                $active = ' active';
             } else {
-                echo '<li class="' . $class . '"><a href="' . $url . '">' . ucwords($title) . '</a></li>';
+                $active = '';
             }
+            echo '<li class="' . $class . '"' . $active . '>';
+            
+            $subPages = get_static_sub_pages(str_replace('.md', '', $base));
+            echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
+            if(!empty($subPages))
+            {
+                echo '<ul>';
+                
+                $iSub = 0;
+                $countSub = count($subPages);
+                foreach($subPages as $index => $sp)
+                {
+                    $classSub = "item";
+                    if($iSub == 0)
+                    {
+                        $classSub .= " first";
+                    }
+                    if($iSub == $countSub -1)
+                    {
+                        $classSub .= " last";
+                    }
+                    $replacedSub = substr($sp, 0, strrpos($sp, '/')) . '/';
+                    $baseSub = str_replace($replacedSub, '', $sp);
+                    $urlSub = $url . "/" . str_replace('.md', '', $baseSub);
+                    echo '<li class="' . $classSub . '"><a href="' . $urlSub . '">&raquo; ' . get_title_from_file($sp) . '</a></li>';
+                    $iSub++;
+                }
+                echo '</ul>';
+            }
+            echo '</li>';
         }
         echo '</ul>';
     } else {
