@@ -1146,7 +1146,7 @@ get('/:static/:sub', function($static,$sub) {
         file_cache($_SERVER['REQUEST_URI']);
     }
 
-    render('static-sub', array(
+    render('static', array(
         'head_contents' => head_contents($post->title . ' - ' . blog_title(), $description = get_description($post->body), $post->url),
         'bodyclass' => 'inpage',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,

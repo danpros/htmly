@@ -357,7 +357,9 @@ function get_recent_pages() {
         if (!empty($posts)) {
             krsort($posts);
             echo '<table class="post-list">';
-            echo '<tr class="head"><th>Title</th><th>Views</th><th>Operations</th></tr>';
+            echo '<tr class="head"><th>Title</th>';
+            if (config("views.counter") == "true") echo '<th>Views</th>';
+            echo '<th>Operations</th></tr>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
