@@ -108,22 +108,127 @@ post('/login', function() {
     }
 });
 
-get("/:static/:sub/edit", function($static,$sub){
-    echo $static,$sub,"edit";
-    die();
+get("/:static/:sub/edit", function($static,$sub) {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+        $post = get_static_post($static);
+
+        if (!$post) {
+            not_found();
+        }
+
+        $post = $post[0];
+        
+        $page = get_static_sub_post($static,$sub);
+
+        if (!$page) {
+            not_found();
+        }
+
+        $page = $page[0];
+
+        render('edit-page', array(
+            'head_contents' => head_contents('Edit page - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'editpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ',
+            'p' => $page,
+            'type' => 'staticpage',
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
 });
-post("/:static/:sub/edit", function($static,$sub){
-    echo $static,$sub,"edit.";
-    die();
+post("/:static/:sub/edit", function() {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    if(!login())
+    {
+        $login = site_url() . 'login';
+        header("location: $login");   
+    }
+    
+    $title = from($_REQUEST, 'title');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $oldfile = from($_REQUEST, 'oldfile');
+    $destination = from($_GET, 'destination');
+    if ($proper && !empty($title) && !empty($content)) {
+        if (!empty($url)) {
+            edit_page($title, $url, $content, $oldfile, $destination);
+        } else {
+            $url = $title;
+            edit_page($title, $url, $content, $oldfile, $destination);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+
+        render('edit-page', array(
+            'head_contents' => head_contents('Edit page - ' . blog_title(), blog_description(), site_url()),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'oldfile' => $oldfile,
+            'postTitle' => $title,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'editpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit page'
+        ));
+    }
 });
 
-get("/:static/:sub/delete", function($static,$sub){
-    echo $static,$sub,"delete";
-    die();
+get("/:static/:sub/delete",  function($static,$sub) {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+        $post = get_static_post($static);
+
+        if (!$post) {
+            not_found();
+        }
+
+        $post = $post[0];
+
+        $page = get_static_sub_post($static,$sub);
+
+        if (!$page) {
+            not_found();
+        }
+
+        $page = $page[0];
+
+        render('delete-page', array(
+            'head_contents' => head_contents('Delete page - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'deletepage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a>' . $page->title,
+            'p' => $page,
+            'type' => 'staticpage',
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
 });
-post("/:static/:sub/delete", function($static,$sub){
-    echo $static,$sub,"delete.";
-    die();
+post("/:static/:sub/delete", function() {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if ($proper && login()) {
+        $file = from($_REQUEST, 'file');
+        $destination = from($_GET, 'destination');
+        delete_page($file, $destination);
+    }
 });
 
 // The blog post page
@@ -313,7 +418,7 @@ get('/:year/:month/:name/delete', function($year, $month, $name) {
 post('/:year/:month/:name/delete', function() {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
-    if ($proper) {
+    if ($proper && login()) {
         $file = from($_REQUEST, 'file');
         $destination = from($_GET, 'destination');
         delete_post($file, $destination);
@@ -660,6 +765,12 @@ get('/:static/edit', function($static) {
 post('/:static/edit', function() {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
+    if(!login())
+    {
+        $login = site_url() . 'login';
+        header("location: $login");   
+    }
+    
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -729,7 +840,7 @@ get('/:static/delete', function($static) {
 post('/:static/delete', function() {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
-    if ($proper) {
+    if ($proper && login()) {
         $file = from($_REQUEST, 'file');
         $destination = from($_GET, 'destination');
         delete_page($file, $destination);
@@ -825,7 +936,7 @@ post('/add/page', function() {
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
-    if ($proper && !empty($title) && !empty($content)) {
+    if ($proper && !empty($title) && !empty($content) && login()) {
         if (!empty($url)) {
             add_page($title, $url, $content);
         } else {
@@ -1116,13 +1227,67 @@ get('/admin/update/now/:csrf', function($CSRF) {
     }
 });
 
-get('/:static/add', function($static){
-    echo $static,"add";
-    die();
+get('/:static/add', function($static) {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        $post = get_static_post($static);
+        
+        if(! $post)
+        {
+            not_found();
+        }
+        
+        $post = $post[0];
+        
+        render('add-page', array(
+            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'addpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> Add page'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
 });
-post('/:static/add', function($static){
-    echo $static,"add.";
-    die();
+post('/:static/add', function($static) {//not working
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    if ($proper && !empty($title) && !empty($content) && login()) {
+        if (!empty($url)) {
+            add_sub_page($title, $url, $content, $static);
+        } else {
+            $url = $title;
+            add_sub_page($title, $url, $content, $static);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-page', array(
+            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'addpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> Add page'
+        ));
+    }
 });
 
 get('/:static/:sub', function($static,$sub) {
