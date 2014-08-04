@@ -15,7 +15,9 @@ function user($key, $user=null) {
 // Create a session
 function session($user, $pass, $str = null) {
 		$user_file = 'config/users/' . $user . '.ini';
+		$user_enc = user('encryption', $user);
 		$user_pass = user('password', $user);
+		$password = (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none')?hash($user_enc,$pass):$pass;
 		
 		if(file_exists($user_file)) {
 			if($pass === $user_pass) {
