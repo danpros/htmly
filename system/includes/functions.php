@@ -1139,7 +1139,7 @@ function get_menu() {
             } else {
                 $active = '';
             }
-            echo '<li class="' . $class . '"' . $active . '>';
+            echo '<li class="' . $class . ' ' . $active . '">';
             
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
