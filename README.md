@@ -140,16 +140,24 @@ Here's the explanation (separated by an underscore):
 - `2014-01-31-12-56-40` is the published date. The date format is `yyyy-mm-dd-hh-mm-ss`
 - `tag1,tag2,tag3` is the tag, separated by comma
 - `databaseless-blogging-platform-flat-file-blog` is the URL
-
+	
 For static pages, we use the following format:
 
 ````
-about.md
+content/static/about.md
 ````
 
-That is means if `about` is the URL.
+That means the URL is `about`.
 
 So if you write it offline then you must naming the .md file as above.
+
+For static sub pages, we use the following format:
+
+````
+content/static/about/me.md
+````
+
+That means the URL is `about/me`.
 
 Content Title
 -------------
