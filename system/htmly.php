@@ -141,7 +141,7 @@ get("/:static/:sub/edit", function($static,$sub) {
         header("location: $login");
     }
 });
-post("/:static/:sub/edit", function() {
+post("/:static/:sub/edit", function($static,$sub) {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     if(!login())
@@ -155,6 +155,10 @@ post("/:static/:sub/edit", function() {
     $content = from($_REQUEST, 'content');
     $oldfile = from($_REQUEST, 'oldfile');
     $destination = from($_GET, 'destination');
+    if($destination === null)
+    {
+        $destination = $static . "/" . $sub;
+    }
     if ($proper && !empty($title) && !empty($content)) {
         if (!empty($url)) {
             edit_page($title, $url, $content, $oldfile, $destination);
@@ -1252,7 +1256,7 @@ get('/:static/add', function($static) {
         header("location: $login");
     }
 });
-post('/:static/add', function($static) {//not working
+post('/:static/add', function($static) {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 

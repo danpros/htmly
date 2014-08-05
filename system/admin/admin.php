@@ -184,7 +184,7 @@ function add_sub_page($title, $url, $content, $static) {
             $post_content = stripslashes($post_content);
         }
         $filename = $post_url . '.md';
-        $dir = 'content/static/' . $static;
+        $dir = 'content/static/' . $static . '/';
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {

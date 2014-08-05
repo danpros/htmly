@@ -1099,7 +1099,7 @@ function get_title_from_file($v)
 }
 
 // Auto generate menu from static page
-function get_menu() {
+function get_menu() {//aktive Link for Sub Pages ::TODO
 
     $posts = get_static_pages();
     $req = $_SERVER['REQUEST_URI'];
@@ -1133,13 +1133,16 @@ function get_menu() {
             $url = site_url() . str_replace('.md', '', $base);
 
             $title = get_title_from_file($v);
-                    
-            if (strpos($req, str_replace('.md', '', $base)) !== false) {
+                        
+            $reqBase = str_replace(substr($req, 0, strrpos($req, '/')) . '/', '', $req);
+
+            if ($reqBase == str_replace('.md', '', $base)) {
                 $active = ' active';
+                $reqBase = '';
             } else {
                 $active = '';
             }
-            echo '<li class="' . $class . ' ' . $active . '">';
+            echo '<li class="' . $class . $active . '">';
             
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
@@ -1162,6 +1165,9 @@ function get_menu() {
                     }
                     $replacedSub = substr($sp, 0, strrpos($sp, '/')) . '/';
                     $baseSub = str_replace($replacedSub, '', $sp);
+                    if ($reqBase == str_replace('.md', '', $baseSub)) {
+                        $classSub .= ' active';
+                    }
                     $urlSub = $url . "/" . str_replace('.md', '', $baseSub);
                     echo '<li class="' . $classSub . '"><a href="' . $urlSub . '">&raquo; ' . get_title_from_file($sp) . '</a></li>';
                     $iSub++;
