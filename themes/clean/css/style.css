@@ -437,7 +437,7 @@ aside .archive ul li ul, aside .tagcloud ul li {
 	margin-left:30px;
 }
 
-aside .menu ul li a:hover, aside .menu ul li.active a{
+aside .menu ul li > a:hover, aside .menu ul li.active > a{
 	background-color:#389dc1;
 	color:#fff;
 }
