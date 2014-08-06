@@ -54,6 +54,33 @@ function get_static_pages() {
     return $_page;
 }
 
+// Get static page path. Unsorted. 
+function get_static_sub_pages($static = null) {
+
+    static $_sub_page = array();
+
+    if (empty($_sub_page)) {
+        $url = 'cache/index/index-sub-page.txt';
+        if(! file_exists($url)) {
+            rebuilt_cache('all');
+        }
+        $_sub_page = unserialize(file_get_contents($url));
+    }
+    if($static != null)
+    {
+        $stringLen = strlen($static);
+        return array_filter($_sub_page, function($sub_page)use($static,$stringLen){
+            $x = explode("/",$sub_page);
+            if($x[count($x)-2] == $static)
+            {
+                return true;
+            }
+            return false;
+        });
+    }
+    return $_sub_page;
+}
+
 // Get author bio path. Unsorted. 
 function get_author_names() {
 
@@ -130,6 +157,11 @@ function rebuilt_cache($type) {
         $page_cache = glob('content/static/*.md', GLOB_NOSORT);
         $string = serialize($page_cache);
         file_put_contents('cache/index/index-page.txt', print_r($string, true));
+    } elseif ($type === 'subpage') {
+
+        $page_cache = glob('content/static/*/*.md', GLOB_NOSORT);
+        $string = serialize($page_cache);
+        file_put_contents('cache/index/index-sub-page.txt', print_r($string, true));
     } elseif ($type === 'author') {
 
         $author_cache = glob('content/*/author.md', GLOB_NOSORT);
@@ -138,6 +170,7 @@ function rebuilt_cache($type) {
     } elseif ($type === 'all') {
         rebuilt_cache('posts');
         rebuilt_cache('page');
+        rebuilt_cache('subpage');
         rebuilt_cache('author');
     }
 }
@@ -465,6 +498,53 @@ function get_static_post($static) {
                     $post->views = get_views($post->file);
                 }
                 
+                $tmp[] = $post;
+            }
+        }
+    }
+
+    return $tmp;
+}
+// Return static page.
+function get_static_sub_post($static,$sub_static) {
+
+    $posts = get_static_sub_pages($static);
+    
+    $tmp = array();
+
+    if (!empty($posts)) {
+
+        foreach ($posts as $index => $v) {
+            if (strpos($v, $sub_static . '.md') !== false) {
+
+                $post = new stdClass;
+
+                // Replaced string
+                $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+
+                // The static page URL
+                $url = str_replace($replaced, '', $v);
+                $post->url = site_url() . $static . "/" . str_replace('.md', '', $url);
+
+                $post->file = $v;
+
+                // Get the contents and convert it to HTML
+                $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+
+                // Extract the title and body
+                $arr = explode('t-->', $content);
+                if (isset($arr[1])) {
+                    $title = str_replace('<!--t', '', $arr[0]);
+                    $title = rtrim(ltrim($title, ' '), ' ');
+                    $post->title = $title;
+                    $post->body = $arr[1];
+                } else {
+                    $post->title = $sub_static;
+                    $post->body = $arr[0];
+                }
+                
+                $post->views = get_views($post->file);
+
                 $tmp[] = $post;
             }
         }
@@ -1002,8 +1082,24 @@ function menu() {
     }
 }
 
+function get_title_from_file($v)
+{
+    // Get the contents and convert it to HTML
+    $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+
+    // Extract the title and body
+    $arr = explode('t-->', $content);
+    if (isset($arr[1])) {
+        $title = str_replace('<!--t', '', $arr[0]);
+        $title = rtrim(ltrim($title, ' '), ' ');
+    } else {
+        $title = str_replace('-', ' ', str_replace('.md', '', $base));
+    }
+    return $title;
+}
+
 // Auto generate menu from static page
-function get_menu() {
+function get_menu() {//aktive Link for Sub Pages ::TODO
 
     $posts = get_static_pages();
     $req = $_SERVER['REQUEST_URI'];
@@ -1036,23 +1132,48 @@ function get_menu() {
             $base = str_replace($replaced, '', $v);
             $url = site_url() . str_replace('.md', '', $base);
 
-            // Get the contents and convert it to HTML
-            $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+            $title = get_title_from_file($v);
 
-            // Extract the title and body
-            $arr = explode('t-->', $content);
-            if (isset($arr[1])) {
-                $title = str_replace('<!--t', '', $arr[0]);
-                $title = rtrim(ltrim($title, ' '), ' ');
+            if ($req == site_path() . "/" . str_replace('.md', '', $base)) {
+                $active = ' active';
+                $reqBase = '';
             } else {
-                $title = str_replace('-', ' ', str_replace('.md', '', $base));
+                $active = '';
             }
-
-            if (strpos($req, str_replace('.md', '', $base)) !== false) {
-                echo '<li class="' . $class . ' active"><a href="' . $url . '">' . ucwords($title) . '</a></li>';
-            } else {
-                echo '<li class="' . $class . '"><a href="' . $url . '">' . ucwords($title) . '</a></li>';
+            echo '<li class="' . $class . $active . '">';
+            
+            $subPages = get_static_sub_pages(str_replace('.md', '', $base));
+            echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
+            if(!empty($subPages))
+            {
+                echo '<ul>';
+                
+                $iSub = 0;
+                $countSub = count($subPages);
+                foreach($subPages as $index => $sp)
+                {
+                    $classSub = "item";
+                    if($iSub == 0)
+                    {
+                        $classSub .= " first";
+                    }
+                    if($iSub == $countSub -1)
+                    {
+                        $classSub .= " last";
+                    }
+                    $replacedSub = substr($sp, 0, strrpos($sp, '/')) . '/';
+                    $baseSub = str_replace($replacedSub, '', $sp);
+                    
+                    if ($req == site_path() . "/" . str_replace('.md', '', $base) . "/" . str_replace('.md', '', $baseSub)) {
+                        $classSub .= ' active';
+                    }
+                    $urlSub = $url . "/" . str_replace('.md', '', $baseSub);
+                    echo '<li class="' . $classSub . '"><a href="' . $urlSub . '">&raquo; ' . get_title_from_file($sp) . '</a></li>';
+                    $iSub++;
+                }
+                echo '</ul>';
             }
+            echo '</li>';
         }
         echo '</ul>';
     } else {

@@ -27,7 +27,7 @@
 	$oldurl = str_replace($dir . '/','',$url);
 	$oldmd = str_replace('.md','',$oldurl);
 	
-	$delete = site_url() . $oldmd . '/delete?destination=' . $destination;
+	$delete = $p->url . '/delete?destination=' . $destination;
 	
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css" />

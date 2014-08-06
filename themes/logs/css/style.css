@@ -306,7 +306,7 @@ ul li, ol li{
 	text-decoration: underline;
 }
 
-#menu ul li.active a {
+#menu ul li.active > a {
 	text-decoration: underline;
 }
 
