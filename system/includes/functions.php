@@ -1133,10 +1133,8 @@ function get_menu() {//aktive Link for Sub Pages ::TODO
             $url = site_url() . str_replace('.md', '', $base);
 
             $title = get_title_from_file($v);
-                        
-            $reqBase = str_replace(substr($req, 0, strrpos($req, '/')) . '/', '', $req);
 
-            if ($reqBase == str_replace('.md', '', $base)) {
+            if ($req == site_path() . "/" . str_replace('.md', '', $base)) {
                 $active = ' active';
                 $reqBase = '';
             } else {
@@ -1165,7 +1163,8 @@ function get_menu() {//aktive Link for Sub Pages ::TODO
                     }
                     $replacedSub = substr($sp, 0, strrpos($sp, '/')) . '/';
                     $baseSub = str_replace($replacedSub, '', $sp);
-                    if ($reqBase == str_replace('.md', '', $baseSub)) {
+                    
+                    if ($req == site_path() . "/" . str_replace('.md', '', $base) . "/" . str_replace('.md', '', $baseSub)) {
                         $classSub .= ' active';
                     }
                     $urlSub = $url . "/" . str_replace('.md', '', $baseSub);
