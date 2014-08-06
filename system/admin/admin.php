@@ -189,6 +189,33 @@ function add_page($title, $url, $content) {
 	
 }
 
+// Add static sub page
+function add_sub_page($title, $url, $content, $static) {
+
+    $post_title = $title;
+    $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
+
+    if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
+        if (get_magic_quotes_gpc()) {
+            $post_content = stripslashes($post_content);
+        }
+        $filename = $post_url . '.md';
+        $dir = 'content/static/' . $static . '/';
+        if (is_dir($dir)) {
+            file_put_contents($dir . $filename, print_r($post_content, true));
+        } else {
+            mkdir($dir, 0777, true);
+            file_put_contents($dir . $filename, print_r($post_content, true));
+        }
+
+        rebuilt_cache('all');
+        clear_page_cache($post_url);
+        $redirect = site_url() . 'admin';
+        header("Location: $redirect");
+    }
+}
+
 // Delete blog post
 function delete_post($file, $destination) {
 	if(!login()) return null;
