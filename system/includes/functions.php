@@ -1055,6 +1055,9 @@ function get_title_from_file($v)
     // Get the contents and convert it to HTML
     $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
+    $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+    $base = str_replace($replaced, '', $v);
+
     // Extract the title and body
     return get_content_tag('t',$content,str_replace('-', ' ', str_replace('.md', '', $base)));
 }
