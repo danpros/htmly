@@ -1686,6 +1686,5 @@ function get_content_tag($tag, $string, $alt = null) {
 }
 
 function remove_html_comments($content) {
-    //return $content;
     return trim(preg_replace('/(\s|)<!--(.*)-->(\s|)/', '', $content));
 }
