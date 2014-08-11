@@ -16,7 +16,7 @@ function get_post_unsorted() {
     if (empty($_unsorted)) {
 
         $url = 'cache/index/index-unsorted.txt';
-        if(! file_exists($url)) {
+        if (!file_exists($url)) {
             rebuilt_cache('all');
         }
         $_unsorted = unserialize(file_get_contents($url));
@@ -31,7 +31,7 @@ function get_post_sorted() {
 
     if (empty($_sorted)) {
         $url = 'cache/index/index-sorted.txt';
-        if(! file_exists($url)) {
+        if (!file_exists($url)) {
             rebuilt_cache('all');
         }
         $_sorted = unserialize(file_get_contents($url));
@@ -46,7 +46,7 @@ function get_static_pages() {
 
     if (empty($_page)) {
         $url = 'cache/index/index-page.txt';
-        if(! file_exists($url)) {
+        if (!file_exists($url)) {
             rebuilt_cache('all');
         }
         $_page = unserialize(file_get_contents($url));
@@ -61,18 +61,16 @@ function get_static_sub_pages($static = null) {
 
     if (empty($_sub_page)) {
         $url = 'cache/index/index-sub-page.txt';
-        if(! file_exists($url)) {
+        if (!file_exists($url)) {
             rebuilt_cache('all');
         }
         $_sub_page = unserialize(file_get_contents($url));
     }
-    if($static != null)
-    {
+    if ($static != null) {
         $stringLen = strlen($static);
-        return array_filter($_sub_page, function($sub_page)use($static,$stringLen){
-            $x = explode("/",$sub_page);
-            if($x[count($x)-2] == $static)
-            {
+        return array_filter($_sub_page, function($sub_page)use($static, $stringLen) {
+            $x = explode("/", $sub_page);
+            if ($x[count($x) - 2] == $static) {
                 return true;
             }
             return false;
@@ -88,7 +86,7 @@ function get_author_names() {
 
     if (empty($_author)) {
         $url = 'cache/index/index-author.txt';
-        if(! file_exists($url)) {
+        if (!file_exists($url)) {
             rebuilt_cache('all');
         }
         $_author = unserialize(file_get_contents($url));
@@ -245,13 +243,14 @@ function get_posts($posts, $page = 1, $perpage = 0) {
         $content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
 
         // Extract the title and body
-        $post->title = get_content_tag('t',$content,'Untitled: ' . date('l jS \of F Y', $post->date));
+        $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
         $post->body = remove_html_comments($content);
 
-        if(config("views.counter"))
-        {
+        if (config("views.counter")) {
             $post->views = get_views($post->file);
         }
+
+        $post->description = get_content_tag("d", $content, get_description($post->body));
 
         $tmp[] = $post;
     }
@@ -413,8 +412,10 @@ function get_bio($author) {
                 $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
                 // Extract the title and body
-                $post->title = get_content_tag('t',$content,$author);
+                $post->title = get_content_tag('t', $content, $author);
                 $post->body = remove_html_comments($content);
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
 
                 $tmp[] = $post;
             }
@@ -435,6 +436,8 @@ function default_profile($author) {
 
     $profile->title = $author;
     $profile->body = '<p>Just another HTMLy user.</p>';
+
+    $profile->descirption = 'Just another HTMLy user';
 
     return $tmp[] = $profile;
 }
@@ -466,14 +469,15 @@ function get_static_post($static) {
                 $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
                 // Extract the title and body
-                $post->title = get_content_tag('t',$content,$static);
+                $post->title = get_content_tag('t', $content, $static);
                 $post->body = remove_html_comments($content);
-                
-                if(config("views.counter"))
-                {
+
+                if (config("views.counter")) {
                     $post->views = get_views($post->file);
                 }
-                
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
                 $tmp[] = $post;
             }
         }
@@ -481,11 +485,12 @@ function get_static_post($static) {
 
     return $tmp;
 }
+
 // Return static page.
-function get_static_sub_post($static,$sub_static) {
+function get_static_sub_post($static, $sub_static) {
 
     $posts = get_static_sub_pages($static);
-    
+
     $tmp = array();
 
     if (!empty($posts)) {
@@ -508,10 +513,12 @@ function get_static_sub_post($static,$sub_static) {
                 $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
                 // Extract the title and body
-                $post->title = get_content_tag('t',$content,$sub_static);
+                $post->title = get_content_tag('t', $content, $sub_static);
                 $post->body = remove_html_comments($content);
-                
+
                 $post->views = get_views($post->file);
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
 
                 $tmp[] = $post;
             }
@@ -1050,8 +1057,7 @@ function menu() {
     }
 }
 
-function get_title_from_file($v)
-{
+function get_title_from_file($v) {
     // Get the contents and convert it to HTML
     $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
@@ -1059,12 +1065,11 @@ function get_title_from_file($v)
     $base = str_replace($replaced, '', $v);
 
     // Extract the title and body
-    return get_content_tag('t',$content,str_replace('-', ' ', str_replace('.md', '', $base)));
+    return get_content_tag('t', $content, str_replace('-', ' ', str_replace('.md', '', $base)));
 }
 
 // Auto generate menu from static page
 function get_menu() {//aktive Link for Sub Pages ::TODO
-
     $posts = get_static_pages();
     $req = $_SERVER['REQUEST_URI'];
 
@@ -1105,29 +1110,25 @@ function get_menu() {//aktive Link for Sub Pages ::TODO
                 $active = '';
             }
             echo '<li class="' . $class . $active . '">';
-            
+
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
-            if(!empty($subPages))
-            {
+            if (!empty($subPages)) {
                 echo '<ul>';
-                
+
                 $iSub = 0;
                 $countSub = count($subPages);
-                foreach($subPages as $index => $sp)
-                {
+                foreach ($subPages as $index => $sp) {
                     $classSub = "item";
-                    if($iSub == 0)
-                    {
+                    if ($iSub == 0) {
                         $classSub .= " first";
                     }
-                    if($iSub == $countSub -1)
-                    {
+                    if ($iSub == $countSub - 1) {
                         $classSub .= " last";
                     }
                     $replacedSub = substr($sp, 0, strrpos($sp, '/')) . '/';
                     $baseSub = str_replace($replacedSub, '', $sp);
-                    
+
                     if ($req == site_path() . "/" . str_replace('.md', '', $base) . "/" . str_replace('.md', '', $baseSub)) {
                         $classSub .= ' active';
                     }
@@ -1644,52 +1645,40 @@ function is_csrf_proper($csrf_token) {
     return false;
 }
 
-function add_view($page)
-{
+function add_view($page) {
     $filename = "cache/count.json";
     $views = array();
-    if(file_exists($filename))
-    {
-        $views = json_decode(file_get_contents($filename),true);
+    if (file_exists($filename)) {
+        $views = json_decode(file_get_contents($filename), true);
     }
-    if(isset($views[$page]))
-    {
-        $views[$page]++;
-    }
-    else
-    {
+    if (isset($views[$page])) {
+        $views[$page] ++;
+    } else {
         $views[$page] = 1;
     }
-    file_put_contents($filename,json_encode($views));
+    file_put_contents($filename, json_encode($views));
 }
 
-function get_views($page)
-{
+function get_views($page) {
     static $_views = array();
-    
-    if(empty($_views))
-    {
+
+    if (empty($_views)) {
         $filename = "cache/count.json";
-        if(file_exists($filename))
-        {
-            $_views = json_decode(file_get_contents($filename),true);
+        if (file_exists($filename)) {
+            $_views = json_decode(file_get_contents($filename), true);
         }
     }
-    if(isset($_views[$page]))
-    {
+    if (isset($_views[$page])) {
         return $_views[$page];
     }
     return -1;
 }
 
-function get_content_tag($tag, $string, $alt = null)
-{
-    $reg = '/\<!--'.$tag.'(.+)'.$tag.'--\>/';
+function get_content_tag($tag, $string, $alt = null) {
+    $reg = '/\<!--' . $tag . '(.+)' . $tag . '--\>/';
     $ary = array();
-    if(preg_match($reg, $string, $ary))
-    {
-        if(isset($ary[1]))
-        {
+    if (preg_match($reg, $string, $ary)) {
+        if (isset($ary[1])) {
             return trim($ary[1]);
         }
     }
