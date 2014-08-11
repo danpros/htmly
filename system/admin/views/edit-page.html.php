@@ -7,15 +7,8 @@
 		$url = $oldfile;
 	}
 	$content = file_get_contents($url);
-	$arr = explode('t-->', $content);
-	if(isset($arr[1])) {
-		$oldtitle = ltrim(rtrim(str_replace('<!--t','',$arr[0]), ' '));
-		$oldcontent = ltrim($arr[1]);
-	}
-	else {
-		$oldtitle = 'Untitled';
-		$oldcontent = ltrim($arr[0]);
-	}
+	$oldtitle = get_content_tag('t',$content,'Untitled');
+	$oldcontent = remove_html_comments($content);
 	
 	if(isset($_GET['destination'])) {
 		$destination = $_GET['destination'];

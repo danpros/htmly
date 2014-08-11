@@ -245,16 +245,8 @@ function get_posts($posts, $page = 1, $perpage = 0) {
         $content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
 
         // Extract the title and body
-        $arr = explode('t-->', $content);
-        if (isset($arr[1])) {
-            $title = str_replace('<!--t', '', $arr[0]);
-            $title = rtrim(ltrim($title, ' '), ' ');
-            $post->title = $title;
-            $post->body = $arr[1];
-        } else {
-            $post->title = 'Untitled: ' . date('l jS \of F Y', $post->date);
-            $post->body = $arr[0];
-        }
+        $post->title = get_content_tag('t',$content,'Untitled: ' . date('l jS \of F Y', $post->date));
+        $post->body = remove_html_comments($content);
 
         if(config("views.counter"))
         {
@@ -421,16 +413,8 @@ function get_bio($author) {
                 $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
                 // Extract the title and body
-                $arr = explode('t-->', $content);
-                if (isset($arr[1])) {
-                    $title = str_replace('<!--t', '', $arr[0]);
-                    $title = rtrim(ltrim($title, ' '), ' ');
-                    $post->title = $title;
-                    $post->body = $arr[1];
-                } else {
-                    $post->title = $author;
-                    $post->body = $arr[0];
-                }
+                $post->title = get_content_tag('t',$content,$author);
+                $post->body = remove_html_comments($content);
 
                 $tmp[] = $post;
             }
@@ -482,16 +466,8 @@ function get_static_post($static) {
                 $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
                 // Extract the title and body
-                $arr = explode('t-->', $content);
-                if (isset($arr[1])) {
-                    $title = str_replace('<!--t', '', $arr[0]);
-                    $title = rtrim(ltrim($title, ' '), ' ');
-                    $post->title = $title;
-                    $post->body = $arr[1];
-                } else {
-                    $post->title = $static;
-                    $post->body = $arr[0];
-                }
+                $post->title = get_content_tag('t',$content,$static);
+                $post->body = remove_html_comments($content);
                 
                 if(config("views.counter"))
                 {
@@ -532,16 +508,8 @@ function get_static_sub_post($static,$sub_static) {
                 $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
                 // Extract the title and body
-                $arr = explode('t-->', $content);
-                if (isset($arr[1])) {
-                    $title = str_replace('<!--t', '', $arr[0]);
-                    $title = rtrim(ltrim($title, ' '), ' ');
-                    $post->title = $title;
-                    $post->body = $arr[1];
-                } else {
-                    $post->title = $sub_static;
-                    $post->body = $arr[0];
-                }
+                $post->title = get_content_tag('t',$content,$sub_static);
+                $post->body = remove_html_comments($content);
                 
                 $post->views = get_views($post->file);
 
@@ -1088,14 +1056,7 @@ function get_title_from_file($v)
     $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
     // Extract the title and body
-    $arr = explode('t-->', $content);
-    if (isset($arr[1])) {
-        $title = str_replace('<!--t', '', $arr[0]);
-        $title = rtrim(ltrim($title, ' '), ' ');
-    } else {
-        $title = str_replace('-', ' ', str_replace('.md', '', $base));
-    }
-    return $title;
+    return get_content_tag('t',$content,str_replace('-', ' ', str_replace('.md', '', $base)));
 }
 
 // Auto generate menu from static page
@@ -1716,4 +1677,23 @@ function get_views($page)
         return $_views[$page];
     }
     return -1;
+}
+
+function get_content_tag($tag, $string, $alt = null)
+{
+    $reg = '/\<!--'.$tag.'(.+)'.$tag.'--\>/';
+    $ary = array();
+    if(preg_match($reg, $string, $ary))
+    {
+        if(isset($ary[1]))
+        {
+            return trim($ary[1]);
+        }
+    }
+    return $alt;
+}
+
+function remove_html_comments($content) {
+    //return $content;
+    return trim(preg_replace('/(\s|)<!--(.*)-->(\s|)/', '', $content));
 }
