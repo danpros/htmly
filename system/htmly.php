@@ -108,7 +108,7 @@ post('/login', function() {
     }
 });
 
-get("/:static/:sub/edit", function($static,$sub) {
+get("/:static/:sub/edit", function($static, $sub) {
 
     if (login()) {
 
@@ -120,8 +120,8 @@ get("/:static/:sub/edit", function($static,$sub) {
         }
 
         $post = $post[0];
-        
-        $page = get_static_sub_post($static,$sub);
+
+        $page = get_static_sub_post($static, $sub);
 
         if (!$page) {
             not_found();
@@ -141,23 +141,21 @@ get("/:static/:sub/edit", function($static,$sub) {
         header("location: $login");
     }
 });
-post("/:static/:sub/edit", function($static,$sub) {
+post("/:static/:sub/edit", function($static, $sub) {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
-    if(!login())
-    {
+    if (!login()) {
         $login = site_url() . 'login';
-        header("location: $login");   
+        header("location: $login");
     }
-    
+
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
     $oldfile = from($_REQUEST, 'oldfile');
     $destination = from($_GET, 'destination');
     $description = from($_REQUEST, 'description');
-    if($destination === null)
-    {
+    if ($destination === null) {
         $destination = $static . "/" . $sub;
     }
     if ($proper && !empty($title) && !empty($content)) {
@@ -193,7 +191,7 @@ post("/:static/:sub/edit", function($static,$sub) {
     }
 });
 
-get("/:static/:sub/delete",  function($static,$sub) {
+get("/:static/:sub/delete", function($static, $sub) {
 
     if (login()) {
 
@@ -206,7 +204,7 @@ get("/:static/:sub/delete",  function($static,$sub) {
 
         $post = $post[0];
 
-        $page = get_static_sub_post($static,$sub);
+        $page = get_static_sub_post($static, $sub);
 
         if (!$page) {
             not_found();
@@ -239,8 +237,7 @@ post("/:static/:sub/delete", function() {
 // The blog post page
 get('/:year/:month/:name', function($year, $month, $name) {
 
-    if(config("views.counter") != "true")
-    {
+    if (config("views.counter") != "true") {
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
         }
@@ -253,9 +250,8 @@ get('/:year/:month/:name', function($year, $month, $name) {
     if (!$current) {
         not_found();
     }
-    
-    if(config("views.counter") == "true")
-    {
+
+    if (config("views.counter") == "true") {
         add_view($current->file);
 
         if (!login()) {
@@ -284,7 +280,7 @@ get('/:year/:month/:name', function($year, $month, $name) {
     }
 
     render('post', array(
-        'head_contents' => head_contents($current->title . ' - ' . blog_title(), $description = get_description($current->body), $current->url),
+        'head_contents' => head_contents($current->title . ' - ' . blog_title(), $current->description, $current->url),
         'p' => $current,
         'authorinfo' => authorinfo($bio->title, $bio->body),
         'bodyclass' => 'inpost',
@@ -707,14 +703,13 @@ get('/:static', function($static) {
         }
         die;
     } else {
-        
-        if( config("views.counter") != "true")
-        {
+
+        if (config("views.counter") != "true") {
             if (!login()) {
                 file_cache($_SERVER['REQUEST_URI']);
             }
         }
-        
+
         $post = get_static_post($static);
 
         if (!$post) {
@@ -723,8 +718,7 @@ get('/:static', function($static) {
 
         $post = $post[0];
 
-        if(config("views.counter") == "true")
-        {
+        if (config("views.counter") == "true") {
             add_view($post->file);
             if (!login()) {
                 file_cache($_SERVER['REQUEST_URI']);
@@ -732,7 +726,7 @@ get('/:static', function($static) {
         }
 
         render('static', array(
-            'head_contents' => head_contents($post->title . ' - ' . blog_title(), $description = get_description($post->body), $post->url),
+            'head_contents' => head_contents($post->title . ' - ' . blog_title(), $post->description, $post->url),
             'bodyclass' => 'inpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
@@ -772,12 +766,11 @@ get('/:static/edit', function($static) {
 post('/:static/edit', function() {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
-    if(!login())
-    {
+    if (!login()) {
         $login = site_url() . 'login';
-        header("location: $login");   
+        header("location: $login");
     }
-    
+
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -1244,14 +1237,13 @@ get('/:static/add', function($static) {
         config('views.root', 'system/admin/views');
 
         $post = get_static_post($static);
-        
-        if(! $post)
-        {
+
+        if (!$post) {
             not_found();
         }
-        
+
         $post = $post[0];
-        
+
         render('add-page', array(
             'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
             'bodyclass' => 'addpage',
@@ -1301,29 +1293,28 @@ post('/:static/add', function($static) {
     }
 });
 
-get('/:static/:sub', function($static,$sub) {
-    
+get('/:static/:sub', function($static, $sub) {
+
     $father_post = get_static_post($static);
     if (!$father_post) {
         not_found();
     }
-    $post = get_static_sub_post($static,$sub);
+    $post = get_static_sub_post($static, $sub);
     if (!$post) {
         not_found();
     }
     $post = $post[0];
-    
-	if(config("views.counter") == "true")
-	{
-		add_view($post->file);
-	}
+
+    if (config("views.counter") == "true") {
+        add_view($post->file);
+    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
 
     render('static', array(
-        'head_contents' => head_contents($post->title . ' - ' . blog_title(), $description = get_description($post->body), $post->url),
+        'head_contents' => head_contents($post->title . ' - ' . blog_title(), $post->description, $post->url),
         'bodyclass' => 'inpage',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
         'p' => $post,

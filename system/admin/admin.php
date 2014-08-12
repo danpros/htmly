@@ -46,7 +46,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
-        $post_description = "<!--d " . $description . " d-->";
+        $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
     }
@@ -134,7 +134,7 @@ function add_post($title, $tag, $url, $content, $user, $desciption = null) {
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
-        $post_description = "<!--d " . $description . " d-->";
+        $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
     }
@@ -166,7 +166,7 @@ function add_page($title, $url, $content, $description = null) {
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
-        $post_description = "<!--d " . $description . " d-->";
+        $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
     }
@@ -198,7 +198,7 @@ function add_sub_page($title, $url, $content, $static, $description = null) {
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
-        $post_description = "<!--d " . $description . " d-->";
+        $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
     }
