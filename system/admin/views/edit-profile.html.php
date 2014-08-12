@@ -8,15 +8,8 @@
 	
 	if(file_exists($filename)) {
 		$content = file_get_contents($filename);
-		$arr = explode('t-->', $content);
-		if(isset($arr[1])) {
-			$oldtitle = ltrim(rtrim(str_replace('<!--t','',$arr[0]), ' '));
-			$oldcontent = ltrim($arr[1]);
-		}
-		else {
-			$oldtitle = $user;
-			$oldcontent = ltrim($arr[0]);
-		}
+		$oldtitle = get_content_tag('t',$content,'user');
+		$oldcontent = remove_html_comments($content);
 	}
 	else {
 			$oldtitle = $user;
