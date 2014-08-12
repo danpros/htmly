@@ -39,14 +39,18 @@ function remove_accent($str) {
 }
 
 // Edit blog posts
-function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) {
-
+function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null) {
     $oldurl = explode('_', $oldfile);
 
     $post_title = $title;
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
-    $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
+    if ($description !== null) {
+        $post_description = "\n<!--d " . $description . " d-->";
+    } else {
+        $post_description = "";
+    }
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {
@@ -85,13 +89,17 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null) 
 }
 
 // Edit static page
-function edit_page($title, $url, $content, $oldfile, $destination = null) {
-
+function edit_page($title, $url, $content, $oldfile, $destination = null, $description = null) {
     $dir = substr($oldfile, 0, strrpos($oldfile, '/'));
 
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
-    $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
+    if ($description !== null) {
+        $post_description = "\n<!--d " . $description . " d-->";
+    } else {
+        $post_description = '';
+    }
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {
@@ -119,13 +127,18 @@ function edit_page($title, $url, $content, $oldfile, $destination = null) {
 }
 
 // Add blog post
-function add_post($title, $tag, $url, $content, $user) {
+function add_post($title, $tag, $url, $content, $user, $desciption = null) {
 
     $post_date = date('Y-m-d-H-i-s');
     $post_title = $title;
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
-    $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
+    if ($description !== null) {
+        $post_description = "\n<!--d " . $description . " d-->";
+    } else {
+        $post_description = "";
+    }
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {
@@ -148,11 +161,16 @@ function add_post($title, $tag, $url, $content, $user) {
 }
 
 // Add static page
-function add_page($title, $url, $content) {
+function add_page($title, $url, $content, $description = null) {
 
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
-    $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
+    if ($description !== null) {
+        $post_description = "\n<!--d " . $description . " d-->";
+    } else {
+        $post_description = "";
+    }
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {
@@ -175,11 +193,16 @@ function add_page($title, $url, $content) {
 }
 
 // Add static sub page
-function add_sub_page($title, $url, $content, $static) {
+function add_sub_page($title, $url, $content, $static, $description = null) {
 
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
-    $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content;
+    if ($description !== null) {
+        $post_description = "\n<!--d " . $description . " d-->";
+    } else {
+        $post_description = "";
+    }
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {

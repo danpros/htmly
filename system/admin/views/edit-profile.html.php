@@ -28,6 +28,8 @@
 <div class="wmd-panel">
 <form method="POST">
 	Title <span class="required">*</span> <br><input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" value="<?php echo $oldtitle?>"/><br><br>
+	Meta Description (optional)<br><input type="text" class="text" name="description" value="<?php if (isset($postDescription)) { echo $postDescription;} ?>"/><br>
+	<br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
 	<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
