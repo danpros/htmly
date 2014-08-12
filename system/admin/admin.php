@@ -127,7 +127,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 }
 
 // Add blog post
-function add_post($title, $tag, $url, $content, $user, $desciption = null) {
+function add_post($title, $tag, $url, $content, $user, $description = null) {
 
     $post_date = date('Y-m-d-H-i-s');
     $post_title = $title;
