@@ -501,9 +501,8 @@ post('/edit/profile', function() {
     $user = $_SESSION[config("site.url")]['user'];
     $title = from($_REQUEST, 'title');
     $content = from($_REQUEST, 'content');
-    $description = from($_REQUEST, 'description');
     if ($proper && !empty($title) && !empty($content)) {
-        edit_profile($title, $content, $user, $description);
+        edit_profile($title, $content, $user);
     } else {
         $message['error'] = '';
         if (empty($title)) {
