@@ -1299,6 +1299,8 @@ function get_static_path() {
 // Generate sitemap.xml.
 function generate_sitemap($str) {
 
+    header('X-Robots-Tag: noindex');
+    
     echo '<?xml version="1.0" encoding="UTF-8"?>';
 
     if ($str == 'index') {
