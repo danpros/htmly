@@ -852,7 +852,7 @@ function base64_encode_image($filename = string, $filetype = string) {
 }
 
 // Social links
-function social() {
+function social($imgDir = null) {
 
     $twitter = config('social.twitter');
     $facebook = config('social.facebook');
@@ -860,23 +860,27 @@ function social() {
     $tumblr = config('social.tumblr');
     $rss = site_url() . 'feed/rss';
 
+    if ($imgDir === null) {
+        $imgDir = "default/img/";
+    }
+
     if (!empty($twitter)) {
-        echo '<a href="' . $twitter . '" target="_blank"><img src="' . site_url() . 'themes/default/img/twitter.png" width="32" height="32" alt="Twitter"/></a>';
+        echo '<a href="' . $twitter . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'twitter.png" width="32" height="32" alt="Twitter"/></a>';
     }
 
     if (!empty($facebook)) {
-        echo '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/default/img/facebook.png" width="32" height="32" alt="Facebook"/></a>';
+        echo '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'facebook.png" width="32" height="32" alt="Facebook"/></a>';
     }
 
     if (!empty($google)) {
-        echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/default/img/googleplus.png" width="32" height="32" alt="Google+"/></a>';
+        echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'googleplus.png" width="32" height="32" alt="Google+"/></a>';
     }
 
     if (!empty($tumblr)) {
-        echo '<a href="' . $tumblr . '" target="_blank"><img src="' . site_url() . 'themes/default/img/tumblr.png" width="32" height="32" alt="Tumblr"/></a>';
+        echo '<a href="' . $tumblr . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'tumblr.png" width="32" height="32" alt="Tumblr"/></a>';
     }
 
-    echo '<a href="' . site_url() . 'feed/rss" target="_blank"><img src="' . site_url() . 'themes/default/img/rss.png" width="32" height="32" alt="RSS Feed"/></a>';
+    echo '<a href="' . $rss . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'rss.png" width="32" height="32" alt="RSS Feed"/></a>';
 }
 
 // Copyright
@@ -978,19 +982,26 @@ function publisher() {
 }
 
 // Google Analytics
-function analytics() {
+function analytics($analyticsDir = null) {
     $analytics = config('google.analytics.id');
+    if($analyticsDir === null)
+    {
+        $analyticsDir = '//www.google-analytics.com/analytics.js';
+    }
+    else
+    {
+        $analyticsDir = site_url() . 'themes/' . $analyticsDir . 'analytics.js';
+    }
     $script = <<<EOF
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', '{$analytics}']);
-		_gaq.push(['_trackPageview']);
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','{$analyticsDir}','ga');
+
+    ga('create', '{$analytics}', 'auto');
+    ga('send', 'pageview');
+</script>
 EOF;
     if (!empty($analytics)) {
         return $script;
@@ -1112,9 +1123,9 @@ function get_menu() {//aktive Link for Sub Pages ::TODO
             echo '<li class="' . $class . $active . '">';
 
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
-            echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
+            echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
             if (!empty($subPages)) {
-                echo '<ul>';
+                echo '<br/><ul>';
 
                 $iSub = 0;
                 $countSub = count($subPages);
@@ -1298,6 +1309,8 @@ function get_static_path() {
 
 // Generate sitemap.xml.
 function generate_sitemap($str) {
+
+    header('X-Robots-Tag: noindex');
 
     echo '<?xml version="1.0" encoding="UTF-8"?>';
 
