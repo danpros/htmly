@@ -1112,9 +1112,9 @@ function get_menu() {//aktive Link for Sub Pages ::TODO
             echo '<li class="' . $class . $active . '">';
 
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
-            echo '<a href="' . $url . '">' . ucwords($title) . '</a><br/>';
+            echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
             if (!empty($subPages)) {
-                echo '<ul>';
+                echo '<br/><ul>';
 
                 $iSub = 0;
                 $countSub = count($subPages);
