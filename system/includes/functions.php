@@ -852,31 +852,36 @@ function base64_encode_image($filename = string, $filetype = string) {
 }
 
 // Social links
-function social() {
+function social($imgDir = null) {
 
     $twitter = config('social.twitter');
     $facebook = config('social.facebook');
     $google = config('social.google');
     $tumblr = config('social.tumblr');
     $rss = site_url() . 'feed/rss';
+    
+    if($imgDir === null)
+    {
+        $imgDir = "default/img/";
+    }
 
     if (!empty($twitter)) {
-        echo '<a href="' . $twitter . '" target="_blank"><img src="' . site_url() . 'themes/default/img/twitter.png" width="32" height="32" alt="Twitter"/></a>';
+        echo '<a href="' . $twitter . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'twitter.png" width="32" height="32" alt="Twitter"/></a>';
     }
 
     if (!empty($facebook)) {
-        echo '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/default/img/facebook.png" width="32" height="32" alt="Facebook"/></a>';
+        echo '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'facebook.png" width="32" height="32" alt="Facebook"/></a>';
     }
 
     if (!empty($google)) {
-        echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/default/img/googleplus.png" width="32" height="32" alt="Google+"/></a>';
+        echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'googleplus.png" width="32" height="32" alt="Google+"/></a>';
     }
 
     if (!empty($tumblr)) {
-        echo '<a href="' . $tumblr . '" target="_blank"><img src="' . site_url() . 'themes/default/img/tumblr.png" width="32" height="32" alt="Tumblr"/></a>';
+        echo '<a href="' . $tumblr . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'tumblr.png" width="32" height="32" alt="Tumblr"/></a>';
     }
 
-    echo '<a href="' . site_url() . 'feed/rss" target="_blank"><img src="' . site_url() . 'themes/default/img/rss.png" width="32" height="32" alt="RSS Feed"/></a>';
+    echo '<a href="' . $rss . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'rss.png" width="32" height="32" alt="RSS Feed"/></a>';
 }
 
 // Copyright
