@@ -20,7 +20,7 @@ function session($user, $pass, $str = null) {
     $password = (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none') ? hash($user_enc, $pass) : $pass;
 
     if (file_exists($user_file)) {
-        if ($pass === $user_pass) {
+        if ($password === $user_pass) {
             $_SESSION[config("site.url")]['user'] = $user;
             header('location: admin');
         } else {

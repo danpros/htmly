@@ -35,7 +35,7 @@
 	Title <span class="required">*</span><br><input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" value="<?php echo $oldtitle?>"/><br><br>
 	Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
 	<span class="help">If the url leave empty we will use the page title.</span><br><br>
-	Meta Description (optional)<br><input type="text" class="text" name="description" value="<?php if (isset($p->description)) { echo $p->description;} ?>"/><br>
+	Meta Description (optional)<br><input type="text" class="text" name="description" maxlength="2" value="<?php if (isset($p->description)) { echo $p->description;} ?>"/><br>
 	<br><br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
