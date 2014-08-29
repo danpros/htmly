@@ -661,10 +661,6 @@ function archive_list() {
         $script = <<<EOF
 	if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
 EOF;
-        echo <<<EOF
-		<style>ul.archivegroup{padding:0;margin:0;}.archivegroup .expanded ul{display:block;}.archivegroup .collapsed ul{display:none;}.archivegroup li.expanded,.archivegroup li.collapsed{list-style:none;}
-		</style>
-EOF;
         echo '<h3>Archive</h3>';
         $i = 0;
         $len = count($by_year);
