@@ -863,3 +863,21 @@ table.post-list td a {
     }
 
 }
+
+/*----------------------------
+        Archive
+-----------------------------*/
+
+ul.archivegroup{
+    padding:0;
+    margin:0;
+}
+.archivegroup .expanded ul{
+    display:block;
+}
+.archivegroup .collapsed ul{
+    display:none;
+}
+.archivegroup li.expanded,.archivegroup li.collapsed{
+    list-style:none;
+}
