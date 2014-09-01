@@ -266,6 +266,10 @@ textarea {
 	line-height: 1.4;
 	background-color: #F6F7F9;
 	border: 1px solid #CFDAE5;
+	padding: 2%;
+	width: 96%;
+	min-height: 5em;
+	overflow: auto;
 }
 
 textarea:hover {

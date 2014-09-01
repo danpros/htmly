@@ -10,7 +10,7 @@
 		Title <span class="required">*</span><br><input type="text" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" name="title" value="<?php if (isset($postTitle)) { echo $postTitle;} ?>"/><br><br>
 		Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) { echo $postUrl;} ?>"/><br>
 		<span class="help">If the url leave empty we will use the page title.</span><br><br>
-		Meta Description (optional)<br><input type="text" class="text" name="description" maxlength="2" value="<?php if (isset($postDescription)) { echo $postDescription;} ?>"/><br>
+		Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 		<br>
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
 		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br/>
