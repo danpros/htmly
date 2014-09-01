@@ -11,7 +11,7 @@
 		Tag <span class="required">*</span> <br><input type="text" class="text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error';}} ?>" name="tag" value="<?php if (isset($postTag)) { echo $postTag;} ?>"/><br><br>
 		Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) { echo $postUrl;} ?>"/><br>
 		<span class="help">If the url leave empty we will use the post title.</span><br><br>
-		Meta Description (optional)<br><input type="text" class="text" name="description" maxlength="2" value="<?php if (isset($postDescription)) { echo $postDescription;} ?>"/><br>
+		Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 		<br><br>
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
 		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br/>
