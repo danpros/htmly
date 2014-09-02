@@ -185,6 +185,14 @@ Contribute
 1. Fork and edit
 2. Submit pull request for consideration
 
+Contributers
+----------
+- [danpros](https://github.com/danpros)
+- [Kanti](https://github.com/Kanti)
+- [fahmi182](https://github.com/fahmi182)
+- [fanningert](https://github.com/fanningert)
+- [BlackCodec](https://github.com/BlackCodec)
+
 Copyright / License
 -------------------
 For copyright notice please read [COPYRIGHT.txt](https://github.com/danpros/htmly/blob/master/COPYRIGHT.txt). HTMLy licensed under the GNU General Public License Version 2.0 (or later).
