@@ -187,10 +187,10 @@ Contribute
 
 Contributers
 ----------
-- [danpros](https://github.com/danpros)
-- [Kanti](https://github.com/Kanti)
-- [fahmi182](https://github.com/fahmi182)
-- [fanningert](https://github.com/fanningert)
+- [danpros](https://github.com/danpros) - [Weblog](http://www.danpros.com)
+- [Kanti](https://github.com/Kanti) - [Weblog](https://kanti.de)
+- [fahmi182](https://github.com/fahmi182) - [Weblog](http://ifahmi.com)
+- [fanningert](https://github.com/fanningert) - [Weblog](http://thomas.fanninger.at)
 - [BlackCodec](https://github.com/BlackCodec)
 
 Copyright / License
