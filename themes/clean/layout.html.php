@@ -5,6 +5,7 @@
 	<link href="<?php echo site_url() ?>themes/clean/css/style.css" rel="stylesheet" />
 	<link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet" />
 	<?php if (publisher()):?><link href="<?php echo publisher() ?>" rel="publisher" /><?php endif;?>
+	<?php if (wmt()):?><?php echo wmt() ?><?php endif;?>
 	<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
