@@ -32,6 +32,9 @@ fb.color = "light"
 ; Disqus comments
 disqus.shortname = ""
 
+; Google Web Master Tool ID verification
+google.wmt.id = ""
+
 ; Google+ publisher
 google.publisher = ""
 

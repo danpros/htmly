@@ -1576,6 +1576,7 @@ function head_contents($title, $description, $canonical) {
     $styleImage = config('lightbox');
     $jq = config('jquery');
     $output = '';
+    $wmt_id = config('google.wmt.id');
 
     $title = '<title>' . $title . '</title>';
     $favicon = '<link href="' . site_url() . 'favicon.ico" rel="icon" type="image/x-icon"/>';
@@ -1591,14 +1592,19 @@ function head_contents($title, $description, $canonical) {
     $jquery = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
     $lightbox = '<script src="' . site_url() . 'system/plugins/lightbox/js/lightbox-2.6.min.js"></script>';
     $corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
+    $webmasterTools = '';
+    if(!empty($wmt_id))
+    {
+    	$webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
+    }
 
     if ($styleImage == 'on') {
-        $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n";
+        $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n" . $webmasterTools . "\n";
     } else {
         if ($jq == 'enable') {
-            $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $jquery . "\n";
+            $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $jquery . "\n" . $webmasterTools . "\n";
         } else {
-            $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n";
+            $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $webmasterTools . "\n";
         }
     }
 
