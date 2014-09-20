@@ -50,6 +50,7 @@
 			<div class="container">
 				<footer id="footer">
 					<div class="footer-column">
+						<div class="recent column"><div class="inner"><h3>Recent Posts</h3><?php echo recent()?></div></div>
 						<div class="archive column"><div class="inner"><?php echo archive_list()?></div></div>
 						<div class="tagcloud column"><div class="inner"><?php echo tag_cloud()?></div></div>
 						<div class="social column"><div class="inner"><h3>Follow</h3><?php echo social()?></div></div>

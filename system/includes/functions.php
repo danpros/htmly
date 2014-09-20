@@ -626,6 +626,21 @@ function keyword_count($keyword) {
     return count($tmp);
 }
 
+function recent() {
+    $str = '<ul>';
+    $posts = get_posts(null, 1, 5);
+    foreach($posts as $post)
+    {
+        $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+    }
+    if(empty($posts))
+    {
+        $str .= '<li>No Posts Found</li>';
+    }
+    $str .= '</ul>';
+    return $str;
+}
+
 // Return an archive list, categorized by year and month.
 function archive_list() {
 
