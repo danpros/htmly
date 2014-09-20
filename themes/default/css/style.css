@@ -99,7 +99,7 @@ h6 {
 }
 
 #menu, #header, #content, #footer {
-	width: 700px;
+	width: 800px;
 	margin: 0 auto;
 }
 
@@ -156,7 +156,7 @@ a:hover{
 
 blockquote:before {
     color: #BBBBBB;
-    content: "“";
+    content: "â€œ";
     font-size: 3em;
     line-height: 0.1em;
     margin-right: 0.2em;
@@ -165,7 +165,7 @@ blockquote:before {
 
 blockquote:after {
     color: #BBBBBB;
-    content: "”";
+    content: "â€";
     font-size: 3em;
     line-height: 0.1em;
     vertical-align: -0.45em;
@@ -748,7 +748,12 @@ h1.title-post a:hover, h2.title-index a:hover {
 
 .column {
 	float: left;
-	width: 33%;
+	width: 25%;
+}
+
+.recent ul {
+	padding-left: 20px;
+	width: 85%;
 }
 
 .archive .toggle {
