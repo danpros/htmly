@@ -1579,11 +1579,11 @@ function head_contents($title, $description, $canonical) {
     $wmt_id = config('google.wmt.id');
 
     $title = '<title>' . $title . '</title>';
-    $favicon = '<link href="' . site_url() . 'favicon.ico" rel="icon" type="image/x-icon"/>';
+    $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
     $charset = '<meta charset="utf-8" />';
-    $generator = '<meta content="htmly" name="generator"/>';
+    $generator = '<meta name="generator" content="htmly" />';
     $xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
-    $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" user-scalable="no" />';
+    $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />';
     $description = '<meta name="description" content="' . $description . '"/>';
     $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
     $canonical = '<link rel="canonical" href="' . $canonical . '" />';
@@ -1599,12 +1599,12 @@ function head_contents($title, $description, $canonical) {
     }
 
     if ($styleImage == 'on') {
-        $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n" . $webmasterTools . "\n";
+        $output .= $charset . "\n" . $xua . "\n" . $title . "\n" . $description . "\n" . $viewport . "\n" . $generator . "\n" . $webmasterTools . "\n" . $favicon . "\n" . $canonical . "\n" . $sitemap . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n";
     } else {
         if ($jq == 'enable') {
-            $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $jquery . "\n" . $webmasterTools . "\n";
+            $output .= $charset . "\n" . $xua . "\n" . $title . "\n" . $description . "\n" . $viewport . "\n" . $generator . "\n" . $webmasterTools . "\n" . $favicon . "\n" . $canonical . "\n" . $sitemap . "\n" . $feed . "\n" . $jquery . "\n";
         } else {
-            $output .= $title . "\n" . $favicon . "\n" . $charset . "\n" . $generator . "\n" . $xua . "\n" . $viewport . "\n" . $description . "\n" . $sitemap . "\n" . $canonical . "\n" . $feed . "\n" . $webmasterTools . "\n";
+            $output .= $charset . "\n" . $xua . "\n" . $title . "\n" . $description . "\n" . $viewport . "\n" . $generator . "\n" . $webmasterTools . "\n" . $favicon . "\n" . $canonical . "\n" . $sitemap . "\n" . $feed . "\n";
         }
     }
 
