@@ -582,8 +582,16 @@ ul li, ol li{
     margin:0;
 }
 
-.about, .social, .archive, .comments, .tagcloud {
-    margin-bottom:2em;
+.about, .social, .archive, .comments, .tagcloud, .recent {
+    margin-bottom: 2em;
+}
+ 
+.recent li:before {
+    content: "►";
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    margin-right: 5px;
+    color: #21759B;   
 }
 
 /*-------------------------
