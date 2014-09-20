@@ -426,14 +426,14 @@ aside .menu ul li a{
 	margin:2px 0 2px 10px;
 }
 
-aside .archive, aside .tagcloud {
+aside .archive, aside .tagcloud, aside .recent {
 	font-size: 14px;
 	font-family: Georgia, sans-serif;
 	margin-bottom: 1.2em;
 	margin-left: 10px;
 }
 
-aside .archive ul li ul, aside .tagcloud ul li {
+aside .archive ul li ul, aside .tagcloud ul li, aside .recent ul li {
 	margin-left:30px;
 }
 
@@ -751,7 +751,7 @@ aside .copyright p{
 		text-align: center;
 	}
 
-	aside .archive, aside .tagcloud, aside .copyright{
+	aside .archive, aside .tagcloud, aside .copyright, aside .recent {
 		display: none;
 	}
 
