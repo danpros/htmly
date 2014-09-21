@@ -38,6 +38,7 @@ Features
 - User role
 - Online backup
 - File cache
+- Auto Update
 
 Requirements
 ------------
@@ -173,7 +174,7 @@ So wrap the title with HTML comment with `t` for both side.
 
 Demo
 ----
-Visit a real blog powered by HTMLy at [Danlogs](http://www.danlogs.com).
+Visit [HTMLy Demo](http://demo.htmly.com).
 
 Credit
 ------
@@ -185,7 +186,7 @@ Contribute
 1. Fork and edit
 2. Submit pull request for consideration
 
-Contributers
+Contributors
 ----------
 - [danpros](https://github.com/danpros) - [Weblog](http://www.danpros.com)
 - [Kanti](https://github.com/Kanti) - [Weblog](https://kanti.de)
