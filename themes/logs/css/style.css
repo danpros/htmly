@@ -585,13 +585,13 @@ ul li, ol li{
 .about, .social, .archive, .comments, .tagcloud, .recent {
     margin-bottom: 2em;
 }
+
+#sidebar .recent ul {
+    margin: 0.25em 0 0.25em 1.3em;
+}
  
-.recent li:before {
-    content: "►";
-    font-size: 12px;
-    -webkit-font-smoothing: antialiased;
-    margin-right: 5px;
-    color: #21759B;   
+#sidebar .recent li {
+    list-style-type: circle;
 }
 
 /*-------------------------
