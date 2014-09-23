@@ -238,13 +238,14 @@ function get_posts($posts, $page = 1, $perpage = 0) {
         $post->tagb = implode(' » ', $bc);
 
         $post->file = $filepath;
-
-        // Get the contents and convert it to HTML
-        $content = MarkdownExtra::defaultTransform(file_get_contents($filepath));
+        
+        $content = file_get_contents($filepath);
 
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
-        $post->body = remove_html_comments($content);
+
+        // Get the contents and convert it to HTML
+        $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
         if (config("views.counter")) {
             $post->views = get_views($post->file);
@@ -1711,7 +1712,11 @@ function get_content_tag($tag, $string, $alt = null) {
     $ary = array();
     if (preg_match($reg, $string, $ary)) {
         if (isset($ary[1])) {
-            return trim($ary[1]);
+            $result = trim($ary[1]);
+            if(!empty($result))
+            {
+                return $result;
+            }
         }
     }
     return $alt;
