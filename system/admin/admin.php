@@ -43,8 +43,12 @@ function remove_accent($str) {
 }
 
 // Edit blog posts
-function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null) {
+function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null) {
     $oldurl = explode('_', $oldfile);
+    if($date !== null)
+    {
+        $oldurl[0] = substr($oldurl[0],0,-19) . date('Y-m-d-h-m-s',strtotime($date));
+    }
 
     $post_title = $title;
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));

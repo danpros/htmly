@@ -341,13 +341,13 @@ post('/:year/:month/:name/edit', function() {
     $oldfile = from($_REQUEST, 'oldfile');
     $destination = from($_GET, 'destination');
     $description = from($_REQUEST, 'description');
+    $date = from($_REQUEST, 'date');
+    
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
-        if (!empty($url)) {
-            edit_post($title, $tag, $url, $content, $oldfile, $destination, $description);
-        } else {
+        if(empty($url)) {
             $url = $title;
-            edit_post($title, $tag, $url, $content, $oldfile, $destination, $description);
         }
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $date);
     } else {
         $message['error'] = '';
         if (empty($title)) {
