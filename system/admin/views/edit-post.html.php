@@ -49,6 +49,7 @@
 	Tag <span class="required">*</span> <br><input type="text" name="tag" class="text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error';}} ?>" value="<?php echo $oldtag?>"/><br><br>
 	Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
 	<span class="help">If the url leave empty we will use the post title.</span><br><br>
+	Date<br><input type="date" name="date" class="text" value="<?php echo $timestamp; ?>"><br><br>
 	Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 	<br><br>
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
