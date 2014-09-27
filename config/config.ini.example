@@ -1,6 +1,8 @@
 ; The URL of your blog. Include the http or https.
 site.url = ""
 
+timezone = "Asia/Jakarta"
+
 ; Blog info
 blog.title = "HTMLy"
 blog.tagline = "Just another HTMLy blog"

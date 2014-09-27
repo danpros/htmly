@@ -14,6 +14,10 @@ include 'system/includes/opml.php';
 
 // Load the configuration file
 config('source', 'config/config.ini');
+if(config('timezone'))
+{
+    date_default_timezone_set(config('timezone'));
+}
 
 // The front page of the blog.
 // This will match the root url
@@ -342,12 +346,18 @@ post('/:year/:month/:name/edit', function() {
     $destination = from($_GET, 'destination');
     $description = from($_REQUEST, 'description');
     $date = from($_REQUEST, 'date');
+    $time = from($_REQUEST, 'time');
+    $dateTime = null;
+    if($date !== null && $time !== null)
+    {
+        $dateTime = $date . ' ' . $time;
+    }
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if(empty($url)) {
             $url = $title;
         }
-        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $date);
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime);
     } else {
         $message['error'] = '';
         if (empty($title)) {

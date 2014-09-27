@@ -47,7 +47,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
     $oldurl = explode('_', $oldfile);
     if($date !== null)
     {
-        $oldurl[0] = substr($oldurl[0],0,-19) . date('Y-m-d-h-m-s',strtotime($date));
+        $oldurl[0] = substr($oldurl[0],0,-19) . date('Y-m-d-h-i-s',strtotime($date));
     }
 
     $post_title = $title;
