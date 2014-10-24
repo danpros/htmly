@@ -1192,7 +1192,9 @@ EOF;
 
 // The not found error
 function not_found() {
-    error(404, render('404', null, false));
+    header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+    render('404', null, false);
+    die();
 }
 
 // Turn an array of posts into an RSS feed
