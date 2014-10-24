@@ -1,9 +1,6 @@
 # Don't show directory listings for URLs which map to a directory.
 Options -Indexes
 
-# Follow symbolic links in this directory.
-Options +FollowSymLinks
-
 # Make HTMLy handle any 404 errors.
 ErrorDocument 404 /index.php
 
