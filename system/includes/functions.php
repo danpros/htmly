@@ -1624,7 +1624,7 @@ function toolbar() {
 
     $updater = new \Kanti\Updater(array(
 		'name' => 'danpros/htmly',
-		'prerelease' => config("prerelease"),
+		'prerelease' => !!config("prerelease"),
 	));
 
     echo <<<EOF

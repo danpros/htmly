@@ -1228,7 +1228,10 @@ get('/feed/opml', function() {
 get('/admin/update/now/:csrf', function($CSRF) {
 
     $proper = is_csrf_proper($CSRF);
-    $updater = new \Kanti\Updater;
+    $updater = new \Kanti\Updater(array(
+		'name' => 'danpros/htmly',
+		'prerelease' => !!config("prerelease"),
+	));
     if (login() && $proper && $updater->able()) {
         $updater->update();
         config('views.root', 'system/admin/views');
