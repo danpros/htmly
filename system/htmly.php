@@ -1200,8 +1200,11 @@ get('/api/json', function() {
 
     header('Content-type: application/json');
 
-    // Print the 10 latest posts as JSON
-    echo generate_json(get_posts(null, 1, config('json.count')));
+    $page = from($_GET, 'page');
+    $page = $page ? (int) $page : 1;
+    $perpage = config('json.count');
+
+    echo generate_json(get_posts(null, $page, $perpage));
 });
 
 // Show the RSS feed
