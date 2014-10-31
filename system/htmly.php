@@ -1228,8 +1228,8 @@ get('/feed/opml', function() {
 get('/admin/update/now/:csrf', function($CSRF) {
 
     $proper = is_csrf_proper($CSRF);
-    $updater = new Updater;
-    if (login() && $proper && $updater->updateAble()) {
+    $updater = new \Kanti\Updater;
+    if (login() && $proper && $updater->able()) {
         $updater->update();
         config('views.root', 'system/admin/views');
         render('updated-to', array(

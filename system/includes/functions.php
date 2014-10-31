@@ -1622,7 +1622,10 @@ function toolbar() {
 
     $CSRF = get_csrf();
 
-    $updater = new Updater;
+    $updater = new \Kanti\Updater(array(
+		'name' => 'danpros/htmly',
+		'prerelease' => config("prerelease"),
+	));
 
     echo <<<EOF
 	<link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
@@ -1639,7 +1642,7 @@ EOF;
     echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
     echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
-    if ($updater->updateAble()) {
+    if ($updater->able()) {
         echo '<li><a href="' . $base . 'admin/update/now/' . $CSRF . '">Update to ' . $updater->getName() . '</a></li>';
     }
     echo '<li><a href="' . $base . 'logout">Logout</a></li>';
