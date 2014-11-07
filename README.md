@@ -3,7 +3,7 @@ HTMLy
 
 HTMLy is an open source databaseless blogging platform prioritizing simplicity and speed (Flat-File Blog). And because HTMLy also manage the contents, then it can be referred as a Flat-File CMS.
 
-You do not need to use a VPS to run HTMLy, fairly shared hosting or even a free hosting as long as those hosting already support at least PHP 5.3.
+You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
 
 Features
 ---------
@@ -51,7 +51,9 @@ If you don't have openssl, download the latest version, extract it, then upload 
 
 Configurations
 --------------
-Rename `config.ini.example` inside `config` folder to `config.ini` or you can create it one than change the site settings there, create `YourUsername.ini` inside `config/users` folder or simply rename the `username.ini.example`, write down your password there.
+Rename `config.ini.example` inside the `config` folder to `config.ini` (or you can create a new `config/config.ini` file) then change the site settings there.
+
+Create `YourUsername.ini` inside the `config/users` folder or simply rename the `username.ini.example` file and write down your password there:
 
 ````
 password = YourPassword
@@ -63,7 +65,7 @@ HTMLy support admin user role either, simply add the following to your choosen u
 role = admin
 ````
 
-Admin role can edit/delete all users posts.
+A user with the admin role can edit/delete all users' posts.
 
 You can login to admin panel at `www.example.com/login`.
 
@@ -124,9 +126,9 @@ server {
 
 Both Online or Offline
 ----------------------
-In addition by using the built-in editor in the admin panel, you can also write it offline and then upload them into `content/username/blog` folder (the username must match with `YourUsername.ini` above). 
+In addition by using the built-in editor in the admin panel, you can also write markdown files offline and then upload them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above). 
 
-For static pages you can upload it to `content/static` folder.
+For static pages you can upload it to the `content/static` folder.
 
 File Naming Convention
 ----------------------
@@ -139,7 +141,7 @@ When you write a blog post and save it via the admin panel, HTMLy automatically 
 Here's the explanation (separated by an underscore):
 
 - `2014-01-31-12-56-40` is the published date. The date format is `yyyy-mm-dd-hh-mm-ss`
-- `tag1,tag2,tag3` is the tag, separated by comma
+- `tag1,tag2,tag3` are the tags, separated by commas
 - `databaseless-blogging-platform-flat-file-blog` is the URL
 	
 For static pages, we use the following format:
@@ -150,7 +152,7 @@ content/static/about.md
 
 That means the URL is `about`.
 
-So if you write it offline then you must naming the .md file as above.
+So if you write it offline then you must name the .md file as above.
 
 For static sub pages, we use the following format:
 
