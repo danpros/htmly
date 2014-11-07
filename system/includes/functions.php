@@ -7,6 +7,7 @@ use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
+use \Kanti\HubUpdater;
 
 // Get blog post path. Unsorted. Mostly used on widget.
 function get_post_unsorted() {
@@ -1622,7 +1623,7 @@ function toolbar() {
 
     $CSRF = get_csrf();
 
-    $updater = new \Kanti\Updater(array(
+    $updater = new HubUpdater(array(
 		'name' => 'danpros/htmly',
 		'prerelease' => !!config("prerelease"),
 	));

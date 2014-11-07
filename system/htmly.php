@@ -6,7 +6,6 @@ date_default_timezone_set('Asia/Jakarta');
 // Explicitly including the dispatch framework,
 // and our functions.php file
 require 'system/includes/dispatch.php';
-require 'system/includes/updater.php';
 require 'system/includes/functions.php';
 require 'system/admin/admin.php';
 require 'system/includes/session.php';
@@ -1228,7 +1227,7 @@ get('/feed/opml', function() {
 get('/admin/update/now/:csrf', function($CSRF) {
 
     $proper = is_csrf_proper($CSRF);
-    $updater = new \Kanti\Updater(array(
+    $updater = new \Kanti\HubUpdater(array(
 		'name' => 'danpros/htmly',
 		'prerelease' => !!config("prerelease"),
 	));
