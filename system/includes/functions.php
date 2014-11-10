@@ -1493,7 +1493,7 @@ function generate_opml()
         )
     );
 
-    $opml = new OPML($opml_data);
+    $opml = new opml($opml_data);
     echo $opml->render();
 }
 
