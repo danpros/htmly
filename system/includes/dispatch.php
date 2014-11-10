@@ -3,7 +3,8 @@ if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300) {
   error(500, 'dispatch requires at least PHP 5.3 to run.');
 }
 
-function _log($message) {
+function _log($message)
+{
   if (config('debug.enable') == true && php_sapi_name() !== 'cli') {
     $file = config('debug.log');
     $type = $file ? 3 : 0;
@@ -11,8 +12,8 @@ function _log($message) {
   }
 }
 
-function site_url(){
-
+function site_url()
+{
   if (config('site.url') == null)
       error(500, '[site.url] is not set');
 
@@ -20,36 +21,39 @@ function site_url(){
   return rtrim(config('site.url'),'/').'/';
 }
 
-function site_path(){
+function site_path()
+{
   static $_path;
 
   if (config('site.url') == null)
       error(500, '[site.url] is not set');
-  
+
   if (!$_path)
     $_path = rtrim(parse_url(config('site.url'), PHP_URL_PATH),'/');
-  
+
   return $_path;
 }
 
-function error($code, $message) {
+function error($code, $message)
+{
   @header("HTTP/1.0 {$code} {$message}", true, $code);
   die($message);
 }
 
-function config($key, $value = null) {
-
+function config($key, $value = null)
+{
   static $_config = array();
 
   if ($key === 'source' && file_exists($value))
     $_config = parse_ini_file($value, true);
-  else if ($value == null)
+  elseif ($value == null)
     return (isset($_config[$key]) ? $_config[$key] : null);
   else
     $_config[$key] = $value;
 }
 
-function to_b64($str) {
+function to_b64($str)
+{
   $str = base64_encode($str);
   $str = preg_replace('/\//', '_', $str);
   $str = preg_replace('/\+/', '.', $str);
@@ -57,7 +61,8 @@ function to_b64($str) {
   return trim($str, '-');
 }
 
-function from_b64($str) {
+function from_b64($str)
+{
   $str = preg_replace('/\_/', '/', $str);
   $str = preg_replace('/\./', '+', $str);
   $str = preg_replace('/\-/', '=', $str);
@@ -67,8 +72,8 @@ function from_b64($str) {
 
 if (extension_loaded('mcrypt')) {
 
-  function encrypt($decoded, $algo = MCRYPT_RIJNDAEL_256, $mode = MCRYPT_MODE_CBC) {
-
+  function encrypt($decoded, $algo = MCRYPT_RIJNDAEL_256, $mode = MCRYPT_MODE_CBC)
+  {
     if (($secret = config('cookies.secret')) == null)
       error(500, '[cookies.secret] is not set');
 
@@ -80,8 +85,8 @@ if (extension_loaded('mcrypt')) {
     return sprintf('%s|%s', $encrypted, to_b64($iv_code));
   }
 
-  function decrypt($encoded, $algo = MCRYPT_RIJNDAEL_256, $mode = MCRYPT_MODE_CBC) {
-
+  function decrypt($encoded, $algo = MCRYPT_RIJNDAEL_256, $mode = MCRYPT_MODE_CBC)
+  {
     if (($secret = config('cookies.secret')) == null)
       error(500, '[cookies.secret] is not set');
 
@@ -96,13 +101,14 @@ if (extension_loaded('mcrypt')) {
 
 }
 
-function set_cookie($name, $value, $expire = 31536000, $path = '/') {
+function set_cookie($name, $value, $expire = 31536000, $path = '/')
+{
   $value = (function_exists('encrypt') ? encrypt($value) : $value);
   setcookie($name, $value, time() + $expire, $path);
 }
 
-function get_cookie($name) {
-
+function get_cookie($name)
+{
   $value = from($_COOKIE, $name);
 
   if ($value)
@@ -111,7 +117,8 @@ function get_cookie($name) {
   return $value;
 }
 
-function delete_cookie() {
+function delete_cookie()
+{
   $cookies = func_get_args();
   foreach ($cookies as $ck)
     setcookie($ck, '', -10, '/');
@@ -120,7 +127,8 @@ function delete_cookie() {
 // if we have APC loaded, enable cache functions
 if (extension_loaded('apc')) {
 
-  function cache($key, $func, $ttl = 0) {
+  function cache($key, $func, $ttl = 0)
+  {
     if (($data = apc_fetch($key)) === false) {
       $data = call_user_func($func);
       if ($data !== null) {
@@ -130,7 +138,8 @@ if (extension_loaded('apc')) {
     return $data;
   }
 
-  function cache_invalidate() {
+  function cache_invalidate()
+  {
     foreach (func_get_args() as $key) {
       apc_delete($key);
     }
@@ -138,8 +147,8 @@ if (extension_loaded('apc')) {
 
 }
 
-function warn($name = null, $message = null) {
-
+function warn($name = null, $message = null)
+{
   static $warnings = array();
 
   if ($name == '*')
@@ -154,15 +163,18 @@ function warn($name = null, $message = null) {
   $warnings[$name] = $message;
 }
 
-function _u($str) {
+function _u($str)
+{
   return urlencode($str);
 }
 
-function _h($str, $enc = 'UTF-8', $flags = ENT_QUOTES) {
+function _h($str, $enc = 'UTF-8', $flags = ENT_QUOTES)
+{
   return htmlentities($str, $flags, $enc);
 }
 
-function from($source, $name) {
+function from($source, $name)
+{
   if (is_array($name)) {
     $data = array();
     foreach ($name as $k)
@@ -172,8 +184,8 @@ function from($source, $name) {
   return isset($source[$name]) ? $source[$name] : null ;
 }
 
-function stash($name, $value = null) {
-
+function stash($name, $value = null)
+{
   static $_stash = array();
 
   if ($value === null)
@@ -184,26 +196,26 @@ function stash($name, $value = null) {
   return $value;
 }
 
-function method($verb = null) {
-
+function method($verb = null)
+{
   if ($verb == null || (strtoupper($verb) == strtoupper($_SERVER['REQUEST_METHOD'])))
     return strtoupper($_SERVER['REQUEST_METHOD']);
 
   error(400, 'bad request');
 }
 
-function client_ip() {
-
+function client_ip()
+{
   if (isset($_SERVER['HTTP_CLIENT_IP']))
     return $_SERVER['HTTP_CLIENT_IP'];
-  else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+  elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
     return $_SERVER['HTTP_X_FORWARDED_FOR'];
 
   return $_SERVER['REMOTE_ADDR'];
 }
 
-function redirect(/* $code_or_path, $path_or_cond, $cond */) {
-
+function redirect(/* $code_or_path, $path_or_cond, $cond */)
+{
   $argv = func_get_args();
   $argc = count($argv);
 
@@ -243,8 +255,8 @@ function redirect(/* $code_or_path, $path_or_cond, $cond */) {
   exit;
 }
 
-function partial($view, $locals = null) {
-
+function partial($view, $locals = null)
+{
   if (is_array($locals) && count($locals)) {
     extract($locals, EXTR_SKIP);
   }
@@ -267,11 +279,13 @@ function partial($view, $locals = null) {
   return '';
 }
 
-function content($value = null) {
+function content($value = null)
+{
   return stash('$content$', $value);
 }
 
-function render($view, $locals = null, $layout = null) {
+function render($view, $locals = null, $layout = null)
+{
 	$login = login();
 	if(!$login) {
 		$c = str_replace('/', '#', str_replace('?', '~', $_SERVER['REQUEST_URI']));
@@ -319,14 +333,15 @@ function render($view, $locals = null, $layout = null) {
 	}
 }
 
-function json($obj, $code = 200) {
+function json($obj, $code = 200)
+{
   header('Content-type: application/json', true, $code);
   echo json_encode($obj);
   exit;
 }
 
-function condition() {
-
+function condition()
+{
   static $cb_map = array();
 
   $argv = func_get_args();
@@ -350,8 +365,8 @@ function condition() {
   error(500, 'condition ['.$name.'] is undefined');
 }
 
-function middleware($cb_or_path = null) {
-
+function middleware($cb_or_path = null)
+{
   static $cb_map = array();
 
   if ($cb_or_path == null || is_string($cb_or_path)) {
@@ -363,8 +378,8 @@ function middleware($cb_or_path = null) {
   }
 }
 
-function filter($sym, $cb_or_val = null) {
-
+function filter($sym, $cb_or_val = null)
+{
   static $cb_map = array();
 
   if (is_callable($cb_or_val)) {
@@ -384,7 +399,8 @@ function filter($sym, $cb_or_val = null) {
   error(500, 'bad call to filter()');
 }
 
-function route_to_regex($route) {
+function route_to_regex($route)
+{
   $route = preg_replace_callback('@:[\w]+@i', function ($matches) {
     $token = str_replace(':', '', $matches[0]);
     return '(?P<'.$token.'>[a-z0-9_\0-\.]+)';
@@ -392,8 +408,8 @@ function route_to_regex($route) {
   return '@^'.rtrim($route, '/').'$@i';
 }
 
-function route($method, $pattern, $callback = null) {
-
+function route($method, $pattern, $callback = null)
+{
   // callback map by request type
   static $route_map = array(
     'GET' => array(),
@@ -458,16 +474,18 @@ function route($method, $pattern, $callback = null) {
 
 }
 
-function get($path, $cb) {
+function get($path, $cb)
+{
   route('GET', $path, $cb);
 }
 
-function post($path, $cb) {
+function post($path, $cb)
+{
   route('POST', $path, $cb);
 }
 
-function flash($key, $msg = null, $now = false) {
-
+function flash($key, $msg = null, $now = false)
+{
   static $x = array(),
          $f = null;
 
@@ -497,10 +515,10 @@ function flash($key, $msg = null, $now = false) {
   $x[$key] = $msg;
 }
 
-function dispatch() {
-
+function dispatch()
+{
   $path = urldecode($_SERVER['REQUEST_URI']);
-  
+
   if (config('site.url') !== null)
     $path = preg_replace('@^'.preg_quote(site_path()).'@', '', $path);
 
@@ -511,4 +529,3 @@ function dispatch() {
 
   route(method(), "/{$uri}");
 }
-?>

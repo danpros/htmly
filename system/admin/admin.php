@@ -1,7 +1,8 @@
 <?php
 
 // Return username.ini value
-function user($key, $user = null) {
+function user($key, $user = null)
+{
     $value = 'config/users/' . $user . '.ini';
     static $_config = array();
     if (file_exists($value)) {
@@ -13,7 +14,8 @@ function user($key, $user = null) {
 }
 
 // Create a session
-function session($user, $pass, $str = null) {
+function session($user, $pass, $str = null)
+{
     $user_file = 'config/users/' . $user . '.ini';
     $user_enc = user('encryption', $user);
     $user_pass = user('password', $user);
@@ -32,21 +34,22 @@ function session($user, $pass, $str = null) {
 }
 
 // Clean URLs
-function remove_accent($str) {
+function remove_accent($str)
+{
     $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ');
     $b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o');
     $cyr = array('ж',  'ч',  'щ',   'ш',  'ю',  'а', 'б', 'в', 'г', 'д', 'e', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ъ', 'ь', 'я', 'Ж',  'Ч',  'Щ',   'Ш',  'Ю',  'А', 'Б', 'В', 'Г', 'Д', 'Е', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ъ', 'Ь', 'Я');
     $lat = array('zh', 'ch', 'sht', 'sh', 'yu', 'a', 'b', 'v', 'g', 'd', 'e', 'z', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'h', 'c', 'y', 'x', 'q', 'Zh', 'Ch', 'Sht', 'Sh', 'Yu', 'A', 'B', 'V', 'G', 'D', 'E', 'Z', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'c', 'Y', 'X', 'Q');
-    $a = array_merge($a,$cyr);
-    $b = array_merge($b,$lat);
+    $a = array_merge($a, $cyr);
+    $b = array_merge($b, $lat);
     return str_replace($a, $b, $str);
 }
 
 // Edit blog posts
-function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null) {
+function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null)
+{
     $oldurl = explode('_', $oldfile);
-    if($date !== null)
-    {
+    if($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . date('Y-m-d-h-i-s',strtotime($date));
     }
 
@@ -97,7 +100,8 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
 }
 
 // Edit static page
-function edit_page($title, $url, $content, $oldfile, $destination = null, $description = null) {
+function edit_page($title, $url, $content, $oldfile, $destination = null, $description = null)
+{
     $dir = substr($oldfile, 0, strrpos($oldfile, '/'));
 
     $post_title = $title;
@@ -135,7 +139,8 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 }
 
 // Add blog post
-function add_post($title, $tag, $url, $content, $user, $description = null) {
+function add_post($title, $tag, $url, $content, $user, $description = null)
+{
 
     $post_date = date('Y-m-d-H-i-s');
     $post_title = $title;
@@ -169,7 +174,8 @@ function add_post($title, $tag, $url, $content, $user, $description = null) {
 }
 
 // Add static page
-function add_page($title, $url, $content, $description = null) {
+function add_page($title, $url, $content, $description = null)
+{
 
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
@@ -201,7 +207,8 @@ function add_page($title, $url, $content, $description = null) {
 }
 
 // Add static sub page
-function add_sub_page($title, $url, $content, $static, $description = null) {
+function add_sub_page($title, $url, $content, $static, $description = null)
+{
 
     $post_title = $title;
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
@@ -233,7 +240,8 @@ function add_sub_page($title, $url, $content, $static, $description = null) {
 }
 
 // Delete blog post
-function delete_post($file, $destination) {
+function delete_post($file, $destination)
+{
     if (!login())
         return null;
     $deleted_content = $file;
@@ -258,7 +266,8 @@ function delete_post($file, $destination) {
 }
 
 // Delete static page
-function delete_page($file, $destination) {
+function delete_page($file, $destination)
+{
     if (!login())
         return null;
     $deleted_content = $file;
@@ -287,8 +296,8 @@ function delete_page($file, $destination) {
 }
 
 // Edit user profile
-function edit_profile($title, $content, $user) {
-
+function edit_profile($title, $content, $user)
+{
     $user_title = $title;
     $user_content = '<!--t ' . $user_title . ' t-->' . "\n\n" . $content;
 
@@ -311,8 +320,8 @@ function edit_profile($title, $content, $user) {
 }
 
 // Import RSS feed
-function migrate($title, $time, $tags, $content, $url, $user, $source) {
-
+function migrate($title, $time, $tags, $content, $url, $user, $source)
+{
     $post_date = date('Y-m-d-H-i-s', $time);
     $post_title = $title;
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tags));
@@ -341,7 +350,8 @@ function migrate($title, $time, $tags, $content, $url, $user, $source) {
 }
 
 // Fetch RSS feed
-function get_feed($feed_url, $credit, $message = null) {
+function get_feed($feed_url, $credit, $message = null)
+{
     $source = file_get_contents($feed_url);
     $feed = new SimpleXmlElement($source);
     if (!empty($feed->channel->item)) {
@@ -350,7 +360,7 @@ function get_feed($feed_url, $credit, $message = null) {
             $descriptionB = $entry->description;
             if (!empty($descriptionA)) {
                 $content = $descriptionA;
-            } else if (!empty($descriptionB)) {
+            } elseif (!empty($descriptionB)) {
                 $content = preg_replace('#<br\s*/?>#i', "\n", $descriptionB);
             } else {
                 return $str = '<li>Can not read the feed content.</li>';
@@ -376,7 +386,8 @@ function get_feed($feed_url, $credit, $message = null) {
 }
 
 // Get recent posts by user
-function get_recent_posts() {
+function get_recent_posts()
+{
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
@@ -411,7 +422,8 @@ function get_recent_posts() {
 }
 
 // Get all static pages
-function get_recent_pages() {
+function get_recent_pages()
+{
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_static_post(null);
         if (!empty($posts)) {
@@ -458,7 +470,8 @@ function get_recent_pages() {
 }
 
 // Get all available zip files
-function get_backup_files() {
+function get_backup_files()
+{
     if (isset($_SESSION[config("site.url")]['user'])) {
         $files = get_zip_files();
         if (!empty($files)) {
@@ -505,8 +518,8 @@ function get_backup_files() {
     }
 }
 
-function clear_post_cache($post_date, $post_tag, $post_url, $filename) {
-
+function clear_post_cache($post_date, $post_tag, $post_url, $filename)
+{
     $b = str_replace('/', '#', site_path() . '/');
     $t = explode('-', $post_date);
     $c = explode(',', $post_tag);
@@ -585,7 +598,8 @@ function clear_post_cache($post_date, $post_tag, $post_url, $filename) {
     }
 }
 
-function clear_page_cache($url) {
+function clear_page_cache($url)
+{
     $b = str_replace('/', '#', site_path() . '/');
     $p = 'cache/page/' . $b . $url . '.cache';
     if (file_exists($p)) {

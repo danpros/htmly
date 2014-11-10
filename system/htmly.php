@@ -6,7 +6,6 @@ date_default_timezone_set('Asia/Jakarta');
 // Explicitly including the dispatch framework,
 // and our functions.php file
 require 'system/includes/dispatch.php';
-require 'system/includes/updater.php';
 require 'system/includes/functions.php';
 require 'system/admin/admin.php';
 require 'system/includes/session.php';
@@ -14,8 +13,7 @@ include 'system/includes/opml.php';
 
 // Load the configuration file
 config('source', 'config/config.ini');
-if(config('timezone'))
-{
+if(config('timezone')) {
     date_default_timezone_set(config('timezone'));
 }
 
@@ -65,7 +63,7 @@ get('/index', function () {
 });
 
 // Get submitted login data
-post('/login', function() {
+post('/login', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -112,7 +110,7 @@ post('/login', function() {
     }
 });
 
-get("/:static/:sub/edit", function($static, $sub) {
+get("/:static/:sub/edit", function ($static, $sub) {
 
     if (login()) {
 
@@ -145,7 +143,7 @@ get("/:static/:sub/edit", function($static, $sub) {
         header("location: $login");
     }
 });
-post("/:static/:sub/edit", function($static, $sub) {
+post("/:static/:sub/edit", function ($static, $sub) {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     if (!login()) {
@@ -195,7 +193,7 @@ post("/:static/:sub/edit", function($static, $sub) {
     }
 });
 
-get("/:static/:sub/delete", function($static, $sub) {
+get("/:static/:sub/delete", function ($static, $sub) {
 
     if (login()) {
 
@@ -228,7 +226,7 @@ get("/:static/:sub/delete", function($static, $sub) {
         header("location: $login");
     }
 });
-post("/:static/:sub/delete", function() {
+post("/:static/:sub/delete", function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if ($proper && login()) {
@@ -239,7 +237,7 @@ post("/:static/:sub/delete", function() {
 });
 
 // The blog post page
-get('/:year/:month/:name', function($year, $month, $name) {
+get('/:year/:month/:name', function ($year, $month, $name) {
 
     if (config("views.counter") != "true") {
         if (!login()) {
@@ -296,7 +294,7 @@ get('/:year/:month/:name', function($year, $month, $name) {
 });
 
 // Edit blog post
-get('/:year/:month/:name/edit', function($year, $month, $name) {
+get('/:year/:month/:name/edit', function ($year, $month, $name) {
 
     if (login()) {
 
@@ -334,7 +332,7 @@ get('/:year/:month/:name/edit', function($year, $month, $name) {
 });
 
 // Get edited data for blog post
-post('/:year/:month/:name/edit', function() {
+post('/:year/:month/:name/edit', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -348,11 +346,10 @@ post('/:year/:month/:name/edit', function() {
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
     $dateTime = null;
-    if($date !== null && $time !== null)
-    {
+    if($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
-    
+
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if(empty($url)) {
             $url = $title;
@@ -389,7 +386,7 @@ post('/:year/:month/:name/edit', function() {
 });
 
 // Delete blog post
-get('/:year/:month/:name/delete', function($year, $month, $name) {
+get('/:year/:month/:name/delete', function ($year, $month, $name) {
 
     if (login()) {
 
@@ -427,7 +424,7 @@ get('/:year/:month/:name/delete', function($year, $month, $name) {
 });
 
 // Get deleted data for blog post
-post('/:year/:month/:name/delete', function() {
+post('/:year/:month/:name/delete', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if ($proper && login()) {
@@ -438,7 +435,7 @@ post('/:year/:month/:name/delete', function() {
 });
 
 // The author page
-get('/author/:profile', function($profile) {
+get('/author/:profile', function ($profile) {
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -487,7 +484,7 @@ get('/author/:profile', function($profile) {
 });
 
 // Edit the profile
-get('/edit/profile', function() {
+get('/edit/profile', function () {
 
     if (login()) {
 
@@ -504,7 +501,7 @@ get('/edit/profile', function() {
 });
 
 // Get edited data for static page
-post('/edit/profile', function() {
+post('/edit/profile', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -597,7 +594,7 @@ get('/admin/posts', function () {
 });
 
 // The author page
-get('/admin/mine', function() {
+get('/admin/mine', function () {
 
     if (login()) {
 
@@ -654,7 +651,7 @@ get('/admin/mine', function() {
 });
 
 // The static page
-get('/:static', function($static) {
+get('/:static', function ($static) {
 
     if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml') {
 
@@ -662,17 +659,17 @@ get('/:static', function($static) {
 
         if ($static === 'sitemap.xml') {
             generate_sitemap('index');
-        } else if ($static === 'sitemap.base.xml') {
+        } elseif ($static === 'sitemap.base.xml') {
             generate_sitemap('base');
-        } else if ($static === 'sitemap.post.xml') {
+        } elseif ($static === 'sitemap.post.xml') {
             generate_sitemap('post');
-        } else if ($static === 'sitemap.static.xml') {
+        } elseif ($static === 'sitemap.static.xml') {
             generate_sitemap('static');
-        } else if ($static === 'sitemap.tag.xml') {
+        } elseif ($static === 'sitemap.tag.xml') {
             generate_sitemap('tag');
-        } else if ($static === 'sitemap.archive.xml') {
+        } elseif ($static === 'sitemap.archive.xml') {
             generate_sitemap('archive');
-        } else if ($static === 'sitemap.author.xml') {
+        } elseif ($static === 'sitemap.author.xml') {
             generate_sitemap('author');
         }
 
@@ -745,7 +742,7 @@ get('/:static', function($static) {
 });
 
 // Edit the static page
-get('/:static/edit', function($static) {
+get('/:static/edit', function ($static) {
 
     if (login()) {
 
@@ -772,7 +769,7 @@ get('/:static/edit', function($static) {
 });
 
 // Get edited data for static page
-post('/:static/edit', function() {
+post('/:static/edit', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     if (!login()) {
@@ -820,7 +817,7 @@ post('/:static/edit', function() {
 });
 
 // Deleted the static page
-get('/:static/delete', function($static) {
+get('/:static/delete', function ($static) {
 
     if (login()) {
 
@@ -847,7 +844,7 @@ get('/:static/delete', function($static) {
 });
 
 // Get deleted data for static page
-post('/:static/delete', function() {
+post('/:static/delete', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if ($proper && login()) {
@@ -858,7 +855,7 @@ post('/:static/delete', function() {
 });
 
 // Add blog post
-get('/add/post', function() {
+get('/add/post', function () {
 
     if (login()) {
 
@@ -876,7 +873,7 @@ get('/add/post', function() {
 });
 
 // Get submitted blog post data
-post('/add/post', function() {
+post('/add/post', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -922,7 +919,7 @@ post('/add/post', function() {
 });
 
 // Add the static page
-get('/add/page', function() {
+get('/add/page', function () {
 
     if (login()) {
 
@@ -940,7 +937,7 @@ get('/add/page', function() {
 });
 
 // Get submitted static page data
-post('/add/page', function() {
+post('/add/page', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -980,7 +977,7 @@ post('/add/page', function() {
 });
 
 // Import page
-get('/admin/import', function() {
+get('/admin/import', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('import', array(
@@ -996,7 +993,7 @@ get('/admin/import', function() {
 });
 
 // Get import post
-post('/admin/import', function() {
+post('/admin/import', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -1040,7 +1037,7 @@ post('/admin/import', function() {
 });
 
 // Backup page
-get('/admin/backup', function() {
+get('/admin/backup', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('backup', array(
@@ -1056,7 +1053,7 @@ get('/admin/backup', function() {
 });
 
 // Create Zip file
-get('/admin/backup-start', function() {
+get('/admin/backup-start', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('backup-start', array(
@@ -1072,7 +1069,7 @@ get('/admin/backup-start', function() {
 });
 
 // Delete all cache
-get('/admin/clear-cache', function() {
+get('/admin/clear-cache', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('clear-cache', array(
@@ -1089,7 +1086,7 @@ get('/admin/clear-cache', function() {
 
 
 // The tag page
-get('/tag/:tag', function($tag) {
+get('/tag/:tag', function ($tag) {
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -1119,7 +1116,7 @@ get('/tag/:tag', function($tag) {
 });
 
 // The archive page
-get('/archive/:req', function($req) {
+get('/archive/:req', function ($req) {
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -1143,7 +1140,7 @@ get('/archive/:req', function($req) {
 
     if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
         $timestamp = date('d F Y', $date);
-    } else if (isset($time[0]) && isset($time[1])) {
+    } elseif (isset($time[0]) && isset($time[1])) {
         $timestamp = date('F Y', $date);
     } else {
         $timestamp = $req;
@@ -1165,7 +1162,7 @@ get('/archive/:req', function($req) {
 });
 
 // The search page
-get('/search/:keyword', function($keyword) {
+get('/search/:keyword', function ($keyword) {
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -1196,16 +1193,19 @@ get('/search/:keyword', function($keyword) {
 });
 
 // The JSON API
-get('/api/json', function() {
+get('/api/json', function () {
 
     header('Content-type: application/json');
 
-    // Print the 10 latest posts as JSON
-    echo generate_json(get_posts(null, 1, config('json.count')));
+    $page = from($_GET, 'page');
+    $page = $page ? (int) $page : 1;
+    $perpage = config('json.count');
+
+    echo generate_json(get_posts(null, $page, $perpage));
 });
 
 // Show the RSS feed
-get('/feed/rss', function() {
+get('/feed/rss', function () {
 
     header('Content-Type: application/rss+xml');
 
@@ -1214,7 +1214,7 @@ get('/feed/rss', function() {
 });
 
 // Generate OPML file
-get('/feed/opml', function() {
+get('/feed/opml', function () {
 
     header('Content-Type: text/xml');
 
@@ -1222,11 +1222,14 @@ get('/feed/opml', function() {
     echo generate_opml();
 });
 
-get('/admin/update/now/:csrf', function($CSRF) {
+get('/admin/update/now/:csrf', function ($CSRF) {
 
     $proper = is_csrf_proper($CSRF);
-    $updater = new Updater;
-    if (login() && $proper && $updater->updateAble()) {
+    $updater = new \Kanti\HubUpdater(array(
+		'name' => 'danpros/htmly',
+		'prerelease' => !!config("prerelease"),
+	));
+    if (login() && $proper && $updater->able()) {
         $updater->update();
         config('views.root', 'system/admin/views');
         render('updated-to', array(
@@ -1239,7 +1242,7 @@ get('/admin/update/now/:csrf', function($CSRF) {
     }
 });
 
-get('/:static/add', function($static) {
+get('/:static/add', function ($static) {
 
     if (login()) {
 
@@ -1263,7 +1266,7 @@ get('/:static/add', function($static) {
         header("location: $login");
     }
 });
-post('/:static/add', function($static) {
+post('/:static/add', function ($static) {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
@@ -1302,7 +1305,7 @@ post('/:static/add', function($static) {
     }
 });
 
-get('/:static/:sub', function($static, $sub) {
+get('/:static/:sub', function ($static, $sub) {
 
     $father_post = get_static_post($static);
     if (!$father_post) {
@@ -1334,7 +1337,7 @@ get('/:static/:sub', function($static, $sub) {
 // If we get here, it means that
 // nothing has been matched above
 
-get('.*', function() {
+get('.*', function () {
     not_found();
 });
 
