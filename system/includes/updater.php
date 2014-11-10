@@ -1,16 +1,18 @@
 <?php
 
-class CacheOneFile {
-
+class CacheOneFile
+{
     protected $fileName = "";
     protected $holdTime = 43200; //12h
 
-    public function __construct($fileName, $holdTime = 43200) {
+    public function __construct($fileName, $holdTime = 43200)
+    {
         $this->fileName = $fileName;
         $this->holdTime = $holdTime;
     }
 
-    public function is() {
+    public function is()
+    {
         if (!file_exists($this->fileName))
             return false;
         if (filemtime($this->fileName) < ( time() - $this->holdTime )) {
@@ -20,25 +22,28 @@ class CacheOneFile {
         return true;
     }
 
-    public function get() {
+    public function get()
+    {
         return file_get_contents($this->fileName);
     }
 
-    public function set($content) {
+    public function set($content)
+    {
         file_put_contents($this->fileName, $content);
     }
 
 }
 
-class Updater {
-
+class Updater
+{
     protected $cachedInfo = "cache/downloadInfo.json";
     protected $versionFile = "cache/installedVersion.json";
     protected $zipFile = "cache/tmpZipFile.zip";
     protected $infos = array();
     protected $context = null;
-    
-    protected function genCaFile(){
+
+    protected function genCaFile()
+    {
         if(file_exists("cache/ca_bundle.crt"))
             return 1;
         //https://github.com/bagder/ca-bundle
@@ -3938,13 +3943,14 @@ kI26oQ==
 -----END CERTIFICATE-----");
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         if (!file_exists("cache/")) {
             mkdir("cache/");
         }
         $this->genCaFile();
         $this->cachedInfo = new CacheOneFile($this->cachedInfo);
-        
+
         $this->context = stream_context_create(
             array(
                 'http' => array(
@@ -3959,7 +3965,8 @@ kI26oQ==
         $this->infos = $this->getInfos();
     }
 
-    protected function getInfos() {
+    protected function getInfos()
+    {
         $path = "https://api.github.com/repos/danpros/htmly/releases";
         if ($this->cachedInfo->is()) {
             $fileContent = $this->cachedInfo->get();
@@ -3980,7 +3987,8 @@ kI26oQ==
         return json_decode($fileContent, true);
     }
 
-    public function updateAble() {
+    public function updateAble()
+    {
         if (!in_array('https', stream_get_wrappers()))
             return false;
         if (empty($this->infos))
@@ -3998,7 +4006,8 @@ kI26oQ==
         return true;
     }
 
-    public function update() {
+    public function update()
+    {
         if ($this->updateAble()) {
             if ($this->download("https://github.com/danpros/htmly/archive/" . $this->infos[0]['tag_name'] . ".zip")) {
                 if ($this->unZip()) {
@@ -4014,7 +4023,8 @@ kI26oQ==
         return false;
     }
 
-    protected function download($url) {
+    protected function download($url)
+    {
         $file = @fopen($url, 'r', false , $this->context);
         if ($file == false)
             return false;
@@ -4022,7 +4032,8 @@ kI26oQ==
         return true;
     }
 
-    protected function unZip() {
+    protected function unZip()
+    {
         $path = dirname($_SERVER['SCRIPT_FILENAME']) . "/" . $this->zipFile;
 
         $zip = new ZipArchive;
@@ -4047,7 +4058,8 @@ kI26oQ==
         }
     }
 
-    public function printOne() {
+    public function printOne()
+    {
         $releases = $this->infos;
         $string = "<h3>Updated to<h3>";
         $string .= "<h2>[" . $releases[0]['tag_name'] . "] " . $releases[0]['name'] . "</h2>\n";
@@ -4055,7 +4067,8 @@ kI26oQ==
         return $string;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->infos[0]['tag_name'];
     }
 
