@@ -4,24 +4,24 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "09a845c7ac1f579f79cdd0196a86199d",
+    "hash": "d7bc647b7c26ac62864fbe9199d1565a",
     "packages": [
         {
             "name": "kanti/hub-updater",
-            "version": "dev-master",
+            "version": "0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kanti/hub-updater.git",
-                "reference": "fd965ed3524720d70a0cdddbd95e83f536c9b24f"
+                "reference": "fc70ff8ad8e68db921914106e5f4b56557358dfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/fd965ed3524720d70a0cdddbd95e83f536c9b24f",
-                "reference": "fd965ed3524720d70a0cdddbd95e83f536c9b24f",
+                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/fc70ff8ad8e68db921914106e5f4b56557358dfb",
+                "reference": "fc70ff8ad8e68db921914106e5f4b56557358dfb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "autoload": {
@@ -29,7 +29,7 @@
                     "Kanti\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "notification-url": "http://packagist.org/downloads/",
             "license": [
                 "GPL-2.0"
             ],
@@ -41,8 +41,8 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Simple Github Updater for Web Projects [PHP]",
-            "time": "2014-10-31 18:20:52"
+            "description": "Simple Github Updater for Web Projects",
+            "time": "2014-11-11 07:32:09"
         },
         {
             "name": "michelf/php-markdown",
@@ -145,8 +145,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "michelf/php-markdown": 20,
-        "kanti/hub-updater": 20
+        "michelf/php-markdown": 20
     },
     "prefer-stable": false,
     "platform": [],
