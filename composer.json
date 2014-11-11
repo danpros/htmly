@@ -2,6 +2,6 @@
     "require": {
 		"michelf/php-markdown": "1.4.*@dev",
 		"suin/php-rss-writer": ">=1.0",
-        "kanti/hub-updater": "dev-master"
+        "kanti/hub-updater": "0.1"
     }
 }

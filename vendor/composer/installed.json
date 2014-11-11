@@ -1,45 +1,5 @@
 [
     {
-        "name": "kanti/hub-updater",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Kanti/hub-updater.git",
-            "reference": "fd965ed3524720d70a0cdddbd95e83f536c9b24f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/fd965ed3524720d70a0cdddbd95e83f536c9b24f",
-            "reference": "fd965ed3524720d70a0cdddbd95e83f536c9b24f",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0"
-        },
-        "time": "2014-10-31 18:20:52",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Kanti\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Kanti",
-                "email": "git@kanti.de",
-                "homepage": "https://kanti.de",
-                "role": "Developer"
-            }
-        ],
-        "description": "Simple Github Updater for Web Projects [PHP]"
-    },
-    {
         "name": "michelf/php-markdown",
         "version": "dev-lib",
         "version_normalized": "dev-lib",
@@ -138,5 +98,45 @@
             "rss",
             "writer"
         ]
+    },
+    {
+        "name": "kanti/hub-updater",
+        "version": "0.1",
+        "version_normalized": "0.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Kanti/hub-updater.git",
+            "reference": "fc70ff8ad8e68db921914106e5f4b56557358dfb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/fc70ff8ad8e68db921914106e5f4b56557358dfb",
+            "reference": "fc70ff8ad8e68db921914106e5f4b56557358dfb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2014-11-11 07:32:09",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Kanti\\": ""
+            }
+        },
+        "notification-url": "http://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Kanti",
+                "email": "git@kanti.de",
+                "homepage": "https://kanti.de",
+                "role": "Developer"
+            }
+        ],
+        "description": "Simple Github Updater for Web Projects"
     }
 ]
