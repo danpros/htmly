@@ -3,5 +3,14 @@
 		"michelf/php-markdown": "1.4.*@dev",
 		"suin/php-rss-writer": ">=1.0",
         "kanti/hub-updater": "0.1"
-    }
+    },
+	"autoload": {
+		"files": [
+			"system/includes/dispatch.php",
+			"system/includes/functions.php",
+			"system/admin/admin.php",
+			"system/includes/session.php",
+			"system/includes/opml.php"
+		]
+	}
 }
