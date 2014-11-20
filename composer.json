@@ -1,6 +1,7 @@
 {
 	"config": {
-		"vendor-dir": "system/vendor/"
+		"vendor-dir": "system/vendor/",
+		"optimize-autoloader": true
 	},
     "require": {
 		"michelf/php-markdown": "1.4.*@dev",
