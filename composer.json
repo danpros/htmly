@@ -1,4 +1,7 @@
 {
+	"config": {
+		"vendor-dir": "system/vendor/"
+	},
     "require": {
 		"michelf/php-markdown": "1.4.*@dev",
 		"suin/php-rss-writer": ">=1.0",
