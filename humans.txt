@@ -1,0 +1,32 @@
+/* TEAM */
+Owner: danpros
+Github: https://github.com/danpros
+Weblog: http://www.danpros.com
+Location: Indonesia
+
+Contributor: Kanti
+Github: https://github.com/Kanti
+Weblog: https://kanti.de
+Location: Stuttgart - Germany
+
+Contributor: fahmi182
+Github: https://github.com/fahmi182
+Weblog: http://ifahmi.com
+Location: Jakarta
+
+Contributor: fanningert
+Github: https://github.com/fanningert
+Location: Vienna
+
+Contributor: BlackCodec
+Github: https://github.com/BlackCodec
+
+Contributor: mlncn
+Github: https://github.com/mlncn
+Location: Natick, Massachusetts, USA
+
+/* THANKS */
+Name: Martin Angelov
+
+/* SITE */
+Software: HTMLy

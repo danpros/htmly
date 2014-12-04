@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d7bc647b7c26ac62864fbe9199d1565a",
+    "hash": "42c6216df6dda4d98ab8a719067f67fa",
     "packages": [
         {
             "name": "kanti/hub-updater",

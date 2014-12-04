@@ -3,14 +3,6 @@
 // Change this to your timezone
 date_default_timezone_set('Asia/Jakarta');
 
-// Explicitly including the dispatch framework,
-// and our functions.php file
-require 'system/includes/dispatch.php';
-require 'system/includes/functions.php';
-require 'system/admin/admin.php';
-require 'system/includes/session.php';
-include 'system/includes/opml.php';
-
 // Load the configuration file
 config('source', 'config/config.ini');
 if(config('timezone')) {
