@@ -1226,7 +1226,7 @@ get('/admin/update/now/:csrf', function ($CSRF) {
         config('views.root', 'system/admin/views');
         render('updated-to', array(
             'head_contents' => head_contents('Updated - ' . blog_title(), blog_description(), site_url()),
-            'updater' => $updater,
+            'info' => $updater->getCurrentInfo(),
         ));
     } else {
         $login = site_url() . 'login';
