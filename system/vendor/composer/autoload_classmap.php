@@ -7,6 +7,7 @@ $baseDir = dirname(dirname($vendorDir));
 
 return array(
     'Kanti\\CacheOneFile' => $vendorDir . '/kanti/hub-updater/CacheOneFile.php',
+    'Kanti\\HelperClass' => $vendorDir . '/kanti/hub-updater/HelperClass.php',
     'Kanti\\HubUpdater' => $vendorDir . '/kanti/hub-updater/HubUpdater.php',
     'Michelf\\Markdown' => $vendorDir . '/michelf/php-markdown/Michelf/Markdown.php',
     'Michelf\\MarkdownExtra' => $vendorDir . '/michelf/php-markdown/Michelf/MarkdownExtra.php',

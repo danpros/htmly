@@ -6,25 +6,25 @@
         "source": {
             "type": "git",
             "url": "https://github.com/michelf/php-markdown.git",
-            "reference": "a8c56ecd5e9e7c7d37d00c814c864c3bc8b32694"
+            "reference": "1b5a30e13974b490964a1610bab5958e83cd4b69"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/a8c56ecd5e9e7c7d37d00c814c864c3bc8b32694",
-            "reference": "a8c56ecd5e9e7c7d37d00c814c864c3bc8b32694",
+            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/1b5a30e13974b490964a1610bab5958e83cd4b69",
+            "reference": "1b5a30e13974b490964a1610bab5958e83cd4b69",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2014-08-10 19:25:52",
+        "time": "2014-12-08 02:09:55",
         "type": "library",
         "extra": {
             "branch-alias": {
                 "dev-lib": "1.4.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-0": {
                 "Michelf": ""
@@ -101,23 +101,23 @@
     },
     {
         "name": "kanti/hub-updater",
-        "version": "0.1",
-        "version_normalized": "0.1.0.0",
+        "version": "v0.3.0",
+        "version_normalized": "0.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Kanti/hub-updater.git",
-            "reference": "fc70ff8ad8e68db921914106e5f4b56557358dfb"
+            "reference": "c520b71d9e836932e67bae7177b9a8bc49dda032"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/fc70ff8ad8e68db921914106e5f4b56557358dfb",
-            "reference": "fc70ff8ad8e68db921914106e5f4b56557358dfb",
+            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/c520b71d9e836932e67bae7177b9a8bc49dda032",
+            "reference": "c520b71d9e836932e67bae7177b9a8bc49dda032",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2014-11-11 07:32:09",
+        "time": "2014-12-12 17:28:13",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -125,7 +125,7 @@
                 "Kanti\\": ""
             }
         },
-        "notification-url": "http://packagist.org/downloads/",
+        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "GPL-2.0"
         ],
