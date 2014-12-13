@@ -1,8 +1,5 @@
 <?php
 
-// Change this to your timezone
-date_default_timezone_set('Asia/Jakarta');
-
 use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
@@ -1667,7 +1664,8 @@ EOF;
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
     echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
     if ($updater->able()) {
-        echo '<li><a href="' . $base . 'admin/update/now/' . $CSRF . '">Update to ' . $updater->getName() . '</a></li>';
+        $info = $updater->getNewestInfo();
+        echo '<li><a href="' . $base . 'admin/update/now/' . $CSRF . '">Update to ' . $info['tag_name'] . '</a></li>';
     }
     echo '<li><a href="' . $base . 'logout">Logout</a></li>';
 

@@ -174,6 +174,16 @@ PHP Markdown, please visit [michelf.ca/donate] or send Bitcoin to
 Version History
 ---------------
 
+Unreleased
+
+*	Added the ability to insert custom HTML attributes everywhere an extra
+	attribute block is allowed (links, images, headers). Credits to
+	Peter Droogmans for providing the implementation.
+
+*	Added a `url_filter_func` configuration variable which takes a function
+	that can rewrite any link or image URL to something different.
+
+
 PHP Markdown Lib 1.4.1 (4 May 2014)
 
 *	The HTML block parser will now treat `<figure>` as a block-level element
