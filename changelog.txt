@@ -1,8 +1,0 @@
-2014-06-27: File cache support
-2014-06-14: Foreign Char Support
-2014-02-25: HTTPS Support
-2014-02-15: HTMLy v1.2
-2014-02-08: HTMLy v1.1.
-2014-02-01: HTMLy v1.0.
-2014-01-26: RC version.
-2014-01-01: Initial release.
