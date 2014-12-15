@@ -57,11 +57,12 @@ get('/index', function () {
 // Get submitted login data
 post('/login', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = (is_csrf_proper(from($_REQUEST, 'csrf_token')));
+    $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
 
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
-    if ($proper && !empty($user) && !empty($pass)) {
+    if ($proper && $captcha && !empty($user) && !empty($pass)) {
 
         session($user, $pass, null);
         $log = session($user, $pass, null);
@@ -87,6 +88,9 @@ post('/login', function () {
         }
         if (!$proper) {
             $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        if(!$captcha) {
+            $message['error'] .= '<li>reCaptcha not correct.</li>';
         }
 
         config('views.root', 'system/admin/views');

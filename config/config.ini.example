@@ -43,6 +43,13 @@ google.publisher = ""
 ; Google analytics
 google.analytics.id = ""
 
+; Google reCaptcha
+; https://www.google.com/recaptcha/admin
+
+google.reCaptcha = false
+google.reCaptcha.public = ""
+google.reCaptcha.private = ""
+
 ; Pagination, RSS, and JSON
 posts.perpage = "5"
 tag.perpage = "10"
