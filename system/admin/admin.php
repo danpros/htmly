@@ -13,6 +13,18 @@ function user($key, $user = null)
     }
 }
 
+function create_user($userName, $password){
+    $file = 'config/users/' . $userName . '.ini';
+    if(file_exists($file)) {
+        return false;
+    } else {
+        file_put_contents($file,"password = " . hash("sha512",$password) . "\n" .
+            "encryption = sha512\n" .
+            "role = user\n");
+        return true;
+    }
+}
+
 // Create a session
 function session($user, $pass, $str = null)
 {
