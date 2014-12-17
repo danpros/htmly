@@ -25,13 +25,9 @@ function rrmdir($dir) {
 
 //run upgrade specific stuff
 if(isGraterThan("2.3")) {// 2.4, 2.5, ...
-    echo "yes";
     if(file_exists("vendor/")){
         rrmdir("vendor/");
     }
-}
-else{
-    echo "no";
 }
 
 if(isGraterThan("2.3")) {
