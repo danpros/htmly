@@ -101,25 +101,25 @@
     },
     {
         "name": "kanti/hub-updater",
-        "version": "v0.3.0",
-        "version_normalized": "0.3.0.0",
+        "version": "v0.3.1",
+        "version_normalized": "0.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Kanti/hub-updater.git",
-            "reference": "c520b71d9e836932e67bae7177b9a8bc49dda032"
+            "reference": "105bf291983b1323c5916092cc4e170bf987b00c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/c520b71d9e836932e67bae7177b9a8bc49dda032",
-            "reference": "c520b71d9e836932e67bae7177b9a8bc49dda032",
+            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/105bf291983b1323c5916092cc4e170bf987b00c",
+            "reference": "105bf291983b1323c5916092cc4e170bf987b00c",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2014-12-12 17:28:13",
+        "time": "2014-12-27 13:59:09",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "Kanti\\": ""
