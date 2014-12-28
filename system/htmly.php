@@ -64,8 +64,8 @@ post('/login', function () {
     $pass = from($_REQUEST, 'password');
     if ($proper && $captcha && !empty($user) && !empty($pass)) {
 
-        session($user, $pass, null);
-        $log = session($user, $pass, null);
+        session($user, $pass);
+        $log = session($user, $pass);
 
         if (!empty($log)) {
 
@@ -997,8 +997,8 @@ post('/admin/import', function () {
     $credit = from($_REQUEST, 'credit');
     if (!empty($url)) {
 
-        get_feed($url, $credit, null);
-        $log = get_feed($url, $credit, null);
+        get_feed($url, $credit);
+        $log = get_feed($url, $credit);
 
         if (!empty($log)) {
 
