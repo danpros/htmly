@@ -995,7 +995,7 @@ post('/admin/import', function () {
 
     $url = from($_REQUEST, 'url');
     $credit = from($_REQUEST, 'credit');
-    if (!empty($url)) {
+    if (login() && !empty($url) && $proper) {
 
         get_feed($url, $credit);
         $log = get_feed($url, $credit);
