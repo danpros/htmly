@@ -4,8 +4,8 @@
 		"optimize-autoloader": true
 	},
     "require": {
-		"michelf/php-markdown": "1.4.*@dev",
-		"suin/php-rss-writer": ">=1.0",
+		"michelf/php-markdown": "~1.4",
+		"suin/php-rss-writer": "~1",
         "kanti/hub-updater": "~0.3"
     },
 	"autoload": {

@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fd413dc0819094cfb73068fa24dc1cf0",
+    "hash": "93444ef16e9607df09bdc196135e9946",
     "packages": [
         {
             "name": "kanti/hub-updater",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kanti/hub-updater.git",
-                "reference": "c520b71d9e836932e67bae7177b9a8bc49dda032"
+                "reference": "105bf291983b1323c5916092cc4e170bf987b00c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/c520b71d9e836932e67bae7177b9a8bc49dda032",
-                "reference": "c520b71d9e836932e67bae7177b9a8bc49dda032",
+                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/105bf291983b1323c5916092cc4e170bf987b00c",
+                "reference": "105bf291983b1323c5916092cc4e170bf987b00c",
                 "shasum": ""
             },
             "require": {
@@ -42,20 +42,20 @@
                 }
             ],
             "description": "Simple Github Updater for Web Projects",
-            "time": "2014-12-12 17:28:13"
+            "time": "2014-12-27 13:59:09"
         },
         {
             "name": "michelf/php-markdown",
-            "version": "dev-lib",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "1b5a30e13974b490964a1610bab5958e83cd4b69"
+                "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/1b5a30e13974b490964a1610bab5958e83cd4b69",
-                "reference": "1b5a30e13974b490964a1610bab5958e83cd4b69",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
+                "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
                 "shasum": ""
             },
             "require": {
@@ -93,7 +93,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2014-12-08 02:09:55"
+            "time": "2014-05-05 02:43:50"
         },
         {
             "name": "suin/php-rss-writer",
@@ -144,9 +144,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "michelf/php-markdown": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "platform": [],
     "platform-dev": []

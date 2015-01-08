@@ -4,7 +4,8 @@
 date_default_timezone_set('Asia/Jakarta');
 
 // Load the configuration file
-config('source', 'config/config.ini');
+$config_file = 'config/config.ini';
+config('source', $config_file);
 if(config('timezone')) {
     date_default_timezone_set(config('timezone'));
 }
@@ -995,7 +996,7 @@ post('/admin/import', function () {
 
     $url = from($_REQUEST, 'url');
     $credit = from($_REQUEST, 'credit');
-    if (!empty($url)) {
+    if (login() && !empty($url) && $proper) {
 
         get_feed($url, $credit);
         $log = get_feed($url, $credit);
@@ -1030,6 +1031,54 @@ post('/admin/import', function () {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
         ));
     }
+});
+
+// Config page
+get('/admin/config', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('config', array(
+            'head_contents' => head_contents('Config - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'config',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+
+// Config page
+post('/admin/config', function () {
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $newKey = from($_REQUEST, 'newKey');
+        $newValue = from($_REQUEST, 'newValue');
+
+        $new_config = array();
+        $new_Keys = array();
+        if(!empty($newKey)){
+            $new_Keys[$newKey] = $newValue;
+        }
+        foreach($_POST as $name => $value){
+            if(substr($name,0,8) == "-config-"){
+                $name = str_replace("_", ".",substr($name,8));
+                $new_config[$name] = $value;
+            }
+        }
+        save_config($new_config, $new_Keys);
+        $login = site_url() . 'admin/config';
+        header("location: $login");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
 });
 
 // Backup page
