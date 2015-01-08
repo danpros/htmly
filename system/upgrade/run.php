@@ -32,5 +32,5 @@ if (isGraterThan("2.3")) {// 2.4, 2.5, ...
     }
 }
 
-//file_put_contents("index.php", file_get_contents("system/upgrade/index.php"));
-//rrmdir("system/upgrade/");
+file_put_contents("index.php", file_get_contents("system/upgrade/index.php"));
+rrmdir("system/upgrade/");
