@@ -52,6 +52,24 @@ function config($key, $value = null)
         $_config[$key] = $value;
 }
 
+function save_config($data = array(),$new = array()){
+    global $config_file;
+
+    $string = file_get_contents($config_file) . "\n";
+
+    foreach ($data as $word => $value) {
+        $value = str_replace('"','\"',$value);
+        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = "' . $value . '"', $string);
+    }
+    $string = rtrim($string);
+    foreach ($new as $word => $value) {
+        $value = str_replace('"','\"',$value);
+        $string .= "\n" . $word . ' = "' . $value . '"' . "\n";
+    }
+    $string = rtrim($string);
+    return file_put_contents($config_file, $string);
+}
+
 function to_b64($str)
 {
     $str = base64_encode($str);

@@ -1662,10 +1662,11 @@ EOF;
     echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';
     echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
+    echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
     echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
     if ($updater->able()) {
         $info = $updater->getNewestInfo();
-        echo '<li><a href="' . $base . 'admin/update/now/' . $CSRF . '">Update to ' . $info['tag_name'] . '</a></li>';
+        echo '<li><a href="' . $base . 'admin/update/now/' . $CSRF . '" alt="' . $info['name'] . '">Update to ' . $info['tag_name'] . '</a></li>';
     }
     echo '<li><a href="' . $base . 'logout">Logout</a></li>';
 
