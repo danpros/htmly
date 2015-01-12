@@ -112,13 +112,13 @@ function get_zip_files()
 // usort function. Sort by filename.
 function sortfile($a, $b)
 {
-    return $a['filename'] == $b['filename'] ? 0 : ( $a['filename'] < $b['filename'] ) ? 1 : -1;
+    return $a['filename'] == $b['filename'] ? 0 : ($a['filename'] < $b['filename']) ? 1 : -1;
 }
 
 // usort function. Sort by date.
 function sortdate($a, $b)
 {
-    return $a->date == $b->date ? 0 : ( $a->date < $b->date ) ? 1 : -1;
+    return $a->date == $b->date ? 0 : ($a->date < $b->date) ? 1 : -1;
 }
 
 // Rebuilt cache index
@@ -632,10 +632,10 @@ function recent()
 {
     $str = '<ul>';
     $posts = get_posts(null, 1, 5);
-    foreach($posts as $post) {
+    foreach ($posts as $post) {
         $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
     }
-    if(empty($posts)) {
+    if (empty($posts)) {
         $str .= '<li>No Posts Found</li>';
     }
     $str .= '</ul>';
@@ -1007,7 +1007,7 @@ function publisher()
 function analytics($analyticsDir = null)
 {
     $analytics = config('google.analytics.id');
-    if($analyticsDir === null) {
+    if ($analyticsDir === null) {
         $analyticsDir = '//www.google-analytics.com/analytics.js';
     } else {
         $analyticsDir = site_url() . 'themes/' . $analyticsDir . 'analytics.js';
@@ -1075,6 +1075,8 @@ function menu()
                             } else {
                                 echo '<li class="' . $class . '"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
                             }
+                        } else {
+                            echo '<li class="' . $class . '"><a target="_blank" href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
                         }
                     }
                 } else {
@@ -1102,7 +1104,8 @@ function get_title_from_file($v)
 }
 
 // Auto generate menu from static page
-function get_menu() {//aktive Link for Sub Pages ::TODO
+function get_menu()
+{//aktive Link for Sub Pages ::TODO
     $posts = get_static_pages();
     $req = $_SERVER['REQUEST_URI'];
 
@@ -1204,7 +1207,7 @@ EOF;
 // The not found error
 function not_found()
 {
-    header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+    header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', null, false);
     die();
 }
@@ -1217,10 +1220,10 @@ function generate_rss($posts)
     $rssLength = config('rss.char');
 
     $channel
-            ->title(blog_title())
-            ->description(blog_description())
-            ->url(site_url())
-            ->appendTo($feed);
+        ->title(blog_title())
+        ->description(blog_description())
+        ->url(site_url())
+        ->appendTo($feed);
 
     foreach ($posts as $p) {
 
@@ -1242,14 +1245,14 @@ function generate_rss($posts)
         $tags = explode(',', str_replace(' ', '', strip_tags($p->tag)));
         foreach ($tags as $tag) {
             $item
-                    ->category($tag, site_url() . 'tag/' . $tag);
+                ->category($tag, site_url() . 'tag/' . $tag);
         }
         $item
-                ->title($p->title)
-                ->pubDate($p->date)
-                ->description($body)
-                ->url($p->url)
-                ->appendTo($channel);
+            ->title($p->title)
+            ->pubDate($p->date)
+            ->description($body)
+            ->url($p->url)
+            ->appendTo($channel);
     }
 
     echo $feed;
@@ -1617,8 +1620,8 @@ function head_contents($title, $description, $canonical)
     $lightbox = '<script src="' . site_url() . 'system/plugins/lightbox/js/lightbox-2.6.min.js"></script>';
     $corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
     $webmasterTools = '';
-    if(!empty($wmt_id)) {
-    	$webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
+    if (!empty($wmt_id)) {
+        $webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
     }
 
     if ($styleImage == 'on') {
@@ -1644,9 +1647,9 @@ function toolbar()
     $CSRF = get_csrf();
 
     $updater = new HubUpdater(array(
-		'name' => 'danpros/htmly',
-		'prerelease' => !!config("prerelease"),
-	));
+        'name' => 'danpros/htmly',
+        'prerelease' => !!config("prerelease"),
+    ));
 
     echo <<<EOF
 	<link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
@@ -1676,7 +1679,7 @@ EOF;
 // File cache
 function file_cache($request)
 {
-    if(config('cache.off')) return;
+    if (config('cache.off')) return;
 
     $c = str_replace('/', '#', str_replace('?', '~', $request));
     $cachefile = 'cache/page/' . $c . '.cache';
@@ -1717,7 +1720,7 @@ function add_view($page)
         $views = json_decode(file_get_contents($filename), true);
     }
     if (isset($views[$page])) {
-        $views[$page] ++;
+        $views[$page]++;
     } else {
         $views[$page] = 1;
     }
@@ -1747,7 +1750,7 @@ function get_content_tag($tag, $string, $alt = null)
     if (preg_match($reg, $string, $ary)) {
         if (isset($ary[1])) {
             $result = trim($ary[1]);
-            if(!empty($result)) {
+            if (!empty($result)) {
                 return $result;
             }
         }
@@ -1760,8 +1763,9 @@ function remove_html_comments($content)
     return trim(preg_replace('/(\s|)<!--(.*)-->(\s|)/', '', $content));
 }
 
-function isCaptcha($reCaptchaResponse){
-    if(! config("google.reCaptcha")){
+function isCaptcha($reCaptchaResponse)
+{
+    if (!config("google.reCaptcha")) {
         return true;
     }
     $url = "https://www.google.com/recaptcha/api/siteverify";
@@ -1771,11 +1775,11 @@ function isCaptcha($reCaptchaResponse){
         "remoteip" => $_SERVER['REMOTE_ADDR'],
     );
     $fileContent = @file_get_contents($url . "?" . http_build_query($options));
-    if($fileContent === false) {
+    if ($fileContent === false) {
         return false;
     }
     $json = json_decode($fileContent, true);
-    if($json == false){
+    if ($json == false) {
         return false;
     }
     return ($json['success']);
