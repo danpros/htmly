@@ -47,7 +47,7 @@ HTMLy requires PHP 5.3 or greater.
 Installations
 -------------
 if you have openssl on your server, use the [Installer](https://github.com/Kanti/htmly-installer/releases/latest). read the [Instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp).
-If you don't have openssl, download the latest version, extract it, then upload the extracted files to your server. Make sure the installation folder is writeable by your server.
+If you don't have openssl, [download](https://github.com/danpros/htmly/releases/latest) the latest version, extract it, then upload the extracted files to your server. Make sure the installation folder is writeable by your server.
 
 Configurations
 --------------
