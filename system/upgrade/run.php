@@ -1,5 +1,7 @@
 <?php
 
+config('source', $config_file);
+
 $updater = new Kanti\HubUpdater("danpros/htmly");
 $info = $updater->getCurrentInfo();
 $versionNumber = substr($info['tag_name'], 1);
@@ -32,5 +34,8 @@ if (isGraterThan("2.3")) {// 2.4, 2.5, ...
     }
 }
 
-file_put_contents("index.php", file_get_contents("system/upgrade/index.php"));
-rrmdir("system/upgrade/");
+
+if(!config("dev")){
+    file_put_contents("index.php", file_get_contents("system/upgrade/index.php"));
+    rrmdir("system/upgrade/");
+}
