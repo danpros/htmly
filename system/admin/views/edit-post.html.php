@@ -8,6 +8,8 @@
 
 	$content = file_get_contents($url);
 	$oldtitle = get_content_tag('t',$content,'Untitled');
+	$oldfi = get_content_tag('fi',$content);
+	$oldvid = get_content_tag('vid',$content);
 	$oldcontent = remove_html_comments($content);
 	
 	$dir = substr($url, 0, strrpos($url, '/'));
@@ -52,6 +54,8 @@
 	Date Time<br><input type="date" name="date" class="text" value="<?php echo $timestamp; ?>"><br><input type="time" name="time" class="text" value="<?php echo $time->format('H:i'); ?>"><br><br>
 	Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 	<br><br>
+	Featured Image (optional)<br><input type="text" class="text" name="fi" value="<?php echo $oldfi?>"/><br><br>
+	Embed Youtube Video (optional)<br><input type="text" class="text" name="vid" value="<?php echo $oldvid?>"/><br><br>	
 	<div id="wmd-button-bar" class="wmd-button-bar"></div>
 	<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
 	<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
