@@ -13,6 +13,8 @@
 		<span class="help">If the url leave empty we will use the post title.</span><br><br>
 		Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 		<br><br>
+		Featured Image (optional)<br><input type="text" class="text" name="fi" value="<?php if (isset($postFi)) { echo $postFi;} ?>"/><br><br>
+		Embed Youtube Video (optional)<br><input type="text" class="text" name="vid" value="<?php if (isset($postVid)) { echo $postVid;} ?>"/><br><br>		
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
 		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br/>
 		<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">

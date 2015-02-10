@@ -55,13 +55,13 @@ Rename `config.ini.example` inside the `config` folder to `config.ini` (or you c
 
 Create `YourUsername.ini` inside the `config/users` folder or simply rename the `username.ini.example` file and write down your password there:
 
-````
+````cfg
 password = YourPassword
 ````
 
 HTMLy support admin user role either, simply add the following to your choosen user:
 
-````
+````cfg
 role = admin
 ````
 
@@ -72,7 +72,7 @@ You can login to admin panel at `www.example.com/login`.
 ### Lighttpd
 Here a example configuration
 
-````
+````php
 $HTTP["url"] =~ "^/config" {
   url.access-deny = ( "" )
 }
@@ -95,7 +95,7 @@ url.rewrite-once = (
 ### Nginx
 Here a basic configuration for nginx.
 
-````
+````nginx
 server {
   listen 80;
 
@@ -165,13 +165,13 @@ That means the URL is `about/me`.
 Content Title
 -------------
 If you write it offline, for the title of the post you need to add a title in the following format:
+```html
+<!--t Here is the post title t-->
 
-    <!--t Here is the post title t-->
+Paragraph 1
 
-	Paragraph 1
-
-	Paragraph 2 etc.
-
+Paragraph 2 etc.
+```
 So wrap the title with HTML comment with `t` for both side.
 
 Demo

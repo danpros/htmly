@@ -5,6 +5,16 @@
 		<a name="more"></a>
 		<h1 class="title-post" itemprop="name"><?php echo $p->title ?></h1>
 		<div class="date">
+        <?php if (!empty($p->feature)){?>
+        <div class="featured-image">
+          <a href="<?php echo $p->url?>"><img src="<?php echo $p->feature; ?>" alt="<?php echo $p->title ?>"/></a>
+        </div>
+        <?php }?>
+        <?php if (!empty($p->video)){?>
+        <div class="featured-video">
+          <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <?php }?>		
 			<span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this day"><?php echo date('d F Y', $p->date)?></a></span> - Posted in 
 			<span itemprop="articleSection"><?php echo $p->tag ?></span> by 
 			<span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span> - 

@@ -333,6 +333,8 @@ post('/:year/:month/:name/edit', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
+    $fi = from($_REQUEST, 'fi');
+    $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -350,7 +352,7 @@ post('/:year/:month/:name/edit', function () {
         if(empty($url)) {
             $url = $title;
         }
-        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime);
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $fi, $vid);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -372,6 +374,8 @@ post('/:year/:month/:name/edit', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
+            'postFi' => $fi,
+            'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
             'postContent' => $content,
@@ -874,6 +878,8 @@ post('/add/post', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
+    $fi = from($_REQUEST, 'fi');
+    $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -881,10 +887,10 @@ post('/add/post', function () {
     $user = $_SESSION[config("site.url")]['user'];
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if (!empty($url)) {
-            add_post($title, $tag, $url, $content, $user, $description);
+            add_post($title, $tag, $url, $content, $user, $description, $fi, $vid);
         } else {
             $url = $title;
-            add_post($title, $tag, $url, $content, $user, $description);
+            add_post($title, $tag, $url, $content, $user, $description, $fi, $vid);
         }
     } else {
         $message['error'] = '';
@@ -905,12 +911,32 @@ post('/add/post', function () {
             'head_contents' => head_contents('Add post - ' . blog_title(), blog_description(), site_url()),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
+            'postFi' => $fi,
+            'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
             'postContent' => $content,
             'bodyclass' => 'addpost',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
         ));
+    }
+});
+
+// Add the static page
+get('/add/page', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-page', array(
+            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'addpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
     }
 });
 
