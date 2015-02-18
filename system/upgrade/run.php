@@ -24,6 +24,8 @@ function rrmdir($dir)
         }
         reset($objects);
         rmdir($dir);
+    } else if (is_file($dir)) {
+        unlink($dir);
     }
 }
 
@@ -35,7 +37,7 @@ if (isGraterThan("2.3")) {// 2.4, 2.5, ...
 }
 
 
-if(!config("dev")){
+if (!config("dev")) {
     file_put_contents("index.php", file_get_contents("system/upgrade/index.php"));
     rrmdir("system/upgrade/");
 }
