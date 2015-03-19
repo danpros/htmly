@@ -1,0 +1,154 @@
+/*  ungrid the simplest responsive css grid (http://badge.fury.io/bo/ungrid) 
+*/@media(min-width:60em){
+	.row{
+		width:100%;
+		display:table;
+		table-layout:fixed
+	}
+
+	.col{
+		display:table-cell
+	}
+
+}
+
+body.admin{
+}
+.hidden{
+	display: none;
+}
+
+.add_post{
+}
+
+.post_editor {
+	padding: 1em 2em;
+}
+
+.post_editor  .help{
+	font-style: italic;
+	margin: 0 0 2em 0;
+}
+
+
+input.text{
+	margin: 0.5em 0;
+	min-width: 25em;
+	//background-color: #F6F7F9;
+	border: 1px solid #CFDAE5;
+}
+
+input:required{
+
+}
+
+.post_editor input.text {
+	font-size: 1em;
+}
+
+.post_editor input#title,
+.post_editor input#tag{
+	width:100%
+}
+
+.post_editor input#title{
+	font-size: 1.8em;
+}
+.post_editor fieldset{
+	margin: 0;
+	margin-bottom: 1em;
+}
+
+.post_editor fieldset legend{
+	margin-left: 90%;
+	font-size: 1em;
+	font-weight: 700;
+}
+
+.toggle_field_label{
+	cursor: pointer;
+}
+
+.toggle_field div.col{
+	vertical-align: top;
+}
+
+.wmd-panel textarea{
+	resize: none;
+}
+
+.post_editor .wmd-input {
+	min-height: 500px;
+	padding: 1em 1em;
+	width: 100%;
+}
+.post_editor #wmd-preview {
+	width: 50%;
+	float: right;
+	min-height: 530px;
+	padding: 0em 1em;
+}
+.dropzone{
+	border: 4px dashed gray;
+	border-radius: 5px;
+	background: none repeat scroll 0% 0% #FFF;
+	min-height: 150px;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+.dropzone.dz-started {
+	border: none;
+}
+
+.post_editor .dropzone{
+	margin: 0 30px; 
+}
+.dropzone .dz-default.dz-message{
+	margin: 1.3em;	
+	text-align: center;
+	font-size: 40px;
+	color: gray;
+}
+
+
+.dropzone.dz-started .dz-message {
+    display: none;
+}
+.post_editor .dz-preview div.dz-details,
+.post_editor .dz-preview div.dz-error-mark,
+.post_editor .dz-preview div.dz-error-message,
+.post_editor .dz-preview div.dz-progress,
+.post_editor .dz-preview div.dz-success-mark{
+	display: none;
+}
+
+.post_editor div.dz-preview div.dz-image img{
+	width: 100%;
+	height: auto;
+	cursor: default;
+}
+
+.post_editor .pbutton{
+	text-align: right;
+}
+.pbutton input.submit{
+	font-weight: 700;
+	padding: 0.5em 5em;
+}
+
+
+.main_footer{
+	padding: 3em 0;
+}
+.main_footer p{
+	text-align: center;
+	font-weight:400;
+	font-size: 0.65em;
+	line-height: 0.2em;
+    letter-spacing: 0.1em;
+}
+.tema_abu{
+	background: #F3F3F3;
+	color: #666;
+}
