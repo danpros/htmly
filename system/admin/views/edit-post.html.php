@@ -106,7 +106,7 @@ $(document).ready(function() {
 	});
 
 	Dropzone.options.featuredDropzone = {
-		url: "/edd/upload.php",
+		url: "/upload.php",
 		acceptedFiles: 'image/*',
 		uploadMultiple: false,
 		addRemoveLinks: true,
