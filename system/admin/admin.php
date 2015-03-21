@@ -405,6 +405,15 @@ function get_feed($feed_url, $credit)
 }
 
 // Get recent posts by user
+function get_my_posts()
+{
+    if (isset($_SESSION[config("site.url")]['user'])) {
+        $posts = get_profile($_SESSION[config("site.url")]['user'], 1, 5);
+       return $posts;
+    }
+}
+
+// Get recent posts by user
 function get_recent_posts()
 {
     if (isset($_SESSION[config("site.url")]['user'])) {
