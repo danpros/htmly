@@ -7,30 +7,42 @@
 	<div class="error-message"><?php echo $error ?></div>
  <?php } ?>
  
+<?php
+$nojQueryCSS = "";
+if(config('jquery')== 'enable'){
+	$nojQueryCSS="hidden";
+}
+?> 
+ 
 <section class="row add_post">
 	<form method="POST" class="col post_editor">
-		<input type="text" class="text row" required id="title" name="title" placeholder="Title*" value="<?php if (isset($postTitle)) { echo $postTitle;} ?>"/> 
-		<input type="text" class="text row" required id='tag' name="tag" placeholder="Tag*" value="<?php if (isset($postTag)) { echo $postTag;} ?>"/>
+		<input type="text" class="text row <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" required id="title" name="title" placeholder="Title*" value="<?=(isset($postTitle)) ? $postTitle : "" ?>"/>
+		<input type="text" class="text row <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error';}} ?>" required id="tag" name="tag" placeholder="Tag*" value="<?=(isset($postTag)) ? $postTag : "" ?>"/>
 		
 		<fieldset>
 		<legend class='toggle_field_label'> Advance <i class="fa fa-chevron-down"></i></legend>
 		<div  class="row toggle_field">
-			<div class="col"><div type="text" class="dropzone" id="featuredDropzone"></div></div>
+			<div class="col">
+				<input type="text" class="text row <?=$nojQueryCSS?>" id="fi" name="fi" placeholder="Featured Image (optional)" value="" data-site-url="<?php echo site_url() ?>" data-image-url=""/>
+				<input type="text" class="text row <?=$nojQueryCSS?>" id="vid" name="vid" placeholder="Embed Youtube Video (optional)" value="<?php if (isset($postVid)) { echo $postVid;} ?>"/>
+				<div class="row dropzone hidden" id="featuredDropzone"></div>
+			</div>
 			<div class="col">
 				<input type="text" class="text row" name="url" placeholder="Url (optional)" value="<?php if (isset($postUrl)) { echo $postUrl;} ?>"/>
 				<p class="help ">If the url leave empty we will use the post title.</p>
-				<textarea name="description" class="row" placeholder="Meta Description (optional)" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
+				<textarea name="description" class="row" placeholder="Meta Description (optional)" maxlength="200" rows="6"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 			</div>
 		</div>
 		</fieldset>
 		
-		<input type="hidden" id="fi" name="fi" value="" data-site-url="<?php echo site_url() ?>" data-image-url=""/>
-
-		<div id="wmd-button-bar" class="wmd-button-bar row"></div>
-		<div class="wmd-panel">
-		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br/>
+		<div id="mdEditor" class="row">
+			<div class="wmd-panel col">
+				<div id="wmd-button-bar" class="wmd-button-bar row"></div>
+				<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br/>
+			</div>
+			<div id="wmd-preview" class="col wmd-panel wmd-preview"></div>
 		</div>
-		<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+
 		<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
 		<div class="row pbutton">
 			<input type="submit" name="submit" class="submit" value="Publish"/>
@@ -50,9 +62,9 @@
 })();
 </script>
 
+<?php if(config('jquery')== 'enable'){ ?>
 
 <script type="text/javascript">
-
 (function ($) {
 $(document).ready(function() {
 	$('.toggle_field').hide();
@@ -60,21 +72,24 @@ $(document).ready(function() {
 		$(this).siblings().toggle();
 		$(this).children('i').toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
 	});
-
+	$('.dropzone').show();
 	Dropzone.options.featuredDropzone = {
-		url: "/upload.php",
+		url: "../upload.php",
 		acceptedFiles: 'image/*',
 		uploadMultiple: false,
 		addRemoveLinks: true,
 		thumbnailWidth: 300,
 		thumbnailHeight: null,
-		dictRemoveFile: "Cancel",
-		dictCancelUpload: "Hapus/Ganti Gambar",
+		dictRemoveFile: "Remove",
+		dictCancelUpload: "Remove/Change Picture",
 		dictDefaultMessage: '<i class="fa fa-picture-o"></i><p>Drop image to upload</p>',
 		
 		init: function() {
 			this.on("success", function(file,ret) {
-				$('#fi').val($('#fi').data('site-url')+ret); 
+				$('#fi').val($('#fi').data('site-url')+ret);			
+			});
+			this.on("removedfile", function(file) {
+				$('#fi').val('');			
 			});
 			this.on("error", function (file,errmsg){alert(errmsg)});
 		 }
@@ -84,10 +99,9 @@ $(document).ready(function() {
 })(jQuery);
 </script>
 
-<!--  
-<input type="text" class="text row" id="vid" name="vid" placeholder="Embed Youtube Video (optional)" value="<?php if (isset($postVid)) { echo $postVid;} ?>"/>
+<?php } ?> 
 
--->
+
 
 
 		

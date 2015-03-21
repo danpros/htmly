@@ -1,21 +1,21 @@
 /*  ungrid the simplest responsive css grid (http://badge.fury.io/bo/ungrid) 
-*/@media(min-width:60em){
-	.row{
-		width:100%;
-		display:table;
-		table-layout:fixed
-	}
+*/@media(min-width:60em){.row{width:100%;display:table;table-layout:fixed}.col{display:table-cell}}
 
-	.col{
-		display:table-cell
-	}
-
-}
-
-body.admin{
-}
 .hidden{
 	display: none;
+}
+.tema_abu{
+	background: #F3F3F3;
+	color: #666;
+}
+
+input.text{
+	margin: 0.5em 0;
+	border: 1px solid #CFDAE5;
+}
+
+input:required{
+
 }
 
 .add_post{
@@ -24,33 +24,20 @@ body.admin{
 .post_editor {
 	padding: 1em 2em;
 }
-
 .post_editor  .help{
 	font-style: italic;
 	margin: 0 0 2em 0;
 }
-
-
-input.text{
-	margin: 0.5em 0;
-	min-width: 25em;
-	//background-color: #F6F7F9;
-	border: 1px solid #CFDAE5;
-}
-
-input:required{
-
-}
-
 .post_editor input.text {
 	font-size: 1em;
 }
-
+.post_editor textarea{
+	resize: none;
+}
 .post_editor input#title,
 .post_editor input#tag{
 	width:100%
 }
-
 .post_editor input#title{
 	font-size: 1.8em;
 }
@@ -58,78 +45,30 @@ input:required{
 	margin: 0;
 	margin-bottom: 1em;
 }
-
 .post_editor fieldset legend{
 	margin-left: 90%;
 	font-size: 1em;
 	font-weight: 700;
 }
-
 .toggle_field_label{
 	cursor: pointer;
 }
-
 .toggle_field div.col{
+	vertical-align: top;
+	padding:0 10px;
+}
+
+
+.post_editor .wmd-panel {
+	float:none;
+}
+.post_editor .wmd-preview {
 	vertical-align: top;
 }
 
-.wmd-panel textarea{
-	resize: none;
-}
-
-.post_editor .wmd-input {
-	min-height: 500px;
-	padding: 1em 1em;
-	width: 100%;
-}
-.post_editor #wmd-preview {
-	width: 50%;
-	float: right;
-	min-height: 530px;
-	padding: 0em 1em;
-}
-.dropzone{
-	border: 4px dashed gray;
-	border-radius: 5px;
-	background: none repeat scroll 0% 0% #FFF;
-	min-height: 150px;
-	box-sizing: border-box;
-	cursor: pointer;
-}
-
-.dropzone.dz-started {
-	border: none;
-}
-
-.post_editor .dropzone{
-	margin: 0 30px; 
-}
-.dropzone .dz-default.dz-message{
-	margin: 1.3em;	
-	text-align: center;
-	font-size: 40px;
-	color: gray;
-}
-
-
-.dropzone.dz-started .dz-message {
-    display: none;
-}
-.post_editor .dz-preview div.dz-details,
-.post_editor .dz-preview div.dz-error-mark,
-.post_editor .dz-preview div.dz-error-message,
-.post_editor .dz-preview div.dz-progress,
-.post_editor .dz-preview div.dz-success-mark{
-	display: none;
-}
-
-.post_editor div.dz-preview div.dz-image img{
-	width: 100%;
-	height: auto;
-	cursor: default;
-}
 
 .post_editor .pbutton{
+	margin: 20px 0;
 	text-align: right;
 }
 .pbutton input.submit{
@@ -148,7 +87,38 @@ input:required{
 	line-height: 0.2em;
     letter-spacing: 0.1em;
 }
-.tema_abu{
-	background: #F3F3F3;
-	color: #666;
+
+/*  Dropzone 
+*/
+.dropzone{
+	border: 4px dashed gray;
+	border-radius: 5px;
+	background: none repeat scroll 0% 0% #FFF;
+	min-height: 150px;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+.dropzone .dz-default.dz-message{
+	margin: 1.3em;	
+	text-align: center;
+	font-size: 40px;
+	color: gray;
+}
+.dropzone.dz-started {
+	border: none;
+}
+.dropzone.dz-started .dz-message {
+    display: none;
+}
+.dz-preview .dz-details,
+.dz-preview .dz-error-mark,
+.dz-preview .dz-error-message,
+.dz-preview .dz-progress,
+.dz-preview .dz-success-mark{
+	display: none;
+}
+.dz-preview .dz-image img{
+	width: 100%;
+	height: auto;
+	cursor: default;
 }

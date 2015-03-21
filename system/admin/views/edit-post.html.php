@@ -36,7 +36,10 @@
 	// The post URL
 	$delete= site_url().date('Y/m', $postdate).'/'.$oldmd . '/delete?destination=' . $destination;
 	
-	
+	$nojQueryCSS = "";
+	if(config('jquery')== 'enable'){
+		$nojQueryCSS="hidden";
+	}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css" />
@@ -50,35 +53,39 @@
  
 <section class="row">
 	<form method="POST" class="col post_editor">
-		<input type="text" class="text row" required id="title" name="title" placeholder="Title*" value="<?php echo $oldtitle ?>"/> 
-		<input type="text" class="text row" required id='tag' name="tag" placeholder="Tag*" value="<?php echo $oldtag ?>"/>
-		
+		<input type="text" class="text row <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" required id="title" name="title" placeholder="Title*" value="<?php echo $oldtitle ?>"/> 
+		<input type="text" class="text row <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error';}} ?>" required id='tag' name="tag" placeholder="Tag*" value="<?php echo $oldtag ?>"/>
+	
 		<fieldset>
 		<legend class='toggle_field_label'> Advance <i class="fa fa-chevron-down"></i></legend>
 		<div  class="row toggle_field">
-			<div class="col"><div type="text" class="dropzone" id="featuredDropzone"></div></div>
+			<div class="col">
+				<input type="text" class="text row <?=$nojQueryCSS?>" id="fi" name="fi" placeholder="Featured Image (optional)" value="<?php echo $oldfi?>" data-site-url="<?php echo site_url() ?>" data-image-url=""/>
+				<input type="text" class="text row <?=$nojQueryCSS?>" id="vid" name="vid" placeholder="Embed Youtube Video (optional)" value="<?php echo $oldvid ?>"/>
+				<div class="row dropzone hidden" id="featuredDropzone"></div>
+			</div>
 			<div class="col">
 				<input type="text" class="text row" name="url" placeholder="Url (optional)" value="<?php echo $oldmd ?>"/>
 				<p class="help ">If the url leave empty we will use the post title.</p>
-				<textarea name="description" class="row" placeholder="Meta Description (optional)" maxlength="200"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
+				<textarea name="description" class="row" placeholder="Meta Description (optional)" maxlength="200" rows="6"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 			</div>
 		</div>
 		</fieldset>
 		
-		<input type="hidden" id="fi" name="fi" value="<?php echo $oldfi?>" data-site-url="<?php echo site_url() ?>" data-image-url="<?php echo $oldfi?>"/>
-
-		<div id="wmd-button-bar" class="wmd-button-bar row"></div>
-		<div class="wmd-panel">
-		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content"><?php echo $oldcontent ?></textarea><br/>
+		<div id="mdEditor" class="row">
+			<div class="wmd-panel col">
+				<div id="wmd-button-bar" class="wmd-button-bar row"></div>
+				<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error';}} ?>" name="content"><?php echo $oldcontent ?></textarea><br/>
+			</div>
+			<div id="wmd-preview" class="col wmd-panel wmd-preview"></div>
 		</div>
-		<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
-		<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-		<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
-	 
 		<div class="row pbutton">
 			<input type="submit" name="submit" class="submit" value="Save"/>
 			<a href="<?php echo $delete?>">Delete</a>
 		<div class="row">
+		
+		<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+		<input type="hidden" name="csrf_token" value="<?php echo get_csrf()?>">
 	</form>
 
 </section>
@@ -94,9 +101,8 @@
 })();
 </script>
 
-
+<?php if(config('jquery')== 'enable'){?>
 <script type="text/javascript">
-
 (function ($) {
 $(document).ready(function() {
 	$('.toggle_field').hide();
@@ -104,9 +110,9 @@ $(document).ready(function() {
 		$(this).siblings().toggle();
 		$(this).children('i').toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
 	});
-
+	$('.dropzone').show();
 	Dropzone.options.featuredDropzone = {
-		url: "/upload.php",
+		url: "../upload.php",
 		acceptedFiles: 'image/*',
 		uploadMultiple: false,
 		addRemoveLinks: true,
@@ -121,24 +127,19 @@ $(document).ready(function() {
 				$('#fi').val($('#fi').data('site-url')+ret); 
 			});
 			this.on("error", function (file,errmsg){alert(errmsg)});
-			
-			var oldfi = $('#fi').data('image-url');
+			var oldfi = $('#fi').val();
 			// Create the mock file:
 			var mockFile = { name: "Filename", size: 12345 };
-
 			// Call the default addedfile event handler
 			this.emit("addedfile", mockFile);
-
 			// And optionally show the thumbnail of the file:
 			this.emit("thumbnail", mockFile, oldfi);
-
 			// Make sure that there is no progress bar, etc...
 			this.emit("complete", mockFile);
 
 		 }
 	}
-	//$("div#featuredDropzone").dropzone({ url: "/edd/upload.php" });	
-	
 })	
 })(jQuery);
 </script>
+<?php } ?>
