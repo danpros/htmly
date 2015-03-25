@@ -27,24 +27,42 @@ function create_user($userName, $password)
 }
 
 // Create a session
-function session($user, $pass)
-{
-    $user_file = 'config/users/' . $user . '.ini';
-    $user_enc = user('encryption', $user);
-    $user_pass = user('password', $user);
-    $password = (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none') ? hash($user_enc, $pass) : $pass;
+function session($user, $pass, $str = null) {
+        $user_file = 'config/users/' . $user . '.ini';
+        $user_enc = user('encryption', $user);
+        $user_pass = user('password', $user);
 
-    if (file_exists($user_file)) {
-        if ($password === $user_pass) {
-            $_SESSION[config("site.url")]['user'] = $user;
-            header('location: admin');
-        } else {
-            return $str = '<li>Your username and password mismatch.</li>';
+        // Is the password hashed?
+        if (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none') {
+            // If the hash algo bcrypt?
+            if ($user_enc == 'bcrypt') {
+                // DON'T DO A FUCKING THING BECAUSE WE'RE USING THE APSSWORDV_ERIFY FUCNTION BITJESK.
+                $password = $pass;
+            }
+            else {
+                // Yay, we're using a hashing algorithm designed to be FAST so brute forcers can exert less effort
+                $password = hash($user_enc,$pass);
+            }
         }
-    } else {
-        return $str = '<li>Username not found in our record.</li>';
-    }
+        else {
+            // Wow, we really like plaintext stuff.  Hope your /config/user/admin.ini isn't web-accessible
+            $password = $pass;
+        }
+
+        if(file_exists($user_file)) {
+            if($password === $user_pass || password_verify($password, $user_pass)) {
+                $_SESSION[config("site.url")]['user'] = $user;
+                header('location: admin');
+            }
+            else {
+                return $str = '<li>Your username and password mismatch.</li>';
+            }
+        }
+        else {
+            return $str = '<li>Username not found in our record.</li>';
+        }
 }
+
 
 // Clean URLs
 function remove_accent($str)
