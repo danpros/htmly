@@ -68,7 +68,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
 
     $post_title = $title;
     $post_fi = $fi;
-    $post_vid = str_replace(["http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"], "", $vid);
+    $post_vid = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", $vid);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
@@ -161,7 +161,7 @@ function add_post($title, $tag, $url, $content, $user, $description = null, $fi,
     $post_date = date('Y-m-d-H-i-s');
     $post_title = $title;
     $post_fi = $fi;
-    $post_vid = str_replace(["http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"], "", $vid);
+    $post_vid = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", $vid);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
