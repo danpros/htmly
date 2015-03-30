@@ -1,1 +1,68 @@
-body{padding-top:30px}#toolbar{background:#666;box-shadow:0 5px 15px #000;color:#CCC;font-family:Georgia,sans-serif;left:0;margin:0 -20px;padding:0 25px;position:fixed;right:0;top:0;z-index:600;border:0;font-size:15px;text-align:left;vertical-align:baseline;min-height:30px}#toolbar ul{margin:0;padding-top:5px;padding-bottom:5px;padding-left:30px;float:left}#toolbar ul li,#toolbar ul li a{float:left;list-style:none;margin:0}#toolbar a{color:#FFF;font-size:.846em;text-decoration:none;border-radius:10px;padding:0 10px;line-height:1.6}@media all and (max-width:550px){body{padding-top:60px}}table#config td:first-child{width:30%}table#config td:last-child{width:70%}table#config input{width:100%;box-sizing:border-box}table#config tr:last-child td{border-bottom:none}
+body {
+    padding-top: 30px
+}
+
+#toolbar {
+    background: #666;
+    box-shadow: 0 5px 15px #000;
+    color: #CCC;
+    font-family: Georgia, sans-serif;
+    left: 0;
+    margin: 0 -20px;
+    padding: 0 25px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 600;
+    border: 0;
+    font-size: 15px;
+    text-align: left;
+    vertical-align: baseline;
+    min-height: 30px
+}
+
+#toolbar ul {
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    float: left
+}
+
+#toolbar ul li, #toolbar ul li a {
+    float: left;
+    list-style: none;
+    margin: 0
+}
+
+#toolbar a {
+    color: #FFF;
+    font-size: .846em;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 0 10px;
+    line-height: 1.6
+}
+
+@media all and (max-width: 550px) {
+    body {
+        padding-top: 60px
+    }
+}
+
+table#config td:first-child {
+    width: 30%
+}
+
+table#config td:last-child {
+    width: 70%
+}
+
+table#config input {
+    width: 100%;
+    box-sizing: border-box
+}
+
+table#config tr:last-child td {
+    border-bottom: none
+}

@@ -32,6 +32,7 @@
                 return "0";
             return (string)$value;
         }
+
         foreach ($array as $key => $value) {
             echo '<tr>';
             echo '<td><label for="' . $key . '">' . $key . '</label></td>';

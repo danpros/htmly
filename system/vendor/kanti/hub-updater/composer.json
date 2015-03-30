@@ -13,15 +13,23 @@
     "support": {
         "forum": "https://github.com/Kanti/hub-updater/issues",
         "issues": "https://github.com/Kanti/hub-updater/issues",
-		"source": "https://github.com/Kanti/hub-updater"
+        "source": "https://github.com/Kanti/hub-updater"
     },
     "minimum-stability": "dev",
     "require": {
-		"php": ">=5.3.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Kanti\\": ""
-		}
+        "php": ">=5.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.6@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kanti\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kanti\\Test\\": "tests"
+        }
     }
 }

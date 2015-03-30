@@ -28,11 +28,14 @@ class HubUpdater
     {
         //options
         if (is_array($option)) {
-            if (!isset($option['name'])) {
+            if (!isset($option['name']) || empty($option['name'])) {
                 throw new \Exception('No Name in Option Set');
             }
             $this->options = $option + $this->options;
         } elseif (is_string($option)) {
+            if(empty($option)){
+                throw new \Exception('No Name Set');
+            }
             $this->options['name'] = $option;
         } else {
             throw new \Exception('No Option Set');
@@ -65,7 +68,8 @@ class HubUpdater
         $this->streamContext = stream_context_create(
             array(
                 'http' => array(
-                    'header' => "User-Agent: Awesome-Update-My-Self-" . $this->options['name'] . "\r\nAccept: application/vnd.github.v3+json\r\n",
+                    'header' => "User-Agent: Awesome-Update-My-Self-" . $this->options['name'] . "\r\n"
+                        . "Accept: application/vnd.github.v3+json\r\n",
                 ),
                 'ssl' => array(
                     'cafile' => $caBundleDir . '/ca_bundle.crt',
@@ -287,6 +291,13 @@ class HubUpdater
             }
             $this->newestInfo = $release;
             break;
+        }
+        if (!isset($this->newestInfo)) {
+            if ($this->options["exceptions"]) {
+                throw new \Exception("no suitable release found");
+            } else {
+                return array();
+            }
         }
         return $this->newestInfo;
     }
