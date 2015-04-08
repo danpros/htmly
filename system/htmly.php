@@ -5,7 +5,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 // Load the configuration file
 config('source', $config_file);
-if(config('timezone')) {
+if (config('timezone')) {
     date_default_timezone_set(config('timezone'));
 }
 
@@ -18,7 +18,7 @@ get('/index', function () {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('posts.perpage');
 
     $posts = get_posts(null, $page, $perpage);
@@ -89,7 +89,7 @@ post('/login', function () {
         if (!$proper) {
             $message['error'] .= '<li>CSRF Token not correct.</li>';
         }
-        if(!$captcha) {
+        if (!$captcha) {
             $message['error'] .= '<li>reCaptcha not correct.</li>';
         }
 
@@ -344,12 +344,12 @@ post('/:year/:month/:name/edit', function () {
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
     $dateTime = null;
-    if($date !== null && $time !== null) {
+    if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
 
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
-        if(empty($url)) {
+        if (empty($url)) {
             $url = $title;
         }
         edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $fi, $vid);
@@ -442,7 +442,7 @@ get('/author/:profile', function ($profile) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('profile.perpage');
 
     $posts = get_profile($profile, $page, $perpage);
@@ -545,7 +545,7 @@ get('/admin/posts', function () {
 
             config('views.root', 'system/admin/views');
             $page = from($_GET, 'page');
-            $page = $page ? (int) $page : 1;
+            $page = $page ? (int)$page : 1;
             $perpage = 20;
 
             $posts = get_posts(null, $page, $perpage);
@@ -603,7 +603,7 @@ get('/admin/mine', function () {
         $profile = $_SESSION[config("site.url")]['user'];
 
         $page = from($_GET, 'page');
-        $page = $page ? (int) $page : 1;
+        $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
 
         $posts = get_profile($profile, $page, $perpage);
@@ -1087,12 +1087,12 @@ post('/admin/config', function () {
 
         $new_config = array();
         $new_Keys = array();
-        if(!empty($newKey)){
+        if (!empty($newKey)) {
             $new_Keys[$newKey] = $newValue;
         }
-        foreach($_POST as $name => $value){
-            if(substr($name,0,8) == "-config-"){
-                $name = str_replace("_", ".",substr($name,8));
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
                 $new_config[$name] = $value;
             }
         }
@@ -1163,7 +1163,7 @@ get('/tag/:tag', function ($tag) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('tag.perpage');
 
     $posts = get_tag($tag, $page, $perpage, false);
@@ -1193,7 +1193,7 @@ get('/archive/:req', function ($req) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('archive.perpage');
 
     $posts = get_archive($req, $page, $perpage);
@@ -1239,7 +1239,7 @@ get('/search/:keyword', function ($keyword) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('search.perpage');
 
     $posts = get_keyword($keyword, $page, $perpage);
@@ -1268,7 +1268,7 @@ get('/api/json', function () {
     header('Content-type: application/json');
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('json.count');
 
     echo generate_json(get_posts(null, $page, $perpage));
@@ -1296,9 +1296,9 @@ get('/admin/update/now/:csrf', function ($CSRF) {
 
     $proper = is_csrf_proper($CSRF);
     $updater = new \Kanti\HubUpdater(array(
-		'name' => 'danpros/htmly',
-		'prerelease' => !!config("prerelease"),
-	));
+        'name' => 'danpros/htmly',
+        'prerelease' => !!config("prerelease"),
+    ));
     if (login() && $proper && $updater->able()) {
         $updater->update();
         config('views.root', 'system/admin/views');

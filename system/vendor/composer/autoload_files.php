@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
+    $vendorDir . '/ircmaxell/password-compat/lib/password.php',
     $baseDir . '/system/includes/dispatch.php',
     $baseDir . '/system/includes/functions.php',
     $baseDir . '/system/admin/admin.php',

@@ -13,15 +13,27 @@ function user($key, $user = null)
     }
 }
 
-function create_user($userName, $password)
+function update_user($userName, $password, $role)
+{
+    $file = 'config/users/' . $userName . '.ini';
+    if (file_exists($file)) {
+        file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
+            "encryption = password_hash\n" .
+            "role = " . $role . "\n");
+        return true;
+    }
+    return false;
+}
+
+function create_user($userName, $password, $role = "user")
 {
     $file = 'config/users/' . $userName . '.ini';
     if (file_exists($file)) {
         return false;
     } else {
-        file_put_contents($file, "password = " . hash("sha512", $password) . "\n" .
-            "encryption = sha512\n" .
-            "role = user\n");
+        file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
+            "encryption = password_hash\n" .
+            "role = " . $role . "\n");
         return true;
     }
 }
@@ -30,20 +42,35 @@ function create_user($userName, $password)
 function session($user, $pass)
 {
     $user_file = 'config/users/' . $user . '.ini';
-    $user_enc = user('encryption', $user);
-    $user_pass = user('password', $user);
-    $password = (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none') ? hash($user_enc, $pass) : $pass;
-
-    if (file_exists($user_file)) {
-        if ($password === $user_pass) {
-            $_SESSION[config("site.url")]['user'] = $user;
-            header('location: admin');
-        } else {
-            return $str = '<li>Your username and password mismatch.</li>';
-        }
-    } else {
+    if (!file_exists($user_file)) {
         return $str = '<li>Username not found in our record.</li>';
     }
+
+    $user_enc = user('encryption', $user);
+    $user_pass = user('password', $user);
+    $user_role = user('role', $user);
+
+    if ($user_enc == "password_hash") {
+        if (password_verify($pass, $user_pass)) {
+            if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
+                update_user($user, $pass, $user_role);
+            }
+            $_SESSION[config("site.url")]['user'] = $user;
+            header('location: admin');
+        }
+    } else if (old_password_verify($pass, $user_enc, $user_pass)) {
+        update_user($user, $pass, $user_role);
+        $_SESSION[config("site.url")]['user'] = $user;
+        header('location: admin');
+    } else {
+        return $str = '<li>Your username and password mismatch.</li>';
+    }
+}
+
+function old_password_verify($pass, $user_enc, $user_pass)
+{
+    $password = (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none') ? hash($user_enc, $pass) : $pass;
+    return ($password === $user_pass);
 }
 
 // Clean URLs
@@ -68,7 +95,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
 
     $post_title = $title;
     $post_fi = $fi;
-    $post_vid = str_replace(["http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"], "", $vid);
+    $post_vid = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", $vid);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
@@ -161,7 +188,7 @@ function add_post($title, $tag, $url, $content, $user, $description = null, $fi,
     $post_date = date('Y-m-d-H-i-s');
     $post_title = $title;
     $post_fi = $fi;
-    $post_vid = str_replace(["http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"], "", $vid);
+    $post_vid = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", $vid);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {

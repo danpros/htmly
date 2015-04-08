@@ -244,7 +244,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
         $post->feature = get_content_tag('fi', $content);
-        $post->video = get_content_tag('vid', $content);        
+        $post->video = get_content_tag('vid', $content);
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));

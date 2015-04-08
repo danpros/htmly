@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
-    'Kanti\\' => array($vendorDir . '/kanti/hub-updater'),
+    'Kanti\\' => array($vendorDir . '/kanti/hub-updater/src'),
 );
