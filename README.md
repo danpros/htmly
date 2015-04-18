@@ -68,7 +68,7 @@ role = admin
 Users assigned with the admin role can edit/delete all users' posts.
 
 To access the admin panel, add `/login` to the end of your site's URL.
-IE: `www.yoursite.com/login`
+e.g. `www.yoursite.com/login`
 
 ### Lighttpd
 The following are example configuration for lighttpd:
@@ -151,7 +151,8 @@ For static pages, use the following format:
 content/static/about.md
 ````
 
-In the example above, the `/about.md` creates the URL: `www.yourblog.com/about`.
+In the example above, the `/about.md` creates the URL:  
+`www.yourblog.com/about`
 
 Thus, if you write/create files offline, you must name the .md file in the format above.
 
@@ -161,7 +162,8 @@ For static subpages, use the following format:
 content/static/about/me.md
 ````
 
-This will create the following URL: `www.yourblog.com/about/me`.
+This will create the URL:  
+`www.yourblog.com/about/me`
 
 Content Title
 -------------
