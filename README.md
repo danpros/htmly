@@ -71,7 +71,7 @@ To access the admin panel, add `/login` to the end of your site's URL.
 e.g. `www.yoursite.com/login`
 
 ### Lighttpd
-The following are example configuration for lighttpd:
+The following is an example configuration for lighttpd:
 
 ````php
 $HTTP["url"] =~ "^/config" {
@@ -94,7 +94,7 @@ url.rewrite-once = (
 ````
 
 ### Nginx
-The following are basic configuration for Nginx:
+The following is a basic configuration for Nginx:
 
 ````nginx
 server {
