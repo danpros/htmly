@@ -4,9 +4,8 @@
 date_default_timezone_set('Asia/Jakarta');
 
 // Load the configuration file
-$config_file = 'config/config.ini';
 config('source', $config_file);
-if(config('timezone')) {
+if (config('timezone')) {
     date_default_timezone_set(config('timezone'));
 }
 
@@ -19,7 +18,7 @@ get('/index', function () {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('posts.perpage');
 
     $posts = get_posts(null, $page, $perpage);
@@ -90,7 +89,7 @@ post('/login', function () {
         if (!$proper) {
             $message['error'] .= '<li>CSRF Token not correct.</li>';
         }
-        if(!$captcha) {
+        if (!$captcha) {
             $message['error'] .= '<li>reCaptcha not correct.</li>';
         }
 
@@ -334,6 +333,8 @@ post('/:year/:month/:name/edit', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
+    $fi = from($_REQUEST, 'fi');
+    $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -343,15 +344,15 @@ post('/:year/:month/:name/edit', function () {
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
     $dateTime = null;
-    if($date !== null && $time !== null) {
+    if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
 
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
-        if(empty($url)) {
+        if (empty($url)) {
             $url = $title;
         }
-        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime);
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $fi, $vid);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -373,6 +374,8 @@ post('/:year/:month/:name/edit', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
+            'postFi' => $fi,
+            'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
             'postContent' => $content,
@@ -439,7 +442,7 @@ get('/author/:profile', function ($profile) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('profile.perpage');
 
     $posts = get_profile($profile, $page, $perpage);
@@ -542,7 +545,7 @@ get('/admin/posts', function () {
 
             config('views.root', 'system/admin/views');
             $page = from($_GET, 'page');
-            $page = $page ? (int) $page : 1;
+            $page = $page ? (int)$page : 1;
             $perpage = 20;
 
             $posts = get_posts(null, $page, $perpage);
@@ -600,7 +603,7 @@ get('/admin/mine', function () {
         $profile = $_SESSION[config("site.url")]['user'];
 
         $page = from($_GET, 'page');
-        $page = $page ? (int) $page : 1;
+        $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
 
         $posts = get_profile($profile, $page, $perpage);
@@ -875,6 +878,8 @@ post('/add/post', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
+    $fi = from($_REQUEST, 'fi');
+    $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -882,10 +887,10 @@ post('/add/post', function () {
     $user = $_SESSION[config("site.url")]['user'];
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if (!empty($url)) {
-            add_post($title, $tag, $url, $content, $user, $description);
+            add_post($title, $tag, $url, $content, $user, $description, $fi, $vid);
         } else {
             $url = $title;
-            add_post($title, $tag, $url, $content, $user, $description);
+            add_post($title, $tag, $url, $content, $user, $description, $fi, $vid);
         }
     } else {
         $message['error'] = '';
@@ -906,12 +911,32 @@ post('/add/post', function () {
             'head_contents' => head_contents('Add post - ' . blog_title(), blog_description(), site_url()),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
+            'postFi' => $fi,
+            'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
             'postContent' => $content,
             'bodyclass' => 'addpost',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
         ));
+    }
+});
+
+// Add the static page
+get('/add/page', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-page', array(
+            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'addpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
     }
 });
 
@@ -1062,12 +1087,12 @@ post('/admin/config', function () {
 
         $new_config = array();
         $new_Keys = array();
-        if(!empty($newKey)){
+        if (!empty($newKey)) {
             $new_Keys[$newKey] = $newValue;
         }
-        foreach($_POST as $name => $value){
-            if(substr($name,0,8) == "-config-"){
-                $name = str_replace("_", ".",substr($name,8));
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
                 $new_config[$name] = $value;
             }
         }
@@ -1138,7 +1163,7 @@ get('/tag/:tag', function ($tag) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('tag.perpage');
 
     $posts = get_tag($tag, $page, $perpage, false);
@@ -1168,7 +1193,7 @@ get('/archive/:req', function ($req) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('archive.perpage');
 
     $posts = get_archive($req, $page, $perpage);
@@ -1214,7 +1239,7 @@ get('/search/:keyword', function ($keyword) {
     }
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('search.perpage');
 
     $posts = get_keyword($keyword, $page, $perpage);
@@ -1243,7 +1268,7 @@ get('/api/json', function () {
     header('Content-type: application/json');
 
     $page = from($_GET, 'page');
-    $page = $page ? (int) $page : 1;
+    $page = $page ? (int)$page : 1;
     $perpage = config('json.count');
 
     echo generate_json(get_posts(null, $page, $perpage));
@@ -1271,9 +1296,9 @@ get('/admin/update/now/:csrf', function ($CSRF) {
 
     $proper = is_csrf_proper($CSRF);
     $updater = new \Kanti\HubUpdater(array(
-		'name' => 'danpros/htmly',
-		'prerelease' => !!config("prerelease"),
-	));
+        'name' => 'danpros/htmly',
+        'prerelease' => !!config("prerelease"),
+    ));
     if (login() && $proper && $updater->able()) {
         $updater->update();
         config('views.root', 'system/admin/views');

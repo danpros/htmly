@@ -1,4 +1,5 @@
 <?php
+
 class opml
 {
     private $data;
