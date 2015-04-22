@@ -1,27 +1,27 @@
 HTMLy
 =====
 
-HTMLy is an open source databaseless, blogging platform that prioritizes simplicity and speed (Flat-File Blog). HTMLy can be referred to as a Flat-File CMS, since it will also manage your content.
+HTMLy is an open source databaseless blogging platform prioritizing simplicity and speed (Flat-File Blog). And because HTMLy also manage the contents, then it can be referred as a Flat-File CMS.
 
 You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
 
 Features
 ---------
-- Admin Panel
+- Admin panel
 - Markdown editor with live preview
-- Categorization with tags (multiple tagging support)
-- Static Pages (e.g. Contact Page, About Page)
+- Categorization with tags (multi tags support)
+- Static pages Eg. for contact page
 - Meta canonical, description, and rich snippets for SEO
 - Pagination
-- Author Page
+- Author page
 - Multi author support
-- Social Links
+- Social links
 - Disqus Comments (optional)
 - Facebook Comments (optional)
 - Google Analytics
-- Built-in Search
-- Related Posts
-- Per Post Navigation (previous and next post)
+- Built-in search
+- Related posts
+- Per post navigation (previous and next post)
 - Body class for easy theming
 - Breadcrumb
 - Archive page (by year, year-month, or year-month-day)
@@ -30,14 +30,14 @@ Features
 - RSS Feed
 - RSS 2.0 Importer (basic)
 - Sitemap.xml
-- Archive and Tag Cloud Widget
-- SEO Friendly URLs
+- Archive and tag cloud widget
+- SEO friendly URLs
 - Teaser thumbnail for images and Youtube videos
-- Responsive Design
+- Responsive design
 - Lightbox
-- User Roles
-- Online Backup
-- File Caching
+- User role
+- Online backup
+- File cache
 - Auto Update
 
 Requirements
@@ -46,8 +46,8 @@ HTMLy requires PHP 5.3 or greater.
 
 Installations
 -------------
-If you have OpenSSL on your server, use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started.
-If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
+if you have openssl on your server, use the [Installer](https://github.com/Kanti/htmly-installer/releases/latest). read the [Instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp).
+If you don't have openssl, [download](https://github.com/danpros/htmly/releases/latest) the latest version, extract it, then upload the extracted files to your server. Make sure the installation folder is writeable by your server.
 
 Configurations
 --------------
@@ -59,19 +59,18 @@ Create `YourUsername.ini` inside the `config/users` folder or simply rename the 
 password = YourPassword
 ````
 
-In addition, HTMLy support admin user role. To do so, simply add the following line to your choosen user:
+HTMLy support admin user role either, simply add the following to your choosen user:
 
 ````cfg
 role = admin
 ````
 
-Users assigned with the admin role can edit/delete all users' posts.
+A user with the admin role can edit/delete all users' posts.
 
-To access the admin panel, add `/login` to the end of your site's URL.
-e.g. `www.yoursite.com/login`
+You can login to admin panel at `www.example.com/login`.
 
 ### Lighttpd
-The following is an example configuration for lighttpd:
+Here a example configuration
 
 ````php
 $HTTP["url"] =~ "^/config" {
@@ -94,7 +93,7 @@ url.rewrite-once = (
 ````
 
 ### Nginx
-The following is a basic configuration for Nginx:
+Here a basic configuration for nginx.
 
 ````nginx
 server {
@@ -127,11 +126,7 @@ server {
 
 Both Online or Offline
 ----------------------
-<<<<<<< HEAD
-The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above).
-=======
-The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above). 
->>>>>>> 1fda3d7a35f0fc4d6251bb0f6eb1782647986064
+In addition by using the built-in editor in the admin panel, you can also write markdown files offline and then upload them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above). 
 
 For static pages you can upload it to the `content/static` folder.
 
@@ -149,35 +144,27 @@ Here's the explanation (separated by an underscore):
 - `tag1,tag2,tag3` are the tags, separated by commas
 - `databaseless-blogging-platform-flat-file-blog` is the URL
 	
-For static pages, use the following format:
+For static pages, we use the following format:
 
 ````
 content/static/about.md
 ````
 
-In the example above, the `/about.md` creates the URL:  
-`www.yourblog.com/about`
+That means the URL is `about`.
 
-Thus, if you write/create files offline, you must name the .md file in the format above.
+So if you write it offline then you must name the .md file as above.
 
-For static subpages, use the following format:
+For static sub pages, we use the following format:
 
 ````
 content/static/about/me.md
 ````
 
-This will create the URL:  
-`www.yourblog.com/about/me`
+That means the URL is `about/me`.
 
 Content Title
 -------------
-If you are writing offline, to create a title for your post, wrap the title with an HTML comment and a `t` on both side.
-
-```html
-<!--t Title t-->
-````  
-
-Example of how your post would look like:
+If you write it offline, for the title of the post you need to add a title in the following format:
 ```html
 <!--t Here is the post title t-->
 
@@ -185,7 +172,7 @@ Paragraph 1
 
 Paragraph 2 etc.
 ```
-
+So wrap the title with HTML comment with `t` for both side.
 
 Demo
 ----
@@ -212,4 +199,4 @@ Contributors
 
 Copyright / License
 -------------------
-For copyright notice please read [COPYRIGHT.txt](https://github.com/danpros/htmly/blob/master/COPYRIGHT.txt). HTMLy is licensed under the GNU General Public License Version 2.0 (or later).
+For copyright notice please read [COPYRIGHT.txt](https://github.com/danpros/htmly/blob/master/COPYRIGHT.txt). HTMLy licensed under the GNU General Public License Version 2.0 (or later).
