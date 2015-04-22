@@ -127,7 +127,11 @@ server {
 
 Both Online or Offline
 ----------------------
+<<<<<<< HEAD
 The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above).
+=======
+The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above). 
+>>>>>>> 1fda3d7a35f0fc4d6251bb0f6eb1782647986064
 
 For static pages you can upload it to the `content/static` folder.
 
