@@ -1,21 +1,20 @@
 {
-  "config": {
-    "vendor-dir": "system/vendor/",
-    "optimize-autoloader": true
-  },
-  "require": {
-    "michelf/php-markdown": "~1.4",
-    "suin/php-rss-writer": "~1",
-    "kanti/hub-updater": "~0.3",
-    "ircmaxell/password-compat": "~1.0"
-  },
-  "autoload": {
-    "files": [
-      "system/includes/dispatch.php",
-      "system/includes/functions.php",
-      "system/admin/admin.php",
-      "system/includes/session.php",
-      "system/includes/opml.php"
-    ]
-  }
+	"config": {
+		"vendor-dir": "system/vendor/",
+		"optimize-autoloader": true
+	},
+    "require": {
+		"michelf/php-markdown": "~1.4",
+		"suin/php-rss-writer": "~1",
+        "kanti/hub-updater": "~0.3"
+    },
+	"autoload": {
+		"files": [
+			"system/includes/dispatch.php",
+			"system/includes/functions.php",
+			"system/admin/admin.php",
+			"system/includes/session.php",
+			"system/includes/opml.php"
+		]
+	}
 }

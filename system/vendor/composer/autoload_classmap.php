@@ -6,12 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
-    'Kanti\\CacheOneFile' => $vendorDir . '/kanti/hub-updater/src/CacheOneFile.php',
-    'Kanti\\HelperClass' => $vendorDir . '/kanti/hub-updater/src/HelperClass.php',
-    'Kanti\\HubUpdater' => $vendorDir . '/kanti/hub-updater/src/HubUpdater.php',
+    'Kanti\\CacheOneFile' => $vendorDir . '/kanti/hub-updater/CacheOneFile.php',
+    'Kanti\\HelperClass' => $vendorDir . '/kanti/hub-updater/HelperClass.php',
+    'Kanti\\HubUpdater' => $vendorDir . '/kanti/hub-updater/HubUpdater.php',
     'Michelf\\Markdown' => $vendorDir . '/michelf/php-markdown/Michelf/Markdown.php',
     'Michelf\\MarkdownExtra' => $vendorDir . '/michelf/php-markdown/Michelf/MarkdownExtra.php',
     'Michelf\\MarkdownInterface' => $vendorDir . '/michelf/php-markdown/Michelf/MarkdownInterface.php',
+    'Michelf\\_MarkdownExtra_TmpImpl' => $vendorDir . '/michelf/php-markdown/Michelf/Markdown.php',
     'Suin\\RSSWriter\\Channel' => $vendorDir . '/suin/php-rss-writer/Source/Suin/RSSWriter/Channel.php',
     'Suin\\RSSWriter\\ChannelInterface' => $vendorDir . '/suin/php-rss-writer/Source/Suin/RSSWriter/ChannelInterface.php',
     'Suin\\RSSWriter\\Feed' => $vendorDir . '/suin/php-rss-writer/Source/Suin/RSSWriter/Feed.php',

@@ -1,0 +1,12 @@
+{
+	"config": {
+		"bin-dir": ".",
+		"vendor-dir": "Vendor"
+	},
+	"require": {
+		"php":            ">=5.3.2",
+		"EHER/PHPUnit":   ">=1.6",
+		"suin/xoopsunit": ">=1.2",
+		"mockery/mockery": ">=0.7.2"
+	}
+}
