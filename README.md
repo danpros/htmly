@@ -125,6 +125,16 @@ server {
 }
 ````
 
+Making a secure password
+----------------------
+Passwords can be stored in `username.ini` (where "username" is the user's username) in either plaintext, encryption algorithms supported by php `hash` or bcrypt (recommended). To generate a bcrypt encrypted password:
+````
+$ php -a
+> echo password_hash('desiredpassword', PASSWORD_BCRYPT);
+````
+This will produce a hash which is to be placed in the `password` field in `username.ini`. Ensure that the `encryption` field is set to `bcrypt`.
+
+
 Both Online or Offline
 ----------------------
 The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above). 
