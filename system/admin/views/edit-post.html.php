@@ -7,7 +7,7 @@ if (isset($p->file)) {
 
 $content = file_get_contents($url);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
-$oldfi = get_content_tag('fi', $content);
+$oldimg = get_content_tag('img', $content);
 $oldvid = get_content_tag('vid', $content);
 $oldcontent = remove_html_comments($content);
 
@@ -64,7 +64,7 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
                 echo $p->description;
             } ?></textarea>
         <br><br>
-        Featured Image (optional)<br><input type="text" class="text" name="fi" value="<?php echo $oldfi ?>"/><br><br>
+        Featured Image (optional)<br><input type="text" class="text" name="img" value="<?php echo $oldimg ?>"/><br><br>
         Embed Youtube Video (optional)<br><input type="text" class="text" name="vid" value="<?php echo $oldvid ?>"/><br><br>
 
         <div id="wmd-button-bar" class="wmd-button-bar"></div>

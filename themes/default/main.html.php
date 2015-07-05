@@ -19,18 +19,6 @@ $len = count($posts); ?>
             <h2 class="title-index" itemprop="name"><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></h2>
 
             <div class="date">
-                <?php if (!empty($p->feature)) { ?>
-                    <div class="featured-image">
-                        <a href="<?php echo $p->url ?>"><img src="<?php echo $p->feature; ?>"
-                                                             alt="<?php echo $p->title ?>"/></a>
-                    </div>
-                <?php } ?>
-                <?php if (!empty($p->video)) { ?>
-                    <div class="featured-video">
-                        <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315"
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
-                <?php } ?>
                 <span itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in
                 <span itemprop="articleSection"><?php echo $p->tag ?></span> by
                 <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span>
@@ -41,6 +29,16 @@ $len = count($posts); ?>
                                 href=<?php echo $p->url ?>></fb:comments-count> Comments</span></a>
                 <?php } ?>
             </div>
+            <?php if (!empty($p->image)) { ?>
+                <div class="featured-image">
+                    <a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
+                </div>
+            <?php } ?>
+            <?php if (!empty($p->video)) { ?>
+                <div class="featured-video">
+                   <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                </div>
+            <?php } ?>
             <div class="teaser-body" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
                 <?php echo get_teaser($p->body, $p->url) ?>

@@ -29,8 +29,8 @@
                 echo $p->description;
             } ?></textarea>
         <br><br>
-        Featured Image (optional)<br><input type="text" class="text" name="fi" value="<?php if (isset($postFi)) {
-            echo $postFi;
+        Featured Image (optional)<br><input type="text" class="text" name="img" value="<?php if (isset($postImg)) {
+            echo $postImg;
         } ?>"/><br><br>
         Embed Youtube Video (optional)<br><input type="text" class="text" name="vid" value="<?php if (isset($postVid)) {
             echo $postVid;

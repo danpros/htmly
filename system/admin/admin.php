@@ -86,7 +86,7 @@ function remove_accent($str)
 }
 
 // Edit blog posts
-function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $fi, $vid)
+function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $img, $vid)
 {
     $oldurl = explode('_', $oldfile);
     if ($date !== null) {
@@ -94,17 +94,27 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
     }
 
     $post_title = $title;
-    $post_fi = $fi;
+    $post_img = $img;
     $post_vid = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", $vid);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
+    $post_tag = rtrim($post_tag, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
     }
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
-    $post_content = '<!--fi ' . $post_fi . ' fi-->' . "\n\n" . '<!--vid ' . $post_vid . ' vid-->' . "\n\n" . $post_content;
+    if ($img !== null) {
+        $post_img = "\n<!--img " . $post_img. " img-->";
+    } else {
+        $post_img = "";
+    }
+    if ($vid !== null) {
+        $post_vid = "\n<!--vid " . $post_vid. " vid-->";
+    } else {
+        $post_vid = "";
+    }		
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_img . $post_vid  ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {
@@ -182,22 +192,32 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 }
 
 // Add blog post
-function add_post($title, $tag, $url, $content, $user, $description = null, $fi, $vid)
+function add_post($title, $tag, $url, $content, $user, $description = null, $img, $vid)
 {
 
     $post_date = date('Y-m-d-H-i-s');
     $post_title = $title;
-    $post_fi = $fi;
+    $post_img = $img;
     $post_vid = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", $vid);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
+    $post_tag = rtrim($post_tag, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
     }
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
-    $post_content = '<!--fi ' . $post_fi . ' fi-->' . "\n\n" . '<!--vid ' . $post_vid . ' vid-->' . "\n\n" . $post_content;
+    if ($img !== null) {
+        $post_img = "\n<!--img " . $post_img. " img-->";
+    } else {
+        $post_img = "";
+    }
+    if ($vid !== null) {
+        $post_vid = "\n<!--vid " . $post_vid. " vid-->";
+    } else {
+        $post_vid = "";
+    }		
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_img . $post_vid  ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         if (get_magic_quotes_gpc()) {

@@ -4,7 +4,6 @@ use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
-use \Kanti\HubUpdater;
 
 // Get blog post path. Unsorted. Mostly used on widget.
 function get_post_unsorted()
@@ -223,7 +222,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $url = array();
         $bc = array();
 
-        $t = explode(',', $arr[1]);
+        $t = explode(',', rtrim($arr[1], ','));
         foreach ($t as $tt) {
             $tag[] = array($tt, site_url() . 'tag/' . $tt);
         }
@@ -243,7 +242,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
-        $post->feature = get_content_tag('fi', $content);
+        $post->image = get_content_tag('img', $content);
         $post->video = get_content_tag('vid', $content);
 
         // Get the contents and convert it to HTML
@@ -319,7 +318,7 @@ function get_tag($tag, $page, $perpage, $random)
     foreach ($posts as $index => $v) {
         $url = $v['filename'];
         $str = explode('_', $url);
-        $mtag = explode(',', $str[1]);
+        $mtag = explode(',', rtrim($str[1], ','));
         $etag = explode(',', $tag);
         foreach ($mtag as $t) {
             foreach ($etag as $e) {
@@ -727,7 +726,7 @@ function tag_cloud()
 
             $arr = explode('_', $v);
 
-            $data = $arr[1];
+            $data = rtrim($arr[1], ',');
             $mtag = explode(',', $data);
             foreach ($mtag as $etag) {
                 $tags[] = $etag;
@@ -1646,13 +1645,6 @@ function toolbar()
     $role = user('role', $user);
     $base = site_url();
 
-    $CSRF = get_csrf();
-
-    $updater = new HubUpdater(array(
-        'name' => 'danpros/htmly',
-        'prerelease' => !!config("prerelease"),
-    ));
-
     echo <<<EOF
 	<link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
 EOF;
@@ -1669,10 +1661,7 @@ EOF;
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
     echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
     echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
-    if ($updater->able()) {
-        $info = $updater->getNewestInfo();
-        echo '<li><a href="' . $base . 'admin/update/now/' . $CSRF . '" alt="' . $info['name'] . '">Update to ' . $info['tag_name'] . '</a></li>';
-    }
+    echo '<li><a href="' . $base . 'admin/update">Update</a></li>';
     echo '<li><a href="' . $base . 'logout">Logout</a></li>';
 
     echo '</ul></div>';

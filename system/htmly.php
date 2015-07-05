@@ -333,7 +333,7 @@ post('/:year/:month/:name/edit', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
-    $fi = from($_REQUEST, 'fi');
+    $img = from($_REQUEST, 'img');
     $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
@@ -352,7 +352,7 @@ post('/:year/:month/:name/edit', function () {
         if (empty($url)) {
             $url = $title;
         }
-        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $fi, $vid);
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $img, $vid);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -374,7 +374,7 @@ post('/:year/:month/:name/edit', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
-            'postFi' => $fi,
+            'postImg' => $img,
             'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
@@ -1290,6 +1290,22 @@ get('/feed/opml', function () {
 
     // Generate OPML file for the RSS
     echo generate_opml();
+});
+
+// Update page
+get('/admin/update', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('update', array(
+            'head_contents' => head_contents('Check for Update - ' . blog_title(), blog_description(), site_url()),
+            'bodyclass' => 'updatepage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Update HTMLy'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
 });
 
 get('/admin/update/now/:csrf', function ($CSRF) {

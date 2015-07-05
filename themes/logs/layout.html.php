@@ -3,9 +3,7 @@
 <head>
     <?php echo $head_contents ?>
     <link href="<?php echo site_url() ?>themes/logs/css/style.css" rel="stylesheet"/>
-    <link
-        href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic'
-        rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic" rel="stylesheet" type="text/css">
     <?php if (publisher()): ?>
         <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>
     <!--[if lt IE 9]>

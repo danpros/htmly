@@ -866,6 +866,26 @@ aside .copyright p {
 
 }
 
+@media all and (max-width: 560px) {
+
+    .featured-video {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .featured-video iframe, .featured-video object, .featured-video embed {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+}
+
 /*----------------------------
         Archive
 -----------------------------*/
