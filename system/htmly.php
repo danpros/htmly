@@ -878,7 +878,7 @@ post('/add/post', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
-    $fi = from($_REQUEST, 'fi');
+    $img = from($_REQUEST, 'img');
     $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');

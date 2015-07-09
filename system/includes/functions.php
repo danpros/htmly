@@ -596,7 +596,8 @@ function get_count($var, $str)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v[$str];
+        $arr = explode('_', $v[$str]);
+        $url = $arr[0];
         if (strpos($url, "$var") !== false) {
             $tmp[] = $v;
         }

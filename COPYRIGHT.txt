@@ -26,14 +26,18 @@ license, including:
   
   Markdown - (c) 2003-2006 John Gruber
 
-  \Suin\RSSWriter - (c) Suin <https://github.com/suin>
+  RSSWriter - (c) Suin <https://github.com/suin>
   
-  Showdown code (c) 2007 John Fraser
+  Showdown code - (c) 2007 John Fraser
   
-  Pagedown modifications and bugfixes (c) 2009 Dana Robinson
+  Pagedown modifications and bugfixes - (c) 2009 Dana Robinson
   
-  Pagedown modifications and bugfixes (c) 2009-2013 Stack Exchange Inc.
+  Pagedown modifications and bugfixes - (c) 2009-2013 Stack Exchange Inc.
   
-  Lightbox2 (c) Lokesh Dhakar <lokeshdhakar.com>
+  Lightbox2 - (c) Lokesh Dhakar <lokeshdhakar.com>
 
-  jQuery (c) The jQuery Foundation
+  jQuery - (c) The jQuery Foundation
+  
+  Hub Updater - (c) Kanti.de <https://github.com/Kanti>
+  
+  Password Compat - (c) Anthony Ferrara <https://github.com/ircmaxell>
