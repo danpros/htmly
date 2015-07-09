@@ -9,7 +9,7 @@ $path      = null;
 
 if (is_dir($dir)) {
 } else {
-    mkdir($dir, 0644, true);
+    mkdir($dir, 0755, true);
 }
 
 if (isset($_FILES)) {
