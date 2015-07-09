@@ -1,4 +1,4 @@
-Copyright (c) 2014 Danang Probo Sayekti.
+Copyright (c) 2015 Danang Probo Sayekti.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,6 +38,10 @@ license, including:
 
   jQuery - (c) The jQuery Foundation
   
+  jQuery UI - (c) The jQuery Foundation
+  
   Hub Updater - (c) Kanti.de <https://github.com/Kanti>
   
   Password Compat - (c) Anthony Ferrara <https://github.com/ircmaxell>
+  
+  jQuery.AjaxFileUpload.js - (c) Jordan Feldstein <https://github.com/jfeldstein>
