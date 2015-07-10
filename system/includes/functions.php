@@ -1618,7 +1618,7 @@ function head_contents($title, $description, $canonical)
     $canonical = '<link rel="canonical" href="' . $canonical . '" />';
     $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
     $lightboxcss = '<link href="' . site_url() . 'system/plugins/lightbox/css/lightbox.css" rel="stylesheet" />';
-    $jquery = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
+    $jquery = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>';
     $lightbox = '<script src="' . site_url() . 'system/plugins/lightbox/js/lightbox-2.6.min.js"></script>';
     $corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
     $webmasterTools = '';

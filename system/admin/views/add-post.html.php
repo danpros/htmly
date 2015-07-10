@@ -1,5 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
+<?php if (config("jquery") != "enable"):?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+<?php endif;?> 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
@@ -74,7 +76,7 @@
             autoOpen: false,
             closeOnEscape: false,
             open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
-		});
+        });
 		
         var $url = $('input[type=text]', $dialog);
         var $file = $('input[type=file]', $dialog);
@@ -122,7 +124,7 @@
             return true; // tell the editor that we'll take care of getting the image url
         });
 
-    editor.run();
+        editor.run();
 	
     })();
 </script>
