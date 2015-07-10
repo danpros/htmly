@@ -8,7 +8,7 @@ You do not need to use a VPS to run HTMLy, shared hosting or even free hosting s
 Features
 ---------
 - Admin Panel
-- Markdown editor with live preview
+- Markdown editor with live preview and image upload
 - Categorization with tags (multiple tagging support)
 - Static Pages (e.g. Contact Page, About Page)
 - Meta canonical, description, and rich snippets for SEO

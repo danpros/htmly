@@ -20,7 +20,6 @@ User-agent: *
 Crawl-delay: 10
 # Directories
 Disallow: /config/
-Disallow: /content/
 Disallow: /system/
 Disallow: /themes/
 Disallow: /vendor/

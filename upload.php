@@ -31,7 +31,7 @@ if (login()) {
 		
             if($check !== false) {
                 if ($error === UPLOAD_ERR_OK) {
-                    $extension = pathinfo($timestamp . '-' . $name, PATHINFO_EXTENSION);
+                    $extension = pathinfo($name, PATHINFO_EXTENSION);
                     if (!in_array($extension, $whitelist)) {
                         $error = 'Invalid file type uploaded.';
                     } else {
