@@ -5,6 +5,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 // Load the configuration file
 config('source', $config_file);
+
 if (config('timezone')) {
     date_default_timezone_set(config('timezone'));
 }
