@@ -1321,6 +1321,8 @@ get('/admin/update/now/:csrf', function ($CSRF) {
         render('updated-to', array(
             'head_contents' => head_contents('Updated - ' . blog_title(), blog_description(), site_url()),
             'info' => $updater->getCurrentInfo(),
+            'bodyclass' => 'updatepage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Update HTMLy'
         ));
     } else {
         $login = site_url() . 'login';
