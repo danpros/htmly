@@ -630,10 +630,17 @@ function keyword_count($keyword)
     return count($tmp);
 }
 
+// Return recent posts lists
 function recent()
 {
+    $count = config('recent.count');
+	
+    if (empty($count)) {
+        $count = 5;
+    }
+	
     $str = '<ul>';
-    $posts = get_posts(null, 1, 5);
+    $posts = get_posts(null, 1, $count);
     foreach ($posts as $post) {
         $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
     }
