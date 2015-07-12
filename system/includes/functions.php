@@ -792,7 +792,7 @@ function get_description($string)
 }
 
 // Get the teaser
-function get_teaser($text, $url)
+function get_teaser($text)
 {
     $teaserType = config('teaser.type');
 
@@ -802,8 +802,7 @@ function get_teaser($text, $url)
         $string = preg_replace('/\s\s+/', ' ', strip_tags($text));
         $string = substr($string, 0, config('teaser.char'));
         $string = substr($string, 0, strrpos($string, ' '));
-        $body = $string . '...' . ' <a class="readmore" href="' . $url . '#more">more</a>';
-        echo '<p>' . $body . '</p>';
+        echo $string;
     }
 }
 
@@ -919,16 +918,16 @@ function disqus($title = null, $url = null)
     $comment = config('comment.system');
     $disqus = config('disqus.shortname');
     $script = <<<EOF
-	<script type="text/javascript">
-		var disqus_shortname = '{$disqus}';
-		var disqus_title = '{$title}';
-		var disqus_url = '{$url}';
-		(function () {
-			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-			dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-		})();
-	</script>
+    <script type="text/javascript">
+        var disqus_shortname = '{$disqus}';
+        var disqus_title = '{$title}';
+        var disqus_url = '{$url}';
+        (function () {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
 EOF;
     if (!empty($disqus) && $comment == 'disqus') {
         return $script;
@@ -941,14 +940,14 @@ function disqus_count()
     $comment = config('comment.system');
     $disqus = config('disqus.shortname');
     $script = <<<EOF
-	<script type="text/javascript">
-		var disqus_shortname = '{$disqus}';
-		(function () {
-			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-			dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
-			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-		})();
-	</script>
+    <script type="text/javascript">
+        var disqus_shortname = '{$disqus}';
+        (function () {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
 EOF;
     if (!empty($disqus) && $comment == 'disqus') {
         return $script;
@@ -961,8 +960,8 @@ function recent_comments()
     $comment = config('comment.system');
     $disqus = config('disqus.shortname');
     $script = <<<EOF
-		<script type="text/javascript" src="//{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
-		<style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
+        <script type="text/javascript" src="//{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
+        <style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
 EOF;
     if (!empty($disqus) && $comment == 'disqus') {
         return $script;
@@ -974,15 +973,17 @@ function facebook()
     $comment = config('comment.system');
     $appid = config('fb.appid');
     $script = <<<EOF
-	<div id="fb-root"></div>
-	<script>(function (d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={$appid}";
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-	<style>.fb-comments, .fb_iframe_widget span, .fb-comments iframe {width: 100%!important;}</style>
+    <div id="fb-root"></div>
+    <script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); 
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={$appid}";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <style>.fb-comments, .fb_iframe_widget span, .fb-comments iframe {width: 100%!important;}</style>
 EOF;
 
     if (!empty($appid) && $comment == 'facebook') {
@@ -1009,14 +1010,13 @@ function analytics($analyticsDir = null)
         $analyticsDir = site_url() . 'themes/' . $analyticsDir . 'analytics.js';
     }
     $script = <<<EOF
-<script>
-    (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
+    <script>
+        (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','{$analyticsDir}','ga');
-
-    ga('create', '{$analytics}', 'auto');
-    ga('send', 'pageview');
+        ga('create', '{$analytics}', 'auto');
+        ga('send', 'pageview');
 </script>
 EOF;
     if (!empty($analytics)) {
@@ -1189,10 +1189,10 @@ function get_menu()
 function search()
 {
     echo <<<EOF
-	<form id="search-form" method="get">
-		<input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
-		<input type="submit" value="Search" class="search-button">
-	</form>
+    <form id="search-form" method="get">
+        <input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
+        <input type="submit" value="Search" class="search-button">
+    </form>
 EOF;
     if (isset($_GET['search'])) {
         $url = site_url() . 'search/' . $_GET['search'];

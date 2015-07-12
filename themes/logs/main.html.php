@@ -36,7 +36,7 @@
             <?php } ?>
             <div class="teaser-body" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
-                <?php echo get_teaser($p->body, $p->url) ?>
+                <p><?php echo get_teaser($p->body) ?>... <a href="<?php echo $p->url;?>#more">more</a></p>
             </div>
         </div>
     </div>
