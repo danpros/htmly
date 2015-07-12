@@ -578,13 +578,13 @@ function get_related($tag)
     if ($total >= 1) {
 
         $i = 1;
-        echo '<div class="related"><h4>Related posts</h4><ul>';
+        echo '<ul>';
         foreach ($tmp as $post) {
             echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
             if ($i++ >= $perpage)
                 break;
         }
-        echo '</ul></div>';
+        echo '</ul>';
     }
 }
 
@@ -679,7 +679,6 @@ function archive_list()
         $script = <<<EOF
 	if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
 EOF;
-        echo '<h3>Archive</h3>';
         $i = 0;
         $len = count($by_year);
         foreach ($by_year as $year => $months) {
@@ -737,7 +736,6 @@ function tag_cloud()
         $tag_collection = array_count_values($tags);
         ksort($tag_collection);
 
-        echo '<h3>Tags</h3>';
         echo '<ul class="taglist">';
         foreach ($tag_collection as $tag => $count) {
             echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
@@ -963,10 +961,6 @@ function recent_comments()
     $comment = config('comment.system');
     $disqus = config('disqus.shortname');
     $script = <<<EOF
-		<script type="text/javascript">
-			var heading ='<h3>Comments</h3>';
-			document.write(heading);
-		</script>
 		<script type="text/javascript" src="//{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
 		<style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
 EOF;
@@ -1600,22 +1594,19 @@ function authorinfo($title = null, $body = null)
     }
 }
 
-function head_contents($title, $description, $canonical)
+function head_contents()
 {
     $styleImage = config('lightbox');
     $jq = config('jquery');
     $output = '';
     $wmt_id = config('google.wmt.id');
 
-    $title = '<title>' . $title . '</title>';
     $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
     $charset = '<meta charset="utf-8" />';
     $generator = '<meta name="generator" content="htmly" />';
     $xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
     $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />';
-    $description = '<meta name="description" content="' . $description . '"/>';
     $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
-    $canonical = '<link rel="canonical" href="' . $canonical . '" />';
     $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
     $lightboxcss = '<link href="' . site_url() . 'system/plugins/lightbox/css/lightbox.css" rel="stylesheet" />';
     $jquery = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>';
@@ -1627,12 +1618,12 @@ function head_contents($title, $description, $canonical)
     }
 
     if ($styleImage == 'on') {
-        $output .= $charset . "\n" . $xua . "\n" . $title . "\n" . $description . "\n" . $viewport . "\n" . $generator . "\n" . $webmasterTools . "\n" . $favicon . "\n" . $canonical . "\n" . $sitemap . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n";
+        $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . $sitemap . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n" . $webmasterTools;
     } else {
         if ($jq == 'enable') {
-            $output .= $charset . "\n" . $xua . "\n" . $title . "\n" . $description . "\n" . $viewport . "\n" . $generator . "\n" . $webmasterTools . "\n" . $favicon . "\n" . $canonical . "\n" . $sitemap . "\n" . $feed . "\n" . $jquery . "\n";
+            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $jquery . "\n" . $webmasterTools;
         } else {
-            $output .= $charset . "\n" . $xua . "\n" . $title . "\n" . $description . "\n" . $viewport . "\n" . $generator . "\n" . $webmasterTools . "\n" . $favicon . "\n" . $canonical . "\n" . $sitemap . "\n" . $feed . "\n";
+            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools;
         }
     }
 

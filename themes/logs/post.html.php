@@ -1,17 +1,15 @@
 <?php if (!empty($breadcrumb)): ?>
-    <div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><?php echo $breadcrumb ?></div><?php endif; ?>
+    <div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><?php echo $breadcrumb ?></div>
+<?php endif; ?>
 <?php if (login()) {
     echo tab($p);
 } ?>
 <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="main">
         <a name="more"></a>
-
         <h1 class="title-post" itemprop="name"><?php echo $p->title ?></h1>
-
         <div class="date">
-            <span itemprop="datePublished"><a href="<?php echo $p->archive ?>"
-                                              title="Show all posts made on this day"><?php echo date('d F Y', $p->date) ?></a></span>
+            <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this day"><?php echo date('d F Y', $p->date) ?></a></span>
             - Posted in
             <span itemprop="articleSection"><?php echo $p->tag ?></span> by
             <span itemprop="author"><a href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></span> -
@@ -47,8 +45,7 @@
     <?php echo get_related($p->tag) ?>
     <div id="comments" class="comments border">
         <?php if (facebook()): ?>
-            <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>"
-                 data-colorscheme="<?php echo config('fb.color') ?>"></div>
+            <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
         <?php endif; ?>
         <?php if (disqus()): ?>
             <div id="disqus_thread"></div>
@@ -56,13 +53,10 @@
     </div>
     <div class="postnav">
         <?php if (!empty($next)): ?>
-            <span class="newer">&laquo; <a href="<?php echo($next['url']); ?>"
-                                           rel="next"><?php echo($next['title']); ?></a></span>
+            <span class="newer">&laquo; <a href="<?php echo($next['url']); ?>" rel="next"><?php echo($next['title']); ?></a></span>
         <?php endif; ?>
-
         <?php if (!empty($prev)): ?>
-            <span class="older"><a href="<?php echo($prev['url']); ?>"
-                                   rel="prev"><?php echo($prev['title']); ?></a> &raquo;</span>
+            <span class="older"><a href="<?php echo($prev['url']); ?>" rel="prev"><?php echo($prev['title']); ?></a> &raquo;</span>
         <?php endif; ?>
     </div>
     <?php if (disqus()): ?>

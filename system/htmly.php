@@ -38,7 +38,9 @@ get('/index', function () {
 
         // a non-existing page
         render('no-posts', array(
-            'head_contents' => head_contents(blog_title() . $tagline, blog_description(), site_url()),
+            'title' => blog_title() . $tagline,
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'noposts',
         ));
 
@@ -46,7 +48,9 @@ get('/index', function () {
     }
 
     render('main', array(
-        'head_contents' => head_contents(blog_title() . $tagline, blog_description(), site_url()),
+        'title' => blog_title() . $tagline,
+        'description' => blog_description(),
+        'canonical' => site_url(),
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'infront',
@@ -73,7 +77,9 @@ post('/login', function () {
             config('views.root', 'system/admin/views');
 
             render('login', array(
-                'head_contents' => head_contents('Login - ' . blog_title(), 'Login page on ' . blog_title(), site_url()),
+                'title' => 'Login - ' . blog_title(),
+                'description' => 'Login page on ' . blog_title(),
+                'canonical' => site_url(),
                 'error' => '<ul>' . $log . '</ul>',
                 'bodyclass' => 'editprofile',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
@@ -97,7 +103,9 @@ post('/login', function () {
         config('views.root', 'system/admin/views');
 
         render('login', array(
-            'head_contents' => head_contents('Login - ' . blog_title(), 'Login page on ' . blog_title(), site_url()),
+            'title' => 'Login - ' . blog_title(),
+            'description' => 'Login page on ' . blog_title(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'username' => $user,
             'password' => $pass,
@@ -129,7 +137,9 @@ get("/:static/:sub/edit", function ($static, $sub) {
         $page = $page[0];
 
         render('edit-page', array(
-            'head_contents' => head_contents('Edit page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'editpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ',
             'p' => $page,
@@ -178,7 +188,9 @@ post("/:static/:sub/edit", function ($static, $sub) {
         config('views.root', 'system/admin/views');
 
         render('edit-page', array(
-            'head_contents' => head_contents('Edit page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
@@ -212,7 +224,9 @@ get("/:static/:sub/delete", function ($static, $sub) {
         $page = $page[0];
 
         render('delete-page', array(
-            'head_contents' => head_contents('Delete page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Delete page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'deletepage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a>' . $page->title,
             'p' => $page,
@@ -279,7 +293,9 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     }
 
     render('post', array(
-        'head_contents' => head_contents($current->title . ' - ' . blog_title(), $current->description, $current->url),
+        'title' => $current->title . ' - ' . blog_title(),
+        'description' => $current->description,
+        'canonical' => $current->url,
         'p' => $current,
         'authorinfo' => authorinfo($bio->title, $bio->body),
         'bodyclass' => 'inpost',
@@ -309,14 +325,18 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
 
         if ($user === $current->author || $role === 'admin') {
             render('edit-post', array(
-                'head_contents' => head_contents('Edit post - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Edit post - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'editpost',
                 'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
-                'head_contents' => head_contents('Edit post - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Edit post - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
@@ -371,7 +391,9 @@ post('/:year/:month/:name/edit', function () {
         config('views.root', 'system/admin/views');
 
         render('edit-post', array(
-            'head_contents' => head_contents('Edit post - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit post - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
@@ -405,14 +427,18 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
 
         if ($user === $current->author || $role === 'admin') {
             render('delete-post', array(
-                'head_contents' => head_contents('Delete post - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Delete post - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'deletepost',
                 'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
-                'head_contents' => head_contents('Delete post - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Delete post - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'deletepost',
                 'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
@@ -460,7 +486,9 @@ get('/author/:profile', function ($profile) {
 
     if (empty($posts) || $page < 1) {
         render('profile', array(
-            'head_contents' => head_contents('Profile for:  ' . $bio->title . ' - ' . blog_title(), 'Profile page and all posts by ' . $bio->title . ' on ' . blog_title() . '.', site_url() . 'author/' . $profile),
+            'title' => 'Profile for:  ' . $bio->title . ' - ' . blog_title(),
+            'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . blog_title() . '.',
+            'canonical' => site_url() . 'author/' . $profile,
             'page' => $page,
             'posts' => null,
             'bio' => $bio->body,
@@ -473,7 +501,9 @@ get('/author/:profile', function ($profile) {
     }
 
     render('profile', array(
-        'head_contents' => head_contents('Profile for:  ' . $bio->title . ' - ' . blog_title(), 'Profile page and all posts by ' . $bio->title . ' on ' . blog_title() . '.', site_url() . 'author/' . $profile),
+        'title' => 'Profile for:  ' . $bio->title . ' - ' . blog_title(),
+        'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . blog_title() . '.',
+        'canonical' => site_url() . 'author/' . $profile,
         'page' => $page,
         'posts' => $posts,
         'bio' => $bio->body,
@@ -491,7 +521,9 @@ get('/edit/profile', function () {
 
         config('views.root', 'system/admin/views');
         render('edit-profile', array(
-            'head_contents' => head_contents('Edit profile - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit profile - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'editprofile',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile',
         ));
@@ -525,7 +557,9 @@ post('/edit/profile', function () {
         config('views.root', 'system/admin/views');
 
         render('edit-profile', array(
-            'head_contents' => head_contents('Edit profile - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit profile - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postContent' => $content,
@@ -557,7 +591,9 @@ get('/admin/posts', function () {
 
                 // a non-existing page
                 render('no-posts', array(
-                    'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
+                    'title' => 'All blog posts - ' . blog_title(),
+                    'description' => blog_description(),
+                    'canonical' => site_url(),
                     'bodyclass' => 'noposts',
                 ));
 
@@ -573,7 +609,9 @@ get('/admin/posts', function () {
             }
 
             render('posts-list', array(
-                'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'All blog posts - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'heading' => 'All blog posts',
                 'page' => $page,
                 'posts' => $posts,
@@ -583,7 +621,9 @@ get('/admin/posts', function () {
             ));
         } else {
             render('denied', array(
-                'head_contents' => head_contents('All blog posts - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'All blog posts - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'bodyclass' => 'denied',
                 'breadcrumb' => '',
             ));
@@ -621,7 +661,9 @@ get('/admin/mine', function () {
 
         if (empty($posts) || $page < 1) {
             render('user-posts', array(
-                'head_contents' => head_contents('My blog posts - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'My blog posts - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'page' => $page,
                 'heading' => 'My posts',
                 'posts' => null,
@@ -635,7 +677,9 @@ get('/admin/mine', function () {
         }
 
         render('user-posts', array(
-            'head_contents' => head_contents('My blog posts - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'My blog posts - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'heading' => 'My posts',
             'page' => $page,
             'posts' => $posts,
@@ -679,7 +723,9 @@ get('/:static', function ($static) {
         if (login()) {
             config('views.root', 'system/admin/views');
             render('main', array(
-                'head_contents' => head_contents('Admin - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Admin - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'bodyclass' => 'adminfront',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Admin'
             ));
@@ -691,7 +737,9 @@ get('/:static', function ($static) {
     } elseif ($static === 'login') {
         config('views.root', 'system/admin/views');
         render('login', array(
-            'head_contents' => head_contents('Login - ' . blog_title(), 'Login page from ' . blog_title() . '.', site_url() . '/login'),
+            'title' => 'Login - ' . blog_title(),
+            'description' => 'Login page from ' . blog_title() . '.',
+            'canonical' => site_url() . '/login',
             'bodyclass' => 'inlogin',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
         ));
@@ -700,7 +748,9 @@ get('/:static', function ($static) {
         if (login()) {
             config('views.root', 'system/admin/views');
             render('logout', array(
-                'head_contents' => head_contents('Logout - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Logout - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'bodyclass' => 'inlogout',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Logout'
             ));
@@ -733,7 +783,9 @@ get('/:static', function ($static) {
         }
 
         render('static', array(
-            'head_contents' => head_contents($post->title . ' - ' . blog_title(), $post->description, $post->url),
+            'title' => $post->title . ' - ' . blog_title(),
+            'description' => $post->description,
+            'canonical' => $post->url,
             'bodyclass' => 'inpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
@@ -757,7 +809,9 @@ get('/:static/edit', function ($static) {
         $post = $post[0];
 
         render('edit-page', array(
-            'head_contents' => head_contents('Edit page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'editpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
@@ -805,7 +859,9 @@ post('/:static/edit', function () {
         config('views.root', 'system/admin/views');
 
         render('edit-page', array(
-            'head_contents' => head_contents('Edit page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Edit page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
@@ -832,7 +888,9 @@ get('/:static/delete', function ($static) {
         $post = $post[0];
 
         render('delete-page', array(
-            'head_contents' => head_contents('Delete page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Delete page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'deletepage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
@@ -863,7 +921,9 @@ get('/add/post', function () {
         config('views.root', 'system/admin/views');
 
         render('add-post', array(
-            'head_contents' => head_contents('Add post - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add post - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'addpost',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
         ));
@@ -909,7 +969,9 @@ post('/add/post', function () {
         }
         config('views.root', 'system/admin/views');
         render('add-post', array(
-            'head_contents' => head_contents('Add post - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add post- ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postFi' => $fi,
@@ -931,7 +993,9 @@ get('/add/page', function () {
         config('views.root', 'system/admin/views');
 
         render('add-page', array(
-            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'addpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
         ));
@@ -949,7 +1013,9 @@ get('/add/page', function () {
         config('views.root', 'system/admin/views');
 
         render('add-page', array(
-            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'addpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
         ));
@@ -988,7 +1054,9 @@ post('/add/page', function () {
         }
         config('views.root', 'system/admin/views');
         render('add-page', array(
-            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postUrl' => $url,
@@ -1004,7 +1072,9 @@ get('/admin/import', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('import', array(
-            'head_contents' => head_contents('Import feed - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Import feed - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'importfeed',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Import feed'
         ));
@@ -1032,7 +1102,9 @@ post('/admin/import', function () {
             config('views.root', 'system/admin/views');
 
             render('import', array(
-                'head_contents' => head_contents('Import feed - ' . blog_title(), blog_description(), site_url()),
+                'title' => 'Import feed - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
                 'error' => '<ul>' . $log . '</ul>',
                 'bodyclass' => 'editprofile',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Import feed'
@@ -1050,7 +1122,9 @@ post('/admin/import', function () {
         config('views.root', 'system/admin/views');
 
         render('import', array(
-            'head_contents' => head_contents('Import feed - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Import feed - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'url' => $url,
             'bodyclass' => 'editprofile',
@@ -1064,7 +1138,9 @@ get('/admin/config', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('config', array(
-            'head_contents' => head_contents('Config - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Config - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'config',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
         ));
@@ -1112,7 +1188,9 @@ get('/admin/backup', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('backup', array(
-            'head_contents' => head_contents('Backup content - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Backup content - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'backup',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Backup'
         ));
@@ -1128,7 +1206,9 @@ get('/admin/backup-start', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('backup-start', array(
-            'head_contents' => head_contents('Backup content started - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Backup content started - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'startbackup',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Backup started'
         ));
@@ -1144,7 +1224,9 @@ get('/admin/clear-cache', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('clear-cache', array(
-            'head_contents' => head_contents('Clearing cache started - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Clearing cache started - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'clearcache',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Clearing cache started'
         ));
@@ -1177,7 +1259,9 @@ get('/tag/:tag', function ($tag) {
     }
 
     render('main', array(
-        'head_contents' => head_contents('Posts tagged: ' . $tag . ' - ' . blog_title(), 'All posts tagged: ' . $tag . ' on ' . blog_title() . '.', site_url() . 'tag/' . $tag),
+        'title' => 'Posts tagged: ' . $tag . ' - ' . blog_title(),
+        'description' => 'All posts tagged: ' . $tag . ' on ' . blog_title() . '.',
+        'canonical' => site_url() . 'tag/' . $tag,
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'intag',
@@ -1223,7 +1307,9 @@ get('/archive/:req', function ($req) {
     }
 
     render('main', array(
-        'head_contents' => head_contents('Archive for: ' . $timestamp . ' - ' . blog_title(), 'Archive page for: ' . $timestamp . ' on ' . blog_title() . '.', site_url() . 'archive/' . $req),
+        'title' => 'Archive for: ' . $timestamp . ' - ' . blog_title(),
+        'description' => 'Archive page for: ' . $timestamp . ' on ' . blog_title() . '.',
+        'canonical' => site_url() . 'archive/' . $req,
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'inarchive',
@@ -1254,7 +1340,9 @@ get('/search/:keyword', function ($keyword) {
     }
 
     render('main', array(
-        'head_contents' => head_contents('Search results for: ' . $keyword . ' - ' . blog_title(), 'Search results for: ' . $keyword . ' on ' . blog_title() . '.', site_url() . 'search/' . $keyword),
+        'title' => 'Search results for: ' . $keyword . ' - ' . blog_title(),
+        'description' => 'Search results for: ' . $keyword . ' on ' . blog_title() . '.',
+        'canonical' => site_url() . 'search/' . $keyword,
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'insearch',
@@ -1298,7 +1386,9 @@ get('/admin/update', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('update', array(
-            'head_contents' => head_contents('Check for Update - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Check for Update - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'updatepage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Update HTMLy'
         ));
@@ -1320,7 +1410,9 @@ get('/admin/update/now/:csrf', function ($CSRF) {
         $updater->update();
         config('views.root', 'system/admin/views');
         render('updated-to', array(
-            'head_contents' => head_contents('Updated - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Updated - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'info' => $updater->getCurrentInfo(),
             'bodyclass' => 'updatepage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Update HTMLy'
@@ -1346,7 +1438,9 @@ get('/:static/add', function ($static) {
         $post = $post[0];
 
         render('add-page', array(
-            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'bodyclass' => 'addpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> Add page'
         ));
@@ -1383,7 +1477,9 @@ post('/:static/add', function ($static) {
         }
         config('views.root', 'system/admin/views');
         render('add-page', array(
-            'head_contents' => head_contents('Add page - ' . blog_title(), blog_description(), site_url()),
+            'title' => 'Add page - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postUrl' => $url,
@@ -1415,7 +1511,9 @@ get('/:static/:sub', function ($static, $sub) {
     }
 
     render('static', array(
-        'head_contents' => head_contents($post->title . ' - ' . blog_title(), $post->description, $post->url),
+        'title' => $post->title . ' - ' . blog_title(),
+        'description' => $post->description,
+        'canonical' => $post->url,
         'bodyclass' => 'inpage',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
         'p' => $post,

@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php echo $head_contents ?>
+    <?php echo head_contents() ?>
+    <title><?php echo $title;?></title>
+    <meta name="description" content="<?php echo $description; ?>"/>
+    <link rel="canonical" href="<?php echo $canonical; ?>" />
     <link href="<?php echo site_url() ?>themes/default/css/style.css" rel="stylesheet"/>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
     <?php if (publisher()): ?>
-        <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>
+    <link href="<?php echo publisher() ?>" rel="publisher" />
+    <?php endif; ?>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -15,12 +19,8 @@
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
     <meta content="<?php echo blog_description() ?>" itemprop="description"/>
 </div>
-<?php if (facebook()) {
-    echo facebook();
-} ?>
-<?php if (login()) {
-    toolbar();
-} ?>
+<?php if (facebook()) { echo facebook(); } ?>
+<?php if (login()) { toolbar(); } ?>
 <div id="outer-wrapper">
     <div id="menu-wrapper">
         <div class="container">
@@ -35,11 +35,9 @@
             <header id="header">
                 <section id="branding">
                     <?php if (is_index()) { ?>
-                        <h1 class="blog-title"><a rel="home"
-                                                  href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
+                        <h1 class="blog-title"><a rel="home" href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
                     <?php } else { ?>
-                        <h2 class="blog-title"><a rel="home"
-                                                  href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h2>
+                        <h2 class="blog-title"><a rel="home" href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h2>
                     <?php } ?>
                     <div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
                 </section>
@@ -61,10 +59,10 @@
                         <div class="inner"><h3>Recent Posts</h3><?php echo recent() ?></div>
                     </div>
                     <div class="archive column">
-                        <div class="inner"><?php echo archive_list() ?></div>
+                        <div class="inner"><h3>Archive</h3><?php echo archive_list() ?></div>
                     </div>
                     <div class="tagcloud column">
-                        <div class="inner"><?php echo tag_cloud() ?></div>
+                        <div class="inner"><h3>Tags</h3><?php echo tag_cloud() ?></div>
                     </div>
                     <div class="social column">
                         <div class="inner"><h3>Follow</h3><?php echo social() ?></div>
