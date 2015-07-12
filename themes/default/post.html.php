@@ -37,7 +37,10 @@
             <a class="googleplus" target="_blank" href="https://plus.google.com/share?url=<?php echo $p->url ?>">Google+</a>
         </div>
     </div>
-    <?php echo get_related($p->tag) ?>
+    <div class="related">
+        <h4>Related posts</h4>
+        <?php echo get_related($p->tag)?>
+    </div>
     <div id="comments" class="comments border">
         <?php if (facebook()): ?>
             <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
