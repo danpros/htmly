@@ -1156,7 +1156,7 @@ function get_menu()
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
             if (!empty($subPages)) {
-                echo '<ul>';
+                echo '<ul class="subnav">';
 
                 $iSub = 0;
                 $countSub = count($subPages);
