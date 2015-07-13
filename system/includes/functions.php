@@ -431,6 +431,7 @@ function get_bio($author)
     }
 }
 
+// Return default profile
 function default_profile($author)
 {
     $tmp = array();
@@ -975,6 +976,7 @@ EOF;
     }
 }
 
+// Facebook comments
 function facebook()
 {
     $comment = config('comment.system');
@@ -1094,6 +1096,7 @@ function menu()
     }
 }
 
+// Get the title from file
 function get_title_from_file($v)
 {
     // Get the contents and convert it to HTML
@@ -1108,7 +1111,7 @@ function get_title_from_file($v)
 
 // Auto generate menu from static page
 function get_menu()
-{//aktive Link for Sub Pages ::TODO
+{
     $posts = get_static_pages();
     $req = $_SERVER['REQUEST_URI'];
 
@@ -1153,7 +1156,7 @@ function get_menu()
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
             if (!empty($subPages)) {
-                echo '<br/><ul>';
+                echo '<ul>';
 
                 $iSub = 0;
                 $countSub = count($subPages);
@@ -1172,7 +1175,7 @@ function get_menu()
                         $classSub .= ' active';
                     }
                     $urlSub = $url . "/" . str_replace('.md', '', $baseSub);
-                    echo '<li class="' . $classSub . '"><a href="' . $urlSub . '">&raquo; ' . get_title_from_file($sp) . '</a></li>';
+                    echo '<li class="' . $classSub . '"><a href="' . $urlSub . '">' . get_title_from_file($sp) . '</a></li>';
                     $iSub++;
                 }
                 echo '</ul>';
@@ -1601,6 +1604,7 @@ function authorinfo($title = null, $body = null)
     }
 }
 
+// Output head contents
 function head_contents()
 {
     $styleImage = config('lightbox');
@@ -1681,11 +1685,13 @@ function file_cache($request)
     }
 }
 
+// Generate csrf token
 function generate_csrf_token()
 {
     $_SESSION[config("site.url")]['csrf_token'] = sha1(microtime(true) . mt_rand(10000, 90000));
 }
 
+// Get csrf token
 function get_csrf()
 {
     if (!isset($_SESSION[config("site.url")]['csrf_token']) || empty($_SESSION[config("site.url")]['csrf_token'])) {
@@ -1694,6 +1700,7 @@ function get_csrf()
     return $_SESSION[config("site.url")]['csrf_token'];
 }
 
+// Check the csrf token
 function is_csrf_proper($csrf_token)
 {
     if ($csrf_token == get_csrf()) {
@@ -1702,6 +1709,7 @@ function is_csrf_proper($csrf_token)
     return false;
 }
 
+// Add page views count
 function add_view($page)
 {
     $filename = "cache/count.json";
@@ -1717,6 +1725,7 @@ function add_view($page)
     file_put_contents($filename, json_encode($views));
 }
 
+// Get the page views count
 function get_views($page)
 {
     static $_views = array();
@@ -1733,6 +1742,7 @@ function get_views($page)
     return -1;
 }
 
+// Get tag inside the markdown files
 function get_content_tag($tag, $string, $alt = null)
 {
     $reg = '/\<!--' . $tag . '(.+)' . $tag . '--\>/';
@@ -1748,11 +1758,13 @@ function get_content_tag($tag, $string, $alt = null)
     return $alt;
 }
 
+// Strip html comment 
 function remove_html_comments($content)
 {
     return trim(preg_replace('/(\s|)<!--(.*)-->(\s|)/', '', $content));
 }
 
+// Google recaptcha
 function isCaptcha($reCaptchaResponse)
 {
     if (!config("google.reCaptcha")) {

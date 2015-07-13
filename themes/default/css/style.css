@@ -390,6 +390,10 @@ table.post-list td a {
     margin: 0;
 }
 
+#menu ul li ul.subnav {
+    display:none;
+}
+
 /*----------------------------
 	Search form
 -----------------------------*/

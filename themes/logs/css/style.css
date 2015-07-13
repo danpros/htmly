@@ -310,6 +310,10 @@ ul li, ol li {
     text-decoration: underline;
 }
 
+#menu ul li ul.subnav {
+    display:none;
+}
+
 /*-------------------------
         Search
 --------------------------*/

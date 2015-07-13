@@ -443,6 +443,10 @@ aside .menu ul li > a:hover, aside .menu ul li.active > a {
     color: #fff;
 }
 
+aside .menu ul li ul.subnav {
+    display:none;
+}
+
 aside .copyright {
     padding: 1.2em 0 65px 0;
     color: #888;
