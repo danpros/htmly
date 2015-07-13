@@ -411,13 +411,11 @@ function get_bio($author)
                 $post->url = site_url() . 'author/' . $profile;
 
                 // Get the contents and convert it to HTML
-                $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+                $content = file_get_contents($v);
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, $author);
-                $post->body = remove_html_comments($content);
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $tmp[] = $post;
             }
@@ -469,11 +467,11 @@ function get_static_post($static)
                 $post->file = $v;
 
                 // Get the contents and convert it to HTML
-                $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+                $content = file_get_contents($v);
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, $static);
-                $post->body = remove_html_comments($content);
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if (config("views.counter")) {
                     $post->views = get_views($post->file);
@@ -513,11 +511,11 @@ function get_static_sub_post($static, $sub_static)
                 $post->file = $v;
 
                 // Get the contents and convert it to HTML
-                $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+                $content = file_get_contents($v);
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, $sub_static);
-                $post->body = remove_html_comments($content);
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $post->views = get_views($post->file);
 
