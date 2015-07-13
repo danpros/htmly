@@ -948,10 +948,10 @@ post('/add/post', function () {
     $user = $_SESSION[config("site.url")]['user'];
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if (!empty($url)) {
-            add_post($title, $tag, $url, $content, $user, $description, $fi, $vid);
+            add_post($title, $tag, $url, $content, $user, $description, $img, $vid);
         } else {
             $url = $title;
-            add_post($title, $tag, $url, $content, $user, $description, $fi, $vid);
+            add_post($title, $tag, $url, $content, $user, $description, $img, $vid);
         }
     } else {
         $message['error'] = '';
@@ -974,7 +974,7 @@ post('/add/post', function () {
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
-            'postFi' => $fi,
+            'postImg' => $img,
             'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
