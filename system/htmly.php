@@ -255,12 +255,13 @@ post('/add/post', function () {
     $content = from($_REQUEST, 'content');
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[config("site.url")]['user'];
+	$draft = from($_REQUEST, 'draft');
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if (!empty($url)) {
-            add_post($title, $tag, $url, $content, $user, $description, $img, $vid);
+            add_post($title, $tag, $url, $content, $user, $description, $img, $vid, $draft);
         } else {
             $url = $title;
-            add_post($title, $tag, $url, $content, $user, $description, $img, $vid);
+            add_post($title, $tag, $url, $content, $user, $description, $img, $vid, $draft);
         }
     } else {
         $message['error'] = '';
@@ -476,6 +477,65 @@ get('/admin/mine', function () {
             'bodyclass' => 'userposts',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $bio->title,
             'pagination' => has_pagination($total, $perpage, $page)
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/draft
+get('/admin/draft', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        $profile = $_SESSION[config("site.url")]['user'];
+
+        $page = from($_GET, 'page');
+        $page = $page ? (int)$page : 1;
+        $perpage = config('profile.perpage');
+
+        $posts = get_draft($profile, $page, $perpage);
+
+        $total = get_count($profile, 'dirname');
+
+        $bio = get_bio($profile);
+
+        if (isset($bio[0])) {
+            $bio = $bio[0];
+        } else {
+            $bio = default_profile($profile);
+        }
+
+        if (empty($posts) || $page < 1) {
+            render('user-draft', array(
+                'title' => 'My draft - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'page' => $page,
+                'heading' => 'My draft',
+                'posts' => null,
+                'bio' => $bio->body,
+                'name' => $bio->title,
+                'bodyclass' => 'userdraft',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $bio->title,
+            ));
+            die;
+        }
+
+        render('user-draft', array(
+            'title' => 'My draft - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'heading' => 'My draft',
+            'page' => $page,
+            'posts' => $posts,
+            'bio' => $bio->body,
+            'name' => $bio->title,
+            'bodyclass' => 'userdraft',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $bio->title,
         ));
     } else {
         $login = site_url() . 'login';
@@ -1367,7 +1427,10 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
         $post = find_post($year, $month, $name);
 
         if (!$post) {
-            not_found();
+            $post = find_draft($year, $month, $name);
+            if (!$post) {
+			    not_found();
+            }
         }
 
         $current = $post['current'];
@@ -1414,6 +1477,8 @@ post('/:year/:month/:name/edit', function () {
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
     $dateTime = null;
+	$revertPost = from($_REQUEST, 'revertpost');
+	$publishDraft = from($_REQUEST, 'publishdraft');
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
@@ -1422,7 +1487,7 @@ post('/:year/:month/:name/edit', function () {
         if (empty($url)) {
             $url = $title;
         }
-        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $img, $vid);
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $img, $vid, $revertPost, $publishDraft);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -1469,7 +1534,10 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
         $post = find_post($year, $month, $name);
 
         if (!$post) {
-            not_found();
+            $post = find_draft($year, $month, $name);
+            if (!$post) {
+			    not_found();
+            }
         }
 
         $current = $post['current'];

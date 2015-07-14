@@ -12,7 +12,7 @@ $oldvid = get_content_tag('vid', $content);
 $oldcontent = remove_html_comments($content);
 
 $dir = substr($url, 0, strrpos($url, '/'));
-
+$isdraft = explode('/', $dir);
 $oldurl = explode('_', $url);
 
 $oldtag = $oldurl[1];
@@ -81,7 +81,11 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
         } ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <input type="submit" name="submit" class="submit" value="Save"/> <a href="<?php echo $delete ?>">Delete</a>
+		<?php if ($isdraft[2] == 'draft') { ?>
+		     <input type="submit" name="publishdraft" class="submit" value="Publish draft"/> <input type="submit" name="updatedraft" class="draft" value="Update draft"/> <a href="<?php echo $delete ?>">Delete</a>
+		<?php } else { ?>
+            <input type="submit" name="updatepost" class="submit" value="Update post"/> <input type="submit" name="revertpost" class="revert" value="Revert to draft"/> <a href="<?php echo $delete ?>">Delete</a>
+		<?php }?>
     </form>
 </div>
 <div id="insertImageDialog" title="Insert Image">

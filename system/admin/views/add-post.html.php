@@ -51,7 +51,7 @@
                 echo $postContent;
             } ?></textarea><br/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <input type="submit" name="submit" class="submit" value="Publish"/>
+        <input type="submit" name="publish" class="submit" value="Publish"/> <input type="submit" name="draft" class="draft" value="Save as draft"/>
     </form>
 </div>
 <div id="insertImageDialog" title="Insert Image">

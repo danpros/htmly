@@ -108,6 +108,24 @@ function get_zip_files()
     return $_zip;
 }
 
+// Get user draft.
+function get_draft_posts()
+{
+    static $_draft = array();
+
+    if (empty($_draft)) {
+        $tmp = array();
+        $tmp = glob('content/*/draft/*.md', GLOB_NOSORT);
+        if (is_array($tmp)) {
+            foreach ($tmp as $file) {
+                $_draft[] = pathinfo($file);
+            }
+        }
+        usort($_draft, "sortfile");
+    }
+    return $_draft;
+}
+
 // usort function. Sort by filename.
 function sortfile($a, $b)
 {
@@ -304,6 +322,50 @@ function find_post($year, $month, $name)
     }
 }
 
+// Find draft.
+function find_draft($year, $month, $name)
+{
+    $posts = get_draft_posts();
+
+    foreach ($posts as $index => $v) {
+        $url = $v['basename'];
+        if (strpos($url, "$year-$month") !== false && strpos($url, $name . '.md') !== false) {
+
+            // Use the get_posts method to return
+            // a properly parsed object
+
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }
+        }
+    }
+}
+
 // Return tag page.
 function get_tag($tag, $page, $perpage, $random)
 {
@@ -365,6 +427,29 @@ function get_archive($req, $page, $perpage)
 function get_profile($profile, $page, $perpage)
 {
     $posts = get_post_sorted();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+        $url = $v['dirname'];
+        $str = explode('/', $url);
+        $author = $str[count($str) - 2];
+        if ($profile === $author) {
+            $tmp[] = $v;
+        }
+    }
+
+    if (empty($tmp)) {
+        return;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage);
+}
+
+// Return draft list
+function get_draft($profile, $page, $perpage)
+{
+    $posts = get_draft_posts();
 
     $tmp = array();
 
@@ -1655,6 +1740,7 @@ EOF;
         echo '<li><a href="' . $base . 'admin/posts">Posts</a></li>';
     }
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
+    echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';
     echo '<li><a href="' . $base . 'add/post">Add post</a></li>';
     echo '<li><a href="' . $base . 'add/page">Add page</a></li>';
     echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';

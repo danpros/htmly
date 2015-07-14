@@ -3,8 +3,10 @@
     <table class="post-list">
         <tr class="head">
             <th>Title</th>
-            <th>Published</th><?php if (config("views.counter") == "true"): ?>
-                <th>Views</th><?php endif; ?>
+            <th>Published</th>
+			<?php if (config("views.counter") == "true"): ?>
+                <th>Views</th>
+            <?php endif; ?>
             <th>Tag</th>
             <th>Operations</th>
         </tr>
@@ -25,10 +27,10 @@
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
                 <td><?php echo date('d F Y', $p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
-                    <td><?php echo $p->views ?></td><?php endif; ?>
+                    <td><?php echo $p->views ?></td>
+                <?php endif; ?>
                 <td><?php echo $p->tag ?></td>
-                <td><a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> <a
-                        href="<?php echo $p->url ?>/delete?destination=admin/mine">Delete</a></td>
+                <td><a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/mine">Delete</a></td>
             </tr>
         <?php endforeach; ?>
     </table>
