@@ -39,6 +39,7 @@ Features
 - Online Backup
 - File Caching
 - Auto Update
+- Post Draft
 
 Requirements
 ------------
