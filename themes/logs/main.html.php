@@ -36,7 +36,9 @@
             <?php } ?>
             <div class="teaser-body" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
-                <p><?php echo get_teaser($p->body) ?>... <a href="<?php echo $p->url;?>#more">more</a></p>
+                <p><?php echo get_teaser($p->body) ?>
+                    <?php if (config('teaser.type') === 'trimmed'):?> ... <a href="<?php echo $p->url;?>#more">more</a><?php endif;?>
+                </p>
             </div>
         </div>
     </div>

@@ -909,7 +909,7 @@ function get_teaser($text)
 {
     $teaserType = config('teaser.type');
 
-    if (strlen(strip_tags($text)) < config('teaser.char') || $teaserType === 'full') {
+    if ($teaserType === 'full') {
         echo $text;
     } else {
         $string = preg_replace('/\s\s+/', ' ', strip_tags($text));
