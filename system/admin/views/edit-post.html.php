@@ -81,11 +81,11 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
         } ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-		<?php if ($isdraft[2] == 'draft') { ?>
-		     <input type="submit" name="publishdraft" class="submit" value="Publish draft"/> <input type="submit" name="updatedraft" class="draft" value="Update draft"/> <a href="<?php echo $delete ?>">Delete</a>
-		<?php } else { ?>
+        <?php if ($isdraft[2] == 'draft') { ?>
+            <input type="submit" name="publishdraft" class="submit" value="Publish draft"/> <input type="submit" name="updatedraft" class="draft" value="Update draft"/> <a href="<?php echo $delete ?>">Delete</a>
+        <?php } else { ?>
             <input type="submit" name="updatepost" class="submit" value="Update post"/> <input type="submit" name="revertpost" class="revert" value="Revert to draft"/> <a href="<?php echo $delete ?>">Delete</a>
-		<?php }?>
+        <?php }?>
     </form>
 </div>
 <div id="insertImageDialog" title="Insert Image">

@@ -255,7 +255,7 @@ post('/add/post', function () {
     $content = from($_REQUEST, 'content');
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[config("site.url")]['user'];
-	$draft = from($_REQUEST, 'draft');
+    $draft = from($_REQUEST, 'draft');
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if (!empty($url)) {
             add_post($title, $tag, $url, $content, $user, $description, $img, $vid, $draft);
@@ -768,13 +768,12 @@ get('/tag/:tag', function ($tag) {
 
     $posts = get_tag($tag, $page, $perpage, false);
 
-    $total = get_count($tag, 'filename');
+    $total = get_tagcount($tag, 'filename');
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
         not_found();
     }
-
     render('main', array(
         'title' => 'Posts tagged: ' . $tag . ' - ' . blog_title(),
         'description' => 'All posts tagged: ' . $tag . ' on ' . blog_title() . '.',
@@ -1429,7 +1428,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
         if (!$post) {
             $post = find_draft($year, $month, $name);
             if (!$post) {
-			    not_found();
+                not_found();
             }
         }
 
@@ -1477,8 +1476,8 @@ post('/:year/:month/:name/edit', function () {
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
     $dateTime = null;
-	$revertPost = from($_REQUEST, 'revertpost');
-	$publishDraft = from($_REQUEST, 'publishdraft');
+    $revertPost = from($_REQUEST, 'revertpost');
+    $publishDraft = from($_REQUEST, 'publishdraft');
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }

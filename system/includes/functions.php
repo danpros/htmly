@@ -395,7 +395,7 @@ function get_tag($tag, $page, $perpage, $random)
     if (empty($tmp)) {
         not_found();
     }
-
+	
     $tmp = array_unique($tmp, SORT_REGULAR);
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -669,7 +669,11 @@ function get_related($tag)
                 break;
         }
         echo '</ul>';
+		
+    } else {
+        echo '<ul><li>No related post found</li></ul>';	
     }
+	
 }
 
 // Return post count. Matching $var and $str provided.
@@ -682,6 +686,24 @@ function get_count($var, $str)
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v[$str]);
         $url = $arr[0];
+        if (strpos($url, "$var") !== false) {
+            $tmp[] = $v;
+        }
+    }
+
+    return count($tmp);
+}
+
+// Return post count. Matching $var and $str provided.
+function get_tagcount($var, $str)
+{
+    $posts = get_post_sorted();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v[$str]);
+        $url = $arr[1];
         if (strpos($url, "$var") !== false) {
             $tmp[] = $v;
         }
@@ -729,7 +751,7 @@ function recent()
         $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
     }
     if (empty($posts)) {
-        $str .= '<li>No Posts Found</li>';
+        $str .= '<li>No recent posts found</li>';
     }
     $str .= '</ul>';
     return $str;
