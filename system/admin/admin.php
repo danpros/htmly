@@ -127,11 +127,24 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
 		
         if(!empty($revertPost) || !empty($publishDraft)) {
 		
+            $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
+            $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
+		
             if($dir[2] == 'draft') {
-                $filename = $dir[0] . '/' . $dir[1] . '/blog/' . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
+                $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
-                $filename = $dir[0] . '/' . $dir[1] . '/draft/' . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
+                $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
 			}
+			
+            if (is_dir($dirBlog)) {
+            } else {
+                mkdir($dirBlog, 0775, true);  
+            }
+			
+			if (is_dir($dirDraft)) {
+            } else {
+                mkdir($dirDraft, 0775, true);  
+            }
 			
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
