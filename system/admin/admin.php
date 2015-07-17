@@ -458,6 +458,7 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
     $post_date = date('Y-m-d-H-i-s', $time);
     $post_title = $title;
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tags));
+    $post_tag = rtrim($post_tag, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if (!empty($source)) {
         $post_content = '<!--t ' . $post_title . ' t-->' . "\n\n" . $content . "\n\n" . 'Source: <a target="_blank" href="' . $source . '">' . $title . '</a>';

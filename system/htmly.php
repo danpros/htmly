@@ -997,7 +997,7 @@ get('/:static', function ($static) {
             'bodyclass' => 'inpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
-            'type' => 'staticpage',
+            'type' => 'staticPage',
             'is_page' => is_page(true),
         ));
     }
@@ -1094,7 +1094,7 @@ get('/:static/edit', function ($static) {
             'bodyclass' => 'editpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
-            'type' => 'staticpage',
+            'type' => 'staticPage',
         ));
     } else {
         $login = site_url() . 'login';
@@ -1173,7 +1173,7 @@ get('/:static/delete', function ($static) {
             'bodyclass' => 'deletepage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
-            'type' => 'staticpage',
+            'type' => 'staticPage',
         ));
     } else {
         $login = site_url() . 'login';
@@ -1220,7 +1220,7 @@ get('/:static/:sub', function ($static, $sub) {
         'bodyclass' => 'inpage',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
         'p' => $post,
-        'type' => 'staticpage',
+        'type' => 'subPage',
         'is_subpage' => is_subpage(true),
     ));
 });
@@ -1254,7 +1254,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
             'bodyclass' => 'editpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ',
             'p' => $page,
-            'type' => 'staticpage',
+            'type' => 'subPage',
         ));
     } else {
         $login = site_url() . 'login';
@@ -1344,7 +1344,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
             'bodyclass' => 'deletepage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a>' . $page->title,
             'p' => $page,
-            'type' => 'staticpage',
+            'type' => 'subPage',
         ));
     } else {
         $login = site_url() . 'login';
@@ -1418,7 +1418,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title,
         'prev' => has_prev($prev),
         'next' => has_next($next),
-        'type' => 'blogpost',
+        'type' => 'blogPost',
         'is_post' => is_post(true),
     ));
 
