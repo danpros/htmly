@@ -76,8 +76,8 @@ function get_static_sub_pages($static = null)
     return $_sub_page;
 }
 
-// Get author bio path. Unsorted.
-function get_author_names()
+// Get author name. Unsorted.
+function get_author_name()
 {
     static $_author = array();
 
@@ -138,6 +138,12 @@ function sortdate($a, $b)
     return $a->date == $b->date ? 0 : ($a->date < $b->date) ? 1 : -1;
 }
 
+// usort function. Sort by views.
+function sortviews($a, $b)
+{
+    return $a[$page] == $b[$page] ? 0 : ($a[$page] < $b[$page]) ? 1 : -1;
+}
+
 // Rebuilt cache index
 function rebuilt_cache($type)
 {
@@ -148,7 +154,7 @@ function rebuilt_cache($type)
     $author_cache = array();
 
     if (is_dir($dir) === false) {
-        mkdir($dir, 0777, true);
+        mkdir($dir, 0775, true);
     }
 
     if ($type === 'posts') {
@@ -220,7 +226,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // The post author + author url
         $post->author = $author;
-        $post->authorurl = site_url() . 'author/' . $author;
+        $post->authorUrl = site_url() . 'author/' . $author;
 
         $dt = str_replace($replaced, '', $arr[0]);
         $t = str_replace('-', '', $dt);
@@ -424,7 +430,7 @@ function get_archive($req, $page, $perpage)
 }
 
 // Return posts list on profile.
-function get_profile($profile, $page, $perpage)
+function get_profile_posts($name, $page, $perpage)
 {
     $posts = get_post_sorted();
 
@@ -434,7 +440,7 @@ function get_profile($profile, $page, $perpage)
         $url = $v['dirname'];
         $str = explode('/', $url);
         $author = $str[count($str) - 2];
-        if ($profile === $author) {
+        if ($name === $author) {
             $tmp[] = $v;
         }
     }
@@ -469,19 +475,20 @@ function get_draft($profile, $page, $perpage)
     return $tmp = get_posts($tmp, $page, $perpage);
 }
 
-// Return author bio.
-function get_bio($author)
+// Return author info.
+function get_author($name)
 {
-    $names = get_author_names();
+    $names = get_author_name();
 
-    $username = 'config/users/' . $author . '.ini';
+    $username = 'config/users/' . $name . '.ini';
 
     $tmp = array();
 
     if (!empty($names)) {
 
         foreach ($names as $index => $v) {
-            $post = new stdClass;
+		
+            $author = new stdClass;
 
             // Replaced string
             $replaced = substr($v, 0, strrpos($v, '/')) . '/';
@@ -490,19 +497,19 @@ function get_bio($author)
             $str = explode('/', $replaced);
             $profile = $str[count($str) - 2];
 
-            if ($author === $profile) {
+            if ($name === $profile) {
                 // Profile URL
                 $url = str_replace($replaced, '', $v);
-                $post->url = site_url() . 'author/' . $profile;
+                $author->url = site_url() . 'author/' . $profile;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($v);
 
                 // Extract the title and body
-                $post->title = get_content_tag('t', $content, $author);
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+                $author->name = get_content_tag('t', $content, $author);
+                $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                $tmp[] = $post;
+                $tmp[] = $author;
             }
         }
     }
@@ -515,17 +522,17 @@ function get_bio($author)
 }
 
 // Return default profile
-function default_profile($author)
+function default_profile($name)
 {
     $tmp = array();
-    $profile = new stdClass;
+    $author = new stdClass;
 
-    $profile->title = $author;
-    $profile->body = '<p>Just another HTMLy user.</p>';
+    $author->name = $name;
+    $author->about = '<p>Just another HTMLy user.</p>';
 
-    $profile->descirption = 'Just another HTMLy user';
+    $author->description = 'Just another HTMLy user';
 
-    return $tmp[] = $profile;
+    return $tmp[] = $author;
 }
 
 // Return static page.
@@ -643,7 +650,7 @@ function get_keyword($keyword, $page, $perpage)
 }
 
 // Get related posts base on post tag.
-function get_related($tag)
+function get_related($tag, $custom = null)
 {
     $perpage = config('related.count');
     $posts = get_tag(strip_tags($tag), 1, $perpage + 1, true);
@@ -656,23 +663,29 @@ function get_related($tag)
             $tmp[] = $post;
         }
     }
+	
+    if (empty($custom)) {
 
-    $total = count($tmp);
+        $total = count($tmp);
 
-    if ($total >= 1) {
+        if ($total >= 1) {
 
-        $i = 1;
-        echo '<ul>';
-        foreach ($tmp as $post) {
-            echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-            if ($i++ >= $perpage)
-                break;
-        }
-        echo '</ul>';
+            $i = 1;
+            echo '<ul>';
+            foreach ($tmp as $post) {
+                echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+                if ($i++ >= $perpage)
+                    break;
+            }
+            echo '</ul>';
 		
-    } else {
-        echo '<ul><li>No related post found</li></ul>';	
-    }
+        } else {
+            echo '<ul><li>No related post found</li></ul>';	
+        }
+	
+	} else {
+	    return $tmp;
+	}
 	
 }
 
@@ -694,7 +707,7 @@ function get_count($var, $str)
     return count($tmp);
 }
 
-// Return post count. Matching $var and $str provided.
+// Return tag count. Matching $var and $str provided.
 function get_tagcount($var, $str)
 {
     $posts = get_post_sorted();
@@ -712,7 +725,7 @@ function get_tagcount($var, $str)
     return count($tmp);
 }
 
-// Return seaarch result count
+// Return search result count
 function keyword_count($keyword)
 {
     $posts = get_post_sorted();
@@ -737,28 +750,37 @@ function keyword_count($keyword)
 }
 
 // Return recent posts lists
-function recent()
+function recent_posts($custom = null, $count = null)
 {
-    $count = config('recent.count');
 	
     if (empty($count)) {
-        $count = 5;
+        $count = config('recent.count');
+        if (empty($count)) {
+            $count = 5;
+        }
     }
 	
-    $str = '<ul>';
     $posts = get_posts(null, 1, $count);
-    foreach ($posts as $post) {
-        $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+	
+	if (!empty($custom)) {
+        return $posts;		
+    } else {
+	
+        $str = '<ul>';
+        foreach ($posts as $post) {
+            $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+        }
+        if (empty($posts)) {
+            $str .= '<li>No recent posts found</li>';
+        }
+        $str .= '</ul>';
+        return $str;
+	
     }
-    if (empty($posts)) {
-        $str .= '<li>No recent posts found</li>';
-    }
-    $str .= '</ul>';
-    return $str;
 }
 
 // Return an archive list, categorized by year and month.
-function archive_list()
+function archive_list($custom = null)
 {
     $posts = get_post_unsorted();
     $by_year = array();
@@ -789,46 +811,51 @@ function archive_list()
         # Most recent year first
         krsort($by_year);
         # Iterate for display
-        $script = <<<EOF
-	if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
-EOF;
         $i = 0;
         $len = count($by_year);
-        foreach ($by_year as $year => $months) {
-            if ($i == 0) {
-                $class = 'expanded';
-                $arrow = '&#9660;';
-            } else {
-                $class = 'collapsed';
-                $arrow = '&#9658;';
+        if (empty($custom)) {
+            foreach ($by_year as $year => $months) {
+                if ($i == 0) {
+                    $class = 'expanded';
+                    $arrow = '&#9660;';
+                } else {
+                   $class = 'collapsed';
+                    $arrow = '&#9658;';
+                }
+                $i++;
+			
+                $by_month = array_count_values($months);
+                # Sort the months
+                krsort($by_month);
+			
+                $script = <<<EOF
+                    if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
+EOF;
+                echo '<ul class="archivegroup">';
+                echo '<li class="' . $class . '">';
+                echo '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
+                echo '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
+                echo '<span class="count">(' . count($months) . ')</span>';
+                echo '<ul class="month">';
+
+                foreach ($by_month as $month => $count) {
+                    $name = date('F', mktime(0, 0, 0, $month, 1, 2010));
+                    echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
+                    echo ' <span class="count">(' . $count . ')</span></li>';
+                }
+
+                echo '</ul>';
+                echo '</li>';
+                echo '</ul>';
             }
-            $i++;
-
-            echo '<ul class="archivegroup">';
-            echo '<li class="' . $class . '">';
-            echo '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
-            echo '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
-            echo '<span class="count">(' . count($months) . ')</span>';
-            echo '<ul class="month">';
-
-            $by_month = array_count_values($months);
-            # Sort the months
-            krsort($by_month);
-            foreach ($by_month as $month => $count) {
-                $name = date('F', mktime(0, 0, 0, $month, 1, 2010));
-                echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
-                echo ' <span class="count">(' . $count . ')</span></li>';
-            }
-
-            echo '</ul>';
-            echo '</li>';
-            echo '</ul>';
+        } else {
+            return $by_year;
         }
     }
 }
 
 // Return tag cloud.
-function tag_cloud()
+function tag_cloud($custom = null)
 {
     $posts = get_post_unsorted();
     $tags = array();
@@ -848,12 +875,16 @@ function tag_cloud()
 
         $tag_collection = array_count_values($tags);
         ksort($tag_collection);
-
-        echo '<ul class="taglist">';
-        foreach ($tag_collection as $tag => $count) {
-            echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+		
+        if(empty($custom)) {
+            echo '<ul class="taglist">';
+            foreach ($tag_collection as $tag => $count) {
+                echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+            }
+            echo '</ul>';
+        } else {
+		    return $tag_collection;
         }
-        echo '</ul>';
     }
 }
 
@@ -895,25 +926,32 @@ function has_pagination($total, $perpage, $page = 1)
 }
 
 // Get the meta description
-function get_description($string)
+function get_description($string, $char = null)
 {
+    if(empty($char)) {
+        $char = config('description.char');
+    }
     $string = remove_accent($string);
     $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
     $string = ltrim($string);
-    $string = substr($string, 0, config('description.char'));
+    $string = substr($string, 0, $char);
     return $string = substr($string, 0, strrpos($string, ' '));
 }
 
 // Get the teaser
-function get_teaser($text)
+function get_teaser($text, $char = null)
 {
     $teaserType = config('teaser.type');
+	
+    if(empty($char)) {
+        $char = config('teaser.char');
+    }
 
     if ($teaserType === 'full') {
         echo $text;
     } else {
         $string = preg_replace('/\s\s+/', ' ', strip_tags($text));
-        $string = substr($string, 0, config('teaser.char'));
+        $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
         echo $string;
     }
@@ -1074,7 +1112,6 @@ function recent_comments()
     $disqus = config('disqus.shortname');
     $script = <<<EOF
         <script type="text/javascript" src="//{$disqus}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=48&excerpt_length=200&hide_mods=0"></script>
-        <style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
 EOF;
     if (!empty($disqus) && $comment == 'disqus') {
         return $script;
@@ -1301,14 +1338,23 @@ function get_menu()
 }
 
 // Search form
-function search()
+function search($text = null)
 {
-    echo <<<EOF
+	if(!empty($text)) {
+        echo <<<EOF
+    <form id="search-form" method="get">
+        <input type="text" class="search-input" name="search" value="{$text}" onfocus="if (this.value == '{$text}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$text}';}">
+        <input type="submit" value="{$text}" class="search-button">
+    </form>
+EOF;
+    } else {
+        echo <<<EOF
     <form id="search-form" method="get">
         <input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
         <input type="submit" value="Search" class="search-button">
     </form>
 EOF;
+	}
     if (isset($_GET['search'])) {
         $url = site_url() . 'search/' . $_GET['search'];
         header("Location: $url");
@@ -1370,7 +1416,7 @@ function generate_rss($posts)
 }
 
 // Return post, archive url for sitemap
-function get_path()
+function sitemap_post_path()
 {
     $posts = get_post_sorted();
 
@@ -1392,7 +1438,7 @@ function get_path()
         $str = explode('/', $replaced);
         $author = $str[count($str) - 3];
 
-        $post->authorurl = site_url() . 'author/' . $author;
+        $post->authorUrl = site_url() . 'author/' . $author;
 
         $dt = str_replace($replaced, '', $arr[0]);
         $t = str_replace('-', '', $dt);
@@ -1421,7 +1467,7 @@ function get_path()
 }
 
 // Return static page path for sitemap
-function get_static_path()
+function sitemap_page_path()
 {
     $posts = get_static_pages();
 
@@ -1471,7 +1517,7 @@ function generate_sitemap($str)
         echo '</urlset>';
     } elseif ($str == 'post') {
 
-        $posts = get_path();
+        $posts = sitemap_post_path();
 
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
@@ -1482,7 +1528,7 @@ function generate_sitemap($str)
         echo '</urlset>';
     } elseif ($str == 'static') {
 
-        $posts = get_static_path();
+        $posts = sitemap_page_path();
 
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
@@ -1530,7 +1576,7 @@ function generate_sitemap($str)
         }
     } elseif ($str == 'archive') {
 
-        $posts = get_path();
+        $posts = sitemap_post_path();
         $day = array();
         $month = array();
         $year = array();
@@ -1562,11 +1608,11 @@ function generate_sitemap($str)
         echo '</urlset>';
     } elseif ($str == 'author') {
 
-        $posts = get_path();
+        $posts = sitemap_post_path();
         $author = array();
 
         foreach ($posts as $p) {
-            $author[] = $p->authorurl;
+            $author[] = $p->authorUrl;
         }
 
         $author = array_unique($author, SORT_REGULAR);
@@ -1655,22 +1701,91 @@ function Zip($source, $destination, $include_dir = false)
     return $zip->close();
 }
 
-// TRUE if the current page is the front page.
-function is_front()
+// TRUE if the current page is an index page like frontpage, tag index, archive index and search index.
+function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
-    if ($req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
+    if (strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || $req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
         return true;
     } else {
         return false;
     }
 }
 
-// TRUE if the current page is an index page like frontpage, tag index, archive index and search index.
-function is_index()
+// TRUE if the current page is the front page.
+function is_front($value = null)
 {
-    $req = $_SERVER['REQUEST_URI'];
-    if (strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || $req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is tag index.
+function is_tag($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is archive index.
+function is_archive($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is search index.
+function is_search($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is profile page.
+function is_profile($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is post page.
+function is_post($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is static page page.
+function is_page($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is sub static page.
+function is_subpage($value = null)
+{
+    if (!empty($value)) {
         return true;
     } else {
         return false;
@@ -1701,11 +1816,11 @@ function blog_copyright()
     return config('blog.copyright');
 }
 
-// Return author info
-function authorinfo($title = null, $body = null)
+// Return author info. Deprecated
+function authorinfo($name = null, $about = null)
 {
     if (config('author.info') == 'true') {
-        return '<div class="author-info"><h4>by <strong>' . $title . '</strong></h4>' . $body . '</div>';
+        return '<div class="author-info"><h4>by <strong>' . $name . '</strong></h4>' . $about . '</div>';
     }
 }
 
@@ -1734,12 +1849,12 @@ function head_contents()
     }
 
     if ($styleImage == 'on') {
-        $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . $sitemap . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n" . $webmasterTools;
+        $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . $sitemap . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n" . $webmasterTools . "\n";
     } else {
         if ($jq == 'enable') {
-            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $jquery . "\n" . $webmasterTools;
+            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $jquery . "\n" . $webmasterTools. "\n";
         } else {
-            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools;
+            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools. "\n";
         }
     }
 

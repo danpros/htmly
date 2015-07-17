@@ -32,7 +32,7 @@
     </div>
     <div class="social"><?php echo social() ?></div>
     <div class="menu"><?php echo menu() ?></div>
-    <div class="recent"><h3>Recent Posts</h3><?php echo recent() ?></div>
+    <div class="recent"><h3>Recent Posts</h3><?php echo recent_posts() ?></div>
     <div class="archive"><h3>Archive</h3><?php echo archive_list() ?></div>
     <div class="tagcloud"><h3>Tags</h3><?php echo tag_cloud() ?></div>
     <div class="copyright"><?php echo copyright() ?></div>

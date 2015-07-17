@@ -519,10 +519,10 @@ function get_feed($feed_url, $credit)
 }
 
 // Get recent posts by user
-function get_recent_posts()
+function get_user_posts()
 {
     if (isset($_SESSION[config("site.url")]['user'])) {
-        $posts = get_profile($_SESSION[config("site.url")]['user'], 1, 5);
+        $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
             echo '<table class="post-list">';
             echo '<tr class="head"><th>Title</th><th>Published</th>';
@@ -555,7 +555,7 @@ function get_recent_posts()
 }
 
 // Get all static pages
-function get_recent_pages()
+function get_user_pages()
 {
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_static_post(null);

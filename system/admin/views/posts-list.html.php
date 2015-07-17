@@ -27,7 +27,7 @@
                 <td><?php echo date('d F Y', $p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
                     <td><?php echo $p->views ?></td><?php endif; ?>
-                <td><a target="_blank" href="<?php echo $p->authorurl ?>"><?php echo $p->author ?></a></td>
+                <td><a target="_blank" href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></td>
                 <td><?php echo $p->tag ?></td>
                 <td><a href="<?php echo $p->url ?>/edit?destination=admin/posts">Edit</a> <a
                         href="<?php echo $p->url ?>/delete?destination=admin/posts">Delete</a></td>

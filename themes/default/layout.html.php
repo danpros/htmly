@@ -56,7 +56,7 @@
             <footer id="footer">
                 <div class="footer-column">
                     <div class="recent column">
-                        <div class="inner"><h3>Recent Posts</h3><?php echo recent() ?></div>
+                        <div class="inner"><h3>Recent Posts</h3><?php echo recent_posts() ?></div>
                     </div>
                     <div class="archive column">
                         <div class="inner"><h3>Archive</h3><?php echo archive_list() ?></div>

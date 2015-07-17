@@ -4,7 +4,7 @@
 <div class="profile-wrapper" itemprop="accountablePerson" itemscope="itemscope">
     <div class="profile" itemtype="http://schema.org/Person" itemscope="itemscope" itemprop="Person">
         <h1 class="title-post" itemprop="name"><?php echo $name ?></h1>
-        <div class="bio" itemprop="description"><?php echo $bio ?></div>
+        <div class="bio" itemprop="description"><?php echo $about ?></div>
     </div>
 </div>
 <h2 class="post-index">Posts by this author</h2>

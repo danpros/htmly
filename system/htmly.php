@@ -41,6 +41,7 @@ get('/index', function () {
             'description' => blog_description(),
             'canonical' => site_url(),
             'bodyclass' => 'noposts',
+            'is_front' => is_front(true),
         ));
 
         die;
@@ -54,7 +55,8 @@ get('/index', function () {
         'posts' => $posts,
         'bodyclass' => 'infront',
         'breadcrumb' => '',
-        'pagination' => has_pagination($total, $perpage, $page)
+        'pagination' => has_pagination($total, $perpage, $page),
+        'is_front' => is_front(true),
     ));
 });
 
@@ -115,7 +117,7 @@ post('/login', function () {
 });
 
 // Show the author page
-get('/author/:profile', function ($profile) {
+get('/author/:name', function ($name) {
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -125,45 +127,46 @@ get('/author/:profile', function ($profile) {
     $page = $page ? (int)$page : 1;
     $perpage = config('profile.perpage');
 
-    $posts = get_profile($profile, $page, $perpage);
+    $posts = get_profile_posts($name, $page, $perpage);
 
-    $total = get_count($profile, 'dirname');
+    $total = get_count($name, 'dirname');
 
-    $bio = get_bio($profile);
+    $author = get_author($name);
 
-    if (isset($bio[0])) {
-        $bio = $bio[0];
+    if (isset($author[0])) {
+        $author = $author[0];
     } else {
-        $bio = default_profile($profile);
+        $author = default_profile($name);
     }
 
     if (empty($posts) || $page < 1) {
         render('profile', array(
-            'title' => 'Profile for:  ' . $bio->title . ' - ' . blog_title(),
-            'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . blog_title() . '.',
-            'canonical' => site_url() . 'author/' . $profile,
+            'title' => 'Profile for:  ' . $author->name . ' - ' . blog_title(),
+            'description' => 'Profile page and all posts by ' . $author->name . ' on ' . blog_title() . '.',
+            'canonical' => site_url() . 'author/' . $name,
             'page' => $page,
             'posts' => null,
-            'bio' => $bio->body,
-            'name' => $bio->title,
+            'about' => $author->about,
+            'name' => $author->name,
             'bodyclass' => 'inprofile',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $bio->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page)
         ));
         die;
     }
 
     render('profile', array(
-        'title' => 'Profile for:  ' . $bio->title . ' - ' . blog_title(),
-        'description' => 'Profile page and all posts by ' . $bio->title . ' on ' . blog_title() . '.',
-        'canonical' => site_url() . 'author/' . $profile,
+        'title' => 'Profile for:  ' . $author->name . ' - ' . blog_title(),
+        'description' => 'Profile page and all posts by ' . $author->name . ' on ' . blog_title() . '.',
+        'canonical' => site_url() . 'author/' . $name,
         'page' => $page,
         'posts' => $posts,
-        'bio' => $bio->body,
-        'name' => $bio->title,
+        'about' => $author->about,
+        'name' => $author->name,
         'bodyclass' => 'inprofile',
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $bio->title,
-        'pagination' => has_pagination($total, $perpage, $page)
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
+        'pagination' => has_pagination($total, $perpage, $page),
+        'is_profile' => is_profile(true),
     ));
 });
 
@@ -430,22 +433,22 @@ get('/admin/mine', function () {
 
         config('views.root', 'system/admin/views');
 
-        $profile = $_SESSION[config("site.url")]['user'];
+        $name = $_SESSION[config("site.url")]['user'];
 
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
 
-        $posts = get_profile($profile, $page, $perpage);
+        $posts = get_profile_posts($name, $page, $perpage);
 
-        $total = get_count($profile, 'dirname');
+        $total = get_count($name, 'dirname');
 
-        $bio = get_bio($profile);
+        $author = get_author($name);
 
-        if (isset($bio[0])) {
-            $bio = $bio[0];
+        if (isset($author[0])) {
+            $author = $author[0];
         } else {
-            $bio = default_profile($profile);
+            $author = default_profile($name);
         }
 
         if (empty($posts) || $page < 1) {
@@ -456,10 +459,10 @@ get('/admin/mine', function () {
                 'page' => $page,
                 'heading' => 'My posts',
                 'posts' => null,
-                'bio' => $bio->body,
-                'name' => $bio->title,
+                'about' => $author->about,
+                'name' => $author->name,
                 'bodyclass' => 'userposts',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $bio->title,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
             die;
@@ -472,10 +475,10 @@ get('/admin/mine', function () {
             'heading' => 'My posts',
             'page' => $page,
             'posts' => $posts,
-            'bio' => $bio->body,
-            'name' => $bio->title,
+            'about' => $author->about,
+            'name' => $author->name,
             'bodyclass' => 'userposts',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $bio->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
@@ -491,22 +494,22 @@ get('/admin/draft', function () {
 
         config('views.root', 'system/admin/views');
 
-        $profile = $_SESSION[config("site.url")]['user'];
+        $name = $_SESSION[config("site.url")]['user'];
 
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
 
-        $posts = get_draft($profile, $page, $perpage);
+        $posts = get_draft($name, $page, $perpage);
 
-        $total = get_count($profile, 'dirname');
+        $total = get_count($name, 'dirname');
 
-        $bio = get_bio($profile);
+        $author = get_author($name);
 
-        if (isset($bio[0])) {
-            $bio = $bio[0];
+        if (isset($author[0])) {
+            $author = $author[0];
         } else {
-            $bio = default_profile($profile);
+            $author = default_profile($name);
         }
 
         if (empty($posts) || $page < 1) {
@@ -517,10 +520,10 @@ get('/admin/draft', function () {
                 'page' => $page,
                 'heading' => 'My draft',
                 'posts' => null,
-                'bio' => $bio->body,
-                'name' => $bio->title,
+                'about' => $author->about,
+                'name' => $author->name,
                 'bodyclass' => 'userdraft',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $bio->title,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
             ));
             die;
         }
@@ -532,10 +535,10 @@ get('/admin/draft', function () {
             'heading' => 'My draft',
             'page' => $page,
             'posts' => $posts,
-            'bio' => $bio->body,
-            'name' => $bio->title,
+            'about' => $author->about,
+            'name' => $author->name,
             'bodyclass' => 'userdraft',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $bio->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
         ));
     } else {
         $login = site_url() . 'login';
@@ -782,7 +785,8 @@ get('/tag/:tag', function ($tag) {
         'posts' => $posts,
         'bodyclass' => 'intag',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . $tag,
-        'pagination' => has_pagination($total, $perpage, $page)
+        'pagination' => has_pagination($total, $perpage, $page),
+        'is_tag' => is_tag(true),
     ));
 });
 
@@ -830,7 +834,8 @@ get('/archive/:req', function ($req) {
         'posts' => $posts,
         'bodyclass' => 'inarchive',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Archive for: ' . $timestamp,
-        'pagination' => has_pagination($total, $perpage, $page)
+        'pagination' => has_pagination($total, $perpage, $page),
+        'is_archive' => is_archive(true),
     ));
 });
 
@@ -863,7 +868,8 @@ get('/search/:keyword', function ($keyword) {
         'posts' => $posts,
         'bodyclass' => 'insearch',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . $keyword,
-        'pagination' => has_pagination($total, $perpage, $page)
+        'pagination' => has_pagination($total, $perpage, $page),
+        'is_search' => is_search(true),
     ));
 });
 
@@ -992,6 +998,7 @@ get('/:static', function ($static) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
             'type' => 'staticpage',
+            'is_page' => is_page(true),
         ));
     }
 });
@@ -1214,6 +1221,7 @@ get('/:static/:sub', function ($static, $sub) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
         'p' => $post,
         'type' => 'staticpage',
+        'is_subpage' => is_subpage(true),
     ));
 });
 
@@ -1380,12 +1388,12 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         }
     }
 
-    $bio = get_bio($current->author);
+    $author = get_author($current->author);
 
-    if (isset($bio[0])) {
-        $bio = $bio[0];
+    if (isset($author[0])) {
+        $author = $author[0];
     } else {
-        $bio = default_profile($current->author);
+        $author = default_profile($current->author);
     }
 
     if (array_key_exists('prev', $post)) {
@@ -1405,13 +1413,15 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'description' => $current->description,
         'canonical' => $current->url,
         'p' => $current,
-        'authorinfo' => authorinfo($bio->title, $bio->body),
+        'author' => $author,
         'bodyclass' => 'inpost',
         'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title,
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => 'blogpost',
+        'is_post' => is_post(true),
     ));
+
 });
 
 // Edit blog post
