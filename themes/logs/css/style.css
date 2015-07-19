@@ -889,7 +889,7 @@ table.post-list td a {
 
 @media all and (max-width: 560px) {
 
-    .featured-video {
+    .featured-video, .featured-audio {
         position: relative;
         padding-bottom: 56.25%;
         padding-top: 30px;
@@ -897,7 +897,7 @@ table.post-list td a {
         overflow: hidden;
     }
 
-    .featured-video iframe, .featured-video object, .featured-video embed {
+    .featured-video iframe, .featured-video object, .featured-video embed, .featured-audio iframe, .featured-audio object, .featured-audio embed {
         height: 100%;
         left: 0;
         position: absolute;

@@ -7,8 +7,7 @@ if (isset($p->file)) {
 
 $content = file_get_contents($url);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
-$oldimg = get_content_tag('img', $content);
-$oldvid = get_content_tag('vid', $content);
+$olddescription = get_content_tag('d', $content);
 $oldcontent = remove_html_comments($content);
 
 $dir = substr($url, 0, strrpos($url, '/'));
@@ -68,17 +67,15 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
             type="time" name="time" class="text" value="<?php echo $time->format('H:i'); ?>"><br><br>
         Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
                 echo $p->description;
-            } ?></textarea>
+            } else { echo $olddescription;} ?></textarea>
         <br><br>
-        Featured Image (optional)<br><input type="text" class="text" name="img" value="<?php echo $oldimg ?>"/><br><br>
-        Embed Youtube Video (optional)<br><input type="text" class="text" name="vid" value="<?php echo $oldvid ?>"/><br><br>
-
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {
             if (empty($postContent)) {
                 echo 'error';
             }
         } ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
+        <input type="hidden" name="is_post" class="text" value="is_post"/>
         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if ($isdraft[2] == 'draft') { ?>

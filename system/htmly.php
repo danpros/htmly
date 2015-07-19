@@ -251,8 +251,6 @@ post('/add/post', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
-    $img = from($_REQUEST, 'img');
-    $vid = from($_REQUEST, 'vid');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -261,10 +259,10 @@ post('/add/post', function () {
     $draft = from($_REQUEST, 'draft');
     if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
         if (!empty($url)) {
-            add_post($title, $tag, $url, $content, $user, $description, $img, $vid, $draft);
+            add_post($title, $tag, $url, $content, $user, $description, $draft);
         } else {
             $url = $title;
-            add_post($title, $tag, $url, $content, $user, $description, $img, $vid, $draft);
+            add_post($title, $tag, $url, $content, $user, $description, $draft);
         }
     } else {
         $message['error'] = '';
@@ -287,13 +285,381 @@ post('/add/post', function () {
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
-            'postImg' => $img,
-            'postVid' => $vid,
             'postTag' => $tag,
             'postUrl' => $url,
             'postContent' => $content,
             'bodyclass' => 'addpost',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
+        ));
+    }
+});
+
+// Show the "Add image" page
+get('/add/image', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-image', array(
+            'title' => 'Add image - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'addimage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add image'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted add image data
+post('/add/image', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $image = from($_REQUEST, 'image');
+    $tag = from($_REQUEST, 'tag');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $description = from($_REQUEST, 'description');
+    $user = $_SESSION[config("site.url")]['user'];
+    $draft = from($_REQUEST, 'draft');
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
+        if (!empty($url)) {
+            add_image($title, $tag, $url, $content, $user, $description, $image, $draft);
+        } else {
+            $url = $title;
+            add_image($title, $tag, $url, $content, $user, $description, $image, $draft);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($tag)) {
+            $message['error'] .= '<li>Tag field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (empty($image)) {
+            $message['error'] .= '<li>Image field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-post', array(
+            'title' => 'Add post- ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postImage' => $image,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'addpost',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
+        ));
+    }
+});
+
+// Show the "Add video" page
+get('/add/video', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-video', array(
+            'title' => 'Add video - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'addvideo',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add video'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted add video data
+post('/add/video', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $video = from($_REQUEST, 'video');
+    $tag = from($_REQUEST, 'tag');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $description = from($_REQUEST, 'description');
+    $user = $_SESSION[config("site.url")]['user'];
+    $draft = from($_REQUEST, 'draft');
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
+        if (!empty($url)) {
+            add_video($title, $tag, $url, $content, $user, $description, $video, $draft);
+        } else {
+            $url = $title;
+            add_video($title, $tag, $url, $content, $user, $description, $video, $draft);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($tag)) {
+            $message['error'] .= '<li>Tag field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (empty($video)) {
+            $message['error'] .= '<li>Video field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-video', array(
+            'title' => 'Add post- ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postVideo' => $video,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'addvideo',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add video'
+        ));
+    }
+});
+
+// Show the "Add link" page
+get('/add/link', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-link', array(
+            'title' => 'Add video - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'addlink',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add link'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted add link data
+post('/add/link', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $link = from($_REQUEST, 'link');
+    $tag = from($_REQUEST, 'tag');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $description = from($_REQUEST, 'description');
+    $user = $_SESSION[config("site.url")]['user'];
+    $draft = from($_REQUEST, 'draft');
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
+        if (!empty($url)) {
+            add_link($title, $tag, $url, $content, $user, $description, $link, $draft);
+        } else {
+            $url = $title;
+            add_link($title, $tag, $url, $content, $user, $description, $link, $draft);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($tag)) {
+            $message['error'] .= '<li>Tag field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (empty($link)) {
+            $message['error'] .= '<li>Link field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-link', array(
+            'title' => 'Add link- ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postLink' => $link,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'addlink',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add link'
+        ));
+    }
+});
+
+// Show the "Add quote" page
+get('/add/quote', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-quote', array(
+            'title' => 'Add quote - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'addquote',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add quote'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted add quote data
+post('/add/quote', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $quote = from($_REQUEST, 'quote');
+    $tag = from($_REQUEST, 'tag');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $description = from($_REQUEST, 'description');
+    $user = $_SESSION[config("site.url")]['user'];
+    $draft = from($_REQUEST, 'draft');
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
+        if (!empty($url)) {
+            add_quote($title, $tag, $url, $content, $user, $description, $quote, $draft);
+        } else {
+            $url = $title;
+            add_quote($title, $tag, $url, $content, $user, $description, $quote, $draft);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($tag)) {
+            $message['error'] .= '<li>Tag field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (empty($quote)) {
+            $message['error'] .= '<li>Quote field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-quote', array(
+            'title' => 'Add quote - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postQuote' => $quote,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'addquote',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add Quote'
+        ));
+    }
+});
+
+// Show the "Add audio" page
+get('/add/audio', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        render('add-audio', array(
+            'title' => 'Add audio - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'addaudio',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add audio'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted add quote data
+post('/add/audio', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $audio = from($_REQUEST, 'audio');
+    $tag = from($_REQUEST, 'tag');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $description = from($_REQUEST, 'description');
+    $user = $_SESSION[config("site.url")]['user'];
+    $draft = from($_REQUEST, 'draft');
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
+        if (!empty($url)) {
+            add_audio($title, $tag, $url, $content, $user, $description, $audio, $draft);
+        } else {
+            $url = $title;
+            add_audio($title, $tag, $url, $content, $user, $description, $audio, $draft);
+        }
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($tag)) {
+            $message['error'] .= '<li>Tag field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (empty($audio)) {
+            $message['error'] .= '<li>Audio field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-audio', array(
+            'title' => 'Add audio - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postAudio' => $audio,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'addaudio',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add audio'
         ));
     }
 });
@@ -544,6 +910,24 @@ get('/admin/draft', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+});
+
+// Show admin/content
+get('/admin/content', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('content-type', array(
+            'title' => 'Add content - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'contenttype',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add content'
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
 });
 
 // Show import page
@@ -1309,6 +1693,8 @@ post('/:static/:sub/edit', function ($static, $sub) {
             'postTitle' => $title,
             'postUrl' => $url,
             'postContent' => $content,
+			'static' => $static,
+			'sub' => $sub,
             'bodyclass' => 'editpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit page'
         ));
@@ -1407,6 +1793,20 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     } else {
         $next = array();
     }
+	
+	if (isset($current->image)) {
+		$var = 'imagePost';
+	} elseif (isset($current->link)) {
+		$var = 'linkPost';
+	} elseif (isset($current->quote)) {
+		$var = 'quotePost';
+	} elseif (isset($current->audio)) {
+		$var = 'audioPost';
+	} elseif (isset($current->video)) {
+		$var = 'videoPost'; }
+	else {
+		$var = 'blogPost';
+	}
 
     render('post', array(
         'title' => $current->title . ' - ' . blog_title(),
@@ -1418,7 +1818,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title,
         'prev' => has_prev($prev),
         'next' => has_next($next),
-        'type' => 'blogPost',
+        'type' => $var,
         'is_post' => is_post(true),
     ));
 
@@ -1443,19 +1843,33 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
         }
 
         $current = $post['current'];
-
+		
+		if (isset($current->image)) {
+			$var = 'edit-image';
+		} elseif (isset($current->link)) {
+			$var = 'edit-link';
+		} elseif (isset($current->quote)) {
+			$var = 'edit-quote';
+		} elseif (isset($current->audio)) {
+			$var = 'edit-audio';
+		} elseif (isset($current->video)) {
+			$var = 'edit-video'; }
+		else {
+		    $var = 'edit-post';
+		}
+		
         if ($user === $current->author || $role === 'admin') {
-            render('edit-post', array(
-                'title' => 'Edit post - ' . blog_title(),
+            render($var, array(
+                'title' => $var .' '. blog_title(),
                 'description' => blog_description(),
                 'canonical' => site_url(),
                 'p' => $current,
-                'bodyclass' => 'editpost',
+                'bodyclass' => 'editcontent',
                 'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
-                'title' => 'Edit post - ' . blog_title(),
+                'title' => $var .' '. blog_title(),
                 'description' => blog_description(),
                 'canonical' => site_url(),
                 'p' => $current,
@@ -1475,8 +1889,17 @@ post('/:year/:month/:name/edit', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
-    $img = from($_REQUEST, 'img');
-    $vid = from($_REQUEST, 'vid');
+	$is_post = from($_REQUEST, 'is_post');
+    $image = from($_REQUEST, 'image');
+	$is_image = from($_REQUEST, 'is_image');
+    $video = from($_REQUEST, 'video');
+    $is_video = from($_REQUEST, 'is_video');
+    $link = from($_REQUEST, 'link');
+    $is_link = from($_REQUEST, 'is_link');
+    $audio = from($_REQUEST, 'audio');
+    $is_audio = from($_REQUEST, 'is_audio');
+    $quote = from($_REQUEST, 'quote');
+    $is_quote = from($_REQUEST, 'is_quote');
     $tag = from($_REQUEST, 'tag');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -1491,12 +1914,57 @@ post('/:year/:month/:name/edit', function () {
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
+	
+	if (!empty($is_image)) {
+		$var = 'edit-image';
+	} elseif (!empty($is_video)) {
+		$var = 'edit-video';
+	} elseif (!empty($is_link)) {
+		$var = 'edit-link';
+	} elseif (!empty($is_quote)) {
+		$var = 'edit-quote';
+	} elseif (!empty($is_audio)) {
+		$var = 'edit-audio';
+	} elseif (!empty($is_post)) {
+		$var = 'edit-post';
+	}
 
-    if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
         if (empty($url)) {
             $url = $title;
         }
-        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $img, $vid, $revertPost, $publishDraft);
+        edit_image($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $image, $revertPost, $publishDraft);
+		
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_video($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $video, $revertPost, $publishDraft);
+		
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_link($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $link, $revertPost, $publishDraft);
+		
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_quote($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $quote, $revertPost, $publishDraft);
+		
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_audio($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $audio, $revertPost, $publishDraft);
+		
+    }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+		edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $revertPost, $publishDraft);
+		
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -1511,22 +1979,48 @@ post('/:year/:month/:name/edit', function () {
         if (!$proper) {
             $message['error'] .= '<li>CSRF Token not correct.</li>';
         }
+
+		if (!empty($is_image)) {
+			if (empty($image)) {
+				$message['error'] .= '<li>Image field is required.</li>';
+			}
+		} elseif (!empty($is_video)) {
+			if (empty($video)) {
+				$message['error'] .= '<li>Video field is required.</li>';
+			}
+		} elseif (!empty($is_link)) {
+			if (empty($link)) {
+				$message['error'] .= '<li>Link field is required.</li>';
+			}
+		} elseif (!empty($is_quote)) {
+			if (empty($quote)) {
+				$message['error'] .= '<li>Quote field is required.</li>';
+			}
+		} elseif (!empty($is_audio)) {
+			if (empty($audio)) {
+				$message['error'] .= '<li>Audio field is required.</li>';
+			}
+		}
+		
         config('views.root', 'system/admin/views');
 
-        render('edit-post', array(
-            'title' => 'Edit post - ' . blog_title(),
+        render($var, array(
+            'title' => 'Edit content - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
             'postTitle' => $title,
-            'postImg' => $img,
-            'postVid' => $vid,
+            'postImage' => $image,
+            'postVideo' => $video,
+            'postLink' => $link,
+            'postQuote' => $quote,
+            'postAudio' => $audio,
             'postTag' => $tag,
             'postUrl' => $url,
             'postContent' => $content,
-            'bodyclass' => 'editpost',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit post'
+            'bodyclass' => 'editcontent',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit content'
         ));
     }
 });

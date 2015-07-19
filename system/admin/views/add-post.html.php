@@ -35,13 +35,6 @@
                 echo $p->description;
             } ?></textarea>
         <br><br>
-        Featured Image (optional)<br><input type="text" class="text" name="img" value="<?php if (isset($postImg)) {
-            echo $postImg;
-        } ?>"/><br><br>
-        Embed Youtube Video (optional)<br><input type="text" class="text" name="vid" value="<?php if (isset($postVid)) {
-            echo $postVid;
-        } ?>"/><br><br>
-
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {
             if (empty($postContent)) {

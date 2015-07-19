@@ -266,8 +266,11 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
-        $post->image = get_content_tag('img', $content);
-        $post->video = get_content_tag('vid', $content);
+        $post->image = get_content_tag('image', $content);
+        $post->video = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", get_content_tag('video', $content));
+		$post->link  = get_content_tag('link', $content);
+		$post->quote  = get_content_tag('quote', $content);
+		$post->audio  = get_content_tag('audio', $content);
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
@@ -1878,8 +1881,7 @@ EOF;
     }
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
     echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';
-    echo '<li><a href="' . $base . 'add/post">Add post</a></li>';
-    echo '<li><a href="' . $base . 'add/page">Add page</a></li>';
+    echo '<li><a href="' . $base . 'admin/content">Add content</a></li>';
     echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';
     echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';

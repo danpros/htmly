@@ -1,3 +1,41 @@
+<?php
+if (isset($p->file)) {
+    $url = $p->file;
+} else {
+    $url = $oldfile;
+}
+
+$content = file_get_contents($url);
+$oldtitle = get_content_tag('t', $content, 'Untitled');
+$olddescription = get_content_tag('d', $content);
+$oldlink = get_content_tag('link', $content);
+$oldcontent = remove_html_comments($content);
+
+$dir = substr($url, 0, strrpos($url, '/'));
+$isdraft = explode('/', $dir);
+$oldurl = explode('_', $url);
+
+$oldtag = $oldurl[1];
+
+$oldmd = str_replace('.md', '', $oldurl[2]);
+
+if (isset($_GET['destination'])) {
+    $destination = $_GET['destination'];
+} else {
+    $destination = 'admin';
+}
+$replaced = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/';
+$dt = str_replace($replaced, '', $oldurl[0]);
+$t = str_replace('-', '', $dt);
+$time = new DateTime($t);
+$timestamp = $time->format("Y-m-d");
+// The post date
+$postdate = strtotime($timestamp);
+// The post URL
+$delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destination=' . $destination;
+
+
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <?php if (config("jquery") != "enable"):?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
@@ -13,32 +51,44 @@
 <?php } ?>
 <div class="wmd-panel">
     <form method="POST">
-        Title <span class="required">*</span><br><input type="text" class="text <?php if (isset($postTitle)) {
-            if (empty($postTitle)) {
+        Title <span class="required">*</span> <br><input type="text" name="title"
+                                                         class="text <?php if (isset($postTitle)) {
+                                                             if (empty($postTitle)) {
+                                                                 echo 'error';
+                                                             }
+                                                         } ?>" value="<?php echo $oldtitle ?>"/><br><br>
+        Tag <span class="required">*</span> <br><input type="text" name="tag" class="text <?php if (isset($postTag)) {
+            if (empty($postTag)) {
                 echo 'error';
             }
-        } ?>" name="title" value="<?php if (isset($postTitle)) {
-            echo $postTitle;
-        } ?>"/><br><br>
-        Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) {
-            echo $postUrl;
-        } ?>"/><br>
-        <span class="help">If the url leave empty we will use the page title.</span><br><br>
+        } ?>" value="<?php echo $oldtag ?>"/><br><br>
+        Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
+        <span class="help">If the url leave empty we will use the post title.</span><br><br>
+        Date Time<br><input type="date" name="date" class="text" value="<?php echo $timestamp; ?>"><br><input
+            type="time" name="time" class="text" value="<?php echo $time->format('H:i'); ?>"><br><br>
         Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
                 echo $p->description;
-            } ?></textarea>
+            } else {echo $olddescription;}?></textarea>
         <br><br>
-
+       Featured Link <span class="required">*</span> <br><textarea maxlength="200" class="text <?php if (isset($postLink)) {
+            if (empty($postLink)) {
+                echo 'error';
+            }
+        } ?>" name="link" ><?php echo $oldlink ?></textarea><br><br>
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {
             if (empty($postContent)) {
                 echo 'error';
             }
-        } ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {
-                echo $postContent;
-            } ?></textarea><br/>
+        } ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea><br>
+		<input type="hidden" name="is_link" class="text" value="is_link"/>
+        <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <input type="submit" name="submit" class="submit" value="Publish"/>
+        <?php if ($isdraft[2] == 'draft') { ?>
+            <input type="submit" name="publishdraft" class="submit" value="Publish draft"/> <input type="submit" name="updatedraft" class="draft" value="Update draft"/> <a href="<?php echo $delete ?>">Delete</a>
+        <?php } else { ?>
+            <input type="submit" name="updatepost" class="submit" value="Update post"/> <input type="submit" name="revertpost" class="revert" value="Revert to draft"/> <a href="<?php echo $delete ?>">Delete</a>
+        <?php }?>
     </form>
 </div>
 <div id="insertImageDialog" title="Insert Image">

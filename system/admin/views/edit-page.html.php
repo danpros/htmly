@@ -7,6 +7,7 @@ if (isset($p->file)) {
 }
 $content = file_get_contents($url);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
+$olddescription = get_content_tag('d', $content);
 $oldcontent = remove_html_comments($content);
 
 if (isset($_GET['destination'])) {
@@ -18,7 +19,17 @@ $dir = substr($url, 0, strrpos($url, '/'));
 $oldurl = str_replace($dir . '/', '', $url);
 $oldmd = str_replace('.md', '', $oldurl);
 
-$delete = $p->url . '/delete?destination=' . $destination;
+if (isset($p->url)) {
+    $delete = $p->url . '/delete?destination=' . $destination;
+}
+else {
+	if(empty($sub)) {
+		$delete = site_url() . $oldmd . '/delete?destination=' . $destination;
+	}
+	else {
+		$delete = site_url() . $static .'/'. $sub . '/delete?destination=' . $destination;
+	}
+}
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
@@ -46,9 +57,8 @@ $delete = $p->url . '/delete?destination=' . $destination;
         <span class="help">If the url leave empty we will use the page title.</span><br><br>
         Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
                 echo $p->description;
-            } ?></textarea>
+            } else {echo $olddescription;}?></textarea>
         <br><br>
-
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {
             if (empty($postContent)) {

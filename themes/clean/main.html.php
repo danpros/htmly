@@ -24,14 +24,29 @@
                     <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> Comments</span></a>
                 <?php } ?>
             </div>
-            <?php if (!empty($p->image)) { ?>
+		    <?php if (!empty($p->image)) { ?>
                 <div class="featured-image">
                     <a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
                 </div>
             <?php } ?>
             <?php if (!empty($p->video)) { ?>
                 <div class="featured-video">
-                   <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                </div>
+            <?php } ?>
+			<?php if (!empty($p->audio)) { ?>
+				<div class="featured-audio">
+					<iframe width="560" height="315" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
+				</div>
+			<?php } ?>
+            <?php if (!empty($p->quote)) { ?>
+                <div class="featured-quote">
+                    <blockquote><?php echo $p->quote ?></blockquote>
+                </div>
+            <?php } ?>
+            <?php if (!empty($p->link)) { ?>
+                <div class="featured-quote">
+                    <a href="<?php echo $p->link ?>"><?php echo $p->link ?></a>
                 </div>
             <?php } ?>
             <div class="teaser-body" itemprop="articleBody">
