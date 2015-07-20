@@ -443,7 +443,7 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
         $post_description = "";
     }
     if ($link !== null) {
-        $post_link = "\n<!--link" . $post_link. " img-->";
+        $post_link = "\n<!--link" . $post_link. " link-->";
     } else {
         $post_link = "";
     }	

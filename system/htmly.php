@@ -450,7 +450,7 @@ get('/add/link', function () {
         config('views.root', 'system/admin/views');
 
         render('add-link', array(
-            'title' => 'Add video - ' . blog_title(),
+            'title' => 'Add link - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
             'bodyclass' => 'addlink',
@@ -501,7 +501,7 @@ post('/add/link', function () {
         }
         config('views.root', 'system/admin/views');
         render('add-link', array(
-            'title' => 'Add link- ' . blog_title(),
+            'title' => 'Add link - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
