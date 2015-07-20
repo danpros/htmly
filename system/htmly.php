@@ -1853,8 +1853,8 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
 		} elseif (isset($current->audio)) {
 			$var = 'edit-audio';
 		} elseif (isset($current->video)) {
-			$var = 'edit-video'; }
-		else {
+			$var = 'edit-video'; 
+		} else {
 		    $var = 'edit-post';
 		}
 		

@@ -267,7 +267,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
         $post->image = get_content_tag('image', $content);
-        $post->video = str_replace(array("http://", "https://", "www.", "youtube", ".com", "/watch?v=", "/embed/"), "", get_content_tag('video', $content));
+        $post->video = get_youtube_id(get_content_tag('video', $content));
 		$post->link  = get_content_tag('link', $content);
 		$post->quote  = get_content_tag('quote', $content);
 		$post->audio  = get_content_tag('audio', $content);
@@ -2010,4 +2010,16 @@ function isCaptcha($reCaptchaResponse)
         return false;
     }
     return ($json['success']);
+}
+
+// Get YouTube video ID
+function get_youtube_id($url)
+{
+    if(empty($url)) {
+       return;
+    }
+
+    preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches);
+
+    return $matches[1];
 }
