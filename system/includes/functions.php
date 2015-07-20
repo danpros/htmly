@@ -1179,7 +1179,7 @@ EOF;
 }
 
 // Menu
-function menu()
+function menu($custom = null)
 {
     $menu = config('blog.menu');
     $req = $_SERVER['REQUEST_URI'];
@@ -1188,7 +1188,7 @@ function menu()
 
         $links = explode('|', $menu);
 
-        echo '<ul class="nav">';
+        echo '<ul class="nav navbar-nav ' . $custom . '">';
 
         $i = 0;
         $len = count($links);
@@ -1237,7 +1237,7 @@ function menu()
 
         echo '</ul>';
     } else {
-        get_menu();
+        get_menu($custom);
     }
 }
 
@@ -1255,7 +1255,7 @@ function get_title_from_file($v)
 }
 
 // Auto generate menu from static page
-function get_menu()
+function get_menu($custom)
 {
     $posts = get_static_pages();
     $req = $_SERVER['REQUEST_URI'];
@@ -1264,7 +1264,7 @@ function get_menu()
 
         krsort($posts);
 
-        echo '<ul class="nav">';
+        echo '<ul class="nav navbar-nav ' . $custom . '">';
         if ($req == site_path() . '/') {
             echo '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         } else {
@@ -1296,13 +1296,12 @@ function get_menu()
             } else {
                 $active = '';
             }
-            echo '<li class="' . $class . $active . '">';
-
-            $subPages = get_static_sub_pages(str_replace('.md', '', $base));
-            echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
+			
+			$subPages = get_static_sub_pages(str_replace('.md', '', $base));
             if (!empty($subPages)) {
-                echo '<ul class="subnav">';
-
+			    echo '<li class="' . $class . $active .' dropdown">';
+				echo '<a class="dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
+                echo '<ul class="subnav dropdown-menu" role="menu">';
                 $iSub = 0;
                 $countSub = count($subPages);
                 foreach ($subPages as $index => $sp) {
@@ -1324,13 +1323,16 @@ function get_menu()
                     $iSub++;
                 }
                 echo '</ul>';
-            }
+            } else {
+				echo '<li class="' . $class . $active .'">';
+				echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
+			}
             echo '</li>';
         }
         echo '</ul>';
     } else {
 
-        echo '<ul class="nav">';
+        echo '<ul class="nav navbar-nav ' . $custom . '">';
         if ($req == site_path() . '/') {
             echo '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         } else {
