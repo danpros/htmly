@@ -268,9 +268,9 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
         $post->image = get_content_tag('image', $content);
         $post->video = get_youtube_id(get_content_tag('video', $content));
-		$post->link  = get_content_tag('link', $content);
-		$post->quote  = get_content_tag('quote', $content);
-		$post->audio  = get_content_tag('audio', $content);
+        $post->link  = get_content_tag('link', $content);
+        $post->quote  = get_content_tag('quote', $content);
+        $post->audio  = get_content_tag('audio', $content);
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
@@ -404,7 +404,7 @@ function get_tag($tag, $page, $perpage, $random)
     if (empty($tmp)) {
         not_found();
     }
-	
+    
     $tmp = array_unique($tmp, SORT_REGULAR);
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -490,7 +490,7 @@ function get_author($name)
     if (!empty($names)) {
 
         foreach ($names as $index => $v) {
-		
+        
             $author = new stdClass;
 
             // Replaced string
@@ -666,7 +666,7 @@ function get_related($tag, $custom = null)
             $tmp[] = $post;
         }
     }
-	
+    
     if (empty($custom)) {
 
         $total = count($tmp);
@@ -681,15 +681,15 @@ function get_related($tag, $custom = null)
                     break;
             }
             echo '</ul>';
-		
+        
         } else {
-            echo '<ul><li>No related post found</li></ul>';	
+            echo '<ul><li>No related post found</li></ul>';    
         }
-	
-	} else {
-	    return $tmp;
-	}
-	
+    
+    } else {
+        return $tmp;
+    }
+    
 }
 
 // Return post count. Matching $var and $str provided.
@@ -755,20 +755,20 @@ function keyword_count($keyword)
 // Return recent posts lists
 function recent_posts($custom = null, $count = null)
 {
-	
+    
     if (empty($count)) {
         $count = config('recent.count');
         if (empty($count)) {
             $count = 5;
         }
     }
-	
+    
     $posts = get_posts(null, 1, $count);
-	
-	if (!empty($custom)) {
-        return $posts;		
+    
+    if (!empty($custom)) {
+        return $posts;        
     } else {
-	
+    
         $str = '<ul>';
         foreach ($posts as $post) {
             $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
@@ -778,7 +778,7 @@ function recent_posts($custom = null, $count = null)
         }
         $str .= '</ul>';
         return $str;
-	
+    
     }
 }
 
@@ -826,11 +826,11 @@ function archive_list($custom = null)
                     $arrow = '&#9658;';
                 }
                 $i++;
-			
+            
                 $by_month = array_count_values($months);
                 # Sort the months
                 krsort($by_month);
-			
+            
                 $script = <<<EOF
                     if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
 EOF;
@@ -878,7 +878,7 @@ function tag_cloud($custom = null)
 
         $tag_collection = array_count_values($tags);
         ksort($tag_collection);
-		
+        
         if(empty($custom)) {
             echo '<ul class="taglist">';
             foreach ($tag_collection as $tag => $count) {
@@ -886,7 +886,7 @@ function tag_cloud($custom = null)
             }
             echo '</ul>';
         } else {
-		    return $tag_collection;
+            return $tag_collection;
         }
     }
 }
@@ -945,7 +945,7 @@ function get_description($string, $char = null)
 function get_teaser($text, $char = null)
 {
     $teaserType = config('teaser.type');
-	
+    
     if(empty($char)) {
         $char = config('teaser.char');
     }
@@ -1296,11 +1296,11 @@ function get_menu($custom)
             } else {
                 $active = '';
             }
-			
-			$subPages = get_static_sub_pages(str_replace('.md', '', $base));
+            
+            $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             if (!empty($subPages)) {
-			    echo '<li class="' . $class . $active .' dropdown">';
-				echo '<a class="dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
+                echo '<li class="' . $class . $active .' dropdown">';
+                echo '<a class="dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 echo '<ul class="subnav dropdown-menu" role="menu">';
                 $iSub = 0;
                 $countSub = count($subPages);
@@ -1324,9 +1324,9 @@ function get_menu($custom)
                 }
                 echo '</ul>';
             } else {
-				echo '<li class="' . $class . $active .'">';
-				echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
-			}
+                echo '<li class="' . $class . $active .'">';
+                echo '<a href="' . $url . '">' . ucwords($title) . '</a>';
+            }
             echo '</li>';
         }
         echo '</ul>';
@@ -1345,7 +1345,7 @@ function get_menu($custom)
 // Search form
 function search($text = null)
 {
-	if(!empty($text)) {
+    if(!empty($text)) {
         echo <<<EOF
     <form id="search-form" method="get">
         <input type="text" class="search-input" name="search" value="{$text}" onfocus="if (this.value == '{$text}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$text}';}">
@@ -1359,7 +1359,7 @@ EOF;
         <input type="submit" value="Search" class="search-button">
     </form>
 EOF;
-	}
+    }
     if (isset($_GET['search'])) {
         $url = site_url() . 'search/' . $_GET['search'];
         header("Location: $url");
@@ -1874,7 +1874,7 @@ function toolbar()
     $base = site_url();
 
     echo <<<EOF
-	<link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
+    <link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
 EOF;
     echo '<div id="toolbar"><ul>';
     echo '<li><a href="' . $base . 'admin">Admin</a></li>';

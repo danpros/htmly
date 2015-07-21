@@ -23,12 +23,12 @@ if (isset($p->url)) {
     $delete = $p->url . '/delete?destination=' . $destination;
 }
 else {
-	if(empty($sub)) {
-		$delete = site_url() . $oldmd . '/delete?destination=' . $destination;
-	}
-	else {
-		$delete = site_url() . $static .'/'. $sub . '/delete?destination=' . $destination;
-	}
+    if(empty($sub)) {
+        $delete = site_url() . $oldmd . '/delete?destination=' . $destination;
+    }
+    else {
+        $delete = site_url() . $static .'/'. $sub . '/delete?destination=' . $destination;
+    }
 }
 
 ?>
@@ -87,19 +87,19 @@ else {
     (function () {
         var converter = new Markdown.Converter();
         var editor = new Markdown.Editor(converter);
-		
+
         var $dialog = $('#insertImageDialog').dialog({ 
             autoOpen: false,
             closeOnEscape: false,
             open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
         });
-		
+
         var $url = $('input[type=text]', $dialog);
         var $file = $('input[type=file]', $dialog);
         var base = '<?php echo site_url() ?>';
-		
+
         editor.hooks.set('insertImageDialog', function(callback) {
-		
+
             var dialogInsertClick = function() {                                      
                 callback($url.val().length > 0 ? $url.val(): null);
                 dialogClose();
@@ -129,18 +129,18 @@ else {
                     $file.val('');
                 }
             };
-			
+
             $file.ajaxfileupload({
                 'action': '<?php echo site_url() ?>upload.php',
                 'onComplete': uploadComplete,
             });
-			
+            
             $dialog.dialog('open');
 
             return true; // tell the editor that we'll take care of getting the image url
         });
 
         editor.run();
-	
+
     })();
 </script>

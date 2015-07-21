@@ -15,5 +15,5 @@ if ($updater->able()) {
     echo '<p><a href="' . site_url() . 'admin/update/now/' . $CSRF . '" alt="' . $info['name'] . '">Update to ' . $info['tag_name'] . '</a></p>';
 } else {
     echo '<h3>No Available Update</h3>';
-    echo '<p>You are using the latest HTMLy version.</p>';	
+    echo '<p>You are using the latest HTMLy version.</p>';    
 }

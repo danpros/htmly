@@ -89,9 +89,9 @@ function remove_accent($str)
 function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $revertPost, $publishDraft)
 {
     $oldurl = explode('_', $oldfile);
-	$dir = explode('/', $oldurl[0]);
+    $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-h-i-s', strtotime($date));
-	
+    
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
@@ -104,52 +104,52 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         if(!empty($revertPost) || !empty($publishDraft)) {
-		
+        
             $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
             $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
-		
+        
             if($dir[2] == 'draft') {
                 $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
-			}
-			
+            }
+            
             if (is_dir($dirBlog)) {
             } else {
                 mkdir($dirBlog, 0775, true);  
             }
-			
-			if (is_dir($dirDraft)) {
+            
+            if (is_dir($dirDraft)) {
             } else {
                 mkdir($dirDraft, 0775, true);  
             }
-			
+            
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
             $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-			
-		} else {
-		
+            
+        } else {
+        
             $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
-		
+        
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true));
             } else {
                 rename($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true));
             }
-		
-		}
+        
+        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -162,14 +162,14 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
-		}
-		
+        }
+        
         // The post date
         $postdate = strtotime($timestamp);
          
         // The post URL
         $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
-		
+        
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $newfile);
         if ($destination == 'post') {
@@ -197,9 +197,9 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
 function edit_image($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $image, $revertPost, $publishDraft)
 {
     $oldurl = explode('_', $oldfile);
-	$dir = explode('/', $oldurl[0]);
+    $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-h-i-s', strtotime($date));
-	
+    
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
@@ -218,52 +218,52 @@ function edit_image($title, $tag, $url, $content, $oldfile, $destination = null,
         $post_image = "\n<!--image " . $post_image. " image-->";
     } else {
         $post_image = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_image ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         if(!empty($revertPost) || !empty($publishDraft)) {
-		
+        
             $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
             $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
-		
+        
             if($dir[2] == 'draft') {
                 $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
-			}
-			
+            }
+            
             if (is_dir($dirBlog)) {
             } else {
                 mkdir($dirBlog, 0775, true);  
             }
-			
-			if (is_dir($dirDraft)) {
+            
+            if (is_dir($dirDraft)) {
             } else {
                 mkdir($dirDraft, 0775, true);  
             }
-			
+            
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
             $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-			
-		} else {
-		
+            
+        } else {
+        
             $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
-		
+        
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true));
             } else {
                 rename($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true));
             }
-		
-		}
+        
+        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -276,14 +276,14 @@ function edit_image($title, $tag, $url, $content, $oldfile, $destination = null,
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
-		}
-		
+        }
+        
         // The post date
         $postdate = strtotime($timestamp);
          
         // The post URL
         $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
-		
+        
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $newfile);
         if ($destination == 'post') {
@@ -311,9 +311,9 @@ function edit_image($title, $tag, $url, $content, $oldfile, $destination = null,
 function edit_video($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $video, $revertPost, $publishDraft)
 {
     $oldurl = explode('_', $oldfile);
-	$dir = explode('/', $oldurl[0]);
+    $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-h-i-s', strtotime($date));
-	
+    
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
@@ -332,52 +332,52 @@ function edit_video($title, $tag, $url, $content, $oldfile, $destination = null,
         $post_video = "\n<!--video " . $post_video . " video-->";
     } else {
         $post_video = "";
-    }		
+    }        
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_video  ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         if(!empty($revertPost) || !empty($publishDraft)) {
-		
+        
             $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
             $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
-		
+        
             if($dir[2] == 'draft') {
                 $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
-			}
-			
+            }
+            
             if (is_dir($dirBlog)) {
             } else {
                 mkdir($dirBlog, 0775, true);  
             }
-			
-			if (is_dir($dirDraft)) {
+            
+            if (is_dir($dirDraft)) {
             } else {
                 mkdir($dirDraft, 0775, true);  
             }
-			
+            
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
             $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-			
-		} else {
-		
+            
+        } else {
+        
             $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
-		
+        
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true));
             } else {
                 rename($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true));
             }
-		
-		}
+        
+        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -390,14 +390,14 @@ function edit_video($title, $tag, $url, $content, $oldfile, $destination = null,
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
-		}
-		
+        }
+        
         // The post date
         $postdate = strtotime($timestamp);
          
         // The post URL
         $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
-		
+        
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $newfile);
         if ($destination == 'post') {
@@ -425,9 +425,9 @@ function edit_video($title, $tag, $url, $content, $oldfile, $destination = null,
 function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $link, $revertPost, $publishDraft)
 {
     $oldurl = explode('_', $oldfile);
-	$dir = explode('/', $oldurl[0]);
+    $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-h-i-s', strtotime($date));
-	
+    
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
@@ -446,52 +446,52 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
         $post_link = "\n<!--link" . $post_link. " link-->";
     } else {
         $post_link = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_link ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         if(!empty($revertPost) || !empty($publishDraft)) {
-		
+        
             $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
             $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
-		
+        
             if($dir[2] == 'draft') {
                 $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
-			}
-			
+            }
+            
             if (is_dir($dirBlog)) {
             } else {
                 mkdir($dirBlog, 0775, true);  
             }
-			
-			if (is_dir($dirDraft)) {
+            
+            if (is_dir($dirDraft)) {
             } else {
                 mkdir($dirDraft, 0775, true);  
             }
-			
+            
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
             $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-			
-		} else {
-		
+            
+        } else {
+        
             $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
-		
+        
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true));
             } else {
                 rename($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true));
             }
-		
-		}
+        
+        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -504,14 +504,14 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
-		}
-		
+        }
+        
         // The post date
         $postdate = strtotime($timestamp);
          
         // The post URL
         $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
-		
+        
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $newfile);
         if ($destination == 'post') {
@@ -539,9 +539,9 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
 function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $quote, $revertPost, $publishDraft)
 {
     $oldurl = explode('_', $oldfile);
-	$dir = explode('/', $oldurl[0]);
+    $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-h-i-s', strtotime($date));
-	
+    
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
@@ -560,52 +560,52 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
         $post_quote = "\n<!--quote" . $post_quote . " quote-->";
     } else {
         $post_quote = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_quote ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         if(!empty($revertPost) || !empty($publishDraft)) {
-		
+        
             $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
             $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
-		
+        
             if($dir[2] == 'draft') {
                 $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
-			}
-			
+            }
+            
             if (is_dir($dirBlog)) {
             } else {
                 mkdir($dirBlog, 0775, true);  
             }
-			
-			if (is_dir($dirDraft)) {
+            
+            if (is_dir($dirDraft)) {
             } else {
                 mkdir($dirDraft, 0775, true);  
             }
-			
+            
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
             $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-			
-		} else {
-		
+            
+        } else {
+        
             $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
-		
+        
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true));
             } else {
                 rename($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true));
             }
-		
-		}
+        
+        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -618,14 +618,14 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
-		}
-		
+        }
+        
         // The post date
         $postdate = strtotime($timestamp);
          
         // The post URL
         $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
-		
+        
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $newfile);
         if ($destination == 'post') {
@@ -653,9 +653,9 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
 function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $audio, $revertPost, $publishDraft)
 {
     $oldurl = explode('_', $oldfile);
-	$dir = explode('/', $oldurl[0]);
+    $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-h-i-s', strtotime($date));
-	
+    
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
@@ -674,52 +674,52 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
         $post_audio = "\n<!--audio" . $post_audio . " audio-->";
     } else {
         $post_audio = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_audio ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         if(!empty($revertPost) || !empty($publishDraft)) {
-		
+        
             $dirBlog = $dir[0] . '/' . $dir[1] . '/blog/';
             $dirDraft = $dir[0] . '/' . $dir[1] . '/draft/';
-		
+        
             if($dir[2] == 'draft') {
                 $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md'; 
-			}
-			
+            }
+            
             if (is_dir($dirBlog)) {
             } else {
                 mkdir($dirBlog, 0775, true);  
             }
-			
-			if (is_dir($dirDraft)) {
+            
+            if (is_dir($dirDraft)) {
             } else {
                 mkdir($dirDraft, 0775, true);  
             }
-			
+            
             file_put_contents($filename, print_r($post_content, true));
             unlink($oldfile);
             $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-			
-		} else {
-		
+            
+        } else {
+        
             $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
-		
+        
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true));
             } else {
                 rename($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true));
             }
-		
-		}
+        
+        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -732,14 +732,14 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
-		}
-		
+        }
+        
         // The post date
         $postdate = strtotime($timestamp);
          
         // The post URL
         $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
-		
+        
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $newfile);
         if ($destination == 'post') {
@@ -815,15 +815,15 @@ function add_post($title, $tag, $url, $content, $user, $description = null, $dra
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
         $post_description = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         
-		if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         
         if (empty($draft)) {
@@ -831,7 +831,7 @@ function add_post($title, $tag, $url, $content, $user, $description = null, $dra
         } else {
             $dir = 'content/' . $user . '/draft/';
         }
-		
+        
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
@@ -841,13 +841,13 @@ function add_post($title, $tag, $url, $content, $user, $description = null, $dra
 
         rebuilt_cache('all');
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
-		
+        
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
-		
+        
         header("Location: $redirect");
     }
 }
@@ -871,15 +871,15 @@ function add_image($title, $tag, $url, $content, $user, $description = null, $im
         $post_image = "\n<!--image " . $post_image. " image-->";
     } else {
         $post_image = "";
-    }	
+    }    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_image ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         
-		if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         
         if (empty($draft)) {
@@ -887,7 +887,7 @@ function add_image($title, $tag, $url, $content, $user, $description = null, $im
         } else {
             $dir = 'content/' . $user . '/draft/';
         }
-		
+        
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
@@ -897,13 +897,13 @@ function add_image($title, $tag, $url, $content, $user, $description = null, $im
 
         rebuilt_cache('all');
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
-		
+        
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
-		
+        
         header("Location: $redirect");
     }
 }
@@ -927,15 +927,15 @@ function add_video($title, $tag, $url, $content, $user, $description = null, $vi
         $post_video = "\n<!--video " . $post_video . " video-->";
     } else {
         $post_video = "";
-    }		
+    }        
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_video  ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         
-		if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         
         if (empty($draft)) {
@@ -943,7 +943,7 @@ function add_video($title, $tag, $url, $content, $user, $description = null, $vi
         } else {
             $dir = 'content/' . $user . '/draft/';
         }
-		
+        
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
@@ -953,13 +953,13 @@ function add_video($title, $tag, $url, $content, $user, $description = null, $vi
 
         rebuilt_cache('all');
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
-		
+        
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
-		
+        
         header("Location: $redirect");
     }
 }
@@ -983,15 +983,15 @@ function add_audio($title, $tag, $url, $content, $user, $description = null, $au
         $post_audio = "\n<!--audio " . $post_audio . " audio-->";
     } else {
         $post_audio = "";
-    }		
+    }        
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_audio  ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         
-		if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         
         if (empty($draft)) {
@@ -999,7 +999,7 @@ function add_audio($title, $tag, $url, $content, $user, $description = null, $au
         } else {
             $dir = 'content/' . $user . '/draft/';
         }
-		
+        
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
@@ -1009,13 +1009,13 @@ function add_audio($title, $tag, $url, $content, $user, $description = null, $au
 
         rebuilt_cache('all');
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
-		
+        
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
-		
+        
         header("Location: $redirect");
     }
 }
@@ -1039,15 +1039,15 @@ function add_link($title, $tag, $url, $content, $user, $description = null, $lin
         $post_link = "\n<!--link " . $post_link . " link-->";
     } else {
         $post_link = "";
-    }		
+    }        
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_link  ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         
-		if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         
         if (empty($draft)) {
@@ -1055,7 +1055,7 @@ function add_link($title, $tag, $url, $content, $user, $description = null, $lin
         } else {
             $dir = 'content/' . $user . '/draft/';
         }
-		
+        
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
@@ -1065,13 +1065,13 @@ function add_link($title, $tag, $url, $content, $user, $description = null, $lin
 
         rebuilt_cache('all');
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
-		
+        
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
-		
+        
         header("Location: $redirect");
     }
 }
@@ -1095,15 +1095,15 @@ function add_quote($title, $tag, $url, $content, $user, $description = null, $qu
         $post_quote = "\n<!--quote " . $post_quote . " quote-->";
     } else {
         $post_quote = "";
-    }		
+    }        
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $post_quote ."\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
         
-		if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
-		
+        
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         
         if (empty($draft)) {
@@ -1111,7 +1111,7 @@ function add_quote($title, $tag, $url, $content, $user, $description = null, $qu
         } else {
             $dir = 'content/' . $user . '/draft/';
         }
-		
+        
         if (is_dir($dir)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
@@ -1121,13 +1121,13 @@ function add_quote($title, $tag, $url, $content, $user, $description = null, $qu
 
         rebuilt_cache('all');
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename);
-		
+        
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
-		
+        
         header("Location: $redirect");
     }
 }

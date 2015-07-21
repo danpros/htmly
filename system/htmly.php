@@ -1693,8 +1693,8 @@ post('/:static/:sub/edit', function ($static, $sub) {
             'postTitle' => $title,
             'postUrl' => $url,
             'postContent' => $content,
-			'static' => $static,
-			'sub' => $sub,
+            'static' => $static,
+            'sub' => $sub,
             'bodyclass' => 'editpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit page'
         ));
@@ -1793,20 +1793,20 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     } else {
         $next = array();
     }
-	
-	if (isset($current->image)) {
-		$var = 'imagePost';
-	} elseif (isset($current->link)) {
-		$var = 'linkPost';
-	} elseif (isset($current->quote)) {
-		$var = 'quotePost';
-	} elseif (isset($current->audio)) {
-		$var = 'audioPost';
-	} elseif (isset($current->video)) {
-		$var = 'videoPost'; }
-	else {
-		$var = 'blogPost';
-	}
+    
+    if (isset($current->image)) {
+        $var = 'imagePost';
+    } elseif (isset($current->link)) {
+        $var = 'linkPost';
+    } elseif (isset($current->quote)) {
+        $var = 'quotePost';
+    } elseif (isset($current->audio)) {
+        $var = 'audioPost';
+    } elseif (isset($current->video)) {
+        $var = 'videoPost'; }
+    else {
+        $var = 'blogPost';
+    }
 
     render('post', array(
         'title' => $current->title . ' - ' . blog_title(),
@@ -1843,21 +1843,21 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
         }
 
         $current = $post['current'];
-		
-		if (isset($current->image)) {
-			$var = 'edit-image';
-		} elseif (isset($current->link)) {
-			$var = 'edit-link';
-		} elseif (isset($current->quote)) {
-			$var = 'edit-quote';
-		} elseif (isset($current->audio)) {
-			$var = 'edit-audio';
-		} elseif (isset($current->video)) {
-			$var = 'edit-video'; 
-		} else {
-		    $var = 'edit-post';
-		}
-		
+        
+        if (isset($current->image)) {
+            $var = 'edit-image';
+        } elseif (isset($current->link)) {
+            $var = 'edit-link';
+        } elseif (isset($current->quote)) {
+            $var = 'edit-quote';
+        } elseif (isset($current->audio)) {
+            $var = 'edit-audio';
+        } elseif (isset($current->video)) {
+            $var = 'edit-video'; 
+        } else {
+            $var = 'edit-post';
+        }
+        
         if ($user === $current->author || $role === 'admin') {
             render($var, array(
                 'title' => $var .' '. blog_title(),
@@ -1889,9 +1889,9 @@ post('/:year/:month/:name/edit', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
     $title = from($_REQUEST, 'title');
-	$is_post = from($_REQUEST, 'is_post');
+    $is_post = from($_REQUEST, 'is_post');
     $image = from($_REQUEST, 'image');
-	$is_image = from($_REQUEST, 'is_image');
+    $is_image = from($_REQUEST, 'is_image');
     $video = from($_REQUEST, 'video');
     $is_video = from($_REQUEST, 'is_video');
     $link = from($_REQUEST, 'link');
@@ -1914,57 +1914,57 @@ post('/:year/:month/:name/edit', function () {
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
-	
-	if (!empty($is_image)) {
-		$var = 'edit-image';
-	} elseif (!empty($is_video)) {
-		$var = 'edit-video';
-	} elseif (!empty($is_link)) {
-		$var = 'edit-link';
-	} elseif (!empty($is_quote)) {
-		$var = 'edit-quote';
-	} elseif (!empty($is_audio)) {
-		$var = 'edit-audio';
-	} elseif (!empty($is_post)) {
-		$var = 'edit-post';
-	}
+    
+    if (!empty($is_image)) {
+        $var = 'edit-image';
+    } elseif (!empty($is_video)) {
+        $var = 'edit-video';
+    } elseif (!empty($is_link)) {
+        $var = 'edit-link';
+    } elseif (!empty($is_quote)) {
+        $var = 'edit-quote';
+    } elseif (!empty($is_audio)) {
+        $var = 'edit-audio';
+    } elseif (!empty($is_post)) {
+        $var = 'edit-post';
+    }
 
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
         if (empty($url)) {
             $url = $title;
         }
         edit_image($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $image, $revertPost, $publishDraft);
-		
+        
     } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
         if (empty($url)) {
             $url = $title;
         }
         edit_video($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $video, $revertPost, $publishDraft);
-		
+        
     } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
         if (empty($url)) {
             $url = $title;
         }
         edit_link($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $link, $revertPost, $publishDraft);
-		
+        
     } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
         if (empty($url)) {
             $url = $title;
         }
         edit_quote($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $quote, $revertPost, $publishDraft);
-		
+        
     } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
         if (empty($url)) {
             $url = $title;
         }
         edit_audio($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $audio, $revertPost, $publishDraft);
-		
+        
     }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
         if (empty($url)) {
             $url = $title;
         }
-		edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $revertPost, $publishDraft);
-		
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $revertPost, $publishDraft);
+        
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -1980,28 +1980,28 @@ post('/:year/:month/:name/edit', function () {
             $message['error'] .= '<li>CSRF Token not correct.</li>';
         }
 
-		if (!empty($is_image)) {
-			if (empty($image)) {
-				$message['error'] .= '<li>Image field is required.</li>';
-			}
-		} elseif (!empty($is_video)) {
-			if (empty($video)) {
-				$message['error'] .= '<li>Video field is required.</li>';
-			}
-		} elseif (!empty($is_link)) {
-			if (empty($link)) {
-				$message['error'] .= '<li>Link field is required.</li>';
-			}
-		} elseif (!empty($is_quote)) {
-			if (empty($quote)) {
-				$message['error'] .= '<li>Quote field is required.</li>';
-			}
-		} elseif (!empty($is_audio)) {
-			if (empty($audio)) {
-				$message['error'] .= '<li>Audio field is required.</li>';
-			}
-		}
-		
+        if (!empty($is_image)) {
+            if (empty($image)) {
+                $message['error'] .= '<li>Image field is required.</li>';
+            }
+        } elseif (!empty($is_video)) {
+            if (empty($video)) {
+                $message['error'] .= '<li>Video field is required.</li>';
+            }
+        } elseif (!empty($is_link)) {
+            if (empty($link)) {
+                $message['error'] .= '<li>Link field is required.</li>';
+            }
+        } elseif (!empty($is_quote)) {
+            if (empty($quote)) {
+                $message['error'] .= '<li>Quote field is required.</li>';
+            }
+        } elseif (!empty($is_audio)) {
+            if (empty($audio)) {
+                $message['error'] .= '<li>Audio field is required.</li>';
+            }
+        }
+        
         config('views.root', 'system/admin/views');
 
         render($var, array(
@@ -2039,7 +2039,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
         if (!$post) {
             $post = find_draft($year, $month, $name);
             if (!$post) {
-			    not_found();
+                not_found();
             }
         }
 

@@ -13,31 +13,31 @@
             <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span> -
             <span><a href="<?php echo $p->url ?>" rel="permalink">Permalink</a></span>
         </div>
-		<?php if (!empty($p->image)) { ?>
-			<div class="featured-image">
-				<a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
-			</div>
-		<?php } ?>
-		<?php if (!empty($p->video)) { ?>
-			<div class="featured-video">
-				<iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
-			</div>
-		<?php } ?>
-		<?php if (!empty($p->audio)) { ?>
-			<div class="featured-audio">
-				<iframe width="560" height="315" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
-			</div>
-		<?php } ?>
-		<?php if (!empty($p->quote)) { ?>
-			<div class="featured-quote">
-				<blockquote><?php echo $p->quote ?></blockquote>
-			</div>
-		<?php } ?>
-		<?php if (!empty($p->link)) { ?>
-			<div class="featured-quote">
-				<a href="<?php echo $p->link ?>"><?php echo $p->link ?></a>
-			</div>
-		<?php } ?>
+        <?php if (!empty($p->image)) { ?>
+            <div class="featured-image">
+                <a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
+            </div>
+        <?php } ?>
+        <?php if (!empty($p->video)) { ?>
+            <div class="featured-video">
+                <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+            </div>
+        <?php } ?>
+        <?php if (!empty($p->audio)) { ?>
+            <div class="featured-audio">
+                <iframe width="560" height="315" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
+            </div>
+        <?php } ?>
+        <?php if (!empty($p->quote)) { ?>
+            <div class="featured-quote">
+                <blockquote><?php echo $p->quote ?></blockquote>
+            </div>
+        <?php } ?>
+        <?php if (!empty($p->link)) { ?>
+            <div class="featured-quote">
+                <a href="<?php echo $p->link ?>"><?php echo $p->link ?></a>
+            </div>
+        <?php } ?>
         <div class="post-body" itemprop="articleBody">
             <?php echo $p->body; ?>
         </div>
@@ -47,8 +47,8 @@
         <div class="author-info">
             <h4>By <strong><?php echo $author->name ?></strong></h4>
             <?php echo $author->about ?>
-		</div>
-		        <div class="share">
+        </div>
+                <div class="share">
             <h4>Share this post</h4>
             <a class="twitter" target="_blank"
                href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>">Twitter</a>

@@ -24,7 +24,7 @@
                     <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> Comments</span></a>
                 <?php } ?>
             </div>
-		    <?php if (!empty($p->image)) { ?>
+            <?php if (!empty($p->image)) { ?>
                 <div class="featured-image">
                     <a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
                 </div>

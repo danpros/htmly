@@ -64,7 +64,7 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
         Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
         <span class="help">If the url leave empty we will use the post title.</span><br><br>
         Year, Month, Day<br><input type="date" name="date" class="text" value="<?php echo date('Y-m-d', $postdate); ?>"><br>
-		Hour, Minute, Second<br><input
+        Hour, Minute, Second<br><input
             type="time" name="time" class="text" value="<?php echo $time->format('H:i:s'); ?>"><br><br>
         Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
                 echo $p->description;
@@ -103,19 +103,19 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
     (function () {
         var converter = new Markdown.Converter();
         var editor = new Markdown.Editor(converter);
-		
+
         var $dialog = $('#insertImageDialog').dialog({ 
             autoOpen: false,
             closeOnEscape: false,
             open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
         });
-		
+
         var $url = $('input[type=text]', $dialog);
         var $file = $('input[type=file]', $dialog);
         var base = '<?php echo site_url() ?>';
-		
+
         editor.hooks.set('insertImageDialog', function(callback) {
-		
+
             var dialogInsertClick = function() {                                      
                 callback($url.val().length > 0 ? $url.val(): null);
                 dialogClose();
@@ -145,18 +145,18 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
                     $file.val('');
                 }
             };
-			
+
             $file.ajaxfileupload({
                 'action': '<?php echo site_url() ?>upload.php',
                 'onComplete': uploadComplete,
             });
-			
+            
             $dialog.dialog('open');
 
             return true; // tell the editor that we'll take care of getting the image url
         });
 
         editor.run();
-	
+
     })();
 </script>
