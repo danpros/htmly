@@ -27,7 +27,7 @@ $replaced = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/';
 $dt = str_replace($replaced, '', $oldurl[0]);
 $t = str_replace('-', '', $dt);
 $time = new DateTime($t);
-$timestamp = $time->format("Y-m-d");
+$timestamp = $time->format("Y-m-d H:i:s");
 // The post date
 $postdate = strtotime($timestamp);
 // The post URL
@@ -63,8 +63,9 @@ $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destinat
         } ?>" value="<?php echo $oldtag ?>"/><br><br>
         Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
         <span class="help">If the url leave empty we will use the post title.</span><br><br>
-        Date Time<br><input type="date" name="date" class="text" value="<?php echo $timestamp; ?>"><br><input
-            type="time" name="time" class="text" value="<?php echo $time->format('H:i'); ?>"><br><br>
+        Year, Month, Day<br><input type="date" name="date" class="text" value="<?php echo date('Y-m-d', $postdate); ?>"><br>
+		Hour, Minute, Second<br><input
+            type="time" name="time" class="text" value="<?php echo $time->format('H:i:s'); ?>"><br><br>
         Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
                 echo $p->description;
             } else { echo $olddescription;} ?></textarea>
