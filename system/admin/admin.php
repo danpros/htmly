@@ -90,7 +90,7 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
 {
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
-    $olddate = date('Y-m-d-h-i-s', strtotime($date));
+    $olddate = date('Y-m-d-H-i-s', strtotime($date));
     
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
@@ -198,7 +198,7 @@ function edit_image($title, $tag, $url, $content, $oldfile, $destination = null,
 {
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
-    $olddate = date('Y-m-d-h-i-s', strtotime($date));
+    $olddate = date('Y-m-d-H-i-s', strtotime($date));
     
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
@@ -312,7 +312,7 @@ function edit_video($title, $tag, $url, $content, $oldfile, $destination = null,
 {
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
-    $olddate = date('Y-m-d-h-i-s', strtotime($date));
+    $olddate = date('Y-m-d-H-i-s', strtotime($date));
     
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
@@ -426,7 +426,7 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
 {
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
-    $olddate = date('Y-m-d-h-i-s', strtotime($date));
+    $olddate = date('Y-m-d-H-i-s', strtotime($date));
     
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
@@ -540,7 +540,7 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
 {
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
-    $olddate = date('Y-m-d-h-i-s', strtotime($date));
+    $olddate = date('Y-m-d-H-i-s', strtotime($date));
     
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
@@ -654,7 +654,7 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
 {
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
-    $olddate = date('Y-m-d-h-i-s', strtotime($date));
+    $olddate = date('Y-m-d-H-i-s', strtotime($date));
     
     if ($date !== null) {
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
