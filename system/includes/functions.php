@@ -933,6 +933,9 @@ function get_description($string, $char = null)
 {
     if(empty($char)) {
         $char = config('description.char');
+        if(empty($char)) {
+            $char = 150;
+        }
     }
     $string = remove_accent($string);
     $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
@@ -948,10 +951,15 @@ function get_teaser($text, $char = null)
     
     if(empty($char)) {
         $char = config('teaser.char');
+        if(empty($char)) {
+            $char = 200;
+        }		
     }
 
     if ($teaserType === 'full') {
         echo $text;
+    } elseif (strlen(strip_tags($text)) < $char) {
+        echo preg_replace('/\s\s+/', ' ', strip_tags($text));
     } else {
         $string = preg_replace('/\s\s+/', ' ', strip_tags($text));
         $string = substr($string, 0, $char);
