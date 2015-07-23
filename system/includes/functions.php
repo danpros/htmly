@@ -653,10 +653,17 @@ function get_keyword($keyword, $page, $perpage)
 }
 
 // Get related posts base on post tag.
-function get_related($tag, $custom = null)
+function get_related($tag, $custom = null, $count = null)
 {
-    $perpage = config('related.count');
-    $posts = get_tag(strip_tags($tag), 1, $perpage + 1, true);
+
+    if (empty($count)) {
+        $count = config('related.count');
+        if (empty($count)) {
+            $count = 4;
+        }
+    }
+
+    $posts = get_tag(strip_tags($tag), 1, $count + 1, true);
     $tmp = array();
     $req = urldecode($_SERVER['REQUEST_URI']);
 
@@ -677,7 +684,7 @@ function get_related($tag, $custom = null)
             echo '<ul>';
             foreach ($tmp as $post) {
                 echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-                if ($i++ >= $perpage)
+                if ($i++ >= $count)
                     break;
             }
             echo '</ul>';
@@ -937,15 +944,21 @@ function get_description($string, $char = null)
             $char = 150;
         }
     }
-    $string = remove_accent($string);
-    $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
-    $string = ltrim($string);
-    $string = substr($string, 0, $char);
-    return $string = substr($string, 0, strrpos($string, ' '));
+    if (strlen(strip_tags($string)) < $char) {
+        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = ltrim(rtrim($string));
+        return $string;
+    } else {
+        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = ltrim(rtrim($string));
+        $string = substr($string, 0, $char);
+        $string = substr($string, 0, strrpos($string, ' '));
+        return $string;
+    }
 }
 
 // Get the teaser
-function get_teaser($text, $char = null)
+function get_teaser($string, $char = null)
 {
     $teaserType = config('teaser.type');
     
@@ -953,18 +966,21 @@ function get_teaser($text, $char = null)
         $char = config('teaser.char');
         if(empty($char)) {
             $char = 200;
-        }		
+        }        
     }
 
     if ($teaserType === 'full') {
-        echo $text;
-    } elseif (strlen(strip_tags($text)) < $char) {
-        echo preg_replace('/\s\s+/', ' ', strip_tags($text));
+        echo $string;
+    } elseif (strlen(strip_tags($string)) < $char) {
+        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = ltrim(rtrim($string));
+        return $string;
     } else {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($text));
+        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = ltrim(rtrim($string));
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
-        echo $string;
+        return $string;
     }
 }
 
@@ -2030,4 +2046,25 @@ function get_youtube_id($url)
     preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches);
 
     return $matches[1];
+}
+
+// Shorten the string
+function shorten($string = null, $char = null)
+{
+    if(empty($char) || empty($string)) {
+        return;
+    }
+    
+    if (strlen(strip_tags($string)) < $char) {
+        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = ltrim(rtrim($string));
+        return $string;
+    } else {
+        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = ltrim(rtrim($string));
+        $string = substr($string, 0, $char);
+        $string = substr($string, 0, strrpos($string, ' '));
+        return $string;
+    }
+    
 }
