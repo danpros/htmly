@@ -45,7 +45,7 @@
                 </div>
             <?php } ?>
             <?php if (!empty($p->link)) { ?>
-                <div class="featured-quote">
+                <div class="featured-link">
                     <a href="<?php echo $p->link ?>"><?php echo $p->link ?></a>
                 </div>
             <?php } ?>
