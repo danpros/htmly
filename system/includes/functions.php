@@ -1866,13 +1866,12 @@ function head_contents()
     $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />';
     $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
     $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
-    $corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
     $webmasterTools = '';
     if (!empty($wmt_id)) {
         $webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
     }
 
-    $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $corejs . "\n" . $webmasterTools . "\n";
+    $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools . "\n";
 
     return $output;
 }

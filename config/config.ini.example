@@ -1,6 +1,8 @@
-; The URL of your blog. Include the http or https.
+; The URL of your blog. Include the http or https. 
+; If you are using Facebook or Disqus comments than use absolute URLs
 site.url = ""
 
+; Your timezone
 timezone = "Asia/Jakarta"
 
 ; Blog info
@@ -26,7 +28,7 @@ breadcrumb.home = "Home"
 ; Comment system. Choose "facebook", "disqus", or "disable".
 comment.system = "disable"
 
-;Facebook comments
+; Facebook comments
 fb.appid = ""
 fb.num = "5"
 fb.color = "light"
@@ -51,7 +53,7 @@ google.reCaptcha.public = ""
 google.reCaptcha.private = ""
 
 ; Pagination, RSS, and JSON
-posts.perpage = "5"
+posts.perpage = "10"
 tag.perpage = "10"
 archive.perpage = "10"
 search.perpage = "10"
@@ -59,7 +61,10 @@ profile.perpage = "10"
 json.count = "10"
 
 ; Related posts
-related.count = "4"
+related.count = "3"
+
+; Recent posts
+recent.count = "5"
 
 ; Author info on blog post. Set "true" or "false".
 author.info = "true"
@@ -67,33 +72,33 @@ author.info = "true"
 ; Teaser type: set "trimmed" or "full".
 teaser.type = "trimmed"
 
-; Teaser char count
+; Teaser character count
 teaser.char = "200"
 
-; Description char count
+; Description character count
 description.char = "150"
 
-;RSS feed count
+; RSS feed count
 rss.count = "10"
 
-;RSS feed description length. If left empty we will use full page.
-rss.char = ""
+; RSS feed description length. If left empty we will use full page.
+rss.char = "200"
 
 ; Enable image thumbnail on teaser, the options is "true" and "false". If set to "true", you can specify the default thumbnail also.
-img.thumbnail = "true"
+img.thumbnail = "false"
 default.thumbnail = ""
 
-;Enable or disable jQuery, if Lightbox is "on" then this option ignored.
-jquery = "disable"
+; Enable view Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page.
+views.counter = "true"
 
-; Lightbox inline image handling. This can slowdown your page load, especially when Disqus enabled. "on" or "off".
-lightbox = "off"
+; Also install pre-release
+prerelease = false
+
+; Switch on and off the file cache for development purposes.
+cache.off = false
 
 ; Set the theme here
-views.root = "themes/logs"
-
- ;Enable view Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page.
-views.counter = "true"
+views.root = "themes/blog"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
