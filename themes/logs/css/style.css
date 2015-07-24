@@ -130,6 +130,17 @@ a:hover {
     border-bottom: 1px solid #E4E7EE;
 }
 
+.tab ul {
+	padding:0;
+	margin:0;
+}
+
+.tab  li {
+    display: inline-block;
+	margin:0;
+	padding:0;
+}
+
 .tab a {
     background: #E4E7EE;
     border-radius: 6px 6px 0px 0;
