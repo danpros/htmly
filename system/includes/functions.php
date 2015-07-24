@@ -659,7 +659,7 @@ function get_related($tag, $custom = null, $count = null)
     if (empty($count)) {
         $count = config('related.count');
         if (empty($count)) {
-            $count = 4;
+            $count = 3;
         }
     }
 
@@ -1029,10 +1029,10 @@ function tab($p)
     $role = user('role', $user);
     if (isset($p->author)) {
         if ($user === $p->author || $role === 'admin') {
-            echo '<div class="tab"><a href="' . $p->url . '">View</a><a href="' . $p->url . '/edit?destination=post">Edit</a></div>';
+            echo '<div class="tab" style="margin-bottom:30px;"><ul class="nav nav-tabs"><li role="presentation" class="active"><a href="' . $p->url . '">View</a></li><li><a href="' . $p->url . '/edit?destination=post">Edit</a></li></ul></div>';
         }
     } else {
-        echo '<div class="tab"><a href="' . $p->url . '">View</a><a href="' . $p->url . '/edit?destination=post">Edit</a></div>';
+        echo '<div class="tab" style="margin-bottom:30px;><ul class="nav nav-tabs"><li role="presentation" class="active"><a href="' . $p->url . '">View</a><a href="' . $p->url . '/edit?destination=post">Edit</a></li></ul></div>';
     }
 }
 
@@ -1081,7 +1081,7 @@ function social($imgDir = null)
 function copyright()
 {
     $blogcp = blog_copyright();
-    $credit = 'Proudly powered by <a href="http://www.htmly.com" target="_blank">HTMLy</a>.';
+    $credit = 'Proudly powered by <a href="http://www.htmly.com" target="_blank">HTMLy</a>';
 
     if (!empty($blogcp)) {
         return $copyright = '<p>' . $blogcp . '</p><p>' . $credit . '</p>';
@@ -1856,8 +1856,6 @@ function authorinfo($name = null, $about = null)
 // Output head contents
 function head_contents()
 {
-    $styleImage = config('lightbox');
-    $jq = config('jquery');
     $output = '';
     $wmt_id = config('google.wmt.id');
 
@@ -1868,24 +1866,13 @@ function head_contents()
     $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />';
     $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
     $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
-    $lightboxcss = '<link href="' . site_url() . 'system/plugins/lightbox/css/lightbox.css" rel="stylesheet" />';
-    $jquery = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>';
-    $lightbox = '<script src="' . site_url() . 'system/plugins/lightbox/js/lightbox-2.6.min.js"></script>';
     $corejs = '<script src="' . site_url() . 'system/resources/htmly.js"></script>';
     $webmasterTools = '';
     if (!empty($wmt_id)) {
         $webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
     }
 
-    if ($styleImage == 'on') {
-        $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . $sitemap . "\n" . $feed . "\n" . $lightboxcss . "\n" . $jquery . "\n" . $lightbox . "\n" . $corejs . "\n" . $webmasterTools . "\n";
-    } else {
-        if ($jq == 'enable') {
-            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $jquery . "\n" . $webmasterTools. "\n";
-        } else {
-            $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools. "\n";
-        }
-    }
+    $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $corejs . "\n" . $webmasterTools . "\n";
 
     return $output;
 }
