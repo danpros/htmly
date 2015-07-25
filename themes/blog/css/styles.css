@@ -139,7 +139,7 @@ a.dotted-link:hover {
   color: #49515a;
 }
 pre {
-  margin:10px 0;
+  margin:1em 0;
 }
 
 /*-------------------------
@@ -384,19 +384,19 @@ iframe {
   margin:0;
 }
 .post .item img {
-  margin: 30px 0px;
+  margin: 1em 0px;
 }
 .post .featured-image img {
   margin-top:0;
 }
 .post .item .info, .post .item .desc {
-  margin-bottom: 30px;
+  margin-bottom: 1em;
 }
 .inpost .post .item .desc {
   margin:0;
 }
 .post .featured {
-  margin-bottom: 30px;
+  margin-bottom: 1em;
 }
 .post .featured-image {
   position: relative;
@@ -575,6 +575,10 @@ ul.month {
   }
   .project-image {
     margin-bottom: 15px;
+  }
+  .main-nav .navbar-toggle, #navbar {
+    float:none!important;
+	text-align:Center;
   }
 }
 /* Small devices (tablets, 768px and up) */
