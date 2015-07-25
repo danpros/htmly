@@ -1416,12 +1416,12 @@ function generate_rss($posts)
         if (!empty($rssLength)) {
             if (strlen(strip_tags($p->body)) < config('rss.char')) {
                 $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
-                $body = $string . '...' . ' <a class="readmore" href="' . $p->url . '#more">more</a>';
+                $body = $string . '...' . ' <a class="readmore" href="' . $p->url . '">more</a>';
             } else {
                 $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
                 $string = substr($string, 0, config('rss.char'));
                 $string = substr($string, 0, strrpos($string, ' '));
-                $body = $string . '...' . ' <a class="readmore" href="' . $p->url . '#more">more</a>';
+                $body = $string . '...' . ' <a class="readmore" href="' . $p->url . '">more</a>';
             }
         } else {
             $body = $p->body;
