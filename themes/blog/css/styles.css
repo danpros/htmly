@@ -154,18 +154,15 @@ table {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-
 th, td {
   padding: 5px 10px;
   border: none;
 }
-
 th {
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
   font-size: 16px;
 }
-
 td {
   border: 1px solid #ddd;
   border-top: none;
@@ -578,7 +575,7 @@ ul.month {
   }
   .main-nav .navbar-toggle, #navbar {
     float:none!important;
-	text-align:Center;
+    text-align:Center;
   }
 }
 /* Small devices (tablets, 768px and up) */
