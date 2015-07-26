@@ -1,3 +1,6 @@
+<?php if (!empty($breadcrumb)): ?>
+    <div class="breadcrumb"><?php echo $breadcrumb ?></div>
+<?php endif; ?>
 <section class="post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="section-inner">
         <div class="content">

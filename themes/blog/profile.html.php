@@ -1,3 +1,6 @@
+<?php if (!empty($breadcrumb)): ?>
+    <div class="breadcrumb"><?php echo $breadcrumb ?></div>
+<?php endif; ?>
 <section class="post section">
     <div class="section-inner">
         <div class="content"> 
