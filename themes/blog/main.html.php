@@ -65,6 +65,7 @@
                         <a href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a> 
                         <a class="last" href="https://plus.google.com/share?url=<?php echo $p->url ?>"><i class="fa fa-google-plus"></i></a> 
                     </span>
+                <div style="clear:both;"></div>
                 </div>
             </div><!--//item-->                       
         </div><!--//content-->  

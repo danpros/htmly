@@ -102,13 +102,13 @@
                     <div class="section-inner">
                         <h2 class="heading">Latest Blog Posts</h2>
                         <?php $lists = recent_posts(true);?>
-                        <?php $i = 1; $lt = 60;?>
+                        <?php $char = 60;?>
                         <?php foreach ($lists as $l):?>
-                        <?php if (strlen(strip_tags($l->title)) > $lt) { $lbp = shorten($l->title, $lt) . '...';} else {$lbp = $l->title;}?>
+                        <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
                         <div class="item">
-                            <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $lbp;?></a></h3>
+                            <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
                             <div class="content">
-                                <p><?php echo get_teaser($l->body, 75); ?>...</p>
+                                <p><?php echo shorten($l->body, 75); ?>...</p>
                                 <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> Read more</a>
                             </div><!--//content-->
                         </div>

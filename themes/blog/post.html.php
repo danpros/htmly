@@ -72,16 +72,16 @@
                     <?php echo disqus_count() ?>
                 <?php endif; ?>
                 <?php $tags = get_related($p->tag, true, config('related.count'));?>
-                <?php  $mt = 30; $total = count($tags); $i = 1; if ($total >= 1) { ?>
+                <?php $char = 30; $total = count($tags); $i = 1; if ($total >= 1) { ?>
                     <div class="related related-posts" style="margin-top:30px;position:relative;">
                         <hr>
                         <h2 class="heading">Related Posts</h2>
                         <?php foreach ($tags as $t):?>
                             <div class="item col-md-4">
-                                <?php if (strlen(strip_tags($t->title)) > $mt) { $rt = shorten($t->title, $mt) . '...';} else {$rt = $t->title;}?>
-                                <h3 class="title"><a href="<?php echo $t->url;?>"><?php echo $rt;?></a></h3>
+                                <?php if (strlen(strip_tags($t->title)) > $char) { $relatedTitle = shorten($t->title, $char) . '...';} else {$relatedTitle = $t->title;}?>
+                                <h3 class="title"><a href="<?php echo $t->url;?>"><?php echo $relatedTitle;?></a></h3>
                                 <div class="content">
-                                    <p><?php echo get_teaser($t->body, 60); ?>... <a class="more-link" href="<?php echo $t->url;?>">more</a></p>
+                                    <p><?php echo shorten($t->body, 60); ?>... <a class="more-link" href="<?php echo $t->url;?>">more</a></p>
                                 </div><!--//content-->
                             </div>
                             <?php if ($i++ >= config('related.count')) break; ?>
