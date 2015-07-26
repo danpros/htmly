@@ -30,7 +30,7 @@
         header("Location: $url");
     }
 ?>
-<body class="<?php echo $bodyclass; ?>">
+<body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
     <meta content="<?php echo blog_description() ?>" itemprop="description"/>
