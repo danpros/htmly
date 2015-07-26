@@ -945,16 +945,19 @@ function get_description($string, $char = null)
         }
     }
     if (strlen(strip_tags($string)) < $char) {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = remove_accent($string);
+        $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', '', strip_tags($string));
         $string = ltrim(rtrim($string));
         return $string;
     } else {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+        $string = remove_accent($string);
+        $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', '', strip_tags($string));
         $string = ltrim(rtrim($string));
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
         return $string;
     }
+
 }
 
 // Get the teaser
