@@ -34,7 +34,6 @@ Features
 - SEO Friendly URLs
 - Teaser thumbnail for images and Youtube videos
 - Responsive Design
-- Lightbox
 - User Roles
 - Online Backup
 - File Caching
