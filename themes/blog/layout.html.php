@@ -139,7 +139,7 @@
                     <div class="section-inner">
                         <h2 class="heading">Tags</h2>
                         <div class="tag-cloud">
-                            <?php $tags = tag_cloud(true);?>
+                            <?php $tags = tag_cloud(true); if(empty($tags)) return;?>
                             <?php foreach ($tags as $tag => $count):?>
                                 <a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo $tag;?></a> 
                             <?php endforeach;?>
