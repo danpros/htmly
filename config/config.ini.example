@@ -65,6 +65,9 @@ related.count = "3"
 ; Recent posts
 recent.count = "5"
 
+; Popular posts
+popular.count = "5"
+
 ; Author info on blog post. Set "true" or "false".
 author.info = "true"
 

@@ -5,59 +5,59 @@ Options -Indexes
 ErrorDocument 404 /index.php
 
 # Set the default handler.
-DirectoryIndex index.php index.html index.htm
+DirectoryIndex index.php
 
 # Requires mod_expires to be enabled.
 <IfModule mod_expires.c>
 
   # to activate mode_expires
-  ExpiresActive on
+  # ExpiresActive on
   
-  ExpiresDefault                                      "access plus 1 month"
+  # ExpiresDefault                                      "access plus 1 month"
 
   # For CSS
-  ExpiresByType text/css                              "access plus 1 month"
+  # ExpiresByType text/css                              "access plus 1 month"
 
   # For Data interchange
-  ExpiresByType application/json                      "access plus 0 seconds"
-  ExpiresByType application/xml                       "access plus 0 seconds"
-  ExpiresByType text/xml                              "access plus 0 seconds"
+  # ExpiresByType application/json                      "access plus 0 seconds"
+  # ExpiresByType application/xml                       "access plus 0 seconds"
+  # ExpiresByType text/xml                              "access plus 0 seconds"
 
   # For Favicon
-  ExpiresByType image/x-icon                          "access plus 1 year"
+  # ExpiresByType image/x-icon                          "access plus 1 year"
 
   # For HTML components (HTCs)
-  ExpiresByType text/x-component                      "access plus 1 month"
+  # ExpiresByType text/x-component                      "access plus 1 month"
 
   # For HTML
-  ExpiresByType text/html                             "access plus 1 month"
+  # ExpiresByType text/html                             "access plus 1 month"
 
   # For JavaScript
-  ExpiresByType application/javascript                "access plus 1 month"
+  # ExpiresByType application/javascript                "access plus 1 month"
 
   # For Manifest files
-  ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
-  ExpiresByType text/cache-manifest                   "access plus 0 seconds"
+  # ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
+  # ExpiresByType text/cache-manifest                   "access plus 0 seconds"
 
   # For Media
-  ExpiresByType audio/ogg                             "access plus 1 month"
-  ExpiresByType image/gif                             "access plus 1 month"
-  ExpiresByType image/jpeg                            "access plus 1 month"
-  ExpiresByType image/png                             "access plus 1 month"
-  ExpiresByType video/mp4                             "access plus 1 month"
-  ExpiresByType video/ogg                             "access plus 1 month"
-  ExpiresByType video/webm                            "access plus 1 month"
+  # ExpiresByType audio/ogg                             "access plus 1 month"
+  # ExpiresByType image/gif                             "access plus 1 month"
+  # ExpiresByType image/jpeg                            "access plus 1 month"
+  # ExpiresByType image/png                             "access plus 1 month"
+  # ExpiresByType video/mp4                             "access plus 1 month"
+  # ExpiresByType video/ogg                             "access plus 1 month"
+  # ExpiresByType video/webm                            "access plus 1 month"
 
   # For Web feeds
-  ExpiresByType application/atom+xml                  "access plus 1 day"
-  ExpiresByType application/rss+xml                   "access plus 1 day"
+  # ExpiresByType application/atom+xml                  "access plus 1 day"
+  # ExpiresByType application/rss+xml                   "access plus 1 day"
 
   # For Web fonts
-  ExpiresByType application/font-woff                 "access plus 1 month"
-  ExpiresByType application/vnd.ms-fontobject         "access plus 1 month"
-  ExpiresByType application/x-font-ttf                "access plus 1 month"
-  ExpiresByType font/opentype                         "access plus 1 month"
-  ExpiresByType image/svg+xml                         "access plus 1 month"
+  # ExpiresByType application/font-woff                 "access plus 1 month"
+  # ExpiresByType application/vnd.ms-fontobject         "access plus 1 month"
+  # ExpiresByType application/x-font-ttf                "access plus 1 month"
+  # ExpiresByType font/opentype                         "access plus 1 month"
+  # ExpiresByType image/svg+xml                         "access plus 1 month"
 
 </IfModule>
 
