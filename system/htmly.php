@@ -352,8 +352,8 @@ post('/add/image', function () {
             $message['error'] .= '<li>CSRF Token not correct.</li>';
         }
         config('views.root', 'system/admin/views');
-        render('add-post', array(
-            'title' => 'Add post- ' . blog_title(),
+        render('add-image', array(
+            'title' => 'Add image - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -363,7 +363,7 @@ post('/add/image', function () {
             'postUrl' => $url,
             'postContent' => $content,
             'bodyclass' => 'addpost',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add image'
         ));
     }
 });
@@ -427,7 +427,7 @@ post('/add/video', function () {
         }
         config('views.root', 'system/admin/views');
         render('add-video', array(
-            'title' => 'Add post- ' . blog_title(),
+            'title' => 'Add video - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -780,6 +780,72 @@ get('/admin/posts', function () {
         } else {
             render('denied', array(
                 'title' => 'All blog posts - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/popular 
+get('/admin/popular', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+
+            config('views.root', 'system/admin/views');
+            $page = from($_GET, 'page');
+            $page = $page ? (int)$page : 1;
+            $perpage = 20;
+
+            $posts = popular_posts(true,$perpage);
+
+            $total = '';
+
+            if (empty($posts) || $page < 1) {
+
+                // a non-existing page
+                render('no-posts', array(
+                    'title' => 'Popular posts - ' . blog_title(),
+                    'description' => blog_description(),
+                    'canonical' => site_url(),
+                    'bodyclass' => 'noposts',
+                ));
+
+                die;
+            }
+
+            $tl = blog_tagline();
+
+            if ($tl) {
+                $tagline = ' - ' . $tl;
+            } else {
+                $tagline = '';
+            }
+
+            render('popular-posts', array(
+                'title' => 'Popular posts - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'heading' => 'Popular posts',
+                'page' => $page,
+                'posts' => $posts,
+                'bodyclass' => 'popular-posts',
+                'breadcrumb' => '',
+                'pagination' => has_pagination($total, $perpage, $page)
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Popular posts - ' . blog_title(),
                 'description' => blog_description(),
                 'canonical' => site_url(),
                 'bodyclass' => 'denied',

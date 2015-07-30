@@ -608,15 +608,15 @@ ul li, ol li {
     margin: 0;
 }
 
-.about, .social, .archive, .comments, .tagcloud, .recent {
+.about, .social, .archive, .comments, .tagcloud, .recent, .popular {
     margin-bottom: 2em;
 }
 
-#sidebar .recent ul {
+#sidebar .recent ul, #sidebar .popular ul {
     margin: 0.25em 0 0.25em 1.3em;
 }
 
-#sidebar .recent li {
+#sidebar .recent li, #sidebar .popular li {
     list-style-type: circle;
 }
 

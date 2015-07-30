@@ -456,6 +456,24 @@ iframe {
   margin-bottom: 0;
 }
 
+/* popular-posts Section */
+.popular-posts .item {
+  margin-bottom: 20px;
+}
+.popular-posts .item .title {
+  font-size: 16px;
+  line-height: 1.3;
+}
+.popular-posts .item .title a {
+  color: #778492;
+}
+.popular-posts .item .title a:hover {
+  color: #5f6b77;
+}
+.popular-posts .item:last-child {
+  margin-bottom: 0;
+}
+
 /* archive Section */
 ul.archivegroup {
   margin: 0;

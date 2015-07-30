@@ -138,12 +138,6 @@ function sortdate($a, $b)
     return $a->date == $b->date ? 0 : ($a->date < $b->date) ? 1 : -1;
 }
 
-// usort function. Sort by views.
-function sortviews($a, $b)
-{
-    return $a[$page] == $b[$page] ? 0 : ($a[$page] < $b[$page]) ? 1 : -1;
-}
-
 // Rebuilt cache index
 function rebuilt_cache($type)
 {
@@ -776,16 +770,78 @@ function recent_posts($custom = null, $count = null)
         return $posts;        
     } else {
     
-        $str = '<ul>';
+        echo '<ul>';
         foreach ($posts as $post) {
-            $str .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+            echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
         }
         if (empty($posts)) {
-            $str .= '<li>No recent posts found</li>';
+            echo '<li>No recent posts found</li>';
         }
-        $str .= '</ul>';
-        return $str;
+        echo '</ul>';
+    }
+}
+
+// Return popular posts lists
+function popular_posts($custom = null, $count = null) 
+{
+
+    static $_views = array();
+    $tmp = array();
+
+    if (empty($count)) {
+        $count = config('popular.count');
+        if (empty($count)) {
+            $count = 5;
+        }
+    }
     
+    if (config('views.counter') == 'true') {
+        if (empty($_views)) {
+            $filename = 'content/views.json';
+            if (file_exists($filename)) {
+                $_views = json_decode(file_get_contents($filename), true);
+                if(is_array($_views)) {
+                    arsort($_views);
+                    foreach ($_views as $key => $val) {
+                        if (file_exists($key)) {
+                            if (strpos($key, 'blog') !== false) {
+                                $tmp[] = pathinfo($key);
+                            }
+                        }
+                    }
+                    $posts = get_posts($tmp, 1, $count);
+                    if (empty($custom)) {
+                        echo '<ul>';
+                        foreach ($posts as $post) {
+                            echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+                        }
+                        echo '</ul>';
+                    }
+                    else {
+                        return $posts;
+                    }
+                } else {
+                    if(empty($custom)) {
+                        echo '<ul><li>No popular posts found</li></ul>';
+                    } else {
+                        echo '<ul><li>No popular posts found</li></ul>';
+                        return $tmp;
+                    }
+                } 
+            } else {
+                if (empty($custom)) {
+                    echo '<ul><li>No popular posts found</li></ul>';
+                } else {
+                    return $tmp;
+                }
+            }
+        }
+    } else {
+        if (empty($custom)) {
+            echo '<ul><li>No popular posts found</li></ul>';
+        } else {
+            return $tmp;
+        }
     }
 }
 
@@ -895,6 +951,9 @@ function tag_cloud($custom = null)
         } else {
             return $tag_collection;
         }
+    } else {
+        if(empty($custom)) return;
+        return $tags;
     }
 }
 
@@ -945,13 +1004,13 @@ function get_description($string, $char = null)
         }
     }
     if (strlen(strip_tags($string)) < $char) {
-        $string = remove_accent($string);
         $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
+        $string = preg_replace('/\s\s+/', ' ', $string);
         $string = ltrim(rtrim($string));
         return $string;
     } else {
-        $string = remove_accent($string);
         $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
+        $string = preg_replace('/\s\s+/', ' ', $string);
         $string = ltrim(rtrim($string));
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
@@ -1893,6 +1952,7 @@ EOF;
     echo '<li><a href="' . $base . 'admin">Admin</a></li>';
     if ($role === 'admin') {
         echo '<li><a href="' . $base . 'admin/posts">Posts</a></li>';
+        echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
     }
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
     echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';
@@ -1950,7 +2010,7 @@ function is_csrf_proper($csrf_token)
 // Add page views count
 function add_view($page)
 {
-    $filename = "cache/count.json";
+    $filename = "content/views.json";
     $views = array();
     if (file_exists($filename)) {
         $views = json_decode(file_get_contents($filename), true);
@@ -1969,7 +2029,7 @@ function get_views($page)
     static $_views = array();
 
     if (empty($_views)) {
-        $filename = "cache/count.json";
+        $filename = "content/views.json";
         if (file_exists($filename)) {
             $_views = json_decode(file_get_contents($filename), true);
         }

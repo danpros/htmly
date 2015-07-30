@@ -57,6 +57,12 @@
                     <h3>Recent Posts</h3>
                     <?php echo recent_posts() ?>
                 </div>
+                <?php if(config('views.counter') === 'true') :?>
+                <div class="popular">
+                    <h3>Popular Posts</h3>
+                    <?php echo popular_posts() ?>
+                </div>
+                <?php endif;?>
                 <div class="archive">
                     <h3>Archive</h3>
                     <?php echo archive_list() ?>

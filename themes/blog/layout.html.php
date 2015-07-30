@@ -115,6 +115,25 @@
                         <?php endforeach;?>
                     </div><!--//section-inner-->
                 </aside><!--//section-->
+                <?php if (config('views.counter') === 'true') :?>
+                <aside class="popular-posts aside section">
+                    <div class="section-inner">
+                        <h2 class="heading">Popular Blog Posts</h2>
+                        <?php $lists = popular_posts(true);?>
+                        <?php $char = 60;?>
+                        <?php foreach ($lists as $l):?>
+                        <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                        <div class="item">
+                            <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                            <div class="content">
+                                <p><?php echo shorten($l->body, 75); ?>...</p>
+                                <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> Read more</a>
+                            </div><!--//content-->
+                        </div>
+                        <?php endforeach;?>
+                    </div><!--//section-inner-->
+                </aside><!--//section-->
+                <?php endif;?>
                 <?php if (disqus()): ?>
                 <aside class="comments aside section">
                     <div class="section-inner">
@@ -139,11 +158,10 @@
                     <div class="section-inner">
                         <h2 class="heading">Tags</h2>
                         <div class="tag-cloud">
-                            <?php $tags = tag_cloud(true); if(is_array($tags)) { ?>
-                                <?php foreach ($tags as $tag => $count):?>
-                                    <a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo $tag;?></a> 
-                                <?php endforeach;?>
-                            <?php } ?>
+                            <?php $tags = tag_cloud(true);?>
+                            <?php foreach ($tags as $tag => $count):?>
+                                <a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo $tag;?></a> 
+                            <?php endforeach;?>
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
