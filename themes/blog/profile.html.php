@@ -1,7 +1,7 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<section class="post section">
+<section class="inprofile post section">
     <div class="section-inner">
         <div class="content"> 
             <div class="item" itemtype="http://schema.org/Person" itemscope="itemscope" itemprop="Person">

@@ -824,7 +824,6 @@ function popular_posts($custom = null, $count = null)
                     if(empty($custom)) {
                         echo '<ul><li>No popular posts found</li></ul>';
                     } else {
-                        echo '<ul><li>No popular posts found</li></ul>';
                         return $tmp;
                     }
                 } 
@@ -1952,7 +1951,9 @@ EOF;
     echo '<li><a href="' . $base . 'admin">Admin</a></li>';
     if ($role === 'admin') {
         echo '<li><a href="' . $base . 'admin/posts">Posts</a></li>';
-        echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
+        if (config('views.counter') == 'true') {
+		    echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
+        }
     }
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
     echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';

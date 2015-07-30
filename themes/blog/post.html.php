@@ -1,7 +1,7 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<section class="post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+<section class="inpost post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="section-inner">
         <div class="content">    
             <?php if (login()) { echo tab($p); } ?>   
@@ -94,7 +94,7 @@
     </div><!--//section-inner-->                 
 </section><!--//section-->
 <?php if (facebook() || disqus()): ?>
-    <section class="post section">
+    <section class="comment-wrapper post section">
         <div class="section-inner">
             <div class="content">
                <div id="comments">
@@ -109,4 +109,4 @@
             </div><!--//content-->  
         </div><!--//section-inner-->                 
     </section><!--//section-->
-<?php endif; ?>        
+<?php endif; ?>

@@ -100,40 +100,50 @@
                 </aside><!--//section-->
                 <aside class="recent-posts aside section">
                     <div class="section-inner">
-                        <h2 class="heading">Latest Blog Posts</h2>
-                        <?php $lists = recent_posts(true);?>
-                        <?php $char = 60;?>
-                        <?php foreach ($lists as $l):?>
-                        <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
-                        <div class="item">
-                            <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
-                            <div class="content">
-                                <p><?php echo shorten($l->body, 75); ?>...</p>
-                                <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> Read more</a>
-                            </div><!--//content-->
+                        <!-- Tab nav -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#recent-posts" aria-controls="recent-posts" role="tab" data-toggle="tab">Recent Posts</a></li>
+                            <?php if (config('views.counter') === 'true') :?>
+                            <li role="presentation"><a href="#popular-posts" aria-controls="popular-posts" role="tab" data-toggle="tab">Popular Posts</a></li>
+                            <?php endif;?>
+                        </ul>
+                        <!-- Tab content -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="recent-posts">
+                                <h2 class="hide">Recent Posts</h2>
+                                <?php $lists = recent_posts(true);?>
+                                <?php $char = 60;?>
+                                <?php foreach ($lists as $l):?>
+                                    <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                                    <div class="item">
+                                        <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                                        <div class="content">
+                                        <p><?php echo shorten($l->body, 75); ?>...</p>
+                                        <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> Read more</a>
+                                        </div><!--//content-->
+                                    </div>
+                                <?php endforeach;?>
+                            </div>
+                            <?php if (config('views.counter') === 'true') :?>
+                            <div role="tabpanel" class="tab-pane" id="popular-posts">
+                                <h2 class="hide">Popular Posts</h2>
+                                <?php $lists = popular_posts(true);?>
+                                <?php $char = 60;?>
+                                <?php foreach ($lists as $l):?>
+                                    <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                                    <div class="item">
+                                        <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                                        <div class="content">
+                                        <p><?php echo shorten($l->body, 75); ?>...</p>
+                                        <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> Read more</a>
+                                        </div><!--//content-->
+                                    </div>
+                                <?php endforeach;?>
+                            </div>
+                            <?php endif;?>
                         </div>
-                        <?php endforeach;?>
                     </div><!--//section-inner-->
                 </aside><!--//section-->
-                <?php if (config('views.counter') === 'true') :?>
-                <aside class="popular-posts aside section">
-                    <div class="section-inner">
-                        <h2 class="heading">Popular Blog Posts</h2>
-                        <?php $lists = popular_posts(true);?>
-                        <?php $char = 60;?>
-                        <?php foreach ($lists as $l):?>
-                        <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
-                        <div class="item">
-                            <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
-                            <div class="content">
-                                <p><?php echo shorten($l->body, 75); ?>...</p>
-                                <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> Read more</a>
-                            </div><!--//content-->
-                        </div>
-                        <?php endforeach;?>
-                    </div><!--//section-inner-->
-                </aside><!--//section-->
-                <?php endif;?>
                 <?php if (disqus()): ?>
                 <aside class="comments aside section">
                     <div class="section-inner">
@@ -153,7 +163,6 @@
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
-                
                 <aside class="tags aside section">
                     <div class="section-inner">
                         <h2 class="heading">Tags</h2>
