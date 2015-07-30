@@ -29,7 +29,8 @@ Contributor: Tea23
 Github: https://github.com/Tea23
 
 /* THANKS */
-Name: Martin Angelov
+Name: Martin Angelov (http://tutorialzine.com)
+Name: Xiaoying Riley (http://themes.3rdwavemedia.com)
 
 /* SITE */
 Software: HTMLy
