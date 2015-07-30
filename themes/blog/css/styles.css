@@ -580,12 +580,19 @@ ul.month {
     margin-top: 30px;
     float: none !important;
   }
+  .sections-wrapper {
+    padding-bottom: 40px;
+    padding-top: 40px;
+  }
   .project-image {
     margin-bottom: 15px;
   }
   .main-nav .navbar-toggle, #navbar {
     float:none!important;
     text-align: center;
+  }
+  .comment-wrapper.section {
+    margin-bottom:30px;
   }
   .pager {
     margin-bottom: 30px;
