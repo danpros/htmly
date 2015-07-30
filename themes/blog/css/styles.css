@@ -429,6 +429,7 @@ iframe {
 }
 .pager {
   margin-top:30px;
+  margin-bottom: 0px;
 }
 
 /* share section */
@@ -584,7 +585,10 @@ ul.month {
   }
   .main-nav .navbar-toggle, #navbar {
     float:none!important;
-    text-align:Center;
+    text-align: center;
+  }
+  .pager {
+    margin-bottom: 30px;
   }
 }
 /* Small devices (tablets, 768px and up) */
