@@ -1477,12 +1477,12 @@ function generate_rss($posts)
         if (!empty($rssLength)) {
             if (strlen(strip_tags($p->body)) < config('rss.char')) {
                 $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
-                $body = $string . '...' . ' <a class="readmore" href="' . $p->url . '">more</a>';
+                $body = $string . '...';
             } else {
                 $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
                 $string = substr($string, 0, config('rss.char'));
                 $string = substr($string, 0, strrpos($string, ' '));
-                $body = $string . '...' . ' <a class="readmore" href="' . $p->url . '">more</a>';
+                $body = $string . '...';
             }
         } else {
             $body = $p->body;
@@ -1795,7 +1795,7 @@ function Zip($source, $destination, $include_dir = false)
 function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
-    if (strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || $req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
+    if (strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || strpos($req, '/blog') !== false || $req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
         return true;
     } else {
         return false;
