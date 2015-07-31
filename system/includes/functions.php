@@ -1812,6 +1812,16 @@ function is_front($value = null)
     }
 }
 
+// TRUE if the current page is the blog page.
+function is_blog($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // TRUE if the current page is tag index.
 function is_tag($value = null)
 {

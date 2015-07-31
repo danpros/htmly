@@ -320,16 +320,13 @@ iframe {
 /* ======= Sections======= */
 .sections-wrapper {
   padding-top: 60px;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
 }
 .section {
   margin-bottom: 30px;
 }
-.inpost.section, .inpage.section, .inprofile.section, .comment-wrapper.section, .tags.section, .section.last {
-  margin-bottom: 0px;
-}
 .comment-wrapper.section {
-  margin-top:30px;
+  margin-bottom: 30px;
 }
 .section .section-inner {
   background: #fff;
@@ -428,8 +425,11 @@ iframe {
   margin-bottom: 20px;
 }
 .pager {
-  margin-top:30px;
-  margin-bottom: 0px;
+  margin-top:0px;
+  margin-bottom: 30px;
+}
+.inprofile .pager {
+  margin-bottom:0px;
 }
 
 /* share section */
@@ -581,8 +581,8 @@ ul.month {
     float: none !important;
   }
   .sections-wrapper {
-    padding-bottom: 40px;
-    padding-top: 40px;
+    padding-top: 30px;
+    padding-bottom: 0px;
   }
   .project-image {
     margin-bottom: 15px;
@@ -590,12 +590,6 @@ ul.month {
   .main-nav .navbar-toggle, #navbar {
     float:none!important;
     text-align: center;
-  }
-  .comment-wrapper.section {
-    margin-bottom:30px;
-  }
-  .pager {
-    margin-bottom: 30px;
   }
 }
 /* Small devices (tablets, 768px and up) */

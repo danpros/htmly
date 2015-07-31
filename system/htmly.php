@@ -1417,6 +1417,55 @@ get('/:static', function ($static) {
             header("location: $login");
         }
         die;
+    } elseif ($static === 'blog') {
+    
+        if(config('blog.enable') !== 'true') return not_found();
+        
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }
+
+        $page = from($_GET, 'page');
+        $page = $page ? (int)$page : 1;
+        $perpage = config('posts.perpage');
+
+        $posts = get_posts(null, $page, $perpage);
+
+        $total = '';
+
+        $tl = blog_tagline();
+
+        if ($tl) {
+            $tagline = ' - ' . $tl;
+        } else {
+            $tagline = '';
+        }
+
+        if (empty($posts) || $page < 1) {
+
+            // a non-existing page
+            render('no-posts', array(
+                'title' => 'Blog - ' . blog_title(),
+                'description' => blog_title() . ' Blog Homepage',
+                'canonical' => site_url(),
+                'bodyclass' => 'noposts',
+                'is_front' => is_front(true),
+            ));
+
+            die;
+        }
+
+        render('main', array(
+            'title' => 'Blog - ' . blog_title(),
+            'description' => blog_title() . ' Blog Homepage',
+            'canonical' => site_url() . 'blog',
+            'page' => $page,
+            'posts' => $posts,
+            'bodyclass' => 'inblog',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Blog',
+            'pagination' => has_pagination($total, $perpage, $page),
+            'is_blog' => is_blog(true),
+        ));
     } else {
 
         if (config("views.counter") != "true") {
@@ -1873,6 +1922,12 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     else {
         $var = 'blogPost';
     }
+    
+    if (config('blog.enable') === 'true') {
+        $blog = ' <span typeof="v:Breadcrumb"><a href="' . site_url() . 'blog">Blog</a></span> &#187; ';
+    } else {
+        $blog = '';
+    }
 
     render('post', array(
         'title' => $current->title . ' - ' . blog_title(),
@@ -1881,7 +1936,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'p' => $current,
         'author' => $author,
         'bodyclass' => 'inpost',
-        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title,
+        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . $current->tagb . ' &#187; ' . $current->title,
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,
