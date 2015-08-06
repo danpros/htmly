@@ -8,13 +8,16 @@ if (isset($p->file)) {
 $content = file_get_contents($url);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
 $olddescription = get_content_tag('d', $content);
+$oldtag = get_content_tag('tag', $content);
 $oldcontent = remove_html_comments($content);
 
 $dir = substr($url, 0, strrpos($url, '/'));
 $isdraft = explode('/', $dir);
 $oldurl = explode('_', $url);
 
-$oldtag = $oldurl[1];
+if (empty($oldtag)) {
+    $oldtag = $oldurl[1];
+}
 
 $oldmd = str_replace('.md', '', $oldurl[2]);
 
