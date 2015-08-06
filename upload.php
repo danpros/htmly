@@ -6,6 +6,13 @@ require 'system/includes/session.php';
 // Load the configuration file
 config('source', 'config/config.ini');
 
+// Set the timezone
+if (config('timezone')) {
+    date_default_timezone_set(config('timezone'));
+} else {
+    date_default_timezone_set('Asia/Jakarta');
+}
+
 $whitelist = array('jpg', 'jpeg', 'png', 'gif');
 $name      = null;
 $dir       = 'content/images/';

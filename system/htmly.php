@@ -1228,13 +1228,13 @@ get('/tag/:tag', function ($tag) {
         not_found();
     }
     render('main', array(
-        'title' => 'Posts tagged: ' . $tag . ' - ' . blog_title(),
-        'description' => 'All posts tagged: ' . $tag . ' on ' . blog_title() . '.',
+        'title' => 'Posts tagged: ' . tag_i18n($tag) . ' - ' . blog_title(),
+        'description' => 'All posts tagged: ' . tag_i18n($tag) . ' on ' . blog_title() . '.',
         'canonical' => site_url() . 'tag/' . $tag,
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'intag',
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . $tag,
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
         'is_tag' => is_tag(true),
     ));
@@ -1311,13 +1311,13 @@ get('/search/:keyword', function ($keyword) {
     }
 
     render('main', array(
-        'title' => 'Search results for: ' . $keyword . ' - ' . blog_title(),
-        'description' => 'Search results for: ' . $keyword . ' on ' . blog_title() . '.',
+        'title' => 'Search results for: ' . tag_i18n($keyword) . ' - ' . blog_title(),
+        'description' => 'Search results for: ' . tag_i18n($keyword) . ' on ' . blog_title() . '.',
         'canonical' => site_url() . 'search/' . $keyword,
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'insearch',
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . $keyword,
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . tag_i18n($keyword),
         'pagination' => has_pagination($total, $perpage, $page),
         'is_search' => is_search(true),
     ));
@@ -1781,10 +1781,10 @@ post('/:static/:sub/edit', function ($static, $sub) {
     }
     if ($proper && !empty($title) && !empty($content)) {
         if (!empty($url)) {
-            edit_page($title, $url, $content, $oldfile, $destination, $description);
+            edit_page($title, $url, $content, $oldfile, $destination, $description, $static);
         } else {
             $url = $title;
-            edit_page($title, $url, $content, $oldfile, $destination, $description);
+            edit_page($title, $url, $content, $oldfile, $destination, $description, $static);
         }
     } else {
         $message['error'] = '';

@@ -26,7 +26,8 @@
 </head> 
 <?php     
     if (isset($_GET['search'])) {
-        $url = site_url() . 'search/' . $_GET['search'];
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
 ?>
@@ -169,7 +170,7 @@
                         <div class="tag-cloud">
                             <?php $tags = tag_cloud(true);?>
                             <?php foreach ($tags as $tag => $count):?>
-                                <a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo $tag;?></a> 
+                                <a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?></a> 
                             <?php endforeach;?>
                         </div><!--//content-->
                     </div><!--//section-inner-->

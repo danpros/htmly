@@ -236,24 +236,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The post URL
         $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
 
-        $tag = array();
-        $url = array();
-        $bc = array();
-
-        $t = explode(',', rtrim($arr[1], ','));
-        foreach ($t as $tt) {
-            $tag[] = array($tt, site_url() . 'tag/' . $tt);
-        }
-
-        foreach ($tag as $a) {
-            $url[] = '<span><a href="' . $a[1] . '">' . $a[0] . '</a></span>';
-            $bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $a[1] . '">' . $a[0] . '</a></span>';
-        }
-
-        $post->tag = implode(', ', $url);
-
-        $post->tagb = implode(' » ', $bc);
-
         $post->file = $filepath;
 
         $content = file_get_contents($filepath);
@@ -265,6 +247,32 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $post->link  = get_content_tag('link', $content);
         $post->quote  = get_content_tag('quote', $content);
         $post->audio  = get_content_tag('audio', $content);
+        
+        $tag = array();
+        $url = array();
+        $bc = array();
+        
+        $tLang = get_content_tag('tag', $content);
+        $tl = explode(',', rtrim($tLang, ','));
+        $t = explode(',', rtrim($arr[1], ','));
+        $tCom = array_combine($t, $tl);
+        
+        foreach ($tCom as $key => $val) {
+            if(!empty($val)) {
+                $tag[] = array($val, site_url() . 'tag/' . $key);
+            } else {
+                $tag[] = array($key, site_url() . 'tag/' . $key);
+            }
+        }
+
+        foreach ($tag as $a) {
+            $url[] = '<span><a href="' . $a[1] . '">' . $a[0] . '</a></span>';
+            $bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $a[1] . '">' . $a[0] . '</a></span>';
+        }
+
+        $post->tag = implode(', ', $url);
+
+        $post->tagb = implode(' » ', $bc);
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
@@ -657,7 +665,7 @@ function get_related($tag, $custom = null, $count = null)
         }
     }
 
-    $posts = get_tag(strip_tags($tag), 1, $count + 1, true);
+    $posts = get_tag(strip_tags(remove_accent($tag)), 1, $count + 1, true);
     $tmp = array();
     $req = urldecode($_SERVER['REQUEST_URI']);
 
@@ -944,7 +952,7 @@ function tag_cloud($custom = null)
         if(empty($custom)) {
             echo '<ul class="taglist">';
             foreach ($tag_collection as $tag => $count) {
-                echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . $tag . '</a> <span class="count">(' . $count . ')</span></li>';
+                echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . tag_i18n($tag) . '</a> <span class="count">(' . $count . ')</span></li>';
             }
             echo '</ul>';
         } else {
@@ -1446,7 +1454,8 @@ EOF;
 EOF;
     }
     if (isset($_GET['search'])) {
-        $url = site_url() . 'search/' . $_GET['search'];
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
 }
@@ -1962,7 +1971,7 @@ EOF;
     if ($role === 'admin') {
         echo '<li><a href="' . $base . 'admin/posts">Posts</a></li>';
         if (config('views.counter') == 'true') {
-		    echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
+            echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
         }
     }
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
@@ -2127,4 +2136,51 @@ function shorten($string = null, $char = null)
         return $string;
     }
     
+}
+
+// save the i18n tag
+function save_tag_i18n($tag,$tagDisplay)
+{
+    $filename = "content/tags.lang";
+    $tags = array();
+    $tmp = array();
+    $views = array();
+    
+    $tt = explode(',', rtrim($tag, ','));
+    $tl = explode(',', rtrim($tagDisplay, ','));
+    $tags = array_combine($tt,$tl);
+    
+    if (file_exists($filename)) {
+        $views = unserialize(file_get_contents($filename));
+        foreach ($tags as $key => $val) {
+            if (isset($views[$key])) {
+                $views[$key] = $val;
+            } else {
+                $views[$key] = $val;
+            }
+        }
+    } else {
+        $views = $tags;
+    }
+
+    $tmp = serialize($views);
+    file_put_contents($filename, print_r($tmp, true));
+
+}
+
+// translate tag to i18n
+function tag_i18n($tag)
+{
+    static $tags = array();
+
+    if (empty($tags)) {
+        $filename = "content/tags.lang";
+        if (file_exists($filename)) {
+            $tags = unserialize(file_get_contents($filename));
+        }
+    }
+    if (isset($tags[$tag])) {
+        return $tags[$tag];
+    }
+    return $tag;
 }
