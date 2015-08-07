@@ -252,19 +252,25 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $url = array();
         $bc = array();
         
-        $tLang = get_content_tag('tag', $content);
-        $tl = explode(',', rtrim($tLang, ','));
+        $tagt = get_content_tag('tag', $content);
         $t = explode(',', rtrim($arr[1], ','));
-        $tCom = array_combine($t, $tl);
         
-        foreach ($tCom as $key => $val) {
-            if(!empty($val)) {
-                $tag[] = array($val, site_url() . 'tag/' . $key);
-            } else {
-                $tag[] = array($key, site_url() . 'tag/' . $key);
+        if(!empty($tagt)) {
+            $tl = explode(',', rtrim($tagt, ','));
+            $tCom = array_combine($t, $tl);
+            foreach ($tCom as $key => $val) {
+                if(!empty($val)) {
+                    $tag[] = array($val, site_url() . 'tag/' . $key);
+                } else {
+                    $tag[] = array($key, site_url() . 'tag/' . $key);
+                }
+            } 
+        } else {
+            foreach ($t as $tt) {
+                $tag[] = array($tt, site_url() . 'tag/' . $tt);
             }
         }
-
+        
         foreach ($tag as $a) {
             $url[] = '<span><a href="' . $a[1] . '">' . $a[0] . '</a></span>';
             $bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $a[1] . '">' . $a[0] . '</a></span>';
