@@ -1,9 +1,12 @@
-HTMLy
-=====
+<a href="https://www.htmly.com" target="_blank">![Logo](https://www.htmly.com/content/images/20150812224335-htmly.png)</a>
 
-HTMLy is an open source databaseless blogging platform that prioritizes simplicity and speed (Flat-File Blog). HTMLy can be referred to as a Flat-File CMS, since it will also manage your content.
+HTMLy is an open source databaseless web publishing platform that prioritizes simplicity and speed. HTMLy can be referred to as a Flat-File Blog or Flat-File CMS, since it will also manage your content.
 
 You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
+
+Demo
+----
+Visit <a href="https://demo.htmly.com" target="_blank">HTMLy Demo</a>.
 
 Features
 ---------
@@ -42,16 +45,11 @@ Features
 
 Requirements
 ------------
-HTMLy requires PHP 5.3 or greater.
+HTMLy requires PHP 5.3 or greater and php-xml package.
 
 Installations
 -------------
-If you have OpenSSL on your server, use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started.
-If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
-
-OpenShift
----------
-Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://github.com/danpros/htmly-openshift) for easy deployment.
+If you have OpenSSL on your server, use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
 
 Configurations
 --------------
@@ -129,6 +127,11 @@ server {
 }
 ````
 
+OpenShift
+---------
+Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://github.com/danpros/htmly-openshift) for easy deployment.
+
+
 Making a secure password
 ----------------------
 Passwords can be stored in `username.ini` (where "username" is the user's username) in either plaintext, encryption algorithms supported by php `hash` or bcrypt (recommended). To generate a bcrypt encrypted password:
@@ -195,11 +198,6 @@ Paragraph 1
 
 Paragraph 2 etc.
 ```
-
-
-Demo
-----
-Visit [HTMLy Demo](http://demo.htmly.com).
 
 Credit
 ------
