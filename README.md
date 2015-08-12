@@ -49,6 +49,10 @@ Installations
 If you have OpenSSL on your server, use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started.
 If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
 
+OpenShift
+---------
+Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://github.com/danpros/htmly-openshift) for easy deployment.
+
 Configurations
 --------------
 Rename `config.ini.example` inside the `config` folder to `config.ini` (or you can create a new `config/config.ini` file) then change the site settings there.
