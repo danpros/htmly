@@ -1017,9 +1017,9 @@ function get_description($string, $char = null)
         }
     }
     if (strlen(strip_tags($string)) < $char) {
-        return safe_html($string);
+        return safe_html(strip_tags($string));
     } else {
-        $string = safe_html($string);
+        $string = safe_html(strip_tags($string));
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
         return $string;
