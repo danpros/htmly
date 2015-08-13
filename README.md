@@ -2,11 +2,11 @@
 
 HTMLy is an open source databaseless web publishing platform that prioritizes simplicity and speed. HTMLy can be referred to as a Flat-File Blog or Flat-File CMS, since it will also manage your content.
 
-You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
+You do not need to use a VPS to run HTMLy, shared hosting or even [free hosting](https://github.com/danpros/htmly#openshift) should work as long as the host supports at least PHP 5.3.
 
 Demo
 ----
-Visit <a href="https://demo.htmly.com" target="_blank">HTMLy Demo</a>.
+Visit <a href="https://demo.htmly.com" target="_blank">HTMLy demo</a> as blog.
 
 Features
 ---------
@@ -49,7 +49,7 @@ HTMLy requires PHP 5.3 or greater and php-xml package.
 
 Installations
 -------------
-If you have OpenSSL on your server, use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
+If you have an OpenSSL enabled server (usually enabled by default), use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
 
 Configurations
 --------------
