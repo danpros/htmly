@@ -96,12 +96,13 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -213,13 +214,14 @@ function edit_image($title, $tag, $url, $content, $oldfile, $destination = null,
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_image = preg_replace('/\s\s+/', ' ', strip_tags($image));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -336,13 +338,14 @@ function edit_video($title, $tag, $url, $content, $oldfile, $destination = null,
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_video = preg_replace('/\s\s+/', ' ', strip_tags($video));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -459,13 +462,14 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_link = preg_replace('/\s\s+/', ' ', strip_tags($link));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -582,13 +586,14 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_quote = preg_replace('/\s\s+/', ' ', strip_tags($quote));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -705,13 +710,14 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
         $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
     }
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_audio = preg_replace('/\s\s+/', ' ', strip_tags($audio));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -822,8 +828,9 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 {
     $dir = substr($oldfile, 0, strrpos($oldfile, '/'));
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -865,12 +872,13 @@ function add_post($title, $tag, $url, $content, $user, $description = null, $dra
 {
 
     $post_date = date('Y-m-d-H-i-s');
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -924,13 +932,14 @@ function add_image($title, $tag, $url, $content, $user, $description = null, $im
 {
 
     $post_date = date('Y-m-d-H-i-s');
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_image = preg_replace('/\s\s+/', ' ', strip_tags($image));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -989,13 +998,14 @@ function add_video($title, $tag, $url, $content, $user, $description = null, $vi
 {
 
     $post_date = date('Y-m-d-H-i-s');
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_video = preg_replace('/\s\s+/', ' ', strip_tags($video));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -1054,13 +1064,14 @@ function add_audio($title, $tag, $url, $content, $user, $description = null, $au
 {
 
     $post_date = date('Y-m-d-H-i-s');
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_audio = preg_replace('/\s\s+/', ' ', strip_tags($audio));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -1119,13 +1130,14 @@ function add_link($title, $tag, $url, $content, $user, $description = null, $lin
 {
 
     $post_date = date('Y-m-d-H-i-s');
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_link = preg_replace('/\s\s+/', ' ', strip_tags($link));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -1184,13 +1196,14 @@ function add_quote($title, $tag, $url, $content, $user, $description = null, $qu
 {
 
     $post_date = date('Y-m-d-H-i-s');
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_quote = preg_replace('/\s\s+/', ' ', strip_tags($quote));
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tag));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), $tag);
     $post_tag = rtrim($post_tag, ',');
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -1248,8 +1261,9 @@ function add_quote($title, $tag, $url, $content, $user, $description = null, $qu
 function add_page($title, $url, $content, $description = null)
 {
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -1281,8 +1295,9 @@ function add_page($title, $url, $content, $description = null)
 function add_sub_page($title, $url, $content, $static, $description = null)
 {
 
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $description = safe_html($description);
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -1369,7 +1384,7 @@ function delete_page($file, $destination)
 // Edit user profile
 function edit_profile($title, $content, $user)
 {
-    $user_title = $title;
+    $user_title = safe_html($title);
     $user_content = '<!--t ' . $user_title . ' t-->' . "\n\n" . $content;
 
     if (!empty($user_title) && !empty($user_content)) {
@@ -1394,7 +1409,7 @@ function edit_profile($title, $content, $user)
 function migrate($title, $time, $tags, $content, $url, $user, $source)
 {
     $post_date = date('Y-m-d-H-i-s', $time);
-    $post_title = $title;
+    $post_title = safe_html($title);
     $post_tag = preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($tags));
     $post_tag = rtrim($post_tag, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));

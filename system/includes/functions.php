@@ -1017,14 +1017,9 @@ function get_description($string, $char = null)
         }
     }
     if (strlen(strip_tags($string)) < $char) {
-        $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
-        $string = preg_replace('/\s\s+/', ' ', $string);
-        $string = ltrim(rtrim($string));
-        return $string;
+        return safe_html($string);
     } else {
-        $string = preg_replace('/[^A-Za-z0-9 !@#$%^&*(),.-]/u', ' ', strip_tags($string));
-        $string = preg_replace('/\s\s+/', ' ', $string);
-        $string = ltrim(rtrim($string));
+        $string = safe_html($string);
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
         return $string;
@@ -2189,4 +2184,14 @@ function tag_i18n($tag)
         return $tags[$tag];
     }
     return $tag;
+}
+
+// return html safe string
+function safe_html($string)
+{
+    $string = htmlspecialchars($string, ENT_QUOTES);
+    $string = preg_replace('/\r\n|\r|\n/', ' ', $string);
+    $string = preg_replace('/\s\s+/', ' ', $string);
+    $string = ltrim(rtrim($string));
+    return $string;
 }
