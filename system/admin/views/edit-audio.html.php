@@ -34,9 +34,13 @@ $time = new DateTime($t);
 $timestamp = $time->format("Y-m-d H:i:s");
 // The post date
 $postdate = strtotime($timestamp);
-// The post URL
-$delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destination=' . $destination;
 
+if (config('permalink.type') == 'post') {
+    $delete = site_url() . 'post/' . $oldmd . '/delete?destination=' . $destination;
+} else {
+    // The post URL
+    $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destination=' . $destination;
+}
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script> 

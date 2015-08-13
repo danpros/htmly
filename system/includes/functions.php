@@ -232,10 +232,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
-
-        // The post URL
-        $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
-
+        
+        if (config('permalink.type') == 'post') {
+            $post->url = site_url() . 'post/' . str_replace('.md', '', $arr[2]);
+        } else {
+            $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
+        }
+        
         $post->file = $filepath;
 
         $content = file_get_contents($filepath);
@@ -335,6 +338,35 @@ function find_post($year, $month, $name)
                     'prev' => $pr[0]
                 );
             }
+        } else if (strpos($url, $name . '.md') !== false) {
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }        
         }
     }
 }
@@ -379,6 +411,35 @@ function find_draft($year, $month, $name)
                     'prev' => $pr[0]
                 );
             }
+        } else if (strpos($url, $name . '.md') !== false) {
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }        
         }
     }
 }
@@ -1558,7 +1619,11 @@ function sitemap_post_path()
         $post->archiveyear = site_url() . 'archive/' . date('Y', $post->date);
 
         // The post URL
-        $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
+        if (config('permalink.type') == 'post') {
+            $post->url = site_url() . 'post/' . str_replace('.md', '', $arr[2]);
+        } else {
+            $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
+        }
 
         $tmp[] = $post;
     }

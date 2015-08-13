@@ -174,9 +174,13 @@ function edit_post($title, $tag, $url, $content, $oldfile, $destination = null, 
         
         // The post date
         $postdate = strtotime($timestamp);
-         
+            
         // The post URL
-        $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        if (config('permalink.type') == 'post') {
+            $posturl = site_url() . 'post/' . $post_url;
+        } else {
+            $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        }
         
         save_tag_i18n($post_tag, $post_tagmd);
         
@@ -300,7 +304,11 @@ function edit_image($title, $tag, $url, $content, $oldfile, $destination = null,
         $postdate = strtotime($timestamp);
          
         // The post URL
-        $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        if (config('permalink.type') == 'post') {
+            $posturl = site_url() . 'post/' . $post_url;
+        } else {
+            $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        }
         
         save_tag_i18n($post_tag, $post_tagmd);
         
@@ -424,7 +432,11 @@ function edit_video($title, $tag, $url, $content, $oldfile, $destination = null,
         $postdate = strtotime($timestamp);
          
         // The post URL
-        $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        if (config('permalink.type') == 'post') {
+            $posturl = site_url() . 'post/' . $post_url;
+        } else {
+            $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        }
         
         save_tag_i18n($post_tag, $post_tagmd);
         
@@ -548,7 +560,11 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
         $postdate = strtotime($timestamp);
          
         // The post URL
-        $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        if (config('permalink.type') == 'post') {
+            $posturl = site_url() . 'post/' . $post_url;
+        } else {
+            $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        }
         
         save_tag_i18n($post_tag, $post_tagmd);
         
@@ -672,7 +688,11 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
         $postdate = strtotime($timestamp);
          
         // The post URL
-        $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        if (config('permalink.type') == 'post') {
+            $posturl = site_url() . 'post/' . $post_url;
+        } else {
+            $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        }
         
         save_tag_i18n($post_tag, $post_tagmd);
         
@@ -796,7 +816,11 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
         $postdate = strtotime($timestamp);
          
         // The post URL
-        $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        if (config('permalink.type') == 'post') {
+            $posturl = site_url() . 'post/' . $post_url;
+        } else {
+            $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        }
         
         save_tag_i18n($post_tag, $post_tagmd);
         

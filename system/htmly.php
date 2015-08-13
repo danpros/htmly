@@ -1353,6 +1353,351 @@ get('/feed/opml', function () {
     echo generate_opml();
 });
 
+// Show blog post without year-month
+get('/post/:name', function ($name) {
+
+    if (config('permalink.type') != 'post') {
+        $post = find_post(null, null, $name);
+        $current = $post['current'];
+        $redir = site_url() . date('Y/m', $current->date) . '/' . $name;
+        header("location: $redir", TRUE, 301);
+    }
+
+    if (config("views.counter") != "true") {
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }
+    }
+
+    $post = find_post(null, null, $name);
+
+    $current = $post['current'];
+
+    if (!$current) {
+        not_found();
+    }
+
+    if (config("views.counter") == "true") {
+        add_view($current->file);
+
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }
+    }
+
+    $author = get_author($current->author);
+
+    if (isset($author[0])) {
+        $author = $author[0];
+    } else {
+        $author = default_profile($current->author);
+    }
+
+    if (array_key_exists('prev', $post)) {
+        $prev = $post['prev'];
+    } else {
+        $prev = array();
+    }
+
+    if (array_key_exists('next', $post)) {
+        $next = $post['next'];
+    } else {
+        $next = array();
+    }
+    
+    if (isset($current->image)) {
+        $var = 'imagePost';
+    } elseif (isset($current->link)) {
+        $var = 'linkPost';
+    } elseif (isset($current->quote)) {
+        $var = 'quotePost';
+    } elseif (isset($current->audio)) {
+        $var = 'audioPost';
+    } elseif (isset($current->video)) {
+        $var = 'videoPost'; }
+    else {
+        $var = 'blogPost';
+    }
+    
+    if (config('blog.enable') === 'true') {
+        $blog = ' <span typeof="v:Breadcrumb"><a href="' . site_url() . 'blog">Blog</a></span> &#187; ';
+    } else {
+        $blog = '';
+    }
+
+    render('post', array(
+        'title' => $current->title . ' - ' . blog_title(),
+        'description' => $current->description,
+        'canonical' => $current->url,
+        'p' => $current,
+        'author' => $author,
+        'bodyclass' => 'inpost',
+        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . $current->tagb . ' &#187; ' . $current->title,
+        'prev' => has_prev($prev),
+        'next' => has_next($next),
+        'type' => $var,
+        'is_post' => is_post(true),
+    ));
+
+});
+
+// Edit blog post
+get('/post/:name/edit', function ($name) {
+
+    if (login()) {
+
+        $user = $_SESSION[config("site.url")]['user'];
+        $role = user('role', $user);
+
+        config('views.root', 'system/admin/views');
+        $post = find_post(null, null, $name);
+
+        if (!$post) {
+            $post = find_draft(null, null, $name);
+            if (!$post) {
+                not_found();
+            }
+        }
+
+        $current = $post['current'];
+        
+        if (isset($current->image)) {
+            $var = 'edit-image';
+        } elseif (isset($current->link)) {
+            $var = 'edit-link';
+        } elseif (isset($current->quote)) {
+            $var = 'edit-quote';
+        } elseif (isset($current->audio)) {
+            $var = 'edit-audio';
+        } elseif (isset($current->video)) {
+            $var = 'edit-video'; 
+        } else {
+            $var = 'edit-post';
+        }
+        
+        if ($user === $current->author || $role === 'admin') {
+            render($var, array(
+                'title' => $var .' '. blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'p' => $current,
+                'bodyclass' => 'editcontent',
+                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+            ));
+        } else {
+            render('denied', array(
+                'title' => $var .' '. blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'p' => $current,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Get edited data from blog post
+post('/post/:name/edit', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $title = from($_REQUEST, 'title');
+    $is_post = from($_REQUEST, 'is_post');
+    $image = from($_REQUEST, 'image');
+    $is_image = from($_REQUEST, 'is_image');
+    $video = from($_REQUEST, 'video');
+    $is_video = from($_REQUEST, 'is_video');
+    $link = from($_REQUEST, 'link');
+    $is_link = from($_REQUEST, 'is_link');
+    $audio = from($_REQUEST, 'audio');
+    $is_audio = from($_REQUEST, 'is_audio');
+    $quote = from($_REQUEST, 'quote');
+    $is_quote = from($_REQUEST, 'is_quote');
+    $tag = from($_REQUEST, 'tag');
+    $url = from($_REQUEST, 'url');
+    $content = from($_REQUEST, 'content');
+    $oldfile = from($_REQUEST, 'oldfile');
+    $destination = from($_GET, 'destination');
+    $description = from($_REQUEST, 'description');
+    $date = from($_REQUEST, 'date');
+    $time = from($_REQUEST, 'time');
+    $dateTime = null;
+    $revertPost = from($_REQUEST, 'revertpost');
+    $publishDraft = from($_REQUEST, 'publishdraft');
+    if ($date !== null && $time !== null) {
+        $dateTime = $date . ' ' . $time;
+    }
+    
+    if (!empty($is_image)) {
+        $var = 'edit-image';
+    } elseif (!empty($is_video)) {
+        $var = 'edit-video';
+    } elseif (!empty($is_link)) {
+        $var = 'edit-link';
+    } elseif (!empty($is_quote)) {
+        $var = 'edit-quote';
+    } elseif (!empty($is_audio)) {
+        $var = 'edit-audio';
+    } elseif (!empty($is_post)) {
+        $var = 'edit-post';
+    }
+
+    if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_image($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $image, $revertPost, $publishDraft);
+        
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_video($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $video, $revertPost, $publishDraft);
+        
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_link($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $link, $revertPost, $publishDraft);
+        
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_quote($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $quote, $revertPost, $publishDraft);
+        
+    } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_audio($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $audio, $revertPost, $publishDraft);
+        
+    }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
+        if (empty($url)) {
+            $url = $title;
+        }
+        edit_post($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $revertPost, $publishDraft);
+        
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($tag)) {
+            $message['error'] .= '<li>Tag field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+
+        if (!empty($is_image)) {
+            if (empty($image)) {
+                $message['error'] .= '<li>Image field is required.</li>';
+            }
+        } elseif (!empty($is_video)) {
+            if (empty($video)) {
+                $message['error'] .= '<li>Video field is required.</li>';
+            }
+        } elseif (!empty($is_link)) {
+            if (empty($link)) {
+                $message['error'] .= '<li>Link field is required.</li>';
+            }
+        } elseif (!empty($is_quote)) {
+            if (empty($quote)) {
+                $message['error'] .= '<li>Quote field is required.</li>';
+            }
+        } elseif (!empty($is_audio)) {
+            if (empty($audio)) {
+                $message['error'] .= '<li>Audio field is required.</li>';
+            }
+        }
+        
+        config('views.root', 'system/admin/views');
+
+        render($var, array(
+            'title' => 'Edit content - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'oldfile' => $oldfile,
+            'postTitle' => $title,
+            'postImage' => $image,
+            'postVideo' => $video,
+            'postLink' => $link,
+            'postQuote' => $quote,
+            'postAudio' => $audio,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'bodyclass' => 'editcontent',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit content'
+        ));
+    }
+});
+
+// Delete blog post
+get('/post/:name/delete', function ($name) {
+
+    if (login()) {
+
+        $user = $_SESSION[config("site.url")]['user'];
+        $role = user('role', $user);
+
+        config('views.root', 'system/admin/views');
+        $post = find_post(null, null, $name);
+
+        if (!$post) {
+            $post = find_draft(null, null, $name);
+            if (!$post) {
+                not_found();
+            }
+        }
+
+        $current = $post['current'];
+
+        if ($user === $current->author || $role === 'admin') {
+            render('delete-post', array(
+                'title' => 'Delete post - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'p' => $current,
+                'bodyclass' => 'deletepost',
+                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Delete post - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'p' => $current,
+                'bodyclass' => 'deletepost',
+                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Get deleted data from blog post
+post('/post/:name/delete', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if ($proper && login()) {
+        $file = from($_REQUEST, 'file');
+        $destination = from($_GET, 'destination');
+        delete_post($file, $destination);
+    }
+});
+
 // Show various page (top-level), admin, login, sitemap, static page.
 get('/:static', function ($static) {
 
@@ -1864,8 +2209,13 @@ post('/:static/:sub/delete', function () {
     }
 });
 
-// Show blog post page
+// Show blog post with year-month
 get('/:year/:month/:name', function ($year, $month, $name) {
+    
+    if (config('permalink.type') == 'post') {
+        $redir = site_url() . 'post/' . $name;
+        header("location: $redir", TRUE, 301);
+    }
 
     if (config("views.counter") != "true") {
         if (!login()) {

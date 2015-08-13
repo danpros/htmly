@@ -10,6 +10,9 @@ blog.tagline = "Just another HTMLy blog"
 blog.description = "Proudly powered by HTMLy, a databaseless blogging platform."
 blog.copyright = "(c) Your name."
 
+; Set permalink type. "default" using /year/month/title. "post" using /post/title
+permalink.type = "default"
+
 ; Show the /blog url as the blog homepage
 blog.enable = "false"
 
