@@ -9,9 +9,9 @@
     <link rel="canonical" href="<?php echo $canonical; ?>" />
     <?php if (publisher()): ?>
     <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>    
-    <link href='//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Crimson+Text:400,400italic' rel='stylesheet' type='text/css'>     
+    <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic" rel="stylesheet" type="text/css">     
     <!-- Global CSS -->
     <link rel="stylesheet" href="<?php echo site_url();?>themes/blog/css/bootstrap.min.css">   
     <!-- Plugins CSS -->
