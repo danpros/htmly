@@ -12,9 +12,9 @@
         </tr>
         <?php
         global $config_file;
-        $array = [
+        $array = array(
             "google.wmt" => "hallo",
-        ];
+        );
         if (file_exists($config_file)) {
             $array = parse_ini_file($config_file, true);
         }

@@ -13,7 +13,7 @@ blog.copyright = "(c) Your name."
 ; Set permalink type. "default" using /year/month/title. "post" using /post/title
 permalink.type = "default"
 
-; Show the /blog url as the blog homepage
+; Show the /blog url as the blog homepage. Options "false" and "true"
 blog.enable = "false"
 
 ; Social account
@@ -51,7 +51,7 @@ google.publisher = ""
 google.analytics.id = ""
 
 ; Google reCaptcha
-; https://www.google.com/recaptcha/admin
+; https://www.google.com/recaptcha/admin. Options "false" and "true"
 
 google.reCaptcha = false
 google.reCaptcha.public = ""
@@ -102,8 +102,14 @@ views.counter = "true"
 ; Also install pre-release
 prerelease = false
 
-; Switch on and off the file cache for development purposes.
+; Switch on and off the file cache for development purposes. Options "false" and "true"
 cache.off = false
+
+; Switch on and off the page generation time. Options "false" and "true"
+generation.time = false
+
+; Switch on and off the cache timestamp. Options "false" and "true"
+cache.timestamp = false
 
 ; Set the theme here
 views.root = "themes/blog"

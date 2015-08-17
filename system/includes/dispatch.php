@@ -327,35 +327,37 @@ function render($view, $locals = null, $layout = null)
     content(trim(ob_get_clean()));
 
     if ($layout !== false) {
-
         if ($layout == null) {
             $layout = config('views.layout');
             $layout = ($layout == null) ? 'layout' : $layout;
         }
-
         $layout = "{$view_root}/{$layout}.html.php";
-
         header('Content-type: text/html; charset=utf-8');
-		
-        ob_start();
-		$time = microtime();
-		$time = explode(' ', $time);
-		$time = $time[1] + $time[0];
-		$start = $time;
-        require $layout;
-		$time = microtime();
-		$time = explode(' ', $time);
-		$time = $time[1] + $time[0];
-		$finish = $time;
-		$total_time = round(($finish - $start), 4);
-        echo "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
+        if (config('generation.time') == 'true') {
+            ob_start();
+            $time = microtime();
+            $time = explode(' ', $time);
+            $time = $time[1] + $time[0];
+            $start = $time;
+            require $layout;
+            $time = microtime();
+            $time = explode(' ', $time);
+            $time = $time[1] + $time[0];
+            $finish = $time;
+            $total_time = round(($finish - $start), 4);
+            echo "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
+        } else {
+            ob_start();
+            require $layout;
+        }
         if (!$login) {
             if (!file_exists($cachefile)) {
-                echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
+                if (config('cache.timestamp') == 'true') {
+                    echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
+                }
                 file_put_contents($cachefile, ob_get_contents());
             }
         }
-
         echo trim(ob_get_clean());
     } else {
         echo content();
