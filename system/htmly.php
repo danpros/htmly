@@ -801,7 +801,6 @@ get('/admin/popular', function () {
 
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
-
             config('views.root', 'system/admin/views');
             $page = from($_GET, 'page');
             $page = $page ? (int)$page : 1;
@@ -1221,7 +1220,7 @@ get('/tag/:tag', function ($tag) {
 
     $posts = get_tag($tag, $page, $perpage, false);
 
-    $total = get_tagcount($tag, 'filename');
+    $total = get_tagcount($tag, 'basename');
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -1253,7 +1252,7 @@ get('/archive/:req', function ($req) {
 
     $posts = get_archive($req, $page, $perpage);
 
-    $total = get_count($req, 'filename');
+    $total = get_count($req, 'basename');
 
     if (empty($posts) || $page < 1) {
         // a non-existing page

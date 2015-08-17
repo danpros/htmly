@@ -112,7 +112,6 @@ function get_zip_files()
 function get_draft_posts()
 {
     static $_draft = array();
-
     if (empty($_draft)) {
         $tmp = array();
         $tmp = glob('content/*/draft/*.md', GLOB_NOSORT);
@@ -129,7 +128,7 @@ function get_draft_posts()
 // usort function. Sort by filename.
 function sortfile($a, $b)
 {
-    return $a['filename'] == $b['filename'] ? 0 : ($a['filename'] < $b['filename']) ? 1 : -1;
+    return $a['basename'] == $b['basename'] ? 0 : ($a['basename'] < $b['basename']) ? 1 : -1;
 }
 
 // usort function. Sort by date.
@@ -188,6 +187,11 @@ function rebuilt_cache($type)
         rebuilt_cache('subpage');
         rebuilt_cache('author');
     }
+    
+    foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
+        unlink($file);
+    }
+    
 }
 
 // Return blog posts.
@@ -456,7 +460,7 @@ function get_tag($tag, $page, $perpage, $random)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v['filename'];
+        $url = $v['basename'];
         $str = explode('_', $url);
         $mtag = explode(',', rtrim($str[1], ','));
         $etag = explode(',', $tag);
@@ -487,7 +491,7 @@ function get_archive($req, $page, $perpage)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v['filename'];
+        $url = $v['basename'];
         $str = explode('_', $url);
         if (strpos($str[0], "$req") !== false) {
             $tmp[] = $v;
@@ -703,7 +707,7 @@ function get_keyword($keyword, $page, $perpage)
     $words = explode(' ', $keyword);
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['filename']);
+        $arr = explode('_', $v['basename']);
         $filter = $arr[1] . ' ' . $arr[2];
         foreach ($words as $word) {
             if (stripos($filter, $word) !== false) {
@@ -814,7 +818,7 @@ function keyword_count($keyword)
     $words = explode(' ', $keyword);
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['filename']);
+        $arr = explode('_', $v['basename']);
         $filter = $arr[1] . ' ' . $arr[2];
         foreach ($words as $word) {
             if (strpos($filter, strtolower($word)) !== false) {
@@ -831,7 +835,6 @@ function keyword_count($keyword)
 // Return recent posts lists
 function recent_posts($custom = null, $count = null)
 {
-    
     if (empty($count)) {
         $count = config('recent.count');
         if (empty($count)) {
@@ -839,7 +842,27 @@ function recent_posts($custom = null, $count = null)
         }
     }
     
-    $posts = get_posts(null, 1, $count);
+    $dir = "cache/widget";
+    $filename = "cache/widget/recent.cache";
+    $tmp = array();
+    $posts = array();
+    
+    if (is_dir($dir) === false) {
+        mkdir($dir, 0775, true);
+    }
+    
+    if (file_exists($filename)) {
+        $posts = unserialize(file_get_contents($filename));
+        if (count($posts) != $count) {
+            $posts = get_posts(null, 1, $count);
+            $tmp = serialize($posts);
+            file_put_contents($filename, print_r($tmp, true));
+        }        
+    } else {
+       $posts = get_posts(null, 1, $count);
+       $tmp = serialize($posts);
+       file_put_contents($filename, print_r($tmp, true));
+    }
     
     if (!empty($custom)) {
         return $posts;        
@@ -877,14 +900,39 @@ function popular_posts($custom = null, $count = null)
                 $_views = json_decode(file_get_contents($filename), true);
                 if(is_array($_views)) {
                     arsort($_views);
+                    $i = 1;
                     foreach ($_views as $key => $val) {
                         if (file_exists($key)) {
                             if (strpos($key, 'blog') !== false) {
                                 $tmp[] = pathinfo($key);
+                                if ($i++ >= $count)
+                                break;
                             }
                         }
                     }
-                    $posts = get_posts($tmp, 1, $count);
+                    
+                    $dir = "cache/widget";
+                    $filecache = "cache/widget/popular.cache";
+                    $ar = array();
+                    $posts = array();
+
+                    if (is_dir($dir) === false) {
+                        mkdir($dir, 0775, true);
+                    }
+
+                    if (file_exists($filecache)) {
+                        $posts = unserialize(file_get_contents($filecache));
+                        if (count($posts) != $count) {
+                            $posts = get_posts($tmp, 1, $count);
+                            $ar = serialize($posts);
+                            file_put_contents($filecache, print_r($ar, true));
+                        }
+                    } else {
+                        $posts = get_posts($tmp, 1, $count);
+                        $ar = serialize($posts);
+                        file_put_contents($filecache, print_r($ar, true));
+                    }
+
                     if (empty($custom)) {
                         echo '<ul>';
                         foreach ($posts as $post) {
@@ -922,37 +970,56 @@ function popular_posts($custom = null, $count = null)
 // Return an archive list, categorized by year and month.
 function archive_list($custom = null)
 {
+
+    $dir = "cache/widget";
+    $filename = "cache/widget/archive.cache";
+    $ar = array();
+    
+    if (is_dir($dir) === false) {
+        mkdir($dir, 0775, true);
+    }
+        
     $posts = get_post_unsorted();
     $by_year = array();
     $col = array();
 
     if (!empty($posts)) {
+        
+        if (!file_exists($filename)) {
+            foreach ($posts as $index => $v) {
 
-        foreach ($posts as $index => $v) {
+                $arr = explode('_', $v);
 
-            $arr = explode('_', $v);
+                // Replaced string
+                $str = $arr[0];
+                $replaced = substr($str, 0, strrpos($str, '/')) . '/';
 
-            // Replaced string
-            $str = $arr[0];
-            $replaced = substr($str, 0, strrpos($str, '/')) . '/';
+                $date = str_replace($replaced, '', $arr[0]);
+                $data = explode('-', $date);
+                $col[] = $data;
+            }
 
-            $date = str_replace($replaced, '', $arr[0]);
-            $data = explode('-', $date);
-            $col[] = $data;
-        }
+            foreach ($col as $row) {
 
-        foreach ($col as $row) {
-
-            $y = $row['0'];
-            $m = $row['1'];
-            $by_year[$y][] = $m;
+                $y = $row['0'];
+                $m = $row['1'];
+                $by_year[$y][] = $m;
+            }
+            
+            $ar = serialize($by_year);
+            file_put_contents($filename, print_r($ar, true));
+            
+        } else {
+            $by_year = unserialize(file_get_contents($filename)); 
         }
 
         # Most recent year first
         krsort($by_year);
+        
         # Iterate for display
         $i = 0;
         $len = count($by_year);
+
         if (empty($custom)) {
             foreach ($by_year as $year => $months) {
                 if ($i == 0) {
@@ -997,24 +1064,36 @@ EOF;
 // Return tag cloud.
 function tag_cloud($custom = null)
 {
+
+    $dir = "cache/widget";
+    $filename = "cache/widget/tags.cache";
+    $tg = array();
+    
+    if (is_dir($dir) === false) {
+        mkdir($dir, 0775, true);
+    }
+    
     $posts = get_post_unsorted();
     $tags = array();
 
     if (!empty($posts)) {
 
-        foreach ($posts as $index => $v) {
-
-            $arr = explode('_', $v);
-
-            $data = rtrim($arr[1], ',');
-            $mtag = explode(',', $data);
-            foreach ($mtag as $etag) {
-                $tags[] = $etag;
+        if (!file_exists($filename)) {
+            foreach ($posts as $index => $v) {
+                $arr = explode('_', $v);
+                $data = rtrim($arr[1], ',');
+                $mtag = explode(',', $data);
+                foreach ($mtag as $etag) {
+                    $tags[] = $etag;
+                }
             }
+            $tag_collection = array_count_values($tags);
+            ksort($tag_collection);
+            $tg = serialize($tag_collection);
+            file_put_contents($filename, print_r($tg, true));
+        } else {
+            $tag_collection = unserialize(file_get_contents($filename));
         }
-
-        $tag_collection = array_count_values($tags);
-        ksort($tag_collection);
         
         if(empty($custom)) {
             echo '<ul class="taglist">';
@@ -2061,7 +2140,6 @@ function file_cache($request)
 
     $c = str_replace('/', '#', str_replace('?', '~', $request));
     $cachefile = 'cache/page/' . $c . '.cache';
-
     if (file_exists($cachefile)) {
         header('Content-type: text/html; charset=utf-8');
         readfile($cachefile);

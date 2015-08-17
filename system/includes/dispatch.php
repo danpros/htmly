@@ -311,7 +311,7 @@ function render($view, $locals = null, $layout = null)
         $dir = 'cache/page';
         $cachefile = $dir . '/' . $c . '.cache';
         if (is_dir($dir) === false) {
-            mkdir($dir, 0777, true);
+            mkdir($dir, 0775, true);
         }
     }
 
@@ -336,12 +336,22 @@ function render($view, $locals = null, $layout = null)
         $layout = "{$view_root}/{$layout}.html.php";
 
         header('Content-type: text/html; charset=utf-8');
-
+		
         ob_start();
+		$time = microtime();
+		$time = explode(' ', $time);
+		$time = $time[1] + $time[0];
+		$start = $time;
         require $layout;
-
+		$time = microtime();
+		$time = explode(' ', $time);
+		$time = $time[1] + $time[0];
+		$finish = $time;
+		$total_time = round(($finish - $start), 4);
+        echo "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
         if (!$login) {
             if (!file_exists($cachefile)) {
+                echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
                 file_put_contents($cachefile, ob_get_contents());
             }
         }
