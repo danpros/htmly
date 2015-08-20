@@ -1481,7 +1481,7 @@ function get_feed($feed_url, $credit)
             $time = new DateTime($entry->pubDate);
             $timestamp = $time->format("Y-m-d H:i:s");
             $time = strtotime($timestamp);
-            $tags = strip_tags(preg_replace(array('/[^a-zA-Z0-9,.\-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($entry->category)));
+            $tags = $entry->category;
             $title = rtrim($entry->title, ' \,\.\-');
             $title = ltrim($title, ' \,\.\-');
             $user = $_SESSION[config("site.url")]['user'];

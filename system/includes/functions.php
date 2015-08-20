@@ -267,14 +267,14 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $tCom = array_combine($t, $tl);
             foreach ($tCom as $key => $val) {
                 if(!empty($val)) {
-                    $tag[] = array($val, site_url() . 'tag/' . $key);
+                    $tag[] = array($val, site_url() . 'tag/' . strtolower($key));
                 } else {
-                    $tag[] = array($key, site_url() . 'tag/' . $key);
+                    $tag[] = array($key, site_url() . 'tag/' . strtolower($key));
                 }
             } 
         } else {
             foreach ($t as $tt) {
-                $tag[] = array($tt, site_url() . 'tag/' . $tt);
+                $tag[] = array($tt, site_url() . 'tag/' . strtolower($tt));
             }
         }
         
@@ -1577,10 +1577,10 @@ function generate_rss($posts)
         }
 
         $item = new Item();
-        $tags = explode(',', str_replace(' ', '', strip_tags($p->tag)));
+        $tags = explode(',', str_replace(' ', '', strip_tags(remove_accent($p->tag))));
         foreach ($tags as $tag) {
             $item
-                ->category($tag, site_url() . 'tag/' . $tag);
+                ->category(tag_i18n($tag), site_url() . 'tag/' . strtolower($tag));
         }
         $item
             ->title($p->title)
@@ -1735,12 +1735,12 @@ function generate_sitemap($str)
                 $data = $arr[1];
                 $mtag = explode(',', $data);
                 foreach ($mtag as $etag) {
-                    $tags[] = $etag;
+                    $tags[] = strtolower($etag);
                 }
             }
 
             foreach ($tags as $t) {
-                $tag[] = site_url() . 'tag/' . $t;
+                $tag[] = site_url() . 'tag/' . strtolower($t);
             }
 
             echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
