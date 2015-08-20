@@ -308,8 +308,8 @@ function find_post($year, $month, $name)
     $posts = get_post_sorted();
 
     foreach ($posts as $index => $v) {
-        $url = $v['basename'];
-        if (strpos($url, "$year-$month") !== false && strpos($url, $name . '.md') !== false) {
+        $arr = explode('_', $v['basename']);
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) {
 
             // Use the get_posts method to return
             // a properly parsed object
@@ -342,7 +342,7 @@ function find_post($year, $month, $name)
                     'prev' => $pr[0]
                 );
             }
-        } else if (strpos($url, $name . '.md') !== false) {
+        } else if (strtolower($arr[2]) === strtolower($name)) {
             $ar = get_posts($posts, $index + 1, 1);
             $nx = get_posts($posts, $index, 1);
             $pr = get_posts($posts, $index + 2, 1);
@@ -381,8 +381,8 @@ function find_draft($year, $month, $name)
     $posts = get_draft_posts();
 
     foreach ($posts as $index => $v) {
-        $url = $v['basename'];
-        if (strpos($url, "$year-$month") !== false && strpos($url, $name . '.md') !== false) {
+        $arr = explode('_', $v['basename']);
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) {
 
             // Use the get_posts method to return
             // a properly parsed object
@@ -415,7 +415,7 @@ function find_draft($year, $month, $name)
                     'prev' => $pr[0]
                 );
             }
-        } else if (strpos($url, $name . '.md') !== false) {
+        } else if (strtolower($arr[2]) === strtolower($name)) {
             $ar = get_posts($posts, $index + 1, 1);
             $nx = get_posts($posts, $index, 1);
             $pr = get_posts($posts, $index + 2, 1);
@@ -460,14 +460,13 @@ function get_tag($tag, $page, $perpage, $random)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v['basename'];
-        $str = explode('_', $url);
+        $str = explode('_', $v['basename']);
         $mtag = explode(',', rtrim($str[1], ','));
         $etag = explode(',', $tag);
         foreach ($mtag as $t) {
             foreach ($etag as $e) {
                 $e = trim($e);
-                if ($t === $e) {
+                if (strtolower($t) === strtolower($e)) {
                     $tmp[] = $v;
                 }
             }
@@ -491,8 +490,7 @@ function get_archive($req, $page, $perpage)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v['basename'];
-        $str = explode('_', $url);
+        $str = explode('_', $v['basename']);
         if (strpos($str[0], "$req") !== false) {
             $tmp[] = $v;
         }
@@ -513,10 +511,9 @@ function get_profile_posts($name, $page, $perpage)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v['dirname'];
-        $str = explode('/', $url);
+        $str = explode('/', $v['dirname']);
         $author = $str[count($str) - 2];
-        if ($name === $author) {
+        if (strtolower($name) === strtolower($author)) {
             $tmp[] = $v;
         }
     }
@@ -536,10 +533,9 @@ function get_draft($profile, $page, $perpage)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $url = $v['dirname'];
-        $str = explode('/', $url);
+        $str = explode('/', $v['dirname']);
         $author = $str[count($str) - 2];
-        if ($profile === $author) {
+        if (strtolower($profile) === strtolower($author)) {
             $tmp[] = $v;
         }
     }
@@ -621,7 +617,7 @@ function get_static_post($static)
     if (!empty($posts)) {
 
         foreach ($posts as $index => $v) {
-            if (strpos($v, $static . '.md') !== false) {
+            if (stripos($v, $static . '.md') !== false) {
 
                 $post = new stdClass;
 
@@ -665,7 +661,7 @@ function get_static_sub_post($static, $sub_static)
     if (!empty($posts)) {
 
         foreach ($posts as $index => $v) {
-            if (strpos($v, $sub_static . '.md') !== false) {
+            if (stripos($v, $sub_static . '.md') !== false) {
 
                 $post = new stdClass;
 
@@ -742,7 +738,7 @@ function get_related($tag, $custom = null, $count = null)
 
     foreach ($posts as $post) {
         $url = $post->url;
-        if (strpos($url, $req) === false) {
+        if (stripos($url, $req) === false) {
             $tmp[] = $post;
         }
     }
@@ -782,7 +778,7 @@ function get_count($var, $str)
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v[$str]);
         $url = $arr[0];
-        if (strpos($url, "$var") !== false) {
+        if (stripos($url, "$var") !== false) {
             $tmp[] = $v;
         }
     }
@@ -800,7 +796,7 @@ function get_tagcount($var, $str)
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v[$str]);
         $url = $arr[1];
-        if (strpos($url, "$var") !== false) {
+        if (stripos($url, "$var") !== false) {
             $tmp[] = $v;
         }
     }
@@ -821,7 +817,7 @@ function keyword_count($keyword)
         $arr = explode('_', $v['basename']);
         $filter = $arr[1] . ' ' . $arr[2];
         foreach ($words as $word) {
-            if (strpos($filter, strtolower($word)) !== false) {
+            if (stripos($filter, $word) !== false) {
                 $tmp[] = $v;
             }
         }
@@ -903,7 +899,7 @@ function popular_posts($custom = null, $count = null)
                     $i = 1;
                     foreach ($_views as $key => $val) {
                         if (file_exists($key)) {
-                            if (strpos($key, 'blog') !== false) {
+                            if (stripos($key, 'blog') !== false) {
                                 $tmp[] = pathinfo($key);
                                 if ($i++ >= $count)
                                 break;
@@ -1084,7 +1080,7 @@ function tag_cloud($custom = null)
                 $data = rtrim($arr[1], ',');
                 $mtag = explode(',', $data);
                 foreach ($mtag as $etag) {
-                    $tags[] = $etag;
+                    $tags[] = strtolower($etag);
                 }
             }
             $tag_collection = array_count_values($tags);
@@ -1443,11 +1439,11 @@ function menu($custom = null)
 
             if (isset($anc[0]) && isset($anc[1])) {
 
-                if (strpos(rtrim($anc[1], '/') . '/', site_url()) !== false) {
+                if (stripos(rtrim($anc[1], '/') . '/', site_url()) !== false) {
                     $id = substr($link, strrpos($link, '/') + 1);
                     $file = 'content/static/' . $id . '.md';
                     if (file_exists($file)) {
-                        if (strpos($req, $id) !== false) {
+                        if (stripos($req, $id) !== false) {
                             echo '<li class="' . $class . ' active"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
                         } else {
                             echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
@@ -1949,7 +1945,7 @@ function Zip($source, $destination, $include_dir = false)
 function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
-    if (strpos($req, '/archive/') !== false || strpos($req, '/tag/') !== false || strpos($req, '/search/') !== false || strpos($req, '/blog') !== false || $req == site_path() . '/' || strpos($req, site_path() . '/?page') !== false) {
+    if (stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
         return true;
     } else {
         return false;
