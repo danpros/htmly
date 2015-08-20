@@ -2,6 +2,11 @@
 <p>
     <u>hint:</u> Use <code>Ctrl</code>/<code>CMD⌘</code> + <code>F</code> to search for your config key or value.
 </p>
+<p>
+    <u>pro tips:</u> You can creating custom config key and print out your config key value anywhere in your template.
+</p>
+<pre><code>&lt;?php echo config('your.key'); ?&gt;</code></pre>
+<hr style="margin:30px 0;border:1px solid #e3e3e3;">
 <form method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
     <input type="submit">

@@ -53,7 +53,7 @@ else {
                                                         } ?>" value="<?php echo $oldtitle ?>"/><br><br>
         Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/><br>
         <span class="help">If the url leave empty we will use the page title.</span><br><br>
-        Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
+        Meta Description (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {
                 echo $p->description;
             } else {echo $olddescription;}?></textarea>
         <br><br>

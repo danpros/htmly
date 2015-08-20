@@ -1229,7 +1229,7 @@ get('/tag/:tag', function ($tag) {
     render('main', array(
         'title' => 'Posts tagged: ' . tag_i18n($tag) . ' - ' . blog_title(),
         'description' => 'All posts tagged: ' . tag_i18n($tag) . ' on ' . blog_title() . '.',
-        'canonical' => site_url() . 'tag/' . $tag,
+        'canonical' => site_url() . 'tag/' . strtolower($tag),
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'intag',
@@ -1312,7 +1312,7 @@ get('/search/:keyword', function ($keyword) {
     render('main', array(
         'title' => 'Search results for: ' . tag_i18n($keyword) . ' - ' . blog_title(),
         'description' => 'Search results for: ' . tag_i18n($keyword) . ' on ' . blog_title() . '.',
-        'canonical' => site_url() . 'search/' . $keyword,
+        'canonical' => site_url() . 'search/' . strtolower($keyword),
         'page' => $page,
         'posts' => $posts,
         'bodyclass' => 'insearch',

@@ -72,11 +72,11 @@ if (config('permalink.type') == 'post') {
         Year, Month, Day<br><input type="date" name="date" class="text" value="<?php echo date('Y-m-d', $postdate); ?>"><br>
         Hour, Minute, Second<br><input
             type="time" name="time" class="text" value="<?php echo $time->format('H:i:s'); ?>"><br><br>
-        Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
+        Meta Description (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {
                 echo $p->description;
             } else {echo $olddescription;}?></textarea>
         <br><br>
-       Featured Quote <span class="required">*</span> <br><textarea maxlength="200" class="text <?php if (isset($postQuote)) {
+       Featured Quote <span class="required">*</span> <br><textarea rows="3" cols="20" class="text <?php if (isset($postQuote)) {
             if (empty($postQuote)) {
                 echo 'error';
             }

@@ -29,11 +29,11 @@
             echo $postUrl;
         } ?>"/><br>
         <span class="help">If the url leave empty we will use the post title.</span><br><br>
-        Meta Description (optional)<br><textarea name="description" maxlength="200"><?php if (isset($p->description)) {
+        Meta Description (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {
                 echo $p->description;
             } ?></textarea>
         <br><br>
-        Featured Audio <span class="required">*</span> (SoundCloud Only)<br><textarea maxlength="200" class="text <?php if (isset($postAudio)) {
+        Featured Audio <span class="required">*</span> (SoundCloud Only)<br><textarea rows="3" cols="20" class="text <?php if (isset($postAudio)) {
             if (empty($postAudio)) {
                 echo 'error';
             }

@@ -15,7 +15,7 @@ if ($updater->able()) {
     echo '<p>Release Title: <strong>'. $info['name'] .'</strong></p>';
     echo '<p>Version: <strong>'. $info['tag_name'] .'</strong></p>';
     echo '<h4>Release Notes</h4>';
-    echo '<div style="background-color:#f9f9f9;border:1px solid #ccc;border-radius:4px;color:#333;display:block;font-size:13px;line-height:1.42857;margin:20px 0;padding:0 1em;word-break:break-all;word-wrap:break-word;">';
+    echo '<div style="background-color:#f9f9f9;border:1px solid #ccc;border-radius:4px;color:#333;display:block;font-size:13px;margin:20px 0;padding:0 1em;">';
     echo \Michelf\MarkdownExtra::defaultTransform($info['body']);
     echo '</div>';
     echo '<p><strong>Important:</strong> Please always backup your files before upgrading to newer version.</p>';
@@ -26,7 +26,7 @@ if ($updater->able()) {
     echo '<p>Release Title: <strong>'. $info['name'] .'</strong></p>';
     echo '<p>Installed Version: <strong>'. $info['tag_name'] .'</strong></p>';
     echo '<h4>Release Notes: </h4>';
-    echo '<div style="background-color:#f9f9f9;border:1px solid #ccc;border-radius:4px;color:#333;display:block;font-size:13px;line-height:1.42857;margin:20px 0;padding:0 1em;word-break:break-all;word-wrap:break-word;">';
+    echo '<div style="background-color:#f9f9f9;border:1px solid #ccc;border-radius:4px;color:#333;display:block;font-size:13px;margin:20px 0;padding:0 1em;">';
     echo \Michelf\MarkdownExtra::defaultTransform($info['body']);
     echo '</div>';
     echo '<p>Read on <a target="_blank" href="' . $info['html_url'] . '">Github</a>.</p>';
