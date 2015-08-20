@@ -309,7 +309,7 @@ function find_post($year, $month, $name)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) {
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
 
             // Use the get_posts method to return
             // a properly parsed object
@@ -342,35 +342,6 @@ function find_post($year, $month, $name)
                     'prev' => $pr[0]
                 );
             }
-        } else if (strtolower($arr[2]) === strtolower($name)) {
-            $ar = get_posts($posts, $index + 1, 1);
-            $nx = get_posts($posts, $index, 1);
-            $pr = get_posts($posts, $index + 2, 1);
-
-            if ($index == 0) {
-                if (isset($pr[0])) {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => $pr[0]
-                    );
-                } else {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => null
-                    );
-                }
-            } elseif (count($posts) == $index + 1) {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0]
-                );
-            } else {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0],
-                    'prev' => $pr[0]
-                );
-            }        
         }
     }
 }
@@ -382,7 +353,7 @@ function find_draft($year, $month, $name)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) {
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
 
             // Use the get_posts method to return
             // a properly parsed object
@@ -415,35 +386,6 @@ function find_draft($year, $month, $name)
                     'prev' => $pr[0]
                 );
             }
-        } else if (strtolower($arr[2]) === strtolower($name)) {
-            $ar = get_posts($posts, $index + 1, 1);
-            $nx = get_posts($posts, $index, 1);
-            $pr = get_posts($posts, $index + 2, 1);
-
-            if ($index == 0) {
-                if (isset($pr[0])) {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => $pr[0]
-                    );
-                } else {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => null
-                    );
-                }
-            } elseif (count($posts) == $index + 1) {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0]
-                );
-            } else {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0],
-                    'prev' => $pr[0]
-                );
-            }        
         }
     }
 }
