@@ -1678,6 +1678,8 @@ function sitemap_page_path()
 // Generate sitemap.xml.
 function generate_sitemap($str)
 {
+    $default_priority = '0.5';
+
     header('X-Robots-Tag: noindex');
 
     echo '<?xml version="1.0" encoding="UTF-8"?>';
@@ -1685,49 +1687,95 @@ function generate_sitemap($str)
     if ($str == 'index') {
 
         echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        echo '<sitemap><loc>' . site_url() . 'sitemap.base.xml</loc></sitemap>';
-        echo '<sitemap><loc>' . site_url() . 'sitemap.post.xml</loc></sitemap>';
-        echo '<sitemap><loc>' . site_url() . 'sitemap.static.xml</loc></sitemap>';
-        echo '<sitemap><loc>' . site_url() . 'sitemap.tag.xml</loc></sitemap>';
-        echo '<sitemap><loc>' . site_url() . 'sitemap.archive.xml</loc></sitemap>';
-        echo '<sitemap><loc>' . site_url() . 'sitemap.author.xml</loc></sitemap>';
+
+        if (config('sitemap.priority.base') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.base.xml</loc></sitemap>';
+        }
+
+        if (config('sitemap.priority.post') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.post.xml</loc></sitemap>';
+        }
+
+        if (config('sitemap.priority.static') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.static.xml</loc></sitemap>';
+        }
+
+        if (config('sitemap.priority.tag') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.tag.xml</loc></sitemap>';
+        }
+
+        if (config('sitemap.priority.archiveDay') !== 'false' || config('sitemap.priority.archiveMonth') !== 'false' || config('sitemap.priority.archiveYear') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.archive.xml</loc></sitemap>';
+        }
+
+        if (config('sitemap.priority.author') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.author.xml</loc></sitemap>';
+        }
+
         echo '</sitemapindex>';
+
     } elseif ($str == 'base') {
 
+        $priority = (config('sitemap.priority.base')) ? config('sitemap.priority.base') : '1.0';
+
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        echo '<url><loc>' . site_url() . '</loc><priority>1.0</priority></url>';
+
+        if ($priority !== 'false') {
+            echo '<url><loc>' . site_url() . '</loc><priority>' . $priority . '</priority></url>';
+        }
+
         echo '</urlset>';
+
     } elseif ($str == 'post') {
 
-        $posts = sitemap_post_path();
+        $priority = (config('sitemap.priority.post')) ? config('sitemap.priority.post') : $default_priority;
+
+        $posts = [];
+        if ($priority !== 'false') {
+            $posts = sitemap_post_path();
+        }
 
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
         foreach ($posts as $p) {
-            echo '<url><loc>' . $p->url . '</loc><priority>0.5</priority></url>';
+
+            echo '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority><lastmod>' . date('Y-m-d', $p->date) . '</lastmod></url>';
         }
 
         echo '</urlset>';
+
     } elseif ($str == 'static') {
 
-        $posts = sitemap_page_path();
+        $priority = (config('sitemap.priority.static')) ? config('sitemap.priority.static') : $default_priority;
+
+        $posts = [];
+        if ($priority !== 'false') {
+            $posts = sitemap_page_path();
+        }
 
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        if (!empty($posts)) {
+        foreach ($posts as $p) {
 
-            foreach ($posts as $p) {
-                echo '<url><loc>' . $p->url . '</loc><priority>0.5</priority></url>';
-            }
+            echo '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority></url>';
         }
 
         echo '</urlset>';
+
     } elseif ($str == 'tag') {
 
-        $posts = get_post_unsorted();
+        $priority = (config('sitemap.priority.tag')) ? config('sitemap.priority.tag') : $default_priority;
+
+        $posts = [];
+        if ($priority !== 'false') {
+            $posts = get_post_unsorted();
+        }
+
         $tags = array();
 
-        if (!empty($posts)) {
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        if($posts) {
             foreach ($posts as $index => $v) {
 
                 $arr = explode('_', $v);
@@ -1743,20 +1791,23 @@ function generate_sitemap($str)
                 $tag[] = site_url() . 'tag/' . strtolower($t);
             }
 
-            echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
             if (isset($tag)) {
 
                 $tag = array_unique($tag, SORT_REGULAR);
 
                 foreach ($tag as $t) {
-                    echo '<url><loc>' . $t . '</loc><priority>0.5</priority></url>';
+                    echo '<url><loc>' . $t . '</loc><priority>' . $priority . '</priority></url>';
                 }
             }
-
-            echo '</urlset>';
         }
+
+        echo '</urlset>';
+
     } elseif ($str == 'archive') {
+
+        $priorityDay = (config('sitemap.priority.archiveDay')) ? config('sitemap.priority.archiveDay') : $default_priority;
+        $priorityMonth = (config('sitemap.priority.archiveMonth')) ? config('sitemap.priority.archiveMonth') : $default_priority;
+        $priorityYear = (config('sitemap.priority.archiveYear')) ? config('sitemap.priority.archiveYear') : $default_priority;
 
         $posts = sitemap_post_path();
         $day = array();
@@ -1775,34 +1826,48 @@ function generate_sitemap($str)
 
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        foreach ($day as $d) {
-            echo '<url><loc>' . $d . '</loc><priority>0.5</priority></url>';
+        if ($priorityDay !== 'false') {
+            foreach ($day as $d) {
+                echo '<url><loc>' . $d . '</loc><priority>' . $priorityDay . '</priority></url>';
+            }
         }
 
-        foreach ($month as $m) {
-            echo '<url><loc>' . $m . '</loc><priority>0.5</priority></url>';
+        if ($priorityMonth !== 'false') {
+            foreach ($month as $m) {
+                echo '<url><loc>' . $m . '</loc><priority>' . $priorityMonth . '</priority></url>';
+            }
         }
 
-        foreach ($year as $y) {
-            echo '<url><loc>' . $y . '</loc><priority>0.5</priority></url>';
+        if ($priorityYear !== 'false') {
+            foreach ($year as $y) {
+                echo '<url><loc>' . $y . '</loc><priority>' . $priorityYear . '</priority></url>';
+            }
         }
 
         echo '</urlset>';
+
     } elseif ($str == 'author') {
 
-        $posts = sitemap_post_path();
-        $author = array();
+        $priority = (config('sitemap.priority.author')) ? config('sitemap.priority.author') : $default_priority;
 
-        foreach ($posts as $p) {
-            $author[] = $p->authorUrl;
+        $author = [];
+        if ($priority !== 'false') {
+
+            $posts = sitemap_post_path();
+
+            foreach ($posts as $p) {
+                $author[] = $p->authorUrl;
+            }
+
+            $author = array_unique($author, SORT_REGULAR);
         }
-
-        $author = array_unique($author, SORT_REGULAR);
 
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        foreach ($author as $a) {
-            echo '<url><loc>' . $a . '</loc><priority>0.5</priority></url>';
+        if ($priority !== 'false') {
+            foreach ($author as $a) {
+                echo '<url><loc>' . $a . '</loc><priority>' . $priority . '</priority></url>';
+            }
         }
 
         echo '</urlset>';

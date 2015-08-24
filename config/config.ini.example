@@ -99,6 +99,16 @@ default.thumbnail = ""
 ; Enable view Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page.
 views.counter = "true"
 
+; Sitemap priorities between "0.0" and "1.0". Set "false" to disable a sitemap for the given type. (See /sitemap.xml)
+sitemap.priority.base = "1.0"
+sitemap.priority.post = "0.5"
+sitemap.priority.static = "0.5"
+sitemap.priority.tag = "0.5"
+sitemap.priority.archiveDay = "0.5"
+sitemap.priority.archiveMonth = "0.5"
+sitemap.priority.archiveYear = "0.5"
+sitemap.priority.author = "0.5"
+
 ; Also install pre-release
 prerelease = false
 
