@@ -41,6 +41,8 @@ Allow: /themes/*/images/
 Allow: /themes/*/img/
 Allow: /themes/*/js/
 Allow: /themes/*/fonts/
+
+# Allow content images
 Allow: /content/images/*.jpg
 Allow: /content/images/*.png
 Allow: /content/images/*.gif
