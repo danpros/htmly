@@ -4,7 +4,9 @@
     <?php echo head_contents() ?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
-    <link rel="canonical" href="<?php echo $canonical; ?>" />
+    <?php if($canonical): ?>
+        <link rel="canonical" href="<?php echo $canonical; ?>" />
+    <?php endif; ?>
     <link href="<?php echo site_url() ?>themes/logs/css/style.css" rel="stylesheet"/>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
     <?php if (publisher()): ?>
