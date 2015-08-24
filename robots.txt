@@ -17,17 +17,30 @@
 # http://www.sxw.org.uk/computing/robots/check.html
 
 User-agent: *
-# Directories
+
+# Disallow directories
 Disallow: /config/
 Disallow: /system/
 Disallow: /themes/
 Disallow: /vendor/
 Disallow: /cache/
-# Files
+
+# Disallow files
 Disallow: /changelog.txt
 Disallow: /composer.json
 Disallow: /composer.lock
 Disallow: /composer.phar
-# Paths 
+
+# Disallow paths
 Disallow: /search/
 Disallow: /admin/
+
+# Allow themes
+Allow: /themes/*/css/
+Allow: /themes/*/images/
+Allow: /themes/*/img/
+Allow: /themes/*/js/
+Allow: /themes/*/fonts/
+Allow: /content/images/*.jpg
+Allow: /content/images/*.png
+Allow: /content/images/*.gif
