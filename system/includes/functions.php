@@ -654,7 +654,13 @@ function get_keyword($keyword, $page, $perpage)
         }
     }
 
-    return ($tmp) ? get_posts($tmp, $page, $perpage) : [];
+    if (empty($tmp)) {
+        // a non-existing page
+        render('404-search', null, false);
+        die;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage);
 }
 
 // Get related posts base on post tag.
@@ -1537,13 +1543,7 @@ EOF;
 function not_found()
 {
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
-    render('404', array(
-        'title' => 'This page doesn\'t exist! - ' . blog_title(),
-        'description' => '',
-        'canonical' => false,
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
-        'bodyclass' => 'error-404',
-    ));
+    render('404', null, false);
     die();
 }
 
