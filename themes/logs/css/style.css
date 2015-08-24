@@ -332,6 +332,10 @@ ul li, ol li {
 #search-form {
     float: right;
 }
+.error-404 .post #search-form,
+.error-404-search .post #search-form {
+    float: none;
+}
 
 .search-input {
     border: 1px solid #E5E5E5;
