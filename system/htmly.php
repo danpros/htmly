@@ -1301,13 +1301,19 @@ get('/search/:keyword', function ($keyword) {
 
     $posts = get_keyword($keyword, $page, $perpage);
 
-    $total = keyword_count($keyword);
-
-    if (empty($posts) || $page < 1) {
-        // a non-existing page
-        render('404-search', null, false);
+    if (!$posts || $page < 1) {
+        // a non-existing page or no search result
+        render('404-search', array(
+            'title' => 'Search results not found! - ' . blog_title(),
+            'description' => '',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; No search results',
+            'canonical' => site_url() . 'search/' . strtolower($keyword),
+            'bodyclass' => 'error-404-search',
+        ));
         die;
     }
+
+    $total = keyword_count($keyword);
 
     render('main', array(
         'title' => 'Search results for: ' . tag_i18n($keyword) . ' - ' . blog_title(),

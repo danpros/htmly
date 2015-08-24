@@ -414,6 +414,11 @@ table.post-list td a {
     float: right;
 }
 
+.error-404 .post #search-form,
+.error-404-search .post #search-form {
+    float: none;
+}
+
 .search-input {
     margin: 0;
     padding: 4px 15px;
@@ -519,7 +524,7 @@ h1.title-post a:hover, h2.title-index a:hover {
     padding-top: 0;
 }
 
-.infront .first, .inpost .post, .intag .first, .inarchive .first, .insearch .first {
+.infront .first, .inpost .post, .intag .first, .inarchive .first, .insearch .first, .error-404 .post, .error-404-search .post {
     padding-top: 0;
 }
 

@@ -6,7 +6,9 @@
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
-    <link rel="canonical" href="<?php echo $canonical; ?>" />
+    <?php if($canonical): ?>
+        <link rel="canonical" href="<?php echo $canonical; ?>" />
+    <?php endif; ?>
     <?php if (publisher()): ?>
     <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>    
     <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
