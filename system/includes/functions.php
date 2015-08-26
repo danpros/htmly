@@ -114,7 +114,7 @@ function get_draft_posts()
     static $_draft = array();
     if (empty($_draft)) {
         $tmp = array();
-        $tmp = glob('content/*/draft/*.md', GLOB_NOSORT);
+        $tmp = glob('content/*/*/*/draft/*.md', GLOB_NOSORT);
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
                 $_draft[] = pathinfo($file);
@@ -123,6 +123,38 @@ function get_draft_posts()
         usort($_draft, "sortfile");
     }
     return $_draft;
+}
+
+// Get user draft.
+function get_category_files()
+{
+    static $_desc = array();
+    if (empty($_desc)) {
+        $tmp = array();
+        $tmp = glob('content/data/category/*.md', GLOB_NOSORT);
+        if (is_array($tmp)) {
+            foreach ($tmp as $file) {
+                $_desc[] = $file;
+            }
+        }
+    }
+    return $_desc;
+}
+
+// Get user draft.
+function get_category_folder()
+{
+    static $_dfolder = array();
+    if (empty($_dfolder)) {
+        $tmp = array();
+        $tmp = glob('content/*/blog/*/', GLOB_ONLYDIR);
+        if (is_array($tmp)) {
+            foreach ($tmp as $dir) {
+                $_dfolder[] = $dir;
+            }
+        }
+    }
+    return $_dfolder;
 }
 
 // usort function. Sort by filename.
@@ -151,16 +183,26 @@ function rebuilt_cache($type)
     }
 
     if ($type === 'posts') {
-        $posts_cache_unsorted = glob('content/*/blog/*.md', GLOB_NOSORT);
+	    $tmpu = array();
+        $tmpu = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
+		 if (is_array($tmpu)) {
+            foreach ($tmpu as $fileu) {
+			    if(strpos($fileu, 'draft') === false) {
+                    $posts_cache_unsorted[] = $fileu;
+				}
+            }
+        }
         $string = serialize($posts_cache_unsorted);
         file_put_contents('cache/index/index-unsorted.txt', print_r($string, true));
 
         $tmp = array();
-        $tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+        $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
 
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
-                $posts_cache_sorted[] = pathinfo($file);
+			    if(strpos($file, 'draft') === false) {
+                    $posts_cache_sorted[] = pathinfo($file);
+				}
             }
         }
         usort($posts_cache_sorted, "sortfile");
@@ -220,11 +262,21 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Author string
         $str = explode('/', $replaced);
-        $author = $str[count($str) - 3];
+        $author = $str[count($str) - 5];
+		if($str[count($str) - 3] == 'uncategorized') {
+		    $category = default_category();
+			$post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
+		} else {
+		    $category = get_category_info($str[count($str) - 3]);
+			$post->category = '<a href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
+		}
+		$type = $str[count($str) - 2];
 
         // The post author + author url
         $post->author = $author;
         $post->authorUrl = site_url() . 'author/' . $author;
+		
+		$post->type = $type;
 
         $dt = str_replace($replaced, '', $arr[0]);
         $t = str_replace('-', '', $dt);
@@ -258,6 +310,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $tag = array();
         $url = array();
         $bc = array();
+		$rel = array();
         
         $tagt = get_content_tag('tag', $content);
         $t = explode(',', rtrim($arr[1], ','));
@@ -279,13 +332,15 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
         
         foreach ($tag as $a) {
-            $url[] = '<span><a href="' . $a[1] . '">' . $a[0] . '</a></span>';
+            $url[] = '<a rel="tag" href="' . $a[1] . '">' . $a[0] . '</a>';
             $bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $a[1] . '">' . $a[0] . '</a></span>';
         }
 
-        $post->tag = implode(', ', $url);
+        $post->tag = implode(' ', $url);
 
         $post->tagb = implode(' » ', $bc);
+		
+		$post->related = rtrim($arr[1], ',');
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
@@ -390,6 +445,103 @@ function find_draft($year, $month, $name)
     }
 }
 
+// Return category page.
+function get_category($category, $page, $perpage)
+{
+    $posts = get_post_sorted();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+	
+        $filepath = $v['dirname'] . '/' . $v['basename'];
+
+        // Extract the date
+        $arr = explode('_', $filepath);
+
+        // Replaced string
+        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+        // Author string
+        $str = explode('/', $replaced);
+		$cat = $str[count($str) - 3];
+	
+		if (strtolower($category) === strtolower($cat)) {
+			$tmp[] = $v;
+		}
+    }
+
+    if (empty($tmp)) {
+        not_found();
+    }
+    
+    $tmp = array_unique($tmp, SORT_REGULAR);
+
+    return $tmp = get_posts($tmp, $page, $perpage);
+}
+
+// Return category data.
+function get_category_info($category)
+{
+    $posts = get_category_files();
+
+    $tmp = array();
+
+    if (!empty($posts)) {
+
+        foreach ($posts as $index => $v) {
+            if (stripos($v, $category . '.md') !== false) {
+
+                $desc = new stdClass;
+
+                // Replaced string
+                $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+
+                // The static page URL
+                $url= str_replace($replaced, '', $v);
+				
+                $desc->url = site_url() . 'category/' . str_replace('.md', '', $url);
+				
+				$desc->md = str_replace('.md', '', $url);
+
+                $desc->file = $v;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($v);
+
+                // Extract the title and body
+                $desc->title = get_content_tag('t', $content, $category);
+                $desc->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                $desc->description = get_content_tag("d", $content, get_description($desc->body));
+
+                $tmp[] = $desc;
+            }
+        }
+    }
+	
+	if (strtolower($category) == 'uncategorized') {
+	    return default_category();
+	}
+	
+    return $tmp;
+}
+
+// Return default profile
+function default_category()
+{
+    $tmp = array();
+    $desc = new stdClass;
+
+    $desc->title = 'Uncategorized';
+    $desc->url = site_url() . 'category/uncategorized';
+    $desc->body = "<p>Topics that don't need a category, or don't fit into any other existing category.</p>";
+
+    $desc->description = 'Uncategorized Posts';
+
+    return $tmp[] = $desc;
+}
+
 // Return tag page.
 function get_tag($tag, $page, $perpage, $random)
 {
@@ -454,7 +606,7 @@ function get_profile_posts($name, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        $author = $str[count($str) - 2];
+        $author = $str[count($str) - 4];
         if (strtolower($name) === strtolower($author)) {
             $tmp[] = $v;
         }
@@ -476,7 +628,7 @@ function get_draft($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        $author = $str[count($str) - 2];
+        $author = $str[count($str) - 4];
         if (strtolower($profile) === strtolower($author)) {
             $tmp[] = $v;
         }
@@ -668,7 +820,7 @@ function get_related($tag, $custom = null, $count = null)
         }
     }
 
-    $posts = get_tag(strip_tags(remove_accent($tag)), 1, $count + 1, true);
+    $posts = get_tag($tag, 1, $count + 1, true);
     $tmp = array();
     $req = urldecode($_SERVER['REQUEST_URI']);
 
@@ -715,6 +867,64 @@ function get_count($var, $str)
         $arr = explode('_', $v[$str]);
         $url = $arr[0];
         if (stripos($url, "$var") !== false) {
+            $tmp[] = $v;
+        }
+    }
+
+    return count($tmp);
+}
+
+// Return tag count. Matching $var and $str provided.
+function get_categorycount($var)
+{
+    $posts = get_post_sorted();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+	
+         $filepath = $v['dirname'] . '/' . $v['basename'];
+
+        // Extract the date
+        $arr = explode('_', $filepath);
+
+        // Replaced string
+        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+        // Author string
+        $str = explode('/', $replaced);
+		$cat = $str[count($str) - 3];
+		
+        if (stripos($cat, "$var") !== false) {
+            $tmp[] = $v;
+        }
+    }
+
+    return count($tmp);
+}
+
+// Return tag count. Matching $var and $str provided.
+function get_draftcount($var)
+{
+    $posts = get_draft_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+	
+         $filepath = $v['dirname'] . '/' . $v['basename'];
+
+        // Extract the date
+        $arr = explode('_', $filepath);
+
+        // Replaced string
+        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+        // Author string
+        $str = explode('/', $replaced);
+		$cat = $str[count($str) - 3];
+		
+        if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
         }
     }
@@ -1577,10 +1787,10 @@ function generate_rss($posts)
         }
 
         $item = new Item();
-        $tags = explode(',', str_replace(' ', '', strip_tags(remove_accent($p->tag))));
-        foreach ($tags as $tag) {
+        $cats = explode(',', str_replace(' ', '', strip_tags(remove_accent($p->category))));
+        foreach ($cats as $cat) {
             $item
-                ->category(tag_i18n($tag), site_url() . 'tag/' . strtolower($tag));
+                ->category($cat, site_url() . 'category/' . strtolower($cat));
         }
         $item
             ->title($p->title)
@@ -1952,7 +2162,7 @@ function Zip($source, $destination, $include_dir = false)
 function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
-    if (stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
+    if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
         return true;
     } else {
         return false;
@@ -2001,6 +2211,16 @@ function is_archive($value = null)
 
 // TRUE if the current page is search index.
 function is_search($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is category index.
+function is_category($value = null)
 {
     if (!empty($value)) {
         return true;
@@ -2125,6 +2345,9 @@ EOF;
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
     echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';
     echo '<li><a href="' . $base . 'admin/content">Add content</a></li>';
+    if ($role === 'admin') {
+        echo '<li><a href="' . $base . 'admin/categories">Categories</a></li>';
+    }
     echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';
     echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
@@ -2340,4 +2563,49 @@ function safe_html($string)
     $string = preg_replace('/\s\s+/', ' ', $string);
     $string = ltrim(rtrim($string));
     return $string;
+}
+
+// return tag safe string
+function safe_tag($string)
+{
+	$tags = array();
+	$string = preg_replace('/[\s-]+/', ' ', $string);
+	$string = explode(',', $string);
+    $string = array_map('trim', $string);
+        foreach ($string as $str) {
+            $tags[] = $str;
+        }
+	$string = implode(',', $tags);
+	$string = preg_replace('/[\s_]/', '-', $string);
+	return $string;
+	
+}
+
+// rename category folder
+function rename_category_folder($string, $old_url)
+{
+
+	$old = str_replace('.md', '/', $old_url);
+	$url = substr($old, 0, strrpos($old, '/'));
+	$ostr = explode('/', $url);
+	$url = '/blog/' . $ostr[count($ostr) - 1];
+	
+    $dir = get_category_folder();
+	
+	$file = array();
+   
+	foreach ($dir as $index => $v) {
+	    if (stripos($v, $url) !== false) {
+			$str = explode('/', $v);
+			$n = $str[count($ostr) - 4] . '/' . $str[count($ostr) - 3] .'/'. $str[count($ostr) - 2] .'/'. $string . '/';
+			$file[] = array($v, $n);
+		}
+	}
+	
+	foreach ($file as $f) {
+	    if(is_dir($f[0])) {
+		    rename($f[0], $f[1]);
+		}
+	}
+	
 }

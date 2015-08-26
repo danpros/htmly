@@ -60,7 +60,7 @@
     </div>
     <div class="related">
         <h4>Related posts</h4>
-        <?php echo get_related($p->tag)?>
+        <?php echo get_related($p->related)?>
     </div>
     <div id="comments" class="comments border">
         <?php if (facebook()): ?>

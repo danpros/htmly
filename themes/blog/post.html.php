@@ -35,7 +35,7 @@
                     <h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in 
-                        <span itemprop="articleSection"><?php echo $p->tag;?></span> by 
+                        <span itemprop="articleSection"><?php echo $p->category;?></span> by 
                         <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span>
                     </p>
                 </div>
@@ -43,6 +43,7 @@
                     <?php echo $p->body; ?>
                 </div><!--//desc-->
                 <div style="margin-top:30px;position:relative;">
+                    <span class="tags"><i class="fa fa-tags"></i> <?php echo $p->tag;?></span>
                     <?php if (disqus_count()) { ?>
                         <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
                     <?php } elseif (facebook()) { ?>
@@ -71,7 +72,7 @@
                 <?php if (disqus_count()): ?>
                     <?php echo disqus_count() ?>
                 <?php endif; ?>
-                <?php $tags = get_related($p->tag, true, config('related.count'));?>
+                <?php $tags = get_related($p->related, true, config('related.count'));?>
                 <?php $char = 30; $total = count($tags); $i = 1; if ($total >= 1) { ?>
                     <div class="related related-posts" style="margin-top:30px;position:relative;">
                         <hr>

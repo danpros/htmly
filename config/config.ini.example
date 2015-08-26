@@ -59,6 +59,7 @@ google.reCaptcha.private = ""
 
 ; Pagination, RSS, and JSON
 posts.perpage = "10"
+category.perpage = "10"
 tag.perpage = "10"
 archive.perpage = "10"
 search.perpage = "10"

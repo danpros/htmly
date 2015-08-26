@@ -5,6 +5,8 @@ if (isset($p->file)) {
     $url = $oldfile;
 }
 
+$desc = get_category_info(null);
+
 $content = file_get_contents($url);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
 $olddescription = get_content_tag('d', $content);
@@ -28,6 +30,11 @@ if (isset($_GET['destination'])) {
     $destination = 'admin';
 }
 $replaced = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/';
+
+// Category string
+$cat = explode('/', $replaced);
+$category = $cat[count($cat) - 3];
+
 $dt = str_replace($replaced, '', $oldurl[0]);
 $t = str_replace('-', '', $dt);
 $time = new DateTime($t);
@@ -61,6 +68,14 @@ if (config('permalink.type') == 'post') {
                                                                  echo 'error';
                                                              }
                                                          } ?>" value="<?php echo $oldtitle ?>"/><br><br>
+        Category <span class="required">*</span> <br>
+        <select name="category">
+        <option value="uncategorized">Uncategorized</option>
+        <?php foreach ($desc as $d):?>
+        <option value="<?php echo $d->md;?>" <?php if($category === $d->md) { echo 'selected="selected"';} ?>><?php echo $d->title;?></option>
+        <?php endforeach;?>
+        </select> 
+        <br><br>
         Tag <span class="required">*</span> <br><input type="text" name="tag" class="text <?php if (isset($postTag)) {
             if (empty($postTag)) {
                 echo 'error';
@@ -89,7 +104,7 @@ if (config('permalink.type') == 'post') {
         <input type="hidden" name="is_audio" class="text" value="is_audio"/>
         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <?php if ($isdraft[2] == 'draft') { ?>
+        <?php if ($isdraft[4] == 'draft') { ?>
             <input type="submit" name="publishdraft" class="submit" value="Publish draft"/> <input type="submit" name="updatedraft" class="draft" value="Update draft"/> <a href="<?php echo $delete ?>">Delete</a>
         <?php } else { ?>
             <input type="submit" name="updatepost" class="submit" value="Update post"/> <input type="submit" name="revertpost" class="revert" value="Revert to draft"/> <a href="<?php echo $delete ?>">Delete</a>
