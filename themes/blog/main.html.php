@@ -1,6 +1,20 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
+<?php if (!empty($category)): ?>
+<div class="section">
+    <div class="section-inner">
+        <div class="content">
+            <div class="item">
+            <h2 class="title"><?php echo $category->title;?></h2>
+            <div class="text-left">                                   
+                <?php echo $category->body; ?>
+            </div><!--//desc-->
+            </div><!--//item-->                       
+        </div><!--//content-->  
+    </div>
+</div>
+<?php endif; ?>
 <?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
     <?php if ($i == 0) {
@@ -44,7 +58,7 @@
                     <h2 class="title" itemprop="headline"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in 
-                        <span itemprop="articleSection"><?php echo $p->tag;?></span> by 
+                        <span itemprop="articleSection"><?php echo $p->category;?></span> by 
                         <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span>
                         <?php if (disqus_count()) { ?> 
                             with <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>

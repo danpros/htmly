@@ -9,6 +9,9 @@
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
+<?php 
+$desc = get_category_info(null);
+?>
 <div class="wmd-panel">
     <form method="POST">
         Title <span class="required">*</span> <br><input type="text" class="text <?php if (isset($postTitle)) {
@@ -18,6 +21,14 @@
         } ?>" name="title" value="<?php if (isset($postTitle)) {
             echo $postTitle;
         } ?>"/><br><br>
+        Category <span class="required">*</span> <br>
+        <select name="category">
+        <option value="uncategorized">Uncategorized</option>
+        <?php foreach ($desc as $d):?>
+        <option value="<?php echo $d->md;?>"><?php echo $d->title;?></option>
+        <?php endforeach;?>
+        </select> 
+        <br><br>
         Tag <span class="required">*</span> <br><input type="text" class="text <?php if (isset($postTag)) {
             if (empty($postTag)) {
                 echo 'error';

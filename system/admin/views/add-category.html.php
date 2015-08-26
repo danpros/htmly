@@ -9,41 +9,24 @@
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
-<?php 
-$desc = get_category_info(null);
-?>
 <div class="wmd-panel">
     <form method="POST">
-        Title <span class="required">*</span> <br><input type="text" class="text <?php if (isset($postTitle)) {
+        Title <span class="required">*</span><br><input type="text" class="text <?php if (isset($postTitle)) {
             if (empty($postTitle)) {
                 echo 'error';
             }
         } ?>" name="title" value="<?php if (isset($postTitle)) {
             echo $postTitle;
         } ?>"/><br><br>
-        Category <span class="required">*</span> <br>
-        <select name="category">
-        <option value="uncategorized">Uncategorized</option>
-        <?php foreach ($desc as $d):?>
-        <option value="<?php echo $d->md;?>"><?php echo $d->title;?></option>
-        <?php endforeach;?>
-        </select> 
-        <br><br>
-        Tag <span class="required">*</span> <br><input type="text" class="text <?php if (isset($postTag)) {
-            if (empty($postTag)) {
-                echo 'error';
-            }
-        } ?>" name="tag" value="<?php if (isset($postTag)) {
-            echo $postTag;
-        } ?>"/><br><br>
         Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) {
             echo $postUrl;
         } ?>"/><br>
-        <span class="help">If the url leave empty we will use the post title.</span><br><br>
+        <span class="help">If the url leave empty we will use the page title.</span><br><br>
         Meta Description (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {
                 echo $p->description;
             } ?></textarea>
         <br><br>
+
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {
             if (empty($postContent)) {
@@ -53,7 +36,7 @@ $desc = get_category_info(null);
                 echo $postContent;
             } ?></textarea><br/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <input type="submit" name="publish" class="submit" value="Publish"/> <input type="submit" name="draft" class="draft" value="Save as draft"/>
+        <input type="submit" name="submit" class="submit" value="Add category"/>
     </form>
 </div>
 <div id="insertImageDialog" title="Insert Image">
