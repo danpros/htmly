@@ -154,6 +154,10 @@ a:hover {
     font-family: 'Open Sans', sans-serif;
 }
 
+.tags a {
+    margin-right:3px;
+}
+
 /*-------------------------
         Text element
 --------------------------*/

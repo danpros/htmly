@@ -41,6 +41,7 @@
         <div class="post-body" itemprop="articleBody">
             <?php echo $p->body; ?>
         </div>
+        <div class="tags"><strong>Tags:</strong> <?php echo $p->tag;?></div>
     </div>
     <div class="separator">&rarr;</div>
     <div class="share-box">

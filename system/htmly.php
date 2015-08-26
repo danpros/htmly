@@ -1668,7 +1668,7 @@ get('/post/:name', function ($name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = ' <span typeof="v:Breadcrumb"><a href="' . site_url() . 'blog">Blog</a></span> &#187; ';
+        $blog = ' <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . 'blog">Blog</a></span> &#187; ';
     } else {
         $blog = '';
     }
@@ -1680,7 +1680,7 @@ get('/post/:name', function ($name) {
         'p' => $current,
         'author' => $author,
         'bodyclass' => 'inpost',
-        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . $current->category . ' &#187; ' . $current->title,
+        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . '<span typeof="v:Breadcrumb">' . $current->categoryb . '</span>' . ' &#187; ' . $current->title,
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,
@@ -2523,7 +2523,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = ' <span typeof="v:Breadcrumb"><a href="' . site_url() . 'blog">Blog</a></span> &#187; ';
+        $blog = ' <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . 'blog">Blog</a></span> &#187; ';
     } else {
         $blog = '';
     }
@@ -2535,7 +2535,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'p' => $current,
         'author' => $author,
         'bodyclass' => 'inpost',
-        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . $current->category . ' &#187; ' . $current->title,
+        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . '<span typeof="v:Breadcrumb">' . $current->categoryb . '</span>' . ' &#187; ' . $current->title,
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,

@@ -266,9 +266,11 @@ function get_posts($posts, $page = 1, $perpage = 0)
         if($str[count($str) - 3] == 'uncategorized') {
             $category = default_category();
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
+            $post->categoryb = '<a property="v:title" rel="v:url" href="' . $category->url . '">' . $category->title . '</a>';
         } else {
             $category = get_category_info($str[count($str) - 3]);
             $post->category = '<a href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
+            $post->categoryb = '<a property="v:title" rel="v:url" href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
         }
         $type = $str[count($str) - 2];
 
