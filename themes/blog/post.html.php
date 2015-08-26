@@ -43,7 +43,7 @@
                     <?php echo $p->body; ?>
                 </div><!--//desc-->
                 <div style="margin-top:30px;position:relative;">
-                    <span class="tags"><i class="fa fa-tags"></i> <?php echo $p->tag;?></span>
+                    <span class="tags"><i class="fa fa-tags"></i> <?php echo $p->tag;?></span> 
                     <?php if (disqus_count()) { ?>
                         <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
                     <?php } elseif (facebook()) { ?>

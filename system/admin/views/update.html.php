@@ -31,3 +31,5 @@ if ($updater->able()) {
     echo '</div>';
     echo '<p>Read on <a target="_blank" href="' . $info['html_url'] . '">Github</a>.</p>';
 }
+
+migrate_old_content();

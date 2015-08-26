@@ -12,7 +12,7 @@ Features
 ---------
 - Admin Panel
 - Markdown editor with live preview and image upload
-- Categorization with tags (multiple tagging support)
+- Categorization with category and tags (multiple tagging support)
 - Static Pages (e.g. Contact Page, About Page)
 - Meta canonical, description, and rich snippets for SEO
 - Pagination
@@ -144,7 +144,7 @@ This will produce a hash which is to be placed in the `password` field in `usern
 
 Both Online or Offline
 ----------------------
-The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog` folder (the `username` must match `YourUsername.ini` above). 
+The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog/category/type/` folder (the `username` must match `YourUsername.ini` above). 
 
 For static pages you can upload it to the `content/static` folder.
 
@@ -218,6 +218,7 @@ Contributors
 - [BlackCodec](https://github.com/BlackCodec)
 - [mlncn](https://github.com/mlncn)
 - [Tea23](https://github.com/Tea23)
+- [greenphp](https://github.com/greenphp)
 
 Copyright / License
 -------------------

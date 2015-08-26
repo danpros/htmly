@@ -28,6 +28,9 @@ Location: Natick, Massachusetts, USA
 Contributor: Tea23
 Github: https://github.com/Tea23
 
+Contributor: greenphp
+Github: https://github.com/greenphp
+
 /* THANKS */
 Name: Martin Angelov (http://tutorialzine.com)
 Name: Xiaoying Riley (http://themes.3rdwavemedia.com)

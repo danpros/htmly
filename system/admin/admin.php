@@ -575,7 +575,7 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
         $tagmd = "";
     }    
     if ($link !== null) {
-        $post_link = "\n<!--link" . $post_link. " link-->";
+        $post_link = "\n<!--link " . $post_link. " link-->";
     } else {
         $post_link = "";
     }    
@@ -730,7 +730,7 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
         $tagmd = "";
     }    
     if ($quote !== null) {
-        $post_quote = "\n<!--quote" . $post_quote . " quote-->";
+        $post_quote = "\n<!--quote " . $post_quote . " quote-->";
     } else {
         $post_quote = "";
     }    
@@ -886,7 +886,7 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
         $tagmd = "";
     }    
     if ($audio !== null) {
-        $post_audio = "\n<!--audio" . $post_audio . " audio-->";
+        $post_audio = "\n<!--audio " . $post_audio . " audio-->";
     } else {
         $post_audio = "";
     }    
