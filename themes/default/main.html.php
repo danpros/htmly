@@ -16,7 +16,7 @@
             <h2 class="title-index" itemprop="name"><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></h2>
             <div class="date">
                 <span itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in
-                <span itemprop="articleSection"><?php echo $p->tag ?></span> by
+                <span itemprop="articleSection"><?php echo $p->category ?></span> by
                 <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span>
                 <?php if (disqus_count()) { ?> - 
                     <span><a href="<?php echo $p->url ?>#disqus_thread">Comments</a></span>

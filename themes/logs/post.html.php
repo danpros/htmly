@@ -9,7 +9,7 @@
         <div class="date">
             <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this month"><?php echo date('d F Y', $p->date) ?></a></span>
             - Posted in
-            <span itemprop="articleSection"><?php echo $p->tag ?></span> by
+            <span itemprop="articleSection"><?php echo $p->category ?></span> by
             <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span> -
             <span><a href="<?php echo $p->url ?>" rel="permalink">Permalink</a></span>
         </div>

@@ -575,7 +575,7 @@ function edit_link($title, $tag, $url, $content, $oldfile, $destination = null, 
         $tagmd = "";
     }    
     if ($link !== null) {
-        $post_link = "\n<!--link" . $post_link. " link-->";
+        $post_link = "\n<!--link " . $post_link. " link-->";
     } else {
         $post_link = "";
     }    
@@ -730,7 +730,7 @@ function edit_quote($title, $tag, $url, $content, $oldfile, $destination = null,
         $tagmd = "";
     }    
     if ($quote !== null) {
-        $post_quote = "\n<!--quote" . $post_quote . " quote-->";
+        $post_quote = "\n<!--quote " . $post_quote . " quote-->";
     } else {
         $post_quote = "";
     }    
@@ -886,7 +886,7 @@ function edit_audio($title, $tag, $url, $content, $oldfile, $destination = null,
         $tagmd = "";
     }    
     if ($audio !== null) {
-        $post_audio = "\n<!--audio" . $post_audio . " audio-->";
+        $post_audio = "\n<!--audio " . $post_audio . " audio-->";
     } else {
         $post_audio = "";
     }    
@@ -1069,7 +1069,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
     }
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
-    
+	
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
@@ -1080,8 +1080,8 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
             rename($oldfile, $newfile);
             file_put_contents($newfile, print_r($post_content, true));
         }
-        
-        rename_category_folder($post_url, $oldfile);
+		
+		rename_category_folder($post_url, $oldfile);
         
         rebuilt_cache('all');
         if ($destination == 'post') {
