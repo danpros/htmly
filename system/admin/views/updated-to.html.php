@@ -6,5 +6,4 @@
 
 <?php
 require_once "system/upgrade/run.php";
-migrate_old_content();
 ?>
