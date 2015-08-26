@@ -125,7 +125,7 @@ function get_draft_posts()
     return $_draft;
 }
 
-// Get user draft.
+// Get category info files.
 function get_category_files()
 {
     static $_desc = array();
@@ -141,7 +141,7 @@ function get_category_files()
     return $_desc;
 }
 
-// Get user draft.
+// Get category folder.
 function get_category_folder()
 {
     static $_dfolder = array();
@@ -183,13 +183,13 @@ function rebuilt_cache($type)
     }
 
     if ($type === 'posts') {
-	    $tmpu = array();
+        $tmpu = array();
         $tmpu = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
-		 if (is_array($tmpu)) {
+         if (is_array($tmpu)) {
             foreach ($tmpu as $fileu) {
-			    if(strpos($fileu, 'draft') === false) {
+                if(strpos($fileu, 'draft') === false) {
                     $posts_cache_unsorted[] = $fileu;
-				}
+                }
             }
         }
         $string = serialize($posts_cache_unsorted);
@@ -200,9 +200,9 @@ function rebuilt_cache($type)
 
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
-			    if(strpos($file, 'draft') === false) {
+                if(strpos($file, 'draft') === false) {
                     $posts_cache_sorted[] = pathinfo($file);
-				}
+                }
             }
         }
         usort($posts_cache_sorted, "sortfile");
@@ -263,20 +263,20 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Author string
         $str = explode('/', $replaced);
         $author = $str[count($str) - 5];
-		if($str[count($str) - 3] == 'uncategorized') {
-		    $category = default_category();
-			$post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
-		} else {
-		    $category = get_category_info($str[count($str) - 3]);
-			$post->category = '<a href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
-		}
-		$type = $str[count($str) - 2];
+        if($str[count($str) - 3] == 'uncategorized') {
+            $category = default_category();
+            $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
+        } else {
+            $category = get_category_info($str[count($str) - 3]);
+            $post->category = '<a href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
+        }
+        $type = $str[count($str) - 2];
 
         // The post author + author url
         $post->author = $author;
         $post->authorUrl = site_url() . 'author/' . $author;
-		
-		$post->type = $type;
+        
+        $post->type = $type;
 
         $dt = str_replace($replaced, '', $arr[0]);
         $t = str_replace('-', '', $dt);
@@ -310,7 +310,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $tag = array();
         $url = array();
         $bc = array();
-		$rel = array();
+        $rel = array();
         
         $tagt = get_content_tag('tag', $content);
         $t = explode(',', rtrim($arr[1], ','));
@@ -339,8 +339,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $post->tag = implode(' ', $url);
 
         $post->tagb = implode(' » ', $bc);
-		
-		$post->related = rtrim($arr[1], ',');
+        
+        $post->related = rtrim($arr[1], ',');
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
@@ -453,7 +453,7 @@ function get_category($category, $page, $perpage)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-	
+    
         $filepath = $v['dirname'] . '/' . $v['basename'];
 
         // Extract the date
@@ -464,11 +464,11 @@ function get_category($category, $page, $perpage)
 
         // Author string
         $str = explode('/', $replaced);
-		$cat = $str[count($str) - 3];
-	
-		if (strtolower($category) === strtolower($cat)) {
-			$tmp[] = $v;
-		}
+        $cat = $str[count($str) - 3];
+    
+        if (strtolower($category) === strtolower($cat)) {
+            $tmp[] = $v;
+        }
     }
 
     if (empty($tmp)) {
@@ -480,7 +480,7 @@ function get_category($category, $page, $perpage)
     return $tmp = get_posts($tmp, $page, $perpage);
 }
 
-// Return category data.
+// Return category info.
 function get_category_info($category)
 {
     $posts = get_category_files();
@@ -499,10 +499,10 @@ function get_category_info($category)
 
                 // The static page URL
                 $url= str_replace($replaced, '', $v);
-				
+                
                 $desc->url = site_url() . 'category/' . str_replace('.md', '', $url);
-				
-				$desc->md = str_replace('.md', '', $url);
+                
+                $desc->md = str_replace('.md', '', $url);
 
                 $desc->file = $v;
 
@@ -519,11 +519,11 @@ function get_category_info($category)
             }
         }
     }
-	
-	if (strtolower($category) == 'uncategorized') {
-	    return default_category();
-	}
-	
+    
+    if (strtolower($category) == 'uncategorized') {
+        return default_category();
+    }
+    
     return $tmp;
 }
 
@@ -882,7 +882,7 @@ function get_categorycount($var)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-	
+    
          $filepath = $v['dirname'] . '/' . $v['basename'];
 
         // Extract the date
@@ -893,8 +893,8 @@ function get_categorycount($var)
 
         // Author string
         $str = explode('/', $replaced);
-		$cat = $str[count($str) - 3];
-		
+        $cat = $str[count($str) - 3];
+        
         if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
         }
@@ -911,7 +911,7 @@ function get_draftcount($var)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-	
+    
          $filepath = $v['dirname'] . '/' . $v['basename'];
 
         // Extract the date
@@ -922,8 +922,8 @@ function get_draftcount($var)
 
         // Author string
         $str = explode('/', $replaced);
-		$cat = $str[count($str) - 3];
-		
+        $cat = $str[count($str) - 3];
+        
         if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
         }
@@ -1037,7 +1037,7 @@ function popular_posts($custom = null, $count = null)
     
     if (config('views.counter') == 'true') {
         if (empty($_views)) {
-            $filename = 'content/views.json';
+            $filename = 'content/data/views.json';
             if (file_exists($filename)) {
                 $_views = json_decode(file_get_contents($filename), true);
                 if(is_array($_views)) {
@@ -2400,7 +2400,7 @@ function is_csrf_proper($csrf_token)
 // Add page views count
 function add_view($page)
 {
-    $filename = "content/views.json";
+    $filename = "content/data/views.json";
     $views = array();
     if (file_exists($filename)) {
         $views = json_decode(file_get_contents($filename), true);
@@ -2419,7 +2419,7 @@ function get_views($page)
     static $_views = array();
 
     if (empty($_views)) {
-        $filename = "content/views.json";
+        $filename = "content/data/views.json";
         if (file_exists($filename)) {
             $_views = json_decode(file_get_contents($filename), true);
         }
@@ -2511,7 +2511,7 @@ function shorten($string = null, $char = null)
 // save the i18n tag
 function save_tag_i18n($tag,$tagDisplay)
 {
-    $filename = "content/tags.lang";
+    $filename = "content/data/tags.lang";
     $tags = array();
     $tmp = array();
     $views = array();
@@ -2544,7 +2544,7 @@ function tag_i18n($tag)
     static $tags = array();
 
     if (empty($tags)) {
-        $filename = "content/tags.lang";
+        $filename = "content/data/tags.lang";
         if (file_exists($filename)) {
             $tags = unserialize(file_get_contents($filename));
         }
@@ -2568,44 +2568,131 @@ function safe_html($string)
 // return tag safe string
 function safe_tag($string)
 {
-	$tags = array();
-	$string = preg_replace('/[\s-]+/', ' ', $string);
-	$string = explode(',', $string);
+    $tags = array();
+    $string = preg_replace('/[\s-]+/', ' ', $string);
+    $string = explode(',', $string);
     $string = array_map('trim', $string);
         foreach ($string as $str) {
             $tags[] = $str;
         }
-	$string = implode(',', $tags);
-	$string = preg_replace('/[\s_]/', '-', $string);
-	return $string;
-	
+    $string = implode(',', $tags);
+    $string = preg_replace('/[\s_]/', '-', $string);
+    return $string;
+    
 }
 
 // rename category folder
 function rename_category_folder($string, $old_url)
 {
 
-	$old = str_replace('.md', '/', $old_url);
-	$url = substr($old, 0, strrpos($old, '/'));
-	$ostr = explode('/', $url);
-	$url = '/blog/' . $ostr[count($ostr) - 1];
-	
+    $old = str_replace('.md', '/', $old_url);
+    $url = substr($old, 0, strrpos($old, '/'));
+    $ostr = explode('/', $url);
+    $url = '/blog/' . $ostr[count($ostr) - 1];
+    
     $dir = get_category_folder();
-	
-	$file = array();
+    
+    $file = array();
    
-	foreach ($dir as $index => $v) {
-	    if (stripos($v, $url) !== false) {
-			$str = explode('/', $v);
-			$n = $str[count($ostr) - 4] . '/' . $str[count($ostr) - 3] .'/'. $str[count($ostr) - 2] .'/'. $string . '/';
-			$file[] = array($v, $n);
-		}
-	}
-	
-	foreach ($file as $f) {
-	    if(is_dir($f[0])) {
-		    rename($f[0], $f[1]);
-		}
-	}
-	
+    foreach ($dir as $index => $v) {
+        if (stripos($v, $url) !== false) {
+            $str = explode('/', $v);
+            $n = $str[count($ostr) - 4] . '/' . $str[count($ostr) - 3] .'/'. $str[count($ostr) - 2] .'/'. $string . '/';
+            $file[] = array($v, $n);
+        }
+    }
+    
+    foreach ($file as $f) {
+        if(is_dir($f[0])) {
+            rename($f[0], $f[1]);
+        }
+    }
+    
+}
+
+// Migrate old content.
+function migrate_old_content()
+{
+    $content = array();
+    $tmp = array();
+    $files = array();
+    
+    $tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $content[] = $file;
+        }
+    }
+    
+    if(!empty($content)) {
+    
+        foreach ($content as $c => $v) {
+            $arr = explode('/', $v);
+            $string = file_get_contents($v);
+            $image = get_content_tag('image', $string);
+            $video = get_youtube_id(get_content_tag('video', $string));
+            $audio = get_content_tag('audio', $string);
+            $link = get_content_tag('link', $string);
+            $quote = get_content_tag('quote', $string);
+            if (!empty($image)) {
+               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/image/' . $arr[3]);
+               $dir = 'content/' . $arr[1] . '/blog/uncategorized/image/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0775, true);
+                }
+            }
+            if (!empty($video)) {
+               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/video/' . $arr[3]);
+               $dir = 'content/' . $arr[1] . '/blog/uncategorized/video/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0775, true);
+                }
+            }
+            if (!empty($audio)) {
+               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/audio/' . $arr[3]);
+               $dir = 'content/' . $arr[1] . '/blog/uncategorized/audio/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0775, true);
+                }
+            }
+            if (!empty($link)) {
+               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/link/' . $arr[3]);
+               $dir = 'content/' . $arr[1] . '/blog/uncategorized/link/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0775, true);
+                }
+            }
+            if (!empty($quote)) {
+               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/quote/' . $arr[3]);
+               $dir = 'content/' . $arr[1] . '/blog/uncategorized/quote/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0775, true);
+                }
+            }
+            if (empty($image) && empty($video) && empty($audio) && empty($link) && empty($quote)) {
+               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/post/' . $arr[3]);
+               $dir = 'content/' . $arr[1] . '/blog/uncategorized/post/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0775, true);
+                }
+            }
+        }
+        
+        foreach ($files as $f) {
+            rename($f[0], $f[1]);
+        }
+    
+    }
+    
+    if (file_exists('content/tags.lang')) {
+        $dir = 'content/data/';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+        rename('content/tags.lang', 'content/data/tags.lang');
+        unlink('content/views.json');
+    }
+    
+    rebuilt_cache('all');
+    
 }

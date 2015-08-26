@@ -1304,12 +1304,12 @@ get('/category/:category', function ($category) {
     $perpage = config('category.perpage');
 
     $posts = get_category($category, $page, $perpage);
-	
-	$desc = get_category_info($category);
-	
-	if(strtolower($category) !== 'uncategorized') {
-	   $desc = $desc[0];
-	}
+    
+    $desc = get_category_info($category);
+    
+    if(strtolower($category) !== 'uncategorized') {
+       $desc = $desc[0];
+    }
 
     $total = get_categorycount($category);
 
@@ -1323,7 +1323,7 @@ get('/category/:category', function ($category) {
         'canonical' => $desc->url,
         'page' => $page,
         'posts' => $posts,
-		'category' => $desc,
+        'category' => $desc,
         'bodyclass' => 'incategory',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $desc->title,
         'pagination' => has_pagination($total, $perpage, $page),
@@ -1441,8 +1441,7 @@ get('/category/:category/delete', function ($category) {
 });
 
 // Get deleted category data
-post('/category/:category/delete', function () 
-{
+post('/category/:category/delete', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if ($proper && login()) {
         $file = from($_REQUEST, 'file');
