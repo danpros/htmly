@@ -812,7 +812,8 @@ function get_keyword($keyword, $page, $perpage)
         }
     }
 
-    return ($tmp) ? get_posts($tmp, $page, $perpage) : [];
+    return ($tmp) ? get_posts($tmp, $page, $perpage) : []; 
+ 
 }
 
 // Get related posts base on post tag.
@@ -899,8 +900,7 @@ function get_categorycount($var)
 
         // Author string
         $str = explode('/', $replaced);
-        $cat = $str[count($str) - 3];
-        
+        $cat = '/blog/' . $str[count($str) - 3];
         if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
         }
@@ -1755,10 +1755,11 @@ function not_found()
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
         'title' => 'This page doesn\'t exist! - ' . blog_title(),
-        'description' => '',
-        'canonical' => false,
+        'description' => '404 Not Found',
+        'canonical' => site_url(),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
         'bodyclass' => 'error-404',
+        'is_notfound' => is_notfound(true),
     ));
     die();
 }
@@ -2267,6 +2268,16 @@ function is_page($value = null)
 
 // TRUE if the current page is sub static page.
 function is_subpage($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// TRUE if the current page is 404 error page.
+function is_notfound($value = null)
 {
     if (!empty($value)) {
         return true;

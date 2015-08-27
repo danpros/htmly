@@ -1547,10 +1547,11 @@ get('/search/:keyword', function ($keyword) {
         // a non-existing page or no search result
         render('404-search', array(
             'title' => 'Search results not found! - ' . blog_title(),
-            'description' => '',
+            'description' => 'Search results not found!',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; No search results',
-            'canonical' => site_url() . 'search/' . strtolower($keyword),
+            'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
+            'is_search' => is_search(true),
         ));
         die;
     }
