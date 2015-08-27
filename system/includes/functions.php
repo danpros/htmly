@@ -2618,6 +2618,9 @@ function migrate_old_content()
     $content = array();
     $tmp = array();
     $files = array();
+    $draft = array();
+    $dtmp = array();
+    $dfiles = array();
     
     $tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
     if (is_array($tmp)) {
@@ -2695,6 +2698,36 @@ function migrate_old_content()
         unlink('content/views.json');
     }
     
-    rebuilt_cache('all');
+    $dtmp = glob('content/*/draft/*.md', GLOB_NOSORT);
+    $old = array();
+    if (is_array($dtmp)) {
+        foreach ($dtmp as $dfile) {
+            $draft[] = $dfile;
+        }
+    }
     
+    if(!empty($draft)) {
+        foreach ($draft as $d => $val) {
+            $arr = explode('/', $val);
+            $old[] = 'content/' . $arr[1] . '/draft/';
+            $dir = 'content/' . $arr[1] . '/blog/uncategorized/draft/';
+            $new = 'content/' . $arr[1] . '/blog/uncategorized/draft/' . $arr[3];
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $dfiles[] = array($val, $new);
+        }
+    
+        foreach ($dfiles as $fd) {    
+            rename($fd[0], $fd[1]);
+        }
+        $tt = array();
+        $tt = array_unique($old, SORT_REGULAR);
+        foreach ($tt as $t) {    
+            rmdir($t);
+        }
+    }
+    
+    rebuilt_cache('all');
+ 
 }
