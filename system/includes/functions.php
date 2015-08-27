@@ -812,7 +812,11 @@ function get_keyword($keyword, $page, $perpage)
         }
     }
 
-    return ($tmp) ? get_posts($tmp, $page, $perpage) : []; 
+    if (empty($tmp)) {
+        return $tmp;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage); 
  
 }
 
@@ -1947,7 +1951,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.post')) ? config('sitemap.priority.post') : $default_priority;
 
-        $posts = [];
+        $posts = array();
         if ($priority !== 'false') {
             $posts = sitemap_post_path();
         }
@@ -1965,7 +1969,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.static')) ? config('sitemap.priority.static') : $default_priority;
 
-        $posts = [];
+        $posts = array();
         if ($priority !== 'false') {
             $posts = sitemap_page_path();
         }
@@ -1983,7 +1987,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.tag')) ? config('sitemap.priority.tag') : $default_priority;
 
-        $posts = [];
+        $posts = array();
         if ($priority !== 'false') {
             $posts = get_post_unsorted();
         }
@@ -2067,7 +2071,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.author')) ? config('sitemap.priority.author') : $default_priority;
 
-        $author = [];
+        $author = array();
         if ($priority !== 'false') {
 
             $posts = sitemap_post_path();
