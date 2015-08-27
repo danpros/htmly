@@ -302,6 +302,17 @@ span.help {
     font-style: italic;
 }
 
+.category {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    display: block;
+    font-size: 13px;
+    margin: 20px 0;
+    padding: 0 1em;
+}
+
 /*-------------------------
 	Table
 --------------------------*/

@@ -453,6 +453,10 @@ function get_category($category, $page, $perpage)
     $posts = get_post_sorted();
 
     $tmp = array();
+	
+    if (empty($perpage)) {
+        $perpage = 10;	
+    }
 
     foreach ($posts as $index => $v) {
     
@@ -539,7 +543,7 @@ function default_category()
     $desc->url = site_url() . 'category/uncategorized';
     $desc->body = "<p>Topics that don't need a category, or don't fit into any other existing category.</p>";
 
-    $desc->description = 'Uncategorized Posts';
+    $desc->description = "Topics that don't need a category, or don't fit into any other existing category";
 
     return $tmp[] = $desc;
 }
@@ -808,7 +812,12 @@ function get_keyword($keyword, $page, $perpage)
         }
     }
 
-    return ($tmp) ? get_posts($tmp, $page, $perpage) : [];
+    if (empty($tmp)) {
+        return $tmp;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage); 
+ 
 }
 
 // Get related posts base on post tag.
@@ -895,8 +904,7 @@ function get_categorycount($var)
 
         // Author string
         $str = explode('/', $replaced);
-        $cat = $str[count($str) - 3];
-        
+        $cat = '/blog/' . $str[count($str) - 3];
         if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
         }
@@ -1751,10 +1759,11 @@ function not_found()
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
         'title' => 'This page doesn\'t exist! - ' . blog_title(),
-        'description' => '',
-        'canonical' => false,
+        'description' => '404 Not Found',
+        'canonical' => site_url(),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
         'bodyclass' => 'error-404',
+        'is_notfound' => is_notfound(true),
     ));
     die();
 }
@@ -1942,7 +1951,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.post')) ? config('sitemap.priority.post') : $default_priority;
 
-        $posts = [];
+        $posts = array();
         if ($priority !== 'false') {
             $posts = sitemap_post_path();
         }
@@ -1960,7 +1969,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.static')) ? config('sitemap.priority.static') : $default_priority;
 
-        $posts = [];
+        $posts = array();
         if ($priority !== 'false') {
             $posts = sitemap_page_path();
         }
@@ -1978,7 +1987,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.tag')) ? config('sitemap.priority.tag') : $default_priority;
 
-        $posts = [];
+        $posts = array();
         if ($priority !== 'false') {
             $posts = get_post_unsorted();
         }
@@ -2062,7 +2071,7 @@ function generate_sitemap($str)
 
         $priority = (config('sitemap.priority.author')) ? config('sitemap.priority.author') : $default_priority;
 
-        $author = [];
+        $author = array();
         if ($priority !== 'false') {
 
             $posts = sitemap_post_path();
@@ -2271,6 +2280,16 @@ function is_subpage($value = null)
     }
 }
 
+// TRUE if the current page is 404 error page.
+function is_notfound($value = null)
+{
+    if (!empty($value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Return blog title
 function blog_title()
 {
@@ -2402,6 +2421,10 @@ function is_csrf_proper($csrf_token)
 // Add page views count
 function add_view($page)
 {
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
     $filename = "content/data/views.json";
     $views = array();
     if (file_exists($filename)) {
@@ -2513,6 +2536,11 @@ function shorten($string = null, $char = null)
 // save the i18n tag
 function save_tag_i18n($tag,$tagDisplay)
 {
+
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
     $filename = "content/data/tags.lang";
     $tags = array();
     $tmp = array();
@@ -2618,6 +2646,9 @@ function migrate_old_content()
     $content = array();
     $tmp = array();
     $files = array();
+    $draft = array();
+    $dtmp = array();
+    $dfiles = array();
     
     $tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
     if (is_array($tmp)) {
@@ -2685,16 +2716,47 @@ function migrate_old_content()
         }
     
     }
+	
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
     
     if (file_exists('content/tags.lang')) {
-        $dir = 'content/data/';
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775, true);
-        }
         rename('content/tags.lang', 'content/data/tags.lang');
         unlink('content/views.json');
     }
     
-    rebuilt_cache('all');
+    $dtmp = glob('content/*/draft/*.md', GLOB_NOSORT);
+    $old = array();
+    if (is_array($dtmp)) {
+        foreach ($dtmp as $dfile) {
+            $draft[] = $dfile;
+        }
+    }
     
+    if(!empty($draft)) {
+        foreach ($draft as $d => $val) {
+            $arr = explode('/', $val);
+            $old[] = 'content/' . $arr[1] . '/draft/';
+            $dir = 'content/' . $arr[1] . '/blog/uncategorized/draft/';
+            $new = 'content/' . $arr[1] . '/blog/uncategorized/draft/' . $arr[3];
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $dfiles[] = array($val, $new);
+        }
+    
+        foreach ($dfiles as $fd) {    
+            rename($fd[0], $fd[1]);
+        }
+        $tt = array();
+        $tt = array_unique($old, SORT_REGULAR);
+        foreach ($tt as $t) {    
+            rmdir($t);
+        }
+    }
+    
+    rebuilt_cache('all');
+ 
 }

@@ -1,6 +1,16 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
+<?php if (config('category.info')):?>
+    <?php if (!empty($category)): ?>
+        <div class="category">
+            <h2 class="category-title"><?php echo $category->title;?></h2>
+            <div class="category-content">                                   
+                <?php echo $category->body; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
 <?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
     <?php if ($i == 0) {

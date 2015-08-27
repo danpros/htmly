@@ -1251,7 +1251,6 @@ get('/admin/update', function () {
 
 // Show the update now link
 get('/admin/update/now/:csrf', function ($CSRF) {
-
     $proper = is_csrf_proper($CSRF);
     $updater = new \Kanti\HubUpdater(array(
         'name' => 'danpros/htmly',
@@ -1302,6 +1301,10 @@ get('/category/:category', function ($category) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('category.perpage');
+	
+    if (empty($perpage)) {
+        $perpage = 10;	
+    }
 
     $posts = get_category($category, $page, $perpage);
     
@@ -1548,10 +1551,11 @@ get('/search/:keyword', function ($keyword) {
         // a non-existing page or no search result
         render('404-search', array(
             'title' => 'Search results not found! - ' . blog_title(),
-            'description' => '',
+            'description' => 'Search results not found!',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; No search results',
-            'canonical' => site_url() . 'search/' . strtolower($keyword),
+            'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
+            'is_search' => is_search(true),
         ));
         die;
     }
