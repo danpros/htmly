@@ -1,19 +1,21 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<?php if (!empty($category)): ?>
-<div class="section">
-    <div class="section-inner">
-        <div class="content">
-            <div class="item">
-            <h2 class="title"><?php echo $category->title;?></h2>
-            <div class="text-left">                                   
-                <?php echo $category->body; ?>
-            </div><!--//desc-->
-            </div><!--//item-->                       
-        </div><!--//content-->  
-    </div>
-</div>
+<?php if (config('category.info')):?>
+    <?php if (!empty($category)): ?>
+        <div class="section">
+            <div class="section-inner">
+                <div class="content">
+                    <div class="item">
+                    <h2 class="title"><?php echo $category->title;?></h2>
+                    <div class="text-left">                                   
+                        <?php echo $category->body; ?>
+                    </div><!--//desc-->
+                    </div><!--//item-->                       
+                </div><!--//content-->  
+            </div>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 <?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>

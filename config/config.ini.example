@@ -53,7 +53,7 @@ google.analytics.id = ""
 ; Google reCaptcha
 ; https://www.google.com/recaptcha/admin. Options "false" and "true"
 
-google.reCaptcha = false
+google.reCaptcha = "false"
 google.reCaptcha.public = ""
 google.reCaptcha.private = ""
 
@@ -65,6 +65,9 @@ archive.perpage = "10"
 search.perpage = "10"
 profile.perpage = "10"
 json.count = "10"
+
+; Category info
+category.info = "true"
 
 ; Related posts
 related.count = "3"
@@ -111,16 +114,16 @@ sitemap.priority.archiveYear = "0.5"
 sitemap.priority.author = "0.5"
 
 ; Also install pre-release
-prerelease = false
+prerelease = "false"
 
 ; Switch on and off the file cache for development purposes. Options "false" and "true"
-cache.off = false
+cache.off = "false"
 
 ; Switch on and off the page generation time. Options "false" and "true"
-generation.time = false
+generation.time = "false"
 
 ; Switch on and off the cache timestamp. Options "false" and "true"
-cache.timestamp = false
+cache.timestamp = "false"
 
 ; Set the theme here
 views.root = "themes/blog"
