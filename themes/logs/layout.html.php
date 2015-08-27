@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) exit(); ?>
 <!DOCTYPE html>
 <html>
 <head>
