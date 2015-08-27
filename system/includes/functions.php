@@ -543,7 +543,7 @@ function default_category()
     $desc->url = site_url() . 'category/uncategorized';
     $desc->body = "<p>Topics that don't need a category, or don't fit into any other existing category.</p>";
 
-    $desc->description = 'Uncategorized Posts';
+    $desc->description = "Topics that don't need a category, or don't fit into any other existing category";
 
     return $tmp[] = $desc;
 }
@@ -2406,6 +2406,10 @@ function is_csrf_proper($csrf_token)
 // Add page views count
 function add_view($page)
 {
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
     $filename = "content/data/views.json";
     $views = array();
     if (file_exists($filename)) {
@@ -2517,6 +2521,11 @@ function shorten($string = null, $char = null)
 // save the i18n tag
 function save_tag_i18n($tag,$tagDisplay)
 {
+
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
     $filename = "content/data/tags.lang";
     $tags = array();
     $tmp = array();
@@ -2692,12 +2701,13 @@ function migrate_old_content()
         }
     
     }
+	
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
     
     if (file_exists('content/tags.lang')) {
-        $dir = 'content/data/';
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775, true);
-        }
         rename('content/tags.lang', 'content/data/tags.lang');
         unlink('content/views.json');
     }
