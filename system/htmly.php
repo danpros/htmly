@@ -1301,6 +1301,10 @@ get('/category/:category', function ($category) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('category.perpage');
+	
+    if (empty($perpage)) {
+        $perpage = 10;	
+    }
 
     $posts = get_category($category, $page, $perpage);
     
