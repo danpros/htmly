@@ -1251,19 +1251,12 @@ get('/admin/update', function () {
 
 // Show the update now link
 get('/admin/update/now/:csrf', function ($CSRF) {
-    $files = array();
-    $draft = array();
-    $files = glob('content/*/blog/*.md', GLOB_NOSORT);
-    $draft = glob('content/*/draft/*.md', GLOB_NOSORT);
     $proper = is_csrf_proper($CSRF);
     $updater = new \Kanti\HubUpdater(array(
         'name' => 'danpros/htmly',
         'prerelease' => !!config("prerelease"),
     ));
     if (login() && $proper && $updater->able()) {
-        if (!empty($files) || !empty($draft)) {
-            migrate_old_content();
-        }
         $updater->update();
         config('views.root', 'system/admin/views');
         render('updated-to', array(
