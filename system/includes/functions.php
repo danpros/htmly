@@ -453,6 +453,10 @@ function get_category($category, $page, $perpage)
     $posts = get_post_sorted();
 
     $tmp = array();
+	
+    if (empty($perpage)) {
+        $perpage = 10;	
+    }
 
     foreach ($posts as $index => $v) {
     
