@@ -478,6 +478,7 @@ post('/add/link', function () {
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[config("site.url")]['user'];
     $draft = from($_REQUEST, 'draft');
+    $category = from($_REQUEST, 'category');
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
         if (!empty($url)) {
             add_link($title, $tag, $url, $content, $user, $description, $link, $draft, $category);
