@@ -2383,7 +2383,7 @@ EOF;
 // File cache
 function file_cache($request)
 {
-    if (config('cache.off')) return;
+    if (config('cache.off') == 'true') return;
 
     $c = str_replace('/', '#', str_replace('?', '~', $request));
     $cachefile = 'cache/page/' . $c . '.cache';
