@@ -1,7 +1,7 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<?php if (config('category.info')):?>
+<?php if (config('category.info') === 'true'):?>
     <?php if (!empty($category)): ?>
         <div class="section">
             <div class="section-inner">

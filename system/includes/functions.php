@@ -347,7 +347,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-        if (config("views.counter")) {
+        if (config('views.counter') == 'true') {
             $post->views = get_views($post->file);
         }
 
@@ -737,7 +737,7 @@ function get_static_post($static)
                 $post->title = get_content_tag('t', $content, $static);
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                if (config("views.counter")) {
+                if (config('views.counter') == 'true') {
                     $post->views = get_views($post->file);
                 }
 
@@ -2480,7 +2480,7 @@ function remove_html_comments($content)
 // Google recaptcha
 function isCaptcha($reCaptchaResponse)
 {
-    if (!config("google.reCaptcha")) {
+    if (config('google.reCaptcha') == 'false') {
         return true;
     }
     $url = "https://www.google.com/recaptcha/api/siteverify";
