@@ -187,8 +187,7 @@ For static pages, use the following format:
 content/static/about.md
 ````
 
-In the example above, the `/about.md` creates the URL:  
-`www.yourblog.com/about`
+In the example above, the `/about.md` creates the URL: `www.yourblog.com/about`
 
 Thus, if you write/create files offline, you must name the .md file in the format above.
 
@@ -198,8 +197,7 @@ For static subpages, use the following format:
 content/static/about/me.md
 ````
 
-This will create the URL:  
-`www.yourblog.com/about/me`
+This will create the URL: `www.yourblog.com/about/me`
 
 Content Tags
 -------------
