@@ -144,9 +144,28 @@ This will produce a hash which is to be placed in the `password` field in `usern
 
 Both Online or Offline
 ----------------------
-The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog/category/type/` folder (the `username` must match `YourUsername.ini` above). 
+The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog/category/type/`:
+
+* `username` must match `config/users/username.ini`.
+* `category` must match the `category.md` inside `content/data/category/category.md` except the `uncategorized` category.
+* `type` is the content type. Available content type `post`, `video`, `audio`, `link`, `quote`.
 
 For static pages you can upload it to the `content/static` folder.
+
+Category
+--------
+The default category is `Uncategorized` with slug `uncategorized` and you do not need to creating it inside `content/data/category/` folder. But if you write it offline and want to assign new category to specific post you need to creating it first before you can use those category, example `content/data/category/new-category.md` with the following content:
+
+```html
+<!--t New category title t-->
+<!--d New category meta description d-->
+
+New category info etc. 
+```` 
+The slug for the new category is `new-category` (htmly removing the file extension). And for full file directory:
+````
+content/username/new-category/post/file.md
+````
 
 File Naming Convention
 ----------------------
@@ -182,17 +201,70 @@ content/static/about/me.md
 This will create the URL:  
 `www.yourblog.com/about/me`
 
-Content Title
+Content Tags
 -------------
-If you are writing offline, to create a title for your post, wrap the title with an HTML comment and a `t` on both side.
+If you are writing offline, you need specify the content tags below:
 
+**Title**
 ```html
 <!--t Title t-->
 ````  
 
+**Meta description**
+```html
+<!--d The meta description d-->
+```` 
+
+**Tags**
+
+This is just the tags display and for the slug is in the filename.
+```html
+<!--tag Tag1,Tag2 tag-->
+```` 
+
+**Featured image**
+
+Post with featured image.
+```html
+<!--image http://www.example.com/image-url/image.jpg image-->
+```` 
+
+**Featured youtube video**
+
+Post with featured youtube video.
+```html
+<!--video https://www.youtube.com/watch?v=xxxxxxx video-->
+```` 
+
+**Featured soundcloud audio**
+
+Post with featured soundcloud audio.
+```html
+<!--audio https://soundcloud.com/xxxx/audio-url audio-->
+```` 
+
+**Featured link**
+
+Post with featured link.
+```html
+<!--link https://github.com/danpros/htmly link-->
+```` 
+
+**Featured quote**
+
+Post with featured quote.
+```html
+<!--quote Premature Optimization is The Root of All Evil quote-->
+```` 
+
+**Example**
+
 Example of how your post would look like:
 ```html
 <!--t Here is the post title t-->
+<!--d The meta description d-->
+<!--tag Tag1,Tag2 tag-->
+<!--video https://www.youtube.com/watch?v=xxxxxxx video-->
 
 Paragraph 1
 
