@@ -61,9 +61,14 @@ Output:
 
 ## Installation
 
-You can install via Composer.
+### Easy installation
+You can install directly via [Composer](https://getcomposer.org/):
+```bash
+$ composer require suin/php-rss-writer
+```
 
-At first create `composer.json` file:
+### Manual installation
+Add the following code to your `composer.json` file:
 
 ```json
 {
@@ -73,23 +78,22 @@ At first create `composer.json` file:
 }
 ```
 
-Run composer to install.
-
-```
+...and run composer to install it:
+```bash
 $ composer install
 ```
 
-Finally, include `vendor/autoload.php` in your product.
-
-```
+Finally, include `vendor/autoload.php` in your product:
+```php
+<?php
 require_once 'vendor/autoload.php';
 ```
 
-## How to Use
+## How to use
 
-`example.php` is an example usage of RSSWriter.
+The [`examples`](examples) directory contains usage examples for RSSWriter.
 
-If you want to know APIs, please see `FeedInterface`, `ChannelInterface` and `ItemInterface`.
+If you want to know APIs, please see [`FeedInterface`](src/Suin/RSSWriter/FeedInterface.php), [`ChannelInterface`](src/Suin/RSSWriter/ChannelInterface.php) and [`ItemInterface`](src/Suin/RSSWriter/ItemInterface.php).
 
 ## License
 

@@ -1835,7 +1835,7 @@ function sitemap_post_path()
 
         // Author string
         $str = explode('/', $replaced);
-        $author = $str[count($str) - 3];
+        $author = $str[count($str) - 5];
 
         $post->authorUrl = site_url() . 'author/' . $author;
 
@@ -2480,7 +2480,7 @@ function remove_html_comments($content)
 // Google recaptcha
 function isCaptcha($reCaptchaResponse)
 {
-    if (config('google.reCaptcha') == 'false') {
+    if (config('google.reCaptcha') != 'true') {
         return true;
     }
     $url = "https://www.google.com/recaptcha/api/siteverify";

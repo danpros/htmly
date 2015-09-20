@@ -24,5 +24,4 @@ $ ./phpunit
 
 ## View Reports
 
-
 If you want to see code coverages, open Coverage/index.html.

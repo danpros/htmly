@@ -1,8 +1,4 @@
 {
-	"config": {
-		"bin-dir": ".",
-		"vendor-dir": "Vendor"
-	},
 	"require": {
 		"php":            ">=5.3.2",
 		"EHER/PHPUnit":   ">=1.6",

@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "68eb4fad3ec95821f7b883c60043ed6e",
+    "hash": "7596d174acdf281f566feb7cbc72469d",
+    "content-hash": "6dabcc2db078cb3f7d2e8af75949f4ce",
     "packages": [
         {
             "name": "ircmaxell/password-compat",
@@ -50,25 +51,28 @@
         },
         {
             "name": "kanti/hub-updater",
-            "version": "v0.3.1",
+            "version": "v0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kanti/hub-updater.git",
-                "reference": "105bf291983b1323c5916092cc4e170bf987b00c"
+                "reference": "81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/105bf291983b1323c5916092cc4e170bf987b00c",
-                "reference": "105bf291983b1323c5916092cc4e170bf987b00c",
+                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d",
+                "reference": "81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6@dev"
+            },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Kanti\\": ""
+                    "Kanti\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -84,20 +88,20 @@
                 }
             ],
             "description": "Simple Github Updater for Web Projects",
-            "time": "2014-12-27 13:59:09"
+            "time": "2015-02-03 09:53:58"
         },
         {
             "name": "michelf/php-markdown",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6"
+                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
-                "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/e1aabe18173231ebcefc90e615565742fc1c7fd9",
+                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9",
                 "shasum": ""
             },
             "require": {
@@ -120,35 +124,35 @@
             ],
             "authors": [
                 {
-                    "name": "Michel Fortin",
-                    "email": "michel.fortin@michelf.ca",
-                    "homepage": "http://michelf.ca/",
-                    "role": "Developer"
-                },
-                {
                     "name": "John Gruber",
                     "homepage": "http://daringfireball.net/"
+                },
+                {
+                    "name": "Michel Fortin",
+                    "email": "michel.fortin@michelf.ca",
+                    "homepage": "https://michelf.ca/",
+                    "role": "Developer"
                 }
             ],
             "description": "PHP Markdown",
-            "homepage": "http://michelf.ca/projects/php-markdown/",
+            "homepage": "https://michelf.ca/projects/php-markdown/",
             "keywords": [
                 "markdown"
             ],
-            "time": "2014-05-05 02:43:50"
+            "time": "2015-03-01 12:03:08"
         },
         {
             "name": "suin/php-rss-writer",
-            "version": "1.3",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/suin/php-rss-writer.git",
-                "reference": "82812ff988bb470f746d24e153cdc138e8838ff3"
+                "reference": "96ff59575442dbe23e15fe7ff56d0bf27486cff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/82812ff988bb470f746d24e153cdc138e8838ff3",
-                "reference": "82812ff988bb470f746d24e153cdc138e8838ff3",
+                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/96ff59575442dbe23e15fe7ff56d0bf27486cff9",
+                "reference": "96ff59575442dbe23e15fe7ff56d0bf27486cff9",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +161,7 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Suin\\RSSWriter": "Source"
+                    "Suin\\RSSWriter": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -166,10 +170,8 @@
             ],
             "authors": [
                 {
-                    "name": "suin",
-                    "email": "suinyeze@gmail.com",
-                    "homepage": "https://www.facebook.com/suinyeze",
-                    "role": "Developer, Renaming Specialist"
+                    "name": "Hidehito Nozawa aka Suin",
+                    "email": "suinyeze@gmail.com"
                 }
             ],
             "description": "Yet another simple RSS writer library for PHP 5.3 or later.",
@@ -177,10 +179,11 @@
             "keywords": [
                 "feed",
                 "generator",
+                "php",
                 "rss",
                 "writer"
             ],
-            "time": "2014-03-12 06:05:28"
+            "time": "2015-08-21 06:24:39"
         }
     ],
     "packages-dev": [],
