@@ -1763,7 +1763,7 @@ function not_found()
         'canonical' => site_url(),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
         'bodyclass' => 'error-404',
-        'is_notfound' => is_notfound(true),
+        'is_notfound' => true,
     ));
     die();
 }
@@ -2220,116 +2220,6 @@ function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
     if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is the front page.
-function is_front($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is the blog page.
-function is_blog($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is tag index.
-function is_tag($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is archive index.
-function is_archive($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is search index.
-function is_search($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is category index.
-function is_category($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is profile page.
-function is_profile($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is post page.
-function is_post($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is static page page.
-function is_page($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is sub static page.
-function is_subpage($value = null)
-{
-    if (!empty($value)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// TRUE if the current page is 404 error page.
-function is_notfound($value = null)
-{
-    if (!empty($value)) {
         return true;
     } else {
         return false;

@@ -41,7 +41,7 @@ get('/index', function () {
             'description' => blog_description(),
             'canonical' => site_url(),
             'bodyclass' => 'noposts',
-            'is_front' => is_front(true),
+            'is_front' => true,
         ));
 
         die;
@@ -56,7 +56,7 @@ get('/index', function () {
         'bodyclass' => 'infront',
         'breadcrumb' => '',
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_front' => is_front(true),
+        'is_front' => true,
     ));
 });
 
@@ -150,7 +150,8 @@ get('/author/:name', function ($name) {
             'name' => $author->name,
             'bodyclass' => 'inprofile',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
-            'pagination' => has_pagination($total, $perpage, $page)
+            'pagination' => has_pagination($total, $perpage, $page),
+            'is_profile' => true,
         ));
         die;
     }
@@ -166,7 +167,7 @@ get('/author/:name', function ($name) {
         'bodyclass' => 'inprofile',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_profile' => is_profile(true),
+        'is_profile' => true,
     ));
 });
 
@@ -1331,7 +1332,7 @@ get('/category/:category', function ($category) {
         'bodyclass' => 'incategory',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $desc->title,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_category' => is_category(true),
+        'is_category' => true,
     ));
 });
 
@@ -1482,7 +1483,7 @@ get('/tag/:tag', function ($tag) {
         'bodyclass' => 'intag',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_tag' => is_tag(true),
+        'is_tag' => true,
     ));
 });
 
@@ -1531,7 +1532,7 @@ get('/archive/:req', function ($req) {
         'bodyclass' => 'inarchive',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Archive for: ' . $timestamp,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_archive' => is_archive(true),
+        'is_archive' => true,
     ));
 });
 
@@ -1556,7 +1557,7 @@ get('/search/:keyword', function ($keyword) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; No search results',
             'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
-            'is_search' => is_search(true),
+            'is_search' => true,
         ));
         die;
     }
@@ -1572,7 +1573,7 @@ get('/search/:keyword', function ($keyword) {
         'bodyclass' => 'insearch',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . tag_i18n($keyword),
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_search' => is_search(true),
+        'is_search' => true,
     ));
 });
 
@@ -1689,7 +1690,7 @@ get('/post/:name', function ($name) {
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,
-        'is_post' => is_post(true),
+        'is_post' => true,
     ));
 
 });
@@ -2050,7 +2051,7 @@ get('/:static', function ($static) {
                 'description' => blog_title() . ' Blog Homepage',
                 'canonical' => site_url(),
                 'bodyclass' => 'noposts',
-                'is_front' => is_front(true),
+                'is_front' => true,
             ));
 
             die;
@@ -2065,7 +2066,7 @@ get('/:static', function ($static) {
             'bodyclass' => 'inblog',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Blog',
             'pagination' => has_pagination($total, $perpage, $page),
-            'is_blog' => is_blog(true),
+            'is_blog' => true,
         ));
     } else {
 
@@ -2098,7 +2099,7 @@ get('/:static', function ($static) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
             'type' => 'staticPage',
-            'is_page' => is_page(true),
+            'is_page' => true,
         ));
     }
 });
@@ -2321,7 +2322,7 @@ get('/:static/:sub', function ($static, $sub) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
         'p' => $post,
         'type' => 'subPage',
-        'is_subpage' => is_subpage(true),
+        'is_subpage' => true,
     ));
 });
 
@@ -2546,7 +2547,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,
-        'is_post' => is_post(true),
+        'is_post' => true,
     ));
 
 });
