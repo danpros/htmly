@@ -1955,7 +1955,7 @@ post('/post/:name/delete', function () {
 // Show various page (top-level), admin, login, sitemap, static page.
 get('/:static', function ($static) {
 
-    if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml') {
+    if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml' || $static === 'sitemap.category.xml') {
 
         header('Content-Type: text/xml');
 
@@ -1973,6 +1973,8 @@ get('/:static', function ($static) {
             generate_sitemap('archive');
         } elseif ($static === 'sitemap.author.xml') {
             generate_sitemap('author');
+        } elseif ($static === 'sitemap.category.xml') {
+            generate_sitemap('category');
         }
 
         die;

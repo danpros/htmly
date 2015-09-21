@@ -55,6 +55,7 @@ if (config('permalink.type') == 'post') {
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
+<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/jquery.ajaxfileupload.js"></script>
 <?php if (isset($error)) { ?>
@@ -121,4 +122,4 @@ if (config('permalink.type') == 'post') {
 <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/image.js"></script>
+<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>

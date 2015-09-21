@@ -1,6 +1,7 @@
 (function () {
 
     var converter = new Markdown.Converter();
+    Markdown.Extra.init(converter);
     var editor = new Markdown.Editor(converter);
 
     var $dialog = $('#insertImageDialog').dialog({ 

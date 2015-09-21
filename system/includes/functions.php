@@ -453,9 +453,9 @@ function get_category($category, $page, $perpage)
     $posts = get_post_sorted();
 
     $tmp = array();
-	
+    
     if (empty($perpage)) {
-        $perpage = 10;	
+        $perpage = 10;    
     }
 
     foreach ($posts as $index => $v) {
@@ -1920,6 +1920,10 @@ function generate_sitemap($str)
         if (config('sitemap.priority.static') !== 'false') {
             echo '<sitemap><loc>' . site_url() . 'sitemap.static.xml</loc></sitemap>';
         }
+        
+        if (config('sitemap.priority.category') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.category.xml</loc></sitemap>';
+        }
 
         if (config('sitemap.priority.tag') !== 'false') {
             echo '<sitemap><loc>' . site_url() . 'sitemap.tag.xml</loc></sitemap>';
@@ -2088,6 +2092,48 @@ function generate_sitemap($str)
         if ($priority !== 'false') {
             foreach ($author as $a) {
                 echo '<url><loc>' . $a . '</loc><priority>' . $priority . '</priority></url>';
+            }
+        }
+
+        echo '</urlset>';
+
+    } elseif ($str == 'category') {
+
+        $priority = (config('sitemap.priority.category')) ? config('sitemap.priority.category') : $default_priority;
+
+        $posts = array();
+        if ($priority !== 'false') {
+            $posts = get_post_unsorted();
+        }
+
+        $cats = array();
+
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        if($posts) {
+            foreach ($posts as $index => $v) {
+
+                $arr = explode('_', $v);
+                
+                $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+                $str = explode('/', $replaced);
+                
+                $cats[] = $str[count($str) - 3];
+                
+            }
+
+            foreach ($cats as $c) {
+                $cat[] = site_url() . 'category/' . strtolower($c);
+            }
+
+            if (isset($cat)) {
+
+                $cat = array_unique($cat, SORT_REGULAR);
+
+                foreach ($cat as $c) {
+                    echo '<url><loc>' . $c . '</loc><priority>' . $priority . '</priority></url>';
+                }
             }
         }
 
@@ -2716,7 +2762,7 @@ function migrate_old_content()
         }
     
     }
-	
+    
     $dir = 'content/data/';
     if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
