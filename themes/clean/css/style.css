@@ -348,6 +348,13 @@ blockquote p {
     padding: 0 1em;
 }
 
+.tags a:after {
+    content:", ";
+}
+.tags a:last-child:after {
+    content:"";
+}
+
 /*-------------------------
 	Table
 --------------------------*/
