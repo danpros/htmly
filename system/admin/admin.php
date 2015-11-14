@@ -57,6 +57,8 @@ function session($user, $pass)
             }
             $_SESSION[config("site.url")]['user'] = $user;
             header('location: admin');
+        } else {
+            return $str = '<li>Your username and password mismatch.</li>';		
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         update_user($user, $pass, $user_role);

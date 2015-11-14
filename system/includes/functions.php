@@ -1665,7 +1665,7 @@ function menu($custom = null)
                                 echo '<li class="' . $class . '"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
                             }
                         } else {
-                            echo '<li class="' . $class . '"><a target="_blank" href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+                            echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
                         }
                     }
                 } else {
@@ -1704,10 +1704,18 @@ function get_menu($custom)
         krsort($posts);
 
         echo '<ul class="nav navbar-nav ' . $custom . '">';
-        if ($req == site_path() . '/') {
+        if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
             echo '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         } else {
             echo '<li class="item first"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
+        }
+        
+        if (config('blog.enable') == 'true' ) {
+            if ($req == site_path() . '/blog' || stripos($req, site_path() . '/blog?page') !== false) {
+                echo '<li class="item active"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+            } else {
+                echo '<li class="item"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+            }
         }
 
         $i = 0;
