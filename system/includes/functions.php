@@ -1621,7 +1621,7 @@ EOF;
 function menu($custom = null)
 {
     $menu = config('blog.menu');
-    $req = $_SERVER['REQUEST_URI'];
+    $req = strtok($_SERVER["REQUEST_URI"],'?');
 
     if (!empty($menu)) {
 
@@ -1649,24 +1649,20 @@ function menu($custom = null)
             if (isset($anc[0]) && isset($anc[1])) {
 
                 if (stripos(rtrim($anc[1], '/') . '/', site_url()) !== false) {
-                    $id = substr($link, strrpos($link, '/') + 1);
-                    $file = 'content/static/' . $id . '.md';
-                    if (file_exists($file)) {
-                        if (stripos($req, $id) !== false) {
-                            echo '<li class="' . $class . ' active"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+                    if (rtrim($anc[1], '/') . '/' == site_url()) {
+                        if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
+                            echo '<li class="' . $class . ' active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
                         } else {
+                            echo '<li class="' . $class . '"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
+                        }
+                    } elseif (stripos($anc[1], $req) !== false) {
+                        if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
                             echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
+                        } else {
+                            echo '<li class="' . $class . ' active"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
                         }
                     } else {
-                        if (rtrim($anc[1], '/') . '/' == site_url()) {
-                            if ($req == site_path() . '/') {
-                                echo '<li class="' . $class . ' active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
-                            } else {
-                                echo '<li class="' . $class . '"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
-                            }
-                        } else {
-                            echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
-                        }
+                        echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
                     }
                 } else {
                     echo '<li class="' . $class . '"><a target="_blank" href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
