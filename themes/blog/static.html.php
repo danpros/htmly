@@ -6,7 +6,7 @@
         <div class="content">
             <?php if (login()) { echo tab($p); } ?>
             <div class="item">
-                <h2 class="title" itemprop="headline"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
+                <h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
                 <div class="desc text-left" itemprop="articleBody">
                     <?php echo $p->body; ?>
                 </div><!--//desc-->

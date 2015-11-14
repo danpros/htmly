@@ -37,7 +37,6 @@
             <header id="header">
                 <section id="branding">
                     <h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
-
                     <div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
                 </section>
             </header>

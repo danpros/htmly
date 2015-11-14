@@ -16,48 +16,76 @@ get('/index', function () {
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
+    
+    if (config('static.frontpage') == 'true') {
+        
+        $front = get_frontpage();
+        
+        $tl = blog_tagline();
 
-    $page = from($_GET, 'page');
-    $page = $page ? (int)$page : 1;
-    $perpage = config('posts.perpage');
-
-    $posts = get_posts(null, $page, $perpage);
-
-    $total = '';
-
-    $tl = blog_tagline();
-
-    if ($tl) {
-        $tagline = ' - ' . $tl;
-    } else {
-        $tagline = '';
-    }
-
-    if (empty($posts) || $page < 1) {
-
-        // a non-existing page
-        render('no-posts', array(
+        if ($tl) {
+            $tagline = ' - ' . $tl;
+        } else {
+            $tagline = '';
+        }
+        
+        render('static', array(
             'title' => blog_title() . $tagline,
             'description' => blog_description(),
             'canonical' => site_url(),
-            'bodyclass' => 'noposts',
+            'bodyclass' => 'infront',
+            'breadcrumb' => '',
+            'p' => $front,
+            'type' => 'staticPage',
             'is_front' => true,
         ));
+        
+        
+    } else {
 
-        die;
+        $page = from($_GET, 'page');
+        $page = $page ? (int)$page : 1;
+        $perpage = config('posts.perpage');
+
+        $posts = get_posts(null, $page, $perpage);
+
+        $total = '';
+
+        $tl = blog_tagline();
+
+        if ($tl) {
+            $tagline = ' - ' . $tl;
+        } else {
+            $tagline = '';
+        }
+
+        if (empty($posts) || $page < 1) {
+
+            // a non-existing page
+            render('no-posts', array(
+                'title' => blog_title() . $tagline,
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'bodyclass' => 'noposts',
+                'is_front' => true,
+            ));
+
+            die;
+        }
+
+        render('main', array(
+            'title' => blog_title() . $tagline,
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'page' => $page,
+            'posts' => $posts,
+            'bodyclass' => 'infront',
+            'breadcrumb' => '',
+            'pagination' => has_pagination($total, $perpage, $page),
+            'is_front' => true,
+        ));
+    
     }
-
-    render('main', array(
-        'title' => blog_title() . $tagline,
-        'description' => blog_description(),
-        'canonical' => site_url(),
-        'page' => $page,
-        'posts' => $posts,
-        'bodyclass' => 'infront',
-        'breadcrumb' => '',
-        'pagination' => has_pagination($total, $perpage, $page),
-        'is_front' => true,
-    ));
 });
 
 // Get submitted login data
@@ -223,6 +251,73 @@ post('/edit/profile', function () {
             'bodyclass' => 'editprofile',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile'
         ));
+    }
+});
+
+// Edit the frontpage
+get('/edit/frontpage', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+        render('edit-frontpage', array(
+            'title' => 'Edit frontpage - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'bodyclass' => 'editfrontpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit frontpage',
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Get submitted data from edit frontpage
+post('/edit/frontpage', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $title = from($_REQUEST, 'title');
+    $content = from($_REQUEST, 'content');
+    if ($proper && !empty($title) && !empty($content)) {
+        edit_frontpage($title, $content);
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li>Title field is required.</li>';
+        }
+        if (empty($content)) {
+            $message['error'] .= '<li>Content field is required.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li>CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+
+        render('edit-frontpage', array(
+            'title' => 'Edit frontpage - ' . blog_title(),
+            'description' => blog_description(),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postContent' => $content,
+            'bodyclass' => 'editfrontpage',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit frontpage'
+        ));
+    }
+});
+
+// Edit the frontpage
+get('/front/edit', function () {
+
+    if (login()) {
+        $edit = site_url() . 'edit/frontpage';
+        header("location: $edit");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
     }
 });
 
@@ -1303,9 +1398,9 @@ get('/category/:category', function ($category) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('category.perpage');
-	
+    
     if (empty($perpage)) {
-        $perpage = 10;	
+        $perpage = 10;    
     }
 
     $posts = get_category($category, $page, $perpage);
@@ -2068,6 +2163,11 @@ get('/:static', function ($static) {
             'pagination' => has_pagination($total, $perpage, $page),
             'is_blog' => true,
         ));
+    } elseif ($static === 'front') {
+
+        $redir = site_url();
+        header("location: $redir", TRUE, 301);
+
     } else {
 
         if (config("views.counter") != "true") {

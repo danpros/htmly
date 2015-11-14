@@ -187,7 +187,7 @@ function rebuilt_cache($type)
         $tmpu = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
          if (is_array($tmpu)) {
             foreach ($tmpu as $fileu) {
-                if(strpos($fileu, 'draft') === false) {
+                if(strpos($fileu, '/draft/') === false) {
                     $posts_cache_unsorted[] = $fileu;
                 }
             }
@@ -200,7 +200,7 @@ function rebuilt_cache($type)
 
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
-                if(strpos($file, 'draft') === false) {
+                if(strpos($file, '/draft/') === false) {
                     $posts_cache_sorted[] = pathinfo($file);
                 }
             }
@@ -793,6 +793,27 @@ function get_static_sub_post($static, $sub_static)
     return $tmp;
 }
 
+// Return frontpage content
+function get_frontpage()
+{
+    $front = new stdClass;
+    
+    $filename = 'content/data/frontpage/frontpage.md';
+
+    if (file_exists($filename)) {
+        $content = file_get_contents($filename);
+        $front->title = get_content_tag('t', $content, 'Welcome');
+        $front->url = site_url() . 'front';
+        $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+    } else {
+        $front->title = 'Welcome';
+        $front->url = site_url() . 'front';
+        $front->body = 'Welcome to our website.';
+    }
+    
+    return $front;
+}
+
 // Return search page.
 function get_keyword($keyword, $page, $perpage)
 {
@@ -1269,7 +1290,23 @@ function has_prev($prev)
     if (!empty($prev)) {
         return array(
             'url' => $prev->url,
-            'title' => $prev->title
+            'title' => $prev->title,
+            'date' => $prev->date,
+            'body' => $prev->body,
+            'description' => $prev->description,
+            'tag' => $prev->tag,
+            'category' => $prev->category,
+            'author' => $prev->author,
+            'authorUrl' => $prev->authorUrl,
+            'related' => $prev->related,
+            'views' => $prev->views,
+            'type' => $prev->type,
+            'file' => $prev->file,
+            'image' => $prev->image,
+            'video' => $prev->video,
+            'audio' => $prev->audio,
+            'quote' => $prev->quote,
+            'link' => $prev->link
         );
     }
 }
@@ -1281,7 +1318,23 @@ function has_next($next)
     if (!empty($next)) {
         return array(
             'url' => $next->url,
-            'title' => $next->title
+            'title' => $next->title,
+            'date' => $next->date,
+            'body' => $next->body,
+            'description' => $next->description,
+            'tag' => $next->tag,
+            'category' => $next->category,
+            'author' => $next->author,
+            'authorUrl' => $next->authorUrl,
+            'related' => $next->related,
+            'views' => $next->views,
+            'type' => $next->type,
+            'file' => $next->file,
+            'image' => $next->image,
+            'video' => $next->video,
+            'audio' => $next->audio,
+            'quote' => $next->quote,
+            'link' => $next->link
         );
     }
 }

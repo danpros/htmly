@@ -13,6 +13,9 @@ blog.copyright = "(c) Your name."
 ; Set permalink type. "default" using /year/month/title. "post" using /post/title
 permalink.type = "default"
 
+; Make the frontpage static. Options "false" and "true"
+static.frontpage = "false"
+
 ; Show the /blog url as the blog homepage. Options "false" and "true"
 blog.enable = "false"
 

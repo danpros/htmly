@@ -1069,7 +1069,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
     }
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
-	
+    
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
         }
@@ -1080,8 +1080,8 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
             rename($oldfile, $newfile);
             file_put_contents($newfile, print_r($post_content, true));
         }
-		
-		rename_category_folder($post_url, $oldfile);
+        
+        rename_category_folder($post_url, $oldfile);
         
         rebuilt_cache('all');
         if ($destination == 'post') {
@@ -1667,6 +1667,30 @@ function edit_profile($title, $content, $user)
         }
         rebuilt_cache('all');
         $redirect = site_url() . 'author/' . $user;
+        header("Location: $redirect");
+    }
+}
+
+// Edit homepage
+function edit_frontpage($title, $content)
+{
+    $front_title = safe_html($title);
+    $front_content = '<!--t ' . $front_title . ' t-->' . "\n\n" . $content;
+
+    if (!empty($front_title) && !empty($front_content)) {
+        if (get_magic_quotes_gpc()) {
+            $front_content = stripslashes($front_content);
+        }
+        $dir = 'content/data/frontpage';
+        $filename = 'content/data/frontpage/frontpage.md';
+        if (is_dir($dir)) {
+            file_put_contents($filename, print_r($front_content, true));
+        } else {
+            mkdir($dir, 0775, true);
+            file_put_contents($filename, print_r($front_content, true));
+        }
+        rebuilt_cache('all');
+        $redirect = site_url();
         header("Location: $redirect");
     }
 }
