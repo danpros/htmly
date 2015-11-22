@@ -1564,6 +1564,9 @@ get('/tag/:tag', function ($tag) {
     $posts = get_tag($tag, $page, $perpage, false);
 
     $total = get_tagcount($tag, 'basename');
+		
+    $ttag = new stdClass;
+    $ttag->title = tag_i18n($tag);
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -1575,6 +1578,7 @@ get('/tag/:tag', function ($tag) {
         'canonical' => site_url() . 'tag/' . strtolower($tag),
         'page' => $page,
         'posts' => $posts,
+        'tag' => $ttag,
         'bodyclass' => 'intag',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
@@ -1612,6 +1616,9 @@ get('/archive/:req', function ($req) {
     } else {
         $timestamp = $req;
     }
+	
+    $tarchive = new stdClass;
+    $tarchive->title = $timestamp;
 
     if (!$date) {
         // a non-existing page
@@ -1624,6 +1631,7 @@ get('/archive/:req', function ($req) {
         'canonical' => site_url() . 'archive/' . $req,
         'page' => $page,
         'posts' => $posts,
+        'archive' => $tarchive,
         'bodyclass' => 'inarchive',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Archive for: ' . $timestamp,
         'pagination' => has_pagination($total, $perpage, $page),
@@ -1643,16 +1651,20 @@ get('/search/:keyword', function ($keyword) {
     $perpage = config('search.perpage');
 
     $posts = get_keyword($keyword, $page, $perpage);
+	
+    $tsearch = new stdClass;
+    $tsearch->title = $keyword;
 
     if (!$posts || $page < 1) {
         // a non-existing page or no search result
         render('404-search', array(
             'title' => 'Search results not found! - ' . blog_title(),
             'description' => 'Search results not found!',
+            'search' => $tsearch,
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; No search results',
             'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
-            'is_search' => true,
+            'is_404search' => true,
         ));
         die;
     }
@@ -1665,6 +1677,7 @@ get('/search/:keyword', function ($keyword) {
         'canonical' => site_url() . 'search/' . strtolower($keyword),
         'page' => $page,
         'posts' => $posts,
+        'search' => $tsearch,
         'bodyclass' => 'insearch',
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . tag_i18n($keyword),
         'pagination' => has_pagination($total, $perpage, $page),

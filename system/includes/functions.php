@@ -1346,9 +1346,12 @@ function has_pagination($total, $perpage, $page = 1)
     if (!$total) {
         $total = count(get_post_unsorted());
     }
+	$totalPage = ceil($total / $perpage);
+	$number = 'Page '. $page . ' of ' . $totalPage;
     return array(
         'prev' => $page > 1,
-        'next' => $total > $page * $perpage
+        'next' => $total > $page * $perpage,
+        'number' => $number
     );
 }
 

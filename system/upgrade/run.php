@@ -1,6 +1,6 @@
 <?php
 
-config('source', $config_file);
+config('source', 'config/config.ini');
 
 $updater = new Kanti\HubUpdater("danpros/htmly");
 $info = $updater->getCurrentInfo();

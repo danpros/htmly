@@ -15,7 +15,8 @@
 			"system/includes/functions.php",
 			"system/admin/admin.php",
 			"system/includes/session.php",
-			"system/includes/opml.php"
+			"system/includes/opml.php",
+			"system/plugins/urlify/URLify.php"
 		]
 	}
 }
