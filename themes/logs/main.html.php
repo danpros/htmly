@@ -71,10 +71,11 @@
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
     <div class="pager">
         <?php if (!empty($pagination['prev'])): ?>
-            <span class="newer">&laquo; <a href="?page=<?php echo $page - 1 ?>" rel="prev">Newer</a></span>
+            <span class="newer" ><a href="?page=<?php echo $page - 1 ?>" rel="prev">&laquo; Newer</a></span>
         <?php endif; ?>
+        <span class="page-number"><?php echo $pagination['pagenum'];?></span>
         <?php if (!empty($pagination['next'])): ?>
-            <span class="older"><a href="?page=<?php echo $page + 1 ?>" rel="next">Older</a> &raquo;</span>
+            <span class="older"><a href="?page=<?php echo $page + 1 ?>" rel="next">Older  &raquo;</a></span>
         <?php endif; ?>
     </div>
 <?php endif; ?>

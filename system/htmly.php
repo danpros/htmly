@@ -28,7 +28,7 @@ get('/index', function () {
         } else {
             $tagline = '';
         }
-        
+            
         render('static', array(
             'title' => blog_title() . $tagline,
             'description' => blog_description(),
@@ -1564,7 +1564,7 @@ get('/tag/:tag', function ($tag) {
     $posts = get_tag($tag, $page, $perpage, false);
 
     $total = get_tagcount($tag, 'basename');
-		
+        
     $ttag = new stdClass;
     $ttag->title = tag_i18n($tag);
 
@@ -1616,7 +1616,7 @@ get('/archive/:req', function ($req) {
     } else {
         $timestamp = $req;
     }
-	
+    
     $tarchive = new stdClass;
     $tarchive->title = $timestamp;
 
@@ -1651,7 +1651,7 @@ get('/search/:keyword', function ($keyword) {
     $perpage = config('search.perpage');
 
     $posts = get_keyword($keyword, $page, $perpage);
-	
+    
     $tsearch = new stdClass;
     $tsearch->title = $keyword;
 

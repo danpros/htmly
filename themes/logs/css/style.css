@@ -576,13 +576,29 @@ ul li, ol li {
 
 .pager, .postnav {
     font-size: 15px;
+    position:relative;
 }
 
-.pager .newer, .postnav .newer {
+.pager {
+    text-align:center;
+	margin-bottom: 1em;
+}
+
+.pager .newer {
+    position:absolute;
+    left: 0;
+}
+
+.postnav .newer {
     float: left;
 }
 
-.pager .older, .postnav .older {
+.pager .older {
+    position:absolute;
+    right:0;
+}
+
+.postnav .older {
     float: right;
 }
 

@@ -161,6 +161,10 @@ h6 {
     font-family: 'Open Sans', sans-serif;
 }
 
+#content ul.nav, #content ul.nav li {
+    margin-bottom:0;
+}
+
 /*----------------------------
 	Content & Posts
 -----------------------------*/
@@ -463,8 +467,12 @@ aside .archive, aside .tagcloud, aside .recent {
     margin-left: 10px;
 }
 
-aside .archive ul li ul, aside .tagcloud ul li, aside .recent ul li {
-    margin-left: 30px;
+aside .tagcloud ul li, aside .recent ul li {
+    margin-left: 15px;
+}
+
+aside .archive ul li ul {
+   margin-left: 18px;
 }
 
 aside .menu ul li > a:hover, aside .menu ul li.active > a {
@@ -556,6 +564,7 @@ aside .copyright p {
     width: 100%;
     float: left;
     padding: 30px 0 30px 0;
+    text-align:center;
 }
 
 .pager .pagination-arrow {
@@ -572,6 +581,7 @@ aside .copyright p {
 
 .pager .pagination-arrow.newer {
     padding-left: 20px;
+    float:left;
 }
 
 .pager .pagination-arrow.older {
@@ -936,6 +946,7 @@ ul.archivegroup {
     display: none;
 }
 
-.archivegroup li.expanded, .archivegroup li.collapsed {
+.archivegroup li.expanded, .archivegroup li.collapsed, .archivegroup li.expanded li, .archivegroup li.collapsed li {
     list-style: none;
+	background:none;
 }
