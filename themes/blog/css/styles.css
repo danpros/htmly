@@ -612,3 +612,8 @@ ul.month {
     width: 1360px;
   }
 }
+
+.pagination {
+  margin-top:0;
+  margin-bottom:15px;
+}
