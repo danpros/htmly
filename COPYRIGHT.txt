@@ -43,3 +43,5 @@ license, including:
   Password Compat - (c) Anthony Ferrara <https://github.com/ircmaxell>
   
   jQuery.AjaxFileUpload.js - (c) Jordan Feldstein <https://github.com/jfeldstein>
+  
+  URLify for PHP by jbroadway <https://github.com/jbroadway> based on URLify.js - (c) Django Software Foundation and individual contributors

@@ -533,7 +533,7 @@ function get_category_info($category)
     return $tmp;
 }
 
-// Return default profile
+// Return default category
 function default_category()
 {
     $tmp = array();
@@ -541,9 +541,9 @@ function default_category()
 
     $desc->title = 'Uncategorized';
     $desc->url = site_url() . 'category/uncategorized';
-    $desc->body = "<p>Topics that don't need a category, or don't fit into any other existing category.</p>";
+    $desc->body = '<p>Topics that don&#39;t need a category, or don&#39;t fit into any other existing category.</p>';
 
-    $desc->description = "Topics that don't need a category, or don't fit into any other existing category";
+    $desc->description = 'Topics that don&#39;t need a category, or don&#39;t fit into any other existing category.';
 
     return $tmp[] = $desc;
 }
