@@ -89,15 +89,7 @@
 </section><!--//section-->
 <?php endforeach; ?>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
-    <div class="pager">
-        <?php if (!empty($pagination['prev'])): ?>
-            <span class="newer pull-left"><a class="btn btn-cta-secondary" href="?page=<?php echo $page - 1 ?>" rel="prev">Newer</a></span>
-        <?php endif; ?>
-        <span class="page-number"><?php echo $pagination['pagenum'];?></span>
-        <?php if (!empty($pagination['next'])): ?>
-            <span class="older pull-right"><a class="btn btn-cta-secondary" href="?page=<?php echo $page + 1 ?>" rel="next">Older</a></span>
-        <?php endif; ?>
-    </div>
+    <div class="pagination"><?php echo $pagination['html'];?></div>
 <?php endif; ?>
 <?php if (disqus_count()): ?>
     <?php echo disqus_count() ?>

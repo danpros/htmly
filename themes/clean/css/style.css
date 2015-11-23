@@ -1,5 +1,5 @@
 /*-------------------------
-	Simple reset
+    Simple reset
 --------------------------*/
 
 * {
@@ -8,7 +8,7 @@
 }
 
 /*-------------------------
-	General Styles
+    General Styles
 --------------------------*/
 
 html {
@@ -48,7 +48,7 @@ img {
 }
 
 /*----------------------------
-	Headings
+    Headings
 -----------------------------*/
 
 h1 {
@@ -127,7 +127,7 @@ h6 {
 }
 
 /*-------------------------
-	Tab
+    Tab
 --------------------------*/
 
 .tab {
@@ -138,14 +138,14 @@ h6 {
 }
 
 .tab ul {
-	padding:0;
-	margin:0;
+    padding:0;
+    margin:0;
 }
 
 .tab  li {
     display: inline-block;
-	margin:0;
-	padding:0;
+    margin:0;
+    padding:0;
 }
 
 .tab a {
@@ -166,7 +166,7 @@ h6 {
 }
 
 /*----------------------------
-	Content & Posts
+    Content & Posts
 -----------------------------*/
 
 #content {
@@ -360,7 +360,7 @@ blockquote p {
 }
 
 /*-------------------------
-	Table
+    Table
 --------------------------*/
 
 table {
@@ -410,7 +410,7 @@ td {
 }
 
 /*----------------------------
-	The left bar
+    The left bar
 -----------------------------*/
 
 aside {
@@ -497,7 +497,7 @@ aside .copyright p {
 }
 
 /*-------------------------
-	Raleted posts
+    Raleted posts
 --------------------------*/
 
 .related {
@@ -512,7 +512,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	Pagination buttons
+    Pagination buttons
 -----------------------------*/
 
 .postnav {
@@ -608,7 +608,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	The 404 page
+    The 404 page
 -----------------------------*/
 
 .message {
@@ -629,7 +629,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	Search form
+    Search form
 -----------------------------*/
 
 .search {
@@ -684,7 +684,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	Profile
+    Profile
 -----------------------------*/
 
 .profile {
@@ -702,7 +702,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	Share + Author info
+    Share + Author info
 -----------------------------*/
 
 .separator {
@@ -761,7 +761,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	Media queries
+    Media queries
 -----------------------------*/
 
 @media all and (max-width: 1024px) {
@@ -851,7 +851,7 @@ aside .copyright p {
 }
 
 /*----------------------------
-	Video
+    Video
 -----------------------------*/
 
 .video-wrapper {
@@ -948,5 +948,5 @@ ul.archivegroup {
 
 .archivegroup li.expanded, .archivegroup li.collapsed, .archivegroup li.expanded li, .archivegroup li.collapsed li {
     list-style: none;
-	background:none;
-}
+    background:none;
+}    

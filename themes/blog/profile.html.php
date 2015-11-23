@@ -28,16 +28,6 @@
                             </li>
                         <?php endforeach; ?>
                     </ul>
-                    <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
-                        <div class="pager">
-                            <?php if (!empty($pagination['prev'])): ?>
-                                <span class="newer pull-left"><a class="btn btn-cta-secondary" href="?page=<?php echo $page - 1 ?>" rel="prev">Newer</a></span>
-                            <?php endif; ?>
-                            <?php if (!empty($pagination['next'])): ?>
-                                <span class="older pull-right"><a class="btn btn-cta-secondary" href="?page=<?php echo $page + 1 ?>" rel="next">Older</a></span>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
                 <?php } else {
                     echo 'No posts found!';
                 } ?>
@@ -45,3 +35,6 @@
         </div><!--//content--> 
     </div><!--//section-inner-->
 </section><!--//section-->
+<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
+	<div class="pagination"><?php echo $pagination['html'];?></div>
+<?php endif; ?>
