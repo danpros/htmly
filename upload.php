@@ -22,8 +22,7 @@ $path      = null;
 
 if (login()) {
  
-    if (is_dir($dir)) {
-    } else {
+    if (!is_dir($dir)) {
         mkdir($dir, 0755, true);
     }
 
@@ -39,7 +38,7 @@ if (login()) {
             if($check !== false) {
                 if ($error === UPLOAD_ERR_OK) {
                     $extension = pathinfo($name, PATHINFO_EXTENSION);
-                    if (!in_array($extension, $whitelist)) {
+                    if (!in_array(strtolower($extension), $whitelist)) {
                         $error = 'Invalid file type uploaded.';
                     } else {
                         move_uploaded_file($tmp_name, $dir . $timestamp . '-' . $name);

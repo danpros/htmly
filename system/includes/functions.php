@@ -628,6 +628,9 @@ function get_profile_posts($name, $page, $perpage)
 // Return draft list
 function get_draft($profile, $page, $perpage)
 {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
     $posts = get_draft_posts();
 
     $tmp = array();
@@ -635,7 +638,7 @@ function get_draft($profile, $page, $perpage)
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
         $author = $str[count($str) - 4];
-        if (strtolower($profile) === strtolower($author)) {
+        if (strtolower($profile) === strtolower($author) || $role === 'admin') {
             $tmp[] = $v;
         }
     }
@@ -969,12 +972,14 @@ function get_tagcount($var, $str)
     $posts = get_post_sorted();
 
     $tmp = array();
-
+    
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v[$str]);
-        $url = $arr[1];
-        if (stripos($url, "$var") !== false) {
-            $tmp[] = $v;
+        $mtag = explode(',', rtrim($arr[1], ','));
+        foreach ($mtag as $t) {
+            if (strtolower($t) === strtolower($var)) {
+                $tmp[] = $v;
+            }
         }
     }
 
@@ -1889,6 +1894,13 @@ function get_menu($custom)
         } else {
             echo '<li class="item first"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         }
+        if (config('blog.enable') == 'true' ) {
+            if ($req == site_path() . '/blog' || stripos($req, site_path() . '/blog?page') !== false) {
+                echo '<li class="item active"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+            } else {
+                echo '<li class="item"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+            }
+        }
         echo '</ul>';
     }
 }
@@ -2454,7 +2466,7 @@ function toolbar()
     $base = site_url();
 
     echo <<<EOF
-    <link href="{$base}themes/default/css/toolbar.css" rel="stylesheet" />
+    <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
 EOF;
     echo '<div id="toolbar"><ul>';
     echo '<li><a href="' . $base . 'admin">Admin</a></li>';
