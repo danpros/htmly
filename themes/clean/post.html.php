@@ -5,7 +5,11 @@
 <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="main">
         <a name="more"></a>
+        <?php if (!empty($p->link)) { ?>
+        <h1 class="title-post" itemprop="name"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title ?> &rarr;</a></h1>
+        <?php } else { ?>
         <h1 class="title-post" itemprop="name"><?php echo $p->title ?></h1>
+        <?php } ?>
         <div class="date">
             <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this month"><?php echo date('d F Y', $p->date) ?></a></span>
             - Posted in
@@ -31,11 +35,6 @@
         <?php if (!empty($p->quote)) { ?>
             <div class="featured-quote">
                 <blockquote><?php echo $p->quote ?></blockquote>
-            </div>
-        <?php } ?>
-        <?php if (!empty($p->link)) { ?>
-            <div class="featured-link">
-                <a href="<?php echo $p->link ?>"><?php echo $p->link ?></a>
             </div>
         <?php } ?>
         <div class="post-body" itemprop="articleBody">

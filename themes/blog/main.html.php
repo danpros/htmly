@@ -51,13 +51,12 @@
                         <blockquote class="quote"><i class="fa fa-quote-left"></i> <?php echo $p->quote ?> <i class="fa fa-quote-right"></i></blockquote>
                     </div>
                 <?php } ?>
-                <?php if (!empty($p->link)) { ?>
-                    <div class="featured featured-link">
-                        <a target="_blank" href="<?php echo $p->link ?>"><i class="fa fa-external-link"></i> <?php echo $p->link ?></a>
-                    </div>
-                <?php } ?>
                 <div class="info text-left">
-                    <h2 class="title" itemprop="headline"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
+                    <?php if (!empty($p->link)) { ?>
+                        <h2 class="title" itemprop="headline"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title;?> <i class="fa fa-external-link"></i></a></h2>
+                    <?php } else {?>
+                        <h2 class="title" itemprop="headline"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
+                    <?php } ?>
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in 
                         <span itemprop="articleSection"><?php echo $p->category;?></span> by 

@@ -181,7 +181,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     if ($media !== null) {
         $post_media = "\n<!--" . $type . " " . $post_media. " " . $type . "-->";
     } else {
-        $post_image = "";
+        $post_media = "";
     }    
     $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
 

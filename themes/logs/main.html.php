@@ -23,7 +23,11 @@
     $i++; ?>
     <div class="<?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
         <div class="main">
-            <h2 class="title-index" itemprop="name"><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></h2>
+            <?php if (!empty($p->link)) { ?>
+                <h2 class="title-index" itemprop="name"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title ?> &rarr;</a></h2>
+            <?php } else { ?>
+                <h2 class="title-index" itemprop="name"><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></h2>
+            <?php } ?>
             <div class="date">
                 <span itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in
                 <span itemprop="articleSection"><?php echo $p->category ?></span> by
@@ -52,11 +56,6 @@
             <?php if (!empty($p->quote)) { ?>
                 <div class="featured-quote">
                     <blockquote><?php echo $p->quote ?></blockquote>
-                </div>
-            <?php } ?>
-            <?php if (!empty($p->link)) { ?>
-                <div class="featured-link">
-                    <a href="<?php echo $p->link ?>"><?php echo $p->link ?></a>
                 </div>
             <?php } ?>
             <div class="teaser-body" itemprop="articleBody">

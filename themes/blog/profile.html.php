@@ -35,6 +35,8 @@
         </div><!--//content--> 
     </div><!--//section-inner-->
 </section><!--//section-->
+<?php if (!empty($posts)) { ?>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 	<div class="pagination"><?php echo $pagination['html'];?></div>
 <?php endif; ?>
+<?php } ?>

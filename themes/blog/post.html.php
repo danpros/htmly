@@ -26,13 +26,12 @@
                         <blockquote class="quote"><i class="fa fa-quote-left"></i> <?php echo $p->quote ?> <i class="fa fa-quote-right"></i></blockquote>
                     </div>
                 <?php } ?>
-                <?php if (!empty($p->link)) { ?>
-                    <div class="featured featured-link">
-                        <a target="_blank" href="<?php echo $p->link ?>"><i class="fa fa-external-link"></i> <?php echo $p->link ?></a>
-                    </div>
-                <?php } ?>
                 <div class="info text-left">
-                    <h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
+                    <?php if (!empty($p->link)) { ?>
+                        <h1 class="title" itemprop="headline"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title;?> <i class="fa fa-external-link"></i></a></h1>
+					<?php } else { ?>
+						<h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
+					<?php } ?>
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in 
                         <span itemprop="articleSection"><?php echo $p->category;?></span> by 
@@ -50,9 +49,9 @@
                         <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a>
                     <?php } ?>
                     <span class="share pull-right">
-                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
-                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a> 
-                        <a target="_blank" class="last" href="https://plus.google.com/share?url=<?php echo $p->url ?>"><i class="fa fa-google-plus"></i></a> 
+                        <a target="    " class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
+                        <a target="    " href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a> 
+                        <a target="    " class="last" href="https://plus.google.com/share?url=<?php echo $p->url ?>"><i class="fa fa-google-plus"></i></a> 
                     </span>
                 <div style="clear:both;"></div>
                 </div>
