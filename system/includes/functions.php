@@ -1513,7 +1513,7 @@ function get_teaser($string, $char = null)
 }
 
 // Get thumbnail from image and Youtube.
-function get_thumbnail($text)
+function get_thumbnail($text, $url = null)
 {
     if (config('img.thumbnail') == 'true') {
 
@@ -1530,22 +1530,57 @@ function get_thumbnail($text)
             if ($imgTags->length > 0) {
                 $imgElement = $imgTags->item(0);
                 $imgSource = $imgElement->getAttribute('src');
-                return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
+                if (!empty($url)) {
+                    return $imgSource;
+                } else {
+                    return '<div class="thumbnail" style="background-image:url(' . $imgSource . ');"></div>';
+                }
             } elseif ($vidTags->length > 0) {
                 $vidElement = $vidTags->item(0);
                 $vidSource = $vidElement->getAttribute('src');
                 $fetch = explode("embed/", $vidSource);
                 if (isset($fetch[1])) {
                     $vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/default.jpg';
-                    return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
+                    if (!empty($url)) {
+                        return $vidThumb;
+                    } else {
+                        return '<div class="thumbnail" style="background-image:url(' . $vidThumb . ');"></div>';
+                    }
                 }
             } else {
                 if (!empty($default)) {
-                    return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
+                    if (!empty($url)) {
+                        return $default;
+                    } else {
+                        return '<div class="thumbnail" style="background-image:url(' . $default . ');"></div>';
+                    }
                 }
             }
         } else {
+            // Ignore
+        }
+    }
+}
 
+// Get image from post and Youtube thumbnail.
+function get_image($text)
+{
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHtml($text);
+    $imgTags = $dom->getElementsByTagName('img');
+    $vidTags = $dom->getElementsByTagName('iframe');
+    if ($imgTags->length > 0) {
+        $imgElement = $imgTags->item(0);
+        $imgSource = $imgElement->getAttribute('src');
+        return $imgSource;
+    } elseif ($vidTags->length > 0) {
+        $vidElement = $vidTags->item(0);
+        $vidSource = $vidElement->getAttribute('src');
+        $fetch = explode("embed/", $vidSource);
+        if (isset($fetch[1])) {
+            $vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/sddefault.jpg';
+            return $vidThumb;
         }
     }
 }
