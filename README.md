@@ -131,6 +131,10 @@ OpenShift
 ---------
 Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://github.com/danpros/htmly-openshift) for easy deployment.
 
+**Quick install:**
+
+[![Click to install OpenShift](http://launch-shifter.rhcloud.com/launch/light/Click to install.svg)](https://hub.openshift.com/quickstarts/deploy/219-htmly)
+
 
 Making a secure password
 ----------------------

@@ -13,8 +13,23 @@ if (config('timezone')) {
 // The front page of the blog
 get('/index', function () {
 
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
+    }
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--front.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--front';
+    } else {
+        $layout = '';
     }
     
     if (config('static.frontpage') == 'true') {
@@ -28,8 +43,15 @@ get('/index', function () {
         } else {
             $tagline = '';
         }
+        
+        $pv = $vroot . '/static--front.html.php'; 
+        if (file_exists($pv)) {
+            $pview = 'static--front';
+        } else {
+            $pview = 'static';
+        }
             
-        render('static', array(
+        render($pview, array(
             'title' => blog_title() . $tagline,
             'description' => blog_description(),
             'canonical' => site_url(),
@@ -38,11 +60,11 @@ get('/index', function () {
             'p' => $front,
             'type' => 'staticPage',
             'is_front' => true,
-        ));
+        ), $layout);
         
         
     } else {
-
+    
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('posts.perpage');
@@ -58,6 +80,13 @@ get('/index', function () {
         } else {
             $tagline = '';
         }
+        
+        $pv = $vroot . '/main--front.html.php'; 
+        if (file_exists($pv)) {
+            $pview = 'main--front';
+        } else {
+            $pview = 'main';
+        }
 
         if (empty($posts) || $page < 1) {
 
@@ -68,12 +97,12 @@ get('/index', function () {
                 'canonical' => site_url(),
                 'bodyclass' => 'noposts',
                 'is_front' => true,
-            ));
+            ), $layout);
 
             die;
         }
 
-        render('main', array(
+        render($pview, array(
             'title' => blog_title() . $tagline,
             'description' => blog_description(),
             'canonical' => site_url(),
@@ -83,7 +112,7 @@ get('/index', function () {
             'breadcrumb' => '',
             'pagination' => has_pagination($total, $perpage, $page),
             'is_front' => true,
-        ));
+        ), $layout);
     
     }
 });
@@ -147,6 +176,12 @@ post('/login', function () {
 // Show the author page
 get('/author/:name', function ($name) {
 
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -166,9 +201,28 @@ get('/author/:name', function ($name) {
     } else {
         $author = default_profile($name);
     }
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--profile--' . strtolower($name) . '.html.php'; 
+    $ls = $vroot . '/layout--profile.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--profile--' . strtolower($name);
+    } else if (file_exists($ls)) {
+        $layout = 'layout--profile';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/profile--'. strtolower($name) .'.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'profile--'. strtolower($name);
+    } else {
+        $pview = 'profile';
+    }
 
     if (empty($posts) || $page < 1) {
-        render('profile', array(
+        render($pview, array(
             'title' => 'Profile for:  ' . $author->name . ' - ' . blog_title(),
             'description' => 'Profile page and all posts by ' . $author->name . ' on ' . blog_title() . '.',
             'canonical' => site_url() . 'author/' . $name,
@@ -180,11 +234,11 @@ get('/author/:name', function ($name) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page),
             'is_profile' => true,
-        ));
+        ), $layout);
         die;
     }
 
-    render('profile', array(
+    render($pview, array(
         'title' => 'Profile for:  ' . $author->name . ' - ' . blog_title(),
         'description' => 'Profile page and all posts by ' . $author->name . ' on ' . blog_title() . '.',
         'canonical' => site_url() . 'author/' . $name,
@@ -196,7 +250,7 @@ get('/author/:name', function ($name) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
         'pagination' => has_pagination($total, $perpage, $page),
         'is_profile' => true,
-    ));
+    ), $layout);
 });
 
 // Edit the profile
@@ -1267,6 +1321,12 @@ get('/admin/categories', function () {
 // Show the category page
 get('/category/:category', function ($category) {
 
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -1293,7 +1353,30 @@ get('/category/:category', function ($category) {
         // a non-existing page
         not_found();
     }
-    render('main', array(
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--category--'. strtolower($category) .'.html.php'; 
+    $ls = $vroot . '/layout--category.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--category--' . strtolower($category);
+    } else if (file_exists($ls)) {
+        $layout = 'layout--category';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/main--category--'. strtolower($category) .'.html.php';
+    $ps = $vroot . '/main--category.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'main--category--' . strtolower($category);
+    } else if (file_exists($ps)) {
+        $pview = 'main--category';
+    } else {
+        $pview = 'main';
+    }
+    
+    render($pview, array(
         'title' => $desc->title . ' - ' . blog_title(),
         'description' => $desc->description,
         'canonical' => $desc->url,
@@ -1304,7 +1387,7 @@ get('/category/:category', function ($category) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $desc->title,
         'pagination' => has_pagination($total, $perpage, $page),
         'is_category' => true,
-    ));
+    ), $layout);
 });
 
 // Show edit the category page
@@ -1430,6 +1513,12 @@ post('/category/:category/delete', function () {
 // Show the tag page
 get('/tag/:tag', function ($tag) {
 
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -1449,7 +1538,30 @@ get('/tag/:tag', function ($tag) {
         // a non-existing page
         not_found();
     }
-    render('main', array(
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--tag--' . strtolower($tag) . '.html.php'; 
+    $ls = $vroot . '/layout--tag.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--tag--' . strtolower($tag);
+    } else if (file_exists($ls)) {
+        $layout = 'layout--tag';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/main--tag--' . strtolower($tag) . '.html.php'; 
+    $ps = $vroot . '/main--tag.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'main--tag--' . strtolower($tag);
+    } elseif (file_exists($ps)) {
+        $pview = 'main--tag';
+    } else {
+        $pview = 'main';
+    }
+    
+    render($pview, array(
         'title' => 'Posts tagged: ' . tag_i18n($tag) . ' - ' . blog_title(),
         'description' => 'All posts tagged: ' . tag_i18n($tag) . ' on ' . blog_title() . '.',
         'canonical' => site_url() . 'tag/' . strtolower($tag),
@@ -1460,11 +1572,17 @@ get('/tag/:tag', function ($tag) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
         'is_tag' => true,
-    ));
+    ), $layout);
 });
 
 // Show the archive page
 get('/archive/:req', function ($req) {
+
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -1501,8 +1619,24 @@ get('/archive/:req', function ($req) {
         // a non-existing page
         not_found();
     }
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--archive.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--archive';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/main--archive.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'main--archive';
+    } else {
+        $pview = 'main';
+    }
 
-    render('main', array(
+    render($pview, array(
         'title' => 'Archive for: ' . $timestamp . ' - ' . blog_title(),
         'description' => 'Archive page for: ' . $timestamp . ' on ' . blog_title() . '.',
         'canonical' => site_url() . 'archive/' . $req,
@@ -1513,11 +1647,17 @@ get('/archive/:req', function ($req) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Archive for: ' . $timestamp,
         'pagination' => has_pagination($total, $perpage, $page),
         'is_archive' => true,
-    ));
+    ), $layout);
 });
 
 // Show the search page
 get('/search/:keyword', function ($keyword) {
+
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -1531,6 +1671,15 @@ get('/search/:keyword', function ($keyword) {
     
     $tsearch = new stdClass;
     $tsearch->title = $keyword;
+	
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--search.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--search';
+    } else {
+        $layout = '';
+    }
 
     if (!$posts || $page < 1) {
         // a non-existing page or no search result
@@ -1542,13 +1691,20 @@ get('/search/:keyword', function ($keyword) {
             'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
             'is_404search' => true,
-        ));
+        ), $layout);
         die;
     }
 
     $total = keyword_count($keyword);
+    
+    $pv = $vroot . '/main--search.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'main--search';
+    } else {
+        $pview = 'main';
+    }
 
-    render('main', array(
+    render($pview, array(
         'title' => 'Search results for: ' . tag_i18n($keyword) . ' - ' . blog_title(),
         'description' => 'Search results for: ' . tag_i18n($keyword) . ' on ' . blog_title() . '.',
         'canonical' => site_url() . 'search/' . strtolower($keyword),
@@ -1559,7 +1715,7 @@ get('/search/:keyword', function ($keyword) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . tag_i18n($keyword),
         'pagination' => has_pagination($total, $perpage, $page),
         'is_search' => true,
-    ));
+    ), $layout);
 });
 
 // The JSON API
@@ -1594,6 +1750,12 @@ get('/feed/opml', function () {
 
 // Show blog post without year-month
 get('/post/:name', function ($name) {
+
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
 
     if (config('permalink.type') != 'post') {
         $post = find_post(null, null, $name);
@@ -1663,8 +1825,27 @@ get('/post/:name', function ($name) {
     } else {
         $blog = '';
     }
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--post--' . $current->ct . '.html.php';
+    $ls = $vroot . '/layout--post.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--post--' . $current->ct;
+    } elseif (file_exists($ls)) {
+        $layout = 'layout--post';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/post--' . $current->ct . '.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'post--' . $current->ct;
+    } else {
+        $pview = 'post';
+    }
 
-    render('post', array(
+    render($pview, array(
         'title' => $current->title . ' - ' . blog_title(),
         'description' => $current->description,
         'canonical' => $current->url,
@@ -1676,7 +1857,7 @@ get('/post/:name', function ($name) {
         'next' => has_next($next),
         'type' => $var,
         'is_post' => true,
-    ));
+    ), $layout);
 
 });
 
@@ -1943,6 +2124,12 @@ post('/post/:name/delete', function () {
 // Show various page (top-level), admin, login, sitemap, static page.
 get('/:static', function ($static) {
 
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
     if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml' || $static === 'sitemap.category.xml') {
 
         header('Content-Type: text/xml');
@@ -2029,6 +2216,22 @@ get('/:static', function ($static) {
         } else {
             $tagline = '';
         }
+        
+        $vroot = rtrim(config('views.root'), '/');
+        
+        $lt = $vroot . '/layout--blog.html.php'; 
+        if (file_exists($lt)) {
+            $layout = 'layout--blog';
+        } else {
+            $layout = '';
+        }
+        
+        $pv = $vroot . '/main--blog.html.php'; 
+        if (file_exists($pv)) {
+            $pview = 'main--blog';
+        } else {
+            $pview = 'main';
+        }
 
         if (empty($posts) || $page < 1) {
 
@@ -2039,12 +2242,12 @@ get('/:static', function ($static) {
                 'canonical' => site_url(),
                 'bodyclass' => 'noposts',
                 'is_front' => true,
-            ));
+            ), $layout);
 
             die;
         }
 
-        render('main', array(
+        render($pview, array(
             'title' => 'Blog - ' . blog_title(),
             'description' => blog_title() . ' Blog Homepage',
             'canonical' => site_url() . 'blog',
@@ -2054,7 +2257,7 @@ get('/:static', function ($static) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Blog',
             'pagination' => has_pagination($total, $perpage, $page),
             'is_blog' => true,
-        ));
+        ), $layout);
     } elseif ($static === 'front') {
 
         $redir = site_url();
@@ -2082,8 +2285,27 @@ get('/:static', function ($static) {
                 file_cache($_SERVER['REQUEST_URI']);
             }
         }
+        
+        $vroot = rtrim(config('views.root'), '/');
+        
+        $lt = $vroot . '/layout--' . strtolower($static) . '.html.php';
+        $ls = $vroot . '/layout--static.html.php'; 
+        if (file_exists($lt)) {
+            $layout = 'layout--' . strtolower($static);
+        } else if (file_exists($ls)) {
+            $layout = 'layout--static';
+        } else {
+            $layout = '';
+        }
+        
+        $pv = $vroot . '/static--' . strtolower($static) . '.html.php'; 
+        if (file_exists($pv)) {
+            $pview = 'static--' . strtolower($static);
+        } else {
+            $pview = 'static';
+        }
 
-        render('static', array(
+        render($pview, array(
             'title' => $post->title . ' - ' . blog_title(),
             'description' => $post->description,
             'canonical' => $post->url,
@@ -2092,7 +2314,7 @@ get('/:static', function ($static) {
             'p' => $post,
             'type' => 'staticPage',
             'is_page' => true,
-        ));
+        ), $layout);
     }
 });
 
@@ -2290,6 +2512,12 @@ post('/:static/delete', function () {
 // Show the sb static page
 get('/:static/:sub', function ($static, $sub) {
 
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
     $father_post = get_static_post($static);
     if (!$father_post) {
         not_found();
@@ -2307,8 +2535,33 @@ get('/:static/:sub', function ($static, $sub) {
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--' . strtolower($static) . '--' . strtolower($sub) . '.html.php';
+    $ls = $vroot . '/layout--' . strtolower($static) . '.html.php';
+    $lf = $vroot . '/layout--static.html.php';
+    if (file_exists($lt)) {
+        $layout = 'layout--' . strtolower($static) . '--' . strtolower($sub);
+    } else if (file_exists($ls)) {
+        $layout = 'layout--' . strtolower($static);
+    } else if (file_exists($lf)) {
+        $layout = 'layout--static';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/static--' . strtolower($static) . '--' . strtolower($sub) . '.html.php';
+    $ps = $vroot . '/static--' . strtolower($static) . '.html.php';
+    if (file_exists($pv)) {
+        $pview = 'static--' . strtolower($static) . '--' . strtolower($sub);
+    } else if (file_exists($ps)) {
+        $pview = 'static--' . strtolower($static);
+    } else {
+        $pview = 'static';
+    }
 
-    render('static', array(
+    render($pview, array(
         'title' => $post->title . ' - ' . blog_title(),
         'description' => $post->description,
         'canonical' => $post->url,
@@ -2317,7 +2570,7 @@ get('/:static/:sub', function ($static, $sub) {
         'p' => $post,
         'type' => 'subPage',
         'is_subpage' => true,
-    ));
+    ), $layout);
 });
 
 // Edit the sub static page
@@ -2462,6 +2715,12 @@ post('/:static/:sub/delete', function () {
 
 // Show blog post with year-month
 get('/:year/:month/:name', function ($year, $month, $name) {
+
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
     
     if (config('permalink.type') == 'post') {
         $redir = site_url() . 'post/' . $name;
@@ -2529,8 +2788,27 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     } else {
         $blog = '';
     }
-
-    render('post', array(
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--post--' . $current->ct . '.html.php'; 
+    $ls = $vroot . '/layout--post.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--post--' . $current->ct;
+    } else if (file_exists($ls)) {
+        $layout = 'layout--post';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/post--' . $current->ct . '.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'post--' . $current->ct;
+    } else {
+        $pview = 'post';
+    }
+    
+    render($pview, array(
         'title' => $current->title . ' - ' . blog_title(),
         'description' => $current->description,
         'canonical' => $current->url,
@@ -2542,7 +2820,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'next' => has_next($next),
         'type' => $var,
         'is_post' => true,
-    ));
+    ), $layout);
 
 });
 

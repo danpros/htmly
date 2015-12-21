@@ -1,4 +1,4 @@
-; The URL of your blog. Include the http or https if you are using Facebook or Disqus comments. 
+; The URL of your blog. Include the http or https if you are using Facebook or Disqus comment. 
 site.url = ""
 
 ; Your timezone
@@ -103,8 +103,8 @@ rss.char = "200"
 img.thumbnail = "false"
 default.thumbnail = ""
 
-; Enable view Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page.
-views.counter = "true"
+; Enable views Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page and popular posts.
+views.counter = "false"
 
 ; Sitemap priorities between "0.0" and "1.0". Set "false" to disable a sitemap for the given type. (See /sitemap.xml)
 sitemap.priority.base = "1.0"
@@ -119,6 +119,9 @@ sitemap.priority.author = "0.5"
 
 ; Also install pre-release
 prerelease = "false"
+
+; Cache expiration in hour. Eg. "6", "12". Default 6 hours.
+cache.expiration = "6"
 
 ; Switch on and off the file cache for development purposes. Options "false" and "true"
 cache.off = "false"

@@ -273,6 +273,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->categoryb = '<a property="v:title" rel="v:url" href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
         }
         $type = $str[count($str) - 2];
+        $post->ct = $str[count($str) - 3];
 
         // The post author + author url
         $post->author = $author;
@@ -1775,7 +1776,7 @@ function menu($custom = null)
 
         $links = explode('|', $menu);
 
-        echo '<ul class="nav navbar-nav ' . $custom . '">';
+        echo '<ul class="nav ' . $custom . '">';
 
         $i = 0;
         $len = count($links);
@@ -1847,7 +1848,7 @@ function get_menu($custom)
 
         krsort($posts);
 
-        echo '<ul class="nav navbar-nav ' . $custom . '">';
+        echo '<ul class="nav ' . $custom . '">';
         if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
             echo '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         } else {
@@ -1923,7 +1924,7 @@ function get_menu($custom)
         echo '</ul>';
     } else {
 
-        echo '<ul class="nav navbar-nav ' . $custom . '">';
+        echo '<ul class="nav ' . $custom . '">';
         if ($req == site_path() . '/') {
             echo '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         } else {
@@ -2533,12 +2534,23 @@ function file_cache($request)
 {
     if (config('cache.off') == 'true') return;
 
+    $hour = str_replace(',', '.', config('cache.expiration'));
+    if (empty($hour)) {
+        $hour = 6;
+    }
+    
+    $now   = time();
+
     $c = str_replace('/', '#', str_replace('?', '~', $request));
     $cachefile = 'cache/page/' . $c . '.cache';
     if (file_exists($cachefile)) {
-        header('Content-type: text/html; charset=utf-8');
-        readfile($cachefile);
-        die;
+        if ($now - filemtime($cachefile) >= 60 * 60 * $hour) {
+            unlink($cachefile);
+        } else {
+            header('Content-type: text/html; charset=utf-8');
+            readfile($cachefile);
+            die;
+        }
     }
 }
 

@@ -80,7 +80,7 @@
                             </div>
                         </li><!-- /.searchbox -->
                     </ul>
-                    <?php echo menu('navbar-right');?>
+                    <?php echo menu('navbar-nav navbar-right');?>
                 </div>
             </nav>
         </div><!--//container-->
