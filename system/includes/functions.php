@@ -2521,7 +2521,9 @@ EOF;
     echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';
     echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
+    if ($role === 'admin') {
     echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
+    }
     echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
     echo '<li><a href="' . $base . 'admin/update">Update</a></li>';
     echo '<li><a href="' . $base . 'logout">Logout</a></li>';

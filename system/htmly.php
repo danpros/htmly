@@ -1157,15 +1157,29 @@ post('/admin/import', function () {
 
 // Show Config page
 get('/admin/config', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+
     if (login()) {
         config('views.root', 'system/admin/views');
-        render('config', array(
-            'title' => 'Config - ' . blog_title(),
-            'description' => blog_description(),
-            'canonical' => site_url(),
-            'bodyclass' => 'config',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
-        ));
+	    if ($role === 'admin') {
+            render('config', array(
+                'title' => 'Config - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'bodyclass' => 'config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+            ));
+		} else {
+            render('denied', array(
+                'title' => 'Config page - ' . blog_title(),
+                'description' => blog_description(),
+                'canonical' => site_url(),
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
     } else {
         $login = site_url() . 'login';
         header("location: $login");
