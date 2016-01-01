@@ -1524,6 +1524,75 @@ post('/category/:category/delete', function () {
     }
 });
 
+// Show the type page
+get('/type/:type', function ($type) {
+
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+    }
+
+    if (!login()) {
+        file_cache($_SERVER['REQUEST_URI']);
+    }
+
+    $page = from($_GET, 'page');
+    $page = $page ? (int)$page : 1;
+    $perpage = config('type.perpage');
+    
+    if (empty($perpage)) {
+        $perpage = 10;    
+    }
+
+    $posts = get_type($type, $page, $perpage);
+
+    $total = get_typecount($type);
+	
+    $ttype = new stdClass;
+    $ttype->title = $type;
+
+    if (empty($posts) || $page < 1) {
+        // a non-existing page
+        not_found();
+    }
+    
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--type--'. strtolower($type) .'.html.php'; 
+    $ls = $vroot . '/layout--type.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--type--' . strtolower($type);
+    } else if (file_exists($ls)) {
+        $layout = 'layout--type';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/main--type--'. strtolower($type) .'.html.php';
+    $ps = $vroot . '/main--type.html.php'; 
+    if (file_exists($pv)) {
+        $pview = 'main--type--' . strtolower($type);
+    } else if (file_exists($ps)) {
+        $pview = 'main--type';
+    } else {
+        $pview = 'main';
+    }
+    
+    render($pview, array(
+        'title' => 'Posts with type: ' . ucfirst($type) . ' - ' . blog_title(),
+        'description' => 'All posts with type: ' . ucfirst($type) . ' on ' . blog_title() . '.',
+        'canonical' => site_url() . 'type/' . strtolower($type),
+        'page' => $page,
+        'posts' => $posts,
+        'type' => $ttype,
+        'bodyclass' => 'intype',
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . ucfirst($type),
+        'pagination' => has_pagination($total, $perpage, $page),
+        'is_type' => true,
+    ), $layout);
+});
+
 // Show the tag page
 get('/tag/:tag', function ($tag) {
 
@@ -2144,7 +2213,7 @@ get('/:static', function ($static) {
         header("Location: $url");
     }
 
-    if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml' || $static === 'sitemap.category.xml') {
+    if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml' || $static === 'sitemap.category.xml' || $static === 'sitemap.type.xml') {
 
         header('Content-Type: text/xml');
 
@@ -2164,6 +2233,8 @@ get('/:static', function ($static) {
             generate_sitemap('author');
         } elseif ($static === 'sitemap.category.xml') {
             generate_sitemap('category');
+        } elseif ($static === 'sitemap.type.xml') {
+            generate_sitemap('type');
         }
 
         die;

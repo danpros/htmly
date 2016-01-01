@@ -497,6 +497,12 @@ ul.month {
   margin: 0.25em 0 0.25em 1.3em;
 }
 
+/* Category list section */
+
+.category-list ul {
+  padding-left:20px;
+}
+
 /* Tag section */
 .tag-cloud a {
   background: #fafafa;

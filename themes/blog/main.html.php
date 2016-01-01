@@ -69,7 +69,7 @@
                     </p>
                 </div>
                 <div class="desc text-left" itemprop="articleBody">                                    
-                    <p><?php echo get_teaser($p->body) ?></p>
+                    <?php echo get_teaser($p->body, $p->url) ?>
                 </div><!--//desc-->
                 <div style="position:relative;">
                    <?php if (config('teaser.type') === 'trimmed'):?>

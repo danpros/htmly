@@ -650,7 +650,7 @@ ul li, ol li {
     margin: 0;
 }
 
-.about, .social, .archive, .comments, .tagcloud, .recent, .popular {
+.about, .social, .archive, .comments, .tagcloud, .recent, .popular, .category-list {
     margin-bottom: 2em;
 }
 

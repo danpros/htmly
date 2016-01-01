@@ -342,9 +342,14 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $post->tag = implode(' ', $url);
 
         $post->tagb = implode(' » ', $bc);
-        
+    
         $post->related = rtrim($arr[1], ',');
-
+        
+        $more = explode('<!--more-->', $content);
+        if (isset($more['1'])) {
+            $content = $more['0']  . '<a id="more"></a><br>' . "\n\n" . '<!--more-->' . $more['1'];
+        }
+        
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
@@ -547,6 +552,71 @@ function default_category()
     $desc->description = 'Topics that don&#39;t need a category, or don&#39;t fit into any other existing category.';
 
     return $tmp[] = $desc;
+}
+
+// Return category list
+
+function category_list() {
+    
+    $arr = get_category_info(null);
+    $cat = array();
+    $list = array();
+    
+    foreach ($arr as $a) {
+        $cat[] = array($a->md, $a->title);
+    }
+    array_push($cat, array('uncategorized', 'Uncategorized'));
+    asort($cat);
+    
+    echo '<ul>';
+    
+    foreach ($cat as $k => $v) {
+        if (get_categorycount($v['0']) !== 0) {
+            echo '<li><a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1']. '</a></li>';
+        }
+    }
+    
+    echo '</ul>';
+    
+}
+
+// Return type page.
+function get_type($type, $page, $perpage)
+{
+    $posts = get_post_sorted();
+
+    $tmp = array();
+    
+    if (empty($perpage)) {
+        $perpage = 10;    
+    }
+
+    foreach ($posts as $index => $v) {
+    
+        $filepath = $v['dirname'] . '/' . $v['basename'];
+
+        // Extract the date
+        $arr = explode('_', $filepath);
+
+        // Replaced string
+        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+        // Author string
+        $str = explode('/', $replaced);
+        $tp = $str[count($str) - 2];
+    
+        if (strtolower($type) === strtolower($tp)) {
+            $tmp[] = $v;
+        }
+    }
+
+    if (empty($tmp)) {
+        not_found();
+    }
+    
+    $tmp = array_unique($tmp, SORT_REGULAR);
+
+    return $tmp = get_posts($tmp, $page, $perpage);
 }
 
 // Return tag page.
@@ -910,7 +980,7 @@ function get_count($var, $str)
     return count($tmp);
 }
 
-// Return tag count. Matching $var and $str provided.
+// Return category count. Matching $var and $str provided.
 function get_categorycount($var)
 {
     $posts = get_post_sorted();
@@ -938,7 +1008,36 @@ function get_categorycount($var)
     return count($tmp);
 }
 
-// Return tag count. Matching $var and $str provided.
+// Return type count. Matching $var and $str provided.
+function get_typecount($var)
+{
+    $posts = get_post_sorted();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+    
+         $filepath = $v['dirname'] . '/' . $v['basename'];
+
+        // Extract the date
+        $arr = explode('_', $filepath);
+
+        // Replaced string
+        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+        // Author string
+        $str = explode('/', $replaced);
+        $tp = '/' . $str[count($str) - 2] . '/';
+        if (stripos($tp, "$var") !== false) {
+            $tmp[] = $v;
+        }
+    }
+
+    return count($tmp);
+}
+
+
+// Return draft count. Matching $var and $str provided.
 function get_draftcount($var)
 {
     $posts = get_draft_posts();
@@ -1053,6 +1152,53 @@ function recent_posts($custom = null, $count = null)
         }
         if (empty($posts)) {
             echo '<li>No recent posts found</li>';
+        }
+        echo '</ul>';
+    }
+}
+
+// Return recent posts lists
+function recent_type($type, $custom = null, $count = null)
+{
+    if (empty($count)) {
+        $count = config('recent.count');
+        if (empty($count)) {
+            $count = 5;
+        }
+    }
+    
+    $dir = 'cache/widget';
+    $filename = 'cache/widget/recent.' . $type . '.cache';
+    $tmp = array();
+    $posts = array();
+    
+    if (is_dir($dir) === false) {
+        mkdir($dir, 0775, true);
+    }
+    
+    if (file_exists($filename)) {
+        $posts = unserialize(file_get_contents($filename));
+        if (count($posts) != $count) {
+            $posts = get_type($type, 1, $count);
+            $tmp = serialize($posts);
+            file_put_contents($filename, print_r($tmp, true));
+        }        
+    } else {
+       $posts = get_type($type, 1, $count);
+       $tmp = serialize($posts);
+       file_put_contents($filename, print_r($tmp, true));
+    }
+    
+    if (!empty($custom)) {
+        return $posts;        
+    } else {
+    
+        echo '<ul>';
+        foreach ($posts as $post) {
+            echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+        }
+        if (empty($posts)) {
+            echo '<li>No recent ' . $type . ' found</li>';
         }
         echo '</ul>';
     }
@@ -1487,9 +1633,15 @@ function get_description($string, $char = null)
 }
 
 // Get the teaser
-function get_teaser($string, $char = null)
+function get_teaser($string, $url = null, $char = null)
 {
+
     $teaserType = config('teaser.type');
+    $more = config('read.more');
+    
+    if(empty($more)) {
+        $more = 'Read more';
+    }
     
     if(empty($char)) {
         $char = config('teaser.char');
@@ -1499,7 +1651,14 @@ function get_teaser($string, $char = null)
     }
 
     if ($teaserType === 'full') {
-        echo $string;
+        $readMore = explode('<!--more-->', $string);
+        if (isset($readMore['1'])) {
+            $patterns = array('<a id="more"></a><br>', '<p><a id="more"></a><br></p>');
+            $string = str_replace($patterns, '', $readMore['0']);
+            return $string . '<p class="jump-link"><a class="read-more btn btn-cta-secondary" href="'. $url .'#more">' . $more . '</a></p>';
+        } else {
+            return $string;
+        }
     } elseif (strlen(strip_tags($string)) < $char) {
         $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
         $string = ltrim(rtrim($string));
@@ -1846,7 +2005,7 @@ function get_menu($custom)
 
     if (!empty($posts)) {
 
-        krsort($posts);
+        asort($posts);
 
         echo '<ul class="nav ' . $custom . '">';
         if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
@@ -1882,7 +2041,7 @@ function get_menu($custom)
 
             $title = get_title_from_file($v);
 
-            if ($req == site_path() . "/" . str_replace('.md', '', $base)) {
+            if ($req == site_path() . "/" . str_replace('.md', '', $base) || stripos($req, str_replace('.md', '', $base)) !== false) {
                 $active = ' active';
                 $reqBase = '';
             } else {
@@ -1891,6 +2050,7 @@ function get_menu($custom)
             
             $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             if (!empty($subPages)) {
+                asort($subPages);
                 echo '<li class="' . $class . $active .' dropdown">';
                 echo '<a class="dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 echo '<ul class="subnav dropdown-menu" role="menu">';
@@ -2149,6 +2309,10 @@ function generate_sitemap($str)
         if (config('sitemap.priority.author') !== 'false') {
             echo '<sitemap><loc>' . site_url() . 'sitemap.author.xml</loc></sitemap>';
         }
+		
+        if (config('sitemap.priority.type') !== 'false') {
+            echo '<sitemap><loc>' . site_url() . 'sitemap.type.xml</loc></sitemap>';
+        }
 
         echo '</sitemapindex>';
 
@@ -2351,6 +2515,47 @@ function generate_sitemap($str)
         }
 
         echo '</urlset>';
+
+    } elseif ($str == 'type') {
+
+        $priority = (config('sitemap.priority.type')) ? config('sitemap.priority.type') : $default_priority;
+
+        $posts = array();
+        if ($priority !== 'false') {
+            $posts = get_post_unsorted();
+        }
+
+        $cats = array();
+
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        if($posts) {
+            foreach ($posts as $index => $v) {
+
+                $arr = explode('_', $v);
+                
+                $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+
+                $str = explode('/', $replaced);
+                
+                $types[] = $str[count($str) - 2];
+            }
+
+            foreach ($types as $t) {
+                $type[] = site_url() . 'type/' . strtolower($t);
+            }
+
+            if (isset($type)) {
+
+                $type = array_unique($type, SORT_REGULAR);
+
+                foreach ($type as $t) {
+                    echo '<url><loc>' . $t . '</loc><priority>' . $priority . '</priority></url>';
+                }
+            }
+        }
+
+        echo '</urlset>';
     }
 }
 
@@ -2432,7 +2637,7 @@ function Zip($source, $destination, $include_dir = false)
 function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
-    if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
+    if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
         return true;
     } else {
         return false;
@@ -2636,7 +2841,8 @@ function get_content_tag($tag, $string, $alt = null)
 // Strip html comment 
 function remove_html_comments($content)
 {
-    return trim(preg_replace('/(\s|)<!--(.*)-->(\s|)/', '', $content));
+    $patterns = array('/(\s|)<!--t(.*)t-->(\s|)/', '/(\s|)<!--d(.*)d-->(\s|)/', '/(\s|)<!--tag(.*)tag-->(\s|)/', '/(\s|)<!--image(.*)image-->(\s|)/', '/(\s|)<!--video(.*)video-->(\s|)/', '/(\s|)<!--audio(.*)audio-->(\s|)/', '/(\s|)<!--link(.*)link-->(\s|)/', '/(\s|)<!--quote(.*)quote-->(\s|)/');
+    return preg_replace($patterns, '', $content);
 }
 
 // Google recaptcha

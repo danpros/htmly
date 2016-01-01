@@ -60,9 +60,8 @@
             <?php } ?>
             <div class="teaser-body" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
-                <p><?php echo get_teaser($p->body) ?>
-                    <?php if (config('teaser.type') === 'trimmed'):?> ... <a href="<?php echo $p->url;?>#more">more</a><?php endif;?>
-                </p>
+                <?php echo get_teaser($p->body, $p->url) ?>
+                <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>#more">Read more</a><?php endif;?>
             </div>
         </div>
     </div>

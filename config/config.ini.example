@@ -67,6 +67,7 @@ tag.perpage = "10"
 archive.perpage = "10"
 search.perpage = "10"
 profile.perpage = "10"
+type.perpage = "10"
 json.count = "10"
 
 ; Category info
@@ -86,6 +87,9 @@ author.info = "true"
 
 ; Teaser type: set "trimmed" or "full".
 teaser.type = "trimmed"
+
+; Read more link text for "full" teaser type
+read.more = "Read more"
 
 ; Teaser character count
 teaser.char = "200"
@@ -116,6 +120,7 @@ sitemap.priority.archiveDay = "0.5"
 sitemap.priority.archiveMonth = "0.5"
 sitemap.priority.archiveYear = "0.5"
 sitemap.priority.author = "0.5"
+sitemap.priority.type = "0.5"
 
 ; Also install pre-release
 prerelease = "false"
@@ -133,7 +138,7 @@ generation.time = "false"
 cache.timestamp = "false"
 
 ; Set the theme here
-views.root = "themes/blog"
+views.root = "themes/twentysixteen"
 
 ; Framework config. No need to edit.
 views.layout = "layout"

@@ -136,7 +136,7 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
         save_tag_i18n($post_tag, $post_tagmd);
 
         rebuilt_cache('all');
-        clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename, $category);
+        clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename, $category, $type);
         
         if (empty($draft)) {
             $redirect = site_url() . 'admin/mine';
@@ -281,7 +281,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
         save_tag_i18n($post_tag, $post_tagmd);
         
         rebuilt_cache('all');
-        clear_post_cache($dt, $post_tag, $post_url, $newfile, $category);
+        clear_post_cache($dt, $post_tag, $post_url, $newfile, $category, $type);
         if ($destination == 'post') {
             if(!empty($revertPost)) {
                 $drafturl = site_url() . 'admin/draft';
@@ -553,8 +553,9 @@ function delete_post($file, $destination)
     // Get cache file
     $arr = explode('_', $file);
     $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+    $str = explode('/', $replaced);
     $dt = str_replace($replaced, '', $arr[0]);
-    clear_post_cache($dt, $arr[1], str_replace('.md', '', $arr[2]), $file, $arr[count($str) - 3]);
+    clear_post_cache($dt, $arr[1], str_replace('.md', '', $arr[2]), $file, $str[count($str) - 3], $str[count($str) - 2]);
 
     if (!empty($deleted_content)) {
         unlink($deleted_content);
@@ -802,7 +803,7 @@ function get_backup_files()
     }
 }
 
-function clear_post_cache($post_date, $post_tag, $post_url, $filename, $category)
+function clear_post_cache($post_date, $post_tag, $post_url, $filename, $category, $type)
 {
     $b = str_replace('/', '#', site_path() . '/');
     $c = explode(',', $post_tag);
@@ -878,6 +879,15 @@ function clear_post_cache($post_date, $post_tag, $post_url, $filename, $category
         unlink($cc);
     }
     foreach (glob('cache/page/' . $b . 'category#' . $category . '~*.cache', GLOB_NOSORT) as $file) {
+        unlink($file);
+    }
+	
+    // Delete type
+    $tp = 'cache/page/' . $b . 'type#' . $type . '.cache';
+    if (file_exists($tp)) {
+        unlink($tp);
+    }
+    foreach (glob('cache/page/' . $b . 'type#' . $type . '~*.cache', GLOB_NOSORT) as $file) {
         unlink($file);
     }
 
