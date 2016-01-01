@@ -45,3 +45,5 @@ license, including:
   jQuery.AjaxFileUpload.js - (c) Jordan Feldstein <https://github.com/jfeldstein>
   
   URLify for PHP by jbroadway <https://github.com/jbroadway> based on URLify.js - (c) Django Software Foundation and individual contributors
+  
+  Twenty Fifteen & Twenty Sixteen theme - (c) WordPress.org & Automattic.com

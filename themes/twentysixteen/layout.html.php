@@ -96,12 +96,14 @@
                         <?php echo popular_posts();?>
                     </section>
                     <?php endif;?>
-                    
+
+                    <?php if (disqus()): ?>
                     <section id="recent-comments" class="widget widget_recent_comments">
                         <h2 class="widget-title">Recent Comments</h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;} .dsq-widget-list {margin-left:0;}</style>
                     </section>
-                    
+                    <?php endif;?>
+
                     <section id="archives" class="widget widget_archive">
                     <h2 class="widget-title">Archives</h2>        
                         <?php echo archive_list() ?>
