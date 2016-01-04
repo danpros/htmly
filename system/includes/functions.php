@@ -523,6 +523,8 @@ function get_category_info($category)
 
                 // Extract the title and body
                 $desc->title = get_content_tag('t', $content, $category);
+                
+                // Get the contents and convert it to HTML
                 $desc->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
@@ -558,15 +560,28 @@ function default_category()
 
 function category_list() {
     
-    $arr = get_category_info(null);
+    $dir = "cache/widget";
+    $filename = "cache/widget/category.list.cache";
+    $tmp = array();
     $cat = array();
     $list = array();
     
-    foreach ($arr as $a) {
-        $cat[] = array($a->md, $a->title);
+    if (is_dir($dir) === false) {
+        mkdir($dir, 0775, true);
     }
-    array_push($cat, array('uncategorized', 'Uncategorized'));
-    asort($cat);
+    
+    if (file_exists($filename)) {
+        $cat = unserialize(file_get_contents($filename));    
+    } else {
+       $arr = get_category_info(null);
+        foreach ($arr as $a) {
+            $cat[] = array($a->md, $a->title);
+        }
+        array_push($cat, array('uncategorized', 'Uncategorized'));
+        asort($cat);
+        $tmp = serialize($cat);
+        file_put_contents($filename, print_r($tmp, true));
+    }
     
     echo '<ul>';
     
@@ -753,6 +768,8 @@ function get_author($name)
 
                 // Extract the title and body
                 $author->name = get_content_tag('t', $content, $author);
+                
+                // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $tmp[] = $author;
@@ -809,6 +826,8 @@ function get_static_post($static)
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, $static);
+                
+                // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if (config('views.counter') == 'true') {
@@ -853,6 +872,8 @@ function get_static_sub_post($static, $sub_static)
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, $sub_static);
+                
+                // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $post->views = get_views($post->file);
@@ -878,6 +899,7 @@ function get_frontpage()
         $content = file_get_contents($filename);
         $front->title = get_content_tag('t', $content, 'Welcome');
         $front->url = site_url() . 'front';
+        // Get the contents and convert it to HTML
         $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
     } else {
         $front->title = 'Welcome';
@@ -1655,6 +1677,7 @@ function get_teaser($string, $url = null, $char = null)
         if (isset($readMore['1'])) {
             $patterns = array('<a id="more"></a><br>', '<p><a id="more"></a><br></p>');
             $string = str_replace($patterns, '', $readMore['0']);
+            $string = replace_href($string, 'a', 'footnote-ref', $url);
             return $string . '<p class="jump-link"><a class="read-more btn btn-cta-secondary" href="'. $url .'#more">' . $more . '</a></p>';
         } else {
             return $string;
@@ -2309,7 +2332,7 @@ function generate_sitemap($str)
         if (config('sitemap.priority.author') !== 'false') {
             echo '<sitemap><loc>' . site_url() . 'sitemap.author.xml</loc></sitemap>';
         }
-		
+        
         if (config('sitemap.priority.type') !== 'false') {
             echo '<sitemap><loc>' . site_url() . 'sitemap.type.xml</loc></sitemap>';
         }
@@ -3127,4 +3150,26 @@ function migrate_old_content()
     
     rebuilt_cache('all');
  
+}
+
+function replace_href($string, $tag, $class, $url)
+{
+
+    libxml_use_internal_errors(true);
+
+    // Load the HTML in DOM
+    $doc = new DOMDocument();
+    $doc->loadHTML($string);
+    // Then select all anchor tags
+    $all_anchor_tags = $doc->getElementsByTagName($tag);
+    foreach ($all_anchor_tags as $_tag) {
+        if ($_tag->getAttribute('class') == $class) {
+            // If match class get the href value
+            $old = $_tag->getAttribute('href');
+            $new = $_tag->setAttribute('href', $url . $old);
+        }
+    }
+    
+    return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
+
 }
