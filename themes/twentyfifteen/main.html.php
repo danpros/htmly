@@ -46,7 +46,7 @@
 	<?php } ?>
     <div class="entry-content">
         <?php echo get_teaser($p->body, $p->url); ?>
-        <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>#more">Continue reading</a><?php endif;?>
+        <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>">Continue reading</a><?php endif;?>
     </div>
     <footer class="entry-footer">
         <span class="posted-on">

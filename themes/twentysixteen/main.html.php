@@ -42,7 +42,7 @@
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
                     <?php endif; ?>
                     <?php echo get_teaser($p->body, $p->url);?>
-                    <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>#more">Continue reading</a><?php endif;?>
+                    <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>">Continue reading</a><?php endif;?>
                 </div>
             </div>
         </div>
