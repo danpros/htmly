@@ -130,13 +130,11 @@ function get_category_files()
 {
     static $_desc = array();
     if (empty($_desc)) {
-        $tmp = array();
-        $tmp = glob('content/data/category/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_desc[] = $file;
-            }
+        $url = 'cache/index/index-category.txt';
+        if (!file_exists($url)) {
+            rebuilt_cache('all');
         }
+        $_desc = unserialize(file_get_contents($url));
     }
     return $_desc;
 }
@@ -209,25 +207,27 @@ function rebuilt_cache($type)
         $string = serialize($posts_cache_sorted);
         file_put_contents('cache/index/index-sorted.txt', print_r($string, true));
     } elseif ($type === 'page') {
-
         $page_cache = glob('content/static/*.md', GLOB_NOSORT);
         $string = serialize($page_cache);
         file_put_contents('cache/index/index-page.txt', print_r($string, true));
     } elseif ($type === 'subpage') {
-
         $page_cache = glob('content/static/*/*.md', GLOB_NOSORT);
         $string = serialize($page_cache);
         file_put_contents('cache/index/index-sub-page.txt', print_r($string, true));
     } elseif ($type === 'author') {
-
         $author_cache = glob('content/*/author.md', GLOB_NOSORT);
         $string = serialize($author_cache);
         file_put_contents('cache/index/index-author.txt', print_r($string, true));
+    } elseif ($type === 'category') {
+        $category_cache = glob('content/data/category/*.md', GLOB_NOSORT);
+        $string = serialize($category_cache);
+        file_put_contents('cache/index/index-category.txt', print_r($string, true));
     } elseif ($type === 'all') {
         rebuilt_cache('posts');
         rebuilt_cache('page');
         rebuilt_cache('subpage');
         rebuilt_cache('author');
+        rebuilt_cache('category');
     }
     
     foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
@@ -247,6 +247,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
     // Extract a specific page with results
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
+    
+    $catC = category_list(true);
 
     foreach ($posts as $index => $v) {
 
@@ -268,9 +270,14 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
             $post->categoryb = '<a property="v:title" rel="v:url" href="' . $category->url . '">' . $category->title . '</a>';
         } else {
-            $category = get_category_info($str[count($str) - 3]);
-            $post->category = '<a href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
-            $post->categoryb = '<a property="v:title" rel="v:url" href="' . $category[0]->url . '">' . $category[0]->title . '</a>';
+            
+            foreach ($catC as $k => $v) {
+                if ($v['0'] === $str[count($str) - 3]) {
+                    $post->category = '<a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
+                    $post->categoryb = '<a property="v:title" rel="v:url" href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
+                }
+            }
+        
         }
         $type = $str[count($str) - 2];
         $post->ct = $str[count($str) - 3];
@@ -355,6 +362,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         if (config('views.counter') == 'true') {
             $post->views = get_views($post->file);
+        } else {
+            $post->views = null;
         }
 
         $post->description = get_content_tag("d", $content, get_description($post->body));
@@ -558,7 +567,7 @@ function default_category()
 
 // Return category list
 
-function category_list() {
+function category_list($custom = null) {
     
     $dir = "cache/widget";
     $filename = "cache/widget/category.list.cache";
@@ -573,7 +582,7 @@ function category_list() {
     if (file_exists($filename)) {
         $cat = unserialize(file_get_contents($filename));    
     } else {
-       $arr = get_category_info(null);
+        $arr = get_category_info(null);
         foreach ($arr as $a) {
             $cat[] = array($a->md, $a->title);
         }
@@ -581,6 +590,10 @@ function category_list() {
         asort($cat);
         $tmp = serialize($cat);
         file_put_contents($filename, print_r($tmp, true));
+    }
+    
+    if(!empty($custom)) {
+        return $cat;
     }
     
     echo '<ul>';
@@ -3166,7 +3179,7 @@ function replace_href($string, $tag, $class, $url)
         if ($_tag->getAttribute('class') == $class) {
             // If match class get the href value
             $old = $_tag->getAttribute('href');
-            $new = $_tag->setAttribute('href', $url . $old);
+            $new = $_tag->setAttribute('href', $url . utf8_decode($old));
         }
     }
     

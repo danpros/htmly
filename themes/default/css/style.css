@@ -491,7 +491,7 @@ table.post-list td a {
     width: 100%;
 }
 
-.inpost .post {
+.in-post .post {
     padding-bottom: 0;
 }
 
@@ -527,30 +527,30 @@ h1.title-post a:hover, h2.title-index a:hover {
     color: #2E9FFF;
 }
 
-.inpost .post {
+.in-post .post {
     padding-top: 0;
     border: none;
 }
 
-.inpage .border {
+.in-page .border {
     padding: 0;
     margin: 0;
     border: 0;
 }
 
-.inpage .post {
+.in-page .post {
     padding-top: 0;
 }
 
-.infront .first, .inpost .post, .intag .first, .inarchive .first, .insearch .first, .error-404 .post, .error-404-search .post {
+.in-front .first, .in-post .post, .in-tag .first, .in-archive .first, .in-search .first, .error-404 .post, .error-404-search .post {
     padding-top: 0;
 }
 
-.infront .first h2.title-index {
+.in-front .first h2.title-index {
     margin-top: 0;
 }
 
-.inprofile .bio {
+.in-profile .bio {
     font-size: 14px;
     font-style: italic;
     border-bottom: 1px solid #EBF2F6;

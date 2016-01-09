@@ -25,7 +25,7 @@
         header("Location: $url");
     }
 ?>
-<body class="home blog">
+<body class="<?php echo $bodyclass;?>">
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
     <div id="page" class="hfeed site">
