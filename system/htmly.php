@@ -58,7 +58,7 @@ get('/index', function () {
             'bodyclass' => 'in-front',
             'breadcrumb' => '',
             'p' => $front,
-            'type' => 'is_front',
+            'type' => 'is_frontpage',
             'is_front' => true,
         ), $layout);
         
@@ -96,7 +96,7 @@ get('/index', function () {
                 'description' => blog_description(),
                 'canonical' => site_url(),
                 'bodyclass' => 'no-posts',
-                'type' => 'is_front',
+                'type' => 'is_frontpage',
                 'is_front' => true,
             ), $layout);
 
@@ -112,7 +112,7 @@ get('/index', function () {
             'bodyclass' => 'in-front',
             'breadcrumb' => '',
             'pagination' => has_pagination($total, $perpage, $page),
-            'type' => 'is_front',
+            'type' => 'is_frontpage',
             'is_front' => true,
         ), $layout);
     
@@ -271,7 +271,7 @@ get('/edit/profile', function () {
             'title' => 'Edit profile - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
-            'type' => 'is_admin',
+            'type' => 'is_profile',
             'is_admin' => true,
             'bodyclass' => 'edit-profile',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile',
@@ -312,7 +312,7 @@ post('/edit/profile', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postContent' => $content,
-            'type' => 'is_admin',
+            'type' => 'is_profile',
             'is_admin' => true,
             'bodyclass' => 'edit-profile',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile'
@@ -330,7 +330,7 @@ get('/edit/frontpage', function () {
             'title' => 'Edit frontpage - ' . blog_title(),
             'description' => blog_description(),
             'canonical' => site_url(),
-            'type' => 'is_admin',
+            'type' => 'is_frontpage',
             'is_admin' => true,
             'bodyclass' => 'edit-frontpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit frontpage',
@@ -371,7 +371,7 @@ post('/edit/frontpage', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postContent' => $content,
-            'type' => 'is_admin',
+            'type' => 'is_frontpage',
             'is_admin' => true,
             'bodyclass' => 'edit-frontpage',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit frontpage'
