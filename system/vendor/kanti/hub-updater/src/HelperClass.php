@@ -15,13 +15,13 @@ class HelperClass
         if (is_bool($file) || is_array($file)) {
             throw new \InvalidArgumentException;
         }
-        if(strlen($file) >= 3 && static::isAbsolutePath($file)){
+        if (strlen($file) >= 3 && static::isAbsolutePath($file)) {
             return file_exists($file);
         }
         return file_exists(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $file);
     }
 
-    static public function isInPhar()
+    public static function isInPhar()
     {
         return substr(__FILE__, 0, 7) === "phar://";
     }

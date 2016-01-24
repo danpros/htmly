@@ -33,7 +33,10 @@ DirectoryIndex index.php
   # ExpiresByType text/html                             "access plus 1 month"
 
   # For JavaScript
+  # ExpiresByType text/js                               "access plus 1 month"
+  # ExpiresByType text/javascript                       "access plus 1 month"
   # ExpiresByType application/javascript                "access plus 1 month"
+  # ExpiresByType application/x-javascript              "access plus 1 month"
 
   # For Manifest files
   # ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
@@ -65,6 +68,13 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
 
   RewriteEngine on
+  
+# Uncomment the following to redirect all visitors to the https version
+# RewriteCond %{HTTPS} off
+# RewriteRUle (.*) https://www.example.com/$1 [R=301,L]
+# RewriteCond %{HTTPS} on
+# RewriteCond %{HTTP_HOST} ^example\.com$ [NC]
+# RewriteRUle (.*) https://www.example.com/$1 [R=301,L]
 
 # Uncomment the following to redirect all visitors to the www version
 # RewriteCond %{HTTP_HOST} !^www\. [NC]
@@ -102,7 +112,10 @@ DirectoryIndex index.php
     #  and can remove the `<IfModule mod_filter.c>` and `</IfModule>` lines
     #  as `AddOutputFilterByType` is still in the core directives).
     AddOutputFilterByType DEFLATE application/atom+xml \
+                                  text/js \
+                                  text/javascript \
                                   application/javascript \
+                                  application/x-javascript \
                                   application/json \
                                   application/rss+xml \
                                   application/vnd.ms-fontobject \

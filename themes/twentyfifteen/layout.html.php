@@ -16,7 +16,6 @@
     <!--[if lt IE 8]>
     <link rel='stylesheet' id='twentyfifteen-ie7-css'  href='<?php echo site_url();?>themes/twentyfifteen/css/ie7.css' type='text/css' media='all' />
     <![endif]-->
-    <script src="<?php echo site_url();?>themes/twentyfifteen/js/jquery.js" type="text/javascript"></script>
 </head>
 <?php     
     if (isset($_GET['search'])) {
@@ -132,6 +131,7 @@
     /* ]]> */
     </script>
     <!--[if lte IE 8]><script type='text/javascript' src='<?php echo site_url();?>themes/twentyfifteen/js/html5.js'></script><![endif]-->
+    <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/jquery.js"></script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/jquery-migrate.js"></script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/functions.js"></script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/skip-link-focus-fix.js"></script>

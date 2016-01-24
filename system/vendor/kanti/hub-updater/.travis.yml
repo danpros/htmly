@@ -1,0 +1,40 @@
+# Required to run your project under the correct environment.
+language: php
+
+
+# allow_failures: Allow this build to fail under the specified environments.
+# fast_finish: If your build fails do not continue trying to build, just stop.
+matrix:
+  allow_failures:
+    - php: nightly
+  fast_finish: true
+  include:
+    - php: 5.3
+      env: CODECLIMATE=yes
+    - php: 5.4
+    - php: 5.5
+    - php: 5.6
+    - php: 7.0
+    - php: hhvm
+    - php: nightly
+
+
+# Commands to be run before your environment runs.
+install:
+  - composer install --dev --no-interaction
+  - phpenv rehash
+
+# Commands you want to run that will verify your build.
+script:
+  - ./vendor/bin/phpunit -c tests/phpunit.xml
+  - ./vendor/bin/phpcs --standard=PSR2 ./src ./tests -n
+  - ./vendor/bin/phpcpd ./src ./tests -n
+  - >
+    if [[ "$CODECLIMATE" == "yes" ]]; then
+      CODECLIMATE_REPO_TOKEN=857af03b99f4c907a8cf99f7e80f4beb4df5977847fad17445c6f3a7110d83a7 ./vendor/bin/test-reporter
+    fi
+
+# Customize when the notification emails are sent.
+notifications:
+    on_success: never
+    on_failure: always

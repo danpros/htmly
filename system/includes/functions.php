@@ -1778,6 +1778,8 @@ function get_image($text)
             $vidThumb = '//img.youtube.com/vi/' . $fetch[1] . '/sddefault.jpg';
             return $vidThumb;
         }
+    } else{
+	   return false;
     }
 }
 
@@ -2077,7 +2079,7 @@ function get_menu($custom)
 
             $title = get_title_from_file($v);
 
-            if ($req == site_path() . "/" . str_replace('.md', '', $base) || stripos($req, str_replace('.md', '', $base)) !== false) {
+            if ($req == site_path() . "/" . str_replace('.md', '', $base) || stripos($req, site_path() . "/" . str_replace('.md', '', $base)) !== false) {
                 $active = ' active';
                 $reqBase = '';
             } else {
@@ -2717,10 +2719,22 @@ function head_contents()
 {
     $output = '';
     $wmt_id = config('google.wmt.id');
+    static $_version = array();
+    
+    $filename = "cache/installedVersion.json";
+    if (file_exists($filename)) {
+        $_version = json_decode(file_get_contents($filename), true);
+    }
+
+    if (isset($_version['tag_name'])) {
+        $version = 'HTMLy ' . $_version['tag_name'];
+    } else {
+        $version = 'HTMLy';
+    }
 
     $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
     $charset = '<meta charset="utf-8" />';
-    $generator = '<meta name="generator" content="htmly" />';
+    $generator = '<meta name="generator" content="' . $version . '" />';
     $xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
     $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />';
     $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';

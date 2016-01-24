@@ -18,11 +18,6 @@
     <!--[if lt IE 8]>
     <link rel="stylesheet" id="twentysixteen-ie7-css"  href="<?php echo site_url();?>themes/twentysixteen/css/ie7.css" type="text/css" media="all" />
     <![endif]-->
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/html5.js"></script>
-    <![endif]-->
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/jquery.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/jquery-migrate.js"></script>
 </head>
 <?php     
     if (isset($_GET['search'])) {
@@ -153,6 +148,11 @@
         </div><!-- .site-inner -->
     </div><!-- .site -->
 
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/jquery-migrate.js"></script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/skip-link-focus-fix.js"></script>
     <script type="text/javascript">
     /* <![CDATA[ */
@@ -160,5 +160,6 @@
     /* ]]> */
     </script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/functions.js"></script>
+    <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

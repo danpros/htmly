@@ -23,12 +23,18 @@
         <?php if (login()) { echo tab($p); } ?>
         <?php if (!empty($p->link)) {?>
             <div class="post-link"><h1 class="entry-title"><a href="<?php echo $p->link ?>" target="_blank"><?php echo $p->title; ?></a></h1></div>
-		<?php } else { ?>
-			<h1 class="entry-title"><?php echo $p->title; ?></h1>
-		<?php } ?>
+        <?php } else { ?>
+            <h1 class="entry-title"><?php echo $p->title; ?></h1>
+        <?php } ?>
     </header>
     <div class="entry-content">
         <?php echo $p->body; ?>
+    </div>
+    <style>.related {padding-bottom:2em;}.related p {margin-top:0;margin-bottom:0.5em;} .related ul {margin-left:1em;}</style>
+    <div class="related entry-content">
+        <hr>
+        <p><strong>Related Posts</strong></p>
+        <?php echo get_related($p->related);?>
     </div>
     <div class="author-info">
         <h2 class="author-heading">Published by</h2>

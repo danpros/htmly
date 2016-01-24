@@ -44,59 +44,6 @@
         ]
     },
     {
-        "name": "michelf/php-markdown",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/michelf/php-markdown.git",
-            "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/e1aabe18173231ebcefc90e615565742fc1c7fd9",
-            "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2015-03-01 12:03:08",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-lib": "1.4.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Michelf": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "John Gruber",
-                "homepage": "http://daringfireball.net/"
-            },
-            {
-                "name": "Michel Fortin",
-                "email": "michel.fortin@michelf.ca",
-                "homepage": "https://michelf.ca/",
-                "role": "Developer"
-            }
-        ],
-        "description": "PHP Markdown",
-        "homepage": "https://michelf.ca/projects/php-markdown/",
-        "keywords": [
-            "markdown"
-        ]
-    },
-    {
         "name": "suin/php-rss-writer",
         "version": "1.3.1",
         "version_normalized": "1.3.1.0",
@@ -143,27 +90,83 @@
         ]
     },
     {
-        "name": "kanti/hub-updater",
-        "version": "v0.4",
-        "version_normalized": "0.4.0.0",
+        "name": "michelf/php-markdown",
+        "version": "1.6.0",
+        "version_normalized": "1.6.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/Kanti/hub-updater.git",
-            "reference": "81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d"
+            "url": "https://github.com/michelf/php-markdown.git",
+            "reference": "156e56ee036505ec637d761ee62dc425d807183c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d",
-            "reference": "81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d",
+            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/156e56ee036505ec637d761ee62dc425d807183c",
+            "reference": "156e56ee036505ec637d761ee62dc425d807183c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2015-12-24 01:37:31",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-lib": "1.4.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Michelf": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Michel Fortin",
+                "email": "michel.fortin@michelf.ca",
+                "homepage": "https://michelf.ca/",
+                "role": "Developer"
+            },
+            {
+                "name": "John Gruber",
+                "homepage": "https://daringfireball.net/"
+            }
+        ],
+        "description": "PHP Markdown",
+        "homepage": "https://michelf.ca/projects/php-markdown/",
+        "keywords": [
+            "markdown"
+        ]
+    },
+    {
+        "name": "kanti/hub-updater",
+        "version": "v0.4.1",
+        "version_normalized": "0.4.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Kanti/hub-updater.git",
+            "reference": "c9cdc7ce407c2a3596961e2193673303789e084d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/c9cdc7ce407c2a3596961e2193673303789e084d",
+            "reference": "c9cdc7ce407c2a3596961e2193673303789e084d",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "~4.6@dev"
+            "codeclimate/php-test-reporter": "dev-master",
+            "phpunit/phpunit": "4.*",
+            "sebastian/phpcpd": "*",
+            "squizlabs/php_codesniffer": "*"
         },
-        "time": "2015-02-03 09:53:58",
+        "time": "2015-11-28 18:52:10",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "40c7e6fec1121162c6d2243840450628",
+    "hash": "5bdfc8dcf4f971b8f61fd8439dd9cbdb",
     "content-hash": "e98ae62bcc711211dfb7c7c70e7fdfc7",
     "packages": [
         {
@@ -51,23 +51,26 @@
         },
         {
             "name": "kanti/hub-updater",
-            "version": "v0.4",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kanti/hub-updater.git",
-                "reference": "81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d"
+                "reference": "c9cdc7ce407c2a3596961e2193673303789e084d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d",
-                "reference": "81dae71f2b3ccd0e3425579ac932a8c6b7b58c5d",
+                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/c9cdc7ce407c2a3596961e2193673303789e084d",
+                "reference": "c9cdc7ce407c2a3596961e2193673303789e084d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.6@dev"
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": "4.*",
+                "sebastian/phpcpd": "*",
+                "squizlabs/php_codesniffer": "*"
             },
             "type": "library",
             "autoload": {
@@ -88,20 +91,20 @@
                 }
             ],
             "description": "Simple Github Updater for Web Projects",
-            "time": "2015-02-03 09:53:58"
+            "time": "2015-11-28 18:52:10"
         },
         {
             "name": "michelf/php-markdown",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9"
+                "reference": "156e56ee036505ec637d761ee62dc425d807183c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/e1aabe18173231ebcefc90e615565742fc1c7fd9",
-                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/156e56ee036505ec637d761ee62dc425d807183c",
+                "reference": "156e56ee036505ec637d761ee62dc425d807183c",
                 "shasum": ""
             },
             "require": {
@@ -124,14 +127,14 @@
             ],
             "authors": [
                 {
-                    "name": "John Gruber",
-                    "homepage": "http://daringfireball.net/"
-                },
-                {
                     "name": "Michel Fortin",
                     "email": "michel.fortin@michelf.ca",
                     "homepage": "https://michelf.ca/",
                     "role": "Developer"
+                },
+                {
+                    "name": "John Gruber",
+                    "homepage": "https://daringfireball.net/"
                 }
             ],
             "description": "PHP Markdown",
@@ -139,7 +142,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2015-03-01 12:03:08"
+            "time": "2015-12-24 01:37:31"
         },
         {
             "name": "suin/php-rss-writer",

@@ -29,20 +29,20 @@ class CacheOneFile
         return true;
     }
 
-    protected function file_force_contents()
+    protected function fileForceContents()
     {
         $args = func_get_args();
         $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $args[0]);
         $parts = explode(DIRECTORY_SEPARATOR, $path);
         array_pop($parts);
         $directory = '';
-        foreach ($parts as $part):
+        foreach ($parts as $part) {
             $check_path = $directory . $part;
-            if (is_dir($check_path . DIRECTORY_SEPARATOR) === FALSE) {
+            if (is_dir($check_path . DIRECTORY_SEPARATOR) === false) {
                 mkdir($check_path, 0755);
             }
             $directory = $check_path . DIRECTORY_SEPARATOR;
-        endforeach;
+        }
         call_user_func_array('file_put_contents', $args);
     }
 
@@ -53,6 +53,6 @@ class CacheOneFile
 
     public function set($content)
     {
-        $this->file_force_contents($this->fileName, $content);
+        $this->fileForceContents($this->fileName, $content);
     }
 }

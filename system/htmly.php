@@ -36,7 +36,7 @@ get('/index', function () {
         
         $front = get_frontpage();
         
-        $tl = blog_tagline();
+        $tl = strip_tags(blog_tagline());
 
         if ($tl) {
             $tagline = ' - ' . $tl;
@@ -53,7 +53,7 @@ get('/index', function () {
             
         render($pview, array(
             'title' => blog_title() . $tagline,
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'in-front',
             'breadcrumb' => '',
@@ -73,7 +73,7 @@ get('/index', function () {
 
         $total = '';
 
-        $tl = blog_tagline();
+        $tl = strip_tags(blog_tagline());
 
         if ($tl) {
             $tagline = ' - ' . $tl;
@@ -93,7 +93,7 @@ get('/index', function () {
             // a non-existing page
             render('no-posts', array(
                 'title' => blog_title() . $tagline,
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'bodyclass' => 'no-posts',
                 'type' => 'is_frontpage',
@@ -105,7 +105,7 @@ get('/index', function () {
 
         render($pview, array(
             'title' => blog_title() . $tagline,
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'page' => $page,
             'posts' => $posts,
@@ -269,7 +269,7 @@ get('/edit/profile', function () {
         config('views.root', 'system/admin/views');
         render('edit-page', array(
             'title' => 'Edit profile - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_profile',
             'is_admin' => true,
@@ -307,7 +307,7 @@ post('/edit/profile', function () {
 
         render('edit-page', array(
             'title' => 'Edit profile - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
@@ -328,7 +328,7 @@ get('/edit/frontpage', function () {
         config('views.root', 'system/admin/views');
         render('edit-page', array(
             'title' => 'Edit frontpage - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_frontpage',
             'is_admin' => true,
@@ -366,7 +366,7 @@ post('/edit/frontpage', function () {
 
         render('edit-page', array(
             'title' => 'Edit frontpage - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
@@ -404,7 +404,7 @@ get('/add/content', function () {
 
         render('add-content', array(
             'title' => 'Add content - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => $type,
             'is_admin' => true,
@@ -474,7 +474,7 @@ post('/add/content', function () {
             config('views.root', 'system/admin/views');
             render('add-content', array(
                 'title' => 'Add post- ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $message['error'] . '</ul>',
                 'postTitle' => $title,
@@ -517,7 +517,7 @@ post('/add/content', function () {
             config('views.root', 'system/admin/views');
             render('add-content', array(
                 'title' => 'Add image - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $message['error'] . '</ul>',
                 'postTitle' => $title,
@@ -561,7 +561,7 @@ post('/add/content', function () {
             config('views.root', 'system/admin/views');
             render('add-content', array(
                 'title' => 'Add video - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $message['error'] . '</ul>',
                 'postTitle' => $title,
@@ -605,7 +605,7 @@ post('/add/content', function () {
             config('views.root', 'system/admin/views');
             render('add-content', array(
                 'title' => 'Add audio - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $message['error'] . '</ul>',
                 'postTitle' => $title,
@@ -649,7 +649,7 @@ post('/add/content', function () {
             config('views.root', 'system/admin/views');
             render('add-content', array(
                 'title' => 'Add quote - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $message['error'] . '</ul>',
                 'postTitle' => $title,
@@ -693,7 +693,7 @@ post('/add/content', function () {
             config('views.root', 'system/admin/views');
             render('add-content', array(
                 'title' => 'Add link - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $message['error'] . '</ul>',
                 'postTitle' => $title,
@@ -720,7 +720,7 @@ get('/add/page', function () {
 
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_page',
             'is_admin' => true,
@@ -763,7 +763,7 @@ post('/add/page', function () {
         config('views.root', 'system/admin/views');
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
@@ -786,7 +786,7 @@ get('/add/category', function () {
 
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_category',
             'is_admin' => true,
@@ -829,7 +829,7 @@ post('/add/category', function () {
         config('views.root', 'system/admin/views');
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
@@ -867,7 +867,7 @@ get('/admin/posts', function () {
                 // a non-existing page
                 render('no-posts', array(
                     'title' => 'All blog posts - ' . blog_title(),
-                    'description' => blog_description(),
+                    'description' => strip_tags(blog_description()),
                     'canonical' => site_url(),
                     'bodyclass' => 'no-posts',
                 ));
@@ -875,7 +875,7 @@ get('/admin/posts', function () {
                 die;
             }
 
-            $tl = blog_tagline();
+            $tl = strip_tags(blog_tagline());
 
             if ($tl) {
                 $tagline = ' - ' . $tl;
@@ -885,7 +885,7 @@ get('/admin/posts', function () {
 
             render('posts-list', array(
                 'title' => 'All blog posts - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'heading' => 'All blog posts',
                 'page' => $page,
@@ -899,7 +899,7 @@ get('/admin/posts', function () {
         } else {
             render('denied', array(
                 'title' => 'All blog posts - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-posts',
                 'is_admin' => true,
@@ -936,7 +936,7 @@ get('/admin/popular', function () {
                 // a non-existing page
                 render('no-posts', array(
                     'title' => 'Popular posts - ' . blog_title(),
-                    'description' => blog_description(),
+                    'description' => strip_tags(blog_description()),
                     'canonical' => site_url(),
                     'is_admin' => true,
                     'bodyclass' => 'admin-popular',
@@ -945,7 +945,7 @@ get('/admin/popular', function () {
                 die;
             }
 
-            $tl = blog_tagline();
+            $tl = strip_tags(blog_tagline());
 
             if ($tl) {
                 $tagline = ' - ' . $tl;
@@ -955,7 +955,7 @@ get('/admin/popular', function () {
 
             render('popular-posts', array(
                 'title' => 'Popular posts - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'heading' => 'Popular posts',
                 'page' => $page,
@@ -968,7 +968,7 @@ get('/admin/popular', function () {
         } else {
             render('denied', array(
                 'title' => 'Popular posts - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'is_admin' => true,
                 'bodyclass' => 'denied',
@@ -1009,7 +1009,7 @@ get('/admin/mine', function () {
         if (empty($posts) || $page < 1) {
             render('user-posts', array(
                 'title' => 'My blog posts - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'page' => $page,
                 'heading' => 'My posts',
@@ -1027,7 +1027,7 @@ get('/admin/mine', function () {
 
         render('user-posts', array(
             'title' => 'My blog posts - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'heading' => 'My posts',
             'page' => $page,
@@ -1074,7 +1074,7 @@ get('/admin/draft', function () {
         if (empty($posts) || $page < 1) {
             render('user-draft', array(
                 'title' => 'My draft - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'page' => $page,
                 'heading' => 'My draft',
@@ -1091,7 +1091,7 @@ get('/admin/draft', function () {
 
         render('user-draft', array(
             'title' => 'My draft - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'heading' => 'My draft',
             'page' => $page,
@@ -1115,7 +1115,7 @@ get('/admin/content', function () {
         config('views.root', 'system/admin/views');
         render('content-type', array(
             'title' => 'Add content - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-content',
             'is_admin' => true,
@@ -1135,7 +1135,7 @@ get('/admin/import', function () {
         config('views.root', 'system/admin/views');
         render('import', array(
             'title' => 'Import feed - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-import',
             'is_admin' => true,
@@ -1167,7 +1167,7 @@ post('/admin/import', function () {
 
             render('import', array(
                 'title' => 'Import feed - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $log . '</ul>',
                 'type' => 'is_admin-import',
@@ -1189,7 +1189,7 @@ post('/admin/import', function () {
 
         render('import', array(
             'title' => 'Import feed - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'url' => $url,
@@ -1212,7 +1212,7 @@ get('/admin/config', function () {
         if ($role === 'admin') {
             render('config', array(
                 'title' => 'Config - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
@@ -1222,7 +1222,7 @@ get('/admin/config', function () {
         } else {
             render('denied', array(
                 'title' => 'Config page - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
@@ -1274,7 +1274,7 @@ get('/admin/backup', function () {
         config('views.root', 'system/admin/views');
         render('backup', array(
             'title' => 'Backup content - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-backup',
             'is_admin' => true,
@@ -1294,7 +1294,7 @@ get('/admin/backup-start', function () {
         config('views.root', 'system/admin/views');
         render('backup-start', array(
             'title' => 'Backup content started - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-backup-start',
             'is_admin' => true,
@@ -1314,7 +1314,7 @@ get('/admin/clear-cache', function () {
         config('views.root', 'system/admin/views');
         render('clear-cache', array(
             'title' => 'Clearing cache started - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-clear-cache',
             'is_admin' => true,
@@ -1334,7 +1334,7 @@ get('/admin/update', function () {
         config('views.root', 'system/admin/views');
         render('update', array(
             'title' => 'Check for Update - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-update',
             'is_admin' => true,
@@ -1360,7 +1360,7 @@ get('/admin/update/now/:csrf', function ($CSRF) {
         config('views.root', 'system/admin/views');
         render('updated-to', array(
             'title' => 'Updated - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'info' => $updater->getCurrentInfo(),
             'type' => 'is_admin-update',
@@ -1380,7 +1380,7 @@ get('/admin/categories', function () {
         config('views.root', 'system/admin/views');
         render('categories', array(
             'title' => 'Categories - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-categories',
             'is_admin' => true,
@@ -1482,7 +1482,7 @@ get('/category/:category/edit', function ($category) {
 
         render('edit-page', array(
             'title' => 'Edit category - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_category',
             'is_admin' => true,
@@ -1534,7 +1534,7 @@ post('/category/:category/edit', function () {
 
         render('edit-page', array(
             'title' => 'Edit category - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
@@ -1565,7 +1565,7 @@ get('/category/:category/delete', function ($category) {
 
         render('delete-category', array(
             'title' => 'Delete category - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_category',
             'is_admin' => true,
@@ -2053,7 +2053,7 @@ get('/post/:name/edit', function ($name) {
         if ($user === $current->author || $role === 'admin') {
             render('edit-content', array(
                 'title' => $type .' - '. blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'type' => $type,
@@ -2064,7 +2064,7 @@ get('/post/:name/edit', function ($name) {
         } else {
             render('denied', array(
                 'title' => $type .' - '. blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'denied',
@@ -2202,7 +2202,7 @@ post('/post/:name/edit', function () {
 
         render('edit-content', array(
             'title' => $type . ' - ' .  blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
@@ -2246,7 +2246,7 @@ get('/post/:name/delete', function ($name) {
         if ($user === $current->author || $role === 'admin') {
             render('delete-post', array(
                 'title' => 'Delete post - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'is_admin' => true,
@@ -2256,7 +2256,7 @@ get('/post/:name/delete', function ($name) {
         } else {
             render('denied', array(
                 'title' => 'Delete post - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'is_admin' => true,
@@ -2320,7 +2320,7 @@ get('/:static', function ($static) {
             config('views.root', 'system/admin/views');
             render('main', array(
                 'title' => 'Admin - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'bodyclass' => 'admin-front',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Admin'
@@ -2345,7 +2345,7 @@ get('/:static', function ($static) {
             config('views.root', 'system/admin/views');
             render('logout', array(
                 'title' => 'Logout - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'bodyclass' => 'in-logout',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Logout'
@@ -2371,7 +2371,7 @@ get('/:static', function ($static) {
 
         $total = '';
 
-        $tl = blog_tagline();
+        $tl = strip_tags(blog_tagline());
 
         if ($tl) {
             $tagline = ' - ' . $tl;
@@ -2497,7 +2497,7 @@ get('/:static/add', function ($static) {
 
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_page',
             'is_admin' => true,
@@ -2540,7 +2540,7 @@ post('/:static/add', function ($static) {
         config('views.root', 'system/admin/views');
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
@@ -2570,7 +2570,7 @@ get('/:static/edit', function ($static) {
 
         render('edit-page', array(
             'title' => 'Edit page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'edit-page',
             'is_admin' => true,
@@ -2621,7 +2621,7 @@ post('/:static/edit', function () {
 
         render('edit-page', array(
             'title' => 'Edit page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
@@ -2651,7 +2651,7 @@ get('/:static/delete', function ($static) {
 
         render('delete-page', array(
             'title' => 'Delete page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'delete-page',
             'is_admin' => true,
@@ -2764,7 +2764,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
 
         render('edit-page', array(
             'title' => 'Edit page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'edit-page',
             'is_admin' => true,
@@ -2818,7 +2818,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
 
         render('edit-page', array(
             'title' => 'Edit page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
@@ -2858,7 +2858,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
 
         render('delete-page', array(
             'title' => 'Delete page - ' . blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'delete-page',
             'is_admin' => true,
@@ -3037,7 +3037,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
         if ($user === $current->author || $role === 'admin') {
             render('edit-content', array(
                 'title' => $type .' - '. blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'type' => $type,
@@ -3048,7 +3048,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
         } else {
             render('denied', array(
                 'title' => $type .' - '. blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'denied',
@@ -3186,7 +3186,7 @@ post('/:year/:month/:name/edit', function () {
 
         render('edit-content', array(
             'title' => $type . ' - ' .  blog_title(),
-            'description' => blog_description(),
+            'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'oldfile' => $oldfile,
@@ -3230,7 +3230,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
         if ($user === $current->author || $role === 'admin') {
             render('delete-post', array(
                 'title' => 'Delete post - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'delete-post',
@@ -3240,7 +3240,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
         } else {
             render('denied', array(
                 'title' => 'Delete post - ' . blog_title(),
-                'description' => blog_description(),
+                'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
                 'bodyclass' => 'delete-post',

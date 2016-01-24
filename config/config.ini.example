@@ -86,7 +86,7 @@ popular.count = "5"
 author.info = "true"
 
 ; Teaser type: set "trimmed" or "full".
-teaser.type = "trimmed"
+teaser.type = "full"
 
 ; Read more link text for "full" teaser type
 read.more = "Read more"

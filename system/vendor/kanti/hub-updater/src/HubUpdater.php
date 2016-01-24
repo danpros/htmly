@@ -33,7 +33,7 @@ class HubUpdater
             }
             $this->options = $option + $this->options;
         } elseif (is_string($option)) {
-            if(empty($option)){
+            if (empty($option)) {
                 throw new \Exception('No Name Set');
             }
             $this->options['name'] = $option;
@@ -52,7 +52,7 @@ class HubUpdater
         if ($this->options['cache'] !== '') {
             $this->options['cache'] .= '/';
             if (!HelperClass::fileExists($this->options['cache'])) {
-                mkdir($this->options['cache']);
+                mkdir(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache']);
             }
         }
         $caBundleDir = dirname(__FILE__);
@@ -63,7 +63,10 @@ class HubUpdater
             }
         }
 
-        $this->cachedInfo = new CacheOneFile(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['cacheFile'], $this->options['holdTime']);
+        $this->cachedInfo = new CacheOneFile(
+            dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['cacheFile'],
+            $this->options['holdTime']
+        );
 
         $this->streamContext = stream_context_create(
             array(
@@ -146,7 +149,7 @@ class HubUpdater
         $this->getNewestInfo();
 
         if (HelperClass::fileExists($this->options['cache'] . $this->options['versionFile'])) {
-            $fileContent = file_get_contents($this->options['cache'] . $this->options['versionFile']);
+            $fileContent = file_get_contents(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['versionFile']);
             $current = json_decode($fileContent, true);
 
             if (isset($current['id']) && $current['id'] == $this->newestInfo['id']) {
@@ -166,17 +169,23 @@ class HubUpdater
         if ($this->able()) {
             if ($this->download($newestRelease['zipball_url'])) {
                 if ($this->unZip()) {
-                    unlink($this->options['cache'] . $this->options['zipFile']);
+                    unlink(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['zipFile']);
                     if (defined("JSON_PRETTY_PRINT")) {
-                        file_put_contents($this->options['cache'] . $this->options['versionFile'], json_encode(array(
-                            "id" => $newestRelease['id'],
-                            "tag_name" => $newestRelease['tag_name']
-                        ), JSON_PRETTY_PRINT));
+                        file_put_contents(
+                            dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['versionFile'],
+                            json_encode(array(
+                                "id" => $newestRelease['id'],
+                                "tag_name" => $newestRelease['tag_name']
+                            ), JSON_PRETTY_PRINT)
+                        );
                     } else {
-                        file_put_contents($this->options['cache'] . $this->options['versionFile'], json_encode(array(
-                            "id" => $newestRelease['id'],
-                            "tag_name" => $newestRelease['tag_name']
-                        )));
+                        file_put_contents(
+                            dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['versionFile'],
+                            json_encode(array(
+                                "id" => $newestRelease['id'],
+                                "tag_name" => $newestRelease['tag_name']
+                            ))
+                        );
                     }
 
                     return true;
@@ -236,10 +245,13 @@ class HubUpdater
                     $stat = $zip->statIndex($i);
                     if ($stat["crc"] == 0) {
                         if (!HelperClass::fileExists($name)) {
-                            mkdir($name);
+                            mkdir(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $name);
                         }
                     } else {
-                        copy("zip://" . $path . "#" . $zip->getNameIndex($i), $name);
+                        copy(
+                            "zip://" . $path . "#" . $zip->getNameIndex($i),
+                            dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $name
+                        );
                     }
                 }
             }
@@ -259,7 +271,7 @@ class HubUpdater
 
         $this->currentInfo = null;
         if (HelperClass::fileExists($this->options['cache'] . $this->options['versionFile'])) {
-            $fileContent = file_get_contents($this->options['cache'] . $this->options['versionFile']);
+            $fileContent = file_get_contents(dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $this->options['cache'] . $this->options['versionFile']);
             $current = json_decode($fileContent, true);
 
             foreach ($this->allRelease as $release) {

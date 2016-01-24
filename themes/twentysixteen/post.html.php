@@ -27,6 +27,12 @@
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
                     <?php endif; ?>
                     <?php echo $p->body;?>
+                    <hr>
+                    <style>.related p {margin-top:0;margin-bottom:0.5em;} .related ul {margin-left:1em;}</style>
+                    <div class="related">
+                        <p><strong>Related Posts</strong></p>
+                        <?php echo get_related($p->related);?>
+                    </div>
                 </div>
             </div>
         </div>
