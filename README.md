@@ -1,6 +1,6 @@
 <a href="https://www.htmly.com" target="_blank">![Logo](https://raw.githubusercontent.com/danpros/htmly/master/system/resources/images/logo-big.png)</a>
 
-HTMLy is an open source databaseless web publishing platform that prioritizes simplicity and speed. HTMLy can be referred to as a Flat-File Blog or Flat-File CMS, since it will also manage your content.
+HTMLy is an open source Databaseless Blogging Platform or Flat-File Blog prioritizes simplicity and speed written in PHP. HTMLy can be referred to as Flat-File CMS either since it will also manage your content.
 
 You do not need to use a VPS to run HTMLy, shared hosting or even [free hosting](https://github.com/danpros/htmly#openshift) should work as long as the host supports at least PHP 5.3.
 
@@ -49,7 +49,7 @@ HTMLy requires PHP 5.3 or greater and php-xml package.
 
 Installations
 -------------
-If you have an OpenSSL enabled server (usually enabled by default), use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
+If you have an OpenSSL enabled server (usually enabled by default), use the [installer.php](https://github.com/danpros/htmly/releases/latest) and read the following [instructions](https://docs.htmly.com/basics/installations) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
 
 Configurations
 --------------
@@ -129,7 +129,7 @@ server {
 
 OpenShift
 ---------
-Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://github.com/danpros/htmly-openshift) for easy deployment.
+Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://hub.openshift.com/quickstarts/219-htmly) for easy deployment.
 
 **Quick install:**
 
