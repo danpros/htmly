@@ -1814,6 +1814,9 @@ function social($imgDir = null)
     $google = config('social.google');
     $tumblr = config('social.tumblr');
     $rss = site_url() . 'feed/rss';
+    $hubzilla = config('social.hubzilla');
+    $gnusocial = config('social.gnusocial');
+    $diaspora = config('social.diaspora');
 
     if ($imgDir === null) {
         $imgDir = "default/img/";
@@ -1835,6 +1838,18 @@ function social($imgDir = null)
         echo '<a href="' . $tumblr . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'tumblr.png" width="32" height="32" alt="Tumblr"/></a>';
     }
 
+    if (!empty($hubzilla)) {
+        echo '<a href="' . $hubzilla . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'hubzilla.png" width="32" height="32" alt="Hubzilla"/></a>';
+    }
+    
+    if (!empty($gnusocial)) {
+        echo '<a href="' . $gnusocial . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'gnusocial.png" width="32" height="32" alt="GNU Social"/></a>';
+    }
+    
+    if (!empty($diaspora)) {
+        echo '<a href="' . $diaspora . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'diaspora.png" width="32" height="32" alt="Diaspora"/></a>';
+    } 
+    
     echo '<a href="' . $rss . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'rss.png" width="32" height="32" alt="RSS Feed"/></a>';
 }
 

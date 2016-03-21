@@ -24,6 +24,9 @@ social.twitter = "https://twitter.com"
 social.facebook = "https://www.facebook.com"
 social.google = "https://plus.google.com"
 social.tumblr = "http://www.tumblr.com"
+social.hubzilla = ""
+social.gnusocial = ""
+social.diaspora = ""
 
 ; Custom menu link. 
 ; See example below:
