@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5bdfc8dcf4f971b8f61fd8439dd9cbdb",
-    "content-hash": "e98ae62bcc711211dfb7c7c70e7fdfc7",
+    "hash": "4b4af0298a863441fda250d818d3fc4b",
+    "content-hash": "250bd035a1d26dd3e3e01e504833c798",
     "packages": [
         {
             "name": "ircmaxell/password-compat",
@@ -48,6 +48,60 @@
                 "password"
             ],
             "time": "2014-11-20 16:49:30"
+        },
+        {
+            "name": "jbroadway/urlify",
+            "version": "1.0.8-stable",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jbroadway/urlify.git",
+                "reference": "984c991881501098eafdc41053b243237191cff8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jbroadway/urlify/zipball/984c991881501098eafdc41053b243237191cff8",
+                "reference": "984c991881501098eafdc41053b243237191cff8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "URLify": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Johnny Broadway",
+                    "email": "johnny@johnnybroadway.com",
+                    "homepage": "http://www.johnnybroadway.com/"
+                }
+            ],
+            "description": "PHP port of URLify.js from the Django project. Transliterates non-ascii characters for use in URLs.",
+            "homepage": "https://github.com/jbroadway/urlify",
+            "keywords": [
+                "encode",
+                "iconv",
+                "link",
+                "slug",
+                "translit",
+                "transliterate",
+                "transliteration",
+                "url",
+                "urlify"
+            ],
+            "time": "2016-07-27 15:26:43"
         },
         {
             "name": "kanti/hub-updater",
@@ -146,16 +200,16 @@
         },
         {
             "name": "suin/php-rss-writer",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/suin/php-rss-writer.git",
-                "reference": "96ff59575442dbe23e15fe7ff56d0bf27486cff9"
+                "reference": "51840d2fad4087a4bdd93fb6937aa4b324b5c94f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/96ff59575442dbe23e15fe7ff56d0bf27486cff9",
-                "reference": "96ff59575442dbe23e15fe7ff56d0bf27486cff9",
+                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/51840d2fad4087a4bdd93fb6937aa4b324b5c94f",
+                "reference": "51840d2fad4087a4bdd93fb6937aa4b324b5c94f",
                 "shasum": ""
             },
             "require": {
@@ -186,7 +240,7 @@
                 "rss",
                 "writer"
             ],
-            "time": "2015-08-21 06:24:39"
+            "time": "2016-03-01 12:09:17"
         }
     ],
     "packages-dev": [],
@@ -196,5 +250,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "platform-overrides": {
+        "php": "5.3"
+    }
 }

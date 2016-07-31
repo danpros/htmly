@@ -108,8 +108,8 @@ class Item implements ItemInterface
         if ($this->guid) {
             $guid = $xml->addChild('guid', $this->guid);
 
-            if ($this->isPermalink) {
-                $guid->addAttribute('isPermaLink', 'true');
+            if ($this->isPermalink === false) {
+                $guid->addAttribute('isPermaLink', 'false');
             }
         }
 

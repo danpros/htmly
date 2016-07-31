@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
+    'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Suin\\RSSWriter' => array($vendorDir . '/suin/php-rss-writer/src'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
 );

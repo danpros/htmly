@@ -22,6 +22,8 @@ class URLifyTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals ('bobby-mcferrin-dont-worry-be-happy', URLify::filter ("Bobby McFerrin — Don't worry be happy",600,"en"));
 		// test stripping and conversion of UTF-8 spaces
 		$this->assertEquals ('test-mahito-mukai', URLify::filter('向井　真人test　(Mahito Mukai)'));
+		// Treat underscore as space
+		$this->assertEquals ('text_with_underscore', URLify::filter('text_with_underscore', 60, "en", true, true, true, false));
 	}
 
 	function test_add_chars () {

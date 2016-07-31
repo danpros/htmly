@@ -143,7 +143,52 @@ class ItemTest extends TestCase
 			<description>{$data['description']}</description>
 			<category>{$data['categories'][0][0]}</category>
 			<category domain=\"{$data['categories'][1][1]}\">{$data['categories'][1][0]}</category>
-			<guid isPermaLink=\"true\">{$data['guid']}</guid>
+			<guid>{$data['guid']}</guid>
+			<pubDate>{$nowString}</pubDate>
+			<enclosure url=\"{$data['enclosure']['url']}\" type=\"{$data['enclosure']['type']}\" length=\"{$data['enclosure']['length']}\"/>
+			<author>{$data['author']}</author>
+		</item>
+		";
+        $this->assertXmlStringEqualsXmlString($expect, $item->asXML()->asXML());
+    }
+
+    public function testAsXML_false_permalink()
+    {
+        $now = time();
+        $nowString = date(DATE_RSS, $now);
+
+        $data = array(
+            'title' => "Venice Film Festival Tries to Quit Sinking",
+            'url' => 'http://nytimes.com/2004/12/07FEST.html',
+            'description' => "Some of the most heated chatter at the Venice Film Festival this week was about the way that the arrival of the stars at the Palazzo del Cinema was being staged.",
+            'categories' => array(
+                array("Grateful Dead", null),
+                array("MSFT", 'http://www.fool.com/cusips'),
+            ),
+            'guid' => "http://inessential.com/2002/09/01.php#a2",
+            'isPermalink' => false,
+            'pubDate' => $now,
+            'enclosure' => array(
+                'url' => 'http://link-to-audio-file.com/test.mp3',
+                'length' => 4992,
+                'type' => 'audio/mpeg'),
+            'author' => 'Hidehito Nozawa aka Suin'
+        );
+
+        $item = new Item();
+
+        foreach ($data as $key => $value) {
+            $this->reveal($item)->attr($key, $value);
+        }
+
+        $expect = "
+		<item>
+			<title>{$data['title']}</title>
+			<link>{$data['url']}</link>
+			<description>{$data['description']}</description>
+			<category>{$data['categories'][0][0]}</category>
+			<category domain=\"{$data['categories'][1][1]}\">{$data['categories'][1][0]}</category>
+			<guid isPermaLink=\"false\">{$data['guid']}</guid>
 			<pubDate>{$nowString}</pubDate>
 			<enclosure url=\"{$data['enclosure']['url']}\" type=\"{$data['enclosure']['type']}\" length=\"{$data['enclosure']['length']}\"/>
 			<author>{$data['author']}</author>
