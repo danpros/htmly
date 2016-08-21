@@ -53,6 +53,8 @@ If you have an OpenSSL enabled server (usually enabled by default), use the [ins
 
 Configurations
 --------------
+Set written permission for the `cache` and `content` directories.
+
 Rename `config.ini.example` inside the `config` folder to `config.ini` (or you can create a new `config/config.ini` file) then change the site settings there.
 
 Create `YourUsername.ini` inside the `config/users` folder or simply rename the `username.ini.example` file and write down your password there:
@@ -164,8 +166,8 @@ The default category is `Uncategorized` with slug `uncategorized` and you do not
 <!--t New category title t-->
 <!--d New category meta description d-->
 
-New category info etc. 
-```` 
+New category info etc.
+````
 The slug for the new category is `new-category` (htmly removing the file extension). And for full file directory:
 ````
 content/username/new-category/post/file.md
@@ -184,7 +186,7 @@ Here's the explanation (separated by an underscore):
 - `2014-01-31-12-56-40` is the published date. The date format is `yyyy-mm-dd-hh-mm-ss`
 - `tag1,tag2,tag3` are the tags, separated by commas
 - `databaseless-blogging-platform-flat-file-blog` is the URL
-	
+
 For static pages, use the following format:
 
 ````
@@ -210,54 +212,54 @@ If you are writing offline, you need specify the content tags below:
 **Title**
 ```html
 <!--t Title t-->
-````  
+````
 
 **Meta description**
 ```html
 <!--d The meta description d-->
-```` 
+````
 
 **Tags**
 
 This is just the tags display and for the slug is in the filename.
 ```html
 <!--tag Tag1,Tag2 tag-->
-```` 
+````
 
 **Featured image**
 
 Post with featured image.
 ```html
 <!--image http://www.example.com/image-url/image.jpg image-->
-```` 
+````
 
 **Featured youtube video**
 
 Post with featured youtube video.
 ```html
 <!--video https://www.youtube.com/watch?v=xxxxxxx video-->
-```` 
+````
 
 **Featured soundcloud audio**
 
 Post with featured soundcloud audio.
 ```html
 <!--audio https://soundcloud.com/xxxx/audio-url audio-->
-```` 
+````
 
 **Featured link**
 
 Post with featured link.
 ```html
 <!--link https://github.com/danpros/htmly link-->
-```` 
+````
 
 **Featured quote**
 
 Post with featured quote.
 ```html
 <!--quote Premature Optimization is The Root of All Evil quote-->
-```` 
+````
 
 **Example**
 
