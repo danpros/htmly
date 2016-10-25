@@ -41,3 +41,5 @@ if (!config("dev")) {
     file_put_contents("index.php", file_get_contents("system/upgrade/index.php"));
     rrmdir("system/upgrade/");
 }
+
+?>
