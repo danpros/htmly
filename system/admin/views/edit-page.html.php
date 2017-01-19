@@ -76,7 +76,20 @@ if ($type == 'is_frontpage') {
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
-
+<h1 class="page-header">
+    <?php
+        $title = NULL;
+        switch ($type) {
+            case "is_profile":
+                $title = "Profile";
+                break;
+            default:
+                $title = "Page";
+                break;
+        }
+        echo "Edit $title";
+    ?>
+</h1>
 <div class="wmd-panel">
 	<form method="POST">
 		Title <span class="required">*</span>
@@ -95,13 +108,13 @@ if ($type == 'is_frontpage') {
 		<br>
 		<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
 		<?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
-			<input type="submit" name="submit" class="submit" value="Save"/>
+			<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Save"/>
 		<?php } elseif ($type == 'is_category') {?>
 			<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-			<input type="submit" name="submit" class="submit" value="Save category"/>
+			<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Save category"/>
 		<?php } else {?>
 			<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-			<input type="submit" name="submit" class="submit" value="Save"/> <a href="<?php echo $delete ?>">Delete</a>
+			<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Save"/> <a href="<?php echo $delete ?>">Delete</a>
 		<?php } ?>
 	</form>
 </div>

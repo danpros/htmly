@@ -68,7 +68,7 @@ if (config('permalink.type') == 'post') {
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
-
+<h1 class="page-header">Edit Content</h1>
 <div class="wmd-panel">
     <form method="POST">
         Title <span class="required">*</span>
@@ -141,14 +141,18 @@ if (config('permalink.type') == 'post') {
         <?php endif;?>
         <br>
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
-        <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
+        <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="30" rows="10" style="margin-bottom: 10px;"><?php echo $oldcontent ?></textarea>
         <br>
         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if ($isdraft[4] == 'draft') { ?>
-            <input type="submit" name="publishdraft" class="submit" value="Publish draft"/> <input type="submit" name="updatedraft" class="draft" value="Update draft"/> <a href="<?php echo $delete ?>">Delete</a>
+            <input type="submit" name="publishdraft" class="submit btn btn-md btn-primary" value="Publish draft"/> 
+            <input type="submit" name="updatedraft" class="draft btn btn-md btn-warning" value="Update draft"/> 
+            <a type="button" class="btn btn-md btn-danger" href="<?php echo $delete ?>">Delete</a>
         <?php } else { ?>
-            <input type="submit" name="updatepost" class="submit" value="Update post"/> <input type="submit" name="revertpost" class="revert" value="Revert to draft"/> <a href="<?php echo $delete ?>">Delete</a>
+            <input type="submit" name="updatepost" class="submit btn btn-md btn-primary" value="Update post"/> 
+            <input type="submit" name="revertpost" class="revert btn btn-md btn-warning" value="Revert to draft"/> 
+            <a type="button" class="btn btn-md btn-danger pull-right" href="<?php echo $delete ?>">Delete</a>
         <?php }?>
     </form>
 </div>

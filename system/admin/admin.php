@@ -676,11 +676,11 @@ function get_user_posts()
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
-            echo '<table class="post-list">';
-            echo '<tr class="head"><th>Title</th><th>Published</th>';
+            echo '<table id="overview-post-list" class="table table-striped">';
+            echo '<thead><tr class="head"><th>Title</th><th>Published</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
-            echo '<th>Tag</th><th>Operations</th></tr>';
+            echo '<th>Tag</th><th>Operations</th></tr><thead><tbody>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -698,10 +698,11 @@ function get_user_posts()
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
                 echo '<td>' . $p->tag . '</td>';
-                echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
-                echo '</tr>';
+                echo '<td><a type="button" class="btn btn-md btn-warning" href="' . $p->url . '/edit?destination=admin"><i class="glyphicon glyphicon-pencil"></i></a>';
+                echo ' <a type="button" class="btn btn-md btn-danger" href="' . $p->url . '/delete?destination=admin"><i class="glyphicon glyphicon-trash"></i></a>';
+                echo '</td></tr>';
             }
-            echo '</table>';
+            echo '</tbody></table>';
         }
     }
 }

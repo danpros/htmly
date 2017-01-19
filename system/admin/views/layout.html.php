@@ -9,6 +9,7 @@
     <?php endif; ?>
     <link href="<?php echo site_url() ?>system/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo site_url() ?>system/resources/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="<?php echo site_url() ?>system/resources/css/datatables.min.css" rel="stylesheet">
     <link href="<?php echo site_url() ?>system/resources/css/dashboard.css" rel="stylesheet">
     <!--[if lt IE 9]><script src="<?php echo site_url() ?>system/resources/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="<?php echo site_url() ?>system/resources/js/ie-emulation-modes-warning.js"></script>
@@ -60,10 +61,27 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"><\/script>')</script>
+    <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
+    <script src="<?php echo site_url() ?>system/resources/js/datatables.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/bootstrap.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/holder.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#category-list').DataTable({
+                "searching":false,
+            });
+            $('#post-list').DataTable({
+                "searching":false,
+            });
+            $('#overview-post-list').DataTable({
+                "searching":false,
+                "paging":false,
+                "ordering":false,
+                "bInfo":false
+            });
+            $('body .dropdown-toggle').dropdown();
+        });
+    </script>
   </body>
 </html>

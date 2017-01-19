@@ -1,4 +1,4 @@
-<h2>Your Settings:</h2>
+<h1 class="page-header">Your Settings:</h1>
 <p>
     <u>hint:</u> Use <code>Ctrl</code>/<code>CMD⌘</code> + <code>F</code> to search for your config key or value.
 </p>
@@ -9,12 +9,15 @@
 <hr style="margin:30px 0;border:1px solid #e3e3e3;">
 <form method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
-    <input type="submit">
     <table id="config">
         <tr>
-            <td><input type="text" name="newKey" placeholder="Your New Config Key"></td>
-            <td><input type="text" name="newValue" placeholder="Your New Value"></td>
+            <div class="form-inline">
+                <input class="form-control" type="text" name="newKey" placeholder="Your New Config Key"/>
+                <input class="form-control" type="text" name="newValue" placeholder="Your New Value"/>
+                <input type="submit" class="btn btn-md btn-primary">
+            </div>
         </tr>
+        <br/>
         <?php
         global $config_file;
         $array = array(
@@ -40,11 +43,13 @@
 
         foreach ($array as $key => $value) {
             echo '<tr>';
-            echo '<td><label for="' . $key . '">' . $key . '</label></td>';
-            echo '<td><input type="text" name="-config-' . $key . '" value="' . valueMaker($value) . '"></td>';
+            echo '<div class="form-inline" style="margin-bottom:5px;">';
+            echo '<label class="col-md-3" for="' . $key . '">' . $key . '</label>';
+            echo '<input class="form-control" type="text" name="-config-' . $key . '" value="' . valueMaker($value) . '">';
+            echo '</div>';
             echo '</tr>';
         }
         ?>
     </table>
-    <input type="submit">
+    <input type="submit" class="btn btn-md btn-primary">
 </form>

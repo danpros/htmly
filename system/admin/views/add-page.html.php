@@ -31,10 +31,10 @@
 		<br/>
 		<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
 		<?php if ($type == 'is_page') :?>
-		<input type="submit" name="submit" class="submit" value="Publish"/>
+		<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Publish"/>
 		<?php endif;?>
 		<?php if ($type == 'is_category') :?>
-			<input type="submit" name="submit" class="submit" value="Add category"/>
+			<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Add category"/>
 		<?php endif;?>
 	</form>
 </div>

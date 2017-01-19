@@ -99,7 +99,8 @@ $desc = get_category_info(null);
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) { echo $postContent;} ?></textarea>
         <br/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <input type="submit" name="publish" class="submit" value="Publish"/> <input type="submit" name="draft" class="draft" value="Save as draft"/>
+        <input type="submit" name="publish" class="submit btn btn-md btn-primary" value="Publish"/> 
+        <input type="submit" name="draft" class="draft btn btn-md btn-warning" value="Save as draft"/>
     </form>
 </div>
 
