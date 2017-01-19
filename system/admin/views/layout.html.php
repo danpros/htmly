@@ -1,62 +1,69 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en">
+  <head>
     <?php echo head_contents() ?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <?php if($canonical): ?>
         <link rel="canonical" href="<?php echo $canonical; ?>" />
     <?php endif; ?>
-    <link href="<?php echo site_url() ?>system/resources/css/admin.css" rel="stylesheet"/>
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="<?php echo site_url() ?>system/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo site_url() ?>system/resources/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="<?php echo site_url() ?>system/resources/css/dashboard.css" rel="stylesheet">
+    <!--[if lt IE 9]><script src="<?php echo site_url() ?>system/resources/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="<?php echo site_url() ?>system/resources/js/ie-emulation-modes-warning.js"></script>
     <?php if (publisher()): ?>
         <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-</head>
-<body class="admin <?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
-<div class="hide">
-    <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo blog_description() ?>" itemprop="description"/>
-</div>
-<?php if (login()) {
-    toolbar();
-} ?>
-<div id="outer-wrapper">
-    <div id="menu-wrapper">
-        <div class="container">
-            <nav id="menu">
-                <?php echo menu() ?>
-                <?php echo search() ?>
-            </nav>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="<?php echo site_url() ?>admin">Dashboard</a>
         </div>
-    </div>
-    <div id="header-wrapper">
-        <div class="container">
-            <header id="header">
-                <section id="branding">
-                    <h1 class="blog-title"><a href="<?php echo site_url() ?>"><?php echo blog_title() ?></a></h1>
-                    <div class="blog-tagline"><p><?php echo blog_tagline() ?></p></div>
-                </section>
-            </header>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <?php 
+                if (login()) {
+                    newToolBar();
+                } 
+            ?>
+          </ul>
+          <?php echo search() ?>
         </div>
-    </div>
-    <div id="content-wrapper">
-        <div class="container">
-            <section id="content">
-                <?php echo content() ?>
-            </section>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar list-group">
+          <?php echo sideBar(); ?>
         </div>
-    </div>
-    <div id="footer-wrapper">
-        <div class="container">
-            <footer id="footer">
-                <div class="copyright"><?php echo copyright() ?></div>
-            </footer>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <?php echo content() ?>
         </div>
+      </div>
     </div>
-</div>
-<?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
-</body>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"><\/script>')</script>
+    <script src="<?php echo site_url() ?>system/resources/js/bootstrap.min.js"></script>
+    <script src="<?php echo site_url() ?>system/resources/js/holder.min.js"></script>
+    <script src="<?php echo site_url() ?>system/resources/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>

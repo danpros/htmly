@@ -121,7 +121,7 @@ get('/index', function () {
 
 // Get submitted login data
 post('/login', function () {
-
+    
     $proper = (is_csrf_proper(from($_REQUEST, 'csrf_token')));
     $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
 
@@ -131,21 +131,17 @@ post('/login', function () {
 
         session($user, $pass);
         $log = session($user, $pass);
-
+        
         if (!empty($log)) {
-
             config('views.root', 'system/admin/views');
-
             render('login', array(
                 'title' => 'Login - ' . blog_title(),
                 'description' => 'Login page on ' . blog_title(),
                 'canonical' => site_url(),
-                'error' => '<ul>' . $log . '</ul>',
+                'error' => $log,
                 'type' => 'is_login',
                 'is_login' => true,
-                'bodyclass' => 'in-login',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
-            ));
+            ), FALSE);
         }
     } else {
         $message['error'] = '';
@@ -163,12 +159,12 @@ post('/login', function () {
         }
 
         config('views.root', 'system/admin/views');
-
+        
         render('login', array(
             'title' => 'Login - ' . blog_title(),
             'description' => 'Login page on ' . blog_title(),
             'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
+            'error' => $message['error'],
             'username' => $user,
             'password' => $pass,
             'type' => 'is_login',
@@ -1386,7 +1382,7 @@ get('/admin/categories', function () {
             'is_admin' => true,
             'bodyclass' => 'admin-categories',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Categories'
-        ));
+        ), 'layout');
     } else {
         $login = site_url() . 'login';
         header("location: $login");
@@ -2332,13 +2328,7 @@ get('/:static', function ($static) {
         die;
     } elseif ($static === 'login') {
         config('views.root', 'system/admin/views');
-        render('login', array(
-            'title' => 'Login - ' . blog_title(),
-            'description' => 'Login page from ' . blog_title() . '.',
-            'canonical' => site_url() . '/login',
-            'bodyclass' => 'in-login',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
-        ));
+        render('login',NULL, FALSE);
         die;
     } elseif ($static === 'logout') {
         if (login()) {

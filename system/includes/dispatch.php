@@ -314,7 +314,7 @@ function render($view, $locals = null, $layout = null)
             mkdir($dir, 0775, true);
         }
     }
-
+    
     if (is_array($locals) && count($locals)) {
         extract($locals, EXTR_SKIP);
     }
@@ -325,7 +325,7 @@ function render($view, $locals = null, $layout = null)
     ob_start();
     include "{$view_root}/{$view}.html.php";
     content(trim(ob_get_clean()));
-
+    
     if ($layout !== false) {
         if ($layout == null) {
             $layout = config('views.layout');

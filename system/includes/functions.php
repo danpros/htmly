@@ -2140,20 +2140,18 @@ function get_menu($custom)
 }
 
 // Search form
-function search($text = null)
+function search()
 {
     if(!empty($text)) {
         echo <<<EOF
-    <form id="search-form" method="get">
-        <input type="text" class="search-input" name="search" value="{$text}" onfocus="if (this.value == '{$text}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$text}';}">
-        <input type="submit" value="{$text}" class="search-button">
+    <form id="search-form" class="navbar-form navbar-right" method="get">
+        <input type="text" class="search-input form-control" name="search" value="{$text}" onfocus="if (this.value == '{$text}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$text}';}">
     </form>
 EOF;
     } else {
         echo <<<EOF
-    <form id="search-form" method="get">
-        <input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
-        <input type="submit" value="Search" class="search-button">
+    <form id="search-form" class="navbar-form navbar-right" method="get">
+        <input type="text" class="search-input form-control" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
     </form>
 EOF;
     }
@@ -2749,6 +2747,56 @@ function head_contents()
     return $output;
 }
 
+function newToolBar(){
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    $base = site_url();
+    if ($role === 'admin') {
+        echo "<li class='dropdown'>
+                <a type='button' class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                    System
+                    <span class='caret'></span>
+                </a>
+                <ul class='dropdown-menu'>
+                    <li><a href={$base}admin/config>Config</a></li>
+                    <li><a href={$base}admin/update>Update</a></li>
+                    <li role='separator' class='divider'></li>
+                    <li><a href={$base}admin/clear-cache>Clear Cache</a></li>
+                </ul>
+            </li>";
+    }
+    echo "<li class='dropdown'>
+                <a type='button' class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                    Profile
+                    <span class='caret'></span>
+                </a>
+                <ul class='dropdown-menu'>
+                    <li><a href={$base}edit/profile>Edit Profile</a></li>
+                    <li role='separator' class='divider'></li>
+                    <li><a href={$base}logout>Logout</a></li>
+                </ul>
+            </li>";
+}
+
+function sideBar(){
+    $base = site_url();
+    echo <<<EOF
+    <ul class="nav nav-sidebar">
+        <li class=""><a href="{$base}admin">Overview <span class="sr-only">(current)</span></a></li>
+        <li>
+            <a data-toggle="collapse" href="#collapsePost" aria-expanded="true">Post <span class="caret"></span></a>
+            <div id="collapsePost" class="collapse">
+                <ul style="list-style-type: none">
+                    <li style="padding: 5px 0px 5px 0px"><a href="{$base}admin/posts">All Post</a></li>
+                    <li style="padding: 5px 0px 5px 0px"><a href="{$base}admin/content">Add New</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="{$base}admin/categories">Categories</a></li>
+    </ul>
+EOF;
+}
+
 // Return toolbar
 function toolbar()
 {
@@ -2777,7 +2825,7 @@ EOF;
     echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
     echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
     if ($role === 'admin') {
-    echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
+        echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
     }
     echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
     echo '<li><a href="' . $base . 'admin/update">Update</a></li>';

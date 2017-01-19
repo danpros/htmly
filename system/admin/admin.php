@@ -43,7 +43,7 @@ function session($user, $pass)
 {
     $user_file = 'config/users/' . $user . '.ini';
     if (!file_exists($user_file)) {
-        return $str = '<li>Username not found in our record.</li>';
+        return $str = 'Username not found in our record.';
     }
 
     $user_enc = user('encryption', $user);

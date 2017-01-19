@@ -1,6 +1,6 @@
 <a href="https://www.htmly.com" target="_blank">![Logo](https://raw.githubusercontent.com/danpros/htmly/master/system/resources/images/logo-big.png)</a>
 
-HTMLy is an open source Databaseless Blogging Platform or Flat-File Blog prioritizes simplicity and speed written in PHP. HTMLy can be referred to as Flat-File CMS either since it will also manage your content.
+HTMLy is an open source databaseless web publishing platform that prioritizes simplicity and speed. HTMLy can be referred to as a Flat-File Blog or Flat-File CMS, since it will also manage your content.
 
 You do not need to use a VPS to run HTMLy, shared hosting or even [free hosting](https://github.com/danpros/htmly#openshift) should work as long as the host supports at least PHP 5.3.
 
@@ -49,12 +49,10 @@ HTMLy requires PHP 5.3 or greater and php-xml package.
 
 Installations
 -------------
-If you have an OpenSSL enabled server (usually enabled by default), use the [installer.php](https://github.com/danpros/htmly/releases/latest) and read the following [instructions](https://docs.htmly.com/basics/installations) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
+If you have an OpenSSL enabled server (usually enabled by default), use the [installer](https://github.com/Kanti/htmly-installer/releases/latest) and read the following [instructions](https://github.com/Kanti/htmly-installer/blob/master/README.md#htmly-installerphp) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
 
 Configurations
 --------------
-Set written permission for the `cache` and `content` directories.
-
 Rename `config.ini.example` inside the `config` folder to `config.ini` (or you can create a new `config/config.ini` file) then change the site settings there.
 
 Create `YourUsername.ini` inside the `config/users` folder or simply rename the `username.ini.example` file and write down your password there:
@@ -131,7 +129,7 @@ server {
 
 OpenShift
 ---------
-Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://hub.openshift.com/quickstarts/219-htmly) for easy deployment.
+Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://github.com/danpros/htmly-openshift) for easy deployment.
 
 **Quick install:**
 
@@ -166,8 +164,8 @@ The default category is `Uncategorized` with slug `uncategorized` and you do not
 <!--t New category title t-->
 <!--d New category meta description d-->
 
-New category info etc.
-````
+New category info etc. 
+```` 
 The slug for the new category is `new-category` (htmly removing the file extension). And for full file directory:
 ````
 content/username/new-category/post/file.md
@@ -186,7 +184,7 @@ Here's the explanation (separated by an underscore):
 - `2014-01-31-12-56-40` is the published date. The date format is `yyyy-mm-dd-hh-mm-ss`
 - `tag1,tag2,tag3` are the tags, separated by commas
 - `databaseless-blogging-platform-flat-file-blog` is the URL
-
+	
 For static pages, use the following format:
 
 ````
@@ -212,54 +210,54 @@ If you are writing offline, you need specify the content tags below:
 **Title**
 ```html
 <!--t Title t-->
-````
+````  
 
 **Meta description**
 ```html
 <!--d The meta description d-->
-````
+```` 
 
 **Tags**
 
 This is just the tags display and for the slug is in the filename.
 ```html
 <!--tag Tag1,Tag2 tag-->
-````
+```` 
 
 **Featured image**
 
 Post with featured image.
 ```html
 <!--image http://www.example.com/image-url/image.jpg image-->
-````
+```` 
 
 **Featured youtube video**
 
 Post with featured youtube video.
 ```html
 <!--video https://www.youtube.com/watch?v=xxxxxxx video-->
-````
+```` 
 
 **Featured soundcloud audio**
 
 Post with featured soundcloud audio.
 ```html
 <!--audio https://soundcloud.com/xxxx/audio-url audio-->
-````
+```` 
 
 **Featured link**
 
 Post with featured link.
 ```html
 <!--link https://github.com/danpros/htmly link-->
-````
+```` 
 
 **Featured quote**
 
 Post with featured quote.
 ```html
 <!--quote Premature Optimization is The Root of All Evil quote-->
-````
+```` 
 
 **Example**
 

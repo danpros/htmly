@@ -19,6 +19,4 @@ return array(
     'Suin\\RSSWriter\\Item' => $vendorDir . '/suin/php-rss-writer/src/Suin/RSSWriter/Item.php',
     'Suin\\RSSWriter\\ItemInterface' => $vendorDir . '/suin/php-rss-writer/src/Suin/RSSWriter/ItemInterface.php',
     'Suin\\RSSWriter\\SimpleXMLElement' => $vendorDir . '/suin/php-rss-writer/src/Suin/RSSWriter/SimpleXMLElement.php',
-    'URLify' => $vendorDir . '/jbroadway/urlify/URLify.php',
-    'URLifyTest' => $vendorDir . '/jbroadway/urlify/tests/URLifyTest.php',
 );
