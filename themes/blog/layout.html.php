@@ -73,8 +73,8 @@
                             <div class="dropdown-menu searchbox" role="menu">
                                 <form id="search" class="navbar-form search" role="search">
                                     <div class="input-group">
-                                    <input type="search" name="search" class="form-control" placeholder="Type to search">
-                                    <span class="input-group-btn"><button type="submit" class="btn btn-default btn-submit"><i class="fa fa-angle-right"></i></button></span>
+                                        <input type="search" name="search" class="form-control" placeholder="Type to search">
+                                        <span class="input-group-btn"><button type="submit" class="btn btn-default btn-submit"><i class="fa fa-angle-right"></i></button></span>
                                     </div>
                                 </form>
                             </div>

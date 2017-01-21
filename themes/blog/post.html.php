@@ -29,9 +29,9 @@
                 <div class="info text-left">
                     <?php if (!empty($p->link)) { ?>
                         <h1 class="title" itemprop="headline"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title;?> <i class="fa fa-external-link"></i></a></h1>
-					<?php } else { ?>
-						<h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
-					<?php } ?>
+                    <?php } else { ?>
+                        <h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
+                    <?php } ?>
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo date('d F Y', $p->date) ?></span> - Posted in 
                         <span itemprop="articleSection"><?php echo $p->category;?></span> by 

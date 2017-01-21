@@ -680,7 +680,7 @@ function get_user_posts()
             echo '<thead><tr class="head"><th>Title</th><th>Published</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
-            echo '<th>Tag</th><th>Operations</th></tr><thead><tbody>';
+            echo '<th>Tag</th><th>Operations</th></tr></thead><tbody>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -714,11 +714,11 @@ function get_user_pages()
         $posts = get_static_post(null);
         if (!empty($posts)) {
             krsort($posts);
-            echo '<table class="post-list">';
-            echo '<tr class="head"><th>Title</th>';
+            echo '<table id="overview-post-list" class="table table-striped">';
+            echo '<thead><tr class="head"><th>Title</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
-            echo '<th>Operations</th></tr>';
+            echo '<th>Operations</th></tr></thead><tbody>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -735,7 +735,9 @@ function get_user_pages()
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a href="' . $p->url . '/add?destination=admin">Add Sub</a> <a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+                echo '<td><a type="button" class="btn btn-md btn-primary" href="' . $p->url . '/add?destination=admin">Add Sub</a> '
+                        . '<a type="button" class="btn btn-md btn-warning" href="' . $p->url . '/edit?destination=admin">Edit</a> '
+                        . '<a type="button" class="btn btn-md btn-danger" href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
                 echo '</tr>';
 
                 $shortUrl = substr($p->url, strrpos($p->url, "/") + 1);
@@ -750,7 +752,7 @@ function get_user_pages()
                     echo '</tr>';
                 }
             }
-            echo '</table>';
+            echo '</tbody></table>';
         }
     }
 }

@@ -1,6 +1,7 @@
 <h2 class="post-index"><?php echo $heading ?></h2>
 <?php if (!empty($posts)) { ?>
-    <table class="post-list">
+<table id="post-list" class="table table-striped">
+    <thead>
         <tr class="head">
             <th>Title</th>
             <th>Published</th>
@@ -10,6 +11,8 @@
             <th>Tag</th>
             <th>Operations</th>
         </tr>
+    </thead>
+    <tbody>
         <?php $i = 0;
         $len = count($posts); ?>
         <?php foreach ($posts as $p): ?>
@@ -30,10 +33,14 @@
                     <td><?php echo $p->views ?></td>
                 <?php endif; ?>
                 <td><?php echo $p->tag ?></td>
-                <td><a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/mine">Delete</a></td>
+                <td>
+                    <a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> 
+                    <a href="<?php echo $p->url ?>/delete?destination=admin/mine">Delete</a>
+                </td>
             </tr>
         <?php endforeach; ?>
-    </table>
+    </tbody>
+</table>
     <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
         <div class="pager">
             <?php if (!empty($pagination['prev'])): ?>

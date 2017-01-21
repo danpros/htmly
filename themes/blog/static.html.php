@@ -14,3 +14,8 @@
         </div><!--//content-->
     </div><!--//section-inner-->
 </section><!--//section-->
+
+<h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
+<div class="desc text-left" itemprop="articleBody">
+    <?php echo $p->body; ?>
+</div><!--//desc-->

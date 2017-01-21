@@ -567,7 +567,7 @@ function default_category()
 
 // Return category list
 
-function category_list($custom = null) {
+function category_list($custom = null, $customClass = null) {
     
     $dir = "cache/widget";
     $filename = "cache/widget/category.list.cache";
@@ -596,7 +596,7 @@ function category_list($custom = null) {
         return $cat;
     }
     
-    echo '<ul>';
+    echo '<ul class="'.$customClass.'">';
     
     foreach ($cat as $k => $v) {
         if (get_categorycount($v['0']) !== 0) {
@@ -1790,10 +1790,29 @@ function tab($p)
     $role = user('role', $user);
     if (isset($p->author)) {
         if ($user === $p->author || $role === 'admin') {
-            echo '<div class="tab"><ul class="nav nav-tabs"><li role="presentation" class="active"><a href="' . $p->url . '">View</a></li><li><a href="' . $p->url . '/edit?destination=post">Edit</a></li></ul></div>';
+            echo '<div class="tab"><ul class="nav nav-tabs"><li role="presentation" class="active">'
+            . '<a href="' . $p->url . '">View</a></li><li>'
+            . '<a href="' . $p->url . '/edit?destination=post">Edit</a>'
+            . '</li></ul></div>';
         }
     } else {
-        echo '<div class="tab"><ul class="nav nav-tabs"><li role="presentation" class="active"><a href="' . $p->url . '">View</a></li><li><a href="' . $p->url . '/edit?destination=post">Edit</a></li></ul></div>';
+        echo '<div class="tab"><ul class="nav nav-tabs"><li role="presentation" class="active">'
+        . '<a href="' . $p->url . '">View</a></li><li>'
+        . '<a href="' . $p->url . '/edit?destination=post">Edit</a>'
+        . '</li></ul></div>';
+    }
+}
+
+// Return edit button on post
+function editButton($p){
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    if (isset($p->author)) {
+        if ($user === $p->author || $role === 'admin') {
+            echo '<a type="button" class="btn btn-sm btn-primary pull-right" href="' . $p->url . '/edit?destination=post"><i class="glyphicon glyphicon-pencil"></i> Edit Now</a>';
+        }
+    } else {
+        echo '<a type="button" class="btn btn-sm btn-primary pull-right" href="' . $p->url . '/edit?destination=post">Edit</a>';
     }
 }
 
@@ -2771,6 +2790,7 @@ function newToolBar(){
                     <span class='caret'></span>
                 </a>
                 <ul class='dropdown-menu'>
+                    <li><a href={$base}admin/mine>My Post</a></li>
                     <li><a href={$base}edit/profile>Edit Profile</a></li>
                     <li role='separator' class='divider'></li>
                     <li><a href={$base}logout>Logout</a></li>

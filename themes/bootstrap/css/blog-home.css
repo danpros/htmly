@@ -1,0 +1,41 @@
+/*!
+ * Start Bootstrap - Blog Home (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    font-family: 'Source sans pro', sans-serif;
+}
+
+p {
+    font-size: 12pt;
+}
+
+h1{
+    font-size: 32pt;
+    font-weight: 600;
+}
+
+h2{
+    font-size: 24pt;
+    font-weight: 400;
+    margin-bottom: -5px;
+}
+
+.lead{
+    margin-bottom: 10px;
+}
+
+.nav {
+    font-size: 13pt;
+}
+
+.konten{
+    margin-top: -20px;
+}
+
+footer {
+    margin: 50px 0;
+}

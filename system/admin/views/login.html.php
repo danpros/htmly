@@ -30,6 +30,7 @@
             </div>
         <?php } ?>
             <form class="form-signin" method="POST" action="login">
+                <image src="<?php echo site_url() ?>system/resources/images/logo-big.png" width="250"/>
                 <h2 class="form-signin-heading">Please sign in</h2>
                 <label for="inputUsername" class="sr-only">Username</label>
                 <input name="user" type="username" id="inputUsername" class="form-control" placeholder="your username ..." required autofocus>
