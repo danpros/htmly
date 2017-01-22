@@ -10,6 +10,7 @@
     <link href="<?php echo site_url() ?>system/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo site_url() ?>system/resources/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
     <link href="<?php echo site_url() ?>system/resources/css/datatables.min.css" rel="stylesheet">
+    <link href="<?php echo site_url() ?>system/resources/css/select2.min.css" rel="stylesheet">
     <link href="<?php echo site_url() ?>system/resources/css/dashboard.css" rel="stylesheet">
     <!--[if lt IE 9]><script src="<?php echo site_url() ?>system/resources/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="<?php echo site_url() ?>system/resources/js/ie-emulation-modes-warning.js"></script>
@@ -66,6 +67,7 @@
     <script src="<?php echo site_url() ?>system/resources/js/bootstrap.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/holder.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="<?php echo site_url() ?>system/resources/js/select2.full.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#category-list').DataTable({
@@ -81,6 +83,7 @@
                 "bInfo":false
             });
             $('body .dropdown-toggle').dropdown();
+            $('.select2').select2();
         });
     </script>
   </body>

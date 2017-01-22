@@ -112,7 +112,7 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
     }        
     $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
 
-    if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
+    if (!empty($post_title) && !empty($post_tag) && !empty($post_url)) {
         
         if (get_magic_quotes_gpc()) {
             $post_content = stripslashes($post_content);
@@ -677,7 +677,7 @@ function get_user_posts()
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
             echo '<table id="overview-post-list" class="table table-striped">';
-            echo '<thead><tr class="head"><th>Title</th><th>Published</th>';
+            echo '<thead><tr class="head"><th style="width:100px;">Title</th><th>Published</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
             echo '<th>Tag</th><th>Operations</th></tr></thead><tbody>';

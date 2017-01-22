@@ -68,80 +68,83 @@ if (config('permalink.type') == 'post') {
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
+<?php $editorClass = NULL; ?>
 <h1 class="page-header">Edit Content</h1>
 <div class="wmd-panel">
     <form method="POST">
-        Title <span class="required">*</span>
-        <br>
-        <input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';} } ?>" value="<?php echo $oldtitle ?>"/>
-        <br><br>
         Category <span class="required">*</span>
         <br>
-        <select name="category">
+        <select class="select2" name="category">
             <option value="uncategorized">Uncategorized</option>
             <?php foreach ($desc as $d):?>
                 <option value="<?php echo $d->md;?>" <?php if($category === $d->md) { echo 'selected="selected"';} ?>><?php echo $d->title;?></option>
             <?php endforeach;?>
         </select> 
         <br><br>
-        Tag <span class="required">*</span><br>
-        <input type="text" name="tag" class="text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error'; } } ?>" value="<?php echo $oldtag ?>"/><br><br>
-        Url (optional)<br>
-        <input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/>
+        Title <span class="required">*</span>
         <br>
-        <span class="help">If the url leave empty we will use the post title.</span>
-        <br><br>
+        <input type="text" name="title" class="text form-control <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';} } ?>" value="<?php echo $oldtitle ?>"/>
+        <br>
+        Tag <span class="required">*</span><br>
+        <input type="text" name="tag" class="text form-control <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error'; } } ?>" value="<?php echo $oldtag ?>"/>
+        <br>
+        Url (optional)<br>
+        <span class="help"><input type="text" name="url" class="text form-control" value="<?php echo $oldmd ?>"/>
+        If the url leave empty we will use the post title.</span>
+        <br>
+        <br>
         Year, Month, Day<br>
-        <input type="date" name="date" class="text" value="<?php echo date('Y-m-d', $postdate); ?>">
+        <input type="date" name="date" class="text form-control" value="<?php echo date('Y-m-d', $postdate); ?>">
         <br>
         Hour, Minute, Second<br>
-        <input type="time" name="time" class="text" value="<?php echo $time->format('H:i:s'); ?>">
-        <br><br>
+        <input type="time" name="time" class="text form-control" value="<?php echo $time->format('H:i:s'); ?>">
+        <br>
         Meta Description (optional)<br>
-        <textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description; } else { echo $olddescription;} ?></textarea>
-        <br><br>
+        <textarea class="meta-textinput form-control" name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description; } else { echo $olddescription;} ?></textarea>
+        <br>
         
         <?php if ($type == 'is_audio'):?>
         Featured Audio <span class="required">*</span> (SoundCloud Only)
         <br>
-        <textarea rows="3" cols="20" class="text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" name="audio"><?php echo $oldaudio; ?></textarea>
+        <textarea rows="3" cols="20" class="text media-textinput form-control <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" name="audio"><?php echo $oldaudio; ?></textarea>
         <input type="hidden" name="is_audio" value="is_audio">
         <?php endif;?>
         
         <?php if ($type == 'is_video'):?>
         Featured Video <span class="required">*</span> (Youtube Only)
         <br>
-        <textarea rows="3" cols="20" class="text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" name="video"><?php echo $oldvideo ?></textarea>
+        <textarea rows="3" cols="20" class="text media-textinput form-control <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" name="video"><?php echo $oldvideo ?></textarea>
         <input type="hidden" name="is_video" value="is_video">
         <?php endif;?>
         
         <?php if ($type == 'is_image'):?>
         Featured Image <span class="required">*</span>
         <br>
-        <textarea rows="3" cols="20" class="text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" name="image"><?php echo $oldimage; ?></textarea>
+        <textarea rows="3" cols="20" class="text media-textinput form-control <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" name="image"><?php echo $oldimage; ?></textarea>
         <input type="hidden" name="is_image" value="is_image">
         <?php endif;?>
         
         <?php if ($type == 'is_quote'):?>
         Featured Quote <span class="required">*</span>
         <br>
-        <textarea rows="3" cols="20" class="text <?php if (isset($postQuote)) { if (empty($postQuote)) { echo 'error';} } ?>" name="quote"><?php echo $oldquote ?></textarea>
+        <textarea rows="3" cols="20" class="text media-textinput form-control <?php if (isset($postQuote)) { if (empty($postQuote)) { echo 'error';} } ?>" name="quote"><?php echo $oldquote ?></textarea>
         <input type="hidden" name="is_quote" value="is_quote">
         <?php endif;?>
         
         <?php if ($type == 'is_link'):?>
         Featured Link <span class="required">*</span>
         <br>
-        <textarea rows="3" cols="20" class="text <?php if (isset($postLink)) { if (empty($postLink)) { echo 'error';} } ?>" name="link"><?php echo $oldlink ?></textarea>
+        <textarea rows="3" cols="20" class="text media-textinput form-control <?php if (isset($postLink)) { if (empty($postLink)) { echo 'error';} } ?>" name="link"><?php echo $oldlink ?></textarea>
         <input type="hidden" name="is_link" value="is_link">
         <?php endif;?>
         
         <?php if ($type == 'is_post'):?>
+        <?php if (isset($postContent)) { if (empty($postContent)) { $editorClass = 'error'; } } ?>
         <input type="hidden" name="is_post" value="is_post">
         <?php endif;?>
         <br>
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
-        <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="30" rows="10" style="margin-bottom: 10px;"><?php echo $oldcontent ?></textarea>
+        <textarea id="wmd-input" class="wmd-input <?php echo $editorClass; ?>" name="content" cols="30" rows="10" style="margin-bottom: 10px;"><?php echo $oldcontent ?></textarea>
         <br>
         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">

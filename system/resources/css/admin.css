@@ -1031,3 +1031,11 @@ ul.archivegroup {
 .archivegroup li.expanded, .archivegroup li.collapsed {
     list-style: none;
 }
+
+.meta-textinput{
+    width:100%;
+}
+
+.media-textinput{
+    width:100%;
+}

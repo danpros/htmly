@@ -2,7 +2,6 @@
 
 // Load the configuration file
 config('source', $config_file);
-
 // Set the timezone
 if (config('timezone')) {
     date_default_timezone_set(config('timezone'));
@@ -415,7 +414,6 @@ get('/add/content', function () {
 
 // Submitted add post data
 post('/add/content', function () {
-
     $is_image = from($_REQUEST, 'is_image');
     $is_audio = from($_REQUEST, 'is_audio');
     $is_video = from($_REQUEST, 'is_video');
@@ -486,7 +484,7 @@ post('/add/content', function () {
     }
     
     if (!empty($is_image)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
+        if ($proper && !empty($title) && !empty($tag) && !empty($image)) {
             if (!empty($url)) {
                 add_content($title, $tag, $url, $content, $user, $description, $image, $draft, $category, 'image');
             } else {
@@ -500,9 +498,6 @@ post('/add/content', function () {
             }
             if (empty($tag)) {
                 $message['error'] .= '<li>Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li>Content field is required.</li>';
             }
             if (empty($image)) {
                 $message['error'] .= '<li>Image field is required.</li>';
@@ -530,7 +525,7 @@ post('/add/content', function () {
     }
     
     if (!empty($is_video)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
+        if ($proper && !empty($title) && !empty($tag) && !empty($video)) {
             if (!empty($url)) {
                 add_content($title, $tag, $url, $content, $user, $description, $video, $draft, $category, 'video');
             } else {
@@ -544,9 +539,6 @@ post('/add/content', function () {
             }
             if (empty($tag)) {
                 $message['error'] .= '<li>Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li>Content field is required.</li>';
             }
             if (empty($video)) {
                 $message['error'] .= '<li>Video field is required.</li>';
@@ -574,7 +566,7 @@ post('/add/content', function () {
     }
     
     if (!empty($is_audio)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
+        if ($proper && !empty($title) && !empty($tag) && !empty($audio)) {
             if (!empty($url)) {
                 add_content($title, $tag, $url, $content, $user, $description, $audio, $draft, $category, 'audio');
             } else {
@@ -588,9 +580,6 @@ post('/add/content', function () {
             }
             if (empty($tag)) {
                 $message['error'] .= '<li>Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li>Content field is required.</li>';
             }
             if (empty($audio)) {
                 $message['error'] .= '<li>Audio field is required.</li>';
@@ -618,7 +607,7 @@ post('/add/content', function () {
     }
     
     if (!empty($is_quote)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
+        if ($proper && !empty($title) && !empty($tag) && !empty($quote)) {
             if (!empty($url)) {
                 add_content($title, $tag, $url, $content, $user, $description, $quote, $draft, $category, 'quote');
             } else {
@@ -632,9 +621,6 @@ post('/add/content', function () {
             }
             if (empty($tag)) {
                 $message['error'] .= '<li>Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li>Content field is required.</li>';
             }
             if (empty($quote)) {
                 $message['error'] .= '<li>Quote field is required.</li>';
@@ -676,9 +662,6 @@ post('/add/content', function () {
             }
             if (empty($tag)) {
                 $message['error'] .= '<li>Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li>Content field is required.</li>';
             }
             if (empty($link)) {
                 $message['error'] .= '<li>Link field is required.</li>';

@@ -13,30 +13,30 @@
 <?php } ?>
 
 <div class="wmd-panel">
-	<form method="POST">
-		Title <span class="required">*</span>
-		<br>
-		<input type="text" class="text <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'error';}} ?>" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
-		<br><br>
-		Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>"/>
-		<br>
-		<span class="help">If the url leave empty we will use the page title.</span>
-		<br><br>
-		Meta Description (optional)
-		<br>
-		<textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {echo $p->description;} ?></textarea>
-		<br><br>
-		<div id="wmd-button-bar" class="wmd-button-bar"></div>
-		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
-		<br/>
-		<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-		<?php if ($type == 'is_page') :?>
-		<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Publish"/>
-		<?php endif;?>
-		<?php if ($type == 'is_category') :?>
-			<input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Add category"/>
-		<?php endif;?>
-	</form>
+    <form method="POST">
+        Title <span class="required">*</span>
+        <br>
+        <input type="text" class="text <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'error';}} ?>" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
+        <br><br>
+        Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>"/>
+        <br>
+        <span class="help">If the url leave empty we will use the page title.</span>
+        <br><br>
+        Meta Description (optional)
+        <br>
+        <textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {echo $p->description;} ?></textarea>
+        <br><br>
+        <div id="wmd-button-bar" class="wmd-button-bar"></div>
+        <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
+        <br/>
+        <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
+        <?php if ($type == 'is_page') :?>
+        <input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Publish"/>
+        <?php endif;?>
+        <?php if ($type == 'is_category') :?>
+                <input type="submit" name="submit" class="submit btn btn-md btn-primary" value="Add category"/>
+        <?php endif;?>
+    </form>
 </div>
 
 <style>
