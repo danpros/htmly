@@ -16,18 +16,21 @@
     <form method="POST">
         Title <span class="required">*</span>
         <br>
-        <input type="text" class="text <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'error';}} ?>" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
-        <br><br>
-        Url (optional)<br><input type="text" class="text" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>"/>
+        <input type="text" class="text form-control <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'error';}} ?>" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
         <br>
-        <span class="help">If the url leave empty we will use the page title.</span>
+        Url (optional)
+        <br>
+        <span class="help">
+            <input type="text" class="text form-control" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>"/>
+            If the url leave empty we will use the page title.
+        </span>
         <br><br>
         Meta Description (optional)
         <br>
-        <textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) {echo $p->description;} ?></textarea>
+        <textarea style="form-control" name="description" rows="3" cols="20"><?php if (isset($p->description)) {echo $p->description;} ?></textarea>
         <br><br>
         <div id="wmd-button-bar" class="wmd-button-bar"></div>
-        <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
+        <textarea id="wmd-input" class="wmd-input form-control<?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
         <br/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if ($type == 'is_page') :?>

@@ -758,11 +758,8 @@ post('/add/page', function () {
 
 // Show the add category
 get('/add/category', function () {
-
     if (login()) {
-
         config('views.root', 'system/admin/views');
-
         render('add-page', array(
             'title' => 'Add page - ' . blog_title(),
             'description' => strip_tags(blog_description()),

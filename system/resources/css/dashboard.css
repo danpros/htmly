@@ -7,7 +7,6 @@ body {
   padding-top: 50px;
 }
 
-
 /*
  * Global add-ons
  */
@@ -102,4 +101,10 @@ body {
 .placeholder img {
   display: inline-block;
   border-radius: 50%;
+}
+
+/*Admin Part Addition*/
+
+.wmd-preview img {
+    max-width: 100%;
 }
