@@ -15,6 +15,9 @@ foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
     unlink($file);
 }
 
-echo 'All cache has been deleted!';
-
 ?>
+
+<div class="creatorMenu">
+	<h2>Done!</h2>
+	<p>All cache has been deleted!</p>
+</div>

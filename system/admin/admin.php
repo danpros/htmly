@@ -84,7 +84,7 @@ function remove_accent($str)
 // Add content
 function add_content($title, $tag, $url, $content, $user, $description = null, $media = null, $draft, $category, $type)
 {
-
+	
     $post_date = date('Y-m-d-H-i-s');
     $post_title = safe_html($title);
     $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));
@@ -139,7 +139,7 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename, $category, $type);
         
         if (empty($draft)) {
-            $redirect = site_url() . 'admin/mine';
+            $redirect = site_url() . 'admin';
         } else {
             $redirect = site_url() . 'admin/draft';
         }
@@ -151,6 +151,7 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
 // Edit content
 function edit_content($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $media = null, $revertPost, $publishDraft, $category, $type)
 {
+	
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-H-i-s', strtotime($date));
@@ -287,11 +288,15 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
                 $drafturl = site_url() . 'admin/draft';
                 header("Location: $drafturl");
             } else {
-                header("Location: $posturl");
+                $drafturl = site_url() . 'admin';
+                header("Location: $drafturl");				
+                /* header("Location: $posturl"); */
             }
         } else {
             if(!empty($publishDraft)) {
-                header("Location: $posturl");
+                $drafturl = site_url() . 'admin';
+                header("Location: $drafturl");				
+/*                header("Location: $posturl"); */
             } elseif (!empty($revertPost)) {
                 $drafturl = site_url() . 'admin/draft';
                 header("Location: $drafturl");
@@ -332,7 +337,7 @@ function add_page($title, $url, $content, $description = null)
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
-        $redirect = site_url() . 'admin';
+        $redirect = site_url() . 'admin/content';
         header("Location: $redirect");
     }
 }
@@ -366,7 +371,7 @@ function add_sub_page($title, $url, $content, $static, $description = null)
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
-        $redirect = site_url() . 'admin';
+        $redirect = site_url() . 'admin/content';
         header("Location: $redirect");
     }
 }
@@ -414,9 +419,12 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
         rebuilt_cache('all');
         clear_page_cache($post_url);
         if ($destination == 'post') {
-            header("Location: $posturl");
+			$redirect = site_url() . 'admin/content';
+			header("Location: $redirect");
+/*            header("Location: $posturl"); */
         } else {
             $redirect = site_url() . $destination;
+			$redirect = site_url() . 'admin/content';
             header("Location: $redirect");
         }
     }
@@ -538,7 +546,8 @@ function edit_frontpage($title, $content)
             file_put_contents($filename, print_r($front_content, true));
         }
         rebuilt_cache('all');
-        $redirect = site_url();
+		$redirect = site_url() . 'admin/content';
+/*        $redirect = site_url();		*/
         header("Location: $redirect");
     }
 }
@@ -591,11 +600,17 @@ function delete_page($file, $destination)
         unlink($deleted_content);
         rebuilt_cache('all');
         if ($destination == 'post') {
-            $redirect = site_url();
-            header("Location: $redirect");
+			$redirect = site_url() . 'admin/content';
+			header("Location: $redirect");
+			
+/*            $redirect = site_url();
+            header("Location: $redirect"); */
         } else {
-            $redirect = site_url() . $destination;
-            header("Location: $redirect");
+			$redirect = site_url() . 'admin/content';
+			header("Location: $redirect");
+			
+/*            $redirect = site_url() . $destination;
+            header("Location: $redirect"); */
         }
     }
 }
@@ -674,13 +689,15 @@ function get_feed($feed_url, $credit)
 function get_user_posts()
 {
     if (isset($_SESSION[config("site.url")]['user'])) {
-        $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
+        $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 100);
         if (!empty($posts)) {
             echo '<table class="post-list">';
             echo '<tr class="head"><th>Title</th><th>Published</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
-            echo '<th>Tag</th><th>Operations</th></tr>';
+            if (config("input.showTag") == "true")
+				echo '<th>Tag</th>';
+			echo '<th>Operations</th></tr>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -693,12 +710,13 @@ function get_user_posts()
                 }
                 $i++;
                 echo '<tr class="' . $class . '">';
-                echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
+                echo '<td><a href="' . $p->url . '/edit?destination=admin">' . $p->title . '</a></td>';
                 echo '<td>' . date('d F Y', $p->date) . '</td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td>' . $p->tag . '</td>';
-                echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+				if (config("input.showTag") == "true")
+					echo '<td>' . $p->tag . '</td>';
+                echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> | <a href="' . $p->url . '/delete?destination=admin">Delete</a> | <a href="' . $p->url . '">View</a></td>';
                 echo '</tr>';
             }
             echo '</table>';
@@ -731,10 +749,10 @@ function get_user_pages()
                 $i++;
 
                 echo '<tr class="' . $class . '">';
-                echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
+                echo '<td><a href="' . $p->url . '/edit?destination=admin">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a href="' . $p->url . '/add?destination=admin">Add Sub</a> <a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+                echo '<td><a href="' . $p->url . '/add?destination=admin">Add Sub</a> | <a href="' . $p->url . '/edit?destination=admin">Edit</a> | <a href="' . $p->url . '/delete?destination=admin">Delete</a> | <a href="' . $p->url . '">View</a></td>';
                 echo '</tr>';
 
                 $shortUrl = substr($p->url, strrpos($p->url, "/") + 1);
@@ -742,10 +760,10 @@ function get_user_pages()
 
                 foreach ($subPages as $sp) {
                     echo '<tr class="' . $class . '">';
-                    echo '<td> &raquo;<a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></td>';
+                    echo '<td> &raquo;<a href="' . $sp->url . '/edit?destination=admin">' . $sp->title . '</a></td>';
                     if (config("views.counter") == "true")
                         echo '<td>' . $sp->views . '</td>';
-                    echo '<td><a href="' . $sp->url . '/edit?destination=admin">Edit</a> <a href="' . $sp->url . '/delete?destination=admin">Delete</a></td>';
+                    echo '<td><a href="' . $sp->url . '/edit?destination=admin">Edit</a> | <a href="' . $sp->url . '/delete?destination=admin">Delete</a> | <a href="' . $p->url . '">View</a></td>';
                     echo '</tr>';
                 }
             }

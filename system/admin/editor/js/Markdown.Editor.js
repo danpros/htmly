@@ -90,7 +90,7 @@
     // - run() actually starts the editor; should be called after all necessary plugins are registered. Calling this more than once is a no-op.
     // - refreshPreview() forces the preview to be updated. This method is only available after run() was called.
     Markdown.Editor = function (markdownConverter, idPostfix, options) {
-
+	
         options = options || {};
 
         if (typeof options.handler === "function") { //backwards compatible behavior
@@ -103,9 +103,8 @@
         var getString = function (identifier) {
             return options.strings[identifier] || defaultsStrings[identifier];
         }
-
-        idPostfix = idPostfix || "";
-
+		idPostfix = idPostfix || "";
+		
         var hooks = this.hooks = new Markdown.HookCollection();
         hooks.addNoop("onPreviewRefresh");       // called with no arguments after the preview has been refreshed
         hooks.addNoop("postBlockquoteCreation"); // called with the user's selection *after* the blockquote was created; should return the actual to-be-inserted text
@@ -114,7 +113,7 @@
          * its own image insertion dialog, this hook should return true, and the callback should be called with the chosen
          * image url (or null if the user cancelled). If this hook returns false, the default dialog will be used.
          */
-
+		 
         this.getConverter = function () {
             return markdownConverter;
         }
@@ -1236,7 +1235,10 @@
         var inputBox = panels.input,
             buttons = {}; // buttons.undo, buttons.link, etc. The actual DOM elements.
 
-        makeSpritedButtonRow();
+		if(panels.buttonBar)
+		{
+			makeSpritedButtonRow();
+		}
 
         var keyEvent = "keydown";
         if (uaSniffed.isOpera) {
@@ -1393,13 +1395,33 @@
             }
         };
 
-        function setupButton(button, isEnabled) {
-
-            var normalYShift = "0px";
+        function setupButton(button, isEnabled) 
+		{
+			if(button)
+			{		
+				var image = button.getElementsByTagName("span")[0];
+				if (isEnabled) {
+					image.style.color = "#000000"
+					if (!button.isHelp) {
+						button.onclick = function () {
+							doClick(this);
+							return false;
+						}
+					}
+				}
+				else {
+					image.style.color = "#c5c5c5"
+					button.onmouseover = button.onmouseout = button.onclick = function () { };
+				}	
+			}
+/*
+			var normalYShift = "0px";
             var disabledYShift = "-20px";
             var highlightYShift = "-40px";
-            var image = button.getElementsByTagName("span")[0];
+
+			var image = button.getElementsByTagName("span")[0];
             if (isEnabled) {
+
                 image.style.backgroundPosition = button.XShift + " " + normalYShift;
                 button.onmouseover = function () {
                     image.style.backgroundPosition = this.XShift + " " + highlightYShift;
@@ -1431,12 +1453,13 @@
                         return false;
                     }
                 }
-            }
+            }	
             else {
                 image.style.backgroundPosition = button.XShift + " " + disabledYShift;
                 button.onmouseover = button.onmouseout = button.onclick = function () {
                 };
             }
+*/
         }
 
         function bindCommand(method) {
@@ -1448,7 +1471,7 @@
         }
 
         function makeSpritedButtonRow() {
-
+			
             var buttonBar = panels.buttonBar;
 
             var normalYShift = "0px";
@@ -1460,9 +1483,9 @@
             buttonRow.className = 'wmd-button-row';
             buttonRow = buttonBar.appendChild(buttonRow);
             var xPosition = 0;
-            var makeButton = function (id, title, XShift, textOp) {
+            var makeButton = function (id, title, XShift, textOp, fiClass) {
                 var button = document.createElement("li");
-                button.className = "wmd-button";
+                button.className = "wmd-button icon-" + fiClass;
                 button.style.left = xPosition + "px";
                 xPosition += 25;
                 var buttonImage = document.createElement("span");
@@ -1483,41 +1506,75 @@
                 buttonRow.appendChild(spacer);
                 xPosition += 25;
             }
+			
+			var ctoolbar = getString("toolbar");
 
-            buttons.bold = makeButton("wmd-bold-button", getString("bold"), "0px", bindCommand("doBold"));
-            buttons.italic = makeButton("wmd-italic-button", getString("italic"), "-20px", bindCommand("doItalic"));
-            makeSpacer(1);
-            buttons.link = makeButton("wmd-link-button", getString("link"), "-40px", bindCommand(function (chunk, postProcessing) {
-                return this.doLinkOrImage(chunk, postProcessing, false);
-            }));
-            buttons.quote = makeButton("wmd-quote-button", getString("quote"), "-60px", bindCommand("doBlockquote"));
-            buttons.code = makeButton("wmd-code-button", getString("code"), "-80px", bindCommand("doCode"));
-            buttons.image = makeButton("wmd-image-button", getString("image"), "-100px", bindCommand(function (chunk, postProcessing) {
-                return this.doLinkOrImage(chunk, postProcessing, true);
-            }));
-            makeSpacer(2);
-            buttons.olist = makeButton("wmd-olist-button", getString("olist"), "-120px", bindCommand(function (chunk, postProcessing) {
-                this.doList(chunk, postProcessing, true);
-            }));
-            buttons.ulist = makeButton("wmd-ulist-button", getString("ulist"), "-140px", bindCommand(function (chunk, postProcessing) {
-                this.doList(chunk, postProcessing, false);
-            }));
-            buttons.heading = makeButton("wmd-heading-button", getString("heading"), "-160px", bindCommand("doHeading"));
-            buttons.hr = makeButton("wmd-hr-button", getString("hr"), "-180px", bindCommand("doHorizontalRule"));
-            makeSpacer(3);
-            buttons.undo = makeButton("wmd-undo-button", getString("undo"), "-200px", null);
-            buttons.undo.execute = function (manager) {
-                if (manager) manager.undo();
-            };
+			if(ctoolbar == null || ctoolbar.indexOf("bold") > -1)
+			{
+				buttons.bold = makeButton("wmd-bold-button", getString("bold"), "0px", bindCommand("doBold"), "bold");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("italic") > -1)
+			{
+				buttons.italic = makeButton("wmd-italic-button", getString("italic"), "-20px", bindCommand("doItalic"), "italic");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("link") > -1)
+			{
+				buttons.link = makeButton("wmd-link-button", getString("link"), "-40px", bindCommand(function (chunk, postProcessing) {
+					return this.doLinkOrImage(chunk, postProcessing, false);
+				}), "link");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("quote") > -1)
+			{
+				buttons.quote = makeButton("wmd-quote-button", getString("quote"), "-60px", bindCommand("doBlockquote"), "quote-left");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("code") > -1)
+			{
+				buttons.code = makeButton("wmd-code-button", getString("code"), "-80px", bindCommand("doCode"), "code");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("image") > -1)
+			{
+				buttons.image = makeButton("wmd-image-button", getString("image"), "-100px", bindCommand(function (chunk, postProcessing) {
+					return this.doLinkOrImage(chunk, postProcessing, true);
+				}), "picture");	
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("olist") > -1)
+			{
+				buttons.olist = makeButton("wmd-olist-button", getString("olist"), "-120px", bindCommand(function (chunk, postProcessing) {
+					this.doList(chunk, postProcessing, true);
+				}), "list-numbered");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("ulist") > -1)
+			{
+				buttons.ulist = makeButton("wmd-ulist-button", getString("ulist"), "-140px", bindCommand(function (chunk, postProcessing) {
+					this.doList(chunk, postProcessing, false);
+				}), "list-bullet");				
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("heading") > -1)
+			{
+				buttons.heading = makeButton("wmd-heading-button", getString("heading"), "-160px", bindCommand("doHeading"), "header");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("hr") > -1)
+			{
+				buttons.hr = makeButton("wmd-hr-button", getString("hr"), "-180px", bindCommand("doHorizontalRule"), "minus");
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("undo") > -1)
+			{
+				buttons.undo = makeButton("wmd-undo-button", getString("undo"), "-200px", null, "ccw");
+				buttons.undo.execute = function (manager) {
+					if (manager) manager.undo();
+				};
+			}
+			if(ctoolbar == null || ctoolbar.indexOf("redo") > -1)
+			{
+				var redoTitle = /win/.test(nav.platform.toLowerCase()) ?
+					getString("redo") :
+					getString("redomac"); // mac and other non-Windows platforms
 
-            var redoTitle = /win/.test(nav.platform.toLowerCase()) ?
-                getString("redo") :
-                getString("redomac"); // mac and other non-Windows platforms
-
-            buttons.redo = makeButton("wmd-redo-button", redoTitle, "-220px", null);
-            buttons.redo.execute = function (manager) {
-                if (manager) manager.redo();
-            };
+				buttons.redo = makeButton("wmd-redo-button", redoTitle, "-220px", null, "cw");
+				buttons.redo.execute = function (manager) {
+					if (manager) manager.redo();
+				};
+			}
 
             if (helpOptions) {
                 var helpButton = document.createElement("li");

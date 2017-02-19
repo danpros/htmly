@@ -1223,3 +1223,50 @@ body .ui-tooltip {
 	filter: Alpha(Opacity=30); /* support: IE8 */
 	border-radius: 8px;
 }
+
+
+/*----------------------------
+      CUSTOM Image Dialog
+-----------------------------*/
+.ui-widget{
+	font-family: 'Open Sans', Arial, sans-serif;
+}
+.ui-dialog{
+	padding: 0;
+}
+.ui-widget-header{
+	border: 0px;
+	background:#37474f;
+	color: #f5f5f5;
+}
+.ui-dialog .ui-dialog-titlebar{
+	text-align: center;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl{
+	border: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
+	font-family: 'Open Sans', Arial, sans-serif;	
+}
+.ui-dialog .ui-dialog-buttonpane {
+    padding: .3em 0.2em .5em .4em;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+	font-weight: normal;
+	cursor: pointer;
+	background: #37474f;
+	color: #fafafa;
+	border: 1px solid #37474f;
+}
+.ui-widget button.ui-button{
+	font-size: 0.8em;
+	border-radius: 2px;
+}
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover{
+	color: #37474f;
+	background: #fafafa;	
+}

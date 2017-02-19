@@ -3,34 +3,39 @@ body {
 }
 
 #toolbar {
-    background: #666;
-    box-shadow: 0 5px 15px #000;
-    color: #CCC;
-    font-family: Georgia, sans-serif;
+    background: #37474f;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    color: #000;
     left: 0;
-    margin: 0 -20px;
-    padding: 0 25px;
     position: fixed;
     right: 0;
     top: 0;
     z-index: 600;
     border: 0;
-    font-size: 15px;
+    font-size: 1em;
+	text-transform: uppercase;
     text-align: left;
     vertical-align: baseline;
-    min-height: 30px
 }
 
-#toolbar ul {
-    margin: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 30px;
-    float: left
+#toolbar .toolbarInner{
+	max-width: 1050px;
+    margin: 0 auto;
+    display: block;
 }
-
+#toolbar ul.mainTools, #toolbar ul.adminTools{
+	width: 45%;
+	display: inline-block;
+	margin: 0;
+}
+#toolbar ul.adminTools{
+	text-align: right;
+}
+#toolbar ul li{
+	padding: 10px 0;
+	display: inline-block;
+}
 #toolbar ul li, #toolbar ul li a {
-    float: left;
     list-style: none;
     margin: 0
 }
@@ -39,10 +44,37 @@ body {
     color: #FFF;
     font-size: .846em;
     text-decoration: none;
-    border-radius: 10px;
-    padding: 0 10px;
+    padding: 10px;
     line-height: 1.6
 }
+#toolbar a:hover,#toolbar a:focus, #toolbar a:active {
+    background: #57676F;
+}
+
+/* Sub Menus */
+#toolbar li.dropDown{
+	position: relative;
+}
+#toolbar li ul {
+	position: absolute;
+	display: none;
+    background: #37474f;
+	right: -20px;
+	top: 30px;
+	min-width: 100px;
+}
+#toolbar li:hover ul {
+	display: block;
+	padding: 20px;
+}
+#toolbar li ul li {
+	display: block;
+	font-size: .8em;
+	margin: 0;
+	padding: 2px;
+}
+/* end sub */
+
 
 @media all and (max-width: 550px) {
     body {

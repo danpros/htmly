@@ -1,4 +1,30 @@
 /*-------------------------
+ Link and Button Transitions
+--------------------------*/
+
+a, a:link, a:visited, a:focus, a:hover, a:active, input[type="submit"], button, .button, .addPost li{
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+
+button, input[type="submit"], .button a{
+	cursor: pointer;
+	transition-delay: 50ms;	
+}
+button:active, input[type="submit"]:active, .button a:active{
+	transition: none;
+}
+button:focus {outline:none;}
+button::-moz-focus-inner {border:0;}
+button:disabled{
+	background: #DDD;
+	color: #BBB;
+}
+
+/*-------------------------
 	Simple reset
 --------------------------*/
 
@@ -8,7 +34,7 @@
 }
 
 body {
-    font-family: Georgia, sans-serif, Arial;
+    font-family: 'Open Sans', sans-serif, Arial;
     font-size: 17px;
     line-height: 1.6;
     color: #343A3F;
@@ -70,6 +96,7 @@ h6 {
     padding: 0;
     float: left;
     width: 100%;
+	background: #fafafa;
 }
 
 #inner-wrapper {
@@ -105,10 +132,34 @@ h6 {
 .admin #content {
     width: 980px;
     margin: 0 auto;
+	background: #FFF;
+	box-sizing: border-box;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.1);
 }
-
+.in-login #content{
+    width: 350px;
+    margin: 0 auto;
+	padding: 20px;
+	background: #FFF;
+	box-sizing: border-box;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.1);
+}
 #header {
     text-align: center;
+}
+
+.content-creator, .content-list{
+	width: 100%;
+	margin: 40px 0;
+	float: left;
+	background: #FFF;
+	padding: 10px;
+	box-sizing:border-box;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.1);
+}
+
+.content-list{
+	text-align: left;
 }
 
 .hide {
@@ -121,7 +172,7 @@ h6 {
 
 a, a:visited {
     outline: none;
-    color: #2E9FFF;
+    color: #37474f;
     text-decoration: none;
 }
 
@@ -158,6 +209,65 @@ a:hover {
     font-size: 12px;
     font-weight: bold;
     font-family: 'Open Sans', sans-serif;
+}
+
+/*-------------------------
+	CUSTOM ADD NEWS
+--------------------------*/
+
+.creatorMenu{
+	padding: 10px;
+	box-sizing: border-box;
+}
+.creatorMenu h2{
+	display: inline-block;
+}
+.creatorMenu a,.creatorMenu a:link,.creatorMenu a:visited{
+	color: #fafafa;
+	background: #37474f;
+	padding: 5px 10px;
+	border: 1px solid #37474f;
+	border-radius: 2px;
+	float: right;
+	margin: 10px 20px;	
+}
+.creatorMenu a:focus,.creatorMenu a:hover{
+	background: #fafafa;
+	color: #37474f;
+	text-decoration: none;
+}
+.createPost{
+	text-align: center;
+	padding:10px;
+	box-sizing: border-box;
+}
+.addPost{
+	display: block;
+	list-style: none;
+	margin: 20px 0;
+	padding: 0;
+}
+.addPost li{
+	display: inline-block;
+	width: 10%;
+	text-align: center;
+}
+.addPost li i{
+	display: block;
+	margin: auto;
+	font-size: 1.4em;
+	width: 50px;
+	height: 50px;
+	border: 2px solid #37474f;
+	border-radius: 50%;
+	background: #37474f;
+	color: #fafafa;
+	text-align: center;
+	line-height: 50px;
+}
+.addPost li:hover i, .addPost li.active i{
+	color: #37474f;
+	background: #fafafa;
 }
 
 /*-------------------------
@@ -240,30 +350,59 @@ ul li, ol li {
     margin: 0.25em 0;
 }
 
+/*-------------------------
+	FORM
+--------------------------*/
+.formElement{
+	width: 100%;
+	padding: 10px;
+	text-align: left;
+	box-sizing: border-box;
+}
+label{
+	display: block;
+	font-size: 0.8em;
+	text-transform: uppercase;
+	padding: 5px 0;
+}
+.inforight{
+	font-size: 0.9em;
+	float: right;
+	text-transform: none;	
+}
 input[type=text], input[type=password] {
     padding: 4px 6px;
     font-size: 14px;
-    background-color: #F6F7F9;
-    border: 1px solid #CFDAE5;
+    background-color: #fafafa;
+    border: 1px solid #CCC;
+	width: 100%;
+	box-sizing: border-box;
 }
-
 input[type=text]:hover, input[type=password]:hover {
-    background-color: #F6F7F9;
-    border: 1px solid #CCCCCC;
+    background-color: #fafafa;
+    border: 1px solid #CCC;
 }
 
 input[type=submit] {
     padding: 4px 6px;
     font-size: 14px;
     cursor: pointer;
+	background: #37474f;
+	color: #fafafa;
+	border: 1px solid #37474f;
+	margin: 5px 0;
+}
+input[type=submit]:hover{
+	background: #fafafa;
+	color: #37474f;
 }
 
 input.text {
-    width: 75%;
-    padding: 5px;
     font-size: 14px;
-    background-color: #F6F7F9;
-    border: 1px solid #CFDAE5;
+	padding: 8px;
+    background-color: #fafafa;
+    border: 1px solid #CCC;
+	box-sizing:border-box;
 }
 
 input.error, textarea.error {
@@ -274,12 +413,13 @@ textarea {
     font-size: 15px;
     font-family: Georgia, sans-serif;
     line-height: 1.4;
-    background-color: #F6F7F9;
-    border: 1px solid #CFDAE5;
-    padding: 2%;
-    width: 96%;
+    background-color: #fafafa;
+    border: 1px solid #CCC;
+    padding: 4px 6px;
+    width: 100%;
     min-height: 5em;
     overflow: auto;
+	box-sizing: border-box;
 }
 
 textarea:hover {
@@ -324,56 +464,31 @@ span.help {
 	Table
 --------------------------*/
 
-table {
-    font-size: 12px;
+table{
+	width: 100%;
     border: none;
     width: 100%;
-    color: #333333;
-    border: 1px solid #E3E3E3;
-    margin: 1em 0;
     white-space: pre-wrap;
     word-wrap: break-word;
+	font-size: 12px;
+	border-collapse: collapse;
+	border-spacing: 0;	
 }
-
-table h2.title {
-    margin: 5px 0;
+tr.head{
+	background: #fafafa;
 }
-
-th, td {
-    padding: 5px 10px;
-    border: none;
+tr{
+	border: 1px solid #ccc;
+	background: #FFF;
+	padding: 1px;
 }
-
-th.title {
-    margin: 5px 0;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-    font-weight: normal;
+tr:hover
+{
+	background: #fafafa;
 }
-
-td.title {
-    font-weight: normal;
-    background-color: #f6f6f6;
-    font-family: 'Open Sans', sans-serif;
-}
-
-th {
-    background-color: #f6f6f6;
-    border-bottom: 1px solid #E3E3E3;
-    border-right: 1px solid #E3E3E3;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-}
-
-td {
-    background-color: #fafafa;
-    border: 1px solid #E3E3E3;
-    border-top: none;
-    border-left: none;
-}
-
-table.post-list td a {
-    margin: 0 5px;
+th,td{
+	padding: 10px 20px;
+	border-top: 1px solid #ccc;
 }
 
 /*-------------------------

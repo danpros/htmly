@@ -1,5 +1,7 @@
+@import 'fontello/css/fontello.css';
+
 body {
-    font-family: Georgia, sans-serif;
+/*    font-family: Georgia, sans-serif; */
 }
 
 blockquote {
@@ -9,11 +11,11 @@ blockquote {
 }
 
 .wmd-panel {
-    width: 44%;
+    width: 49%;
     float: left;
-    padding-right: 20px;
+	padding: 10px;
+	box-sizing: border-box;
 }
-
 .wmd-button-bar {
     background-color: #F6F7F9;
     padding: 5px 0;
@@ -22,23 +24,32 @@ blockquote {
     border: 1px solid #CFDAE5;
     display: block;
     float: left;
+	
+	background-color: transparent;
+	padding: 0;
+	border: 0px;
 }
-
 .wmd-button-bar:hover {
     border: 1px solid #CCCCCC;
+	border: 0px;
 }
-
 .wmd-input {
     min-height: 300px;
-    width: 96%;
+    width: 100%;
     padding: 2%;
+	box-sizing: border-box;
 }
 
 .wmd-preview {
-    background-color: #E4EBF1;
-    width: 46%;
+    background-color: #fafafa;
+    width: 49%;
     float: left;
     padding: 2%;
+	box-sizing: border-box;
+}
+.content-preview{
+	margin-top: 42px;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.1);	
 }
 
 .wmd-button-row {
@@ -58,21 +69,41 @@ blockquote {
 
 .wmd-button {
     width: 20px;
-    height: 20px;
+    height: 25px;
     padding-left: 5px;
     padding-right: 5px;
     list-style: none;
     cursor: pointer;
-    float: left;
+	float: left;
+	
+	padding: 5px;
+	margin: 1px;
+	border: 1px solid #CCC;
+	border-radius: 1px;
+	font-size: 0.9em;
+}
+.wmd-button:hover{
+	background: #f5f5f5;
 }
 
 .wmd-button > span {
-    background-image: url(../img/wmd-buttons.png);
+/*    background-image: url(../img/wmd-buttons.png);
     background-repeat: no-repeat;
     background-position: 0px 0px;
     width: 20px;
     height: 20px;
     display: inline-block;
+*/
+}
+
+.wmd-button > span {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.wmd-button > span:hover {
+/*  background: lightskyblue; */
 }
 
 .wmd-spacer1 {
