@@ -83,16 +83,16 @@ if($type == 'is_post' || $type == 'is_video' || $type == 'is_audio' || $type == 
 				
 				<?php if ($type == 'is_audio'):?>
 					<div id="audioEditor" class="formElement">
-						<label for="audio">Featured Audio <span class="required">*</span> <span class="inforight"> (iframe-code of soundcloud)</span></label>
-						<textarea id="wmd-input-feature" rows="3" cols="20" class="text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" name="audio"><?php if (isset($postAudio)) { echo $postAudio;} elseif(isset($oldaudio)){ echo $oldaudio; } ?></textarea>
+						<label for="audio">Featured Audio <span class="required">*</span> <span class="inforight"> (add soundcloud url)</span></label>
+						<textarea id="wmd-input-feature" rows="3" cols="20" placeholder="https://soundcloud.com/bonsound/01-you-look-like-trouble-but-i" class="text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" name="audio"><?php if (isset($postAudio)) { echo $postAudio;} elseif(isset($oldaudio)){ echo $oldaudio; } ?></textarea>
 						<input type="hidden" name="is_audio" value="is_audio">
 					</div>
 				<?php endif;?>
 				
 				<?php if ($type == 'is_video'):?>
 					<div id="videoEditor" class="formElement">
-						<label for="video">Featured Video <span class="required">*</span> <span class="inforight"> (iframe-code of YouTube/vimeo)</span></label>
-						<textarea id="wmd-input-feature" rows="3" cols="20" class="text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" name="video"><?php if (isset($postVideo)) { echo $postVideo;} elseif(isset($oldvideo)){echo $oldvideo; } ?></textarea>
+						<label for="video">Featured Video <span class="required">*</span> <span class="inforight"> (add vimeo or youtube url)</span></label>
+						<textarea id="wmd-input-feature" rows="3" cols="20" placeholder="https://www.youtube.com/watch?v=s8qj4TFkzfo" class="text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" name="video"><?php if (isset($postVideo)) { echo $postVideo;} elseif(isset($oldvideo)){echo $oldvideo; } ?></textarea>
 						<input type="hidden" name="is_video" value="is_video">
 					</div>
 				<?php endif;?>
@@ -101,6 +101,7 @@ if($type == 'is_post' || $type == 'is_video' || $type == 'is_audio' || $type == 
 					<div id="imageEditor" class="formElement">
 						<label>Featured Image <span class="required">*</span></label>
 						<div id="wmd-button-bar-image" class="wmd-button-bar"></div>
+						<?php if(isset($oldimage)){ $oldimage = implode("[1]\n[1]",preg_split("/\[\d+\](?: )\[\d+\]/", $oldimage)); } ?>
 						<textarea id="wmd-input-image" rows="3" cols="20" class="text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" name="image"><?php if (isset($postImage)) { echo $postImage;} elseif(isset($oldimage)){echo $oldimage;} ?></textarea>
 						<input type="hidden" name="is_image" value="is_image">
 					</div>
@@ -118,6 +119,7 @@ if($type == 'is_post' || $type == 'is_video' || $type == 'is_audio' || $type == 
 					<div id="linkEditor" class="formElement">
 						<label>Featured Link <span class="required">*</span></label>
 						<div id="wmd-button-bar-link" class="wmd-button-bar"></div>
+						<?php if(isset($oldlink)){ $oldlink = implode("[1]\n[1]",preg_split("/\[\d+\](?: )\[\d+\]/", $oldlink)); } ?>
 						<textarea rows="3" id="wmd-input-link" cols="20" class="text <?php if (isset($postLink)) { if (empty($postLink)) { echo 'error';} } ?>" name="link"><?php if (isset($postLink)) { echo $postLink;} elseif(isset($oldlink)){ echo $oldlink; } ?></textarea>
 						<input type="hidden" name="is_link" value="is_link">
 					</div>

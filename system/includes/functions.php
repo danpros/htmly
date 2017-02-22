@@ -312,11 +312,26 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
         $post->image = get_content_tag('image', $content);
-        $post->video = get_youtube_id(get_content_tag('video', $content));
+        $post->video = get_video_id(get_content_tag('video', $content));
         $post->link  = get_content_tag('link', $content);
         $post->quote  = get_content_tag('quote', $content);
         $post->audio  = get_content_tag('audio', $content);
-        
+		
+		// link and image are markdown now, so convert it to html 
+//		if($post->link){ $post->link = MarkdownExtra::defaultTransform(remove_html_comments($post->link)); exit; }
+		
+		if($post->image){
+			// remove html tags
+			$post->image = remove_html_comments($post->image);
+			// add line break for markdown syntax
+			$post->image = implode("[1]\n[1]",preg_split("/\[\d+\](?: )\[\d+\]/", $post->image));
+			// transform markdown to html
+			$post->image = MarkdownExtra::defaultTransform($post->image);
+		}
+
+		if($post->image){ $post->image = transform_string_md_html($post->image); }
+		if($post->link){ $post->link = transform_string_md_html($post->link); }
+		
         $tag = array();
         $url = array();
         $bc = array();
@@ -2759,31 +2774,38 @@ function toolbar()
     echo <<<EOF
     <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
 EOF;
-    echo '<div id="toolbar"><ul>';
-    echo '<li><a href="' . $base . 'admin">Admin</a></li>';
-    if ($role === 'admin') {
-        echo '<li><a href="' . $base . 'admin/posts">Posts</a></li>';
-        if (config('views.counter') == 'true') {
-            echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
-        }
-    }
+    echo '<div id="toolbar">';
+    echo '<div class="toolbarInner">';
+	echo '<ul class="mainTools">';
+    echo '<li><a href="' . $base . 'admin">Posts</a></li>';
+    echo '<li><a href="' . $base . 'admin/content">Pages</a></li>';
+    echo '<li><a href="' . $base . 'admin/drafts">Drafts</a></li>';
+	if (config('input.showCat') == 'true'){
+		echo '<li><a href="' . $base . 'admin/categories">Categories</a></li>';		
+	}
+	echo '</ul>';
+	echo '<ul class="adminTools">';
+    echo '<li><a href="' . $base . '">Go To Front</a></li>';
+    echo '<li class="dropDown"><a href="#">Tools</a>';
+	echo '<ul class="dropdownItems">';
+    echo '<li><a href="' . $base . 'admin/clear-cache">Clear Cache</a></li>';
+    echo '<li><a href="' . $base . 'admin/profile">Profile</a></li>';
     echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
-    echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';
-    echo '<li><a href="' . $base . 'admin/content">Add content</a></li>';
-    if ($role === 'admin') {
-        echo '<li><a href="' . $base . 'admin/categories">Categories</a></li>';
-    }
-    echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';
-    echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
-    echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
-    if ($role === 'admin') {
-    echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
-    }
-    echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
-    echo '<li><a href="' . $base . 'admin/update">Update</a></li>';
-    echo '<li><a href="' . $base . 'logout">Logout</a></li>';
-
-    echo '</ul></div>';
+	if (config('views.counter') == 'true'){
+		echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
+	}
+	if ($role == 'admin'){
+		echo '<li><a href="' . $base . 'admin/config">Config</a></li>';		
+		echo '<li><a href="' . $base . 'admin/update">Update</a></li>';
+		echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
+		echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';			
+	}
+	echo '</ul>';
+	echo '</li>';
+	echo '<li><a href="' . $base . 'logout">Logout</a></li>';	
+	echo '</ul>';
+	echo '</div>';
+	echo '</div>';	
 }
 
 // File cache
@@ -2921,6 +2943,7 @@ function isCaptcha($reCaptchaResponse)
 // Get YouTube video ID
 function get_youtube_id($url)
 {
+	$url;
     if(empty($url)) {
        return;
     }
@@ -2928,6 +2951,18 @@ function get_youtube_id($url)
     preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches);
 
     return $matches[1];
+}
+
+function get_video_id($url)
+{
+	$url;
+    if(empty($url)) {
+       return;
+    }
+	
+	preg_match('/http(?:s):\/\/(?:www.)?(vimeo|youtube).com\/(?:watch\?v=)?(.*?)(?:\z|&)/',$url,$matches);
+    
+	return $matches;
 }
 
 // Shorten the string
@@ -3081,7 +3116,7 @@ function migrate_old_content()
             $arr = explode('/', $v);
             $string = file_get_contents($v);
             $image = get_content_tag('image', $string);
-            $video = get_youtube_id(get_content_tag('video', $string));
+            $video = get_video_id(get_content_tag('video', $string));
             $audio = get_content_tag('audio', $string);
             $link = get_content_tag('link', $string);
             $quote = get_content_tag('quote', $string);
@@ -3177,6 +3212,18 @@ function migrate_old_content()
     
     rebuilt_cache('all');
  
+}
+
+function transform_string_md_html($string)
+{
+	// remove html tags
+	$string = remove_html_comments($string);
+	// add line break for markdown syntax
+	$md = implode("[1]\n[1]",preg_split("/\[\d+\](?: )\[\d+\]/", $string));
+	// transform markdown to html
+	$html = MarkdownExtra::defaultTransform($md);
+	
+	return $html;
 }
 
 function replace_href($string, $tag, $class, $url)

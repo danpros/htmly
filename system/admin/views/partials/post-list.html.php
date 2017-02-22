@@ -1,5 +1,6 @@
     <table class="post-list">
         <tr class="head">
+            <th>Type</th>
             <th>Title</th>
             <th>Created or Published</th>
 			<?php if (config("views.counter") == "true"): ?>
@@ -13,6 +14,15 @@
         </tr>
         <?php $i = 0; $len = count($posts); ?>
         <?php foreach ($posts as $p): ?>
+			<?php
+				if($p->type == "post"){$icon = "doc-text";}
+				elseif($p->type == "video"){$icon = "videocam";}
+				elseif($p->type == "audio"){$icon = "music";}
+				elseif($p->type == "image"){$icon = "camera";}
+				elseif($p->type == "link"){$icon = "link";}
+				elseif($p->type == "quote"){$icon = "chat-empty";}
+				else{$icon = "";}
+			?>
             <?php
 				if ($i == 0) {
 					$class = 'item first';
@@ -24,7 +34,8 @@
 				$i++;
             ?>
             <tr class="<?php echo $class ?>">
-                <td><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
+				<td><i class="icon-<?php echo $icon; ?>"></i></td>
+                <td><a href="<?php echo $p->url ?>/edit?destination=<?php echo $actionDestination; ?>"><?php echo $p->title ?></a></td>
                 <td><?php echo date('d F Y', $p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
                     <td><?php echo $p->views ?></td>
@@ -33,7 +44,7 @@
 				<?php if (config("input.showTag") == "true"): ?>
 					<td><?php echo $p->tag ?></td>
 				<?php endif; ?>
-                <td><a href="<?php echo $p->url ?>/edit?destination=<?php echo $actionDestination; ?>">Edit</a> | <a href="<?php echo $p->url ?>/delete?destination=<?php echo $actionDestination; ?>">Delete</a></td>
+                <td><a href="<?php echo $p->url ?>/edit?destination=<?php echo $actionDestination; ?>">Edit</a> | <a href="<?php echo $p->url ?>/delete?destination=<?php echo $actionDestination; ?>">Delete</a> |  <a href="<?php echo $p->url ?>">View</a> </td>
             </tr>
         <?php endforeach; ?>
     </table>

@@ -161,7 +161,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     }
 
     $post_title = safe_html($title);
-    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));
+	$post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));
     $pt = safe_tag($tag);
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($pt)));
     $post_tagmd = preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', ' ', ''), $pt);

@@ -1,3 +1,4 @@
+
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>

@@ -1,0 +1,9 @@
+
+.icon-music:before { content: '\e800'; } /* '' */
+.icon-search:before { content: '\e801'; } /* '' */
+.icon-videocam:before { content: '\e802'; } /* '' */
+.icon-camera:before { content: '\e803'; } /* '' */
+.icon-link:before { content: '\e804'; } /* '' */
+.icon-pencil:before { content: '\e805'; } /* '' */
+.icon-chat-empty:before { content: '\f0e6'; } /* '' */
+.icon-doc-text:before { content: '\f0f6'; } /* '' */

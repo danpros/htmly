@@ -27,6 +27,7 @@
         $class = 'post';
     }
     $i++; ?>
+	<?php print_r($p);?>
 <section class="post section <?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="section-inner">
         <div class="content">

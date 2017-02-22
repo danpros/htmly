@@ -24,6 +24,7 @@
         <?php endif; ?>
         <input type="submit" name="submit" value="Login"/>
     </form>
+	<small>Or go back to <a href="<?php echo site_url(); ?>">Startpage</a></small>
 <?php } else {
     header('location: admin');
 } ?>

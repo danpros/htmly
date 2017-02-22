@@ -20,6 +20,7 @@ Changes
 - Several minor changes.
 
 
+
 Be Aware of Downsides!!
 ---------
 These changes are hard-coded in the systems-folder of HTMLy. You cannot update to new versions of HTMLy anymore.
@@ -33,18 +34,20 @@ For copyright notice please read [COPYRIGHT.txt](https://github.com/danpros/html
 
 ## Screenshots
 
+Dashboard after login. In most cases, you will want to create a new blog post. So show this first. The main-menu at the top is strictly reduced to content creation, now. All admin features (backups, imports, configs, profile) are hidden under "tools". You can display the categories in the configs. In this case, there will be a new menu link for categories next to drafts.
+
 ![Dashboard](https://raw.githubusercontent.com/trendschau/tumbly/master/system/resources/images/tumbly-create-posts.png)
 
-Dashboard after login. In most cases, you will want to create a new blog post. So show this first...
-
-
+The input fields are reduced to the ground: Title, featured content and main content. You can add all other fields (date, tags, categories, url) in the configs. The featured field has now its own toolbar to make the editing process more confortable.
 
 ![Dashboard](https://raw.githubusercontent.com/trendschau/tumbly/master/system/resources/images/tumbly-create-image-posts.png)
 
-The input fields are reduced to the ground: Title, featured content and main content. You can add all other fields (date, tags, categories, url) in the configs. If you activate categories, then there will be a new menu link for categories next to drafts. Updates, configs, mine, backups, profile are less important and can be found under "tools". 
-
-
+Pages are completely seperated now. I suppose you will create some static pages if you start your blog, but you will nearly never change them again...
 
 ![Dashboard](https://raw.githubusercontent.com/trendschau/tumbly/master/system/resources/images/tumbly-create-page.png)
 
-Pages are completely seperated now. I suppose you will create some static pages if you start your blog, but you will nearly never change them again...
+I ported the lingonberry theme by [Anders Noren](http://www.andersnoren.se) to TUMBLy/HTMLy, because it is very clean and focuses on different post types. I think it is most comfortable for editors, if they find links to edit and add posts in the frontend, if they are logged in.
+
+ ![Dashboard](https://raw.githubusercontent.com/trendschau/tumbly/master/system/resources/images/lingonberry-theme.png)
+
+Have fun!!
