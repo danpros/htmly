@@ -65,7 +65,7 @@
 
                 <aside id="secondary" class="sidebar widget-area" role="complementary">
                     <section class="widget widget_text">
-                        <h2 class="widget-title">About</h2>
+                        <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <div class="textwidget"><p><?php echo blog_description();?></p>
                         </div>
                     </section>
@@ -74,14 +74,14 @@
                         <form role="search" class="search-form">
                         <label>
                             <span class="screen-reader-text">Search for:</span>
-                            <input type="search" class="search-field" placeholder="Search &hellip;" value="" name="search" title="Search for:" />
+                            <input type="search" class="search-field" placeholder="<?php echo i18n("Search");?> &hellip;" value="" name="search" title="<?php echo i18n("Search_for");?>:" />
                         </label>
                         <button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
                         </form>
                     </section>    
                     
                     <section id="recent-posts" class="widget widget_recent_entries">        
-                        <h2 class="widget-title">Recent Posts</h2>
+                        <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>
                         <?php echo recent_posts();?>
                     </section>
                     
@@ -100,17 +100,17 @@
                     <?php endif;?>
 
                     <section id="archives" class="widget widget_archive">
-                    <h2 class="widget-title">Archives</h2>        
+                    <h2 class="widget-title"><?php echo i18n("Archives");?></h2>        
                         <?php echo archive_list() ?>
                     </section>
                     
                     <section id="category" class="widget widget_category">
-                    <h2 class="widget-title">Category</h2>        
+                    <h2 class="widget-title"><?php echo i18n("Categories");?></h2>        
                         <?php echo category_list() ?>
                     </section>
                     
                     <section id="popular-tags" class="widget widget_popular_tags">
-                    <h2 class="widget-title">Popular Tags</h2>
+                    <h2 class="widget-title"><?php echo i18n("Popular_tags");?></h2>
                         <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
                         <ul>
                         <?php foreach ($tags as $tag => $count):?>

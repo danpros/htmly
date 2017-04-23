@@ -4,6 +4,9 @@ site.url = ""
 ; Your timezone
 timezone = "Asia/Jakarta"
 
+; Your language (currently only "en" for English or "de" for German)
+language = "en"
+
 ; Blog info
 blog.title = "HTMLy"
 blog.tagline = "Just another HTMLy blog"

@@ -3,6 +3,17 @@
 // Load the configuration file
 config('source', $config_file);
 
+// Settings for the language
+if ( config('language') === "de" ) {
+  i18n('source', 'lang/lang-de.ini'); // Load the German language file
+  $date_format = '%d. %B %Y';  // Date format German style
+  setlocale(LC_TIME, 'de_DE', 'de_DE.utf8', "German");  // Change time format to German
+} else {  // Default: English ("en")
+  i18n('source', 'lang/lang-en.ini'); // Load the English language file
+  $date_format = '%B %d, %Y';  // Date format English style
+  setlocale(LC_TIME, 'en_US', 'en_US.utf8', "English"); // Change time format to English
+}
+
 // Set the timezone
 if (config('timezone')) {
     date_default_timezone_set(config('timezone'));
@@ -403,7 +414,7 @@ get('/add/content', function () {
         config('views.root', 'system/admin/views');
 
         render('add-content', array(
-            'title' => 'Add content - ' . blog_title(),
+            'title' => i18n('Add_content') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => $type,
@@ -866,7 +877,7 @@ get('/admin/posts', function () {
 
                 // a non-existing page
                 render('no-posts', array(
-                    'title' => 'All blog posts - ' . blog_title(),
+                    'title' => i18n('All_blog_posts') . ' - ' . blog_title(),
                     'description' => strip_tags(blog_description()),
                     'canonical' => site_url(),
                     'bodyclass' => 'no-posts',
@@ -884,10 +895,10 @@ get('/admin/posts', function () {
             }
 
             render('posts-list', array(
-                'title' => 'All blog posts - ' . blog_title(),
+                'title' => i18n('All_blog_posts') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
-                'heading' => 'All blog posts',
+                'heading' => i18n('All_blog_posts'),
                 'page' => $page,
                 'posts' => $posts,
                 'bodyclass' => 'all-posts',
@@ -898,7 +909,7 @@ get('/admin/posts', function () {
             ));
         } else {
             render('denied', array(
-                'title' => 'All blog posts - ' . blog_title(),
+                'title' => i18n('All_blog_posts') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-posts',
@@ -1012,7 +1023,7 @@ get('/admin/mine', function () {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'page' => $page,
-                'heading' => 'My posts',
+                'heading' => i18n('My_posts'),
                 'posts' => null,
                 'about' => $author->about,
                 'name' => $author->name,
@@ -1029,7 +1040,7 @@ get('/admin/mine', function () {
             'title' => 'My blog posts - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
-            'heading' => 'My posts',
+            'heading' => i18n('My_posts'),
             'page' => $page,
             'posts' => $posts,
             'about' => $author->about,
@@ -1073,11 +1084,11 @@ get('/admin/draft', function () {
 
         if (empty($posts) || $page < 1) {
             render('user-draft', array(
-                'title' => 'My draft - ' . blog_title(),
+                'title' => i18n('My_draft') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'page' => $page,
-                'heading' => 'My draft',
+                'heading' => i18n('My_draft'),
                 'posts' => null,
                 'about' => $author->about,
                 'name' => $author->name,
@@ -1090,10 +1101,10 @@ get('/admin/draft', function () {
         }
 
         render('user-draft', array(
-            'title' => 'My draft - ' . blog_title(),
+            'title' => i18n('My_draft') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
-            'heading' => 'My draft',
+            'heading' => i18n('My_draft'),
             'page' => $page,
             'posts' => $posts,
             'about' => $author->about,
@@ -1114,13 +1125,13 @@ get('/admin/content', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('content-type', array(
-            'title' => 'Add content - ' . blog_title(),
+            'title' => i18n('Add_content') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-content',
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add content'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_content')
         ));
     } else {
         $login = site_url() . 'login';
@@ -2319,7 +2330,7 @@ get('/:static', function ($static) {
         if (login()) {
             config('views.root', 'system/admin/views');
             render('main', array(
-                'title' => 'Admin - ' . blog_title(),
+                'title' => i18n('Admin') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'bodyclass' => 'admin-front',

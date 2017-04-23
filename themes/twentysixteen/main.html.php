@@ -1,14 +1,14 @@
 <?php if (isset($is_category)):?>
-    <header class="page-header"><h1 class="page-title">Category: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
 <?php endif;?>
 <?php if (isset($is_tag)):?>
     <header class="page-header"><h1 class="page-title">Tag: <?php echo $tag->title;?></h1></header>
 <?php endif;?>
 <?php if (isset($is_archive)):?>
-    <header class="page-header"><h1 class="page-title">Archive: <?php echo $archive->title;?></h1></header>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Archive');?>: <?php echo $archive->title;?></h1></header>
 <?php endif;?>
 <?php if (isset($is_search)):?>
-    <header class="page-header"><h1 class="page-title">Search: <?php echo $search->title;?></h1></header>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1></header>
 <?php endif;?>
 <?php if (isset($is_type)):?>
     <header class="page-header"><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1></header>
@@ -50,8 +50,8 @@
 
     <footer class="entry-footer">
         <span class="byline"><span class="author vcard"><a href="<?php echo $p->authorUrl;?>"><img alt="<?php echo $p->author;?>" src="<?php echo site_url();?>themes/twentysixteen/img/avatar.png" class="avatar avatar-49 grav-hashed grav-hijack" height="49" width="49"></a><span class="screen-reader-text">Author </span> <a class="url fn n" href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span></span>
-        <span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="<?php echo $p->url;?>" rel="bookmark"><time class="entry-date published"><?php echo date('F d, Y', $p->date) ?></time></a></span>
-        <span class="cat-links"><span class="screen-reader-text">Category </span><?php echo $p->category;?></span>
+        <span class="posted-on"><span class="screen-reader-text"><?php echo i18n('Posted_on');?> </span><a href="<?php echo $p->url;?>" rel="bookmark"><time class="entry-date published"><?php global $date_format; echo strftime($date_format, $p->date) ?></time></a></span>
+        <span class="cat-links"><span class="screen-reader-text"><?php echo i18n('Category');?> </span><?php echo $p->category;?></span>
         <span class="tags-links"><span class="screen-reader-text">Tags </span><?php echo $p->tag;?></span>
         <?php if (disqus_count()) { ?>
             <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>

@@ -75,7 +75,7 @@
                     </div>
                 <?php endif; ?>
                 <div class="category-list">
-                    <h3>Category</h3>
+                    <h3><?php echo i18n('Category');?></h3>
                     <?php echo category_list() ?>
                 </div>
                 <div class="tagcloud">

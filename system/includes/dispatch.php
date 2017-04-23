@@ -40,6 +40,22 @@ function error($code, $message)
     die($message);
 }
 
+// i18n provides strings in the current language
+function i18n($key, $value = null)
+{
+    static $_i18n = array();
+
+    if ($key === 'source') {
+      if (file_exists($value))
+        $_i18n = parse_ini_file($value, true);
+      else
+        $_i18n = parse_ini_file('lang/lang-en.ini', true);
+    } elseif ($value == null)
+        return (isset($_i18n[$key]) ? $_i18n[$key] : '_i18n_' . $key . '_i18n_');
+    else
+        $_i18n[$key] = $value;
+}
+
 function config($key, $value = null)
 {
     static $_config = array();

@@ -166,7 +166,7 @@
                 </aside><!--//section-->
                 <aside class="category-list aside section">
                     <div class="section-inner">
-                        <h2 class="heading">Category</h2>
+                        <h2 class="heading"><?php echo i18n('Category');?></h2>
                         <div class="content">
                             <?php echo category_list();?>
                         </div><!--//content-->

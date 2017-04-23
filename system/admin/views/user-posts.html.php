@@ -2,13 +2,13 @@
 <?php if (!empty($posts)) { ?>
     <table class="post-list">
         <tr class="head">
-            <th>Title</th>
-            <th>Published</th>
+            <th><?php echo i18n('Title');?></th>
+            <th><?php echo i18n('Published');?></th>
 			<?php if (config("views.counter") == "true"): ?>
                 <th>Views</th>
             <?php endif; ?>
-            <th>Tag</th>
-            <th>Operations</th>
+            <th><?php echo i18n('Tag');?></th>
+            <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php $i = 0;
         $len = count($posts); ?>
@@ -30,7 +30,7 @@
                     <td><?php echo $p->views ?></td>
                 <?php endif; ?>
                 <td><?php echo $p->tag ?></td>
-                <td><a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/mine">Delete</a></td>
+                <td><a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/mine"><?php echo i18n('Delete');?></a></td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -45,5 +45,5 @@
         </div>
     <?php endif; ?>
 <?php } else {
-    echo 'No posts found!';
+    echo i18n('No_posts_found') . '!';
 } ?>

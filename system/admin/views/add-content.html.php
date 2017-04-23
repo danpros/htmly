@@ -27,14 +27,14 @@ $desc = get_category_info(null);
 
 <div class="wmd-panel">
     <form method="POST">
-        Title <span class="required">*</span>
+        <?php echo i18n('Title');?> <span class="required">*</span>
         <br>
         <input type="text" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" name="title" value="<?php if (isset($postTitle)) { echo $postTitle;} ?>"/>
         <br><br>
-        Category <span class="required">*</span>
+        <?php echo i18n('Category');?> <span class="required">*</span>
         <br>
         <select name="category">
-            <option value="uncategorized">Uncategorized</option>
+            <option value="uncategorized"><?php echo i18n("Uncategorized");?></option>
             <?php foreach ($desc as $d):?>
                 <option value="<?php echo $d->md;?>"><?php echo $d->title;?></option>
             <?php endforeach;?>
@@ -48,7 +48,7 @@ $desc = get_category_info(null);
         <br>
         <span class="help">If the url leave empty we will use the post title.</span>
         <br><br>
-        Meta Description (optional)<br>
+        <?php echo i18n('Meta_description');?> (optional)<br>
         <textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
         <br><br>
         
@@ -99,7 +99,7 @@ $desc = get_category_info(null);
         <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) { echo $postContent;} ?></textarea>
         <br/>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <input type="submit" name="publish" class="submit" value="Publish"/> <input type="submit" name="draft" class="draft" value="Save as draft"/>
+        <input type="submit" name="publish" class="submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="draft" value="<?php echo i18n('Save_as_draft');?>"/>
     </form>
 </div>
 

@@ -1,1 +1,1 @@
-<h1>No posts found!</h1>
+<h1><?php echo i18n('No_posts_found');?>!</h1>
