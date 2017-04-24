@@ -96,7 +96,7 @@
                         <?php echo archive_list() ?>
                     </aside>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Category</h2>
+                        <h2 class="widget-title"><?php echo i18n('Category');?></h2>
                         <?php echo category_list() ?>
                     </aside>
                     <aside class="widget widget_meta">

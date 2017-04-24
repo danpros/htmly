@@ -79,7 +79,7 @@ if ($type == 'is_frontpage') {
 
 <div class="wmd-panel">
 	<form method="POST">
-		Title <span class="required">*</span>
+		<?php echo i18n('Title');?> <span class="required">*</span>
 		<br>
 		<input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error'; } } ?>" value="<?php echo $oldtitle ?>"/><br><br>
 		<?php if($type != 'is_frontpage' && $type != 'is_profile') { ?>
@@ -87,7 +87,7 @@ if ($type == 'is_frontpage') {
 		<br>
 		<span class="help">If the url leave empty we will use the page title.</span>
 		<br><br>
-		Meta Description (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
+		<?php echo i18n('Meta_description');?> (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
 		<br><br>
 		<?php } ?>
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
@@ -101,7 +101,7 @@ if ($type == 'is_frontpage') {
 			<input type="submit" name="submit" class="submit" value="Save category"/>
 		<?php } else {?>
 			<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-			<input type="submit" name="submit" class="submit" value="Save"/> <a href="<?php echo $delete ?>">Delete</a>
+			<input type="submit" name="submit" class="submit" value="<?php echo i18n('Save');?>"/> <a href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
 		<?php } ?>
 	</form>
 </div>

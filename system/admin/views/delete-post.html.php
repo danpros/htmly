@@ -29,10 +29,10 @@ if (isset($destination)) {
 }
 
 ?>
-<?php echo '<p>Are you sure want to delete <strong>' . $p->title . '</strong>?</p>'; ?>
+<p><?php echo sprintf(i18n('Are_you_sure_you_want_to_delete_'), $p->title);?></p>
 <form method="POST">
     <input type="hidden" name="file" value="<?php echo $p->file ?>"/><br>
     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-    <input type="submit" name="submit" value="Delete"/>
-    <span><a href="<?php echo $back ?>">Cancel</a></span>
+    <input type="submit" name="submit" value="<?php echo i18n('Delete');?>"/>
+    <span><a href="<?php echo $back . '">' . i18n('Cancel');?></a></span>
 </form>

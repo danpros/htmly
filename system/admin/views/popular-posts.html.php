@@ -2,12 +2,12 @@
 <?php if (!empty($posts)) { ?>
     <table class="post-list">
         <tr class="head">
-            <th>Title</th>
-            <th>Published</th><?php if (config("views.counter") == "true"): ?>
-                <th>Views</th><?php endif; ?>
-            <th>Author</th>
-            <th>Tag</th>
-            <th>Operations</th>
+            <th><?php echo i18n('Title');?></th>
+            <th><?php echo i18n('Published');?></th><?php if (config("views.counter") == "true"): ?>
+                <th><?php echo i18n('Views');?></th><?php endif; ?>
+            <th><?php echo i18n('Author');?></th>
+            <th><?php echo i18n('Tag');?></th>
+            <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php $i = 0;
         $len = count($posts); ?>
@@ -24,7 +24,7 @@
             ?>
             <tr class="<?php echo $class ?>">
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
-                <td><?php echo date('d F Y', $p->date) ?></td>
+                <td><?php echo strftime($date_format, $p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
                     <td><?php echo $p->views ?></td><?php endif; ?>
                 <td><a target="_blank" href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></td>
@@ -35,5 +35,5 @@
         <?php endforeach; ?>
     </table>
 <?php } else {
-    echo 'No posts found!';
+    echo i18n('No_posts_found') . '!';
 } ?>

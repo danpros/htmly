@@ -2,10 +2,10 @@
 <?php if (!empty($posts)) { ?>
     <table class="post-list">
         <tr class="head">
-            <th>Title</th>
-            <th>Created</th>
-            <th>Tag</th>
-            <th>Operations</th>
+            <th><?php echo i18n('Title');?></th>
+            <th><?php echo i18n('Created');?></th>
+            <th><?php echo i18n('Tag');?></th>
+            <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php $i = 0;
         $len = count($posts); ?>
@@ -22,12 +22,12 @@
             ?>
             <tr class="<?php echo $class ?>">
                 <td><?php echo $p->title ?></td>
-                <td><?php echo date('d F Y', $p->date) ?></td>
+                <td><?php echo strftime($date_format, $p->date) ?></td>
                 <td><?php echo strip_tags($p->tag) ?></td>
-                <td><a href="<?php echo $p->url ?>/edit?destination=admin/draft">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/draft">Delete</a></td>
+                <td><a href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
             </tr>
         <?php endforeach; ?>
     </table>
 <?php } else {
-    echo 'No draft found!';
+    echo i18n('No_draft_found') . '!';
 } ?>

@@ -38,5 +38,5 @@
         </div>
     <?php endif; ?>
 <?php } else {
-    echo 'No posts found!';
+    echo i18n('No_posts_found') . '!';
 } ?>

@@ -673,14 +673,16 @@ function get_feed($feed_url, $credit)
 // Get recent posts by user
 function get_user_posts()
 {
+    global $date_format;
+
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
             echo '<table class="post-list">';
-            echo '<tr class="head"><th>Title</th><th>Published</th>';
+            echo '<tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
-            echo '<th>Tag</th><th>Operations</th></tr>';
+            echo '<th>' . i18n('Tag') . '</th><th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -694,11 +696,11 @@ function get_user_posts()
                 $i++;
                 echo '<tr class="' . $class . '">';
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
-                echo '<td>' . date('d F Y', $p->date) . '</td>';
+                echo '<td>' . strftime($date_format, $p->date) . '</td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
                 echo '<td>' . $p->tag . '</td>';
-                echo '<td><a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+                echo '<td><a href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
             }
             echo '</table>';
@@ -714,10 +716,10 @@ function get_user_pages()
         if (!empty($posts)) {
             krsort($posts);
             echo '<table class="post-list">';
-            echo '<tr class="head"><th>Title</th>';
+            echo '<tr class="head"><th>' . i18n('Title') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
-            echo '<th>Operations</th></tr>';
+            echo '<th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -734,7 +736,7 @@ function get_user_pages()
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a href="' . $p->url . '/add?destination=admin">Add Sub</a> <a href="' . $p->url . '/edit?destination=admin">Edit</a> <a href="' . $p->url . '/delete?destination=admin">Delete</a></td>';
+                echo '<td><a href="' . $p->url . '/add?destination=admin">' . i18n('Add_sub') . '</a> <a href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
 
                 $shortUrl = substr($p->url, strrpos($p->url, "/") + 1);
@@ -745,7 +747,7 @@ function get_user_pages()
                     echo '<td> &raquo;<a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></td>';
                     if (config("views.counter") == "true")
                         echo '<td>' . $sp->views . '</td>';
-                    echo '<td><a href="' . $sp->url . '/edit?destination=admin">Edit</a> <a href="' . $sp->url . '/delete?destination=admin">Delete</a></td>';
+                    echo '<td><a href="' . $sp->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a href="' . $sp->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                     echo '</tr>';
                 }
             }
@@ -762,7 +764,7 @@ function get_backup_files()
         if (!empty($files)) {
             krsort($files);
             echo '<table class="backup-list">';
-            echo '<tr class="head"><th>Filename</th><th>Date</th><th>Operations</th></tr>';
+            echo '<tr class="head"><th>' . i18n('Filename') . '</th><th>Date</th><th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($files);
             foreach ($files as $file) {

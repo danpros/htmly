@@ -556,7 +556,7 @@ function default_category()
     $tmp = array();
     $desc = new stdClass;
 
-    $desc->title = 'Uncategorized';
+    $desc->title = i18n("Uncategorized");
     $desc->url = site_url() . 'category/uncategorized';
     $desc->body = '<p>Topics that don&#39;t need a category, or don&#39;t fit into any other existing category.</p>';
 
@@ -586,7 +586,7 @@ function category_list($custom = null) {
         foreach ($arr as $a) {
             $cat[] = array($a->md, $a->title);
         }
-        array_push($cat, array('uncategorized', 'Uncategorized'));
+        array_push($cat, array('uncategorized', i18n('Uncategorized')));
         asort($cat);
         $tmp = serialize($cat);
         file_put_contents($filename, print_r($tmp, true));
@@ -988,7 +988,7 @@ function get_related($tag, $custom = null, $count = null)
             echo '</ul>';
         
         } else {
-            echo '<ul><li>No related post found</li></ul>';    
+            echo '<ul><li>' . i18n('No_related_post_found') . '</li></ul>';
         }
     
     } else {
@@ -1406,7 +1406,7 @@ EOF;
                 echo '<ul class="month">';
 
                 foreach ($by_month as $month => $count) {
-                    $name = date('F', mktime(0, 0, 0, $month, 1, 2010));
+                    $name = strftime('%B', mktime(0, 0, 0, $month, 1, 2010));
                     echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
                     echo ' <span class="count">(' . $count . ')</span></li>';
                 }
@@ -2150,10 +2150,11 @@ function search($text = null)
     </form>
 EOF;
     } else {
+        $search = i18n('Search');
         echo <<<EOF
     <form id="search-form" method="get">
-        <input type="text" class="search-input" name="search" value="Search" onfocus="if (this.value == 'Search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search';}">
-        <input type="submit" value="Search" class="search-button">
+        <input type="text" class="search-input" name="search" value="{$search}" onfocus="if (this.value == '{$search}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$search}';}">
+        <input type="submit" value="{$search}" class="search-button">
     </form>
 EOF;
     }
@@ -2760,28 +2761,28 @@ function toolbar()
     <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
 EOF;
     echo '<div id="toolbar"><ul>';
-    echo '<li><a href="' . $base . 'admin">Admin</a></li>';
+    echo '<li><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
     if ($role === 'admin') {
-        echo '<li><a href="' . $base . 'admin/posts">Posts</a></li>';
+        echo '<li><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
         if (config('views.counter') == 'true') {
             echo '<li><a href="' . $base . 'admin/popular">Popular</a></li>';
         }
     }
-    echo '<li><a href="' . $base . 'admin/mine">Mine</a></li>';
-    echo '<li><a href="' . $base . 'admin/draft">Draft</a></li>';
-    echo '<li><a href="' . $base . 'admin/content">Add content</a></li>';
+    echo '<li><a href="' . $base . 'admin/mine">' . i18n('Mine') . '</a></li>';
+    echo '<li><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
+    echo '<li><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
     if ($role === 'admin') {
-        echo '<li><a href="' . $base . 'admin/categories">Categories</a></li>';
+        echo '<li><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
     }
-    echo '<li><a href="' . $base . 'edit/profile">Edit profile</a></li>';
-    echo '<li><a href="' . $base . 'admin/import">Import</a></li>';
-    echo '<li><a href="' . $base . 'admin/backup">Backup</a></li>';
+    echo '<li><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
+    echo '<li><a href="' . $base . 'admin/import">' . i18n('Import') . '</a></li>';
+    echo '<li><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
     if ($role === 'admin') {
-    echo '<li><a href="' . $base . 'admin/config">Config</a></li>';
+      echo '<li><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
     }
-    echo '<li><a href="' . $base . 'admin/clear-cache">Clear cache</a></li>';
-    echo '<li><a href="' . $base . 'admin/update">Update</a></li>';
-    echo '<li><a href="' . $base . 'logout">Logout</a></li>';
+    echo '<li><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+    echo '<li><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
+    echo '<li><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
     echo '</ul></div>';
 }
