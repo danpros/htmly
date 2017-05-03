@@ -1,22 +1,24 @@
 {
-	"config": {
-		"vendor-dir": "system/vendor/",
-		"optimize-autoloader": true
-	},
-    "require": {
-		"ircmaxell/password-compat": "^1.0",
-		"michelf/php-markdown": "^1.5",
-		"suin/php-rss-writer": "^1.3",
-		"kanti/hub-updater": "^0.4.0"
+    "config": {
+        "vendor-dir": "system/vendor/",
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "5.3"
+        }
     },
-	"autoload": {
-		"files": [
-			"system/includes/dispatch.php",
-			"system/includes/functions.php",
-			"system/admin/admin.php",
-			"system/includes/session.php",
-			"system/includes/opml.php",
-			"system/plugins/urlify/URLify.php"
-		]
-	}
+    "require": {
+        "ircmaxell/password-compat": "^1.0",
+        "michelf/php-markdown": "^1.5",
+        "suin/php-rss-writer": "^1.3",
+        "kanti/hub-updater": "^0.4.0"
+    },
+    "autoload": {
+        "files": [
+            "system/includes/dispatch.php",
+            "system/includes/functions.php",
+            "system/admin/admin.php",
+            "system/includes/session.php",
+            "system/includes/opml.php"
+        ]
+    }
 }
