@@ -880,7 +880,7 @@ a:focus {
 	content: "\f516";
 }
 
-.social-navigation a[href$="/feed/"]:before {
+.social-navigation a[href$="/feed/rss"]:before {
 	content: "\f413";
 }
 
@@ -2092,6 +2092,12 @@ a.post-thumbnail:focus {
 	margin-bottom: 0;
 }
 
+.entry-content figcaption,
+.entry-summary figcaption {
+    font-style: italic;
+    text-align: center;
+    padding-bottom: .5em;
+}
 
 /**
  * 12.2 Post Formats
