@@ -2158,7 +2158,7 @@ post('/post/:name/edit', function () {
         if (empty($url)) {
             $url = $title;
         }
-        edit_contente($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $quote, $revertPost, $publishDraft, $category, 'quote');
+        edit_content($title, $tag, $url, $content, $oldfile, $destination, $description, $dateTime, $quote, $revertPost, $publishDraft, $category, 'quote');
         
     } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
         if (empty($url)) {
