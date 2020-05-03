@@ -3201,3 +3201,26 @@ function replace_href($string, $tag, $class, $url)
     return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
 
 }
+
+function get_language() 
+{
+	
+    $langID = config('language');
+    $langFile = 'lang/'. $langID . '.ini';
+    $local = strtolower($langID);
+
+    // Settings for the language
+    if (!isset($langID) || config('language') === 'en') {
+        i18n('source', 'lang/en.ini'); // Load the English language file
+        setlocale(LC_ALL, 'en_US'); // Change time format to English
+    } else {	
+        if (file_exists($langFile)) {
+            i18n('source', 'lang/' . $langID . '.ini');
+            setlocale(LC_ALL, $local);
+        } else {
+            i18n('source', 'lang/en.ini'); // Load the English language file
+            setlocale(LC_ALL, 'en_US'); // Change time format to English
+        }
+    }
+
+}

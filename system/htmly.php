@@ -3,16 +3,8 @@
 // Load the configuration file
 config('source', $config_file);
 
-// Settings for the language
-if ( config('language') === "de" ) {
-  i18n('source', 'lang/lang-de.ini'); // Load the German language file
-  $date_format = '%d. %B %Y';  // Date format German style
-  setlocale(LC_TIME, 'de_DE', 'de_DE.utf8', "German");  // Change time format to German
-} else {  // Default: English ("en")
-  i18n('source', 'lang/lang-en.ini'); // Load the English language file
-  $date_format = '%B %d, %Y';  // Date format English style
-  setlocale(LC_TIME, 'en_US', 'en_US.utf8', "English"); // Change time format to English
-}
+// Load the language file
+get_language();
 
 // Set the timezone
 if (config('timezone')) {
