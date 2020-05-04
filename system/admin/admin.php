@@ -673,7 +673,6 @@ function get_feed($feed_url, $credit)
 // Get recent posts by user
 function get_user_posts()
 {
-    global $date_format;
 
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
@@ -696,7 +695,7 @@ function get_user_posts()
                 $i++;
                 echo '<tr class="' . $class . '">';
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
-                echo '<td>' . strftime($date_format, $p->date) . '</td>';
+                echo '<td>' . date('d F Y', $p->date) . '</td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
                 echo '<td>' . $p->tag . '</td>';

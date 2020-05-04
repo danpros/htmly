@@ -3215,12 +3215,25 @@ function get_language()
         setlocale(LC_ALL, 'en_US'); // Change time format to English
     } else {	
         if (file_exists($langFile)) {
-            i18n('source', 'lang/' . $langID . '.ini');
+            i18n('source', $langFile);
             setlocale(LC_ALL, $local);
         } else {
             i18n('source', 'lang/en.ini'); // Load the English language file
             setlocale(LC_ALL, 'en_US'); // Change time format to English
         }
+    }
+
+}
+
+function format_date($date)
+{
+
+    $date_format = config('date.format');
+    
+    if (!isset($date_format) || empty($date_format)) {
+        return date('d F Y', $date);
+    } else {
+        return date($date_format, $date);	
     }
 
 }

@@ -19,7 +19,7 @@
                     $i++; ?>
                     <li class="<?php echo $class; ?>">
                         <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> on
-                        <span><?php echo strftime($date_format, $p->date) ?></span> - <?php echo i18n('Posted_in');?> <span><?php echo $p->tag ?></span>
+                        <span><?php echo date('d F Y', $p->date) ?></span> - <?php echo i18n('Posted_in');?> <span><?php echo $p->tag ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>

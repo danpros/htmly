@@ -50,7 +50,7 @@
 
     <footer class="entry-footer">
         <span class="byline"><span class="author vcard"><a href="<?php echo $p->authorUrl;?>"><img alt="<?php echo $p->author;?>" src="<?php echo site_url();?>themes/twentysixteen/img/avatar.png" class="avatar avatar-49 grav-hashed grav-hijack" height="49" width="49"></a><span class="screen-reader-text">Author </span> <a class="url fn n" href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span></span>
-        <span class="posted-on"><span class="screen-reader-text"><?php echo i18n('Posted_on');?> </span><a href="<?php echo $p->url;?>" rel="bookmark"><time class="entry-date published"><?php global $date_format; echo strftime($date_format, $p->date) ?></time></a></span>
+        <span class="posted-on"><span class="screen-reader-text"><?php echo i18n('Posted_on');?> </span><a href="<?php echo $p->url;?>" rel="bookmark"><time class="entry-date published"><?php echo date('d F Y', $p->date) ?></time></a></span>
         <span class="cat-links"><span class="screen-reader-text"><?php echo i18n('Category');?> </span><?php echo $p->category;?></span>
         <span class="tags-links"><span class="screen-reader-text">Tags </span><?php echo $p->tag;?></span>
         <?php if (disqus_count()) { ?>
