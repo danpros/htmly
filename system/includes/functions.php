@@ -360,6 +360,11 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
+        // Convert image tags to figures
+        if (config('fig.captions') == 'true') {
+            $post->body = preg_replace( '/<p>(<img .*?alt="(.*?)"\s*\/>)<\/p>/', '<figure>$1<figcaption>$2</figcaption></figure>', $post->body );
+        }
+
         if (config('views.counter') == 'true') {
             $post->views = get_views($post->file);
         } else {
