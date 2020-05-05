@@ -22,7 +22,7 @@
             ?>
             <tr class="<?php echo $class ?>">
                 <td><?php echo $p->title ?></td>
-                <td><?php echo strftime($date_format, $p->date) ?></td>
+                <td><?php echo date('d F Y', $p->date) ?></td>
                 <td><?php echo strip_tags($p->tag) ?></td>
                 <td><a href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
             </tr>

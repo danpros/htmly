@@ -5,7 +5,7 @@
  * (https://github.com/django/django/blob/master/django/contrib/admin/static/admin/js/urlify.js).
  * Handles symbols from Latin languages, Greek, Turkish, Bulgarian, Russian,
  * Ukrainian, Czech, Polish, Romanian, Latvian, Lithuanian, Vietnamese, Arabic,
- * Serbian, and Azerbaijani. Symbols it cannot transliterate
+ * Serbian, Azerbaijani, Kazakh and Slovak. Symbols it cannot transliterate
  * it will simply omit.
  *
  * Usage:
@@ -16,7 +16,8 @@
  *     echo URLify::filter ('Lo siento, no hablo español.');
  *     // "lo-siento-no-hablo-espanol"
  */
-class URLify {
+class URLify
+{
 	public static $maps = array (
 		'de' => array ( /* German */
 			'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue', 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss',
@@ -53,25 +54,25 @@ class URLify {
 			'ö' => 'o', 'Ö' => 'O', 'ğ' => 'g', 'Ğ' => 'G'
 		),
 		'bg' => array( /* Bulgarian */
-			"Щ" => 'Sht', "Ш" => 'Sh', "Ч" => 'Ch', "Ц" => 'C', "Ю" => 'Yu', "Я" => 'Ya',
-			"Ж" => 'J',   "А" => 'A',  "Б" => 'B',  "В" => 'V', "Г" => 'G',  "Д" => 'D',
-			"Е" => 'E',   "З" => 'Z',  "И" => 'I',  "Й" => 'Y', "К" => 'K',  "Л" => 'L',
-			"М" => 'M',   "Н" => 'N',  "О" => 'O',  "П" => 'P', "Р" => 'R',  "С" => 'S',
-			"Т" => 'T',   "У" => 'U',  "Ф" => 'F',  "Х" => 'H', "Ь" => '',   "Ъ" => 'A',
-			"щ" => 'sht', "ш" => 'sh', "ч" => 'ch', "ц" => 'c', "ю" => 'yu', "я" => 'ya',
-			"ж" => 'j',   "а" => 'a',  "б" => 'b',  "в" => 'v', "г" => 'g',  "д" => 'd',
-			"е" => 'e',   "з" => 'z',  "и" => 'i',  "й" => 'y', "к" => 'k',  "л" => 'l',
-			"м" => 'm',   "н" => 'n',  "о" => 'o',  "п" => 'p', "р" => 'r',  "с" => 's',
-			"т" => 't',   "у" => 'u',  "ф" => 'f',  "х" => 'h', "ь" => '',   "ъ" => 'a'
+			'Щ' => 'Sht', 'Ш' => 'Sh', 'Ч' => 'Ch', 'Ц' => 'C', 'Ю' => 'Yu', 'Я' => 'Ya',
+			'Ж' => 'J',   'А' => 'A',  'Б' => 'B',  'В' => 'V', 'Г' => 'G',  'Д' => 'D',
+			'Е' => 'E',   'З' => 'Z',  'И' => 'I',  'Й' => 'Y', 'К' => 'K',  'Л' => 'L',
+			'М' => 'M',   'Н' => 'N',  'О' => 'O',  'П' => 'P', 'Р' => 'R',  'С' => 'S',
+			'Т' => 'T',   'У' => 'U',  'Ф' => 'F',  'Х' => 'H', 'Ь' => '',   'Ъ' => 'A',
+			'щ' => 'sht', 'ш' => 'sh', 'ч' => 'ch', 'ц' => 'c', 'ю' => 'yu', 'я' => 'ya',
+			'ж' => 'j',   'а' => 'a',  'б' => 'b',  'в' => 'v', 'г' => 'g',  'д' => 'd',
+			'е' => 'e',   'з' => 'z',  'и' => 'i',  'й' => 'y', 'к' => 'k',  'л' => 'l',
+			'м' => 'm',   'н' => 'n',  'о' => 'o',  'п' => 'p', 'р' => 'r',  'с' => 's',
+			'т' => 't',   'у' => 'u',  'ф' => 'f',  'х' => 'h', 'ь' => '',   'ъ' => 'a'
 		),
 		'ru' => array ( /* Russian */
 			'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'yo', 'ж' => 'zh',
-			'з' => 'z', 'и' => 'i', 'й' => 'j', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o',
+			'з' => 'z', 'и' => 'i', 'й' => 'i', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o',
 			'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c',
 			'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sh', 'ъ' => '', 'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu',
 			'я' => 'ya',
 			'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', 'Ж' => 'Zh',
-			'З' => 'Z', 'И' => 'I', 'Й' => 'J', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O',
+			'З' => 'Z', 'И' => 'I', 'Й' => 'I', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O',
 			'П' => 'P', 'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
 			'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sh', 'Ъ' => '', 'Ы' => 'Y', 'Ь' => '', 'Э' => 'E', 'Ю' => 'Yu',
 			'Я' => 'Ya',
@@ -80,6 +81,10 @@ class URLify {
 		'uk' => array ( /* Ukrainian */
 			'Є' => 'Ye', 'І' => 'I', 'Ї' => 'Yi', 'Ґ' => 'G', 'є' => 'ye', 'і' => 'i', 'ї' => 'yi', 'ґ' => 'g'
 		),
+        'kk' => array ( /* Kazakh */
+            'Ә' => 'A', 'Ғ' => 'G', 'Қ' => 'Q', 'Ң' => 'N', 'Ө' => 'O', 'Ұ' => 'U', 'Ү' => 'U', 'Һ' => 'H',
+            'ә' => 'a', 'ғ' => 'g', 'қ' => 'q', 'ң' => 'n', 'ө' => 'o', 'ұ' => 'u', 'ү' => 'u', 'һ' => 'h',
+        ),
 		'cs' => array ( /* Czech */
 			'č' => 'c', 'ď' => 'd', 'ě' => 'e', 'ň' => 'n', 'ř' => 'r', 'š' => 's', 'ť' => 't', 'ů' => 'u',
 			'ž' => 'z', 'Č' => 'C', 'Ď' => 'D', 'Ě' => 'E', 'Ň' => 'N', 'Ř' => 'R', 'Š' => 'S', 'Ť' => 'T',
@@ -102,7 +107,7 @@ class URLify {
 			'ą' => 'a', 'č' => 'c', 'ę' => 'e', 'ė' => 'e', 'į' => 'i', 'š' => 's', 'ų' => 'u', 'ū' => 'u', 'ž' => 'z',
 			'Ą' => 'A', 'Č' => 'C', 'Ę' => 'E', 'Ė' => 'E', 'Į' => 'I', 'Š' => 'S', 'Ų' => 'U', 'Ū' => 'U', 'Ž' => 'Z'
 		),
-		'vn' => array ( /* Vietnamese */
+		'vi' => array ( /* Vietnamese */
 			'Á' => 'A', 'À' => 'A', 'Ả' => 'A', 'Ã' => 'A', 'Ạ' => 'A', 'Ă' => 'A', 'Ắ' => 'A', 'Ằ' => 'A', 'Ẳ' => 'A', 'Ẵ' => 'A', 'Ặ' => 'A', 'Â' => 'A', 'Ấ' => 'A', 'Ầ' => 'A', 'Ẩ' => 'A', 'Ẫ' => 'A', 'Ậ' => 'A',
 			'á' => 'a', 'à' => 'a', 'ả' => 'a', 'ã' => 'a', 'ạ' => 'a', 'ă' => 'a', 'ắ' => 'a', 'ằ' => 'a', 'ẳ' => 'a', 'ẵ' => 'a', 'ặ' => 'a', 'â' => 'a', 'ấ' => 'a', 'ầ' => 'a', 'ẩ' => 'a', 'ẫ' => 'a', 'ậ' => 'a',
 			'É' => 'E', 'È' => 'E', 'Ẻ' => 'E', 'Ẽ' => 'E', 'Ẹ' => 'E', 'Ê' => 'E', 'Ế' => 'E', 'Ề' => 'E', 'Ể' => 'E', 'Ễ' => 'E', 'Ệ' => 'E',
@@ -119,7 +124,13 @@ class URLify {
 			'أ' => 'a', 'ب' => 'b', 'ت' => 't', 'ث' => 'th', 'ج' => 'g', 'ح' => 'h', 'خ' => 'kh', 'د' => 'd',
 			'ذ' => 'th', 'ر' => 'r', 'ز' => 'z', 'س' => 's', 'ش' => 'sh', 'ص' => 's', 'ض' => 'd', 'ط' => 't',
 			'ظ' => 'th', 'ع' => 'aa', 'غ' => 'gh', 'ف' => 'f', 'ق' => 'k', 'ك' => 'k', 'ل' => 'l', 'م' => 'm',
-			'ن' => 'n', 'ه' => 'h', 'و' => 'o', 'ي' => 'y'
+			'ن' => 'n', 'ه' => 'h', 'و' => 'o', 'ي' => 'y',
+			'ا' => 'a', 'إ' => 'a', 'آ' => 'a', 'ؤ' => 'o', 'ئ' => 'y', 'ء' => 'aa',
+			'٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4', '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+		),
+		'fa' => array ( /* Persian */
+			'گ' => 'g', 'ژ' => 'j', 'پ' => 'p', 'چ' => 'ch', 'ی' => 'y', 'ک' => 'k',
+			'۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4', '۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9',
 		),
 		'sr' => array ( /* Serbian */
 			'ђ' => 'dj', 'ј' => 'j', 'љ' => 'lj', 'њ' => 'nj', 'ћ' => 'c', 'џ' => 'dz', 'đ' => 'dj',
@@ -128,6 +139,9 @@ class URLify {
 		'az' => array ( /* Azerbaijani */
 			'ç' => 'c', 'ə' => 'e', 'ğ' => 'g', 'ı' => 'i', 'ö' => 'o', 'ş' => 's', 'ü' => 'u',
 			'Ç' => 'C', 'Ə' => 'E', 'Ğ' => 'G', 'İ' => 'I', 'Ö' => 'O', 'Ş' => 'S', 'Ü' => 'U'
+		),
+		'sk' => array ( /* Slovak */
+			'ĺ' => 'l', 'ľ' => 'l', 'ŕ' => 'r'
 		)
 	);
 
@@ -163,8 +177,10 @@ class URLify {
 
 	/**
 	 * Initializes the character map.
+     * @param string $language
 	 */
-	private static function init ($language = "") {
+	private static function init ($language = "")
+    {
 		if (count (self::$map) > 0 && (($language == "") || ($language == self::$language))) {
 			return;
 		}
@@ -188,13 +204,15 @@ class URLify {
 			}
 		}
 
-		self::$regex = '/[' . self::$chars . ']/u';
+		self::$regex = '/[' . preg_quote(self::$chars, '/') . ']/u';
 	}
 
 	/**
 	 * Add new characters to the list. `$map` should be a hash.
+     * @param array $map
 	 */
-	public static function add_chars ($map) {
+	public static function add_chars ($map)
+    {
 		if (! is_array ($map)) {
 			throw new LogicException ('$map must be an associative array.');
 		}
@@ -206,18 +224,24 @@ class URLify {
 	/**
 	 * Append words to the remove list. Accepts either single words
 	 * or an array of words.
+     * @param mixed $words
 	 */
-	public static function remove_words ($words) {
+	public static function remove_words ($words)
+    {
 		$words = is_array ($words) ? $words : array ($words);
-		self::$remove_list = array_merge (self::$remove_list, $words);
+		self::$remove_list = array_unique (array_merge (self::$remove_list, $words));
 	}
 
 	/**
 	 * Transliterates characters to their ASCII equivalents.
      * $language specifies a priority for a specific language.
      * The latter is useful if languages have different rules for the same character.
+     * @param string $text
+     * @param string $language
+     * @return string
 	 */
-	public static function downcode ($text, $language = "") {
+	public static function downcode ($text, $language = "")
+    {
 		self::init ($language);
 
 		if (preg_match_all (self::$regex, $text, $matches)) {
@@ -240,8 +264,10 @@ class URLify {
 	 * @param bool $use_remove_list Whether you want to remove specific elements previously set in self::$remove_list
 	 * @param bool $lower_case Whether you want the filter to maintain casing or lowercase everything (default)
 	 * @param bool $treat_underscore_as_space Treat underscore as space, so it will replaced with "-"
+     * @return string
 	 */
-	public static function filter ($text, $length = 60, $language = "", $file_name = false, $use_remove_list = true, $lower_case = true, $treat_underscore_as_space = true) {
+	public static function filter ($text, $length = 60, $language = "", $file_name = false, $use_remove_list = true, $lower_case = true, $treat_underscore_as_space = true)
+    {
 		$text = self::downcode ($text,$language);
 
 		if ($use_remove_list) {
@@ -267,7 +293,8 @@ class URLify {
 	/**
 	 * Alias of `URLify::downcode()`.
 	 */
-	public static function transliterate ($text) {
+	public static function transliterate ($text)
+    {
 		return self::downcode ($text);
 	}
 }

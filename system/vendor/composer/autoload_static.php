@@ -16,6 +16,10 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
     );
 
     public static $prefixLengthsPsr4 = array (
+        'M' => 
+        array (
+            'Michelf\\' => 8,
+        ),
         'K' => 
         array (
             'Kanti\\' => 6,
@@ -23,6 +27,10 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
     );
 
     public static $prefixDirsPsr4 = array (
+        'Michelf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/michelf/php-markdown/Michelf',
+        ),
         'Kanti\\' => 
         array (
             0 => __DIR__ . '/..' . '/kanti/hub-updater/src',
@@ -42,13 +50,6 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
             'Suin\\RSSWriter' => 
             array (
                 0 => __DIR__ . '/..' . '/suin/php-rss-writer/src',
-            ),
-        ),
-        'M' => 
-        array (
-            'Michelf' => 
-            array (
-                0 => __DIR__ . '/..' . '/michelf/php-markdown',
             ),
         ),
     );

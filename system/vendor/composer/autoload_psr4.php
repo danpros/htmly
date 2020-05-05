@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
+    'Michelf\\' => array($vendorDir . '/michelf/php-markdown/Michelf'),
     'Kanti\\' => array($vendorDir . '/kanti/hub-updater/src'),
 );

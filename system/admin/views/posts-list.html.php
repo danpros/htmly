@@ -24,7 +24,7 @@
             ?>
             <tr class="<?php echo $class ?>">
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
-                <td><?php echo strftime($date_format, $p->date) ?></td>
+                <td><?php echo date('d F Y', $p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
                     <td><?php echo $p->views ?></td><?php endif; ?>
                 <td><a target="_blank" href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></td>

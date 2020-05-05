@@ -33,7 +33,7 @@
     <div class="social"><?php echo social() ?></div>
     <div class="menu"><?php echo menu() ?></div>
     <div class="recent"><h3><?php echo i18n('Recent_posts');?></h3><?php echo recent_posts() ?></div>
-    <div class="archive"><h3><?php echo i18n('Archive');?></h3><?php echo archive_list() ?></div>
+    <div class="archive"><h3><?php echo i18n('Archives');?></h3><?php echo archive_list() ?></div>
     <div class="category-list"><h3><?php echo i18n('Category');?></h3><?php echo category_list() ?></div>
     <div class="tagcloud"><h3>Tags</h3><?php echo tag_cloud() ?></div>
     <div class="copyright"><?php echo copyright() ?></div>
