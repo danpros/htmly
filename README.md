@@ -2,7 +2,7 @@
 
 HTMLy is an open source Databaseless Blogging Platform or Flat-File Blog prioritizes simplicity and speed written in PHP. HTMLy can be referred to as Flat-File CMS either since it will also manage your content.
 
-You do not need to use a VPS to run HTMLy, shared hosting or even [free hosting](https://github.com/danpros/htmly#openshift) should work as long as the host supports at least PHP 5.3.
+You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
 
 Demo
 ----
@@ -42,6 +42,7 @@ Features
 - File Caching
 - Auto Update
 - Post Draft
+- i18n
 
 Requirements
 ------------
