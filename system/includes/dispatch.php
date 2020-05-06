@@ -366,7 +366,7 @@ function render($view, $locals = null, $layout = null)
             ob_start();
             require $layout;
         }
-        if (!$login) {
+        if (!$login && $view != '404') {
             if (!file_exists($cachefile)) {
                 if (config('cache.timestamp') == 'true') {
                     echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
