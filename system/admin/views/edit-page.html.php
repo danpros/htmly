@@ -41,7 +41,7 @@ if ($type == 'is_frontpage') {
 	$oldcontent = remove_html_comments($content);
 
 	if (isset($_GET['destination'])) {
-		$destination = $_GET['destination'];
+		$destination = _h($_GET['destination']);
 	} else {
 		$destination = 'admin';
 	}

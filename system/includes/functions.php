@@ -1816,7 +1816,6 @@ function social($imgDir = null)
 {
     $twitter = config('social.twitter');
     $facebook = config('social.facebook');
-    $google = config('social.google');
     $tumblr = config('social.tumblr');
     $rss = site_url() . 'feed/rss';
 
@@ -1830,10 +1829,6 @@ function social($imgDir = null)
 
     if (!empty($facebook)) {
         echo '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'facebook.png" width="32" height="32" alt="Facebook"/></a>';
-    }
-
-    if (!empty($google)) {
-        echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'googleplus.png" width="32" height="32" alt="Google+"/></a>';
     }
 
     if (!empty($tumblr)) {
@@ -2164,7 +2159,7 @@ EOF;
 EOF;
     }
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -3212,7 +3207,7 @@ function get_language()
 	
     $langID = config('language');
     $langFile = 'lang/'. $langID . '.ini';
-    $local = strtolower($langID);
+    $local = $langID;
 
     // Settings for the language
     if (!isset($langID) || config('language') === 'en') {

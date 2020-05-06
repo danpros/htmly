@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['destination'])) {
-    $destination = $_GET['destination'];
+    $destination = _h($_GET['destination']);
 }
 $url = $p->file;
 $oldurl = explode('_', $url);

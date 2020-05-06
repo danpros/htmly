@@ -30,7 +30,7 @@ if (empty($oldtag)) {
 $oldmd = str_replace('.md', '', $oldurl[2]);
 
 if (isset($_GET['destination'])) {
-    $destination = $_GET['destination'];
+    $destination = _h($_GET['destination']);
 } else {
     $destination = 'admin';
 }

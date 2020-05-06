@@ -17,7 +17,7 @@ if (config('timezone')) {
 get('/index', function () {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -186,7 +186,7 @@ post('/login', function () {
 get('/author/:name', function ($name) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -397,7 +397,7 @@ get('/front/edit', function () {
 // Show the "Add content" page
 get('/add/content', function () {
 
-    $req = $_GET['type'];
+    $req = _h($_GET['type']);
     
     $type = 'is_' . $req;
 
@@ -1401,7 +1401,7 @@ get('/admin/categories', function () {
 get('/category/:category', function ($category) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1597,7 +1597,7 @@ post('/category/:category/delete', function () {
 get('/type/:type', function ($type) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1666,7 +1666,7 @@ get('/type/:type', function ($type) {
 get('/tag/:tag', function ($tag) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1731,7 +1731,7 @@ get('/tag/:tag', function ($tag) {
 get('/archive/:req', function ($req) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1806,7 +1806,7 @@ get('/archive/:req', function ($req) {
 get('/search/:keyword', function ($keyword) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1904,7 +1904,7 @@ get('/feed/opml', function () {
 get('/post/:name', function ($name) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -2288,7 +2288,7 @@ post('/post/:name/delete', function () {
 get('/:static', function ($static) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -2683,7 +2683,7 @@ post('/:static/delete', function () {
 get('/:static/:sub', function ($static, $sub) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -2890,7 +2890,7 @@ post('/:static/:sub/delete', function () {
 get('/:year/:month/:name', function ($year, $month, $name) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }

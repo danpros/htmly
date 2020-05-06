@@ -1,7 +1,7 @@
 <?php
 if (login()) {
     if (isset($_GET['file'])) {
-        $file = $_GET['file'];
+        $file = _h($_GET['file']);
 
         if (!empty($file)) {
             unlink($file);
