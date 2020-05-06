@@ -17,7 +17,7 @@ if (config('timezone')) {
 get('/index', function () {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -186,7 +186,7 @@ post('/login', function () {
 get('/author/:name', function ($name) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -394,10 +394,10 @@ get('/front/edit', function () {
     }
 });
 
-// Show the "Add post" page
+// Show the "Add content" page
 get('/add/content', function () {
 
-    $req = $_GET['type'];
+    $req = _h($_GET['type']);
     
     $type = 'is_' . $req;
 
@@ -412,7 +412,7 @@ get('/add/content', function () {
             'type' => $type,
             'is_admin' => true,
             'bodyclass' => 'add-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add content'
         ));
     } else {
         $login = site_url() . 'login';
@@ -794,7 +794,7 @@ get('/add/category', function () {
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'add-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add category'
         ));
     } else {
         $login = site_url() . 'login';
@@ -841,7 +841,7 @@ post('/add/category', function () {
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'add-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add category'
         ));
     }
 });
@@ -1401,7 +1401,7 @@ get('/admin/categories', function () {
 get('/category/:category', function ($category) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1597,7 +1597,7 @@ post('/category/:category/delete', function () {
 get('/type/:type', function ($type) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1666,7 +1666,7 @@ get('/type/:type', function ($type) {
 get('/tag/:tag', function ($tag) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1731,7 +1731,7 @@ get('/tag/:tag', function ($tag) {
 get('/archive/:req', function ($req) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1806,7 +1806,7 @@ get('/archive/:req', function ($req) {
 get('/search/:keyword', function ($keyword) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1904,7 +1904,7 @@ get('/feed/opml', function () {
 get('/post/:name', function ($name) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -1973,7 +1973,7 @@ get('/post/:name', function ($name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = ' <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . 'blog">Blog</a></span> &#187; ';
+        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . 'blog"><span itemprop="name">Blog</span></a><meta itemprop="position" content="2" /></li> &#187; ';
     } else {
         $blog = '';
     }
@@ -2010,7 +2010,7 @@ get('/post/:name', function ($name) {
         'p' => $current,
         'author' => $author,
         'bodyclass' => 'in-post category-' . $current->ct . ' type-' . $current->type,
-        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . '<span typeof="v:Breadcrumb">' . $current->categoryb . '</span>' . ' &#187; ' . $current->title,
+        'breadcrumb' => '<style>.breadcrumb-list {margin:0; padding:0;} .breadcrumb-list li {display: inline-block; list-style: none;}</style><ol class="breadcrumb-list" itemscope itemtype="http://schema.org/BreadcrumbList"><li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . '"><span itemprop="name">' . config('breadcrumb.home') . '</span></a><meta itemprop="position" content="1" /></li> &#187; '. $blog . '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">' . $current->categoryb . '<meta itemprop="position" content="3" /></li>' . ' &#187; ' . $current->title . '</ol>',
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,
@@ -2062,7 +2062,7 @@ get('/post/:name/edit', function ($name) {
                 'type' => $type,
                 'is_admin' => true,
                 'bodyclass' => 'edit-post',
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
@@ -2072,7 +2072,7 @@ get('/post/:name/edit', function ($name) {
                 'p' => $current,
                 'bodyclass' => 'denied',
                 'is_admin' => true,
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         }
     } else {
@@ -2254,7 +2254,7 @@ get('/post/:name/delete', function ($name) {
                 'p' => $current,
                 'is_admin' => true,
                 'bodyclass' => 'delete-post',
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
@@ -2264,7 +2264,7 @@ get('/post/:name/delete', function ($name) {
                 'p' => $current,
                 'is_admin' => true,
                 'bodyclass' => 'delete-post',
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         }
     } else {
@@ -2288,7 +2288,7 @@ post('/post/:name/delete', function () {
 get('/:static', function ($static) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -2683,7 +2683,7 @@ post('/:static/delete', function () {
 get('/:static/:sub', function ($static, $sub) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -2890,7 +2890,7 @@ post('/:static/:sub/delete', function () {
 get('/:year/:month/:name', function ($year, $month, $name) {
 
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -2957,7 +2957,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = ' <span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . 'blog">Blog</a></span> &#187; ';
+        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . 'blog"><span itemprop="name">Blog</span></a><meta itemprop="position" content="2" /></li> &#187; ';
     } else {
         $blog = '';
     }
@@ -2994,7 +2994,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'p' => $current,
         'author' => $author,
         'bodyclass' => 'in-post category-' . $current->ct . ' type-' . $current->type,
-        'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; '. $blog . '<span typeof="v:Breadcrumb">' . $current->categoryb . '</span>' . ' &#187; ' . $current->title,
+        'breadcrumb' => '<style>.breadcrumb-list {margin:0; padding:0;} .breadcrumb-list li {display: inline-block; list-style: none;}</style><ol class="breadcrumb-list" itemscope itemtype="http://schema.org/BreadcrumbList"><li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . '"><span itemprop="name">' . config('breadcrumb.home') . '</span></a><meta itemprop="position" content="1" /></li> &#187; '. $blog . '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">' . $current->categoryb . '<meta itemprop="position" content="3" /></li>' . ' &#187; ' . $current->title . '</ol>',
         'prev' => has_prev($prev),
         'next' => has_next($next),
         'type' => $var,
@@ -3046,7 +3046,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
                 'type' => $type,
                 'bodyclass' => 'edit-post',
                 'is_admin' => true,
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
@@ -3056,7 +3056,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
                 'p' => $current,
                 'bodyclass' => 'denied',
                 'is_admin' => true,
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         }
     } else {
@@ -3238,7 +3238,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
                 'p' => $current,
                 'bodyclass' => 'delete-post',
                 'is_admin' => true,
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         } else {
             render('denied', array(
@@ -3248,7 +3248,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
                 'p' => $current,
                 'bodyclass' => 'delete-post',
                 'is_admin' => true,
-                'breadcrumb' => '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->tagb . ' &#187; ' . $current->title
             ));
         }
     } else {

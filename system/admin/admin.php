@@ -695,7 +695,7 @@ function get_user_posts()
                 $i++;
                 echo '<tr class="' . $class . '">';
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
-                echo '<td>' . date('d F Y', $p->date) . '</td>';
+                echo '<td>' . format_date($p->date) . '</td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
                 echo '<td>' . $p->tag . '</td>';

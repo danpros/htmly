@@ -50,7 +50,7 @@
     </div>
     <footer class="entry-footer">
         <span class="posted-on">
-            <a href="<?php echo $p->url;?>" rel="permalink"><time class="entry-date published updated"><?php echo date('F d, Y', $p->date) ?></time></a> 
+            <a href="<?php echo $p->url;?>" rel="permalink"><time class="entry-date published updated"><?php echo format_date($p->date) ?></time></a> 
         </span>
         <span class="byline">
             <span class="author vcard">

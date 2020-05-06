@@ -2,34 +2,53 @@
 Owner: danpros
 Github: https://github.com/danpros
 Weblog: http://www.danpros.com
-Location: Indonesia
 
 Contributor: Kanti
 Github: https://github.com/Kanti
 Weblog: https://kanti.de
-Location: Stuttgart - Germany
 
 Contributor: fahmi182
 Github: https://github.com/fahmi182
 Weblog: http://ifahmi.com
-Location: Jakarta
 
 Contributor: fanningert
 Github: https://github.com/fanningert
-Location: Vienna
 
 Contributor: BlackCodec
 Github: https://github.com/BlackCodec
 
 Contributor: mlncn
 Github: https://github.com/mlncn
-Location: Natick, Massachusetts, USA
 
 Contributor: Tea23
 Github: https://github.com/Tea23
 
 Contributor: greenphp
 Github: https://github.com/greenphp
+
+Contributor: brh55
+Github: https://github.com/brh55
+
+Contributor: ecc
+Github: https://github.com/ecc
+
+Contributor: bluebirch
+Github: https://github.com/bluebirch
+
+Contributor: EBethus
+Github: https://github.com/EBethus
+
+Contributor: nikkolai14
+Github: https://github.com/nikkolai14
+
+Contributor: RalfZim
+Github: https://github.com/RalfZim
+
+Contributor: NightPurrer
+Github: https://github.com/NightPurrer
+
+Contributor: EtherialNL
+Github: https://github.com/EtherialNL
 
 /* THANKS */
 Name: Martin Angelov (http://tutorialzine.com)

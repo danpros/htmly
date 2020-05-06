@@ -11,7 +11,7 @@
             <h1 class="title-post" itemprop="name"><?php echo $p->title ?></h1>
         <?php } ?>
         <div class="date">
-            <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this month"><?php echo date('d F Y', $p->date) ?></a></span>
+            <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this month"><?php echo format_date($p->date) ?></a></span>
             - Posted in
             <span itemprop="articleSection"><?php echo $p->category ?></span> by
             <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span> -
@@ -52,7 +52,6 @@
             <h4>Share this post</h4>
             <a class="twitter" target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>">Twitter</a>
             <a class="facebook" target="_blank" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>">Facebook</a>
-            <a class="googleplus" target="_blank" href="https://plus.google.com/share?url=<?php echo $p->url ?>">Google+</a>
         </div>
     </div>
     <div class="related">

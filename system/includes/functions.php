@@ -268,13 +268,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
         if($str[count($str) - 3] == 'uncategorized') {
             $category = default_category();
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
-            $post->categoryb = '<a property="v:title" rel="v:url" href="' . $category->url . '">' . $category->title . '</a>';
+            $post->categoryb = '<a itemprop="item" href="' . $category->url . '"><span itemprop="name">' . $category->title . '</span></a>';
         } else {
             
             foreach ($catC as $k => $v) {
                 if ($v['0'] === $str[count($str) - 3]) {
                     $post->category = '<a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
-                    $post->categoryb = '<a property="v:title" rel="v:url" href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
+                    $post->categoryb = '<a itemprop="item" href="' . site_url() . 'category/' . $v['0'] . '"><span itemprop="name">' . $v['1'] . '</span></a>';
                 }
             }
         
@@ -343,7 +343,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         
         foreach ($tag as $a) {
             $url[] = '<a rel="tag" href="' . $a[1] . '">' . $a[0] . '</a>';
-            $bc[] = '<span typeof="v:Breadcrumb"><a property="v:title" rel="v:url" href="' . $a[1] . '">' . $a[0] . '</a></span>';
+            $bc[] = '<span><a href="' . $a[1] . '">' . $a[0] . '</a></span>';
         }
 
         $post->tag = implode(' ', $url);
@@ -1816,7 +1816,6 @@ function social($imgDir = null)
 {
     $twitter = config('social.twitter');
     $facebook = config('social.facebook');
-    $google = config('social.google');
     $tumblr = config('social.tumblr');
     $rss = site_url() . 'feed/rss';
 
@@ -1830,10 +1829,6 @@ function social($imgDir = null)
 
     if (!empty($facebook)) {
         echo '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'facebook.png" width="32" height="32" alt="Facebook"/></a>';
-    }
-
-    if (!empty($google)) {
-        echo '<a href="' . $google . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'googleplus.png" width="32" height="32" alt="Google+"/></a>';
     }
 
     if (!empty($tumblr)) {
@@ -2164,7 +2159,7 @@ EOF;
 EOF;
     }
     if (isset($_GET['search'])) {
-        $search = $_GET['search'];
+        $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
@@ -3212,7 +3207,7 @@ function get_language()
 	
     $langID = config('language');
     $langFile = 'lang/'. $langID . '.ini';
-    $local = strtolower($langID);
+    $local = $langID;
 
     // Settings for the language
     if (!isset($langID) || config('language') === 'en') {

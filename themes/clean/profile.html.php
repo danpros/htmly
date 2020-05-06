@@ -22,7 +22,7 @@
             $i++; ?>
             <li class="<?php echo $class; ?>">
                 <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> on
-                <span><?php echo date('d F Y', $p->date) ?></span> - Posted in <span><?php echo $p->tag ?></span>
+                <span><?php echo format_date($p->date) ?></span> - Posted in <span><?php echo $p->tag ?></span>
             </li>
         <?php endforeach; ?>
     </ul>

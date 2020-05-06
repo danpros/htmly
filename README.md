@@ -2,7 +2,7 @@
 
 HTMLy is an open source Databaseless Blogging Platform or Flat-File Blog prioritizes simplicity and speed written in PHP. HTMLy can be referred to as Flat-File CMS either since it will also manage your content.
 
-You do not need to use a VPS to run HTMLy, shared hosting or even [free hosting](https://github.com/danpros/htmly#openshift) should work as long as the host supports at least PHP 5.3.
+You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
 
 Demo
 ----
@@ -42,6 +42,7 @@ Features
 - File Caching
 - Auto Update
 - Post Draft
+- i18n
 
 Requirements
 ------------
@@ -128,15 +129,6 @@ server {
   }
 }
 ````
-
-OpenShift
----------
-Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://hub.openshift.com/quickstarts/219-htmly) for easy deployment.
-
-**Quick install:**
-
-[![Click to install OpenShift](http://launch-shifter.rhcloud.com/launch/light/Click to install.svg)](https://hub.openshift.com/quickstarts/deploy/219-htmly)
-
 
 Making a secure password
 ----------------------
@@ -287,14 +279,7 @@ Contribute
 
 Contributors
 ----------
-- [danpros](https://github.com/danpros) - [Weblog](http://www.danpros.com)
-- [Kanti](https://github.com/Kanti) - [Weblog](https://kanti.de)
-- [fahmi182](https://github.com/fahmi182) - [Weblog](http://ifahmi.com)
-- [fanningert](https://github.com/fanningert) - [Weblog](http://thomas.fanninger.at)
-- [BlackCodec](https://github.com/BlackCodec)
-- [mlncn](https://github.com/mlncn)
-- [Tea23](https://github.com/Tea23)
-- [greenphp](https://github.com/greenphp)
+- [HTMLy Contributors](https://github.com/danpros/htmly/graphs/contributors)
 
 Copyright / License
 -------------------
