@@ -51,7 +51,6 @@
                 <p class="desc"><?php echo blog_tagline();?></p>   
                 <ul class="social list-inline">
                     <li><a href="<?php echo config('social.twitter');?>"><i class="fa fa-twitter"></i></a></li>                   
-                    <li><a href="<?php echo config('social.google');?>"><i class="fa fa-google-plus"></i></a></li>
                     <li><a href="<?php echo config('social.facebook');?>"><i class="fa fa-facebook"></i></a></li>
                     <li><a href="<?php echo config('social.tumblr');?>"><i class="fa fa-tumblr"></i></a></li>
                     <li><a href="<?php echo site_url();?>feed/rss"><i class="fa fa-rss"></i></a></li>                                    
@@ -172,14 +171,17 @@
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
-                <aside class="tags aside section">
+                <aside class="category-list aside section">
                     <div class="section-inner">
-                        <h2 class="heading">Tags</h2>
-                        <div class="tag-cloud">
-                            <?php $tags = tag_cloud(true);?>
-                            <?php foreach ($tags as $tag => $count):?>
-                                <a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?></a> 
-                            <?php endforeach;?>
+                        <h2 class="heading"><?php echo i18n("Popular_tags");?></h2>
+                        <div class="content">
+                        <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
+                        <ul>
+                        <?php foreach ($tags as $tag => $count):?>
+                            <li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
+                        <?php if ($i++ >= 5) break;?>
+                        <?php endforeach;?>
+                        </ul>
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->

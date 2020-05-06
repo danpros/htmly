@@ -135,7 +135,6 @@
                     <ul class="social-links-menu" id="menu-social-links">
                         <li><a href="<?php echo config('social.twitter');?>"><span class="screen-reader-text">Twitter</span></a></li>
                         <li><a href="<?php echo config('social.facebook');?>"><span class="screen-reader-text">Facebook</span></a></li>
-                        <li><a href="<?php echo config('social.google');?>"><span class="screen-reader-text">Google+</span></a></li>
                         <li><a href="<?php echo config('social.github');?>"><span class="screen-reader-text">GitHub</span></a></li>
                     </ul>
                     </div>                

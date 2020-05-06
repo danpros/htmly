@@ -211,16 +211,16 @@ h6 {
     text-decoration: none;
 }
 
-.infront .post, .intag .post, .inarchive .post, .insearch .post, .inprofile .post {
+.in-front .post, .in-tag .post, .in-archive .post, .in-search .post, .in-profile .post {
     border-bottom: 1px solid #dfdfdf;
     padding: 30px 0 10px 0;
 }
 
-.infront .post.first {
+.in-front .post.first {
     padding-top: 50px;
 }
 
-.intag .post.first, .inarchive .post.first, .insearch .post.first, .inprofile .post.first {
+.in-tag .post.first, .in-archive .post.first, .in-search .post.first, .in-profile .post.first {
     padding-top: 0px;
 }
 
@@ -831,7 +831,7 @@ aside .copyright p {
         padding-top: 0px;
     }
 
-    .infront .post, .intag .post, .inarchive .post, .insearch .post {
+    .in-front .post, .in-tag .post, .in-archive .post, .in-search .post {
         padding: 30px 0 20px 0;
     }
 

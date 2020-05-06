@@ -80,7 +80,13 @@
                 </div>
                 <div class="tagcloud">
                     <h3>Tags</h3>
-                    <?php echo tag_cloud() ?>
+					<?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
+					<ul>
+						<?php foreach ($tags as $tag => $count):?>
+						<li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
+						<?php if ($i++ >= 5) break;?>
+						<?php endforeach;?>
+					</ul>
                 </div>
             </aside>
         </div>
