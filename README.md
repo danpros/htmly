@@ -287,14 +287,7 @@ Contribute
 
 Contributors
 ----------
-- [danpros](https://github.com/danpros) - [Weblog](http://www.danpros.com)
-- [Kanti](https://github.com/Kanti) - [Weblog](https://kanti.de)
-- [fahmi182](https://github.com/fahmi182) - [Weblog](http://ifahmi.com)
-- [fanningert](https://github.com/fanningert) - [Weblog](http://thomas.fanninger.at)
-- [BlackCodec](https://github.com/BlackCodec)
-- [mlncn](https://github.com/mlncn)
-- [Tea23](https://github.com/Tea23)
-- [greenphp](https://github.com/greenphp)
+- [HTMLy Contributors](https://github.com/danpros/htmly/graphs/contributors)
 
 Copyright / License
 -------------------
