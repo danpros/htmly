@@ -129,15 +129,6 @@ server {
 }
 ````
 
-OpenShift
----------
-Need a free server to test HTMLy? try [OpenShift](https://www.openshift.com) using the [HTMLy OpenShift QuickStart](https://hub.openshift.com/quickstarts/219-htmly) for easy deployment.
-
-**Quick install:**
-
-[![Click to install OpenShift](http://launch-shifter.rhcloud.com/launch/light/Click to install.svg)](https://hub.openshift.com/quickstarts/deploy/219-htmly)
-
-
 Making a secure password
 ----------------------
 Passwords can be stored in `username.ini` (where "username" is the user's username) in either plaintext, encryption algorithms supported by php `hash` or bcrypt (recommended). To generate a bcrypt encrypted password:
