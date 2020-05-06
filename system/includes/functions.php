@@ -1,6 +1,7 @@
 <?php
 
 use \Michelf\MarkdownExtra;
+use \Michelf\SmartyPants;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
@@ -358,7 +359,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
         
         // Get the contents and convert it to HTML
-        $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+        $post->body = markdown_to_html($content);
 
         // Convert image tags to figures
         if (config('fig.captions') == 'true') {
@@ -539,7 +540,7 @@ function get_category_info($category)
                 $desc->title = get_content_tag('t', $content, $category);
                 
                 // Get the contents and convert it to HTML
-                $desc->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+                $desc->body = markdown_to_html($content);
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
 
@@ -788,7 +789,7 @@ function get_author($name)
                 $author->name = get_content_tag('t', $content, $author);
                 
                 // Get the contents and convert it to HTML
-                $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
+                $author->about = markdown_to_html($content);
 
                 $tmp[] = $author;
             }
@@ -846,7 +847,7 @@ function get_static_post($static)
                 $post->title = get_content_tag('t', $content, $static);
                 
                 // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+                $post->body = markdown_to_html($content);
 
                 if (config('views.counter') == 'true') {
                     $post->views = get_views($post->file);
@@ -892,7 +893,7 @@ function get_static_sub_post($static, $sub_static)
                 $post->title = get_content_tag('t', $content, $sub_static);
                 
                 // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+                $post->body = markdown_to_html($content);
 
                 $post->views = get_views($post->file);
 
@@ -918,7 +919,7 @@ function get_frontpage()
         $front->title = get_content_tag('t', $content, 'Welcome');
         $front->url = site_url() . 'front';
         // Get the contents and convert it to HTML
-        $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+        $front->body = markdown_to_html($content);
     } else {
         $front->title = 'Welcome';
         $front->url = site_url() . 'front';
@@ -2026,7 +2027,7 @@ function menu($custom = null)
 function get_title_from_file($v)
 {
     // Get the contents and convert it to HTML
-    $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+    $content = markdown_to_html($content);
 
     $replaced = substr($v, 0, strrpos($v, '/')) . '/';
     $base = str_replace($replaced, '', $v);
@@ -2894,6 +2895,31 @@ function remove_html_comments($content)
 {
     $patterns = array('/(\s|)<!--t(.*)t-->(\s|)/', '/(\s|)<!--d(.*)d-->(\s|)/', '/(\s|)<!--tag(.*)tag-->(\s|)/', '/(\s|)<!--image(.*)image-->(\s|)/', '/(\s|)<!--video(.*)video-->(\s|)/', '/(\s|)<!--audio(.*)audio-->(\s|)/', '/(\s|)<!--link(.*)link-->(\s|)/', '/(\s|)<!--quote(.*)quote-->(\s|)/');
     return preg_replace($patterns, '', $content);
+}
+
+// Transform markdown to HTML with PHP::MarkdownExtra och PHP::SmartyPants
+function markdown_to_html($markdown)
+{
+    $html = MarkdownExtra::defaultTransform(remove_html_comments($markdown));
+
+    if (config('smart') == 'true') {
+        $parser = new SmartyPants(2);
+        if (config('doublequote.open') !== null) {
+            $parser->smart_doublequote_open = config('doublequote.open');
+        }
+        if (config('doublequote.close') !== null) {
+            $parser->smart_doublequote_close = config('doublequote.close');
+        }
+        if (config('singlequote.open') !== null) {
+            $parser->smart_singlequote_open = config('singlequote.open');
+        }
+        if (config('singlequote.close') !== null) {
+            $parser->smart_singlequote_open = config('singlequote.close');
+        }
+        $html = $parser->transform($html);
+    }
+
+    return $html;
 }
 
 // Google recaptcha

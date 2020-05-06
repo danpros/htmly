@@ -12,6 +12,8 @@ return array(
     'Michelf\\Markdown' => $vendorDir . '/michelf/php-markdown/Michelf/Markdown.php',
     'Michelf\\MarkdownExtra' => $vendorDir . '/michelf/php-markdown/Michelf/MarkdownExtra.php',
     'Michelf\\MarkdownInterface' => $vendorDir . '/michelf/php-markdown/Michelf/MarkdownInterface.php',
+    'Michelf\\SmartyPants' => $vendorDir . '/michelf/php-smartypants/Michelf/SmartyPants.php',
+    'Michelf\\SmartyPantsTypographer' => $vendorDir . '/michelf/php-smartypants/Michelf/SmartyPantsTypographer.php',
     'Suin\\RSSWriter\\Channel' => $vendorDir . '/suin/php-rss-writer/src/Suin/RSSWriter/Channel.php',
     'Suin\\RSSWriter\\ChannelInterface' => $vendorDir . '/suin/php-rss-writer/src/Suin/RSSWriter/ChannelInterface.php',
     'Suin\\RSSWriter\\Feed' => $vendorDir . '/suin/php-rss-writer/src/Suin/RSSWriter/Feed.php',
