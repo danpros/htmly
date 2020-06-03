@@ -55,8 +55,17 @@ google.wmt.id = ""
 ; Google+ publisher
 google.publisher = ""
 
+; -- Analytics --
+analytics = ""
+; "google" or "matomo"
+
 ; Google analytics
 google.analytics.id = ""
+
+; Matomo config
+matomo.url = ""
+matomo.siteid = ""
+; rules for matomo.url: it should start with "://" and end with "/"
 
 ; Google reCaptcha
 ; https://www.google.com/recaptcha/admin. Options "false" and "true"

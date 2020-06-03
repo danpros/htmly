@@ -21,7 +21,7 @@ Features
 - Social Links
 - Disqus Comments (optional)
 - Facebook Comments (optional)
-- Google Analytics
+- Google Analytics and Matomo
 - Built-in Search
 - Related Posts
 - Per Post Navigation (previous and next post)

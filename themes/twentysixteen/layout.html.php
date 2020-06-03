@@ -159,6 +159,6 @@
     /* ]]> */
     </script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/functions.js"></script>
-    <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
+    <?php if (! empty(config("analytics"))): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

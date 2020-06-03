@@ -197,6 +197,6 @@
     <!-- Javascript -->          
     <script type="text/javascript" src="<?php echo site_url();?>themes/blog/js/jquery-latest.min.js"></script>
     <script type="text/javascript" src="<?php echo site_url();?>themes/blog/js/bootstrap.min.js"></script>
-<?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>    
+    <?php if (! empty(config("analytics"))): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html> 
