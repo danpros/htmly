@@ -1088,6 +1088,7 @@ get('/admin/draft', function () {
                 'is_admin' => true,
                 'bodyclass' => 'admin-draft',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
+                'pagination' => has_pagination($total, $perpage, $page)
             ));
             die;
         }
@@ -1105,6 +1106,7 @@ get('/admin/draft', function () {
             'is_admin' => true,
             'bodyclass' => 'admin-draft',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
+            'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
         $login = site_url() . 'login';
