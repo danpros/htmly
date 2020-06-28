@@ -28,6 +28,16 @@
             </tr>
         <?php endforeach; ?>
     </table>
+    <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
+        <div class="pager">
+            <?php if (!empty($pagination['prev'])): ?>
+                <span><a href="?page=<?php echo $page - 1 ?>" class="pagination-arrow newer" rel="prev">Newer</a></span>
+            <?php endif; ?>
+            <?php if (!empty($pagination['next'])): ?>
+                <span><a href="?page=<?php echo $page + 1 ?>" class="pagination-arrow older" rel="next">Older</a></span>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 <?php } else {
     echo i18n('No_draft_found') . '!';
 } ?>
