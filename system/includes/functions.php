@@ -359,7 +359,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
         
         // Get the contents and convert it to HTML
-        $post->body = markdown_to_html($content);
+        $post->body = markdown_to_html(remove_html_comments($content));
 
         // Convert image tags to figures
         if (config('fig.captions') == 'true') {
@@ -540,7 +540,7 @@ function get_category_info($category)
                 $desc->title = get_content_tag('t', $content, $category);
                 
                 // Get the contents and convert it to HTML
-                $desc->body = markdown_to_html($content);
+                $desc->body = markdown_to_html(remove_html_comments($content));
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
 
@@ -789,7 +789,7 @@ function get_author($name)
                 $author->name = get_content_tag('t', $content, $author);
                 
                 // Get the contents and convert it to HTML
-                $author->about = markdown_to_html($content);
+                $author->about = markdown_to_html(remove_html_comments($content));
 
                 $tmp[] = $author;
             }
@@ -847,7 +847,7 @@ function get_static_post($static)
                 $post->title = get_content_tag('t', $content, $static);
                 
                 // Get the contents and convert it to HTML
-                $post->body = markdown_to_html($content);
+                $post->body = markdown_to_html(remove_html_comments($content));
 
                 if (config('views.counter') == 'true') {
                     $post->views = get_views($post->file);
@@ -893,7 +893,7 @@ function get_static_sub_post($static, $sub_static)
                 $post->title = get_content_tag('t', $content, $sub_static);
                 
                 // Get the contents and convert it to HTML
-                $post->body = markdown_to_html($content);
+                $post->body = markdown_to_html(remove_html_comments($content));
 
                 $post->views = get_views($post->file);
 
@@ -919,7 +919,7 @@ function get_frontpage()
         $front->title = get_content_tag('t', $content, 'Welcome');
         $front->url = site_url() . 'front';
         // Get the contents and convert it to HTML
-        $front->body = markdown_to_html($content);
+        $front->body = markdown_to_html(remove_html_comments($content));
     } else {
         $front->title = 'Welcome';
         $front->url = site_url() . 'front';
@@ -2027,7 +2027,7 @@ function menu($custom = null)
 function get_title_from_file($v)
 {
     // Get the contents and convert it to HTML
-    $content = markdown_to_html($content);
+    $content = markdown_to_html(file_get_contents($v));
 
     $replaced = substr($v, 0, strrpos($v, '/')) . '/';
     $base = str_replace($replaced, '', $v);
@@ -2900,7 +2900,7 @@ function remove_html_comments($content)
 // Transform markdown to HTML with PHP::MarkdownExtra och PHP::SmartyPants
 function markdown_to_html($markdown)
 {
-    $html = MarkdownExtra::defaultTransform(remove_html_comments($markdown));
+    $html = MarkdownExtra::defaultTransform($markdown);
 
     if (config('smart') == 'true') {
         $parser = new SmartyPants(2);
