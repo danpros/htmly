@@ -137,7 +137,7 @@ Passwords can be stored in `username.ini` (where "username" is the user's userna
 $ php -a
 > echo password_hash('desiredpassword', PASSWORD_BCRYPT);
 ````
-This will produce a hash which is to be placed in the `password` field in `username.ini`. Ensure that the `encryption` field is set to `bcrypt`.
+This will produce a hash which is to be placed in the `password` field in `username.ini`. Ensure that the `encryption` field is set to `password_hash`.
 
 
 Both Online or Offline
