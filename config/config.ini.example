@@ -4,8 +4,8 @@ site.url = ""
 ; Your timezone
 timezone = "Asia/Jakarta"
 
-; Time format. See: https://www.php.net/manual/en/function.date.php
-time.format = "d F Y"
+; Date format. See: https://www.php.net/manual/en/function.strftime
+date.format = "%d %B %Y"
 
 ; Your language (currently only "en" for English or "de" for German)
 language = "en"
