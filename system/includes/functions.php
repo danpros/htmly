@@ -1859,7 +1859,7 @@ function disqus($title = null, $url = null)
     $script = <<<EOF
     <script type="text/javascript">
         var getAbsolutePath = function(href) {
-            var link = document.createElement('__dummy_get_absolute_path');
+            var link = document.createElement('a');
             link.href = href;
             return link.href;
         };
