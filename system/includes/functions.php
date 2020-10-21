@@ -1858,9 +1858,14 @@ function disqus($title = null, $url = null)
     $disqus = config('disqus.shortname');
     $script = <<<EOF
     <script type="text/javascript">
+        var getAbsolutePath = function(href) {
+            var link = document.createElement('a');
+            link.href = href;
+            return link.href;
+        };
         var disqus_shortname = '{$disqus}';
         var disqus_title = '{$title}';
-        var disqus_url = '{$url}';
+        var disqus_url = getAbsolutePath('{$url}');
         (function () {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
