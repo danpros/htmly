@@ -1539,7 +1539,7 @@ function has_pagination($total, $perpage, $page = 1)
         $total = count(get_post_unsorted());
     }
     $totalPage = ceil($total / $perpage);
-    $number = 'Page '. $page . ' of ' . $totalPage;
+    $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;
     $pager = get_pagination($page, $total, $perpage, 2);
     return array(
         'prev' => $page > 1,
