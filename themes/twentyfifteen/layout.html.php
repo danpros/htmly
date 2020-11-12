@@ -48,7 +48,7 @@
                         </div>
                     </nav>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">About</h2>
+                        <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <p><?php echo blog_description() ?></p>
                     </aside>                    
                     <nav id="social-navigation" class="social-navigation" role="navigation">
@@ -76,23 +76,23 @@
                         <form><input type="search" name="search" class="form-control" placeholder="Type to search"></form>
                     </aside>                            
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Recent Posts</h2>
+                        <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>
                         <?php echo recent_posts() ?>
                     </aside>
                     <?php if (config('views.counter') === 'true') :?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Popular Posts</h2>
+                        <h2 class="widget-title"><?php echo i18n("Popular_posts");?></h2>
                         <?php echo popular_posts() ?>
                     </aside>
                     <?php endif;?>
                     <?php if (disqus()): ?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Recent Comments</h2>
+                        <h2 class="widget-title"><?php echo i18n("Recent_comments");?></h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;}</style>
                     </aside>
                     <?php endif;?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Archive</h2>
+                        <h2 class="widget-title"><?php echo i18n("Archive");?></h2>
                         <?php echo archive_list() ?>
                     </aside>
                     <aside class="widget widget_meta">
@@ -100,7 +100,7 @@
                         <?php echo category_list() ?>
                     </aside>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Popular Tags</h2>
+                        <h2 class="widget-title"><?php echo i18n("Popular_tags");?></h2>
                             <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
                             <ul>
                             <?php foreach ($tags as $tag => $count):?>
