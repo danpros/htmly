@@ -386,7 +386,7 @@ function find_post($year, $month, $name)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+        if ((strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) || ($year === NULL && strtolower($arr[2]) === strtolower($name . '.md'))) {
 
             // Use the get_posts method to return
             // a properly parsed object
