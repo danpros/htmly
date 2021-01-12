@@ -3215,6 +3215,7 @@ function get_language()
     $langFile = 'lang/'. $langID . '.ini';
     $local = $langID;
 
+    // Settings for the language
     if (!isset($langID) || config('language') === 'en' || !file_exists($langFile)) {
     if (!isset($langID) || config('language') === 'en') {
         i18n('source', 'lang/en.ini'); // Load the English language file
