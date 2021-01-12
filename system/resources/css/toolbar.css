@@ -2,6 +2,22 @@ body {
     padding-top: 30px
 }
 
+.admin-front #lAdmin,
+.all-posts #lPosts,
+.admin-popular #lPopular,
+.admin-mine #lMine,
+.admin-draft #lDraft,
+.admin-content #lAddContent,
+.admin-categories #lCategories,
+.edit-profile #lEditProfile,
+.admin-import #lImport,
+.admin-backup #lBackup,
+.admin-config #lConfig,
+.admin-clear-cache #lClearCache,
+.admin-update #lUpdate {
+    background:#400;
+}
+
 #toolbar {
     background: #666;
     box-shadow: 0 5px 15px #000;
