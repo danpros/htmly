@@ -18,6 +18,7 @@
 		<br />
 		<input type="text" class="text <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'error';}} ?>" id="pTitle" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
 		<br /><br />
+		<?php if ($type == 'is_page') :?>
 		<label for="pURL">Url (optional)</label>
 		<br />
 		<input type="text" class="text" id="pURL" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>"/>
@@ -28,8 +29,11 @@
 		<br />
 		<textarea id="pMeta" name="description" rows="3" cols="20"><?php if (isset($p->description)) {echo $p->description;} ?></textarea>
 		<br /><br />
+		<?php endif;?>
 		<label for="wmd-input">Content</label>
+		<?php if ($type == 'is_page') :?>
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
+		<?php endif;?>
 		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
 		<br />
 		<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
