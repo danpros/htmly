@@ -7,7 +7,8 @@
 			<?php if (config("views.counter") == "true"): ?>
                 <th>Views</th>
             <?php endif; ?>
-            <th><?php echo i18n('Tag');?></th>
+            <th><?php echo i18n('Category');?></th>
+            <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php $i = 0;
@@ -29,6 +30,7 @@
                 <?php if (config("views.counter") == "true"): ?>
                     <td><?php echo $p->views ?></td>
                 <?php endif; ?>
+                <td><?php echo $p->category ?></td>
                 <td><?php echo $p->tag ?></td>
                 <td><a href="<?php echo $p->url ?>/edit?destination=admin/mine">Edit</a> <a href="<?php echo $p->url ?>/delete?destination=admin/mine"><?php echo i18n('Delete');?></a></td>
             </tr>
