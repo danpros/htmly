@@ -386,7 +386,7 @@ function find_post($year, $month, $name)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+        if ((strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) || ($year === NULL && strtolower($arr[2]) === strtolower($name . '.md'))) {
 
             // Use the get_posts method to return
             // a properly parsed object
@@ -1539,7 +1539,7 @@ function has_pagination($total, $perpage, $page = 1)
         $total = count(get_post_unsorted());
     }
     $totalPage = ceil($total / $perpage);
-    $number = 'Page '. $page . ' of ' . $totalPage;
+    $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;
     $pager = get_pagination($page, $total, $perpage, 2);
     return array(
         'prev' => $page > 1,
@@ -1858,8 +1858,14 @@ function disqus($title = null, $url = null)
     $disqus = config('disqus.shortname');
     $script = <<<EOF
     <script type="text/javascript">
+        var getAbsolutePath = function(href) {
+            var link = document.createElement('a');
+            link.href = href;
+            return link.href;
+        };
         var disqus_shortname = '{$disqus}';
         var disqus_title = '{$title}';
+        var disqus_url = getAbsolutePath('{$url}');
         var disqus_url = '{$url}';
         (function () {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -3209,17 +3215,23 @@ function get_language()
     $langFile = 'lang/'. $langID . '.ini';
     $local = $langID;
 
-    // Settings for the language
+    if (!isset($langID) || config('language') === 'en' || !file_exists($langFile)) {
     if (!isset($langID) || config('language') === 'en') {
         i18n('source', 'lang/en.ini'); // Load the English language file
-        setlocale(LC_ALL, 'en_US'); // Change time format to English
+        setlocale(LC_ALL, 'en_US', 'en_US.utf8', 'English'); // Change locale to English
     } else {
-        if (file_exists($langFile)) {
-            i18n('source', $langFile);
-            setlocale(LC_ALL, $local);
-        } else {
-            i18n('source', 'lang/en.ini'); // Load the English language file
-            setlocale(LC_ALL, 'en_US'); // Change time format to English
+        i18n('source', $langFile);
+
+        // Locales are known under different names on different systems; I don't know any other way
+        // to handle this than to add a list of locale names for each language.
+        if ($langID === 'de') {
+            setlocale(LC_ALL, 'de_DE', 'de_DE.utf8', 'German');
+        }
+        elseif ($langID === 'sv') {
+            setlocale(LC_ALL,  'sv_SE', 'sv_SE.utf8', 'Swedish');
+        }
+        elseif ($langID === 'pl') {
+            setlocale(LC_ALL,  'pl_PL', 'pl_PL.utf8', 'Polish');
         }
     }
 
@@ -3231,9 +3243,9 @@ function format_date($date)
     $date_format = config('date.format');
 
     if (!isset($date_format) || empty($date_format)) {
-        return date('d F Y', $date);
+        return strftime('%e %B %Y', $date);
     } else {
-        return date($date_format, $date);
+        return strftime($date_format, $date);
     }
 
 }
