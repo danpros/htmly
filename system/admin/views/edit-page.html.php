@@ -64,7 +64,7 @@ if ($type == 'is_frontpage') {
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
-<script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script> 
+<script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
@@ -79,20 +79,25 @@ if ($type == 'is_frontpage') {
 
 <div class="wmd-panel">
 	<form method="POST">
-		<?php echo i18n('Title');?> <span class="required">*</span>
-		<br>
-		<input type="text" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error'; } } ?>" value="<?php echo $oldtitle ?>"/><br><br>
+		<label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
+		<br />
+		<input type="text" id="pTitle" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error'; } } ?>" value="<?php echo $oldtitle ?>"/><br /><br />
 		<?php if($type != 'is_frontpage' && $type != 'is_profile') { ?>
-		Url (optional)<br><input type="text" name="url" class="text" value="<?php echo $oldmd ?>"/>
-		<br>
+		<label for="pURL">Url (optional)</label>
+		<br />
+		<input type="text" id="pURL" name="url" class="text" value="<?php echo $oldmd ?>"/>
+		<br />
 		<span class="help">If the url leave empty we will use the page title.</span>
-		<br><br>
-		<?php echo i18n('Meta_description');?> (optional)<br><textarea name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
-		<br><br>
+		<br /><br />
+		<label for="pMeta"><?php echo i18n('Meta_description');?> (optional)</label>
+		<br />
+		<textarea id="pMeta" name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
+		<br /><br />
 		<?php } ?>
+		<label for="wmd-input">Content</label>
 		<div id="wmd-button-bar" class="wmd-button-bar"></div>
 		<textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
-		<br>
+		<br />
 		<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
 		<?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
 			<input type="submit" name="submit" class="submit" value="Save"/>
