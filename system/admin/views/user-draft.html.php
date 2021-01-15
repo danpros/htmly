@@ -4,7 +4,8 @@
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Created');?></th>
-            <th><?php echo i18n('Tag');?></th>
+            <th><?php echo i18n('Category');?></th>
+            <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php $i = 0;
@@ -23,6 +24,7 @@
             <tr class="<?php echo $class ?>">
                 <td><?php echo $p->title ?></td>
                 <td><?php echo format_date($p->date) ?></td>
+                <td><?php echo strip_tags($p->category) ?></td>
                 <td><?php echo strip_tags($p->tag) ?></td>
                 <td><a href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
             </tr>

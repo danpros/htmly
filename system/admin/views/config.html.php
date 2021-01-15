@@ -41,7 +41,7 @@
         foreach ($array as $key => $value) {
             echo '<tr>';
             echo '<td><label for="' . $key . '">' . $key . '</label></td>';
-            echo '<td><input type="text" name="-config-' . $key . '" value="' . valueMaker($value) . '"></td>';
+            echo '<td><input type="text" id="' . $key . '" name="-config-' . $key . '" value="' . valueMaker($value) . '"></td>';
             echo '</tr>';
         }
         ?>

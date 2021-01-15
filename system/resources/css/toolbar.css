@@ -2,6 +2,22 @@ body {
     padding-top: 30px
 }
 
+.admin-front .tb-admin,
+.all-posts .tb-posts,
+.admin-popular .tb-popular,
+.admin-mine .tb-mine,
+.admin-draft .tb-draft,
+.admin-content .tb-addcontent,
+.admin-categories .tb-categories,
+.edit-profile .tb-editprofile,
+.admin-import .tb-import,
+.admin-backup .tb-backup,
+.admin-config .tb-config,
+.admin-clear-cache .tb-clearcache,
+.admin-update .tb-update {
+    background:#400;
+}
+
 #toolbar {
     background: #666;
     box-shadow: 0 5px 15px #000;
@@ -23,16 +39,16 @@ body {
 
 #toolbar ul {
     margin: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 0;
     padding-left: 30px;
-    float: left
 }
 
 #toolbar ul li, #toolbar ul li a {
-    float: left;
+    display:inline-block;
     list-style: none;
-    margin: 0
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
 }
 
 #toolbar a {
@@ -41,7 +57,6 @@ body {
     text-decoration: none;
     border-radius: 10px;
     padding: 0 10px;
-    line-height: 1.6
 }
 
 @media all and (max-width: 550px) {
