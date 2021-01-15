@@ -158,13 +158,13 @@ function get_category_folder()
 // usort function. Sort by filename.
 function sortfile($a, $b)
 {
-    return $a['basename'] == $b['basename'] ? 0 : ($a['basename'] < $b['basename']) ? 1 : -1;
+    return $a['basename'] == $b['basename'] ? 0 : (($a['basename'] < $b['basename']) ? 1 : -1);
 }
 
 // usort function. Sort by date.
 function sortdate($a, $b)
 {
-    return $a->date == $b->date ? 0 : ($a->date < $b->date) ? 1 : -1;
+    return $a->date == $b->date ? 0 : (($a->date < $b->date) ? 1 : -1);
 }
 
 // Rebuilt cache index
