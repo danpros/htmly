@@ -1,12 +1,13 @@
-body {
-    padding-top: 30px
+:root {
+	--box-shadow:0 4px 16px #000;
+	--border1:1px solid rgba(0,0,0,.5);
 }
-
+/*highlight the selected/current toolbar menu item*/
 .admin-front .tb-admin,
-.all-posts .tb-posts,
-.admin-popular .tb-popular,
-.admin-mine .tb-mine,
-.admin-draft .tb-draft,
+.all-posts #toolbar .tb-posts-parent,.all-posts #toolbar .tb-posts,
+.admin-popular #toolbar .tb-posts-parent,.admin-popular #toolbar .tb-popular,
+.admin-mine #toolbar .tb-posts-parent,.admin-mine #toolbar .tb-mine,
+.admin-draft #toolbar .tb-posts-parent,.admin-draft #toolbar .tb-draft,
 .admin-content .tb-addcontent,
 .admin-categories .tb-categories,
 .edit-profile .tb-editprofile,
@@ -15,69 +16,89 @@ body {
 .admin-config .tb-config,
 .admin-clear-cache .tb-clearcache,
 .admin-update .tb-update {
-    background:#400;
+	background:#400;
 }
-
 #toolbar {
-    background: #666;
-    box-shadow: 0 5px 15px #000;
-    color: #CCC;
-    font-family: Georgia, sans-serif;
-    left: 0;
-    margin: 0 -20px;
-    padding: 0 25px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 600;
-    border: 0;
-    font-size: 15px;
-    text-align: left;
-    vertical-align: baseline;
-    min-height: 30px
+	position: relative;
+	background: #666;
+	color: #CCC;
+}
+#toolbar:after{
+	display:block;
+	position: relative;
+	content:'';
+	height:16px;
+	/*bottom:8px;*/
+	background: linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(255,255,255,1) 100%);
 }
 
 #toolbar ul {
-    margin: 0;
-    padding: 0;
-    padding-left: 30px;
+	display:flex;
+	flex-wrap:wrap;
+	justify-content: space-evenly;
+	margin:0;
+	padding:0;
+	list-style-type: none;
 }
-
-#toolbar ul li, #toolbar ul li a {
-    display:inline-block;
-    list-style: none;
-    margin: 0;
-    height: 30px;
-    line-height: 30px;
+.tb-menu{
+	border-bottom:var(--border1);
+	z-index: 1;
+}
+.tb-menu li {
+	flex-grow: 1;
+	margin:0;
+	background: #666;
 }
 
 #toolbar a {
-    color: #FFF;
-    font-size: .846em;
-    text-decoration: none;
-    border-radius: 10px;
-    padding: 0 10px;
+	display:block;
+	padding:0 .25em;
+	color:white;
+	height:32px;
+	line-height:32px;
+	text-align: center;
 }
-
-@media all and (max-width: 550px) {
-    body {
-        padding-top: 60px
-    }
+#toolbar li{
+	position: relative;
 }
-
-table#config td:first-child {
-    width: 30%
+.tb-menu li:hover > a, .tb-menu li > a:focus{
+	/*focus style also set for better visual tab navigation*/
+ background:rgba(255,255,255,.25);
+ outline: none;
 }
-
-table#config td:last-child {
-    width: 70%
+.tb-dropdown{
+	visibility:hidden;
+	position: absolute;
+	display: block;
+	min-width: 100%;
+	opacity: 0;
+	top:-2em;
+	border-top:none;
+	box-shadow: var(--box-shadow);
+	transition: all .25s linear;
 }
-
-table#config input {
-    width: 100%;
-    box-sizing: border-box
+.tb-posts-parent{}
+.tb-posts-parent.submenu-active .tb-dropdown{
+	visibility:visible;
+	opacity: 1;
+	top:32px;
+	z-index: 2;
 }
-
-table#config tr:last-child td {
-    border-bottom: none
+.tb-dropdown a{
+	text-align: left;
+}
+.tb-posts-parent > a:after{
+	display:inline-block;
+	position: relative;
+	top: 4px;
+	transition: all .2s linear;
+	transform-origin: 50% 50%;
+	content:"\0025C2";
+	margin-left:.125em;
+	font-size:2em;
+	line-height: 0;
+}
+.tb-posts-parent.submenu-active > a:after{
+	transform: rotate(-90deg);
+	top:8px;
 }

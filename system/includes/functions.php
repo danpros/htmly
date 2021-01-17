@@ -158,13 +158,13 @@ function get_category_folder()
 // usort function. Sort by filename.
 function sortfile($a, $b)
 {
-    return $a['basename'] == $b['basename'] ? 0 : (($a['basename'] < $b['basename']) ? 1 : -1);
+    return $a['basename'] == $b['basename'] ? 0 : ($a['basename'] < $b['basename']) ? 1 : -1;
 }
 
 // usort function. Sort by date.
 function sortdate($a, $b)
 {
-    return $a->date == $b->date ? 0 : (($a->date < $b->date) ? 1 : -1);
+    return $a->date == $b->date ? 0 : ($a->date < $b->date) ? 1 : -1;
 }
 
 // Rebuilt cache index
@@ -386,7 +386,7 @@ function find_post($year, $month, $name)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        if ((strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md')) || ($year === NULL && strtolower($arr[2]) === strtolower($name . '.md'))) {
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
 
             // Use the get_posts method to return
             // a properly parsed object
@@ -1539,7 +1539,7 @@ function has_pagination($total, $perpage, $page = 1)
         $total = count(get_post_unsorted());
     }
     $totalPage = ceil($total / $perpage);
-    $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;
+    $number = 'Page '. $page . ' of ' . $totalPage;
     $pager = get_pagination($page, $total, $perpage, 2);
     return array(
         'prev' => $page > 1,
@@ -1845,9 +1845,9 @@ function copyright()
     $credit = 'Proudly powered by <a href="http://www.htmly.com" target="_blank">HTMLy</a>';
 
     if (!empty($blogcp)) {
-        return $copyright = '<p>' . $blogcp . '</p><p>' . $credit . '</p>';
+        return $copyright = '<p class="copyright">' . $blogcp . '<br />' . $credit . '</p>';
     } else {
-        return $credit = '<p>' . $credit . '</p>';
+        return $credit = '<p class="credit">' . $credit . '</p>';
     }
 }
 
@@ -1858,14 +1858,8 @@ function disqus($title = null, $url = null)
     $disqus = config('disqus.shortname');
     $script = <<<EOF
     <script type="text/javascript">
-        var getAbsolutePath = function(href) {
-            var link = document.createElement('a');
-            link.href = href;
-            return link.href;
-        };
         var disqus_shortname = '{$disqus}';
         var disqus_title = '{$title}';
-        var disqus_url = getAbsolutePath('{$url}');
         var disqus_url = '{$url}';
         (function () {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -2739,16 +2733,16 @@ function head_contents()
         $version = 'HTMLy';
     }
 
-    $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
+    $favicon = '    <link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
     $charset = '<meta charset="utf-8" />';
-    $generator = '<meta name="generator" content="' . $version . '" />';
-    $xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
-    $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
-    $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
-    $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
+    $generator = '    <meta name="generator" content="' . $version . '" />';
+    $xua = '    <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->' . "\n" . '    <meta http-equiv="x-ua-compatible" content="ie=edge">';
+    $viewport = '    <meta name="viewport" content="width=device-width, initial-scale=1">';
+    $sitemap = '    <link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
+    $feed = '    <link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
     $webmasterTools = '';
     if (!empty($wmt_id)) {
-        $webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
+        $webmasterTools = ' <meta name="google-site-verification" content="' . $wmt_id . '" />';
     }
 
     $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools . "\n";
@@ -2766,31 +2760,36 @@ function toolbar()
     echo <<<EOF
     <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
 EOF;
-    echo '<div id="toolbar"><ul>';
-    echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
-    if ($role === 'admin') {
-        echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
-        if (config('views.counter') == 'true') {
-            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
+    echo '<ul class="tb-menu">';
+        echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
+        if ($role === 'admin') {
+            // echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
+            echo '<li class="tb-posts-parent"><a href="#">' . i18n('Posts') . '</a><ul class="tb-dropdown">';
+            // not sure how to i18n "All" text content 2020.01.16-sean1138
+            echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">All</a></li>';
+            if (config('views.counter') == 'true') {
+                echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
+            }
         }
-    }
-    echo '<li class="tb-mine"><a href="' . $base . 'admin/mine">' . i18n('Mine') . '</a></li>';
-    echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
-    echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
-    if ($role === 'admin') {
-        echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
-    }
-    echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
-    echo '<li class="tb-import"><a href="' . $base . 'admin/import">' . i18n('Import') . '</a></li>';
-    echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
-    if ($role === 'admin') {
-      echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
-    }
-    echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
-    echo '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
-    echo '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
+        echo '<li class="tb-mine"><a href="' . $base . 'admin/mine">' . i18n('Mine') . '</a></li>';
+        echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
+        echo '</ul>';
+        // coulld move .tb-addcontent into the .tb-dropdown as well 2021.01.16-sean1138
+        echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
+        if ($role === 'admin') {
+            echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
+        }
+        echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
+        echo '<li class="tb-import"><a href="' . $base . 'admin/import">' . i18n('Import') . '</a></li>';
+        echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
+        if ($role === 'admin') {
+          echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
+        }
+        echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+        echo '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
+        echo '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
-    echo '</ul></div>';
+        echo '</ul>';
 }
 
 // File cache
@@ -3216,23 +3215,16 @@ function get_language()
     $local = $langID;
 
     // Settings for the language
-    if (!isset($langID) || config('language') === 'en' || !file_exists($langFile)) {
     if (!isset($langID) || config('language') === 'en') {
         i18n('source', 'lang/en.ini'); // Load the English language file
-        setlocale(LC_ALL, 'en_US', 'en_US.utf8', 'English'); // Change locale to English
+        setlocale(LC_ALL, 'en_US'); // Change time format to English
     } else {
-        i18n('source', $langFile);
-
-        // Locales are known under different names on different systems; I don't know any other way
-        // to handle this than to add a list of locale names for each language.
-        if ($langID === 'de') {
-            setlocale(LC_ALL, 'de_DE', 'de_DE.utf8', 'German');
-        }
-        elseif ($langID === 'sv') {
-            setlocale(LC_ALL,  'sv_SE', 'sv_SE.utf8', 'Swedish');
-        }
-        elseif ($langID === 'pl') {
-            setlocale(LC_ALL,  'pl_PL', 'pl_PL.utf8', 'Polish');
+        if (file_exists($langFile)) {
+            i18n('source', $langFile);
+            setlocale(LC_ALL, $local);
+        } else {
+            i18n('source', 'lang/en.ini'); // Load the English language file
+            setlocale(LC_ALL, 'en_US'); // Change time format to English
         }
     }
 
@@ -3244,9 +3236,9 @@ function format_date($date)
     $date_format = config('date.format');
 
     if (!isset($date_format) || empty($date_format)) {
-        return strftime('%e %B %Y', $date);
+        return date('d F Y', $date);
     } else {
-        return strftime($date_format, $date);
+        return date($date_format, $date);
     }
 
 }
