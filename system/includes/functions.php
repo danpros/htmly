@@ -1845,9 +1845,9 @@ function copyright()
     $credit = 'Proudly powered by <a href="http://www.htmly.com" target="_blank">HTMLy</a>';
 
     if (!empty($blogcp)) {
-        return $copyright = '<p class="copyright">' . $blogcp . '<br />' . $credit . '</p>';
+        return $copyright = '<p>' . $blogcp . '</p><p>' . $credit . '</p>';
     } else {
-        return $credit = '<p class="credit">' . $credit . '</p>';
+        return $credit = '<p>' . $credit . '</p>';
     }
 }
 
@@ -1858,7 +1858,7 @@ function disqus($title = null, $url = null)
     $disqus = config('disqus.shortname');
     $script = <<<EOF
     <script type="text/javascript">
-    var getAbsolutePath = function(href) {
+        var getAbsolutePath = function(href) {
             var link = document.createElement('a');
             link.href = href;
             return link.href;
@@ -2739,16 +2739,16 @@ function head_contents()
         $version = 'HTMLy';
     }
 
-    $favicon = '    <link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
+    $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
     $charset = '<meta charset="utf-8" />';
-    $generator = '    <meta name="generator" content="' . $version . '" />';
-    $xua = '    <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->' . "\n" . '    <meta http-equiv="x-ua-compatible" content="ie=edge">';
-    $viewport = '    <meta name="viewport" content="width=device-width, initial-scale=1">';
-    $sitemap = '    <link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
-    $feed = '    <link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
+    $generator = '<meta name="generator" content="' . $version . '" />';
+    $xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
+    $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
+    $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
+    $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
     $webmasterTools = '';
     if (!empty($wmt_id)) {
-        $webmasterTools = ' <meta name="google-site-verification" content="' . $wmt_id . '" />';
+        $webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
     }
 
     $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools . "\n";
@@ -2766,36 +2766,31 @@ function toolbar()
     echo <<<EOF
     <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
 EOF;
-    echo '<ul class="tb-menu">';
-        echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
-        if ($role === 'admin') {
-            // echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
-            echo '<li class="tb-posts-parent"><a href="#">' . i18n('Posts') . '</a><ul class="tb-dropdown">';
-            // not sure how to i18n "All" text content 2020.01.16-sean1138
-            echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">All</a></li>';
-            if (config('views.counter') == 'true') {
-                echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
-            }
+    echo '<div id="toolbar"><ul>';
+    echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
+    if ($role === 'admin') {
+        echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
+        if (config('views.counter') == 'true') {
+            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
         }
-        echo '<li class="tb-mine"><a href="' . $base . 'admin/mine">' . i18n('Mine') . '</a></li>';
-        echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
-        echo '</ul>';
-        // coulld move .tb-addcontent into the .tb-dropdown as well 2021.01.16-sean1138
-        echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
-        if ($role === 'admin') {
-            echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
-        }
-        echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
-        echo '<li class="tb-import"><a href="' . $base . 'admin/import">' . i18n('Import') . '</a></li>';
-        echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
-        if ($role === 'admin') {
-          echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
-        }
-        echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
-        echo '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
-        echo '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
+    }
+    echo '<li class="tb-mine"><a href="' . $base . 'admin/mine">' . i18n('Mine') . '</a></li>';
+    echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
+    echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
+    if ($role === 'admin') {
+        echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
+    }
+    echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
+    echo '<li class="tb-import"><a href="' . $base . 'admin/import">' . i18n('Import') . '</a></li>';
+    echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
+    if ($role === 'admin') {
+      echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
+    }
+    echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+    echo '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
+    echo '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
-        echo '</ul>';
+    echo '</ul></div>';
 }
 
 // File cache
@@ -3240,7 +3235,7 @@ function get_language()
             setlocale(LC_ALL,  'pl_PL', 'pl_PL.utf8', 'Polish');
         }
     }
-    }
+
 }
 
 function format_date($date)
