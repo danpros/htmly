@@ -143,7 +143,7 @@ generation.time = "false"
 cache.timestamp = "false"
 
 ; Set the theme here
-views.root = "themes/twentysixteen"
+views.root = "themes/twentyfifteen"
 
 ; Framework config. No need to edit.
 views.layout = "layout"

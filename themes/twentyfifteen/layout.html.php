@@ -9,7 +9,7 @@
     <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>
     <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo site_url();?>themes/twentyfifteen/css/font.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo site_url();?>themes/twentyfifteen/genericons/genericons.css" type="text/css" media="all"> 
-    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo site_url();?>themes/twentyfifteen/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo site_url();?>themes/twentyfifteen/css/style_v2.css" type="text/css" media="all">
     <!--[if lt IE 9]>
     <link rel='stylesheet' id='twentyfifteen-ie-css'  href='<?php echo site_url();?>themes/twentyfifteen/css/ie.css' type='text/css' media='all' />
     <![endif]-->
@@ -92,7 +92,7 @@
                     </aside>
                     <?php endif;?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title"><?php echo i18n("Archive");?></h2>
+                        <h2 class="widget-title"><?php echo i18n("Archives");?></h2>
                         <?php echo archive_list() ?>
                     </aside>
                     <aside class="widget widget_meta">
