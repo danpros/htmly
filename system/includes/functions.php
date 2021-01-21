@@ -3216,24 +3216,12 @@ function get_language()
     $local = $langID;
 
     // Settings for the language
-    if (!isset($langID) || config('language') === 'en' || !file_exists($langFile)) {
-    if (!isset($langID) || config('language') === 'en') {
-        i18n('source', 'lang/en.ini'); // Load the English language file
-        setlocale(LC_ALL, 'en_US', 'en_US.utf8', 'English'); // Change locale to English
+    if (!isset($langID) || config('language') === 'en' || config('language') === 'en_US' || !file_exists($langFile)) {
+        i18n('source', 'lang/en_US.ini'); // Load the English language file
+        setlocale(LC_ALL, 'en_US.utf8'); // Change locale to English
     } else {
         i18n('source', $langFile);
-
-        // Locales are known under different names on different systems; I don't know any other way
-        // to handle this than to add a list of locale names for each language.
-        if ($langID === 'de') {
-            setlocale(LC_ALL, 'de_DE', 'de_DE.utf8', 'German');
-        }
-        elseif ($langID === 'sv') {
-            setlocale(LC_ALL,  'sv_SE', 'sv_SE.utf8', 'Swedish');
-        }
-        elseif ($langID === 'pl') {
-            setlocale(LC_ALL,  'pl_PL', 'pl_PL.utf8', 'Polish');
-        }
+        setlocale(LC_ALL, $local . '.utf8');
     }
 
 }

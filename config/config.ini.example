@@ -7,8 +7,8 @@ timezone = "Asia/Jakarta"
 ; Date format. See: https://www.php.net/manual/en/function.strftime
 date.format = "%d %B %Y"
 
-; Your language (currently only "en" for English or "de" for German)
-language = "en"
+; Your language (example "en_US" for English or "de_DE" for German. See lang directory for available language)
+language = "en_US"
 
 ; Blog info
 blog.title = "HTMLy"
