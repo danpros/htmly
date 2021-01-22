@@ -87,7 +87,7 @@
                     <?php endif;?>
                     <?php if (disqus()): ?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title"><?php echo i18n("Recent_comments");?></h2>
+                        <h2 class="widget-title">Recent_comments</h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;}</style>
                     </aside>
                     <?php endif;?>
