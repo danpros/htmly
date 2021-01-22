@@ -795,7 +795,7 @@ function get_backup_files()
                 echo '<tr class="' . $class . '">';
                 echo '<td>' . $name . '</td>';
                 echo '<td>' . $timestamp . '</td>';
-                echo '<td><a target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $file . '"/><input type="submit" name="submit" value="Delete"/></form></td>';
+                echo '<td><a target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $name . '"/><input type="submit" name="submit" value="Delete"/></form></td>';
                 echo '</tr>';
             }
             echo '</table>';

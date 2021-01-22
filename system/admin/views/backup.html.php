@@ -4,7 +4,7 @@ if (login()) {
         $file = _h($_GET['file']);
 
         if (!empty($file)) {
-            unlink($file);
+            unlink("backup/$file");
         }
 
     }
