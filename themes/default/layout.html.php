@@ -82,6 +82,6 @@
         </div>
     </div>
 </div>
-<?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
+<?php if (! empty(config("analytics"))): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>
