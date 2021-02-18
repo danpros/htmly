@@ -28,7 +28,6 @@ blog.enable = "false"
 ; Social account
 social.twitter = "https://twitter.com"
 social.facebook = "https://www.facebook.com"
-social.tumblr = "http://www.tumblr.com"
 
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
@@ -46,9 +45,6 @@ disqus.shortname = ""
 
 ; Google Web Master Tool ID verification
 google.wmt.id = ""
-
-; Google+ publisher
-google.publisher = ""
 
 ; Google analytics
 google.analytics.id = ""
@@ -82,9 +78,6 @@ recent.count = "5"
 ; Popular posts
 popular.count = "5"
 
-; Author info on blog post. Set "true" or "false".
-author.info = "true"
-
 ; Teaser type: set "trimmed" or "full".
 teaser.type = "full"
 
@@ -102,10 +95,6 @@ rss.count = "10"
 
 ; RSS feed description length. If left empty we will use full page.
 rss.char = "200"
-
-; Enable image thumbnail on teaser, the options is "true" and "false". If set to "true", you can specify the default thumbnail also.
-img.thumbnail = "false"
-default.thumbnail = ""
 
 ; Enable views Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page and popular posts.
 views.counter = "false"

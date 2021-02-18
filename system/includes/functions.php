@@ -1813,7 +1813,7 @@ function base64_encode_image($filename = string, $filetype = string)
     }
 }
 
-// Social links
+// Social links. Deprecated
 function social($imgDir = null)
 {
     $twitter = config('social.twitter');
@@ -1822,7 +1822,7 @@ function social($imgDir = null)
     $rss = site_url() . 'feed/rss';
 
     if ($imgDir === null) {
-        $imgDir = "default/img/";
+        $imgDir = "readable/img/";
     }
 
     if (!empty($twitter)) {

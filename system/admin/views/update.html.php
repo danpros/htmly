@@ -29,5 +29,5 @@ if ($updater->able()) {
     echo '<div style="background-color:#f9f9f9;border:1px solid #ccc;border-radius:4px;color:#333;display:block;font-size:13px;margin:20px 0;padding:0 1em;">';
     echo \Michelf\MarkdownExtra::defaultTransform($info['body']);
     echo '</div>';
-    echo '<p><a class="btn btn-primary" target="_blank" href="' . $info['html_url'] . '">Read on Github</a>.</p>';
+    echo '<p><a class="btn btn-primary" target="_blank" href="' . $info['html_url'] . '">Read on Github</a></p>';
 }
