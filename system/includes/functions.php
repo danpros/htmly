@@ -2290,11 +2290,8 @@ function generate_rss($posts)
         }
 
         $item = new Item();
-        $cats = explode(',', str_replace(' ', '', strip_tags(remove_accent($p->category))));
-        foreach ($cats as $cat) {
-            $item
-                ->category($cat, site_url() . 'category/' . strtolower($cat));
-        }
+        $item
+            ->category(strip_tags($p->category));
         $item
             ->title($p->title)
             ->pubDate($p->date)
