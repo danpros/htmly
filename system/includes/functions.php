@@ -1971,9 +1971,9 @@ EOF;
     }
 }
 
-function parseNodes($nodes, $child = null) {
+function parseNodes($nodes, $child = null, $class = null) {
 	if (empty($child)) {
-		$ul = '<ul class="nav navbar-nav primary-menu">';
+		$ul = '<ul class="nav navbar-nav '.$class.'">';
 		foreach ($nodes as $node) {
 			if (isset($node->children)) { 
 				$ul .= parseNode($node, true);
@@ -2023,7 +2023,7 @@ function parseNode($node, $child = null) {
 		
 		$li .= '<a href="'.$node->slug.'">'.$node->name.'</a>';
 		if (isset($node->children)) { 
-			$li .= parseNodes($node->children, true);
+			$li .= parseNodes($node->children, true, null);
 		}
 		$li .= '</li>';
 		return $li;
@@ -2049,7 +2049,7 @@ function parseNode($node, $child = null) {
 		
 		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.$node->slug.'">'.$node->name.'<b class="caret"></b></a>';
 		if (isset($node->children)) { 
-			$li .= parseNodes($node->children, true);
+			$li .= parseNodes($node->children, true, null);
 		}
 		$li .= '</li>';
 		return $li;			
@@ -2057,7 +2057,7 @@ function parseNode($node, $child = null) {
 }
 
 // Menu
-function menu($custom = null)
+function menu($class = null)
 {
     $filename = "content/data/menu.json";
     if (file_exists($filename)) {
@@ -2066,7 +2066,7 @@ function menu($custom = null)
 	    if (empty($nodes)) {
             get_menu($custom);
 	    } else {
-            $html = parseNodes($nodes);
+            $html = parseNodes($nodes, null, $class);
 
             $doc = new DOMDocument();
             $doc->loadHTML($html);
