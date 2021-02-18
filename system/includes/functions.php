@@ -2240,6 +2240,14 @@ EOF;
 // The not found error
 function not_found()
 {
+    $vroot = rtrim(config('views.root'), '/');
+    $lt = $vroot . '/layout--404.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--404';
+    } else {
+        $layout = '';
+    }
+	
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
         'title' => 'This page doesn\'t exist! - ' . blog_title(),
@@ -2248,7 +2256,7 @@ function not_found()
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
         'bodyclass' => 'error-404',
         'is_404' => true,
-    ));
+    ), $layout);
     die();
 }
 
