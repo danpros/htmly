@@ -779,6 +779,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 
 #footer {
     font-size: 14px;
+	text-align: center;
 }
 
 #footer a {
@@ -834,7 +835,6 @@ h1.title-post a:hover, h2.title-index a:hover {
     font-size: 12px;
     float: left;
     width: 100%;
-    border-top: 1px solid #ABB6C5;
     padding-top: 1em;
 }
 

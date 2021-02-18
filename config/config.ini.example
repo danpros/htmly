@@ -30,11 +30,6 @@ social.twitter = "https://twitter.com"
 social.facebook = "https://www.facebook.com"
 social.tumblr = "http://www.tumblr.com"
 
-; Custom menu link. 
-; See example below:
-; "Google->http://www.google.com|Wikipedia->http://www.wikipedia.org". 
-blog.menu = ""
-
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
 

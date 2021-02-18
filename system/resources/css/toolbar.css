@@ -29,7 +29,7 @@ body {
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 600;
+    z-index: 6000;
     border: 0;
     font-size: 15px;
     text-align: left;

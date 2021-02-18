@@ -9,9 +9,7 @@ blockquote {
 }
 
 .wmd-panel {
-    width: 44%;
     float: left;
-    padding-right: 20px;
 }
 
 .wmd-button-bar {
@@ -30,13 +28,10 @@ blockquote {
 
 .wmd-input {
     min-height: 300px;
-    width: 96%;
-    padding: 2%;
 }
 
 .wmd-preview {
     background-color: #E4EBF1;
-    width: 46%;
     float: left;
     padding: 2%;
 }

@@ -118,111 +118,128 @@ $( function() {
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
 
-<div class="wmd-panel">
-    <form method="POST">
-        <label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
-        <br />
-        <input autofocus type="text" id="pTitle" name="title" class="text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';} } ?>" value="<?php echo $oldtitle ?>"/>
-        <br /><br />
-        <label for="pCategory"><?php echo i18n('Category');?> <span class="required">*</span></label>
-        <br />
-        <select id="pCategory" name="category">
-            <option value="uncategorized"><?php echo i18n("Uncategorized");?></option>
-            <?php foreach ($desc as $d):?>
-                <option value="<?php echo $d->md;?>" <?php if($category === $d->md) { echo 'selected="selected"';} ?>><?php echo $d->title;?></option>
-            <?php endforeach;?>
-        </select>
-        <br /><br />
-        <label for="pTag">Tag <span class="required">*</span></label>
-        <br />
-        <input type="text" id="pTag" name="tag" class="text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error'; } } ?>" value="<?php echo $oldtag ?>"/><br /><br />
-        <label for="pURL">Url (optional)</label>
-        <br />
-        <input type="text" id="pURL" name="url" class="text" value="<?php echo $oldmd ?>"/>
-        <br />
-        <span class="help">If the url leave empty we will use the post title.</span>
-        <br /><br />
-        <label for="pDate">Year, Month, Day</label>
-        <br />
-        <input type="date" id="pDate" name="date" class="text" value="<?php echo date('Y-m-d', $postdate); ?>">
-        <br />
-        <label for="pTime">Hour, Minute, Second</label>
-        <br />
-        <input step="1" type="time" id="pTime" name="time" class="text" value="<?php echo $time->format('H:i:s'); ?>">
-        <br /><br />
-        <label for="pMeta">Meta Description (optional)</label>
-        <br />
-        <textarea id="pMeta" name="description" rows="3" cols="20"><?php if (isset($p->description)) { echo $p->description; } else { echo $olddescription;} ?></textarea>
-        <br /><br />
+<div class="row">
+	<div class="wmd-panel" style="width:100%;">
+		<form method="POST">
+			<div class="row">
+				<div class="col-sm-6">
+					<label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
+					<input autofocus type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';} } ?>" value="<?php echo $oldtitle ?>"/>
+					<br>
+					<label for="pCategory"><?php echo i18n('Category');?> <span class="required">*</span></label>
+					<select id="pCategory" class="form-control" name="category">
+						<option value="uncategorized"><?php echo i18n("Uncategorized");?></option>
+						<?php foreach ($desc as $d):?>
+							<option value="<?php echo $d->md;?>" <?php if($category === $d->md) { echo 'selected="selected"';} ?>><?php echo $d->title;?></option>
+						<?php endforeach;?>
+					</select>
+					<br>
+					<label for="pTag">Tag <span class="required">*</span></label>
+					<input type="text" id="pTag" name="tag" class="form-control text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error'; } } ?>" value="<?php echo $oldtag ?>" placeholder="Comma-separated values"/>
+					<br>
 
-        <?php if ($type == 'is_audio'):?>
-        <label for="pAudio">Featured Audio <span class="required">*</span> (SoundCloud Only)</label>
-        <br />
-        <textarea rows="3" cols="20" class="text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php echo $oldaudio; ?></textarea>
-        <input type="hidden" name="is_audio" value="is_audio">
-        <?php endif;?>
+					<label for="pMeta">Meta Description (optional)</label>
+					<textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="If leave empty we will excerpt it from the content below"><?php if (isset($p->description)) { echo $p->description; } else { echo $olddescription;} ?></textarea>
+					<br>
+				</div>
+				
+				<div class="col-sm-6">
+					<div class="form-row">
+						<div class="col">
+							<label for="pDate">Date</label>
+							<input type="date" id="pDate" name="date" class="form-control text" value="<?php echo date('Y-m-d', $postdate); ?>">
+						</div>
+						<div class="col">
+							<label for="pTime">Time</label>
+							<input step="1" type="time" id="pTime" name="time" class="form-control text" value="<?php echo $time->format('H:i:s'); ?>">
+						</div>
+					</div>				
+					<br>
+					<label for="pURL">Url (optional)</label>
+					<input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="If the url leave empty we will use the post title"//>
+					<br>
 
-        <?php if ($type == 'is_video'):?>
-        <label for="pVideo">Featured Video <span class="required">*</span> (Youtube Only)</label>
-        <br />
-        <textarea rows="3" cols="20" class="text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" id="pVideo" name="video"><?php echo $oldvideo ?></textarea>
-        <input type="hidden" name="is_video" value="is_video">
-        <?php endif;?>
+					<?php if ($type == 'is_audio'):?>
+					<label for="pAudio">Featured Audio <span class="required">*</span> (SoundCloud Only)</label>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php echo $oldaudio; ?></textarea>
+					<input type="hidden" name="is_audio" value="is_audio">
+					<br>
+					<?php endif;?>
 
-        <?php if ($type == 'is_image'):?>
-        <label for="pImage">Featured Image <span class="required">*</span></label>
-        <br />
-        <textarea rows="3" cols="20" class="text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" id="pImage" name="image"><?php echo $oldimage; ?></textarea>
-        <input type="hidden" name="is_image" value="is_image">
-        <?php endif;?>
+					<?php if ($type == 'is_video'):?>
+					<label for="pVideo">Featured Video <span class="required">*</span> (Youtube Only)</label>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" id="pVideo" name="video"><?php echo $oldvideo ?></textarea>
+					<input type="hidden" name="is_video" value="is_video">
+					<br>
+					<?php endif;?>
 
-        <?php if ($type == 'is_quote'):?>
-        <label for="pQuote">Featured Quote <span class="required">*</span></label>
-        <br />
-        <textarea rows="3" cols="20" class="text <?php if (isset($postQuote)) { if (empty($postQuote)) { echo 'error';} } ?>" id="pQuote" name="quote"><?php echo $oldquote ?></textarea>
-        <input type="hidden" name="is_quote" value="is_quote">
-        <?php endif;?>
+					<?php if ($type == 'is_image'):?>
+					<label for="pImage">Featured Image <span class="required">*</span></label>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" id="pImage" name="image"><?php echo $oldimage; ?></textarea>
+					<input type="hidden" name="is_image" value="is_image">
+					<br>
+					<?php endif;?>
 
-        <?php if ($type == 'is_link'):?>
-        <label for="pLink">Featured Link <span class="required">*</span></label>
-        <br />
-        <textarea rows="3" cols="20" class="text <?php if (isset($postLink)) { if (empty($postLink)) { echo 'error';} } ?>" id="pLink" name="link"><?php echo $oldlink ?></textarea>
-        <input type="hidden" name="is_link" value="is_link">
-        <?php endif;?>
+					<?php if ($type == 'is_quote'):?>
+					<label for="pQuote">Featured Quote <span class="required">*</span></label>
+					<textarea rows="3" cols="20" class="form-control text <?php if (isset($postQuote)) { if (empty($postQuote)) { echo 'error';} } ?>" id="pQuote" name="quote"><?php echo $oldquote ?></textarea>
+					<input type="hidden" name="is_quote" value="is_quote">
+					<br>
+					<?php endif;?>
 
-        <?php if ($type == 'is_post'):?>
-        <input type="hidden" name="is_post" value="is_post">
-        <?php endif;?>
-        <br />
-        <label for="wmd-input">Content</label>
-        <div id="wmd-button-bar" class="wmd-button-bar"></div>
-        <textarea id="wmd-input" class="wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
-        <br />
-        <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-        <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <?php if ($isdraft[4] == 'draft') { ?>
-            <input type="submit" name="publishdraft" class="submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="draft" value="<?php echo i18n('Update_draft');?>"/> <a href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
-        <?php } else { ?>
-            <input type="submit" name="updatepost" class="submit" value="<?php echo i18n('Update_post');?>"/> <input type="submit" name="revertpost" class="revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
-        <?php }?>
-    </form>
+					<?php if ($type == 'is_link'):?>
+					<label for="pLink">Featured Link <span class="required">*</span></label>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postLink)) { if (empty($postLink)) { echo 'error';} } ?>" id="pLink" name="link"><?php echo $oldlink ?></textarea>
+					<input type="hidden" name="is_link" value="is_link">
+					<br>
+					<?php endif;?>
+
+					<?php if ($type == 'is_post'):?>
+					<input type="hidden" name="is_post" value="is_post">
+					<?php endif;?>
+					<input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+					<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div>
+						<label for="wmd-input">Content</label>
+						<div id="wmd-button-bar" class="wmd-button-bar"></div>
+						<textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php echo $oldcontent ?></textarea><br>
+						<?php if ($isdraft[4] == 'draft') { ?>
+							<input type="submit" name="publishdraft" class="btn btn-primary submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="btn btn-primary draft" value="<?php echo i18n('Update_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
+						<?php } else { ?>
+							<input type="submit" name="updatepost" class="btn btn-primary submit" value="<?php echo i18n('Update_post');?>"/> <input type="submit" name="revertpost" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
+						<?php }?>
+						<br><br>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label>Preview</label>
+					<br>
+					<div id="wmd-preview" class="wmd-panel wmd-preview" style="width:100%;overflow:auto;"></div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<style>
+	#insertImageDialog { display:none; padding: 10px; font-size:12px;}
+	.wmd-prompt-background {z-index:10!important;}
+	#wmd-preview img {max-width:100%;}
+	</style>
+
+	<div id="insertImageDialog" title="Insert Image">
+		<h4>URL</h4>
+		<input type="text" placeholder="Enter image URL" />
+		<h4>Upload</h4>
+		<form method="post" action="" enctype="multipart/form-data">
+			<input type="file" name="file" id="file" />
+		</form>
+	</div>
+
 </div>
-
-<style>
-#insertImageDialog { display:none; padding: 10px; font-size:12px;}
-.wmd-prompt-background {z-index:10!important;}
-</style>
-
-<div id="insertImageDialog" title="Insert Image">
-    <h4>URL</h4>
-    <input type="text" placeholder="Enter image URL" />
-    <h4>Upload</h4>
-    <form method="post" action="" enctype="multipart/form-data">
-        <input type="file" name="file" id="file" />
-    </form>
-</div>
-
-<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>

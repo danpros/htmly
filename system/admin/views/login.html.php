@@ -1,28 +1,31 @@
+<style>.error-message ul {margin:0;padding:0;}</style>
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
 <?php if (!login()) { ?>
     <h1>Login</h1>
     <form method="POST" action="login">
-        User <span class="required">*</span> <br>
-        <input type="text" class="<?php if (isset($username)) {
+        <label>User <span class="required">*</span></label>
+        <input type="text" class="form-control <?php if (isset($username)) {
             if (empty($username)) {
                 echo 'error';
             }
-        } ?>" name="user"/><br><br>
-        Password <span class="required">*</span> <br>
-        <input type="password" class="<?php if (isset($password)) {
+        } ?>" name="user"/>
+		<br>
+        <label>Password <span class="required">*</span></label>
+        <input type="password" class="form-control <?php if (isset($password)) {
             if (empty($password)) {
                 echo 'error';
             }
-        } ?>" name="password"/><br><br>
+        } ?>" name="password"/>
+		<br>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if (config('google.reCaptcha') === 'true'): ?>
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <div class="g-recaptcha" data-sitekey="<?php echo config("google.reCaptcha.public"); ?>"></div>
             <br/>
         <?php endif; ?>
-        <input type="submit" name="submit" value="Login"/>
+        <input type="submit" class="btn btn-primary" name="submit" value="Login"/>
     </form>
 <?php } else {
     header('location: admin');

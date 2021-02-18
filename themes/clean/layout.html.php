@@ -36,7 +36,7 @@
     <div class="archive"><h3><?php echo i18n('Archives');?></h3><?php echo archive_list() ?></div>
     <div class="category-list"><h3><?php echo i18n('Category');?></h3><?php echo category_list() ?></div>
     <div class="tagcloud">
-        <h3>Tags</h3>
+        <h3>Popular Tags</h3>
         <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
         <ul>
             <?php foreach ($tags as $tag => $count):?>

@@ -54,29 +54,6 @@
     <div id="footer-wrapper">
         <div class="container">
             <footer id="footer">
-                <div class="footer-column">
-                    <div class="recent column">
-                        <div class="inner"><h3>Recent Posts</h3><?php echo recent_posts() ?></div>
-                    </div>
-                    <div class="archive column">
-                        <div class="inner"><h3>Archive</h3><?php echo archive_list() ?></div>
-                    </div>
-                    <div class="tagcloud column">
-                        <div class="inner">
-						<h3>Tags</h3>
-						<?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-						<ul>
-							<?php foreach ($tags as $tag => $count):?>
-							<li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-							<?php if ($i++ >= 5) break;?>
-							<?php endforeach;?>
-						</ul>
-						</div>
-                    </div>
-                    <div class="social column">
-                        <div class="inner"><h3>Follow</h3><?php echo social() ?></div>
-                    </div>
-                </div>
                 <div class="copyright"><?php echo copyright() ?></div>
             </footer>
         </div>

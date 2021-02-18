@@ -942,7 +942,9 @@ function get_keyword($keyword, $page, $perpage)
         $filter = $arr[1] . ' ' . $arr[2];
         foreach ($words as $word) {
             if (stripos($filter, $word) !== false) {
-                $tmp[] = $v;
+                if (!in_array($v, $tmp)) {
+                    $tmp[] = $v; 
+                }
             }
         }
     }
@@ -1096,7 +1098,7 @@ function get_draftcount($var)
 
         // Author string
         $str = explode('/', $replaced);
-        $cat = $str[count($str) - 3];
+        $cat = $str[count($str) - 5];
 
         if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
@@ -1969,63 +1971,127 @@ EOF;
     }
 }
 
+function parseNodes($nodes, $child = null) {
+	if (empty($child)) {
+		$ul = '<ul class="nav navbar-nav primary-menu">';
+		foreach ($nodes as $node) {
+			if (isset($node->children)) { 
+				$ul .= parseNode($node, true);
+			} else {
+				$ul .= parseNode($node);
+			}
+		}
+		$ul .= '</ul>';
+		return $ul;
+	} else {
+		$ul = '<ul class="subnav dropdown-menu" role="menu">';
+		foreach ($nodes as $node) {
+			if (isset($node->children)) { 
+				$ul .= parseNode($node, true);
+			} else {
+				$ul .= parseNode($node);
+			}
+		}
+		$ul .= '</ul>';
+		return $ul;
+	}
+}
+
+function parseNode($node, $child = null) {
+	$req = strtok($_SERVER["REQUEST_URI"],'?');
+    $url = parse_url($node->slug);
+    $su = parse_url(site_url());
+	if (empty($child)) {
+
+		if (isset($url['host'])) {
+			if ($url['host'] ==  $su['host']) {
+				if ($url['path'] == $req) {
+                    $li = '<li class="item active '.$node->class.'">';
+				} else  {					
+				    $li = '<li class="item '.$node->class.'">';
+				}
+			} else {
+				$li = '<li class="item '.$node->class.'">'; // Link out
+			}
+		} else {
+			if ($node->slug == $req) {
+				$li = '<li class="item active '.$node->class.'">';
+			} else {
+				$li = '<li class="item '.$node->class.'">';
+			}
+		}
+		
+		$li .= '<a href="'.$node->slug.'">'.$node->name.'</a>';
+		if (isset($node->children)) { 
+			$li .= parseNodes($node->children, true);
+		}
+		$li .= '</li>';
+		return $li;
+	} else {
+		
+		if (isset($url['host'])) {
+			if ($url['host'] ==  $su['host']) {
+				if ($url['path'] == $req) {
+                    $li = '<li class="item dropdown active '.$node->class.'">';
+				} else  {					
+				    $li = '<li class="item dropdown '.$node->class.'">';
+				}
+			} else {
+				$li = '<li class="item dropdown '.$node->class.'">'; // Link out
+			}
+		} else {
+			if ($node->slug == $req) {
+				$li = '<li class="item dropdown active '.$node->class.'">';
+			} else {
+				$li = '<li class="item dropdown '.$node->class.'">';
+			}
+		}
+		
+		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.$node->slug.'">'.$node->name.'<b class="caret"></b></a>';
+		if (isset($node->children)) { 
+			$li .= parseNodes($node->children, true);
+		}
+		$li .= '</li>';
+		return $li;			
+	}
+}
+
 // Menu
 function menu($custom = null)
 {
-    $menu = config('blog.menu');
-    $req = strtok($_SERVER["REQUEST_URI"],'?');
+    $filename = "content/data/menu.json";
+    if (file_exists($filename)) {
+		$json = json_decode(file_get_contents('content/data/menu.json', true));
+		$nodes = json_decode($json);
+	    if (empty($nodes)) {
+            get_menu($custom);
+	    } else {
+            $html = parseNodes($nodes);
 
-    if (!empty($menu)) {
+            $doc = new DOMDocument();
+            $doc->loadHTML($html);
 
-        $links = explode('|', $menu);
+            $finder = new DOMXPath($doc);
+            $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' dropdown-menu ')]");
 
-        echo '<ul class="nav ' . $custom . '">';
-
-        $i = 0;
-        $len = count($links);
-
-        foreach ($links as $link) {
-
-            if ($i == 0) {
-                $class = 'item first';
-            } elseif ($i == $len - 1) {
-                $class = 'item last';
-            } else {
-                $class = 'item';
+            // loop through all <ul> with dropdown-menu class
+            foreach ($elements as $element) {
+                $nodes = $element->childNodes;
+                foreach ($nodes as $node) {
+		            $class = $node->getAttribute('class');
+		            if (stripos ($class, 'active')) {
+						$parentClass = $element->parentNode->getAttribute('class') . ' active';
+			            $element->parentNode->setAttribute('class', $parentClass);
+		            } 
+	            }
             }
-
-            $i++;
-
-            $anc = explode('->', $link);
-
-            if (isset($anc[0]) && isset($anc[1])) {
-
-                if (stripos(rtrim($anc[1], '/') . '/', site_url()) !== false) {
-                    if (rtrim($anc[1], '/') . '/' == site_url()) {
-                        if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
-                            echo '<li class="' . $class . ' active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
-                        } else {
-                            echo '<li class="' . $class . '"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
-                        }
-                    } elseif (stripos($anc[1], $req) !== false) {
-                        if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
-                            echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
-                        } else {
-                            echo '<li class="' . $class . ' active"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
-                        }
-                    } else {
-                        echo '<li class="' . $class . '"><a href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
-                    }
-                } else {
-                    echo '<li class="' . $class . '"><a target="_blank" href="' . $anc[1] . '">' . $anc[0] . '</a></li>';
-                }
-            }
-        }
-
-        echo '</ul>';
-    } else {
-        get_menu($custom);
-    }
+			
+		return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
+			
+	    }
+	} else {
+        get_menu($custom);	
+	}
 }
 
 // Get the title from file
@@ -2768,26 +2834,26 @@ function toolbar()
 EOF;
     echo '<div id="toolbar"><ul>';
     echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
+    echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
     if ($role === 'admin') {
         echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
         if (config('views.counter') == 'true') {
             echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
         }
     }
-    echo '<li class="tb-mine"><a href="' . $base . 'admin/mine">' . i18n('Mine') . '</a></li>';
+    echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">Pages</a></li>';
     echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
-    echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
     if ($role === 'admin') {
         echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
     }
-    echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
-    echo '<li class="tb-import"><a href="' . $base . 'admin/import">' . i18n('Import') . '</a></li>';
-    echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
+    echo '<li class="tb-import"><a href="' . $base . 'admin/menu">Menu</a></li>';
     if ($role === 'admin') {
       echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
     }
-    echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+    echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
     echo '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
+    echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+    echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
     echo '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
     echo '</ul></div>';
@@ -2865,13 +2931,10 @@ function add_view($page)
 // Get the page views count
 function get_views($page)
 {
-    static $_views = array();
-
-    if (empty($_views)) {
-        $filename = "content/data/views.json";
-        if (file_exists($filename)) {
-            $_views = json_decode(file_get_contents($filename), true);
-        }
+    $_views = array();
+    $filename = "content/data/views.json";
+    if (file_exists($filename)) {
+        $_views = json_decode(file_get_contents($filename), true);
     }
     if (isset($_views[$page])) {
         return $_views[$page];

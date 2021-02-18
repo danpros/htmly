@@ -43,7 +43,7 @@ function session($user, $pass)
 {
     $user_file = 'config/users/' . $user . '.ini';
     if (!file_exists($user_file)) {
-        return $str = '<li>Username not found in our record.</li>';
+        return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
     }
 
     $user_enc = user('encryption', $user);
@@ -58,14 +58,14 @@ function session($user, $pass)
             $_SESSION[config("site.url")]['user'] = $user;
             header('location: admin');
         } else {
-            return $str = '<li>Your username and password mismatch.</li>';
+            return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         update_user($user, $pass, $user_role);
         $_SESSION[config("site.url")]['user'] = $user;
         header('location: admin');
     } else {
-        return $str = '<li>Your username and password mismatch.</li>';
+        return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
     }
 }
 
@@ -672,7 +672,7 @@ function get_user_posts()
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
-            echo '<table class="post-list">';
+            echo '<table class="table post-list">';
             echo '<tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
@@ -695,7 +695,7 @@ function get_user_posts()
                     echo '<td>' . $p->views . '</td>';
                 echo '<td>' . $p->category . '</td>';
                 echo '<td>' . $p->tag . '</td>';
-                echo '<td><a href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
+                echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
             }
             echo '</table>';
@@ -710,7 +710,7 @@ function get_user_pages()
         $posts = get_static_post(null);
         if (!empty($posts)) {
             krsort($posts);
-            echo '<table class="post-list">';
+            echo '<table class="table post-list">';
             echo '<tr class="head"><th>' . i18n('Title') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>Views</th>';
@@ -731,7 +731,7 @@ function get_user_pages()
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a href="' . $p->url . '/add?destination=admin">' . i18n('Add_sub') . '</a> <a href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
+                echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/add?destination=admin">' . i18n('Add_sub') . '</a> <a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
 
                 $shortUrl = substr($p->url, strrpos($p->url, "/") + 1);
@@ -739,10 +739,10 @@ function get_user_pages()
 
                 foreach ($subPages as $sp) {
                     echo '<tr class="' . $class . '">';
-                    echo '<td> &raquo;<a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></td>';
+                    echo '<td> <span style="margin-left:30px;">&raquo; <a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></span></td>';
                     if (config("views.counter") == "true")
                         echo '<td>' . $sp->views . '</td>';
-                    echo '<td><a href="' . $sp->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a href="' . $sp->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
+                    echo '<td><a class="btn btn-primary btn-xs" href="' . $sp->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $sp->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                     echo '</tr>';
                 }
             }
@@ -758,7 +758,7 @@ function get_backup_files()
         $files = get_zip_files();
         if (!empty($files)) {
             krsort($files);
-            echo '<table class="backup-list">';
+            echo '<table class="table backup-list">';
             echo '<tr class="head"><th>' . i18n('Filename') . '</th><th>Date</th><th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($files);
@@ -790,7 +790,7 @@ function get_backup_files()
                 echo '<tr class="' . $class . '">';
                 echo '<td>' . $name . '</td>';
                 echo '<td>' . $timestamp . '</td>';
-                echo '<td><a target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $name . '"/><input type="submit" name="submit" value="Delete"/></form></td>';
+                echo '<td><a class="btn btn-primary btn-xs" target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $name . '"/><input type="submit" class="btn btn-danger btn-xs" name="submit" value="Delete"/></form></td>';
                 echo '</tr>';
             }
             echo '</table>';

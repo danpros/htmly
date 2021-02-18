@@ -1,19 +1,17 @@
-<h2>Your Settings:</h2>
-<p>
-    <u>hint:</u> Use <code>Ctrl</code>/<code>CMD⌘</code> + <code>F</code> to search for your config key or value.
-</p>
-<p>
-    <u>pro tips:</u> You can creating custom config key and print out your config key value anywhere in your template.
-</p>
-<pre><code>&lt;?php echo config('your.key'); ?&gt;</code></pre>
-<hr style="margin:30px 0;border:1px solid #e3e3e3;">
+<h2>Your Settings</h2>
+<br>
+<p><u>hint:</u> Use <code>Ctrl</code>/<code>CMD⌘</code> + <code>F</code> to search for your config key or value.</p>
+<p><u>pro tips:</u> You can creating custom config key and print out your config key value anywhere in your template.</p>
+<p><code>&lt;?php echo config('your.key'); ?&gt;</code></p>
+<br>
 <form method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
-    <input type="submit">
-    <table id="config">
+    <input class="form-control btn btn-primary btn-sm" type="submit" style="width:100px;">
+	<br><br>
+    <table class="table" id="config">
         <tr>
-            <td><input type="text" name="newKey" placeholder="Your New Config Key"></td>
-            <td><input type="text" name="newValue" placeholder="Your New Value"></td>
+            <td><input type="text" class="form-control" name="newKey" placeholder="Your New Config Key"></td>
+            <td><input type="text" class="form-control" name="newValue" placeholder="Your New Value"></td>
         </tr>
         <?php
         global $config_file;
@@ -41,10 +39,10 @@
         foreach ($array as $key => $value) {
             echo '<tr>';
             echo '<td><label for="' . $key . '">' . $key . '</label></td>';
-            echo '<td><input type="text" id="' . $key . '" name="-config-' . $key . '" value="' . valueMaker($value) . '"></td>';
+            echo '<td><input class="form-control" type="text" id="' . $key . '" name="-config-' . $key . '" value="' . valueMaker($value) . '"></td>';
             echo '</tr>';
         }
         ?>
     </table>
-    <input type="submit">
+    <input type="submit" class="form-control btn-primary btn-sm" style="width:100px;">
 </form>
