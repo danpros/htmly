@@ -1451,6 +1451,67 @@ get('/admin/categories', function () {
 });
 
 // Show the category page
+get('/admin/categories/:category', function ($category) {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    if (login()) {
+		
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+
+			$page = from($_GET, 'page');
+			$page = $page ? (int)$page : 1;
+			$perpage = config('category.perpage');
+			
+			if (empty($perpage)) {
+				$perpage = 10;    
+			}
+
+			$posts = get_category($category, $page, $perpage);
+			
+			$desc = get_category_info($category);
+			
+			if(strtolower($category) !== 'uncategorized') {
+			   $desc = $desc[0];
+			}
+
+			$total = get_categorycount($category);
+
+			if (empty($posts) || $page < 1) {
+				// a non-existing page
+				not_found();
+			}
+			
+			render('category-list', array(
+				'title' => $desc->title . ' - ' . blog_title(),
+				'description' => $desc->description,
+				'canonical' => $desc->url,
+				'page' => $page,
+				'posts' => $posts,
+				'category' => $desc,
+				'bodyclass' => 'in-category category-' . strtolower($category),
+				'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/categories">Categories</a>  &#187; ' . $desc->title,
+				'pagination' => has_pagination($total, $perpage, $page),
+				'is_category' => true,
+			));
+        } else {
+            render('denied', array(
+                'title' => 'Categories - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-categories',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+    }   
+});
+
+// Show the category page
 get('/category/:category', function ($category) {
 
     if (isset($_GET['search'])) {
