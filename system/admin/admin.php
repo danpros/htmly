@@ -328,7 +328,7 @@ function add_page($title, $url, $content, $description = null)
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
-        $redirect = site_url() . 'admin';
+        $redirect = site_url() . 'admin/pages';
         header("Location: $redirect");
     }
 }
@@ -362,7 +362,7 @@ function add_sub_page($title, $url, $content, $static, $description = null)
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
-        $redirect = site_url() . 'admin';
+        $redirect = site_url() . 'admin/pages';
         header("Location: $redirect");
     }
 }
