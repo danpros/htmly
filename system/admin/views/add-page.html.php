@@ -62,6 +62,7 @@
 	<style>
 	#insertImageDialog { display:none; padding: 10px; font-size:12px;}
 	.wmd-prompt-background {z-index:10!important;}
+	#wmd-preview img {max-width:100%;}
 	</style>
 
 	<div id="insertImageDialog" title="Insert Image">
