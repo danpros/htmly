@@ -19,7 +19,7 @@ function parseMenus($menus) {
 }
 
 function parseMenu($menu) {
-	$li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" data-slug="'.$menu->slug.'">';
+	$li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" data-slug="'.htmlspecialchars($menu->slug, FILTER_SANITIZE_URL).'">';
 	$li .= '<div class="dd-handle">'.$menu->name.'</div>';
 	$li .= '<span class="button-delete btn btn-danger btn-xs" data-owner-id="'.$menu->id.'">Delete</span>';
 	$li .= '<span class="button-edit btn btn-primary btn-xs" data-owner-id="'.$menu->id.'">Edit</span>';

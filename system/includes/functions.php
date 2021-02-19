@@ -2021,7 +2021,7 @@ function parseNode($node, $child = null) {
 			}
 		}
 		
-		$li .= '<a href="'.$node->slug.'">'.$node->name.'</a>';
+		$li .= '<a href="'.htmlspecialchars(rtrim($node->slug, '/') . '/', FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
 		if (isset($node->children)) { 
 			$li .= parseNodes($node->children, true, null);
 		}
@@ -2047,7 +2047,7 @@ function parseNode($node, $child = null) {
 			}
 		}
 		
-		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.$node->slug.'">'.$node->name.'<b class="caret"></b></a>';
+		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(rtrim($node->slug, '/') . '/', FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
 		if (isset($node->children)) { 
 			$li .= parseNodes($node->children, true, null);
 		}
