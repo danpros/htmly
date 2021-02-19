@@ -2003,7 +2003,7 @@ function parseNodes($nodes, $child = null, $class = null) {
 
 function parseNode($node, $child = null) {
 	$req = strtok($_SERVER["REQUEST_URI"],'?');
-    $url = parse_url($node->slug);
+    $url = parse_url(slashUrl($node->slug));
     $su = parse_url(site_url());
 	if (empty($child)) {
 
