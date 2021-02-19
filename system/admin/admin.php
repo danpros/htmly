@@ -731,7 +731,7 @@ function get_user_pages()
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/add?destination=admin">' . i18n('Add_sub') . '</a> <a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
+                echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/add?destination=admin/pages">' . i18n('Add_sub') . '</a> <a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin/pages">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin/pages">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
 
                 $shortUrl = substr($p->url, strrpos($p->url, "/") + 1);
@@ -742,7 +742,7 @@ function get_user_pages()
                     echo '<td> <span style="margin-left:30px;">&raquo; <a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></span></td>';
                     if (config("views.counter") == "true")
                         echo '<td>' . $sp->views . '</td>';
-                    echo '<td><a class="btn btn-primary btn-xs" href="' . $sp->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $sp->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
+                    echo '<td><a class="btn btn-primary btn-xs" href="' . $sp->url . '/edit?destination=admin/pages">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $sp->url . '/delete?destination=admin/pages">' . i18n('Delete') . '</a></td>';
                     echo '</tr>';
                 }
             }
