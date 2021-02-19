@@ -2067,7 +2067,7 @@ function menu($class = null)
             get_menu($custom);
 	    } else {
             $html = parseNodes($nodes, null, $class);
-
+            libxml_use_internal_errors(true);
             $doc = new DOMDocument();
             $doc->loadHTML($html);
 
