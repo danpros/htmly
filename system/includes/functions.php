@@ -1971,6 +1971,10 @@ EOF;
     }
 }
 
+function slashUrl($url) {
+    return rtrim($url, '/') . '/';
+}
+
 function parseNodes($nodes, $child = null, $class = null) {
 	if (empty($child)) {
 		$ul = '<ul class="nav navbar-nav '.$class.'">';
@@ -2005,7 +2009,7 @@ function parseNode($node, $child = null) {
 
 		if (isset($url['host'])) {
 			if ($url['host'] ==  $su['host']) {
-				if ($url['path'] == $req) {
+				if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item active '.$node->class.'">';
 				} else  {					
 				    $li = '<li class="item '.$node->class.'">';
@@ -2014,14 +2018,14 @@ function parseNode($node, $child = null) {
 				$li = '<li class="item '.$node->class.'">'; // Link out
 			}
 		} else {
-			if ($node->slug == $req) {
+			if (slashUrl($node->slug) == slashUrl($req)) {
 				$li = '<li class="item active '.$node->class.'">';
 			} else {
 				$li = '<li class="item '.$node->class.'">';
 			}
 		}
 		
-		$li .= '<a href="'.htmlspecialchars(rtrim($node->slug, '/') . '/', FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
+		$li .= '<a href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
 		if (isset($node->children)) { 
 			$li .= parseNodes($node->children, true, null);
 		}
@@ -2031,7 +2035,7 @@ function parseNode($node, $child = null) {
 		
 		if (isset($url['host'])) {
 			if ($url['host'] ==  $su['host']) {
-				if ($url['path'] == $req) {
+				if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item dropdown active '.$node->class.'">';
 				} else  {					
 				    $li = '<li class="item dropdown '.$node->class.'">';
@@ -2040,14 +2044,14 @@ function parseNode($node, $child = null) {
 				$li = '<li class="item dropdown '.$node->class.'">'; // Link out
 			}
 		} else {
-			if ($node->slug == $req) {
+			if (slashUrl($node->slug) == slashUrl($req)) {
 				$li = '<li class="item dropdown active '.$node->class.'">';
 			} else {
 				$li = '<li class="item dropdown '.$node->class.'">';
 			}
 		}
 		
-		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(rtrim($node->slug, '/') . '/', FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
+		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
 		if (isset($node->children)) { 
 			$li .= parseNodes($node->children, true, null);
 		}
