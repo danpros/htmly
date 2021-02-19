@@ -1,7 +1,7 @@
 <h2 class="post-index"><?php echo $category->title ?></h2>
 <div><?php echo $category->body;?></div>
 <br>
-<?php if ($category->url !== site_url() . 'category/uncategorized'):?><a class="btn btn-primary right" href="<?php echo $category->url;?>/edit">Edit category</a><?php endif;?>
+<?php if ($category->url !== site_url() . 'category/uncategorized'):?><a class="btn btn-primary right" href="<?php echo $category->url;?>/edit?destination=admin/categories">Edit category</a><?php endif;?>
 <br><br>
 <?php if (!empty($posts)) { ?>
     <table class="table post-list">
