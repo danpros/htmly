@@ -10,14 +10,14 @@
             if (empty($username)) {
                 echo 'error';
             }
-        } ?>" name="user"/>
+        } ?>" name="user" placeholder="Username"/>
 		<br>
         <label>Password <span class="required">*</span></label>
         <input type="password" class="form-control <?php if (isset($password)) {
             if (empty($password)) {
                 echo 'error';
             }
-        } ?>" name="password"/>
+        } ?>" name="password" placeholder="Password"/>
 		<br>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if (config('google.reCaptcha') === 'true'): ?>

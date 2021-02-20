@@ -693,7 +693,7 @@ function get_user_posts()
                 echo '<td>' . format_date($p->date) . '</td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td>' . $p->category . '</td>';
+                echo '<td><a href="' . str_replace('category', 'admin/categories', $p->categoryUrl) . '">'. strip_tags($p->category) .'</a></td>';
                 echo '<td>' . $p->tag . '</td>';
                 echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';

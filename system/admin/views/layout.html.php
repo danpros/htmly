@@ -103,31 +103,6 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-user"></i>
-              <p>
-                User
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/mine" class="nav-link">
-                  <p>My posts</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>edit/profile" class="nav-link">
-                  <p>Edit profile</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>logout" class="nav-link">
-                  <p>Logout</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
@@ -188,6 +163,31 @@
 			  <?php } ?>
             </ul>
           </li>
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-user"></i>
+              <p>
+                User
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/mine" class="nav-link">
+                  <p>My posts</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>edit/profile" class="nav-link">
+                  <p>Edit profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>logout" class="nav-link">
+                  <p>Logout</p>
+                </a>
+              </li>
+            </ul>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -269,7 +269,7 @@
   </div>
   <span><a href="<?php echo site_url();?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-</svg> Back to <?php echo blog_title();?> frontpage</a></span>
+</svg> Back to <?php echo blog_title();?></a></span>
   
 </div>
 <?php } ?>

@@ -268,12 +268,14 @@ function get_posts($posts, $page = 1, $perpage = 0)
         if($str[count($str) - 3] == 'uncategorized') {
             $category = default_category();
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
+            $post->categoryUrl = $category->url;
             $post->categoryb = '<a itemprop="item" href="' . $category->url . '"><span itemprop="name">' . $category->title . '</span></a>';
         } else {
 
             foreach ($catC as $k => $v) {
                 if ($v['0'] === $str[count($str) - 3]) {
                     $post->category = '<a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
+                    $post->categoryUrl = site_url() . 'category/' . $v['0'];
                     $post->categoryb = '<a itemprop="item" href="' . site_url() . 'category/' . $v['0'] . '"><span itemprop="name">' . $v['1'] . '</span></a>';
                 }
             }
@@ -2083,7 +2085,7 @@ function menu($class = null)
                 $nodes = $element->childNodes;
                 foreach ($nodes as $node) {
 		            $class = $node->getAttribute('class');
-		            if (stripos ($class, 'active')) {
+		            if (stripos($class, 'active')) {
 						$parentClass = $element->parentNode->getAttribute('class') . ' active';
 			            $element->parentNode->setAttribute('class', $parentClass);
 		            } 
