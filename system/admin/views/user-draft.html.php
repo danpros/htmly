@@ -29,7 +29,6 @@
                 <td><?php echo format_date($p->date) ?></td>
                 <td><a href="<?php echo str_replace('category', 'admin/categories', $p->categoryUrl); ?>"><?php echo strip_tags($p->category);?></td>
                 <td><?php echo $p->tag ?></td>
-                <td><?php echo strip_tags($p->tag) ?></td>
                 <td><a class="btn btn-primary btn-xs" href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-xs" href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
             </tr>
         <?php endforeach; ?>
