@@ -50,28 +50,29 @@
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <p><?php echo blog_description() ?></p>
-                    </aside>                    
+                    </aside>          
+                    <?php if(!empty(config('social.twitter')) || !empty(config('social.facebook'))):?>					
                     <nav id="social-navigation" class="social-navigation" role="navigation">
                         <div class="menu-social-links-container">
                             <ul id="menu-social-links" class="menu">
+							    <?php if(!empty(config('social.twitter'))):?>
                                 <li class="menu-item">
                                     <a href="<?php echo config('social.twitter');?>">
                                     <span class="screen-reader-text">Twitter</span>
                                     </a>
                                 </li>
+								<?php endif;?>
+								<?php if(!empty(config('social.facebook'))):?>
                                 <li class="menu-item">
                                     <a href="<?php echo config('social.facebook');?>">
                                     <span class="screen-reader-text">Facebook</span>
                                     </a>
                                 </li>
-                                <li class="menu-item">
-                                    <a href="<?php echo config('social.google');?>">
-                                    <span class="screen-reader-text">Google</span>
-                                    </a>
-                                </li>
+								<?php endif;?>
                             </ul>
                         </div>
                     </nav>
+					<?php endif;?>
                     <aside class="widget search">
                         <form><input type="search" name="search" class="form-control" placeholder="Type to search"></form>
                     </aside>                            

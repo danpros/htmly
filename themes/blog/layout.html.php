@@ -50,9 +50,8 @@
                 <?php } ?>
                 <p class="desc"><?php echo blog_tagline();?></p>   
                 <ul class="social list-inline">
-                    <li><a href="<?php echo config('social.twitter');?>"><i class="fa fa-twitter"></i></a></li>                   
-                    <li><a href="<?php echo config('social.facebook');?>"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="<?php echo config('social.tumblr');?>"><i class="fa fa-tumblr"></i></a></li>
+                    <?php if(!empty(config('social.twitter'))):?><li><a href="<?php echo config('social.twitter');?>"><i class="fa fa-twitter"></i></a></li><?php endif;?>                   
+                    <?php if(!empty(config('social.facebook'))):?><li><a href="<?php echo config('social.facebook');?>"><i class="fa fa-facebook"></i></a></li><?php endif;?> 
                     <li><a href="<?php echo site_url();?>feed/rss"><i class="fa fa-rss"></i></a></li>                                    
                 </ul> 
             </div><!--//branding-->

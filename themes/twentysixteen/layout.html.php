@@ -130,15 +130,16 @@
                         <?php echo menu('primary-menu');?>
                     </div>
                 </nav><!-- .main-navigation -->
+				<?php if(!empty(config('social.twitter')) || !empty(config('social.facebook'))):?>
                 <nav aria-label="Footer Social Links Menu" role="navigation" class="social-navigation">
                     <div class="menu-social-links-container">
                     <ul class="social-links-menu" id="menu-social-links">
-                        <li><a href="<?php echo config('social.twitter');?>"><span class="screen-reader-text">Twitter</span></a></li>
-                        <li><a href="<?php echo config('social.facebook');?>"><span class="screen-reader-text">Facebook</span></a></li>
-                        <li><a href="<?php echo config('social.github');?>"><span class="screen-reader-text">GitHub</span></a></li>
+                        <?php if(!empty(config('social.twitter'))):?><li><a href="<?php echo config('social.twitter');?>"><span class="screen-reader-text">Twitter</span></a></li><?php endif;?>
+                        <?php if(!empty(config('social.facebook'))):?><li><a href="<?php echo config('social.facebook');?>"><span class="screen-reader-text">Facebook</span></a></li><?php endif;?>
                     </ul>
                     </div>                
                 </nav>
+				<?php endif;?>
                 <div class="site-info">
                     <span class="site-title"><a href="<?php echo site_url();?>" rel="home"><?php echo blog_title();?></a></span>
                     <span class="copyright"><?php echo copyright();?></span>

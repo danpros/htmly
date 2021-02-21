@@ -149,6 +149,21 @@
 	  <small><em>For google-site-verification meta</em></small>
     </div>
   </div>
+  <br>
+  <h4>Social Media</h4>
+  <hr>
+  <div class="form-group row">
+    <label for="google.reCaptcha.private" class="col-sm-2 col-form-label">Twitter account</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.twitter" class="form-control" id="social.twitter" value="<?php echo valueMaker(config('social.twitter'));?>" placeholder="https://twitter.com/gohtmly">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="google.reCaptcha.private" class="col-sm-2 col-form-label">Facebook page</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.facebook" class="form-control" id="social.facebook" value="<?php echo valueMaker(config('social.facebook'));?>" placeholder="https://www.facebook.com/gohtmly">
+    </div>
+  </div>
   <div class="form-group row">
     <div class="col-sm-10">
       <button type="submit" class="btn btn-primary">Save config</button>
