@@ -2105,7 +2105,7 @@ function menu($class = null)
 			
 	    }
 	} else {
-        get_menu($custom);	
+        get_menu($class);	
 	}
 }
 
