@@ -1,9 +1,14 @@
 /* TEAM */
 Owner: danpros
 Github: https://github.com/danpros
-Weblog: http://www.danpros.com
+Weblog: https://www.danpros.com
 
-Contributor: https://github.com/danpros/htmly/graphs/contributors
+Contributor: Kanti
+Github: https://github.com/Kanti
+Weblog: https://kanti.de
+Location: Stuttgart - Germany
+
+Full contributor: https://github.com/danpros/htmly/graphs/contributors
 
 /* SITE */
 Software: HTMLy
