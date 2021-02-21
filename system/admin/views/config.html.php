@@ -40,12 +40,6 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="blog.copyright" class="col-sm-2 col-form-label">Copyright</label>
-    <div class="col-sm-10">
-      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo valueMaker(config('blog.copyright'));?>" placeholder="(c) Your name.">
-    </div>
-  </div>
-  <div class="form-group row">
     <label for=language" class="col-sm-2 col-form-label">Language</label>
     <div class="col-sm-10">
     <select class="form-control" id="language" name="-config-language">
@@ -119,6 +113,12 @@
     <?php } ?>
     </select> 
 	</div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.copyright" class="col-sm-2 col-form-label">Copyright line</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo valueMaker(config('blog.copyright'));?>" placeholder="(c) Your name.">
+    </div>
   </div>
   <div class="form-group row">
     <div class="col-sm-10">
