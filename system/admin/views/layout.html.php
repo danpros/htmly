@@ -119,7 +119,7 @@
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/menu" class="nav-link">
-                  <p>Menus</p>
+                  <p>Menu builder</p>
                 </a>
               </li>
             </ul>
