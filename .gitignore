@@ -1,1 +1,4 @@
-
+/cache/*
+/content/*
+/config/config.ini
+/config/users/*.ini
