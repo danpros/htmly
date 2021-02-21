@@ -73,7 +73,7 @@
                 </div><!--//desc-->
                 <div style="position:relative;">
                    <?php if (config('teaser.type') === 'trimmed'):?>
-                       <span class="more"><a class="btn btn-cta-secondary" href="<?php echo $p->url;?>">Read more</a></span>
+                       <span class="more"><a class="btn btn-cta-secondary" href="<?php echo $p->url;?>"><?php echo config('read.more'); ?></a></span>
                    <?php endif;?>
                     <span class="share pull-right">
                         <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 

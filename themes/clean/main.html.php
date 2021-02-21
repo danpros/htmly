@@ -61,7 +61,7 @@
             <div class="teaser-body" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
                 <?php echo get_teaser($p->body, $p->url) ?>
-                <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>">Read more</a><?php endif;?>
+                <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>"><?php echo config('read.more'); ?></a><?php endif;?>
             </div>
         </div>
     </div>
