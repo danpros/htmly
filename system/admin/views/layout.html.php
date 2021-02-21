@@ -114,32 +114,7 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/config" class="nav-link">
-                  <p>Config</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/config/reading" class="nav-link">
-                  <p>Reading</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/config/widget" class="nav-link">
-                  <p>Widget</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/config/metatags" class="nav-link">
-                  <p>Metatags</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/config/performance" class="nav-link">
-                  <p>Performance</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/config/custom" class="nav-link">
-                  <p>Custom</p>
+                  <p>Configurations</p>
                 </a>
               </li>
               <li class="nav-item">

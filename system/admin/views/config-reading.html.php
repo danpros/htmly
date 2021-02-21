@@ -1,4 +1,15 @@
 <h2>Reading Settings</h2>
+<br>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab">
+    <a class="nav-item nav-link" id="nav-general-tab" href="<?php echo site_url();?>admin/config">General</a>
+    <a class="nav-item nav-link active" id="nav-profile-tab" href="<?php echo site_url();?>admin/config/reading">Reading</a>
+    <a class="nav-item nav-link" id="nav-widget-tab" href="<?php echo site_url();?>admin/config/widget">Widget</a>
+    <a class="nav-item nav-link" id="nav-metatags-tab" href="<?php echo site_url();?>admin/config/metatags">Metatags</a>
+    <a class="nav-item nav-link" id="nav-performance-tab" href="<?php echo site_url();?>admin/config/performance">Performance</a>
+    <a class="nav-item nav-link" id="nav-custom-tab" href="<?php echo site_url();?>admin/config/custom">Custom</a>
+  </div>
+</nav>
 <br><br>
 <form method="POST">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">

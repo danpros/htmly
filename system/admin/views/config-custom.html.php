@@ -1,5 +1,16 @@
-<h2>Your Custom Settings</h2>
+<h2>Custom Settings</h2>
 <br>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab">
+    <a class="nav-item nav-link" id="nav-general-tab" href="<?php echo site_url();?>admin/config">General</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" href="<?php echo site_url();?>admin/config/reading">Reading</a>
+    <a class="nav-item nav-link" id="nav-widget-tab" href="<?php echo site_url();?>admin/config/widget">Widget</a>
+    <a class="nav-item nav-link" id="nav-metatags-tab" href="<?php echo site_url();?>admin/config/metatags">Metatags</a>
+    <a class="nav-item nav-link" id="nav-performance-tab" href="<?php echo site_url();?>admin/config/performance">Performance</a>
+    <a class="nav-item nav-link active" id="nav-custom-tab" href="<?php echo site_url();?>admin/config/custom">Custom</a>
+  </div>
+</nav>
+<br><br>
 <p><u>hint:</u> Use <code>Ctrl</code>/<code>CMD</code> + <code>F</code> to search for your config key or value.</p>
 <p><u>pro tips:</u> You can creating custom config key and print out your config key value anywhere in your template.</p>
 <p><code>&lt;?php echo config('your.key'); ?&gt;</code></p>
