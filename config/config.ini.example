@@ -26,8 +26,8 @@ static.frontpage = "false"
 blog.enable = "false"
 
 ; Social account
-social.twitter = "https://twitter.com"
-social.facebook = "https://www.facebook.com"
+social.twitter = ""
+social.facebook = ""
 
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
