@@ -45,6 +45,12 @@ if (file_exists($config_file)) {
       <input type="number" name="-config-description.char" class="form-control" id="description.char" value="<?php echo config('description.char');?>">
     </div>
   </div>
+  <div class="form-group row">
+    <label for="read.more" class="col-sm-2 col-form-label">Breadcrumb home text</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-breadcrumb.home" class="form-control" id="breadcrumb.home" value="<?php echo valueMaker(config('breadcrumb.home'));?>" placeholder="Home">
+    </div>
+  </div>
   <br>
   <h4>Sitemap</h4>
   <hr>

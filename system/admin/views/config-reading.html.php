@@ -33,6 +33,25 @@
 	</div>
   </div>
   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Enable /blog URL</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable1" value="true" <?php if (config('blog.enable') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="blog.enable1">
+            Enable
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable2" value="false" <?php if (config('blog.enable') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="blog.enable2">
+            Disable
+          </label>
+        </div>
+      </div>
+	</div>
+  </div>
+  <div class="form-group row">
     <label for="posts.perpage" class="col-sm-2 col-form-label">Posts in front page show at most</label>
     <div class="col-sm-10">
       <input type="number" name="-config-posts.perpage" class="form-control" id="posts.perpage" value="<?php echo config('posts.perpage');?>">
