@@ -66,7 +66,7 @@
   <div class="form-group row">
     <label for="read.more" class="col-sm-2 col-form-label">Read more text</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-read.more" class="form-control" id="read.more" value="<?php echo config('read.more');?>" placeholder="Read more">
+      <input type="text" name="-config-read.more" class="form-control" id="read.more" value="<?php echo valueMaker(config('read.more'));?>" placeholder="Read more">
     </div>
   </div>
   <br>
