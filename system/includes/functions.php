@@ -3321,3 +3321,18 @@ function format_date($date)
     }
 
 }
+
+function valueMaker($value)
+{
+    if (is_string($value))
+        return htmlspecialchars($value);
+
+    if ($value === true)
+        return "true";
+    if ($value === false)
+        return "false";
+
+    if ($value == false)
+        return "0";
+    return (string)$value;
+}

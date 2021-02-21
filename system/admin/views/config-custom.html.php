@@ -23,25 +23,9 @@
         </tr>
         <?php
         global $config_file;
-        $array = array(
-            "google.wmt" => "hallo",
-        );
+        $array = array();
         if (file_exists($config_file)) {
             $array = parse_ini_file($config_file, true);
-        }
-        function valueMaker($value)
-        {
-            if (is_string($value))
-                return htmlspecialchars($value);
-
-            if ($value === true)
-                return "true";
-            if ($value === false)
-                return "false";
-
-            if ($value == false)
-                return "0";
-            return (string)$value;
         }
         $configList = json_decode(file_get_contents('content/data/configList.json', true));
         foreach ($array as $key => $value) {

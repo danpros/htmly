@@ -16,33 +16,33 @@
   <div class="form-group row">
     <label for="site.url" class="col-sm-2 col-form-label">Address (URL)</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-site.url" class="form-control" id="site.url" value="<?php echo config('site.url');?>" placeholder="https://www.htmly.com">
+      <input type="text" name="-config-site.url" class="form-control" id="site.url" value="<?php echo valueMaker(config('site.url'));?>" placeholder="https://www.htmly.com">
     </div>
   </div>
   <div class="form-group row">
     <label for="blog.title" class="col-sm-2 col-form-label">Blog title</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-blog.title" class="form-control" id="blog.title" value="<?php echo config('blog.title');?>" placeholder="My HTMLy Blog">
+      <input type="text" name="-config-blog.title" class="form-control" id="blog.title" value="<?php echo valueMaker(config('blog.title'));?>" placeholder="My HTMLy Blog">
     </div>
   </div>
   <div class="form-group row">
     <label for="blog.tagline" class="col-sm-2 col-form-label">Tagline</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-blog.tagline" class="form-control" id="blog.tagline" value="<?php echo config('blog.tagline');?>" placeholder="Databaseless PHP Blogging Platform">
+      <input type="text" name="-config-blog.tagline" class="form-control" id="blog.tagline" value="<?php echo valueMaker(config('blog.tagline'));?>" placeholder="Databaseless PHP Blogging Platform">
 	  <small><em>In a few words, explain what this blog is about.</em></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="blog.description" class="col-sm-2 col-form-label">Description</label>
     <div class="col-sm-10">
-      <textarea id="blog.description" name="-config-blog.description" class="form-control"><?php echo config('blog.description');?></textarea>   
+      <textarea id="blog.description" name="-config-blog.description" class="form-control"><?php echo valueMaker(config('blog.description'));?></textarea>   
 	  <small><em>In one paragraph, tell us more about your blog.</em></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="blog.copyright" class="col-sm-2 col-form-label">Copyright</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo config('blog.copyright');?>" placeholder="(c) Your name.">
+      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo valueMaker(config('blog.copyright'));?>" placeholder="(c) Your name.">
     </div>
   </div>
   <div class="form-group row">

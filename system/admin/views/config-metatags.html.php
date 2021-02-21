@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $config_file;
 $array = array();
 if (file_exists($config_file)) {

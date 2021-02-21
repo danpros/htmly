@@ -82,13 +82,13 @@
   <div class="form-group row">
     <label for="disqus.shortname" class="col-sm-2 col-form-label">Disqus shortname</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-disqus.shortname" class="form-control" id="disqus.shortname" value="<?php echo config('disqus.shortname');?>" placeholder="htmly">
+      <input type="text" name="-config-disqus.shortname" class="form-control" id="disqus.shortname" value="<?php echo valueMaker(config('disqus.shortname'));?>" placeholder="htmly">
     </div>
   </div>
   <div class="form-group row">
     <label for="fb.appid" class="col-sm-2 col-form-label">Facebook App ID</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-fb.appid" class="form-control" id="fb.appid" value="<?php echo config('fb.appid');?>" placeholder="12345abcde">
+      <input type="text" name="-config-fb.appid" class="form-control" id="fb.appid" value="<?php echo valueMaker(config('fb.appid'));?>" placeholder="12345abcde">
     </div>
   </div>
   <br>
@@ -117,13 +117,13 @@
   <div class="form-group row">
     <label for="google.reCaptcha.public" class="col-sm-2 col-form-label">Site Key</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-google.reCaptcha.public" class="form-control" id="google.reCaptcha.public" value="<?php echo config('google.reCaptcha.public');?>" placeholder="12345abcde">
+      <input type="text" name="-config-google.reCaptcha.public" class="form-control" id="google.reCaptcha.public" value="<?php echo valueMaker(config('google.reCaptcha.public'));?>" placeholder="12345abcde">
     </div>
   </div>
   <div class="form-group row">
     <label for="google.reCaptcha.private" class="col-sm-2 col-form-label">Secret Key</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-google.reCaptcha.private" class="form-control" id="google.reCaptcha.private" value="<?php echo config('google.reCaptcha.private');?>" placeholder="12345abcde">
+      <input type="text" name="-config-google.reCaptcha.private" class="form-control" id="google.reCaptcha.private" value="<?php echo valueMaker(config('google.reCaptcha.private'));?>" placeholder="12345abcde">
     </div>
   </div>
   <br>
@@ -132,20 +132,20 @@
   <div class="form-group row">
     <label for="google.gtag.id" class="col-sm-2 col-form-label">Universal Analytics (gtag.js)</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-google.gtag.id" class="form-control" id="google.gtag.id" value="<?php echo config('google.gtag.id');?>" placeholder="12345abcde">
+      <input type="text" name="-config-google.gtag.id" class="form-control" id="google.gtag.id" value="<?php echo valueMaker(config('google.gtag.id'));?>" placeholder="12345abcde">
     </div>
   </div>
   <div class="form-group row">
     <label for="google.analytics.id" class="col-sm-2 col-form-label">Google Analytics (legacy)</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-google.analytics.id" class="form-control" id="google.analytics.id" value="<?php echo config('google.analytics.id');?>" placeholder="12345abcde">
+      <input type="text" name="-config-google.analytics.id" class="form-control" id="google.analytics.id" value="<?php echo valueMaker(config('google.analytics.id'));?>" placeholder="12345abcde">
 	  <small><em>This is legacy code. Usually new created analyics using gtag.js</em></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="google.wmt.id" class="col-sm-2 col-form-label">Google Search Console</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-google.wmt.id" class="form-control" id="google.wmt.id" value="<?php echo config('google.wmt.id');?>" placeholder="12345abcde">
+      <input type="text" name="-config-google.wmt.id" class="form-control" id="google.wmt.id" value="<?php echo valueMaker(config('google.wmt.id'));?>" placeholder="12345abcde">
 	  <small><em>For google-site-verification meta</em></small>
     </div>
   </div>
