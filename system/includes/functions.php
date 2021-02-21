@@ -1950,27 +1950,36 @@ function publisher()
 }
 
 // Google Analytics
-function analytics($analyticsDir = null)
+function analytics()
 {
     $analytics = config('google.analytics.id');
-    if ($analyticsDir === null) {
-        $analyticsDir = '//www.google-analytics.com/analytics.js';
-    } else {
-        $analyticsDir = site_url() . 'themes/' . $analyticsDir . 'analytics.js';
-    }
+    $gtag = config('google.gtag.id');	
     $script = <<<EOF
     <script>
         (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','{$analyticsDir}','ga');
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', '{$analytics}', 'auto');
         ga('send', 'pageview');
 </script>
 EOF;
-    if (!empty($analytics)) {
-        return $script;
-    }
+    $gtagScript = <<<EOF
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={$gtag}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{$gtag}');
+</script>
+EOF;
+    if (!empty($gtag)) {
+        return $gtagScript;
+    } elseif (!empty($analytics)) {
+		return $script;
+	}
 }
 
 function slashUrl($url) {
@@ -2936,7 +2945,7 @@ function add_view($page)
     } else {
         $views[$page] = 1;
     }
-    file_put_contents($filename, json_encode($views));
+    file_put_contents($filename, json_encode($views, JSON_UNESCAPED_UNICODE));
 }
 
 // Get the page views count

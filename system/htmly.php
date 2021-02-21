@@ -1295,6 +1295,346 @@ post('/admin/config', function () {
     die;
 });
 
+// Show Config page
+get('/admin/config/custom', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-custom', array(
+                'title' => 'Config - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Config page - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Submitted Config page data
+post('/admin/config/custom', function () {
+	
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $newKey = from($_REQUEST, 'newKey');
+        $newValue = from($_REQUEST, 'newValue');
+
+        $new_config = array();
+        $new_Keys = array();
+        if (!empty($newKey)) {
+            $new_Keys[$newKey] = $newValue;
+        }
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
+                $new_config[$name] = $value;
+            }
+        }
+        save_config($new_config, $new_Keys);
+        $login = site_url() . 'admin/config/custom';
+        header("location: $login");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Show Config page
+get('/admin/config/reading', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-reading', array(
+                'title' => 'Config - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Config page - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Submitted Config page data
+post('/admin/config/reading', function () {
+	
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $newKey = from($_REQUEST, 'newKey');
+        $newValue = from($_REQUEST, 'newValue');
+
+        $new_config = array();
+        $new_Keys = array();
+        if (!empty($newKey)) {
+            $new_Keys[$newKey] = $newValue;
+        }
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
+                $new_config[$name] = $value;
+            }
+        }
+        save_config($new_config, $new_Keys);
+        $login = site_url() . 'admin/config/reading';
+        header("location: $login");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Show Config page
+get('/admin/config/widget', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-widget', array(
+                'title' => 'Config - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Config page - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Submitted Config page data
+post('/admin/config/widget', function () {
+	
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $newKey = from($_REQUEST, 'newKey');
+        $newValue = from($_REQUEST, 'newValue');
+
+        $new_config = array();
+        $new_Keys = array();
+        if (!empty($newKey)) {
+            $new_Keys[$newKey] = $newValue;
+        }
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
+                $new_config[$name] = $value;
+            }
+        }
+        save_config($new_config, $new_Keys);
+        $login = site_url() . 'admin/config/widget';
+        header("location: $login");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Show Config page
+get('/admin/config/metatags', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-metatags', array(
+                'title' => 'Config - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Config page - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Submitted Config page data
+post('/admin/config/metatags', function () {
+	
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $newKey = from($_REQUEST, 'newKey');
+        $newValue = from($_REQUEST, 'newValue');
+
+        $new_config = array();
+        $new_Keys = array();
+        if (!empty($newKey)) {
+            $new_Keys[$newKey] = $newValue;
+        }
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
+                $new_config[$name] = $value;
+            }
+        }
+        save_config($new_config, $new_Keys);
+        $login = site_url() . 'admin/config/metatags';
+        header("location: $login");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Show Config page
+get('/admin/config/performance', function () {
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-performance', array(
+                'title' => 'Config - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Config page - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '',
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
+// Submitted Config page data
+post('/admin/config/performance', function () {
+	
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $newKey = from($_REQUEST, 'newKey');
+        $newValue = from($_REQUEST, 'newValue');
+
+        $new_config = array();
+        $new_Keys = array();
+        if (!empty($newKey)) {
+            $new_Keys[$newKey] = $newValue;
+        }
+        foreach ($_POST as $name => $value) {
+            if (substr($name, 0, 8) == "-config-") {
+                $name = str_replace("_", ".", substr($name, 8));
+                $new_config[$name] = $value;
+            }
+        }
+        save_config($new_config, $new_Keys);
+        $login = site_url() . 'admin/config/performance';
+        header("location: $login");
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+    die;
+});
+
 // Show Backup page
 get('/admin/backup', function () {
     if (login()) {
@@ -1425,7 +1765,7 @@ post('/admin/menu', function () {
 
     if (login()) {
         $json = from($_REQUEST, 'json');
-		file_put_contents('content/data/menu.json', json_encode($json));
+		file_put_contents('content/data/menu.json', json_encode($json, JSON_UNESCAPED_UNICODE));
     }
 });
 

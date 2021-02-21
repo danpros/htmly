@@ -1,48 +1,117 @@
-<h2>Your Settings</h2>
-<br>
-<p><u>hint:</u> Use <code>Ctrl</code>/<code>CMD⌘</code> + <code>F</code> to search for your config key or value.</p>
-<p><u>pro tips:</u> You can creating custom config key and print out your config key value anywhere in your template.</p>
-<p><code>&lt;?php echo config('your.key'); ?&gt;</code></p>
-<br>
+<h2>General Settings</h2>
+<br><br>
 <form method="POST">
-    <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
-    <input class="form-control btn btn-primary btn-sm" type="submit" style="width:100px;">
-	<br><br>
-    <table class="table" id="config">
-        <tr>
-            <td><input type="text" class="form-control" name="newKey" placeholder="Your New Config Key"></td>
-            <td><input type="text" class="form-control" name="newValue" placeholder="Your New Value"></td>
-        </tr>
-        <?php
-        global $config_file;
-        $array = array(
-            "google.wmt" => "hallo",
-        );
-        if (file_exists($config_file)) {
-            $array = parse_ini_file($config_file, true);
-        }
-        function valueMaker($value)
-        {
-            if (is_string($value))
-                return htmlspecialchars($value);
-
-            if ($value === true)
-                return "true";
-            if ($value === false)
-                return "false";
-
-            if ($value == false)
-                return "0";
-            return (string)$value;
-        }
-
-        foreach ($array as $key => $value) {
-            echo '<tr>';
-            echo '<td><label for="' . $key . '">' . $key . '</label></td>';
-            echo '<td><input class="form-control" type="text" id="' . $key . '" name="-config-' . $key . '" value="' . valueMaker($value) . '"></td>';
-            echo '</tr>';
-        }
-        ?>
-    </table>
-    <input type="submit" class="form-control btn-primary btn-sm" style="width:100px;">
+<input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
+  <div class="form-group row">
+    <label for="site.url" class="col-sm-2 col-form-label">Address (URL)</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-site.url" class="form-control" id="site.url" value="<?php echo config('site.url');?>" placeholder="https://www.htmly.com">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.title" class="col-sm-2 col-form-label">Blog title</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.title" class="form-control" id="blog.title" value="<?php echo config('blog.title');?>" placeholder="My HTMLy Blog">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.tagline" class="col-sm-2 col-form-label">Tagline</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.tagline" class="form-control" id="blog.tagline" value="<?php echo config('blog.tagline');?>" placeholder="Databaseless PHP Blogging Platform">
+	  <small><em>In a few words, explain what this blog is about.</em></small>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.description" class="col-sm-2 col-form-label">Description</label>
+    <div class="col-sm-10">
+      <textarea id="blog.description" name="-config-blog.description" class="form-control"><?php echo config('blog.description');?></textarea>   
+	  <small><em>In one paragraph, tell us more about your blog.</em></small>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.copyright" class="col-sm-2 col-form-label">Copyright</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo config('blog.copyright');?>" placeholder="(c) Your name.">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for=language" class="col-sm-2 col-form-label">Language</label>
+    <div class="col-sm-10">
+    <select class="form-control" id="language" name="-config-language">
+    <?php foreach (glob('lang/*.ini') as $file) { ?>
+       <option value="<?php echo pathinfo($file)['filename'];?>" <?php if (config('language') === pathinfo($file)['filename']):?>selected<?php endif;?>><?php echo pathinfo($file)['filename'];?></option>
+    <?php } ?>
+    </select> 
+	</div>
+  </div>
+  <div class="form-group row">
+    <label for=language" class="col-sm-2 col-form-label">Timezone</label>
+    <div class="col-sm-10">
+    <select class="form-control" id="timezone" name="-config-timezone">
+    <?php foreach (timezone_identifiers_list() as $zone) { ?>
+       <option value="<?php echo $zone;?>" <?php if (config('timezone') === $zone):?>selected<?php endif;?>><?php echo $zone;?></option>
+    <?php } ?>
+    </select> 
+	</div>
+  </div>
+  <div class="form-group row">
+  <?php $time = new DateTime('NOW'); $date = $time->format("Y-m-d H:i:s");?>
+    <label class="col-sm-2 col-form-label">Date Format</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format1" value="%d %B %Y" <?php if (config('date.format') === '%d %B %Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format1">
+            <?php echo strftime('%d %B %Y', strtotime($date)); ?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format2" value="%B %d, %Y" <?php if (config('date.format') === '%B %d, %Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format2">
+            <?php echo strftime('%B %d, %Y', strtotime($date)); ?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format3" value="%d %b %Y" <?php if (config('date.format') === '%d %b %Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format3">
+            <?php echo strftime('%d %b %Y', strtotime($date)); ?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format4" value="%b %d, %Y" <?php if (config('date.format') === '%b %d, %Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format4">
+            <?php echo strftime('%b %d, %Y', strtotime($date)); ?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format5" value="%d/%m/%Y" <?php if (config('date.format') === '%d/%m/%Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format5">
+            <?php echo strftime('%d/%m/%Y', strtotime($date)); ?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="%m/%d/%Y" <?php if (config('date.format') === '%m/%d/%Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format6">
+            <?php echo strftime('%m/%d/%Y', strtotime($date)); ?>
+          </label>
+        </div>
+      </div>
+	</div>
+  </div>
+  <div class="form-group row">
+    <label for=views.root" class="col-sm-2 col-form-label">Blog Theme</label>
+    <div class="col-sm-10">
+    <select class="form-control" id="views.root" name="-config-views.root">
+    <?php foreach (glob('themes/*/layout.html.php') as $folder) { ?>
+	   <?php $theme = explode('/',pathinfo($folder)['dirname']); global $config_file; $this_config = parse_ini_file($config_file, true);?>
+       <option value="<?php echo pathinfo($folder)['dirname'];?>" <?php if ($this_config['views.root'] === pathinfo($folder)['dirname']):?>selected<?php endif;?>><?php echo $theme['1'];?></option>
+    <?php } ?>
+    </select> 
+	</div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary">Save config</button>
+    </div>
+  </div>
 </form>

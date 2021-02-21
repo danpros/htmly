@@ -49,6 +49,9 @@ google.wmt.id = ""
 ; Google analytics
 google.analytics.id = ""
 
+; Google gtag analytics
+google.gtag.id = ""
+
 ; Google reCaptcha
 ; https://www.google.com/recaptcha/admin. Options "false" and "true"
 

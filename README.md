@@ -43,6 +43,7 @@ Features
 - Auto Update
 - Post Draft
 - i18n
+- Menu builder
 
 Requirements
 ------------
@@ -266,11 +267,6 @@ Paragraph 1
 
 Paragraph 2 etc.
 ```
-
-Credit
-------
-* [Martin Angelov](http://tutorialzine.com)
-* [Xiaoying Riley](http://themes.3rdwavemedia.com)
 
 Contribute
 ----------
