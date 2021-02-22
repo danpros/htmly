@@ -2079,7 +2079,7 @@ function menu($class = null)
 		$json = json_decode(file_get_contents('content/data/menu.json', true));
 		$nodes = json_decode($json);
 	    if (empty($nodes)) {
-            get_menu($custom);
+            get_menu($class);
 	    } else {
             $html = parseNodes($nodes, null, $class);
             libxml_use_internal_errors(true);
