@@ -55,7 +55,7 @@
           <img src="<?php echo site_url(); ?>system/resources/images/logo-small.png" class="img-circle elevation-2" alt="HTMLy logo">
         </div>
         <div class="info">
-          <a href="<?php echo site_url();?>admin" class="d-block">Dashboard</a>
+          <a href="<?php echo site_url();?>admin" class="d-block"><?php echo i18n('Dashboard')?></a>
         </div>
       </div>
 
@@ -68,7 +68,7 @@
             <a href="<?php echo site_url();?>admin/content" class="nav-link">
               <i class="nav-icon fa fa-th"></i>
               <p>
-                Add Content
+                <?php echo ucwords(i18n('Add_content')); ?>
               </p>
             </a>
           </li>
@@ -76,50 +76,63 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-thumb-tack"></i>
               <p>
-                Posts
+                <?php echo i18n('Posts'); ?>
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/posts" class="nav-link">
-                  <p>Posts list</p>
+                  <p>
+					 <?php echo i18n('Posts_list'); ?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/draft" class="nav-link">
-                  <p>Posts draft</p>
+                  <p>
+				     <?php echo i18n('Posts_draft'); ?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/pages" class="nav-link">
-                  <p>Static pages</p>
+                  <p>
+					 <?php echo i18n('Static_pages'); ?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/categories" class="nav-link">
-                  <p>Categories</p>
+                  <p>
+					 <?php echo i18n('Categories');?>
+				  </p>
                 </a>
               </li>
             </ul>
+          </li>
           </li>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cogs"></i>
               <p>
-                Settings
+                <?php echo i18n('Settings'); ?>
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/config" class="nav-link">
-                  <p>Configurations</p>
+                  <p>
+				  	<?php echo i18n('Config'); ?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/menu" class="nav-link">
-                  <p>Menu builder</p>
+                  <p>
+					<?php echo i18n('Menus');?>
+				  </p>
                 </a>
               </li>
             </ul>
@@ -128,35 +141,45 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-briefcase"></i>
               <p>
-                Tools
+                <?php echo i18n('Tools'); ?>
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/clear-cache" class="nav-link">
-                  <p>Clear cache</p>
+                  <p>
+					<?php echo i18n('Clear_cache');?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/update" class="nav-link">
-                  <p>Check update</p>
+                  <p>
+					<?php echo i18n('Check_update'); ?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/backup" class="nav-link">
-                  <p>Backup</p>
+                  <p>
+					<?php echo i18n('Backup');?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/import" class="nav-link">
-                  <p>Import RSS</p>
+                  <p>
+					<?php echo i18n('Import_RSS');?>
+				  </p>
                 </a>
               </li>
 			  <?php if (config('views.counter') == 'true') { ?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/popular" class="nav-link">
-                  <p>Popular posts</p>
+                  <p>
+					<?php echo i18n('Popular_posts');?>
+				  </p>
                 </a>
               </li>
 			  <?php } ?>
@@ -166,24 +189,30 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-user"></i>
               <p>
-                User
+                <?php echo i18n('User'); ?>
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/mine" class="nav-link">
-                  <p>My posts</p>
+                  <p>
+					<?php echo i18n('My_posts');?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
-                  <p>Edit profile</p>
+                  <p>
+					<?php echo i18n('Edit_profile');?>
+				  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>logout" class="nav-link">
-                  <p>Logout</p>
+                  <p>
+					<?php echo i18n('Logout'); ?>
+				  </p>
                 </a>
               </li>
             </ul>
@@ -248,7 +277,7 @@
       <small>Admin panel style based on <a rel="nofollow" target="_blank" href="https://github.com/ColorlibHQ/AdminLTE">AdminLTE</a></small>
     </div>
     <!-- Default to the left -->
-    Proudly powered by <a href="https://www.htmly.com" target="_blank">HTMLy</a>
+    <?php echo i18n('Proudly_powered_by');?> <a href="https://www.htmly.com" target="_blank">HTMLy</a>
   </footer>
 </div>
 <!-- ./wrapper -->
