@@ -10,6 +10,11 @@ if ($type != 'is_post' && $type != 'is_image' && $type != 'is_video' && $type !=
 $desc = get_category_info(null);
 
 $tags = tag_cloud(true);
+$ptags = unserialize(file_get_contents('content/data/tags.lang'));
+$tkey = array_keys($tags);
+$newlang = array_intersect_key($ptags, array_flip($tkey));
+$tmp = serialize($newlang);
+file_put_contents('content/data/tags.lang', print_r($tmp, true));
 
 ?>
 

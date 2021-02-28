@@ -55,6 +55,11 @@ if (config('permalink.type') == 'post') {
 }
 
 $tags = tag_cloud(true);
+$ptags = unserialize(file_get_contents('content/data/tags.lang'));
+$tkey = array_keys($tags);
+$newlang = array_intersect_key($ptags, array_flip($tkey));
+$tmp = serialize($newlang);
+file_put_contents('content/data/tags.lang', print_r($tmp, true));
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>

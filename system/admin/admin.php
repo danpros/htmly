@@ -95,6 +95,34 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
+	
+    $post_t =  explode(',', $post_tag);
+    $pret_t = explode(',', $post_tagmd);
+    $tags = tag_cloud(true);
+    $timestamp = date('YmdHis');
+
+    $combine = array_combine($pret_t, $post_t);
+    $inter = array_intersect_key($tags, array_flip($post_t));
+    $newtag = array();
+
+    foreach ($combine as $tag => $v) {
+        if (array_key_exists($v, $tags)) {
+            foreach ($inter as $in => $i){
+                if($v === $in) {
+                    if (strtolower($tag) === strtolower(tag_i18n($in))) {
+                        $newtag[$v]= $tag;
+                    } else {
+                        $newtag[$v.'-'. $timestamp]= $tag;
+                    }
+                }
+            }
+        } else {
+            $newtag[$v] = $tag;
+        }            
+    }
+
+    $post_tag = implode(',', array_keys($newtag));	
+	
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
@@ -166,6 +194,35 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
+    
+
+    $post_t =  explode(',', $post_tag);
+    $pret_t = explode(',', $post_tagmd);
+    $tags = tag_cloud(true);
+    $timestamp = date('YmdHis');
+
+    $combine = array_combine($pret_t, $post_t);
+    $inter = array_intersect_key($tags, array_flip($post_t));
+    $newtag = array();
+
+    foreach ($combine as $tag => $v) {
+        if (array_key_exists($v, $tags)) {
+            foreach ($inter as $in => $i){
+                if($v === $in) {
+                    if (strtolower($tag) === strtolower(tag_i18n($in))) {
+                        $newtag[$v]= $tag;
+                    } else {
+                        $newtag[$v.'-'. $timestamp]= $tag;
+                    }
+                }
+            }
+        } else {
+            $newtag[$v] = $tag;
+        }            
+    }
+
+    $post_tag = implode(',', array_keys($newtag));
+    
     if ($description !== null) {
         $post_description = "\n<!--d " . $description . " d-->";
     } else {
