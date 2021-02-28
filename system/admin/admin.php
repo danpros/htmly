@@ -92,7 +92,7 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($pt)));
     $post_tagmd = safe_html($tag);
     $post_tag = rtrim($post_tag, ',');
-    $post_tagmd = rtrim($post_tagmd, ',');
+    $post_tagmd = preg_replace("/\s*,\s*/", ",", rtrim($post_tagmd, ','));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
 	
@@ -191,7 +191,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($pt)));
     $post_tagmd = safe_html($tag);
     $post_tag = rtrim($post_tag, ',');
-    $post_tagmd = rtrim($post_tagmd, ',');
+    $post_tagmd = preg_replace("/\s*,\s*/", ",", rtrim($post_tagmd, ','));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     
