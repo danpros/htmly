@@ -143,7 +143,11 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
     $post_tag = implode(',', array_keys($newtag));    
     
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
         $post_description = "";
     }
@@ -263,7 +267,11 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     $post_tag = implode(',', array_keys($newtag));
     
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
         $post_description = "";
     }
@@ -403,7 +411,11 @@ function add_page($title, $url, $content, $description = null)
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
         $post_description = "";
     }
@@ -437,7 +449,11 @@ function add_sub_page($title, $url, $content, $static, $description = null)
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
         $post_description = "";
     }
@@ -472,9 +488,13 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
-        $post_description = '';
+        $post_description = "";
     }
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
@@ -522,7 +542,11 @@ function add_category($title, $url, $content, $description = null)
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
         $post_description = "";
     }
@@ -557,9 +581,13 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     if ($description !== null) {
-        $post_description = "\n<!--d " . $description . " d-->";
+        if (!empty($description)) {		
+            $post_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $post_description = "\n<!--d " . get_description($content) . " d-->";
+        }			
     } else {
-        $post_description = '';
+        $post_description = "";
     }
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
