@@ -103,8 +103,10 @@ function parseMenu($menu) {
       type: 'POST',
       url: '<?php echo site_url();?>admin/menu',
       dataType: 'json',
-      data: {'json': js}
-	  
+      data: {'json': js},
+      success: function (response) {
+         alert(response.message);
+      },
     });
   });
 </script>
