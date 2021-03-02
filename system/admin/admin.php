@@ -275,6 +275,16 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     }
 
     $post_tag = implode(',', array_keys($newtag));
+	
+    $posts = get_post_sorted();
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['basename']);
+        if (strtolower($arr[2]) === strtolower($post_url . '.md')) {
+            $post_url = $post_url .'-'. $timestamp;
+        } else {
+            $post_url = $post_url;
+        }
+    }
     
     if ($description !== null) {
         if (!empty($description)) {        
@@ -429,6 +439,18 @@ function add_page($title, $url, $content, $description = null)
     } else {
         $post_description = "";
     }
+	
+    $posts = get_static_pages();
+    $timestamp = date('YmdHis');
+    foreach ($posts as $index => $v) {
+		$arr = explode('/', $v);
+        if (strtolower($arr[2]) === strtolower($post_url . '.md')) {
+            $post_url = $post_url .'-'. $timestamp;
+        } else {
+            $post_url = $post_url;
+        }
+    }
+	
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
@@ -506,6 +528,18 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
     } else {
         $post_description = "";
     }
+	
+    $posts = get_static_pages();
+    $timestamp = date('YmdHis');
+    foreach ($posts as $index => $v) {
+		$arr = explode('/', $v);
+        if (strtolower($arr[2]) === strtolower($post_url . '.md')) {
+            $post_url = $post_url .'-'. $timestamp;
+        } else {
+            $post_url = $post_url;
+        }
+    }	
+	
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
