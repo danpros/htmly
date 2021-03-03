@@ -47,7 +47,7 @@ Features
 
 Requirements
 ------------
-HTMLy requires PHP 5.3 or greater and php-xml package.
+HTMLy requires PHP 5.3 or greater, PHP-XML package, and PHP-ZIP package for backup feature.
 
 Installations
 -------------
