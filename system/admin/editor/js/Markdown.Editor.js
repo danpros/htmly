@@ -46,6 +46,8 @@
         headingexample: "Heading",
 
         hr: "Horizontal Rule <hr> Ctrl+R",
+		
+        readmore: "Read More Link",
 
         undo: "Undo - Ctrl+Z",
         redo: "Redo - Ctrl+Y",
@@ -1435,7 +1437,7 @@
             var highlightYShift = "";
 
             var buttonRow = document.createElement("ul");
-			buttonRow.style.padding = "0px 10px";
+            buttonRow.style.padding = "0px 10px";
             buttonRow.id = "wmd-button-row" + postfix;
             buttonRow.className = 'wmd-button-row';
             buttonRow = buttonBar.appendChild(buttonRow);
@@ -1444,10 +1446,10 @@
                 var button = document.createElement("li");
                 button.className = "wmd-button";
                 var buttonImage = document.createElement("span");
-				var buttonIcon = document.createElement("i");
-				buttonImage.className = "note-btn btn btn-light btn-sm";
-				buttonIcon.className = XClass;
-				buttonImage.appendChild(buttonIcon);
+                var buttonIcon = document.createElement("i");
+                buttonImage.className = "note-btn btn btn-light btn-sm";
+                buttonIcon.className = XClass;
+                buttonImage.appendChild(buttonIcon);
                 button.id = id + postfix;
                 button.appendChild(buttonImage);
                 button.title = title;
@@ -1462,7 +1464,6 @@
                 spacer.className = "wmd-spacer wmd-spacer" + num;
                 spacer.id = "wmd-spacer" + num + postfix;
                 buttonRow.appendChild(spacer);
-                //xPosition += 25;
             }
 
             buttons.bold = makeButton("wmd-bold-button", getString("bold"), "fa fa-bold", bindCommand("doBold"));
@@ -1485,6 +1486,7 @@
             }));
             buttons.heading = makeButton("wmd-heading-button", getString("heading"), "fa fa-header", bindCommand("doHeading"));
             buttons.hr = makeButton("wmd-hr-button", getString("hr"), "fa fa-ellipsis-h", bindCommand("doHorizontalRule"));
+            buttons.readmore= makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
             makeSpacer(3);
             buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa fa-undo", null);
             buttons.undo.execute = function (manager) {
@@ -2213,6 +2215,12 @@
         chunk.startTag = "----------\n";
         chunk.selection = "";
         chunk.skipLines(2, 1, true);
+    }
+	
+    commandProto.doReadMore = function (chunk, postProcessing) {
+        chunk.startTag = "<!--more-->";
+        chunk.selection = "";
+        chunk.skipLines(0, 1, true);
     }
 
 
