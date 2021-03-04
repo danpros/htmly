@@ -1483,7 +1483,7 @@
             buttons.bold = makeButton("wmd-bold-button", getString("bold"), "fa fa-bold", bindCommand("doBold"));
             buttons.italic = makeButton("wmd-italic-button", getString("italic"), "fa fa-italic", bindCommand("doItalic"));
             buttons.heading = makeButton("wmd-heading-button", getString("heading"), "fa fa-header", bindCommand("doHeading"));
-            buttons.strikethrough = makeButton("wmd-strikethrough-button", getString("strikethrough"), "fa fa-strikethrough", bindCommand("doStrikethrough"));
+            //buttons.strikethrough = makeButton("wmd-strikethrough-button", getString("strikethrough"), "fa fa-strikethrough", bindCommand("doStrikethrough"));
             //makeSpacer(1);
             buttons.olist = makeButton("wmd-olist-button", getString("olist"), "fa fa-list-ol", bindCommand(function (chunk, postProcessing) {
                 this.doList(chunk, postProcessing, true);
