@@ -7,8 +7,6 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <?php if (publisher()): ?>
-    <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>    
     <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic" rel="stylesheet" type="text/css">     
@@ -172,15 +170,11 @@
                 </aside><!--//section-->
                 <aside class="category-list aside section">
                     <div class="section-inner">
-                        <h2 class="heading"><?php echo i18n("Popular_tags");?></h2>
+                        <h2 class="heading"><?php echo i18n("Tags");?></h2>
                         <div class="content">
-                        <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-                        <ul>
-                        <?php foreach ($tags as $tag => $count):?>
-                            <li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-                        <?php if ($i++ >= 5) break;?>
-                        <?php endforeach;?>
-                        </ul>
+                        <div class="tagcloud">
+                        <?php echo tag_cloud();?>
+                        </div>
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->

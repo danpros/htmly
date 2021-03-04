@@ -1465,11 +1465,29 @@ function tag_cloud($custom = null)
         }
 
         if(empty($custom)) {
-            echo '<ul class="taglist">';
-            foreach ($tag_collection as $tag => $count) {
-                echo '<li class="item"><a href="' . site_url() . 'tag/' . $tag . '">' . tag_i18n($tag) . '</a> <span class="count">(' . $count . ')</span></li>';
+            // Font sizes
+            $max_size = 22; // max font size in %
+            $min_size = 8; // min font size in %
+
+            // Get the largest and smallest array values
+            $max_qty = max(array_values($tag_collection));
+            $min_qty = min(array_values($tag_collection));
+
+            // Find the range of values
+            $spread = $max_qty - $min_qty;
+            if (0 == $spread) { // we don't want to divide by zero
+                $spread = 1;
             }
-            echo '</ul>';
+
+            // Font-size increment
+            // this is the increase per tag quantity (times used)
+            $step = ($max_size - $min_size)/($spread);
+
+            foreach ($tag_collection as $tag => $count) {
+                $size = $min_size + (($count - $min_qty) * $step);
+                echo ' <a class="tag-cloud-link" href="'. site_url(). 'tag/'. $tag .'" style="font-size:'. $size .'pt;">'.tag_i18n($tag).'</a> ';
+            }			
+
         } else {
             return $tag_collection;
         }

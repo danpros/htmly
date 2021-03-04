@@ -5,7 +5,6 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <?php if (publisher()): ?><link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?> 
     <link rel="stylesheet" id="twentysixteen-fonts-css" href="https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&#038;subset=latin%2Clatin-ext" type="text/css" media="all" />
     <link rel="stylesheet" id="genericons-css"  href="<?php echo site_url();?>themes/twentysixteen/genericons/genericons.css" type="text/css" media="all" />
     <link rel="stylesheet" id="twentysixteen-style-css"  href="<?php echo site_url();?>themes/twentysixteen/css/style.css" type="text/css" media="all" />
@@ -110,14 +109,10 @@
                     </section>
                     
                     <section id="popular-tags" class="widget widget_popular_tags">
-                    <h2 class="widget-title"><?php echo i18n("Popular_tags");?></h2>
-                        <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-                        <ul>
-                        <?php foreach ($tags as $tag => $count):?>
-                            <li><a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-                        <?php if ($i++ >= 5) break;?>
-                        <?php endforeach;?>
-                        </ul>
+                    <h2 class="widget-title"><?php echo i18n("Tags");?></h2>
+                    <div class="tag-cloud">
+                    <?php echo tag_cloud();?>
+                    </div>					
                     </section>
                     
                 </aside><!-- .sidebar .widget-area -->

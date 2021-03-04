@@ -7,9 +7,6 @@
     <link rel="canonical" href="<?php echo $canonical; ?>" />
     <link href="<?php echo site_url() ?>themes/clean/css/style.css" rel="stylesheet"/>
     <link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet"/>
-    <?php if (publisher()): ?>
-    <link href="<?php echo publisher() ?>" rel="publisher" />
-    <?php endif; ?>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -36,14 +33,10 @@
     <div class="archive"><h3><?php echo i18n('Archives');?></h3><?php echo archive_list() ?></div>
     <div class="category-list"><h3><?php echo i18n('Category');?></h3><?php echo category_list() ?></div>
     <div class="tagcloud">
-        <h3>Popular Tags</h3>
-        <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-        <ul>
-            <?php foreach ($tags as $tag => $count):?>
-            <li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-            <?php if ($i++ >= 5) break;?>
-            <?php endforeach;?>
-        </ul>			
+        <h3>Tags</h3>
+        <div class="tag-cloud">
+            <?php echo tag_cloud();?>
+        </div>			
     </div>
     <div class="copyright"><?php echo copyright() ?></div>
 </aside>
