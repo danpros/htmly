@@ -23,6 +23,9 @@
 
         italic: "Emphasis <em> Ctrl+I",
         italicexample: "emphasized text",
+		
+        strikethrough: "Strikethrough <s> Ctrl+X",
+        strikethroughexample: "strikethrough text",
 
         link: "Hyperlink <a> Ctrl+L",
         linkdescription: "enter link description here",
@@ -48,6 +51,8 @@
         hr: "Horizontal Rule <hr> Ctrl+R",
 		
         readmore: "Read More <!--more--> Ctrl+M",
+		
+        table: "Table - Ctrl+T",
 
         undo: "Undo - Ctrl+Z",
         redo: "Redo - Ctrl+Y",
@@ -1287,6 +1292,12 @@
                     case "m":
                         doClick(buttons.readmore);
                         break;
+                    case "x":
+                        doClick(buttons.strikethrough);
+                        break;
+                    case "j":
+                        doClick(buttons.table);
+                        break;
                     case "y":
                         doClick(buttons.redo);
                         break;
@@ -1471,26 +1482,28 @@
 
             buttons.bold = makeButton("wmd-bold-button", getString("bold"), "fa fa-bold", bindCommand("doBold"));
             buttons.italic = makeButton("wmd-italic-button", getString("italic"), "fa fa-italic", bindCommand("doItalic"));
-            makeSpacer(1);
-            buttons.link = makeButton("wmd-link-button", getString("link"), "fa fa-link", bindCommand(function (chunk, postProcessing) {
-                return this.doLinkOrImage(chunk, postProcessing, false);
-            }));
-            buttons.quote = makeButton("wmd-quote-button", getString("quote"), "fa fa-quote-right", bindCommand("doBlockquote"));
-            buttons.code = makeButton("wmd-code-button", getString("code"), "fa fa-code", bindCommand("doCode"));
-            buttons.image = makeButton("wmd-image-button", getString("image"), "fa fa-image", bindCommand(function (chunk, postProcessing) {
-                return this.doLinkOrImage(chunk, postProcessing, true);
-            }));
-            makeSpacer(2);
+            buttons.heading = makeButton("wmd-heading-button", getString("heading"), "fa fa-header", bindCommand("doHeading"));
+            buttons.strikethrough = makeButton("wmd-strikethrough-button", getString("strikethrough"), "fa fa-strikethrough", bindCommand("doStrikethrough"));
+            //makeSpacer(1);
             buttons.olist = makeButton("wmd-olist-button", getString("olist"), "fa fa-list-ol", bindCommand(function (chunk, postProcessing) {
                 this.doList(chunk, postProcessing, true);
             }));
             buttons.ulist = makeButton("wmd-ulist-button", getString("ulist"), "fa fa-list-ul", bindCommand(function (chunk, postProcessing) {
                 this.doList(chunk, postProcessing, false);
             }));
-            buttons.heading = makeButton("wmd-heading-button", getString("heading"), "fa fa-header", bindCommand("doHeading"));
+            buttons.quote = makeButton("wmd-quote-button", getString("quote"), "fa fa-quote-right", bindCommand("doBlockquote"));
+            buttons.code = makeButton("wmd-code-button", getString("code"), "fa fa-code", bindCommand("doCode"));
+            buttons.table = makeButton("wmd-table-button", getString("table"), "fa fa-table", bindCommand("doTable"));
+            //makeSpacer(2);
+            buttons.link = makeButton("wmd-link-button", getString("link"), "fa fa-link", bindCommand(function (chunk, postProcessing) {
+                return this.doLinkOrImage(chunk, postProcessing, false);
+            }));
+            buttons.image = makeButton("wmd-image-button", getString("image"), "fa fa-image", bindCommand(function (chunk, postProcessing) {
+                return this.doLinkOrImage(chunk, postProcessing, true);
+            }));
             buttons.hr = makeButton("wmd-hr-button", getString("hr"), "fa fa-ellipsis-h", bindCommand("doHorizontalRule"));
             buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
-            makeSpacer(3);
+            //makeSpacer(3);
             buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa fa-undo", null);
             buttons.undo.execute = function (manager) {
                 if (manager) manager.undo();
@@ -2225,6 +2238,214 @@
         chunk.selection = "";
         chunk.skipLines(0, 1, true);
     }
+	
+	commandProto.doStrikethrough = function (chunk, postProcessing) {
+
+		// Get rid of whitespace and fixup newlines.
+		chunk.trimWhitespace();
+		chunk.selection = chunk.selection.replace(/\n{2,}/g, "\n");
+
+		// Look for stars before and after.  Is the chunk already marked up?
+		// note that these regex matches cannot fail
+		var starsBefore = /(~*$)/.exec(chunk.before)[0];
+		var starsAfter = /(^~*)/.exec(chunk.after)[0];
+
+		var prevStars = Math.min(starsBefore.length, starsAfter.length);
+
+		var nStars = 2;
+
+		// Remove stars if we have to since the button acts as a toggle.
+		if ((prevStars >= nStars) && (prevStars != 2 || nStars != 1)) {
+			chunk.before = chunk.before.replace(re("[~]{" + nStars + "}$", ""), "");
+			chunk.after = chunk.after.replace(re("^[~]{" + nStars + "}", ""), "");
+		} else if (!chunk.selection && starsAfter) {
+			// It's not really clear why this code is necessary.  It just moves
+			// some arbitrary stuff around.
+			chunk.after = chunk.after.replace(/^(~*)/, "");
+			chunk.before = chunk.before.replace(/(\s?)$/, "");
+			var whitespace = re.$1;
+			chunk.before = chunk.before + starsAfter + whitespace;
+		} else {
+
+			// In most cases, if you don't have any selected text and click the button
+			// you'll get a selected, marked up region with the default text inserted.
+			if (!chunk.selection && !starsAfter) {
+				chunk.selection = this.getString("strikethroughexample");
+			}
+
+			// Add the true markup.
+			var markup = "~~"; // shouldn't the test be = ?
+			chunk.before = chunk.before + markup;
+			chunk.after = markup + chunk.after;
+		}
+
+		return;
+	};
+	
+    commandProto.doTable = function (chunk) {
+	  // Credit: https://github.com/fcrespo82/atom-markdown-table-formatter
+
+	  var keepFirstAndLastPipes = true,
+		/*
+						  ( # header capture
+							(?:
+							  (?:[^\n]*?\|[^\n]*)       # line w/ at least one pipe
+							  \ *                       # maybe trailing whitespace
+							)?                          # maybe header
+							(?:\n|^)                    # newline
+						  )
+						  ( # format capture
+							(?:
+							  \|\ *:?-+:?\ *            # format starting w/pipe
+							  |\|?(?:\ *:?-+:?\ *\|)+   # or separated by pipe
+							)
+							(?:\ *:?-+:?\ *)?           # maybe w/o trailing pipe
+							\ *                         # maybe trailing whitespace
+							\n                          # newline
+						  )
+						  ( # body capture
+							(?:
+							  (?:[^\n]*?\|[^\n]*)       # line w/ at least one pipe
+							  \ *                       # maybe trailing whitespace
+							  (?:\n|$)                  # newline
+							)+ # at least one
+						  )
+				  */
+		regex = /((?:(?:[^\n]*?\|[^\n]*) *)?(?:\r?\n|^))((?:\| *:?-+:? *|\|?(?: *:?-+:? *\|)+)(?: *:?-+:? *)? *\r?\n)((?:(?:[^\n]*?\|[^\n]*) *(?:\r?\n|$))+)/;
+
+
+	  function padding(len, str) {
+		var result = '';
+		str = str || ' ';
+		len = Math.floor(len);
+		for (var i = 0; i < len; i++) {
+		  result += str;
+		}
+		return result;
+	  }
+
+	  function stripTailPipes(str) {
+		return str.trim().replace(/(^\||\|$)/g, "");
+	  }
+
+	  function splitCells(str) {
+		return str.split('|');
+	  }
+
+	  function addTailPipes(str) {
+		if (keepFirstAndLastPipes) {
+		  return "|" + str + "|";
+		} else {
+		  return str;
+		}
+	  }
+
+	  function joinCells(arr) {
+		return arr.join('|');
+	  }
+
+	  function formatTable(text, appendNewline) {
+		var i, j, len1, ref1, ref2, ref3, k, len2, results, formatline, headerline, just, formatrow, data, line, lines, justify, cell, cells, first, last, ends, columns, content, widths, formatted, front, back;
+		formatline = text[2].trim();
+		headerline = text[1].trim();
+		ref1 = headerline.length === 0 ? [0, text[3]] : [1, text[1] + text[3]], formatrow = ref1[0], data = ref1[1];
+		lines = data.trim().split('\n');
+		justify = [];
+		ref2 = splitCells(stripTailPipes(formatline));
+		for (j = 0, len1 = ref2.length; j < len1; j++) {
+		  cell = ref2[j];
+		  ref3 = cell.trim(), first = ref3[0], last = ref3[ref3.length - 1];
+		  switch ((ends = (first ? first : ':') + (last ? last : ''))) {
+			case '::':
+			case '-:':
+			case ':-':
+			  justify.push(ends);
+			  break;
+			default:
+			  justify.push('--');
+		  }
+		}
+		columns = justify.length;
+		content = [];
+		for (j = 0, len1 = lines.length; j < len1; j++) {
+		  line = lines[j];
+		  cells = splitCells(stripTailPipes(line));
+		  cells[columns - 1] = joinCells(cells.slice(columns - 1));
+		  results = [];
+		  for (k = 0, len2 = cells.length; k < len2; k++) {
+			cell = cells[k];
+			results.push(padding(' ') + ((ref2 = cell ? typeof cell.trim === "function" ? cell.trim() : void 0 : void 0) ? ref2 : '') + padding(' '));
+		  }
+		  content.push(results);
+		}
+		widths = [];
+		for (i = j = 0, ref2 = columns - 1; 0 <= ref2 ? j <= ref2 : j >= ref2; i = 0 <= ref2 ? ++j : --j) {
+		  results = [];
+		  for (k = 0, len1 = content.length; k < len1; k++) {
+			cells = content[k];
+			results.push(cells[i].length);
+		  }
+		  widths.push(Math.max.apply(Math, [2].concat(results)));
+		}
+		just = function (string, col) {
+		  var back, front, length;
+		  length = widths[col] - string.length;
+		  switch (justify[col]) {
+			case '::':
+			  front = padding[0], back = padding[1];
+			  return padding(length / 2) + string + padding((length + 1) / 2);
+			case '-:':
+			  return padding(length) + string;
+			default:
+			  return string + padding(length);
+		  }
+		};
+		formatted = [];
+		for (j = 0, len1 = content.length; j < len1; j++) {
+		  cells = content[j];
+		  results = [];
+		  for (i = k = 0, ref2 = columns - 1; 0 <= ref2 ? k <= ref2 : k >= ref2; i = 0 <= ref2 ? ++k : --k) {
+			results.push(just(cells[i], i));
+		  }
+		  formatted.push(addTailPipes(joinCells(results)));
+		}
+		formatline = addTailPipes(joinCells((function () {
+		  var j, ref2, ref3, results;
+		  results = [];
+		  for (i = j = 0, ref2 = columns - 1; 0 <= ref2 ? j <= ref2 : j >= ref2; i = 0 <= ref2 ? ++j : --j) {
+			ref3 = justify[i], front = ref3[0], back = ref3[1];
+			results.push(front + padding(widths[i] - 2, '-') + back);
+		  }
+		  return results;
+		})()));
+		formatted.splice(formatrow, 0, formatline);
+		var result = (headerline.length === 0 && text[1] !== '' ? '\n' : '') + formatted.join('\n');
+		if (appendNewline !== false) {
+		  result += '\n'
+		}
+		return result;
+	  }
+
+	  if (chunk.before.slice(-1) !== '\n') {
+		chunk.before += '\n';
+	  }
+	  var match = chunk.selection.match(regex);
+	  if (match) {
+		chunk.selection = formatTable(match, chunk.selection.slice(-1) === '\n');
+	  } else {
+		var table = chunk.selection + '|\n-|-\n|';
+		match = table.match(regex);
+		if (!match || match[0].slice(0, table.length) !== table) {
+		  return;
+		}
+		table = formatTable(match);
+		var selectionOffset = keepFirstAndLastPipes ? 1 : 0;
+		var pipePos = table.indexOf('|', selectionOffset);
+		chunk.before += table.slice(0, selectionOffset);
+		chunk.selection = table.slice(selectionOffset, pipePos);
+		chunk.after = table.slice(pipePos) + chunk.after;
+	  }
+    };
 
 
 })();
