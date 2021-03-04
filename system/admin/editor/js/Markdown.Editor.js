@@ -47,7 +47,7 @@
 
         hr: "Horizontal Rule <hr> Ctrl+R",
 		
-        readmore: "Read More Link",
+        readmore: "Read More <!--more--> Ctrl+M",
 
         undo: "Undo - Ctrl+Z",
         redo: "Redo - Ctrl+Y",
@@ -1284,6 +1284,9 @@
                     case "r":
                         doClick(buttons.hr);
                         break;
+                    case "m":
+                        doClick(buttons.readmore);
+                        break;
                     case "y":
                         doClick(buttons.redo);
                         break;
@@ -1486,7 +1489,7 @@
             }));
             buttons.heading = makeButton("wmd-heading-button", getString("heading"), "fa fa-header", bindCommand("doHeading"));
             buttons.hr = makeButton("wmd-hr-button", getString("hr"), "fa fa-ellipsis-h", bindCommand("doHorizontalRule"));
-            buttons.readmore= makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
+            buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
             makeSpacer(3);
             buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa fa-undo", null);
             buttons.undo.execute = function (manager) {
