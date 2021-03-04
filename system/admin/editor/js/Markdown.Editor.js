@@ -52,7 +52,7 @@
 		
         readmore: "Read More <!--more--> Ctrl+M",
 		
-        table: "Table - Ctrl+T",
+        table: "Table - Ctrl+J",
 
         undo: "Undo - Ctrl+Z",
         redo: "Redo - Ctrl+Y",
