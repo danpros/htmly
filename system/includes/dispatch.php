@@ -49,7 +49,7 @@ function i18n($key, $value = null)
       if (file_exists($value))
         $_i18n = parse_ini_file($value, true);
       else
-        $_i18n = parse_ini_file('lang/lang-en.ini', true);
+        $_i18n = parse_ini_file('lang/en_US.ini', true);
     } elseif ($value == null)
         return (isset($_i18n[$key]) ? $_i18n[$key] : '_i18n_' . $key . '_i18n_');
     else
