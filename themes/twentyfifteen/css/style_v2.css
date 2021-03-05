@@ -1764,15 +1764,6 @@ a.post-thumbnail:focus {
 	white-space: nowrap;
 }
 
-.comments-area .more-link:after,
-.entry-content .more-link:after,
-.entry-summary .more-link:after {
-	content: "\f429";
-	font-size: 16px;
-	position: relative;
-	top: 5px;
-}
-
 .author-info {
 	border-top: 1px solid #eaeaea;
 	border-top: 1px solid rgba(51, 51, 51, 0.1);
