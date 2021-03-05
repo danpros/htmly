@@ -36,6 +36,23 @@ blockquote {
     padding: 2%;
 }
 
+.wmd-preview table {
+    margin: 20px 0;
+}
+
+.wmd-preview td, .wmd-preview th {
+    border-right: 1px solid #ccc;
+    padding: 8px 12px;
+}
+
+.wmd-preview td:last-child, .wmd-preview th:last-child {
+    border-right: none;
+}
+
+.wmd-preview td {
+    border-top: 1px solid #ccc;	
+}
+
 .wmd-button-row {
     position: relative;
     margin: 0px;
