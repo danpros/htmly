@@ -2040,22 +2040,22 @@ function parseNode($node, $child = null) {
 		if (isset($url['host'])) {
 			if ($url['host'] ==  $su['host']) {
 				if (slashUrl($url['path']) == slashUrl($req)) {
-                    $li = '<li class="item active '.$node->class.'">';
+                    $li = '<li class="item nav-item active '.$node->class.'">';
 				} else  {					
-				    $li = '<li class="item '.$node->class.'">';
+				    $li = '<li class="item nav-item '.$node->class.'">';
 				}
 			} else {
-				$li = '<li class="item '.$node->class.'">'; // Link out
+				$li = '<li class="item nav-item '.$node->class.'">'; // Link out
 			}
 		} else {
 			if (slashUrl($node->slug) == slashUrl($req)) {
-				$li = '<li class="item active '.$node->class.'">';
+				$li = '<li class="item nav-item active '.$node->class.'">';
 			} else {
-				$li = '<li class="item '.$node->class.'">';
+				$li = '<li class="item nav-item '.$node->class.'">';
 			}
 		}
 		
-		$li .= '<a href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
+		$li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
 		if (isset($node->children)) { 
 			$li .= parseNodes($node->children, true, null);
 		}
@@ -2066,22 +2066,22 @@ function parseNode($node, $child = null) {
 		if (isset($url['host'])) {
 			if ($url['host'] ==  $su['host']) {
 				if (slashUrl($url['path']) == slashUrl($req)) {
-                    $li = '<li class="item dropdown active '.$node->class.'">';
+                    $li = '<li class="item nav-item dropdown active '.$node->class.'">';
 				} else  {					
-				    $li = '<li class="item dropdown '.$node->class.'">';
+				    $li = '<li class="item nav-item dropdown '.$node->class.'">';
 				}
 			} else {
-				$li = '<li class="item dropdown '.$node->class.'">'; // Link out
+				$li = '<li class="item nav-item dropdown '.$node->class.'">'; // Link out
 			}
 		} else {
 			if (slashUrl($node->slug) == slashUrl($req)) {
-				$li = '<li class="item dropdown active '.$node->class.'">';
+				$li = '<li class="item nav-item dropdown active '.$node->class.'">';
 			} else {
-				$li = '<li class="item dropdown '.$node->class.'">';
+				$li = '<li class="item nav-item dropdown '.$node->class.'">';
 			}
 		}
 		
-		$li .= '<a class="dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
+		$li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
 		if (isset($node->children)) { 
 			$li .= parseNodes($node->children, true, null);
 		}
