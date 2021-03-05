@@ -1,4 +1,5 @@
 <?php
+if (!defined('HTMLY')) die('HTMLy');
 
 use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;

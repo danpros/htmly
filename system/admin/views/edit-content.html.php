@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php
 if (isset($p->file)) {
     $url = $p->file;

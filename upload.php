@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('HTMLY')) die('HTMLy');
 require 'system/includes/dispatch.php';
 require 'system/includes/session.php';
 

@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2 class="post-index"><?php echo $heading ?></h2>
 <br>
 <a class="btn btn-primary right" href="<?php echo site_url();?>admin/content">Add new post</a>

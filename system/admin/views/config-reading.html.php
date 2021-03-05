@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2>Reading Settings</h2>
 <br>
 <nav>

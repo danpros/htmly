@@ -1,4 +1,5 @@
 <?php
+if (!defined('HTMLY')) die('HTMLy');
 
 // Return username.ini value
 function user($key, $user = null)

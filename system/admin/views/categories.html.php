@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php $desc = get_category_info(null); ?>
 <h2>Categories</h2>
 <br>

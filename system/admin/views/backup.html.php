@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php
 if (login()) {
     if (isset($_GET['file'])) {

@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2 class="post-index"><?php echo $category->title ?></h2>
 <div><?php echo $category->body;?></div>
 <br>

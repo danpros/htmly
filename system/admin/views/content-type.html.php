@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2><?php echo i18n('Add_content');?></h2>
 
 <p><a href="<?php echo site_url();?>add/content?type=post"><?php echo i18n('Regular_post')?></a><br><?php echo i18n('Regular_post_comment')?>.</p>
