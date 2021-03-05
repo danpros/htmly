@@ -66,6 +66,7 @@
                         <?php } elseif (facebook()) { ?> 
                             with <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a>
                         <?php } ?>
+						<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
                     </p>
                 </div>
                 <div class="desc text-left" itemprop="articleBody">                                    

@@ -57,7 +57,8 @@
             <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
         <?php } elseif (facebook()) { ?>
             <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a></span>
-        <?php } ?>        
+        <?php } ?>
+        <?php if (login()) { echo '<span class="edit-link"><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
     </footer><!-- .entry-footer -->
 </article><!-- #post-## -->
 <?php endforeach;?>
