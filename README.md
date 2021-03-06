@@ -51,7 +51,11 @@ HTMLy requires PHP 5.3 or greater, PHP-XML package, and PHP-ZIP package for back
 
 Installations
 -------------
-If you have an OpenSSL enabled server (usually enabled by default), use the [installer.php](https://github.com/danpros/htmly/releases/latest) and read the following [instructions](https://docs.htmly.com/basics/installations) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
+ 1. Download the latest version from the [Github repo](https://github.com/danpros/htmly/releases/latest)
+ 2. Upload and extract the zip file in your web server. You can upload it in the root directory, or in subdirectory such as `htmly`.
+ 3. Visit your domain. If you extract it in root directory visit `https://www.example.com/install.php` and if in subdirectory visit `https://www.example.com/htmly/install.php`.
+ 4. Follow the installer to install HTMLy.
+ 5. The installer will try to delete itself. Please delete the installer manually if the `install.php` stil exist. 
 
 Configurations
 --------------
