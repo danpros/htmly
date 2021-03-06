@@ -30,44 +30,6 @@ function from($source, $name) {
     return isset($source[$name]) ? $source[$name] : null;
 }
 
-function htaccess(){ return <<<EOT
-# Don't show directory listings for URLs which map to a directory.
-Options -Indexes
-
-# Make HTMLy handle any 404 errors.
-ErrorDocument 404 /installer.php
-
-# Set the default handler.
-DirectoryIndex installer.php
-
-# Requires mod_expires to be enabled.
-
-# Various rewrite rules.
-<IfModule mod_rewrite.c>
-
-  RewriteEngine on
-
-# Uncomment the following to redirect all visitors to the www version
-# RewriteCond %{HTTP_HOST} !^www\. [NC]
-# RewriteRule ^ http://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Uncomment the following to redirect all visitors to non www version
-# RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-# RewriteRule ^ http://%1%{REQUEST_URI} [L,R=301]
-
-# If your site is running in a VirtualDocumentRoot at http://example.com/,
-# uncomment the following line:
-# RewriteBase /
-
-# Pass all requests not referring directly to files in the filesystem to index.php.
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d 
-  RewriteRule ^ installer.php [L]
-
-</IfModule>
-EOT;
-}
-
 class Message {
 
     protected $errors = array();
@@ -215,9 +177,6 @@ class Settings
     public function __construct()
     {
         $message = $this->testTheEnvironment();
-        if (is__writable("./") && !file_exists(".htaccess")) {
-            file_put_contents(".htaccess", htaccess());
-        }
 
         $this->generateSiteUrl();
         if (!empty($message)) {
