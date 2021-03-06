@@ -1,4 +1,5 @@
 <?php
+if (file_exists('config/config.ini')) die('HTMLy already installed!');
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
