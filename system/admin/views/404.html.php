@@ -13,9 +13,9 @@
 </head>
 <body>
 <div class="center message">
-    <h1>This page doesn't exist!</h1>
+    <h1><?php echo i18n('This_page_doesnt_exist');?></h1>
 
-    <p>Would you like to try our <a href="<?php echo site_url() ?>">homepage</a> instead?</p>
+    <p><?php echo i18n('Would_you_like_to_try_our');?> <a href="<?php echo site_url() ?>"><?php echo i18n('homepage');?></a> <?php echo i18n('instead');?> ?</p>
 </div>
 </body>
 </html>

@@ -22,8 +22,8 @@ function parseMenus($menus) {
 function parseMenu($menu) {
 	$li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" data-slug="'.htmlspecialchars($menu->slug, FILTER_SANITIZE_URL).'">';
 	$li .= '<div class="dd-handle">'.$menu->name.'</div>';
-	$li .= '<span class="button-delete btn btn-danger btn-xs" data-owner-id="'.$menu->id.'">Delete</span>';
-	$li .= '<span class="button-edit btn btn-primary btn-xs" data-owner-id="'.$menu->id.'">Edit</span>';
+	$li .= '<span class="button-delete btn btn-danger btn-xs" style="margin-right:0.5rem" data-owner-id="'.$menu->id.'">'.i18n('Delete').'</span>';
+	$li .= '<span class="button-edit btn btn-primary btn-xs" data-owner-id="'.$menu->id.'">'.i18n('Edit').'</span>';
 	if (isset($menu->children)) { 
 		$li .= parseMenus($menu->children);
 	}
@@ -35,41 +35,41 @@ function parseMenu($menu) {
 
 <div class="row">
 	<div class="col-md-6">
-		<div class="dd nestable"><?php if (!empty($menu)) {echo $menu;} else {echo '<span>At the moment you are using auto-generated menu.</span><ol class="dd-list"></ol>';}?></div>
+		<div class="dd nestable"><?php if (!empty($menu)) {echo $menu;} else {echo '<span>'.i18n('At_the_moment_you_are_using_auto_generated_menu').'</span><ol class="dd-list"></ol>';}?></div>
 	</div>
 
 	<div class="col-md-6">
 		<form id="menu-add">
-			<h4>Add menu</h4>
+			<h4><?php echo i18n('Add_menu');?></h4>
 			<div class="form-group">
-			<label for="addInputName">Name</label>
-			<input type="text" class="form-control" id="addInputName" placeholder="Item name" required>
+			<label for="addInputName"><?php echo i18n('Name');?></label>
+			<input type="text" class="form-control" id="addInputName" placeholder="<?php echo i18n('Link_name')?>" required>
 			</div>
 			<div class="form-group">
-			<label for="addInputSlug">Slug</label>
-			<input type="text" class="form-control" id="addInputSlug" placeholder="item-slug" required>
+			<label for="addInputSlug"><?php echo i18n('Slug');?></label>
+			<input type="text" class="form-control" id="addInputSlug" placeholder="<?php echo i18n('item_slug');?>" required>
 			</div>
 			<div class="form-group">
-			<label for="addInputClass">CSS Class (Optional)</label>
-			<input type="text" class="form-control" id="addInputClass" placeholder="item-class">
+			<label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
+			<input type="text" class="form-control" id="addInputClass" placeholder="<?php echo i18n('item_class');?>">
 			</div>
-			<button class="btn btn-primary btn-sm" id="addButton">Add menu</button>
+			<button class="btn btn-primary btn-sm" id="addButton"><?php echo i18n('Add_link');?></button>
 		</form>
 		<form id="menu-editor" style="display: none;">
 			<h4>Editing <span id="currentEditName"></span></h4>
 			<div class="form-group">
-			<label for="addInputName">Name</label>
-			<input type="text" class="form-control" id="editInputName" placeholder="Item name" required>
+			<label for="addInputName"><?php echo i18n('Name')?></label>
+			<input type="text" class="form-control" id="editInputName" placeholder="<?php echo i18n('Link_name')?>" required>
 			</div>
 			<div class="form-group">
-			<label for="addInputSlug">Slug</label>
-			<input type="text" class="form-control" id="editInputSlug" placeholder="item-slug">
+			<label for="addInputSlug"><?php echo i18n('Slug');?></label>
+			<input type="text" class="form-control" id="editInputSlug" placeholder="<?php echo i18n('item_slug');?>">
 			</div>
 			<div class="form-group">
-			<label for="addInputClass">CSS Class (Optional)</label>
-			<input type="text" class="form-control" id="editInputClass" placeholder="item-class">
+			<label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
+			<input type="text" class="form-control" id="editInputClass" placeholder="<?php echo i18n('item_class');?>">
 			</div>
-			<button class="btn btn-primary btn-sm" id="editButton">Save Edit</button>
+			<button class="btn btn-primary btn-sm" id="editButton"><?php echo i18n('Save_Edit');?></button>
 		</form>
 	</div>
 </div>
@@ -77,7 +77,7 @@ function parseMenu($menu) {
 <div class="row">
 	<div class="output-container">
 		<div class="col">
-			<button class="btn btn-primary" id="saveButton">Save Menu</button>
+			<button class="btn btn-primary" id="saveButton"><?php echo i18n('Save_Menu');?></button>
 			<form class="form" style="display:none;">
 				<textarea class="form-control" id="json-output" rows="5"></textarea>
 			</form>
@@ -108,7 +108,7 @@ function parseMenu($menu) {
       success: function (response) {
          alert(response.message);
       },
-    });
+    });	
   });
 </script>
 <style>

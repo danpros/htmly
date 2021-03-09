@@ -1,6 +1,6 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php $desc = get_category_info(null); ?>
-<h2>Categories</h2>
+<h2><?php echo i18n("Categories");?></h2>
 <br>
 <a class="btn btn-primary " href="<?php echo site_url();?>add/category"><?php echo i18n('Add_category');?></a>
 <br><br>

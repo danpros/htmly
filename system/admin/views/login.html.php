@@ -4,16 +4,16 @@
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
 <?php if (!login()) { ?>
-    <h1>Login</h1>
+    <h1><?php echo i18n('Login');?></h1>
     <form method="POST" action="login">
-        <label>User <span class="required">*</span></label>
+        <label><?php echo i18n('User');?> <span class="required">*</span></label>
         <input type="text" class="form-control <?php if (isset($username)) {
             if (empty($username)) {
                 echo 'error';
             }
         } ?>" name="user" placeholder="Username"/>
 		<br>
-        <label>Password <span class="required">*</span></label>
+        <label><?php echo i18n('Password');?> <span class="required">*</span></label>
         <input type="password" class="form-control <?php if (isset($password)) {
             if (empty($password)) {
                 echo 'error';
@@ -26,7 +26,7 @@
             <div class="g-recaptcha" data-sitekey="<?php echo config("google.reCaptcha.public"); ?>"></div>
             <br/>
         <?php endif; ?>
-        <input type="submit" class="btn btn-primary" name="submit" value="Login"/>
+        <input type="submit" class="btn btn-primary" name="submit" value="<?php echo i18n('Login');?>"/>
     </form>
 <?php } else {
     header('location: admin');
