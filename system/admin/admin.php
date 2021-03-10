@@ -823,7 +823,7 @@ function get_user_posts()
             echo '<table class="table post-list">';
             echo '<tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
             if (config("views.counter") == "true")
-                echo '<th>Views</th>';
+                echo '<th>'.i18n('Views').'</th>';
             echo '<th>' . i18n('Category') . '</th><th>' . i18n('Tags') . '</th><th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($posts);
@@ -861,7 +861,7 @@ function get_user_pages()
             echo '<table class="table post-list">';
             echo '<tr class="head"><th>' . i18n('Title') . '</th>';
             if (config("views.counter") == "true")
-                echo '<th>Views</th>';
+                echo '<th>'.i18n('Views').'</th>';
             echo '<th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($posts);
@@ -907,7 +907,7 @@ function get_backup_files()
         if (!empty($files)) {
             krsort($files);
             echo '<table class="table backup-list">';
-            echo '<tr class="head"><th>' . i18n('Filename') . '</th><th>Date</th><th>' . i18n('Operations') . '</th></tr>';
+            echo '<tr class="head"><th>' . i18n('Filename') . '</th><th>'.i18n('Date').'</th><th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($files);
             foreach ($files as $file) {
@@ -943,7 +943,7 @@ function get_backup_files()
             }
             echo '</table>';
         } else {
-            echo 'No available backup!';
+            echo i18n('No_available_backup');
         }
     }
 }
