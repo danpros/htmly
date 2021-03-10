@@ -1601,7 +1601,7 @@ function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $
         if ($page > 1)
             $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $prev .'">« Prev</a></li>';
         else
-            $pagination .= '<li class="page-item disabled"><span>« Prev</span></li>';
+            $pagination .= '<li class="page-item disabled"><span class="page-link">« Prev</span></li>';
 
         //pages
         if ($lastpage < 7 + ($adjacents * 2))    //not enough pages to bother breaking it up
@@ -1609,7 +1609,7 @@ function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $
             for ($counter = 1; $counter <= $lastpage; $counter++)
             {
                 if ($counter == $page)
-                    $pagination .= '<li class="page-item active"><span>'. $counter.'</span></li>';
+                    $pagination .= '<li class="page-item active"><span class="page-link">'. $counter.'</span></li>';
                 else
                     $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
             }
@@ -1622,11 +1622,11 @@ function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $
                 for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
                 {
                     if ($counter == $page)
-                        $pagination .= '<li class="page-item active"><span>'. $counter .'</span></li>';
+                        $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
                         $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
-                $pagination .= '<li class="page-item disabled"><span>...</span></li>';
+                $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lastpage .'">'. $lastpage .'</a></li>';
             }
@@ -1635,15 +1635,15 @@ function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $
             {
                 $pagination .= '<li class="page-item"><a class="page-link" href="' . $pagestring .'1">1</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'2">2</a></li>';
-                $pagination .= '<li class="page-item disabled"><span>...</span></li>';
+                $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++)
                 {
                     if ($counter == $page)
-                        $pagination .= '<li class="page-item active"><span>'. $counter .'</span></li>';
+                        $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
                         $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
-                $pagination .= '<li class="page-item disabled"><span>...</span></li>';
+                $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lastpage . '">'. $lastpage .'</a></li>';
             }
@@ -1652,11 +1652,11 @@ function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $
             {
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'1">1</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'2">2</a></li>';
-                $pagination .= '<li class="page-item disabled"><span>...</span></li>';
+                $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 for ($counter = $lastpage - (1 + ($adjacents * 3)); $counter <= $lastpage; $counter++)
                 {
                     if ($counter == $page)
-                        $pagination .= '<li class="page-item active"><span>'. $counter .'</span></li>';
+                        $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
                         $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
@@ -1667,7 +1667,7 @@ function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $
         if ($page < $counter - 1)
             $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $next .'">Next »</a></li>';
         else
-            $pagination .= '<li class="page-item disabled"><span>Next »</span></li>';
+            $pagination .= '<li class="page-item disabled"><span class="page-link">Next »</span></li>';
         $pagination .= '</ul>';
     }
 
