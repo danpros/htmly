@@ -31,7 +31,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="<?php echo site_url();?>" class="nav-link"><i class="fa fa-globe"></i> <?php echo i18n('Home')?></a>
+        <a href="<?php echo site_url();?>" class="nav-link"><i class="fa fa-globe"></i> <?php echo config('breadcrumb.home')?></a>
       </li>
     </ul>
 
