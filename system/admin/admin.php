@@ -221,26 +221,33 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
     
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
-    $taglang = array_flip(unserialize(file_get_contents('content/data/tags.lang')));
-    $tflip = array_intersect_key($taglang, array_flip($tag));
-    $post_tag = array();
-    $post_tagmd = array();
-    foreach ($tag as $t) {
-        if (array_key_exists($t, $tflip)) {
-            foreach ($tflip as $tfp => $tf){
-                if($t === $tfp) {
-                    $post_tag[] = $tf;
-                    $post_tagmd[] = $tfp;
+    $tagslang = "content/data/tags.lang";
+    if (file_exists($tagslang)) {
+        $taglang = array_flip(unserialize(file_get_contents($tagslang)));
+        $tflip = array_intersect_key($taglang, array_flip($tag));
+        $post_tag = array();
+        $post_tagmd = array();
+        foreach ($tag as $t) {
+            if (array_key_exists($t, $tflip)) {
+                foreach ($tflip as $tfp => $tf){
+                    if($t === $tfp) {
+                        $post_tag[] = $tf;
+                        $post_tagmd[] = $tfp;
+                    }
                 }
+            } else {
+                $post_tag[] = $t;
+                $post_tagmd[] = $t;
             }
-        } else {
-            $post_tag[] = $t;
-            $post_tagmd[] = $t;
         }
-    }
-    
-    $post_tag = safe_tag(implode(',', $post_tag));
-    $post_tagmd = safe_html(implode(',', $post_tagmd));
+		
+        $post_tag = safe_tag(implode(',', $post_tag));
+        $post_tagmd = safe_html(implode(',', $post_tagmd));		
+		
+	} else {
+        $post_tag = safe_tag(implode(',', $tag));
+        $post_tagmd = safe_html(implode(',', $tag));		
+	}
     
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
