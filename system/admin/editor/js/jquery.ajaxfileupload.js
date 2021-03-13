@@ -107,11 +107,12 @@
           //  and clean up after ourselves. 
           */
           var handleResponse = function(loadedFrame, element) {
-            var response, responseStr = $(loadedFrame).contents().text();
+            var response, responseStr = $(loadedFrame).contents()[0].body.textContent;
             try {
               //response = $.parseJSON($.trim(responseStr));
               response = JSON.parse(responseStr);
             } catch(e) {
+              console.error(e);
               response = responseStr;
             }
 
