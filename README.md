@@ -51,11 +51,23 @@ HTMLy requires PHP 5.3 or greater, PHP-XML package, and PHP-ZIP package for back
 
 Installations
 -------------
+
+Install HTMLy using the source code:
+
  1. Download the latest version from the [Github repo](https://github.com/danpros/htmly/releases/latest)
  2. Upload and extract the zip file to your web server. You can upload it in the root directory, or in subdirectory such as `htmly`.
  3. Visit your domain. If you extract it in root directory visit `https://www.example.com/install.php` and if in subdirectory visit `https://www.example.com/htmly/install.php`.
  4. Follow the installer to install HTMLy.
  5. The installer will try to delete itself. Please delete the installer manually if the `install.php` still exist. 
+ 
+### Online install
+
+Install HTMLy without downloading the source code and use the online installer:
+
+ 1. Download `online-installer.php` from the [latest release](https://github.com/danpros/htmly/releases/latest)
+ 2. If you upload it in root directory visit `https://www.example.com/online-installer.php` or if in subdirectory visit `https://www.example.com/subdirectory/online-installer.php`.
+ 3. Follow the installer to install HTMLy.
+ 4. Please delete the installer manually if the `online-installer.php` and `install.php` still exist.
 
 Configurations
 --------------
