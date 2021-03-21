@@ -2648,6 +2648,7 @@ get('/:static', function ($static) {
         }
         die;
     } elseif ($static === 'login') {
+        if (session_status() == PHP_SESSION_NONE) session_start();
         config('views.root', 'system/admin/views');
         render('login', array(
             'title' => 'Login - ' . blog_title(),

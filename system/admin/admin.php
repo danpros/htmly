@@ -53,6 +53,7 @@ function session($user, $pass)
 
     if ($user_enc == "password_hash") {
         if (password_verify($pass, $user_pass)) {
+            if (session_status() == PHP_SESSION_NONE) session_start();
             if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
                 update_user($user, $pass, $user_role);
             }
@@ -62,6 +63,7 @@ function session($user, $pass)
             return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
+        if (session_status() == PHP_SESSION_NONE) session_start();
         update_user($user, $pass, $user_role);
         $_SESSION[config("site.url")]['user'] = $user;
         header('location: admin');
