@@ -73,14 +73,6 @@ Configurations
 --------------
 Set written permission for the `cache` and `content` directories.
 
-Rename `config.ini.example` inside the `config` folder to `config.ini` (or you can create a new `config/config.ini` file) then change the site settings there.
-
-Create `YourUsername.ini` inside the `config/users` folder or simply rename the `username.ini.example` file and write down your password there:
-
-````cfg
-password = YourPassword
-````
-
 In addition, HTMLy support admin user role. To do so, simply add the following line to your choosen user:
 
 ````cfg
