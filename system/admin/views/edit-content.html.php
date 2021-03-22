@@ -92,7 +92,7 @@ $( function() {
     $( "#pTag" )
       // don't navigate away from the field on tab when selecting an item
       .on( "keydown", function( event ) {
-        if ( event.keyCode === $.ui.keyCode.TAB &&
+        if ( event.keyCode === 9 && // 9 = tab
             $( this ).autocomplete( "instance" ).menu.active ) {
           event.preventDefault();
         }
