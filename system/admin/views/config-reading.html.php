@@ -15,137 +15,137 @@
 <form method="POST">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Front page displays</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Front_page_displays');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-static.frontpage" id="static.frontpage1" value="false" <?php if (config('static.frontpage') === 'false'):?>checked<?php endif;?>>
           <label class="form-check-label" for="static.frontpage1">
-            Your latest blog posts
+            <?php echo i18n('Your_latest_blog_posts');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-static.frontpage" id="static.frontpage1" value="true" <?php if (config('static.frontpage') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="static.frontpage2">
-            Static page
+            <?php echo i18n('Static_page');?>
           </label>
         </div>
       </div>
 	</div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Enable /blog URL</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Enable_blog_URL');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable1" value="true" <?php if (config('blog.enable') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="blog.enable1">
-            Enable
+            <?php echo i18n('Enable');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable2" value="false" <?php if (config('blog.enable') === 'false'):?>checked<?php endif;?>>
           <label class="form-check-label" for="blog.enable2">
-            Disable
+            <?php echo i18n('Disable');?>
           </label>
         </div>
       </div>
 	</div>
   </div>
   <div class="form-group row">
-    <label for="posts.perpage" class="col-sm-2 col-form-label">Posts in front page show at most</label>
+    <label for="posts.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_front_page_show_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-posts.perpage" class="form-control" id="posts.perpage" value="<?php echo config('posts.perpage');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Blog posts displayed as</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Blog_posts_displayed_as');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-teaser.type" id="teaser.type1" value="full" <?php if (config('teaser.type') === 'full'):?>checked<?php endif;?>>
           <label class="form-check-label" for="teaser.type1">
-            Full post
+            <?php echo i18n('Full_post');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-teaser.type" id="teaser.type2" value="trimmed" <?php if (config('teaser.type') === 'trimmed'):?>checked<?php endif;?>>
           <label class="form-check-label" for="teaser.type2">
-            Summary
+            <?php echo i18n('Summary');?>
           </label>
         </div>
       </div>
 	</div>
   </div>
   <div class="form-group row">
-    <label for="teaser.char" class="col-sm-2 col-form-label">Summary character</label>
+    <label for="teaser.char" class="col-sm-2 col-form-label"><?php echo i18n('Summary_character');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-teaser.char" class="form-control" id="teaser.char" value="<?php echo config('teaser.char');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="read.more" class="col-sm-2 col-form-label">Read more text</label>
+    <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Read_more_text');?></label>
     <div class="col-sm-10">
-      <input type="text" name="-config-read.more" class="form-control" id="read.more" value="<?php echo valueMaker(config('read.more'));?>" placeholder="Read more">
+      <input type="text" name="-config-read.more" class="form-control" id="read.more" value="<?php echo valueMaker(config('read.more'));?>" placeholder="<?php echo i18n('Read_more_text_placeholder');?>">
     </div>
   </div>
   <br>
-  <h4>Posts index settings</h4>
+  <h4><?php echo i18n('Posts_index_settings');?></h4>
   <hr>
   <div class="form-group row">
-    <label for="category.perpage" class="col-sm-2 col-form-label">Posts in category page at most</label>
+    <label for="category.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_category_page_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-category.perpage" class="form-control" id="category.perpage" value="<?php echo config('category.perpage');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="archive.perpage" class="col-sm-2 col-form-label">Posts in archive page at most</label>
+    <label for="archive.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_archive_page_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-archive.perpage" class="form-control" id="archive.perpage" value="<?php echo config('archive.perpage');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="tag.perpage" class="col-sm-2 col-form-label">Posts in tag page at most</label>
+    <label for="tag.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_tag_page_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-tag.perpage" class="form-control" id="tag.perpage" value="<?php echo config('tag.perpage');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="search.perpage" class="col-sm-2 col-form-label">Posts in search result at most</label>
+    <label for="search.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_search_result_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-search.perpage" class="form-control" id="search.perpage" value="<?php echo config('search.perpage');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="type.perpage" class="col-sm-2 col-form-label">Posts in type page at most</label>
+    <label for="type.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_type_page_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-type.perpage" class="form-control" id="type.perpage" value="<?php echo config('type.perpage');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="profile.perpage" class="col-sm-2 col-form-label">Posts in profile page at most</label>
+    <label for="profile.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_profile_page_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-profile.perpage" class="form-control" id="profile.perpage" value="<?php echo config('profile.perpage');?>">
     </div>
   </div>
   <br>
-  <h4>RSS settings</h4>
+  <h4><?php echo i18n('RSS_settings');?></h4>
   <hr>
   <div class="form-group row">
-    <label for="rss.count" class="col-sm-2 col-form-label">RSS feeds show the most recent</label>
+    <label for="rss.count" class="col-sm-2 col-form-label"><?php echo i18n('RSS_feeds_show_the_most_recent');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-rss.count" class="form-control" id="rss.count" value="<?php echo config('rss.count');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="rss.char" class="col-sm-2 col-form-label">RSS character</label>
+    <label for="rss.char" class="col-sm-2 col-form-label"><?php echo i18n('RSS_character');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-rss.char" class="form-control" id="rss.char" value="<?php echo config('rss.char');?>">
     </div>
   </div>
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save config</button>
+      <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>
   </div>
 </form>

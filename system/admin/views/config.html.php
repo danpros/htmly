@@ -15,33 +15,33 @@
 <form method="POST">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
   <div class="form-group row">
-    <label for="site.url" class="col-sm-2 col-form-label">Address (URL)</label>
+    <label for="site.url" class="col-sm-2 col-form-label"><?php echo i18n('Address_URL');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-site.url" class="form-control" id="site.url" value="<?php echo valueMaker(config('site.url'));?>" placeholder="https://www.htmly.com">
     </div>
   </div>
   <div class="form-group row">
-    <label for="blog.title" class="col-sm-2 col-form-label">Blog title</label>
+    <label for="blog.title" class="col-sm-2 col-form-label"><?php echo i18n('Blog_Title');?></label>
     <div class="col-sm-10">
-      <input type="text" name="-config-blog.title" class="form-control" id="blog.title" value="<?php echo valueMaker(config('blog.title'));?>" placeholder="My HTMLy Blog">
+      <input type="text" name="-config-blog.title" class="form-control" id="blog.title" value="<?php echo valueMaker(config('blog.title'));?>" placeholder="<?php echo i18n('Blog_Title_Placeholder');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label for="blog.tagline" class="col-sm-2 col-form-label">Tagline</label>
+    <label for="blog.tagline" class="col-sm-2 col-form-label"><?php echo i18n('Tagline');?></label>
     <div class="col-sm-10">
-      <input type="text" name="-config-blog.tagline" class="form-control" id="blog.tagline" value="<?php echo valueMaker(config('blog.tagline'));?>" placeholder="Databaseless PHP Blogging Platform">
-	  <small><em>In a few words, explain what this blog is about.</em></small>
+      <input type="text" name="-config-blog.tagline" class="form-control" id="blog.tagline" value="<?php echo valueMaker(config('blog.tagline'));?>" placeholder="<?php echo i18n('Tagline_Placeholder');?>">
+	  <small><em><?php echo i18n('Tagline_description');?></em></small>
     </div>
   </div>
   <div class="form-group row">
-    <label for="blog.description" class="col-sm-2 col-form-label">Description</label>
+    <label for="blog.description" class="col-sm-2 col-form-label"><?php echo i18n('Description');?></label>
     <div class="col-sm-10">
       <textarea id="blog.description" name="-config-blog.description" class="form-control"><?php echo valueMaker(config('blog.description'));?></textarea>   
-	  <small><em>In one paragraph, tell us more about your blog.</em></small>
+	  <small><em><?php echo i18n('Blog_Description');?></em></small>
     </div>
   </div>
   <div class="form-group row">
-    <label for=language" class="col-sm-2 col-form-label">Language</label>
+    <label for=language" class="col-sm-2 col-form-label"><?php echo i18n('Language');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="language" name="-config-language">
     <?php foreach (glob('lang/*.ini') as $file) { ?>
@@ -51,7 +51,7 @@
 	</div>
   </div>
   <div class="form-group row">
-    <label for=language" class="col-sm-2 col-form-label">Timezone</label>
+    <label for=language" class="col-sm-2 col-form-label"><?php echo i18n('Timezone');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="timezone" name="-config-timezone">
     <?php foreach (timezone_identifiers_list() as $zone) { ?>
@@ -62,7 +62,7 @@
   </div>
   <div class="form-group row">
   <?php $time = new DateTime('NOW'); $date = $time->format("Y-m-d H:i:s");?>
-    <label class="col-sm-2 col-form-label">Date Format</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Date_Format');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
@@ -105,7 +105,7 @@
 	</div>
   </div>
   <div class="form-group row">
-    <label for=views.root" class="col-sm-2 col-form-label">Blog Theme</label>
+    <label for=views.root" class="col-sm-2 col-form-label"><?php echo i18n('Blog_Theme');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="views.root" name="-config-views.root">
     <?php foreach (glob('themes/*/layout.html.php') as $folder) { ?>
@@ -116,14 +116,14 @@
 	</div>
   </div>
   <div class="form-group row">
-    <label for="blog.copyright" class="col-sm-2 col-form-label">Copyright line</label>
+    <label for="blog.copyright" class="col-sm-2 col-form-label"><?php echo i18n('Copyright_Line');?></label>
     <div class="col-sm-10">
-      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo valueMaker(config('blog.copyright'));?>" placeholder="(c) Your name.">
+      <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo valueMaker(config('blog.copyright'));?>" placeholder="<?php echo i18n('Copyright_Line_Placeholder');?>">
     </div>
   </div>
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save config</button>
+      <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>
   </div>
 </form>

@@ -15,85 +15,85 @@
 <form method="POST">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
   <div class="form-group row">
-    <label for="cache.expiration" class="col-sm-2 col-form-label">Cache expiration</label>
+    <label for="cache.expiration" class="col-sm-2 col-form-label"><?php echo i18n('Cache_expiration');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-cache.expiration" class="form-control" id="cache.expiration" value="<?php echo config('cache.expiration');?>">
     </div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Cache off</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Cache_off');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-cache.off" id="cache.off1" value="true" <?php if (config('cache.off') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="cache.off1">
-            Yes (not recommended)
+            <?php echo i18n('Yes_not_recommended');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-cache.off" id="cache.off2" value="false" <?php if (config('cache.off') === 'false'):?>checked<?php endif;?>>
           <label class="form-check-label" for="cache.off2">
-            No
+            <?php echo i18n('Not');?>
           </label>
         </div>
       </div>
 	</div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Cache timestamp</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Cache_timestamp');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-cache.timestamp" id="cache.timestamp1" value="true" <?php if (config('cache.timestamp') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="cache.timestamp1">
-            Enable
+            <?php echo i18n('Enable');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-cache.timestamp" id="cache.timestamp2" value="false" <?php if (config('cache.timestamp') === 'false'):?>checked<?php endif;?>>
           <label class="form-check-label" for="generation.time2">
-            Disable
+            <?php echo i18n('Disable');?>
           </label>
         </div>
       </div>
 	</div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Page generation time</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Page_generation_time');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-generation.time" id="generation.time1" value="true" <?php if (config('generation.time') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="generation.time1">
-            Enable
+            <?php echo i18n('Enable');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-generation.time" id="generation.time2" value="false" <?php if (config('generation.time') === 'false'):?>checked<?php endif;?>>
           <label class="form-check-label" for="generation.time2">
-            Disable
+            <?php echo i18n('Disable');?>
           </label>
         </div>
       </div>
 	</div>
   </div>
   <br>
-  <h4>Github pre-release</h4>
+  <h4><?php echo i18n('Github_pre_release');?></h4>
   <hr>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Pre-release</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Pre_release');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-prerelease" id="prerelease1" value="true" <?php if (config('prerelease') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="prerelease1">
-            Yes I'm in
+            <?php echo i18n('Yes_Im_in');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-prerelease" id="prerelease2" value="false" <?php if (config('prerelease') === 'false'):?>checked<?php endif;?>>
           <label class="form-check-label" for="prerelease2">
-            Nope
+            <?php echo i18n('Nope');?>
           </label>
         </div>
       </div>
@@ -101,7 +101,7 @@
   </div>
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save config</button>
+      <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>
   </div>
 </form>
