@@ -1,67 +1,69 @@
 (function () {
-
     var converter = new Markdown.Converter();
     Markdown.Extra.init(converter);
     var editor = new Markdown.Editor(converter);
 
-    var $dialog = $('#insertImageDialog').dialog({ 
-        autoOpen: false,
-        closeOnEscape: false,
-        open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+    //======Image Uploader=====
+    var callbackFunc;
+    var dialogClose = function() {
+        $('#insertImageDialog').modal('hide');
+        $('#insertImageDialogURL').val('');
+        $('#insertImageDialogFile').val('');
+    };
+    $('#insertImageDialogInsert').click( function() {
+        callbackFunc( $('#insertImageDialogURL').val().length > 0 ? $('#insertImageDialogURL').val() : null );
+        dialogClose();
     });
-
-    var $url = $('input[type=text]', $dialog);
-    var $file = $('input[type=file]', $dialog);
-
-    editor.hooks.set('insertImageDialog', function(callback) {
-
-        var dialogClose = function() {
-            $url.val('');
-            $file.val('');
-            $dialog.dialog('close');
-        };
-
-        $dialog.dialog({
-            buttons :  { 
-                "Insert" : {
-                    text: "Insert",
-                    id: "insert",
-                    click: function(){
-                        callback($url.val().length > 0 ? $url.val(): null);
-                        dialogClose();
-                    }   
-                },
-                "Cancel" : {
-                    text: "Cancel",
-                    id: "cancel",
-                    click: function(){
-                        dialogClose();
-                        callback(null);
-                    }   
-                }       
-            } 
-        });
-
-        var uploadComplete = function(response) {
-            if (response.error == '0') {
-                $url.val(base_path + response.path);
-                $("#insert").trigger('click');
-            } else {
-                alert(response.error);
-                $file.val('');
+    $('#insertImageDialogClose').click( function() {
+        callbackFunc(null);
+        dialogClose();
+    });
+    $('#insertImageDialogCancel').click( function() {
+        callbackFunc(null);
+        dialogClose();
+    });
+    $('#insertImageDialogFile').on('input', function(){
+        var file = $("#insertImageDialogFile").prop("files");
+        var formData = new FormData();
+        formData.append('file', file[0], file[0].name);
+        // Set up the request.
+        $.ajax({
+            type: "POST",
+            url: base_path + 'upload.php',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.error == '0')
+                {
+                    callbackFunc(base_path + response.path);
+                    dialogClose();
+                }
+                else
+                {
+                    if (response.error !== '') alert(response.error);
+                    else alert("An unknown error has occurred");
+                    console.error("Bad Response");
+                    console.error(response);
+                    $('#insertImageDialogFile').val('');
+                }
+            },
+            failure: function (response) {
+                if (response.error !== '') alert(response.error);
+                else alert("An unknown error has occurred");
+                console.error("Unable to Upload");
+                console.error(response);
+                $('#insertImageDialogFile').val('');
             }
-        };
-
-        $file.ajaxfileupload({
-            'action': base_path + 'upload.php',
-            'onComplete': uploadComplete,
-        });
-
-        $dialog.dialog('open');
+        });//ajax
+    });//oninput
+    editor.hooks.set('insertImageDialog', function(callback) {
+        $('#insertImageDialog').modal('show');
+        callbackFunc = callback;
 
         return true; // tell the editor that we'll take care of getting the image url
     });
-
+    //=====end image uploader=====
     editor.run();
 
 })();
