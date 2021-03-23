@@ -12,15 +12,15 @@
   </div>  
 </nav>
 <br><br>
-<p><u>hint:</u> Use <code>Ctrl</code>/<code>CMD</code> + <code>F</code> to search for your config key or value.</p>
-<p><u>pro tips:</u> You can creating custom config key and print out your config key value anywhere in your template.</p>
-<p><code>&lt;?php echo config('your.key'); ?&gt;</code></p>
+<p><?php echo i18n('hint_Use_CtrlCMDF_to_search_for_your_config_key_or_value');?></p>
+<p><?php echo i18n('pro_tips_You_can_creating_custom_config_key_and_print_out_your_config_key_value_anywhere_in_your_template');?></p>
+<p><code>&lt;?php echo config('<?php echo i18n('your_key');?>'); ?&gt;</code></p>
 <form method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
     <table class="table" id="config">
         <tr>
-            <td><input type="text" class="form-control" name="newKey" placeholder="Your New Config Key"></td>
-            <td><input type="text" class="form-control" name="newValue" placeholder="Your New Value"></td>
+            <td><input type="text" class="form-control" name="newKey" placeholder="<?php echo i18n('Your_New_Config_Key');?>"></td>
+            <td><input type="text" class="form-control" name="newValue" placeholder="<?php echo i18n('Your_New_Value');?>"></td>
         </tr>
         <?php
         global $config_file;
@@ -39,5 +39,5 @@
         }
         ?>
     </table>
-    <input type="submit" class="form-control btn-primary btn-sm" style="width:100px;">
+    <input type="submit" class="form-control btn-primary btn-sm" style="width:100px;" value="<?php echo i18n('Save');?>">
 </form>
