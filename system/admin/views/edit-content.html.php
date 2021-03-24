@@ -74,7 +74,6 @@ if (file_exists($tagslang)) {
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/jquery.ajaxfileupload.js"></script>
 <script>
 $( function() {
     var availableTags = [
@@ -92,7 +91,7 @@ $( function() {
     $( "#pTag" )
       // don't navigate away from the field on tab when selecting an item
       .on( "keydown", function( event ) {
-        if ( event.keyCode === $.ui.keyCode.TAB &&
+        if ( event.keyCode === 9 && // 9 = tab
             $( this ).autocomplete( "instance" ).menu.active ) {
           event.preventDefault();
         }
@@ -234,23 +233,36 @@ $( function() {
 	</div>
 
 	<style>
-	#insertImageDialog { display:none; padding: 10px; font-size:12px;}
 	.wmd-prompt-background {z-index:10!important;}
 	#wmd-preview img {max-width:100%;}
 	</style>
-
-	<div id="insertImageDialog" title="<?php echo i18n('Insert_Image');?>">
-		<label>URL</label>
-		<input type="text" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
-		
-		<hr>
-		
-		<form method="post" action="" enctype="multipart/form-data">
-			<label><?php echo i18n('Upload');?></label>
-			<input type="file" name="file" id="file" />
-		</form>
+	<div class="modal fade" id="insertImageDialog" tabindex="-1" role="dialog" aria-labelledby="insertImageDialogTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="insertImageDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+					<button type="button" class="close" id="insertImageDialogClose" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="insertImageDialogURL">URL</label>
+						<input type="text" class="form-control" id="insertImageDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
+					</div>
+					<hr>
+					<div class="form-group">
+						<label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
+						<input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="insertImageDialogInsert"><?php echo i18n('Insert_Image');?></button>	
+					<button type="button" class="btn btn-secondary"  id="insertImageDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+				</div>
+			</div>
+		</div>
 	</div>
-	
 </div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>

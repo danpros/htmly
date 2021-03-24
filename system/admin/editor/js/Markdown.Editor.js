@@ -74,6 +74,23 @@
     var imageDefaultText = "http://";
     var linkDefaultText = "http://";
 
+    //Polyfill for node.remove() from MDN
+    // from:https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/remove()/remove().md
+    (function (arr) {
+        arr.forEach(function (item) {
+        if (item.hasOwnProperty('remove')) {
+            return;
+        }
+        Object.defineProperty(item, 'remove', {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: function remove() {
+            this.parentNode.removeChild(this);
+            }
+        });
+        });
+    })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
     // -------------------------------------------------------------------
     //  END OF YOUR CHANGES
     // -------------------------------------------------------------------
@@ -1757,7 +1774,7 @@
             // Marks up the link and adds the ref.
             var linkEnteredCallback = function (link) {
 
-                background.parentNode.removeChild(background);
+                background.remove();
 
                 if (link !== null) {
                     // (                          $1
