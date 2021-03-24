@@ -1272,18 +1272,17 @@ post('/admin/config', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if (login() && $proper) {
-        $newKey = from($_REQUEST, 'newKey');
-        $newValue = from($_REQUEST, 'newValue');
-
         $new_config = array();
         $new_Keys = array();
-        if (!empty($newKey)) {
-            $new_Keys[$newKey] = $newValue;
-        }
+
         foreach ($_POST as $name => $value) {
             if (substr($name, 0, 8) == "-config-") {
                 $name = str_replace("_", ".", substr($name, 8));
-                $new_config[$name] = $value;
+                if(!is_null(config($name))) {
+                    $new_config[$name] = $value;
+                } else {
+                    $new_Keys[$name] = $value;	
+                }
             }
         }
         save_config($new_config, $new_Keys);
@@ -1408,18 +1407,17 @@ post('/admin/config/reading', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if (login() && $proper) {
-        $newKey = from($_REQUEST, 'newKey');
-        $newValue = from($_REQUEST, 'newValue');
-
         $new_config = array();
         $new_Keys = array();
-        if (!empty($newKey)) {
-            $new_Keys[$newKey] = $newValue;
-        }
+
         foreach ($_POST as $name => $value) {
             if (substr($name, 0, 8) == "-config-") {
                 $name = str_replace("_", ".", substr($name, 8));
-                $new_config[$name] = $value;
+                if(!is_null(config($name))) {
+                    $new_config[$name] = $value;
+                } else {
+                    $new_Keys[$name] = $value;	
+                }
             }
         }
         save_config($new_config, $new_Keys);
@@ -1476,18 +1474,17 @@ post('/admin/config/widget', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if (login() && $proper) {
-        $newKey = from($_REQUEST, 'newKey');
-        $newValue = from($_REQUEST, 'newValue');
-
         $new_config = array();
         $new_Keys = array();
-        if (!empty($newKey)) {
-            $new_Keys[$newKey] = $newValue;
-        }
+
         foreach ($_POST as $name => $value) {
             if (substr($name, 0, 8) == "-config-") {
                 $name = str_replace("_", ".", substr($name, 8));
-                $new_config[$name] = $value;
+                if(!is_null(config($name))) {
+                    $new_config[$name] = $value;
+                } else {
+                    $new_Keys[$name] = $value;	
+                }
             }
         }
         save_config($new_config, $new_Keys);
@@ -1544,18 +1541,17 @@ post('/admin/config/metatags', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if (login() && $proper) {
-        $newKey = from($_REQUEST, 'newKey');
-        $newValue = from($_REQUEST, 'newValue');
-
         $new_config = array();
         $new_Keys = array();
-        if (!empty($newKey)) {
-            $new_Keys[$newKey] = $newValue;
-        }
+
         foreach ($_POST as $name => $value) {
             if (substr($name, 0, 8) == "-config-") {
                 $name = str_replace("_", ".", substr($name, 8));
-                $new_config[$name] = $value;
+                if(!is_null(config($name))) {
+                    $new_config[$name] = $value;
+                } else {
+                    $new_Keys[$name] = $value;	
+                }
             }
         }
         save_config($new_config, $new_Keys);
@@ -1612,18 +1608,17 @@ post('/admin/config/performance', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if (login() && $proper) {
-        $newKey = from($_REQUEST, 'newKey');
-        $newValue = from($_REQUEST, 'newValue');
-
         $new_config = array();
         $new_Keys = array();
-        if (!empty($newKey)) {
-            $new_Keys[$newKey] = $newValue;
-        }
+
         foreach ($_POST as $name => $value) {
             if (substr($name, 0, 8) == "-config-") {
                 $name = str_replace("_", ".", substr($name, 8));
-                $new_config[$name] = $value;
+                if(!is_null(config($name))) {
+                    $new_config[$name] = $value;
+                } else {
+                    $new_Keys[$name] = $value;	
+                }
             }
         }
         save_config($new_config, $new_Keys);
