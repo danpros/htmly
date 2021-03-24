@@ -112,14 +112,14 @@ $( function() {
 					<br>
 					
 					<?php if ($type == 'is_audio'):?>
-					<label for="pAudio"><?php echo i18n('Featured_Audio');?> <span class="required">*</span> (SoundCloud <?php echo i18n('Only');?>)</label>
+					<label for="pAudio"><?php echo i18n('Featured_Audio');?> <span class="required">*</span></label>
 					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php if (isset($postAudio)) { echo $postAudio;} ?></textarea>
 					<input type="hidden" name="is_audio" value="is_audio">
 					<br>
 					<?php endif;?>
 
 					<?php if ($type == 'is_video'):?>
-					<label for="pVideo"><?php echo i18n('Featured_Video');?> <span class="required">*</span> (Youtube <?php echo i18n('Only');?>)</label>
+					<label for="pVideo"><?php echo i18n('Featured_Video');?> <span class="required">*</span></label>
 					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" id="pVideo" name="video"><?php if (isset($postVideo)) { echo $postVideo;} ?></textarea>
 					<input type="hidden" name="is_video" value="is_video">
 					<br>
