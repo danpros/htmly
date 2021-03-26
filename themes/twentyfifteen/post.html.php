@@ -12,7 +12,7 @@
     <?php endif; ?>
     <?php if (!empty($p->video)):?>
     <div class="post-thumbnail">
-        <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $p->video; ?>" frameborder="0" allowfullscreen></iframe>
+        <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
     </div>
     <?php endif; ?>
     <?php if (!empty($p->quote)):?>

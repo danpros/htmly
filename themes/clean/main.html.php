@@ -47,7 +47,7 @@
             <?php } ?>
             <?php if (!empty($p->video)) { ?>
                 <div class="featured-video">
-                    <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
                 </div>
             <?php } ?>
             <?php if (!empty($p->audio)) { ?>

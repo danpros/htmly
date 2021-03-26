@@ -315,7 +315,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
         $post->image = get_content_tag('image', $content);
-        $post->video = get_youtube_id(get_content_tag('video', $content));
+        $post->video = get_content_tag('video', $content);
         $post->link  = get_content_tag('link', $content);
         $post->quote  = get_content_tag('quote', $content);
         $post->audio  = get_content_tag('audio', $content);
@@ -3027,8 +3027,8 @@ function isCaptcha($reCaptchaResponse)
     return ($json['success']);
 }
 
-// Get YouTube video ID
-function get_youtube_id($url)
+// Get video ID
+function get_video_id($url)
 {
     if(empty($url)) {
        return;
@@ -3164,127 +3164,6 @@ function rename_category_folder($string, $old_url)
             rename($f[0], $f[1]);
         }
     }
-
-}
-
-// Migrate old content.
-function migrate_old_content()
-{
-    $content = array();
-    $tmp = array();
-    $files = array();
-    $draft = array();
-    $dtmp = array();
-    $dfiles = array();
-
-    $tmp = glob('content/*/blog/*.md', GLOB_NOSORT);
-    if (is_array($tmp)) {
-        foreach ($tmp as $file) {
-            $content[] = $file;
-        }
-    }
-
-    if(!empty($content)) {
-
-        foreach ($content as $c => $v) {
-            $arr = explode('/', $v);
-            $string = file_get_contents($v);
-            $image = get_content_tag('image', $string);
-            $video = get_youtube_id(get_content_tag('video', $string));
-            $audio = get_content_tag('audio', $string);
-            $link = get_content_tag('link', $string);
-            $quote = get_content_tag('quote', $string);
-            if (!empty($image)) {
-               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/image/' . $arr[3]);
-               $dir = 'content/' . $arr[1] . '/blog/uncategorized/image/';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0775, true);
-                }
-            }
-            if (!empty($video)) {
-               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/video/' . $arr[3]);
-               $dir = 'content/' . $arr[1] . '/blog/uncategorized/video/';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0775, true);
-                }
-            }
-            if (!empty($audio)) {
-               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/audio/' . $arr[3]);
-               $dir = 'content/' . $arr[1] . '/blog/uncategorized/audio/';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0775, true);
-                }
-            }
-            if (!empty($link)) {
-               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/link/' . $arr[3]);
-               $dir = 'content/' . $arr[1] . '/blog/uncategorized/link/';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0775, true);
-                }
-            }
-            if (!empty($quote)) {
-               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/quote/' . $arr[3]);
-               $dir = 'content/' . $arr[1] . '/blog/uncategorized/quote/';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0775, true);
-                }
-            }
-            if (empty($image) && empty($video) && empty($audio) && empty($link) && empty($quote)) {
-               $files[] = array($v, 'content/' . $arr[1] . '/blog/uncategorized/post/' . $arr[3]);
-               $dir = 'content/' . $arr[1] . '/blog/uncategorized/post/';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0775, true);
-                }
-            }
-        }
-
-        foreach ($files as $f) {
-            rename($f[0], $f[1]);
-        }
-
-    }
-
-    $dir = 'content/data/';
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
-    if (file_exists('content/tags.lang')) {
-        rename('content/tags.lang', 'content/data/tags.lang');
-        unlink('content/views.json');
-    }
-
-    $dtmp = glob('content/*/draft/*.md', GLOB_NOSORT);
-    $old = array();
-    if (is_array($dtmp)) {
-        foreach ($dtmp as $dfile) {
-            $draft[] = $dfile;
-        }
-    }
-
-    if(!empty($draft)) {
-        foreach ($draft as $d => $val) {
-            $arr = explode('/', $val);
-            $old[] = 'content/' . $arr[1] . '/draft/';
-            $dir = 'content/' . $arr[1] . '/blog/uncategorized/draft/';
-            $new = 'content/' . $arr[1] . '/blog/uncategorized/draft/' . $arr[3];
-            if (!is_dir($dir)) {
-                mkdir($dir, 0775, true);
-            }
-            $dfiles[] = array($val, $new);
-        }
-
-        foreach ($dfiles as $fd) {
-            rename($fd[0], $fd[1]);
-        }
-        $tt = array();
-        $tt = array_unique($old, SORT_REGULAR);
-        foreach ($tt as $t) {
-            rmdir($t);
-        }
-    }
-
-    rebuilt_cache('all');
 
 }
 
