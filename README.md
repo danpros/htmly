@@ -40,7 +40,7 @@ Features
 - User Roles
 - Online Backup
 - File Caching
-- Auto Update
+- Online Update
 - Post Draft
 - i18n
 - Menu builder

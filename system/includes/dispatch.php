@@ -351,16 +351,9 @@ function render($view, $locals = null, $layout = null)
         header('Content-type: text/html; charset=utf-8');
         if (config('generation.time') == 'true') {
             ob_start();
-            $time = microtime();
-            $time = explode(' ', $time);
-            $time = $time[1] + $time[0];
-            $start = $time;
             require $layout;
-            $time = microtime();
-            $time = explode(' ', $time);
-            $time = $time[1] + $time[0];
-            $finish = $time;
-            $total_time = round(($finish - $start), 4);
+            $time = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+            $total_time = round($time, 4);
             echo "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
         } else {
             ob_start();
