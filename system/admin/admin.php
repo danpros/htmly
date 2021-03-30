@@ -115,7 +115,14 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
         $post_tag = safe_tag(implode(',', $tag));
         $post_tagmd = safe_html(implode(',', $tag));		
 	}
-
+	
+    $media = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($media, ',')));
+    $med = array();
+    foreach ($media as $m) {
+        $med[] = $m;
+    }
+    $media = implode(',', $med);
+	
     $post_date = date('Y-m-d-H-i-s');
     $post_title = safe_html($title);
     $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));
@@ -249,6 +256,13 @@ function edit_content($title, $tag, $url, $content, $oldfile, $destination = nul
         $post_tagmd = safe_html(implode(',', $tag));		
 	}
     
+    $media = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($media, ',')));
+    $med = array();
+    foreach ($media as $m) {
+        $med[] = $m;
+    }
+    $media = implode(',', $med);
+	
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-H-i-s', strtotime($date));
