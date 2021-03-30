@@ -2037,7 +2037,7 @@ function parseNode($node, $child = null) {
     $su = parse_url(site_url());
 	if (empty($child)) {
 
-		if (isset($url['host'])) {
+		if (isset($url['host']) && isset($su['host'])) {
 			if ($url['host'] ==  $su['host']) {
 				if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item active '.$node->class.'">';
