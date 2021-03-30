@@ -2037,9 +2037,9 @@ function parseNode($node, $child = null) {
     $su = parse_url(site_url());
 	if (empty($child)) {
 
-		if (isset($url['host']) && isset($su['host'])) {
-			if ($url['host'] ==  $su['host']) {
-				if (slashUrl($url['path']) == slashUrl($req)) {
+        if (isset($url['host']) && isset($su['host'])) {
+            if ($url['host'] ==  $su['host']) {
+                if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item active '.$node->class.'">';
 				} else  {					
 				    $li = '<li class="item nav-item '.$node->class.'">';
@@ -3034,9 +3034,21 @@ function get_video_id($url)
        return;
     }
 
-    preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches);
+    $link = parse_url($url);
+	
+    if(!isset($link['host'])) {
+        return $url;
+    }
 
-    return $matches[1];
+    if (stripos($link['host'], 'youtube.com') !== false || stripos($link['host'], 'youtu.be') !== false) { 
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
+        return $match[1];
+    } elseif (stripos($link['host'], 'vimeo.com') !== false) {
+        preg_match('%^https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)(?:[?]?.*)$%im', $url, $match);
+        return $match[3];
+    } else {
+        return $url;
+    }
 }
 
 // Shorten the string
