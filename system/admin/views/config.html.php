@@ -41,7 +41,7 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for=language" class="col-sm-2 col-form-label"><?php echo i18n('Language');?></label>
+    <label for="language" class="col-sm-2 col-form-label"><?php echo i18n('Language');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="language" name="-config-language">
     <?php foreach (glob('lang/*.ini') as $file) { ?>
@@ -51,7 +51,7 @@
 	</div>
   </div>
   <div class="form-group row">
-    <label for=language" class="col-sm-2 col-form-label"><?php echo i18n('Timezone');?></label>
+    <label for="timezone" class="col-sm-2 col-form-label"><?php echo i18n('Timezone');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="timezone" name="-config-timezone">
     <?php foreach (timezone_identifiers_list() as $zone) { ?>
@@ -105,7 +105,7 @@
 	</div>
   </div>
   <div class="form-group row">
-    <label for=views.root" class="col-sm-2 col-form-label"><?php echo i18n('Blog_Theme');?></label>
+    <label for="views.root" class="col-sm-2 col-form-label"><?php echo i18n('Blog_Theme');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="views.root" name="-config-views.root">
     <?php foreach (glob('themes/*/layout.html.php') as $folder) { ?>
