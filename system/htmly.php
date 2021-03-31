@@ -430,6 +430,20 @@ post('/add/content', function () {
     $is_quote = from($_REQUEST, 'is_quote');
     $is_link = from($_REQUEST, 'is_link');
     $is_post = from($_REQUEST, 'is_post');
+	
+    if (!empty($is_image)) {
+        $type = 'is_image';
+    } elseif (!empty($is_video)) {
+        $type = 'is_video';
+    } elseif (!empty($is_link)) {
+        $type = 'is_link';
+    } elseif (!empty($is_quote)) {
+        $type = 'is_quote';
+    } elseif (!empty($is_audio)) {
+        $type = 'is_audio';
+    } elseif (!empty($is_post)) {
+        $type = 'is_post';
+    }
     
     $link = from($_REQUEST, 'link');
     $image = from($_REQUEST, 'image');
@@ -453,265 +467,106 @@ post('/add/content', function () {
         header("location: $add");    
     }
     
-    if (!empty($is_post)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content)) {
-            if (!empty($url)) {
-                add_content($title, $tag, $url, $content, $user, $description, null, $draft, $category, 'post');
-            } else {
-                $url = $title;
-                add_content($title, $tag, $url, $content, $user, $description, null, $draft, $category, 'post');
-            }
-        } else {
-            $message['error'] = '';
-            if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
-            }
-            if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
-            }
-            if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
-            }
-            config('views.root', 'system/admin/views');
-            render('add-content', array(
-                'title' => 'Add post- ' . blog_title(),
-                'description' => strip_tags(blog_description()),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $message['error'] . '</ul>',
-                'postTitle' => $title,
-                'postTag' => $tag,
-                'postUrl' => $url,
-                'postContent' => $content,
-                'type' => 'is_post',
-                'is_admin' => true,
-                'bodyclass' => 'add-post',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add post'
-            ));
-        }
-    }
-    
-    if (!empty($is_image)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-            if (!empty($url)) {
-                add_content($title, $tag, $url, $content, $user, $description, $image, $draft, $category, 'image');
-            } else {
-                $url = $title;
-                add_content($title, $tag, $url, $content, $user, $description, $image, $draft, $category, 'image');
-            }
-        } else {
-            $message['error'] = '';
-            if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
-            }
-            if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
-            }
-            if (empty($image)) {
-                $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
-            }
-            if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
-            }
-            config('views.root', 'system/admin/views');
-            render('add-content', array(
-                'title' => 'Add image - ' . blog_title(),
-                'description' => strip_tags(blog_description()),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $message['error'] . '</ul>',
-                'postTitle' => $title,
-                'postImage' => $image,
-                'postTag' => $tag,
-                'postUrl' => $url,
-                'postContent' => $content,
-                'type' => 'is_image',
-                'is_admin' => true,
-                'bodyclass' => 'add-image',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add image'
-            ));
-        }
-    }
-    
-    if (!empty($is_video)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-            if (!empty($url)) {
-                add_content($title, $tag, $url, $content, $user, $description, $video, $draft, $category, 'video');
-            } else {
-                $url = $title;
-                add_content($title, $tag, $url, $content, $user, $description, $video, $draft, $category, 'video');
-            }
-        } else {
-            $message['error'] = '';
-            if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
-            }
-            if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
-            }
-            if (empty($video)) {
-                $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
-            }
-            if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
-            }
-            config('views.root', 'system/admin/views');
-            render('add-content', array(
-                'title' => 'Add video - ' . blog_title(),
-                'description' => strip_tags(blog_description()),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $message['error'] . '</ul>',
-                'postTitle' => $title,
-                'postVideo' => $video,
-                'postTag' => $tag,
-                'postUrl' => $url,
-                'postContent' => $content,
-                'type' => 'is_video',
-                'is_admin' => true,
-                'bodyclass' => 'add-video',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add video'
-            ));
-        }
-    }
-    
-    if (!empty($is_audio)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-            if (!empty($url)) {
-                add_content($title, $tag, $url, $content, $user, $description, $audio, $draft, $category, 'audio');
-            } else {
-                $url = $title;
-                add_content($title, $tag, $url, $content, $user, $description, $audio, $draft, $category, 'audio');
-            }
-        } else {
-            $message['error'] = '';
-            if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
-            }
-            if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
-            }
-            if (empty($audio)) {
-                $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
-            }
-            if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
-            }
-            config('views.root', 'system/admin/views');
-            render('add-content', array(
-                'title' => 'Add audio - ' . blog_title(),
-                'description' => strip_tags(blog_description()),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $message['error'] . '</ul>',
-                'postTitle' => $title,
-                'postAudio' => $audio,
-                'postTag' => $tag,
-                'postUrl' => $url,
-                'postContent' => $content,
-                'type' => 'is_audio',
-                'is_admin' => true,
-                'bodyclass' => 'add-audio',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add audio'
-            ));
-        }
-    }
-    
-    if (!empty($is_quote)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-            if (!empty($url)) {
-                add_content($title, $tag, $url, $content, $user, $description, $quote, $draft, $category, 'quote');
-            } else {
-                $url = $title;
-                add_content($title, $tag, $url, $content, $user, $description, $quote, $draft, $category, 'quote');
-            }
-        } else {
-            $message['error'] = '';
-            if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
-            }
-            if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
-            }
-            if (empty($quote)) {
-                $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
-            }
-            if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
-            }
-            config('views.root', 'system/admin/views');
-            render('add-content', array(
-                'title' => 'Add quote - ' . blog_title(),
-                'description' => strip_tags(blog_description()),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $message['error'] . '</ul>',
-                'postTitle' => $title,
-                'postQuote' => $quote,
-                'postTag' => $tag,
-                'postUrl' => $url,
-                'postContent' => $content,
-                'type' => 'is_quote',
-                'is_admin' => true,
-                'bodyclass' => 'add-quote',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add Quote'
-            ));
-        }
-    }
-    
-    if (!empty($is_link)) {
-        if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-            if (!empty($url)) {
-                add_content($title, $tag, $url, $content, $user, $description, $link, $draft, $category, 'link');
-            } else {
-                $url = $title;
-                add_content($title, $tag, $url, $content, $user, $description, $link, $draft, $category, 'link');
-            }
-        } else {
-            $message['error'] = '';
-            if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
-            }
-            if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
-            }
-            if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
-            }
-            if (empty($link)) {
-                $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
-            }
-            if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
-            }
-            config('views.root', 'system/admin/views');
-            render('add-content', array(
-                'title' => 'Add link - ' . blog_title(),
-                'description' => strip_tags(blog_description()),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $message['error'] . '</ul>',
-                'postTitle' => $title,
-                'postLink' => $link,
-                'postTag' => $tag,
-                'postUrl' => $url,
-                'postContent' => $content,
-                'type' => 'is_link',
-                'is_admin' => true,
-                'bodyclass' => 'add-link',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add link'
-            ));
-        }
-    }
+	if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
+		if (!empty($url)) {
+			add_content($title, $tag, $url, $content, $user, $description, null, $draft, $category, 'post');
+		} else {
+			$url = $title;
+			add_content($title, $tag, $url, $content, $user, $description, null, $draft, $category, 'post');
+		}
+	} elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
+		if (!empty($url)) {
+			add_content($title, $tag, $url, $content, $user, $description, $image, $draft, $category, 'image');
+		} else {
+			$url = $title;
+			add_content($title, $tag, $url, $content, $user, $description, $image, $draft, $category, 'image');
+		}
+	} elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
+		if (!empty($url)) {
+			add_content($title, $tag, $url, $content, $user, $description, $video, $draft, $category, 'video');
+		} else {
+			$url = $title;
+			add_content($title, $tag, $url, $content, $user, $description, $video, $draft, $category, 'video');
+		}
+	} elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
+		if (!empty($url)) {
+			add_content($title, $tag, $url, $content, $user, $description, $audio, $draft, $category, 'audio');
+		} else {
+			$url = $title;
+			add_content($title, $tag, $url, $content, $user, $description, $audio, $draft, $category, 'audio');
+		}
+	} elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
+		if (!empty($url)) {
+			add_content($title, $tag, $url, $content, $user, $description, $quote, $draft, $category, 'quote');
+		} else {
+			$url = $title;
+			add_content($title, $tag, $url, $content, $user, $description, $quote, $draft, $category, 'quote');
+		}
+	} elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
+		if (!empty($url)) {
+			add_content($title, $tag, $url, $content, $user, $description, $link, $draft, $category, 'link');
+		} else {
+			$url = $title;
+			add_content($title, $tag, $url, $content, $user, $description, $link, $draft, $category, 'link');
+		}
+	} else {
+		$message['error'] = '';
+		if (empty($title)) {
+			$message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+		}
+		if (empty($tag)) {
+			$message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+		}
+		if (empty($content)) {
+			$message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+		}
+		if (!$proper) {
+			$message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+		}
+		
+		if (!empty($is_image)) {
+			if (empty($image)) {
+				$message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+			}
+		} elseif (!empty($is_video)) {
+			if (empty($video)) {
+				$message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+			}
+		} elseif (!empty($is_link)) {
+			if (empty($link)) {
+				$message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+			}
+		} elseif (!empty($is_quote)) {
+			if (empty($quote)) {
+				$message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+			}
+		} elseif (!empty($is_audio)) {
+			if (empty($audio)) {
+				$message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+			}
+		}
+		
+		config('views.root', 'system/admin/views');
+		render('add-content', array(
+			'title' => 'Add content - ' . blog_title(),
+			'description' => strip_tags(blog_description()),
+			'canonical' => site_url(),
+			'error' => '<ul>' . $message['error'] . '</ul>',
+            'postTitle' => $title,
+            'postImage' => $image,
+            'postVideo' => $video,
+            'postLink' => $link,
+            'postQuote' => $quote,
+            'postAudio' => $audio,
+            'postTag' => $tag,
+            'postUrl' => $url,
+            'postContent' => $content,
+            'type' => $type,
+			'is_admin' => true,
+			'bodyclass' => 'add-content',
+			'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add content'
+		));
+	}
     
 });
 
