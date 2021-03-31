@@ -1,8 +1,8 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->  
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->  
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
+<!--[if IE 8]> <html lang="<?php echo str_replace('_', '-', config('language'));?>" class="ie8"> <![endif]-->  
+<!--[if IE 9]> <html lang="<?php echo str_replace('_', '-', config('language'));?>" class="ie9"> <![endif]-->  
+<!--[if !IE]><!--> <html lang="<?php echo str_replace('_', '-', config('language'));?>"> <!--<![endif]-->  
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
@@ -33,7 +33,7 @@
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo blog_description() ?>" itemprop="description"/>
+    <meta content="<?php echo strip_tags(blog_description()); ?>" itemprop="description"/>
 </div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>

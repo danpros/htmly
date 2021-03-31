@@ -1,6 +1,6 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo str_replace('_', '-', config('language'));?>">
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
