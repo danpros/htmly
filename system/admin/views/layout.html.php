@@ -2,11 +2,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<title><?php echo $title;?></title>
-
+    <?php echo head_contents();?>
+    <title><?php echo $title;?></title>
+    <meta name="description" content="<?php echo $description; ?>"/>
+    <link rel="canonical" href="<?php echo $canonical; ?>" />
 	<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/font-awesome.css">
 	<link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
