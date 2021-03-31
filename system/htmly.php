@@ -2065,9 +2065,9 @@ get('/archive/:req', function ($req) {
     $date = strtotime($req);
 
     if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
-        $timestamp = date('d F Y', $date);
+        $timestamp = strftime('%d %B %Y', $date);
     } elseif (isset($time[0]) && isset($time[1])) {
-        $timestamp = date('F Y', $date);
+        $timestamp = strftime('%B %Y', $date);
     } else {
         $timestamp = $req;
     }
