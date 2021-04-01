@@ -1487,7 +1487,7 @@ function tag_cloud($custom = null)
             foreach ($tag_collection as $tag => $count) {
                 $size = $min_size + (($count - $min_qty) * $step);
                 echo ' <a class="tag-cloud-link" href="'. site_url(). 'tag/'. $tag .'" style="font-size:'. $size .'pt;">'.tag_i18n($tag).'</a> ';
-            }			
+            }            
 
         } else {
             return $tag_collection;
@@ -1807,7 +1807,7 @@ function get_image($text)
             return $vidThumb;
         }
     } else{
-	   return false;
+       return false;
     }
 }
 
@@ -1972,7 +1972,7 @@ function publisher()
 function analytics()
 {
     $analytics = config('google.analytics.id');
-    $gtag = config('google.gtag.id');	
+    $gtag = config('google.gtag.id');    
     $script = <<<EOF
     <script>
         (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
@@ -1997,8 +1997,8 @@ EOF;
     if (!empty($gtag)) {
         return $gtagScript;
     } elseif (!empty($analytics)) {
-		return $script;
-	}
+        return $script;
+    }
 }
 
 function slashUrl($url) {
@@ -2006,88 +2006,88 @@ function slashUrl($url) {
 }
 
 function parseNodes($nodes, $child = null, $class = null) {
-	if (empty($child)) {
-		$ul = '<ul class="nav navbar-nav '.$class.'">';
-		foreach ($nodes as $node) {
-			if (isset($node->children)) { 
-				$ul .= parseNode($node, true);
-			} else {
-				$ul .= parseNode($node);
-			}
-		}
-		$ul .= '</ul>';
-		return $ul;
-	} else {
-		$ul = '<ul class="subnav dropdown-menu" role="menu">';
-		foreach ($nodes as $node) {
-			if (isset($node->children)) { 
-				$ul .= parseNode($node, true);
-			} else {
-				$ul .= parseNode($node);
-			}
-		}
-		$ul .= '</ul>';
-		return $ul;
-	}
+    if (empty($child)) {
+        $ul = '<ul class="nav navbar-nav '.$class.'">';
+        foreach ($nodes as $node) {
+            if (isset($node->children)) { 
+                $ul .= parseNode($node, true);
+            } else {
+                $ul .= parseNode($node);
+            }
+        }
+        $ul .= '</ul>';
+        return $ul;
+    } else {
+        $ul = '<ul class="subnav dropdown-menu" role="menu">';
+        foreach ($nodes as $node) {
+            if (isset($node->children)) { 
+                $ul .= parseNode($node, true);
+            } else {
+                $ul .= parseNode($node);
+            }
+        }
+        $ul .= '</ul>';
+        return $ul;
+    }
 }
 
 function parseNode($node, $child = null) {
-	$req = strtok($_SERVER["REQUEST_URI"],'?');
+    $req = strtok($_SERVER["REQUEST_URI"],'?');
     $url = parse_url(slashUrl($node->slug));
     $su = parse_url(site_url());
-	if (empty($child)) {
+    if (empty($child)) {
 
         if (isset($url['host']) && isset($su['host'])) {
             if ($url['host'] ==  $su['host']) {
                 if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item active '.$node->class.'">';
-				} else  {					
-				    $li = '<li class="item nav-item '.$node->class.'">';
-				}
-			} else {
-				$li = '<li class="item nav-item '.$node->class.'">'; // Link out
-			}
-		} else {
-			if (slashUrl($node->slug) == slashUrl($req)) {
-				$li = '<li class="item nav-item active '.$node->class.'">';
-			} else {
-				$li = '<li class="item nav-item '.$node->class.'">';
-			}
-		}
-		
-		$li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
-		if (isset($node->children)) { 
-			$li .= parseNodes($node->children, true, null);
-		}
-		$li .= '</li>';
-		return $li;
-	} else {
-		
-		if (isset($url['host'])) {
-			if ($url['host'] ==  $su['host']) {
-				if (slashUrl($url['path']) == slashUrl($req)) {
+                } else  {                    
+                    $li = '<li class="item nav-item '.$node->class.'">';
+                }
+            } else {
+                $li = '<li class="item nav-item '.$node->class.'">'; // Link out
+            }
+        } else {
+            if (slashUrl($node->slug) == slashUrl($req)) {
+                $li = '<li class="item nav-item active '.$node->class.'">';
+            } else {
+                $li = '<li class="item nav-item '.$node->class.'">';
+            }
+        }
+        
+        $li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
+        if (isset($node->children)) { 
+            $li .= parseNodes($node->children, true, null);
+        }
+        $li .= '</li>';
+        return $li;
+    } else {
+        
+        if (isset($url['host'])) {
+            if ($url['host'] ==  $su['host']) {
+                if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item dropdown active '.$node->class.'">';
-				} else  {					
-				    $li = '<li class="item nav-item dropdown '.$node->class.'">';
-				}
-			} else {
-				$li = '<li class="item nav-item dropdown '.$node->class.'">'; // Link out
-			}
-		} else {
-			if (slashUrl($node->slug) == slashUrl($req)) {
-				$li = '<li class="item nav-item dropdown active '.$node->class.'">';
-			} else {
-				$li = '<li class="item nav-item dropdown '.$node->class.'">';
-			}
-		}
-		
-		$li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
-		if (isset($node->children)) { 
-			$li .= parseNodes($node->children, true, null);
-		}
-		$li .= '</li>';
-		return $li;			
-	}
+                } else  {                    
+                    $li = '<li class="item nav-item dropdown '.$node->class.'">';
+                }
+            } else {
+                $li = '<li class="item nav-item dropdown '.$node->class.'">'; // Link out
+            }
+        } else {
+            if (slashUrl($node->slug) == slashUrl($req)) {
+                $li = '<li class="item nav-item dropdown active '.$node->class.'">';
+            } else {
+                $li = '<li class="item nav-item dropdown '.$node->class.'">';
+            }
+        }
+        
+        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
+        if (isset($node->children)) { 
+            $li .= parseNodes($node->children, true, null);
+        }
+        $li .= '</li>';
+        return $li;            
+    }
 }
 
 // Menu
@@ -2095,11 +2095,11 @@ function menu($class = null)
 {
     $filename = "content/data/menu.json";
     if (file_exists($filename)) {
-		$json = json_decode(file_get_contents('content/data/menu.json', true));
-		$nodes = json_decode($json);
-	    if (empty($nodes)) {
+        $json = json_decode(file_get_contents('content/data/menu.json', true));
+        $nodes = json_decode($json);
+        if (empty($nodes)) {
             get_menu($class);
-	    } else {
+        } else {
             $html = parseNodes($nodes, null, $class);
             libxml_use_internal_errors(true);
             $doc = new DOMDocument();
@@ -2112,20 +2112,20 @@ function menu($class = null)
             foreach ($elements as $element) {
                 $nodes = $element->childNodes;
                 foreach ($nodes as $node) {
-		            $class = $node->getAttribute('class');
-		            if (stripos($class, 'active')) {
-						$parentClass = $element->parentNode->getAttribute('class') . ' active';
-			            $element->parentNode->setAttribute('class', $parentClass);
-		            } 
-	            }
+                    $class = $node->getAttribute('class');
+                    if (stripos($class, 'active')) {
+                        $parentClass = $element->parentNode->getAttribute('class') . ' active';
+                        $element->parentNode->setAttribute('class', $parentClass);
+                    } 
+                }
             }
-			
-		return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
-			
-	    }
-	} else {
-        get_menu($class);	
-	}
+            
+        return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
+            
+        }
+    } else {
+        get_menu($class);    
+    }
 }
 
 // Get the title from file
@@ -2281,7 +2281,7 @@ function not_found()
     } else {
         $layout = '';
     }
-	
+    
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
         'title' => 'This page doesn\'t exist! - ' . blog_title(),
@@ -3035,7 +3035,7 @@ function get_video_id($url)
     }
 
     $link = parse_url($url);
-	
+    
     if(!isset($link['host'])) {
         return $url;
     }
