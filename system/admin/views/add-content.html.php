@@ -100,7 +100,7 @@ $( function() {
 					<label for="pTag">Tag <span class="required">*</span></label>
 					<input type="text" class="form-control text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error';}} ?>" id="pTag" name="tag" value="<?php if (isset($postTag)) { echo $postTag; } ?>" placeholder="<?php echo i18n('Comma_separated_values');?>"/>
 					<br>
-					<label for="pMeta"><?php echo i18n('Meta_description');?> <?php echo i18n('optional');?></label>
+					<label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
 					<textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_leave_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
 					<br>
 				</div>
