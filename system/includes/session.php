@@ -1,4 +1,5 @@
 <?php
+session_set_cookie_params(['samesite' => 'Strict']);
 if (isset($_COOKIE['PHPSESSID']))
     session_start();
 

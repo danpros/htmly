@@ -222,7 +222,7 @@ if(from($_SERVER,'QUERY_STRING') == "rewriteRule.html")
     echo "YES!";
     die();
 }
-
+session_set_cookie_params(['samesite' => 'Strict']);
 session_start();
 new Settings;
 
