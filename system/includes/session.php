@@ -6,7 +6,6 @@ if(PHP_VERSION_ID < 70300) {
     session_set_cookie_params(['samesite' => $samesite]);
 }
 
-session_set_cookie_params(['samesite' => 'Strict']);
 if (isset($_COOKIE['PHPSESSID']))
     session_start();
 
