@@ -1889,7 +1889,6 @@ function disqus($title = null, $url = null)
         var disqus_shortname = '{$disqus}';
         var disqus_title = '{$title}';
         var disqus_url = getAbsolutePath('{$url}');
-        var disqus_url = '{$url}';
         (function () {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
