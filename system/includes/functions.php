@@ -375,6 +375,9 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
 
         $post->description = get_content_tag("d", $content, get_description($post->body));
+		
+        $word_count = str_word_count(strip_tags($post->body));
+        $post->readTime = ceil($word_count / 200);
 
         $tmp[] = $post;
     }
@@ -856,6 +859,9 @@ function get_static_post($static)
                 }
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
+				
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
 
                 $tmp[] = $post;
             }
@@ -900,6 +906,9 @@ function get_static_sub_post($static, $sub_static)
                 $post->views = get_views($post->file);
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
+				
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
 
                 $tmp[] = $post;
             }
@@ -1521,7 +1530,9 @@ function has_prev($prev)
             'video' => $prev->video,
             'audio' => $prev->audio,
             'quote' => $prev->quote,
-            'link' => $prev->link
+            'link' => $prev->link,
+            'categoryUrl' => $prev->categoryUrl,
+            'readTime' => $prev->readTime
         );
     }
 }
@@ -1549,7 +1560,9 @@ function has_next($next)
             'video' => $next->video,
             'audio' => $next->audio,
             'quote' => $next->quote,
-            'link' => $next->link
+            'link' => $next->link,
+            'categoryUrl' => $next->categoryUrl,
+            'readTime' => $next->readTime
         );
     }
 }
