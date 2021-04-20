@@ -2246,13 +2246,10 @@ get('/post/:name', function ($name) {
         }
     }
 
-    $author = get_author($current->author);
-
-    if (isset($author[0])) {
-        $author = $author[0];
-    } else {
-        $author = default_profile($current->author);
-    }
+    $author = new stdClass;
+    $author->url = $current->authorUrl;
+    $author->name = $current->authorName;
+    $author->about = $current->authorAbout;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -3002,11 +2999,6 @@ get('/:static/:sub', function ($static, $sub) {
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
-	
-    if ($static === 'front') {
-        $redir = site_url();
-        header("location: $redir", TRUE, 301);
-    }
 
     $father_post = get_static_post($static);
     if (!$father_post) {
@@ -3242,13 +3234,10 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         }
     }
 
-    $author = get_author($current->author);
-
-    if (isset($author[0])) {
-        $author = $author[0];
-    } else {
-        $author = default_profile($current->author);
-    }
+    $author = new stdClass;
+    $author->url = $current->authorUrl;
+    $author->name = $current->authorName;
+    $author->about = $current->authorAbout;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];

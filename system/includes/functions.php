@@ -288,6 +288,15 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The post author + author url
         $post->author = $author;
         $post->authorUrl = site_url() . 'author/' . $author;
+		
+        $profile = get_author($author);
+        if (isset($profile[0])) {
+            $post->authorName = $profile[0]->name;
+            $post->authorAbout = $profile[0]->about;
+        } else {
+            $post->authorName = $author;
+            $post->authorAbout = 'Just another HTMLy user';
+        }
 
         $post->type = $type;
 
