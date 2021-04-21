@@ -503,7 +503,6 @@ function get_category($category, $page, $perpage)
         // Replaced string
         $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
 
-        // Author string
         $str = explode('/', $replaced);
         $cat = $str[count($str) - 3];
 
@@ -649,7 +648,6 @@ function get_type($type, $page, $perpage)
         // Replaced string
         $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
 
-        // Author string
         $str = explode('/', $replaced);
         $tp = $str[count($str) - 2];
 
@@ -813,7 +811,7 @@ function get_author($name)
     if (!empty($tmp) || file_exists($username)) {
         return $tmp;
     } else {
-        not_found();
+        return false;
     }
 }
 
@@ -1060,7 +1058,6 @@ function get_categorycount($var)
         // Replaced string
         $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
 
-        // Author string
         $str = explode('/', $replaced);
         $cat = '/blog/' . $str[count($str) - 3];
         if (stripos($cat, "$var") !== false) {
@@ -1088,7 +1085,6 @@ function get_typecount($var)
         // Replaced string
         $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
 
-        // Author string
         $str = explode('/', $replaced);
         $tp = '/' . $str[count($str) - 2] . '/';
         if (stripos($tp, "$var") !== false) {
@@ -1117,7 +1113,6 @@ function get_draftcount($var)
         // Replaced string
         $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
 
-        // Author string
         $str = explode('/', $replaced);
         $cat = $str[count($str) - 5];
 

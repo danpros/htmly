@@ -202,7 +202,12 @@ get('/author/:name', function ($name) {
 
     $posts = get_profile_posts($name, $page, $perpage);
 
-    $total = get_count($name, 'dirname');
+    $total = get_count('/'.$name.'/', 'dirname');
+    $username = 'config/users/' . $name . '.ini';
+
+    if ($total === 0 && !file_exists($username)) {
+        not_found();
+    }
 
     $author = get_author($name);
 
