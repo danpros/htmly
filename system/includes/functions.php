@@ -512,7 +512,7 @@ function get_category($category, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        not_found();
+        return false;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
@@ -657,7 +657,7 @@ function get_type($type, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        not_found();
+        return false;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
@@ -691,7 +691,7 @@ function get_tag($tag, $page, $perpage, $random)
     }
 
     if (empty($tmp)) {
-        not_found();
+        return false;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
@@ -714,7 +714,7 @@ function get_archive($req, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        not_found();
+        return false;
     }
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -736,7 +736,7 @@ function get_profile_posts($name, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return;
+        return false;
     }
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -761,7 +761,7 @@ function get_draft($profile, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return;
+        return false;
     }
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -969,7 +969,7 @@ function get_keyword($keyword, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return $tmp;
+        return false;
     }
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -1525,6 +1525,8 @@ function has_prev($prev)
             'tag' => $prev->tag,
             'category' => $prev->category,
             'author' => $prev->author,
+            'authorName' => $prev->authorName,
+            'authorAbout' => $prev->authorAbout,
             'authorUrl' => $prev->authorUrl,
             'related' => $prev->related,
             'views' => $prev->views,
@@ -1555,6 +1557,8 @@ function has_next($next)
             'tag' => $next->tag,
             'category' => $next->category,
             'author' => $next->author,
+            'authorName' => $next->authorName,
+            'authorAbout' => $next->authorAbout,
             'authorUrl' => $next->authorUrl,
             'related' => $next->related,
             'views' => $next->views,
@@ -1882,7 +1886,7 @@ function social($imgDir = null)
 function copyright()
 {
     $blogcp = blog_copyright();
-    $credit = 'Proudly powered by <a href="http://www.htmly.com" target="_blank">HTMLy</a>';
+    $credit = 'Powered by <a href="http://www.htmly.com" target="_blank" rel="nofollow">HTMLy</a>';
 
     if (!empty($blogcp)) {
         return $copyright = '<p>' . $blogcp . '</p><p>' . $credit . '</p>';
@@ -2079,7 +2083,7 @@ function parseNode($node, $child = null) {
         return $li;
     } else {
         
-        if (isset($url['host'])) {
+        if (isset($url['host']) && isset($su['host'])) {
             if ($url['host'] ==  $su['host']) {
                 if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item dropdown active '.$node->class.'">';
