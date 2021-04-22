@@ -1889,9 +1889,9 @@ function copyright()
     $credit = 'Powered by <a href="http://www.htmly.com" target="_blank" rel="nofollow">HTMLy</a>';
 
     if (!empty($blogcp)) {
-        return $copyright = '<p>' . $blogcp . '</p><p>' . $credit . '</p>';
+        return $copyright = '<span class="copyright">' . $blogcp . '</span> <span class="credit">' . $credit . '</span>';
     } else {
-        return $credit = '<p>' . $credit . '</p>';
+        return $credit = '<span class="credit">' . $credit . '</span>';
     }
 }
 

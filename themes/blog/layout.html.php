@@ -185,7 +185,7 @@
     <!-- ******FOOTER****** --> 
     <footer class="footer">
         <div class="container text-center">
-            <?php echo copyright();?>
+            <?php echo copyright();?><br><span>Design by <a href="https://3rdwavemedia.com/" target="_blank" rel="nofollow">3rd Wave Media</a></span>
         </div><!--//container-->
     </footer><!--//footer-->
     <!-- Javascript -->          
