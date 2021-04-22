@@ -553,15 +553,15 @@ ul li, ol li {
 }
 
 .share a.twitter {
-    background: url(../../default/img/share-twitter.png) left top no-repeat;
+    background: url(../../readable/img/share-twitter.png) left top no-repeat;
 }
 
 .share a.facebook {
-    background: url(../../default/img/share-facebook.png) left top no-repeat;
+    background: url(../../readable/img/share-facebook.png) left top no-repeat;
 }
 
 .share a.googleplus {
-    background: url(../../default/img/share-googleplus.png) left top no-repeat;
+    background: url(../../readable/img/share-googleplus.png) left top no-repeat;
 }
 
 .share a:hover {

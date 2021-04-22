@@ -12,17 +12,8 @@
         </div>
     <?php endif; ?>
 <?php endif; ?>
-<?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
-    <?php if ($i == 0) {
-        $class = 'post first';
-    } elseif ($i == $len - 1) {
-        $class = 'post last';
-    } else {
-        $class = 'post';
-    }
-    $i++; ?>
-    <div class="<?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
         <div class="main">
             <?php if (!empty($p->link)) { ?>
                 <h2 class="title-index" itemprop="name"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title ?> &rarr;</a></h2>
@@ -32,7 +23,7 @@
             <div class="date">
                 <span itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in
                 <span itemprop="articleSection"><?php echo $p->category ?></span> by
-                <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span>
+                <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->authorName; ?></a></span>
                 <?php if (disqus_count()) { ?> - 
                     <span><a href="<?php echo $p->url ?>#disqus_thread">Comments</a></span>
                 <?php } elseif (facebook()) { ?> - 

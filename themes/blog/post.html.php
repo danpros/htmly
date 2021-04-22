@@ -36,7 +36,7 @@
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in 
                         <span itemprop="articleSection"><?php echo $p->category;?></span> by 
-                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span>
+                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span>
                     </p>
                 </div>
                 <div class="desc text-left" itemprop="articleBody">                                   

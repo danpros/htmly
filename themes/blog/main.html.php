@@ -61,7 +61,7 @@
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in 
                         <span itemprop="articleSection"><?php echo $p->category;?></span> by 
-                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span>
+                        <span class="author" itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span>
                         <?php if (disqus_count()) { ?> 
                             with <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
                         <?php } elseif (facebook()) { ?> 

@@ -53,7 +53,7 @@
         </span>
         <span class="byline">
             <span class="author vcard">
-                <a href="<?php echo $p->authorUrl; ?>"><?php echo $p->author; ?></a>
+                <a href="<?php echo $p->authorUrl; ?>"><?php echo $p->authorName; ?></a>
             </span>
         </span>
         <span class="cat-links">
