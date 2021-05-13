@@ -3,7 +3,7 @@
 if (login()) {
     if (isset($_GET['file'])) {
         $file = _h($_GET['file']);
-
+        $file = preg_replace('/\/|\\\\/','0',$file);
         if (!empty($file)) {
             unlink("backup/$file");
         }
