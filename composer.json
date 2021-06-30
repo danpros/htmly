@@ -6,13 +6,14 @@
 			"php": "5.3"
 		}
 	},
-    "require": {
+	"require": {
 		"ircmaxell/password-compat": "1.*",
 		"michelf/php-markdown": "1.*",
+		"michelf/php-smartypants": "1.*",
 		"suin/php-rss-writer": "1.*",
 		"kanti/hub-updater": "0.*",
 		"jbroadway/urlify": "^1.0"
-    },
+	},
 	"autoload": {
 		"files": [
 			"system/includes/dispatch.php",

@@ -132,5 +132,14 @@ cache.timestamp = "false"
 ; Set the theme here
 views.root = "themes/twentyfifteen"
 
+; Use "smart" transforms of straight quotes into curly quotes, dashes into en- and em-dashes, etc.
+smart = "true"
+
+; customize smart quote configuration
+;doublequote.open = "&#8221;"
+;doublequote.close = "&#8221;"
+;singlequote.open = "&#8217;"
+;singlequote.close = "&#8217;"
+
 ; Framework config. No need to edit.
 views.layout = "layout"
