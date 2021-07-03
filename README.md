@@ -39,7 +39,7 @@ Features
 - Responsive Design
 - User Roles
 - Online Backup
-- File Caching
+- File Caching (Auto Minify HTML support)
 - Online Update
 - Post Draft
 - i18n
