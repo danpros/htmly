@@ -303,10 +303,10 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $dt = str_replace($replaced, '', $arr[0]);
         $t = str_replace('-', '', $dt);
         $time = new DateTime($t);
-        $timestamp = $time->format("Y-m-d H:i:s");
+        $date = $time->format("Y-m-d H:i:s");
 
         // The post date
-        $post->date = strtotime($timestamp);
+        $post->date = strtotime($date);
 
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
@@ -2385,10 +2385,10 @@ function sitemap_post_path()
         $dt = str_replace($replaced, '', $arr[0]);
         $t = str_replace('-', '', $dt);
         $time = new DateTime($t);
-        $timestamp = $time->format("Y-m-d H:i:s");
+        $date = $time->format("Y-m-d H:i:s");
 
         // The post date
-        $post->date = strtotime($timestamp);
+        $post->date = strtotime($date);
 
         // The archive per day
         $post->archiveday = site_url() . 'archive/' . date('Y-m-d', $post->date);
@@ -3250,6 +3250,33 @@ function format_date($date)
         return strftime($date_format, $date);
     }
 
+}
+
+// Function Timeago 
+function timeago($date){
+    $time = time() - $date;
+     
+    if ($time < 60)
+    return ( $time > 1 ) ? $time . ' ' . i18n('Seconds_ago') : i18n('A_second_ago');
+    elseif ($time < 3600) {
+    $tmp = floor($time / 60);
+    return ($tmp > 1) ? $tmp . ' ' . i18n('Minutes_ago') : i18n('A_minute_ago');
+    }
+    elseif ($time < 86400) {
+    $tmp = floor($time / 3600);
+    return ($tmp > 1) ? $tmp . ' ' . i18n('Hours_ago') : i18n('An_hour_ago');
+    }
+    elseif ($time < 2592000) {
+    $tmp = floor($time / 86400);
+    return ($tmp > 1) ? $tmp . ' ' . i18n('Days_ago') : i18n('Yesterday');
+    }
+    elseif ($time < 946080000) {
+    return format_date($date);
+    }
+    else {
+    $tmp = floor($time / 946080000);
+    return format_date($date);
+    }
 }
 
 function valueMaker($value)
