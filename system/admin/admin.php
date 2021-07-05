@@ -836,11 +836,12 @@ function get_user_posts()
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
-            echo '<table class="table post-list">';
-            echo '<tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
+            echo '<table id="htmly-table" class="table post-list">';
+            echo '<thead><tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>'.i18n('Views').'</th>';
-            echo '<th>' . i18n('Category') . '</th><th>' . i18n('Tags') . '</th><th>' . i18n('Operations') . '</th></tr>';
+            echo '<th>' . i18n('Category') . '</th><th>' . i18n('Tags') . '</th><th>' . i18n('Operations') . '</th></tr></thead>';
+            echo '<tbody>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -859,9 +860,10 @@ function get_user_posts()
                     echo '<td>' . $p->views . '</td>';
                 echo '<td><a href="' . str_replace('category', 'admin/categories', $p->categoryUrl) . '">'. strip_tags($p->category) .'</a></td>';
                 echo '<td>' . $p->tag . '</td>';
-                echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
+                echo '<td><a class="btn btn-primary btn-sm" href="' . $p->url . '/edit?destination=admin">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-sm" href="' . $p->url . '/delete?destination=admin">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
             }
+            echo '</tbody>';
             echo '</table>';
         }
     }
@@ -874,11 +876,12 @@ function get_user_pages()
         $posts = get_static_post(null);
         if (!empty($posts)) {
             krsort($posts);
-            echo '<table class="table post-list">';
-            echo '<tr class="head"><th>' . i18n('Title') . '</th>';
+            echo '<table id="htmly-table" class="table post-list">';
+            echo '<thead><tr class="head"><th>' . i18n('Title') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>'.i18n('Views').'</th>';
-            echo '<th>' . i18n('Operations') . '</th></tr>';
+            echo '<th>' . i18n('Operations') . '</th></tr></thead>';
+            echo '<tbody>';
             $i = 0;
             $len = count($posts);
             foreach ($posts as $p) {
@@ -895,7 +898,7 @@ function get_user_pages()
                 echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
                 if (config("views.counter") == "true")
                     echo '<td>' . $p->views . '</td>';
-                echo '<td><a class="btn btn-primary btn-xs" href="' . $p->url . '/add?destination=admin/pages">' . i18n('Add_sub') . '</a> <a class="btn btn-primary btn-xs" href="' . $p->url . '/edit?destination=admin/pages">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $p->url . '/delete?destination=admin/pages">' . i18n('Delete') . '</a></td>';
+                echo '<td><a class="btn btn-primary btn-sm" href="' . $p->url . '/add?destination=admin/pages">' . i18n('Add_sub') . '</a> <a class="btn btn-primary btn-sm" href="' . $p->url . '/edit?destination=admin/pages">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-sm" href="' . $p->url . '/delete?destination=admin/pages">' . i18n('Delete') . '</a></td>';
                 echo '</tr>';
 
                 $shortUrl = substr($p->url, strrpos($p->url, "/") + 1);
@@ -906,10 +909,11 @@ function get_user_pages()
                     echo '<td> <span style="margin-left:30px;">&raquo; <a target="_blank" href="' . $sp->url . '">' . $sp->title . '</a></span></td>';
                     if (config("views.counter") == "true")
                         echo '<td>' . $sp->views . '</td>';
-                    echo '<td><a class="btn btn-primary btn-xs" href="' . $sp->url . '/edit?destination=admin/pages">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-xs" href="' . $sp->url . '/delete?destination=admin/pages">' . i18n('Delete') . '</a></td>';
+                    echo '<td><a class="btn btn-primary btn-sm" href="' . $sp->url . '/edit?destination=admin/pages">' . i18n('Edit') . '</a> <a class="btn btn-danger btn-sm" href="' . $sp->url . '/delete?destination=admin/pages">' . i18n('Delete') . '</a></td>';
                     echo '</tr>';
                 }
             }
+            echo '</tbody>';
             echo '</table>';
         }
     }
@@ -954,7 +958,7 @@ function get_backup_files()
                 echo '<tr class="' . $class . '">';
                 echo '<td>' . $name . '</td>';
                 echo '<td>' . $timestamp . '</td>';
-                echo '<td><a class="btn btn-primary btn-xs" target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $name . '"/><input type="submit" class="btn btn-danger btn-xs" name="submit" value="Delete"/></form></td>';
+                echo '<td><a class="btn btn-primary btn-sm" target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $name . '"/><input type="submit" class="btn btn-danger btn-sm" name="submit" value="Delete"/></form></td>';
                 echo '</tr>';
             }
             echo '</table>';

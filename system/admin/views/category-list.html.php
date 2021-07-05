@@ -5,12 +5,15 @@
 <?php if ($category->url !== site_url() . 'category/uncategorized'):?><a class="btn btn-primary right" href="<?php echo $category->url;?>/edit?destination=admin/categories"><?php echo i18n("Edit_category");?></a><?php endif;?>
 <br><br>
 <?php if (!empty($posts)) { ?>
-    <table class="table post-list">
+    <table id="htmly-table" class="table post-list">
+        <thead>
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Published');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
+        <thead>
+        <tbody>
         <?php $i = 0;
         $len = count($posts); ?>
         <?php foreach ($posts as $p): ?>
@@ -28,15 +31,16 @@
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
                 <td><?php echo format_date($p->date) ?></td>
                 <?php if ($category->url !== site_url() . 'category/uncategorized') {?>
-                <td><a class="btn btn-primary btn-xs" href="<?php echo $p->url ?>/edit?destination=admin/categories/<?php echo $category->md;?>"><?php echo i18n('Edit');?></a> <a
-                        class="btn btn-danger btn-xs" href="<?php echo $p->url ?>/delete?destination=admin/categories/<?php echo $category->md;?>"><?php echo i18n('Delete');?></a></td>
+                <td><a class="btn btn-primary btn-sm" href="<?php echo $p->url ?>/edit?destination=admin/categories/<?php echo $category->md;?>"><?php echo i18n('Edit');?></a> <a
+                        class="btn btn-danger btn-sm" href="<?php echo $p->url ?>/delete?destination=admin/categories/<?php echo $category->md;?>"><?php echo i18n('Delete');?></a></td>
 				<?php } else {?>
-                <td><a class="btn btn-primary btn-xs" href="<?php echo $p->url ?>/edit?destination=admin/categories/uncategorized"><?php echo i18n('Edit');?></a> <a
-                        class="btn btn-danger btn-xs" href="<?php echo $p->url ?>/delete?destination=admin/categories/uncategorized"><?php echo i18n('Delete');?></a></td>				
+                <td><a class="btn btn-primary btn-sm" href="<?php echo $p->url ?>/edit?destination=admin/categories/uncategorized"><?php echo i18n('Edit');?></a> <a
+                        class="btn btn-danger btn-sm" href="<?php echo $p->url ?>/delete?destination=admin/categories/uncategorized"><?php echo i18n('Delete');?></a></td>				
                 <?php } ?>
 						
             </tr>
         <?php endforeach; ?>
+        </tbody>
     </table>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <br>

@@ -1,6 +1,8 @@
+/*
 body {
     font-family: Georgia, sans-serif;
 }
+*/
 
 blockquote {
     border-left: 2px dotted #888;
@@ -40,17 +42,19 @@ blockquote {
     margin: 20px 0;
 }
 
-.wmd-preview td, .wmd-preview th {
+.wmd-preview td,
+.wmd-preview th {
     border-right: 1px solid #ccc;
     padding: 8px 12px;
 }
 
-.wmd-preview td:last-child, .wmd-preview th:last-child {
+.wmd-preview td:last-child,
+.wmd-preview th:last-child {
     border-right: none;
 }
 
 .wmd-preview td {
-    border-top: 1px solid #ccc;	
+    border-top: 1px solid #ccc;
 }
 
 .wmd-button-row {
@@ -74,10 +78,9 @@ blockquote {
     float: left;
 }
 
-.wmd-button > span {
+.wmd-button>span {
     background-repeat: no-repeat;
     background-position: 0px 0px;
-
     display: inline-block;
 }
 
@@ -102,17 +105,17 @@ blockquote {
     background-color: #F5F5F5;
 }
 
-.wmd-prompt-dialog > div {
+.wmd-prompt-dialog>div {
     font-size: 0.8em;
     font-family: arial, helvetica, sans-serif;
 }
 
-.wmd-prompt-dialog > form > input[type="text"] {
+.wmd-prompt-dialog>form>input[type="text"] {
     border: 1px solid #999999;
     color: black;
 }
 
-.wmd-prompt-dialog > form > input[type="button"] {
+.wmd-prompt-dialog>form>input[type="button"] {
     border: 1px solid #888888;
     font-family: trebuchet MS, helvetica, sans-serif;
     font-size: 0.8em;
@@ -134,21 +137,18 @@ pre code {
 }
 
 @media all and (max-width: 980px) {
-
     .nav {
         width: 100%;
         padding: 2%;
     }
-
-    .wmd-panel, .wmd-preview {
+    .wmd-panel,
+    .wmd-preview {
         width: 96%;
         float: left;
         padding: 2%;
     }
-
     pre {
         white-space: pre-wrap;
         word-wrap: break-word;
     }
-
 }

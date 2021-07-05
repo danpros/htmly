@@ -4,13 +4,16 @@
 <br>
 <a class="btn btn-primary " href="<?php echo site_url();?>add/category"><?php echo i18n('Add_category');?></a>
 <br><br>
-<table class="table category-list">
+<table id="htmly-table" class="table category-list">
+    <thead>
     <tr class="head">
         <th>Name</th>
         <th><?php echo i18n('Description');?></th>
         <th><?php echo i18n('Contents');?></th>
         <th><?php echo i18n('Operations');?></th>
     </tr>
+    </thead>
+    <tbody>
     <tr>
         <td><a href="<?php echo site_url();?>admin/categories/uncategorized"><?php echo i18n("Uncategorized");?></a></td>
         <td><p><?php echo i18n('Uncategorized_comment');?>.</p></td>
@@ -22,7 +25,8 @@
         <td><a href="<?php echo site_url();?>/admin/categories/<?php echo $d->md;?>"><?php echo $d->title;?></a></td>
         <td><?php echo $d->body;?></td>
         <td><?php $total = get_draftcount($d->md) + get_categorycount($d->md); echo $total?></td>
-        <td><a class="btn btn-primary btn-xs" href="<?php echo $d->url;?>/edit?destination=admin/categories"><?php echo i18n('Edit');?></a> <?php if (get_categorycount($d->md) == 0 && get_draftcount($d->md) == 0 ){echo '<a class="btn btn-danger btn-xs" href="' . $d->url . '/delete?destination=admin/categories">' . i18n('Delete') . '</a>';}?></td>
+        <td><a class="btn btn-primary btn-sm" href="<?php echo $d->url;?>/edit?destination=admin/categories"><?php echo i18n('Edit');?></a> <?php if (get_categorycount($d->md) == 0 && get_draftcount($d->md) == 0 ){echo '<a class="btn btn-danger btn-sm" href="' . $d->url . '/delete?destination=admin/categories">' . i18n('Delete') . '</a>';}?></td>
     </tr>
     <?php endforeach;?>
+    </tbody>
 </table>

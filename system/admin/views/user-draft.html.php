@@ -4,7 +4,8 @@
 <a class="btn btn-primary right" href="<?php echo site_url();?>admin/content"><?php echo i18n('Add_new_post');?></a>
 <br><br>
 <?php if (!empty($posts)) { ?>
-    <table class="table post-list">
+    <table id="htmly-table" class="table post-list">
+        <thead>
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Created');?></th>
@@ -12,6 +13,8 @@
             <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
+        </thead>
+        <tbody>
         <?php $i = 0;
         $len = count($posts); ?>
         <?php foreach ($posts as $p): ?>
@@ -30,9 +33,10 @@
                 <td><?php echo format_date($p->date) ?></td>
                 <td><a href="<?php echo str_replace('category', 'admin/categories', $p->categoryUrl); ?>"><?php echo strip_tags($p->category);?></a></td>
                 <td><?php echo $p->tag ?></td>
-                <td><a class="btn btn-primary btn-xs" href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-xs" href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
+                <td><a class="btn btn-primary btn-sm" href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-sm" href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
             </tr>
         <?php endforeach; ?>
+        </tbody>
     </table>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <br>
