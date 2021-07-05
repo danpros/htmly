@@ -9,9 +9,8 @@
 	<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/font-awesome.css">
 	<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/adminlte.min.css">
   <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/OverlayScrollbars.min.css">
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/resources/css/jquery.dataTables.min.css">
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/resources/css/fixedHeader.dataTables.min.css">
-  <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/resources/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/resources/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/resources/css/responsive.bootstrap4.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
 </head>
@@ -266,23 +265,22 @@
 <script src="<?php echo site_url() ?>system/resources/js/bootstrap.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/dataTables.bootstrap4.min.js"></script>
-<script src="<?php echo site_url() ?>system/resources/js/dataTables.fixedHeader.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/dataTables.responsive.min.js"></script>
+<script src="<?php echo site_url() ?>system/resources/js/responsive.bootstrap4.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.overlayScrollbars.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/adminlte.min.js"></script>
 
 <script>
 $(document).ready(function() {
-    var table = $('#htmly-table').DataTable( {
+    $('#htmly-table').DataTable({
       "paging": false,
       "lengthChange": false,
       "searching": false,
-      "ordering": true,
+      "ordering": false,
       "info": false,
       "autoWidth": true,
       "responsive": true,
-    } );
-    new $.fn.dataTable.FixedHeader( table );
+    });
 } );
 </script>
 </body>

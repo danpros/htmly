@@ -4,7 +4,7 @@
 <br>
 <a class="btn btn-primary " href="<?php echo site_url();?>add/category"><?php echo i18n('Add_category');?></a>
 <br><br>
-<table id="htmly-table" class="table category-list">
+<table id="htmly-table" class="table category-list" style="width:100%">
     <thead>
     <tr class="head">
         <th>Name</th>

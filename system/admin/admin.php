@@ -836,7 +836,7 @@ function get_user_posts()
     if (isset($_SESSION[config("site.url")]['user'])) {
         $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
         if (!empty($posts)) {
-            echo '<table id="htmly-table" class="table post-list">';
+            echo '<table id="htmly-table" class="table post-list" style="width:100%">';
             echo '<thead><tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>'.i18n('Views').'</th>';
@@ -876,7 +876,7 @@ function get_user_pages()
         $posts = get_static_post(null);
         if (!empty($posts)) {
             krsort($posts);
-            echo '<table id="htmly-table" class="table post-list">';
+            echo '<table id="htmly-table" class="table post-list" style="width:100%">';
             echo '<thead><tr class="head"><th>' . i18n('Title') . '</th>';
             if (config("views.counter") == "true")
                 echo '<th>'.i18n('Views').'</th>';

@@ -4,7 +4,7 @@
 <a class="btn btn-primary right" href="<?php echo site_url();?>admin/content"><?php echo i18n('Add_new_post');?></a>
 <br><br>
 <?php if (!empty($posts)) { ?>
-    <table id="htmly-table" class="table post-list">
+    <table id="htmly-table" class="table post-list" style="width:100%">
     <thead>
     <tr class="head">
         <th><?php echo i18n('Title');?></th>

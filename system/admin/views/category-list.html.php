@@ -5,7 +5,7 @@
 <?php if ($category->url !== site_url() . 'category/uncategorized'):?><a class="btn btn-primary right" href="<?php echo $category->url;?>/edit?destination=admin/categories"><?php echo i18n("Edit_category");?></a><?php endif;?>
 <br><br>
 <?php if (!empty($posts)) { ?>
-    <table id="htmly-table" class="table post-list">
+    <table id="htmly-table" class="table post-list" style="width:100%">
         <thead>
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
