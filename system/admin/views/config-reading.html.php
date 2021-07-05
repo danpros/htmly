@@ -75,7 +75,7 @@
           </label>
         </div>
       </div>
-	</div>
+	  </div>
   </div>
   <div class="form-group row">
     <label for="teaser.char" class="col-sm-2 col-form-label"><?php echo i18n('Summary_character');?></label>
@@ -88,6 +88,25 @@
     <div class="col-sm-10">
       <input type="text" name="-config-read.more" class="form-control" id="read.more" value="<?php echo valueMaker(config('read.more'));?>" placeholder="<?php echo i18n('Read_more_text_placeholder');?>">
     </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Posts_date_displayed_as');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-timeago.format" id="timeago.format1" value="true" <?php if (config('timeago.format') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="timeago.format1">
+            <?php echo i18n('Timeago_format');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-timeago.format" id="timeago.format2" value="false" <?php if (config('timeago.format') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="timeago.format2">
+            <?php echo i18n('Default');?>
+          </label>
+        </div>
+      </div>
+	  </div>
   </div>
   <br>
   <h4><?php echo i18n('Posts_index_settings');?></h4>

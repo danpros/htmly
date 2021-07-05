@@ -3244,38 +3244,46 @@ function format_date($date)
 
     $date_format = config('date.format');
 
-    if (!isset($date_format) || empty($date_format)) {
-        return strftime('%e %B %Y', $date);
+    // Timeago
+    if(config('timeago.format') == 'true') {
+        $time = time() - $date;
+        if ($time < 60) {
+        return ( $time > 1 ) ? $time . ' ' . i18n('Seconds_ago') : i18n('A_second_ago');
+        }
+        elseif ($time < 3600) {
+        $tmp = floor($time / 60);
+        return ($tmp > 1) ? $tmp . ' ' . i18n('Minutes_ago') : i18n('A_minute_ago');
+        }
+        elseif ($time < 86400) {
+        $tmp = floor($time / 3600);
+        return ($tmp > 1) ? $tmp . ' ' . i18n('Hours_ago') : i18n('An_hour_ago');
+        }
+        elseif ($time < 2592000) {
+        $tmp = floor($time / 86400);
+        return ($tmp > 1) ? $tmp . ' ' . i18n('Days_ago') : i18n('Yesterday');
+        }
+        elseif ($time < 946080000) {
+            if (!isset($date_format) || empty($date_format)) {
+                return strftime('%e %B %Y', $date);
+            } else {
+                return strftime($date_format, $date);
+            }
+        }
+        else {
+        $tmp = floor($time / 946080000);
+            if (!isset($date_format) || empty($date_format)) {
+                return strftime('%e %B %Y', $date);
+            } else {
+                return strftime($date_format, $date);
+            }
+        }
     } else {
-        return strftime($date_format, $date);
-    }
-
-}
-
-// Function Timeago 
-function timeago($date){
-    $time = time() - $date;
-     
-    if ($time < 60)
-    return ( $time > 1 ) ? $time . ' ' . i18n('Seconds_ago') : i18n('A_second_ago');
-    elseif ($time < 3600) {
-    $tmp = floor($time / 60);
-    return ($tmp > 1) ? $tmp . ' ' . i18n('Minutes_ago') : i18n('A_minute_ago');
-    }
-    elseif ($time < 86400) {
-    $tmp = floor($time / 3600);
-    return ($tmp > 1) ? $tmp . ' ' . i18n('Hours_ago') : i18n('An_hour_ago');
-    }
-    elseif ($time < 2592000) {
-    $tmp = floor($time / 86400);
-    return ($tmp > 1) ? $tmp . ' ' . i18n('Days_ago') : i18n('Yesterday');
-    }
-    elseif ($time < 946080000) {
-    return format_date($date);
-    }
-    else {
-    $tmp = floor($time / 946080000);
-    return format_date($date);
+        // Default
+        if (!isset($date_format) || empty($date_format)) {
+            return strftime('%e %B %Y', $date);
+        } else {
+            return strftime($date_format, $date);
+        }
     }
 }
 

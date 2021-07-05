@@ -39,11 +39,13 @@ Features
 - Responsive Design
 - User Roles
 - Online Backup
-- File Caching (Auto Minify HTML support)
+- File Caching
 - Online Update
 - Post Draft
 - i18n
 - Menu builder
+- Caching Minify (optional)
+- Posts Date display like Social Media (optional)
 
 Requirements
 ------------

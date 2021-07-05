@@ -40,6 +40,25 @@
 	</div>
   </div>
   <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Cache_minify');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-cache.minify" id="cache.minify1" value="true" <?php if (config('cache.minify') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="cache.minify1">
+            <?php echo i18n('Enable_recommended');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-cache.minify" id="cache.minify2" value="false" <?php if (config('cache.minify') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="cache.minify2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+	  </div>
+  </div>
+  <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Cache_timestamp');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
@@ -56,7 +75,7 @@
           </label>
         </div>
       </div>
-	</div>
+	  </div>
   </div>
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Page_generation_time');?></label>

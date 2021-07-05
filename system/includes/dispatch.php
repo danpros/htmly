@@ -489,7 +489,11 @@ function render($view, $locals = null, $layout = null)
         }
         if (!$login && $view != '404') {
             if (!file_exists($cachefile)) {
-                $content = minify_html(ob_get_contents()); // Minify HTML
+                if(config('cache.minify') == 'true') {
+                    $content = minify_html(ob_get_contents()); // Minify HTML
+                } else {
+                    $content = ob_get_contents(); // Un-Minify HTML
+                }
                 if (config('cache.timestamp') == 'true') {
                     $content .= "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
                 }

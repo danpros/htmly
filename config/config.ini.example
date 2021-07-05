@@ -93,6 +93,9 @@ teaser.char = "200"
 ; Description character count
 description.char = "150"
 
+; Post date display as, set "true" display as social media or set "false" as default
+timeago.format = "false"
+
 ; RSS feed count
 rss.count = "10"
 
@@ -128,6 +131,9 @@ generation.time = "false"
 
 ; Switch on and off the cache timestamp. Options "false" and "true"
 cache.timestamp = "false"
+
+; Switch on and off the cache minify. Options "false" and "true"
+cache.minify = "false"
 
 ; Set the theme here
 views.root = "themes/twentyfifteen"
