@@ -44,7 +44,7 @@ Features
 - Post Draft
 - i18n
 - Menu builder
-- Caching Minify (optional)
+- Cache Minify (optional)
 - Posts Date display like Social Media (optional)
 
 Requirements
