@@ -35,12 +35,12 @@ function is_admin()
 	}
 }
 
-function is_manager()
+function is_subadmin()
 {
 	if(login()) {
 		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
-		if ($role === 'manager' || $role === 'admin') {
+		if ($role === 'subadmin' || $role === 'admin') {
 			return true;
 		} else {
 			return false;
@@ -55,7 +55,7 @@ function is_editor()
 	if(login()) {
 		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
-		if ($role === 'editor' || $role === 'manager' || $role === 'admin') {
+		if ($role === 'editor' || $role === 'subadmin' || $role === 'admin') {
 			return true;
 		} else {
 			return false;
@@ -70,7 +70,7 @@ function is_moderator()
 	if(login()) {
 		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
-		if ($role === 'moderator' || $role === 'editor' || $role === 'manager' || $role === 'admin') {
+		if ($role === 'moderator' || $role === 'editor' || $role === 'subadmin' || $role === 'admin') {
 			return true;
 		} else {
 			return false;
@@ -85,7 +85,7 @@ function is_author()
 	if(login()) {
 		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
-		if ($role === 'author' || $role === 'moderator' || $role === 'editor' || $role === 'manager' || $role === 'admin') {
+		if ($role === 'author' || $role === 'moderator' || $role === 'editor' || $role === 'subadmin' || $role === 'admin') {
 			return true;
 		} else {
 			return false;
@@ -100,7 +100,7 @@ function is_user()
 	if(login()) {
 		$user = $_SESSION[config("site.url")]['user'];
 		$role = user('role', $user);
-		if ($role === 'user' || $role === 'author' || $role === 'moderator' || $role === 'editor' || $role === 'manager' || $role === 'admin') {
+		if ($role === 'user' || $role === 'author' || $role === 'moderator' || $role === 'editor' || $role === 'subadmin' || $role === 'admin') {
 			return true;
 		} else {
 			return false;
