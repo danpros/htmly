@@ -1903,12 +1903,35 @@ get('/category/:category/delete', function ($category) {
 });
 
 // Get deleted category data
-post('/category/:category/delete', function () {
+post('/category/:category/delete', function ($category)
+{
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
-    if ($proper && login()) {
+    if ($proper && login())
+    {
+        $desc = get_category_info($category);
+        if (strtolower($category) !== 'uncategorized')
+        {
+            $desc = $desc[0];
+        }
         $file = from($_REQUEST, 'file');
         $destination = from($_GET, 'destination');
-        delete_page($file, $destination);
+        if (get_categorycount($desc->md) == 0 && get_draftcount($desc->md) == 0)
+        {
+            delete_page($file, $destination);
+        }
+        else
+        {
+            if ($destination == 'post')
+            {
+                $redirect = site_url();
+                header("Location: $redirect");
+            }
+            else
+            {
+                $redirect = site_url() . $destination;
+                header("Location: $redirect");
+            }
+        }
     }
 });
 
