@@ -480,6 +480,7 @@ function render($view, $locals = null, $layout = null)
         if (config('generation.time') == 'true') {
             ob_start();
             require $layout;
+            static $total_time; // Fix minify
             $time = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
             $total_time = round($time, 4);
             echo "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
@@ -489,15 +490,21 @@ function render($view, $locals = null, $layout = null)
         }
         if (!$login && $view != '404') {
             if (!file_exists($cachefile)) {
+            	if (config('cache.timestamp') == 'true') {
+                    echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
+                }
                 if(config('cache.minify') == 'true') {
-                    $content = minify_html(ob_get_contents()); // Minify HTML
+                	$content = minify_html(ob_get_contents());
+                    if (config('generation.time') == 'true') {
+                    	$content .= "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
+                    }
+                    if (config('cache.timestamp') == 'true') {
+                    	$content .= "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
+                    }
+                	file_put_contents($cachefile, $content);
                 } else {
-                    $content = ob_get_contents(); // Un-Minify HTML
+                	file_put_contents($cachefile, ob_get_contents());
                 }
-                if (config('cache.timestamp') == 'true') {
-                    $content .= "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
-                }
-                file_put_contents($cachefile, $content);
             }
         }
         echo trim(ob_get_clean());
