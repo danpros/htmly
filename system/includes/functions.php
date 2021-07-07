@@ -2943,8 +2943,6 @@ function head_contents()
 // Return toolbar
 function toolbar()
 {
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
     $base = site_url();
 
     echo <<<EOF
@@ -2953,7 +2951,7 @@ EOF;
     echo '<div id="toolbar"><ul>';
     echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
     echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
-    if ($role === 'admin') {
+    if (is_admin()) {
         echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
         if (config('views.counter') == 'true') {
             echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
@@ -2961,11 +2959,12 @@ EOF;
     }
     echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">Pages</a></li>';
     echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
-    if ($role === 'admin') {
+    if (is_admin()) {
         echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
+        echo '<li class="tb-authors"><a href="' . $base . 'admin/authors">' . i18n('Authors') . '</a></li>';
     }
     echo '<li class="tb-import"><a href="' . $base . 'admin/menu">Menu</a></li>';
-    if ($role === 'admin') {
+    if (is_admin()) {
       echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
     }
     echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';

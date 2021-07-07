@@ -30,15 +30,19 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fa fa-globe"></i> <?php echo config('breadcrumb.home') ?></a>
-      </li>
     </ul>
 
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3">
         <input type="search" name="search" class="form-control" placeholder="<?php echo i18n('Type_to_search') ?>">
     </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item d-sm-inline-block">
+        <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fa fa-home"></i> <span class="d-none d-sm-inline-block"><?php echo config('breadcrumb.home') ?></span></a>
+      </li>
+    </ul>
   </nav>
   <!-- /.navbar -->
   <!-- Main Sidebar Container -->
@@ -95,12 +99,14 @@
               </li>
             </ul>
           </li>
+          <?php if(is_admin()): ?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-users"></i>
               <p>
-                <?php echo i18n('Authors'); ?> <sup class="font-weight-bold text-danger"><?php echo i18n('Beta'); ?></sup>
+                <?php echo i18n('Authors'); ?> 
                 <i class="right fa fa-angle-left"></i>
+                <sup class="font-weight-bold text-danger"><?php echo i18n('Beta'); ?></sup>
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -111,6 +117,7 @@
               </li>
             </ul>
           </li>
+          <?php endif; ?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cogs"></i>
@@ -127,11 +134,13 @@
                 </a>
               </li>
               <?php endif; ?>
+              <?php if(is_admin()): ?>
               <li class="nav-item">
                 <a href="<?php echo site_url(); ?>admin/config" class="nav-link">
                   <p><?php echo i18n('Config'); ?></p>
                 </a>
               </li>
+              <?php endif; ?>
               <li class="nav-item">
                 <a href="<?php echo site_url(); ?>admin/menu" class="nav-link">
                   <p><?php echo i18n('Menus'); ?></p>

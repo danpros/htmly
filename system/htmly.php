@@ -137,19 +137,27 @@ post('/login', function () {
         $log = session($user, $pass);
 
         if (!empty($log)) {
+            // Only role as admin is allowed login here
+            if(is_admin()) {
+                config('views.root', 'system/admin/views');
 
-            config('views.root', 'system/admin/views');
-
-            render('login', array(
-                'title' => 'Login - ' . blog_title(),
-                'description' => 'Login page on ' . blog_title(),
-                'canonical' => site_url(),
-                'error' => '<ul>' . $log . '</ul>',
-                'type' => 'is_login',
-                'is_login' => true,
-                'bodyclass' => 'in-login',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
-            ));
+                render('login', array(
+                    'title' => 'Login - ' . blog_title(),
+                    'description' => 'Login page on ' . blog_title(),
+                    'canonical' => site_url(),
+                    'error' => '<ul>' . $log . '</ul>',
+                    'type' => 'is_login',
+                    'is_login' => true,
+                    'bodyclass' => 'in-login',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
+                ));
+            } else {
+                // If role not as admin is not allowed login here
+                unset($_SESSION[config("site.url")]);
+                $url = site_url();
+                header("Location: $url");
+            }
+            
         }
     } else {
         $message['error'] = '';
@@ -319,7 +327,7 @@ post('/add/author', function () {
     $passconfirm = from($_REQUEST, 'passconfirm');
     $content = from($_REQUEST, 'content');
 
-    if ($proper && !empty($title) && !empty($username) && preg_match('/(?=.{6})^[a-z0-9]+$/', $username) && !username_exists($username) && !empty($password) && !empty($passconfirm) && password_match($password, $passconfirm) && login()) {
+    if ($proper && !empty($title) && !empty($username) && preg_match('/(?=.{6})^[a-z0-9]+$/', $username) && !username_exists($username) && !empty($password) && !empty($passconfirm) && password_match($password, $passconfirm) && is_admin()) {
         add_author($title, $username, $password, $content);
     } else {
         $message['error'] = '';
@@ -414,8 +422,60 @@ post('/author/:name/edit', function ($name) {
     $passconfirm = from($_REQUEST, 'passconfirm');
     $content = from($_REQUEST, 'content');
 
-    if ($proper && !empty($title) && !empty($username) && preg_match('/(?=.{6})^[a-z0-9]+$/', $username) && !username_exists($username, $name) && !empty($password) && !empty($passconfirm) && password_match($password, $passconfirm) && valid_password($name, $oldpassword) && login()) {
-        edit_author($name, $title, $username, $password, $content);
+    if ($proper && !empty($title) && !empty($username) && preg_match('/(?=.{6})^[a-z0-9]+$/', $username) && !username_exists($username, $name) && is_admin()) {
+        if(empty($password)) {
+            // If not change the password
+            edit_author($name, $title, $username, $password, $content);
+        } else {
+            // If you want change the password
+            if(is_admin() && !empty($passconfirm) && password_match($password, $passconfirm)) {
+                // Only session user role as admin
+                edit_author($name, $title, $username, $password, $content);
+            } else if(!empty($passconfirm) && password_match($password, $passconfirm) && valid_password($name, $oldpassword)) {
+                // If session user role not as admin
+                edit_author($name, $title, $username, $password, $content);
+            } else {
+                $message['error'] = '';
+                if(is_admin()) {
+                    // Only session user role as admin
+                    if (empty($passconfirm)) {
+                        $message['error'] .= '<li class="alert alert-danger">Password Confirm field is required.</li>';
+                    }
+                    if (!password_match($password, $passconfirm)) {
+                        $message['error'] .= '<li class="alert alert-danger">Password and Password Confirm is not match.</li>';
+                    }
+                } else {
+                    // If session user role not as admin
+                    if (empty($passconfirm)) {
+                        $message['error'] .= '<li class="alert alert-danger">Password Confirm field is required.</li>';
+                    }
+                    if (!password_match($password, $passconfirm)) {
+                        $message['error'] .= '<li class="alert alert-danger">Password and Password Confirm is not match.</li>';
+                    }
+                    if (!valid_password($name, $oldpassword)) {
+                        $message['error'] .= '<li class="alert alert-danger">Old Password is not valid.</li>';
+                    }
+                }
+                
+                config('views.root', 'system/admin/views');
+                render('edit-author', array(
+                    'title' => 'Edit author - ' . blog_title(),
+                    'description' => strip_tags(blog_description()),
+                    'canonical' => site_url(),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'aTitle' => $title,
+                    'aUsername' => $username,
+                    'aOldPassword' => $oldpassword,
+                    'aPassword' => $password,
+                    'aPassConfirm' => $passconfirm,
+                    'aContent' => $content,
+                    'heading' => 'Edit author',
+                    'is_admin' => true,
+                    'bodyclass' => 'edit-author',
+                    'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Edit author'
+                ));
+            }
+        }
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -429,18 +489,6 @@ post('/author/:name/edit', function ($name) {
         }
         if (username_exists($username, $name)) {
             $message['error'] .= '<li class="alert alert-danger">Username is already exist.</li>';
-        }
-        if (empty($password)) {
-            $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
-        }
-        if (empty($passconfirm)) {
-            $message['error'] .= '<li class="alert alert-danger">Password Confirm field is required.</li>';
-        }
-        if (!password_match($password, $passconfirm)) {
-            $message['error'] .= '<li class="alert alert-danger">Password and Password Confirm is not match.</li>';
-        }
-        if (!valid_password($name, $oldpassword)) {
-            $message['error'] .= '<li class="alert alert-danger">Old Password is not valid.</li>';
         }
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
@@ -509,7 +557,7 @@ get('/author/:name/delete', function ($name) {
 // Get data Delete author
 post('/author/:name/delete', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
-    if ($proper && login()) {
+    if ($proper && is_admin()) {
         $file = from($_REQUEST, 'file');
         $destination = from($_GET, 'destination');
         delete_author($file, $destination);

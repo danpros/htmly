@@ -40,21 +40,23 @@ if(!empty($username)) {
 					<br>
 				</div>
 			</div>
+			<?php if(!is_admin()): ?>
 			<div class="row">
 				<div class="col-sm-6">
-					<label for="aOldPassword"><?php echo i18n('Old_Password');?> <span class="required">*</span></label>
+					<label for="aOldPassword"><?php echo i18n('Old_Password');?></label>
 					<input type="password" class="form-control text <?php if (isset($aOldPassword)) {if (empty($aOldPassword)) {echo 'is-invalid';}} ?>" id="aOldPassword" name="oldpassword" value="<?php if (isset($aOldPassword)) {echo $aOldPassword;} ?>"/>
 					<br>
 				</div>
 			</div>
+			<?php endif; ?>
             <div class="row">
 				<div class="col-sm-6">
-					<label for="aPassword"><?php echo i18n('New_Password');?> <span class="required">*</span></label>
+					<label for="aPassword"><?php echo i18n('New_Password');?></label>
 					<input type="password" class="form-control text <?php if (isset($aPassword)) {if (empty($aPassword)) {echo 'is-invalid';}} ?>" id="aPassword" name="password" value="<?php if (isset($aPassword)) {echo $aPassword;} ?>"/>
 					<br>
 				</div>
 				<div class="col-sm-6">
-					<label for="aPassConfirm"><?php echo i18n('Password_confirm');?> <span class="required">*</span></label>
+					<label for="aPassConfirm"><?php echo i18n('Password_confirm');?></label>
 					<input type="password" class="form-control text <?php if (isset($aPassConfirm)) {if (empty($aPassConfirm)) {echo 'is-invalid';}} ?>" id="aPassConfirm" name="passconfirm" value="<?php if (isset($aPassConfirm)) {echo $aPassConfirm;} ?>" placeholder="<?php if (isset($aPassConfirm)) {echo $aPassConfirm;} ?>"/>
 					<br>
 				</div>

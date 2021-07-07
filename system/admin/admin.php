@@ -71,7 +71,20 @@ function edit_author($name, $title, $user, $password, $content)
     $name = get_author_info($name);
     $name = $name[0];
 
-    create_user($user, $password, $name->role);
+    // Jika edit tanpa ganti password
+    if(empty($password)) {
+        $file = 'config/users/' . $user . '.ini';
+        if (!file_exists($file))
+        {
+            // Hanya akan dieksekusi ketika tidak melakukan penggantian password namun melakukan penggantian username
+            file_put_contents($file, "password = " . $name->password . "\n" .
+                "encryption = password_hash\n" .
+                "role = " . $name->role . "\n");
+        }
+    } else {
+        // jika melakukan pergantian password
+        create_user($user, $password, $name->role);
+    }
 
     $user_title = safe_html($title);
     $user_content = '<!--t ' . $user_title . ' t-->' . "\n\n" . $content;
@@ -91,9 +104,10 @@ function edit_author($name, $title, $user, $password, $content)
 
         // Jika username lama tidak sama dengan yang baru maka file username lama akan dihapus
         if($name->username !== $user) {
+            // copying all content and file dari username lama ke username baru
             copy_folders('content/' . $name->username, 'content/' . $user);
             remove_folders('content/' . $name->username);
-            // Memastikan kalau username sesi sama dengan username lama
+            // Jika username sesi sama dengan username lama
             if($_SESSION[config("site.url")]['user'] === $name->username) {
                 if (session_status() == PHP_SESSION_NONE) session_start();
                 $_SESSION[config("site.url")]['user'] = $user;
