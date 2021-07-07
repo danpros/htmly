@@ -99,8 +99,9 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-users"></i>
               <p>
-                <?php echo i18n('Authors'); ?> <sup class="font-weight-bold text-danger"><?php echo i18n('Beta'); ?></sup>
+                <?php echo i18n('Authors'); ?> 
                 <i class="right fa fa-angle-left"></i>
+		<sup class="font-weight-bold text-danger"><?php echo i18n('Beta'); ?></sup>
               </p>
             </a>
             <ul class="nav nav-treeview">
