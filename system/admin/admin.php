@@ -39,6 +39,132 @@ function create_user($userName, $password, $role = "user")
     }
 }
 
+// Add author 
+function add_author($title, $user, $password, $content)
+{
+    create_user($user, $password);
+
+    $user_title = safe_html($title);
+    $user_content = '<!--t ' . $user_title . ' t-->' . "\n\n" . $content;
+
+    if (!empty($user_title) && !empty($user_content)) {
+
+        $user_content = stripslashes($user_content);
+
+        $dir = 'content/' . $user . '/';
+        $filename = 'content/' . $user . '/author.md';
+        if (is_dir($dir)) {
+            file_put_contents($filename, print_r($user_content, true));
+        } else {
+            mkdir($dir, 0775, true);
+            file_put_contents($filename, print_r($user_content, true));
+        }
+        rebuilt_cache('all');
+        $redirect = site_url() . 'admin/authors';
+        header("Location: $redirect");
+    }
+}
+
+// Edit author
+function edit_author($name, $title, $user, $password, $content)
+{
+    $name = get_author_info($name);
+    $name = $name[0];
+
+    create_user($user, $password, $name->role);
+
+    $user_title = safe_html($title);
+    $user_content = '<!--t ' . $user_title . ' t-->' . "\n\n" . $content;
+
+    if (!empty($user_title) && !empty($user_content)) {
+        
+        $user_content = stripslashes($user_content);
+
+        $dir = 'content/' . $user . '/';
+        $filename = 'content/' . $user . '/author.md';
+        if (is_dir($dir)) {
+            file_put_contents($filename, print_r($user_content, true));
+        } else {
+            mkdir($dir, 0775, true);
+            file_put_contents($filename, print_r($user_content, true));
+        }
+
+        // Jika username lama tidak sama dengan yang baru maka file username lama akan dihapus
+        if($name->username !== $user) {
+            copy_folders('content/' . $name->username, 'content/' . $user);
+            remove_folders('content/' . $name->username);
+            // Memastikan kalau username sesi sama dengan username lama
+            if($_SESSION[config("site.url")]['user'] === $name->username) {
+                if (session_status() == PHP_SESSION_NONE) session_start();
+                $_SESSION[config("site.url")]['user'] = $user;
+            }
+            unlink($name->file);
+        }
+
+        rebuilt_cache('all');
+        $redirect = site_url() . 'admin/authors';
+        header("Location: $redirect");
+    }
+}
+
+// Check old password
+function valid_password($user, $pass)
+{
+    $user_enc = user('encryption', $user);
+    $user_pass = user('password', $user);
+    $user_role = user('role', $user);
+
+    if ($user_enc == "password_hash") {
+        if (password_verify($pass, $user_pass)) {
+            if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
+                update_user($user, $pass, $user_role);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    } else if (old_password_verify($pass, $user_enc, $user_pass)) {
+        update_user($user, $pass, $user_role);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Check username exists
+function username_exists($username, $user = null)
+{
+    // Jika username baru tidak sama dengan username lama
+    if($username !== $user || $user === null) {
+        $file = 'config/users/' . $username . '.ini';
+        if(file_exists($file))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    } else { // Jika username baru sama dengan username lama
+        $file = 'config/users/' . $username . '.ini';
+        if(!file_exists($file))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+// Matching password and password confirm
+function password_match($password, $confirm)
+{
+    if($password === $confirm)
+    {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Create a session
 function session($user, $pass)
 {
@@ -47,29 +173,15 @@ function session($user, $pass)
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
     }
 
-    $user_enc = user('encryption', $user);
-    $user_pass = user('password', $user);
-    $user_role = user('role', $user);
-
-    if ($user_enc == "password_hash") {
-        if (password_verify($pass, $user_pass)) {
-            if (session_status() == PHP_SESSION_NONE) session_start();
-            if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
-                update_user($user, $pass, $user_role);
-            }
-            $_SESSION[config("site.url")]['user'] = $user;
-            header('location: admin');
-        } else {
-            return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
-        }
-    } else if (old_password_verify($pass, $user_enc, $user_pass)) {
+    if(valid_password($user, $pass))
+    {
         if (session_status() == PHP_SESSION_NONE) session_start();
-        update_user($user, $pass, $user_role);
         $_SESSION[config("site.url")]['user'] = $user;
         header('location: admin');
     } else {
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
     }
+
 }
 
 function old_password_verify($pass, $user_enc, $user_pass)
@@ -699,6 +811,94 @@ function edit_frontpage($title, $content)
         rebuilt_cache('all');
         $redirect = site_url();
         header("Location: $redirect");
+    }
+}
+
+// Move folder and files
+function copy_folders($oldfolder, $newfolder)
+{
+    if (is_dir($oldfolder))
+    {
+        $dir = opendir($oldfolder);
+        if (!is_dir($newfolder))
+        {
+            mkdir($newfolder, 0775, true);
+        }
+        while (($file = readdir($dir)))
+        {
+            if (($file != '.') && ($file != '..'))
+            {
+                if (is_dir($oldfolder . '/' . $file))
+                {
+                    copy_folders($oldfolder . '/' . $file, $newfolder . '/' . $file);
+                }
+                else
+                {
+                    copy($oldfolder . '/' . $file, $newfolder . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+}
+
+
+// Delete folder and files
+function remove_folders($dir)
+{
+    if (false === file_exists($dir)) {
+        return false;
+    }
+    
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
+
+    foreach ($files as $fileinfo) {
+        if ($fileinfo->isDir()) {
+            if (false === rmdir($fileinfo->getRealPath())) {
+                return false;
+            }
+        } else {
+            if (false === unlink($fileinfo->getRealPath())) {
+                return false;
+            }
+        }
+    }
+
+    return rmdir($dir);
+}
+
+// Delete author
+function delete_author($file, $destination)
+{
+    if (!login())
+        return null;
+    $deleted_content = $file;
+
+    if (!empty($deleted_content)) {
+
+        $str = explode('/', $file);
+        $str = str_replace('.ini', '', $str);
+        $username = $str[2];
+
+        $dir = 'content/' . $username . '/';
+
+        $user = $_SESSION[config("site.url")]['user'];
+        // Melarang untuk menghapus diri sendiri, karena bunuh diri itu dosa :D
+        if($user !== $username) {
+            remove_folders($dir);
+            unlink($deleted_content);
+            rebuilt_cache('all');
+        }
+        if ($destination == 'author') {
+            $redirect = site_url();
+            header("Location: $redirect");
+        } else {
+            $redirect = site_url() . $destination;
+            header("Location: $redirect");
+        }
     }
 }
 

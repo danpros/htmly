@@ -17,22 +17,26 @@
 		<form method="POST">
 			<div class="row">
 				<div class="col-sm-6">
-					<label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
-					<input type="text" class="form-control text <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'is-invalid';}} ?>" id="pTitle" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
+					<label for="aTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
+					<input type="text" class="form-control <?php if (isset($aTitle)) {if (empty($aTitle)) {echo 'is-invalid';}} ?>" id="aTitle" name="title" value="<?php if (isset($aTitle)) {echo $aTitle;} ?>"/>
 					<br>
-					<?php if ($type == 'is_page') :?>
-					<label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
-					<textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_leave_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) {echo $p->description;} ?></textarea>
-					<br>
-					<?php endif;?>
-					
 				</div>
 				<div class="col-sm-6">
-					<?php if ($type == 'is_page') :?>
-					<label for="pURL">Url (<?php echo i18n('optional');?>)</label>
-					<input type="text" class="form-control text" id="pURL" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_page_title');?>"/>
+					<label for="aUsername"><?php echo i18n('Username');?> <span class="required">*</span></label>
+					<input type="text" class="form-control text text-lowercase <?php if (isset($aUsername)) {if (empty($aUsername)) {echo 'is-invalid';}} ?>" id="aUsername" name="username" value="<?php if (isset($aUsername)) {echo $aUsername;} ?>" placeholder="<?php if (isset($aUsername)) {echo $aUsername;} ?>"/>
 					<br>
-					<?php endif;?>
+				</div>
+			</div>
+            <div class="row">
+				<div class="col-sm-6">
+					<label for="aPassword"><?php echo i18n('Password');?> <span class="required">*</span></label>
+					<input type="password" class="form-control text <?php if (isset($aPassword)) {if (empty($aPassword)) {echo 'is-invalid';}} ?>" id="aPassword" name="password" value="<?php if (isset($aPassword)) {echo $aPassword;} ?>"/>
+					<br>
+				</div>
+				<div class="col-sm-6">
+					<label for="aPassConfirm"><?php echo i18n('Password_confirm');?> <span class="required">*</span></label>
+					<input type="password" class="form-control text <?php if (isset($aPassConfirm)) {if (empty($aPassConfirm)) {echo 'is-invalid';}} ?>" id="aPassConfirm" name="passconfirm" value="<?php if (isset($aPassConfirm)) {echo $aPassConfirm;} ?>" placeholder="<?php if (isset($aPassConfirm)) {echo $aPassConfirm;} ?>"/>
+					<br>
 				</div>
 			</div>
 			
@@ -40,15 +44,10 @@
 				<div class="col-sm-6">
 					<label for="wmd-input"><?php echo i18n('Content');?></label>
 					<div id="wmd-button-bar" class="wmd-button-bar"></div>
-					<textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'is-invalid';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
+					<textarea id="wmd-input" class="form-control wmd-input" name="content" cols="20" rows="10"><?php if (isset($aContent)) {echo $aContent;} ?></textarea>
 					<br>
 					<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-					<?php if ($type == 'is_page') :?>
-					<input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/>
-					<?php endif;?>
-					<?php if ($type == 'is_category') :?>
-						<input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_category');?>"/>
-					<?php endif;?>
+					<input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_author');?>"/>
 				</div>
 				<div class="col-sm-6">
 					<label><?php echo i18n('Preview');?></label>

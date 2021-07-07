@@ -132,7 +132,7 @@ $( function() {
 			<div class="row">
 				<div class="col-sm-6">
 					<label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
-					<input autofocus type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';} } ?>" value="<?php echo $oldtitle ?>"/>
+					<input autofocus type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'is-invalid';} } ?>" value="<?php echo $oldtitle ?>"/>
 					<br>
 					<label for="pCategory"><?php echo i18n('Category');?> <span class="required">*</span></label>
 					<select id="pCategory" class="form-control" name="category">
@@ -143,7 +143,7 @@ $( function() {
 					</select>
 					<br>
 					<label for="pTag">Tag <span class="required">*</span></label>
-					<input type="text" id="pTag" name="tag" class="form-control text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error'; } } ?>" value="<?php echo $oldtag ?>" placeholder="<?php echo i18n('Comma_separated_values');?>"/>
+					<input type="text" id="pTag" name="tag" class="form-control text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'is-invalid'; } } ?>" value="<?php echo $oldtag ?>" placeholder="<?php echo i18n('Comma_separated_values');?>"/>
 					<br>
 
 					<label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
@@ -169,35 +169,35 @@ $( function() {
 
 					<?php if ($type == 'is_audio'):?>
 					<label for="pAudio"><?php echo i18n('Featured_Audio');?>  <span class="required">*</span> (e.g Soundcloud)</label>
-					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php echo $oldaudio; ?></textarea>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'is-invalid';} } ?>" id="pAudio" name="audio"><?php echo $oldaudio; ?></textarea>
 					<input type="hidden" name="is_audio" value="is_audio">
 					<br>
 					<?php endif;?>
 
 					<?php if ($type == 'is_video'):?>
 					<label for="pVideo"><?php echo i18n('Featured_Video');?> <span class="required">*</span> (e.g Youtube)</label>
-					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" id="pVideo" name="video"><?php echo $oldvideo ?></textarea>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'is-invalid';} } ?>" id="pVideo" name="video"><?php echo $oldvideo ?></textarea>
 					<input type="hidden" name="is_video" value="is_video">
 					<br>
 					<?php endif;?>
 
 					<?php if ($type == 'is_image'):?>
 					<label for="pImage"><?php echo i18n('Featured_Image');?> <span class="required">*</span></label>
-					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" id="pImage" name="image"><?php echo $oldimage; ?></textarea>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'is-invalid';} } ?>" id="pImage" name="image"><?php echo $oldimage; ?></textarea>
 					<input type="hidden" name="is_image" value="is_image">
 					<br>
 					<?php endif;?>
 
 					<?php if ($type == 'is_quote'):?>
 					<label for="pQuote"><?php echo i18n('Featured_Quote');?> <span class="required">*</span></label>
-					<textarea rows="3" cols="20" class="form-control text <?php if (isset($postQuote)) { if (empty($postQuote)) { echo 'error';} } ?>" id="pQuote" name="quote"><?php echo $oldquote ?></textarea>
+					<textarea rows="3" cols="20" class="form-control text <?php if (isset($postQuote)) { if (empty($postQuote)) { echo 'is-invalid';} } ?>" id="pQuote" name="quote"><?php echo $oldquote ?></textarea>
 					<input type="hidden" name="is_quote" value="is_quote">
 					<br>
 					<?php endif;?>
 
 					<?php if ($type == 'is_link'):?>
 					<label for="pLink"><?php echo i18n('Featured_Link');?> <span class="required">*</span></label>
-					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postLink)) { if (empty($postLink)) { echo 'error';} } ?>" id="pLink" name="link"><?php echo $oldlink ?></textarea>
+					<textarea rows="2" cols="20" class="form-control text <?php if (isset($postLink)) { if (empty($postLink)) { echo 'is-invalid';} } ?>" id="pLink" name="link"><?php echo $oldlink ?></textarea>
 					<input type="hidden" name="is_link" value="is_link">
 					<br>
 					<?php endif;?>
@@ -214,7 +214,7 @@ $( function() {
 					<div>
 						<label for="wmd-input"><?php echo i18n('Content');?></label>
 						<div id="wmd-button-bar" class="wmd-button-bar"></div>
-						<textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php echo $oldcontent ?></textarea><br>
+						<textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'is-invalid'; } } ?>" name="content" cols="20" rows="15"><?php echo $oldcontent ?></textarea><br>
 						<?php if ($isdraft[4] == 'draft') { ?>
 							<input type="submit" name="publishdraft" class="btn btn-primary submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="btn btn-primary draft" value="<?php echo i18n('Update_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
 						<?php } else { ?>

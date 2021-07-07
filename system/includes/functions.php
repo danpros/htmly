@@ -6,6 +6,65 @@ use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
 
+// Get all authors
+function get_authors()
+{
+    $tmp = array();
+    foreach (glob('config/users/*.ini', GLOB_NOSORT) as $key => $value) {
+        if(preg_match('/config\/users\/(.*)\.ini/i', $value, $matches)) {
+
+            $user = new stdClass;
+            $user->username = $matches[1];
+            $user->password = user('password', $matches[1]);
+            $user->role = user('role', $matches[1]);
+            $user->url = site_url() . 'author/' . $matches[1];
+            $user->file = $value;
+            
+	        $filename = 'content/' . $matches[1] . '/author.md';
+	        if (file_exists($filename)) {
+		        $content = file_get_contents($filename);
+		        $user->title = get_content_tag('t', $content, 'user');
+		        $user->content = remove_html_comments($content);
+	        } else {
+		        $user->title = $matches[1];
+		        $user->content = 'Just another HTMLy user.';
+	        }
+
+            $tmp[] = $user;
+        }
+    }
+    return $tmp;
+}
+
+// Get author info
+function get_author_info($author)
+{
+    $tmp = array();
+    $value = 'config/users/' . $author . '.ini';
+    if(preg_match('/config\/users\/(.*)\.ini/i', $value, $matches)) {
+
+        $user = new stdClass;
+        $user->username = $matches[1];
+        $user->password = user('password', $matches[1]);
+        $user->role = user('role', $matches[1]);
+        $user->url = site_url() . 'author/' . $matches[1];
+        $user->file = $value;
+        
+        $filename = 'content/' . $matches[1] . '/author.md';
+        if (file_exists($filename)) {
+            $content = file_get_contents($filename);
+            $user->title = get_content_tag('t', $content, 'user');
+            $user->content = remove_html_comments($content);
+        } else {
+            $user->title = $matches[1];
+            $user->content = 'Just another HTMLy user.';
+        }
+
+        $tmp[] = $user;
+    }
+    return $tmp;
+}
+
 // Get blog post path. Unsorted. Mostly used on widget.
 function get_post_unsorted()
 {

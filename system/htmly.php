@@ -270,6 +270,287 @@ get('/author/:name', function ($name) {
     ), $layout);
 });
 
+// Add author
+get('/add/author', function () {
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if (is_admin()) {
+
+            render('add-author', array(
+                'title' => 'Add author - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'heading' => 'Add author',
+                'is_admin' => true,
+                'bodyclass' => 'add-author',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Add author'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Add author - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'heading' => 'Add author',
+                'is_admin' => true,
+                'bodyclass' => 'add-author',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Add author'
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Get data Add author
+post('/add/author', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    
+    if (!login()) {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+
+    $title = from($_REQUEST, 'title');
+    $username = strtolower(from($_REQUEST, 'username'));
+    $password = from($_REQUEST, 'password');
+    $passconfirm = from($_REQUEST, 'passconfirm');
+    $content = from($_REQUEST, 'content');
+
+    if ($proper && !empty($title) && !empty($username) && preg_match('/(?=.{6})^[a-z0-9]+$/', $username) && !username_exists($username) && !empty($password) && !empty($passconfirm) && password_match($password, $passconfirm) && login()) {
+        add_author($title, $username, $password, $content);
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+        }
+        if (empty($username)) {
+            $message['error'] .= '<li class="alert alert-danger">Username field is required.</li>';
+        }
+        if (!preg_match('/(?=.{6})^[a-z0-9]+$/', $username)) {
+            $message['error'] .= '<li class="alert alert-danger">Username only letters, numbers, and must be 6 or more.</li>';
+        }
+        if (username_exists($username)) {
+            $message['error'] .= '<li class="alert alert-danger">Username is already exist.</li>';
+        }
+        if (empty($password)) {
+            $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
+        }
+        if (empty($passconfirm)) {
+            $message['error'] .= '<li class="alert alert-danger">Password Confirm field is required.</li>';
+        }
+        if (!password_match($password, $passconfirm)) {
+            $message['error'] .= '<li class="alert alert-danger">Password and Password Confirm is not match.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('add-author', array(
+            'title' => 'Add author - ' . blog_title(),
+            'description' => strip_tags(blog_description()),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'aTitle' => $title,
+            'aUsername' => $username,
+            'aPassword' => $password,
+            'aPassConfirm' => $passconfirm,
+            'aContent' => $content,
+            'heading' => 'Add author',
+            'is_admin' => true,
+            'bodyclass' => 'add-author',
+            'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Add author'
+        ));
+    }
+});
+
+// Edit author
+get('/author/:name/edit', function ($name) {
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if (is_admin()) {
+            render('edit-author', array(
+                'title' => 'Edit author - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'username' => $name,
+                'is_admin' => true,
+                'bodyclass' => 'edit-author',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Edit author'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Edit author - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'is_admin' => true,
+                'bodyclass' => 'edit-author',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Edit author'
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Get data Edit author
+post('/author/:name/edit', function ($name) {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+
+    if (!login()) {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+
+    $title = from($_REQUEST, 'title');
+    $username = strtolower(from($_REQUEST, 'username'));
+    $oldpassword = from($_REQUEST, 'oldpassword');
+    $password = from($_REQUEST, 'password');
+    $passconfirm = from($_REQUEST, 'passconfirm');
+    $content = from($_REQUEST, 'content');
+
+    if ($proper && !empty($title) && !empty($username) && preg_match('/(?=.{6})^[a-z0-9]+$/', $username) && !username_exists($username, $name) && !empty($password) && !empty($passconfirm) && password_match($password, $passconfirm) && valid_password($name, $oldpassword) && login()) {
+        edit_author($name, $title, $username, $password, $content);
+    } else {
+        $message['error'] = '';
+        if (empty($title)) {
+            $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+        }
+        if (empty($username)) {
+            $message['error'] .= '<li class="alert alert-danger">Username field is required.</li>';
+        }
+        if (!preg_match('/(?=.{6})^[a-z0-9]+$/', $username)) {
+            $message['error'] .= '<li class="alert alert-danger">Username only letters, numbers, and must be 6 or more.</li>';
+        }
+        if (username_exists($username, $name)) {
+            $message['error'] .= '<li class="alert alert-danger">Username is already exist.</li>';
+        }
+        if (empty($password)) {
+            $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
+        }
+        if (empty($passconfirm)) {
+            $message['error'] .= '<li class="alert alert-danger">Password Confirm field is required.</li>';
+        }
+        if (!password_match($password, $passconfirm)) {
+            $message['error'] .= '<li class="alert alert-danger">Password and Password Confirm is not match.</li>';
+        }
+        if (!valid_password($name, $oldpassword)) {
+            $message['error'] .= '<li class="alert alert-danger">Old Password is not valid.</li>';
+        }
+        if (!$proper) {
+            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+        }
+        config('views.root', 'system/admin/views');
+        render('edit-author', array(
+            'title' => 'Edit author - ' . blog_title(),
+            'description' => strip_tags(blog_description()),
+            'canonical' => site_url(),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'aTitle' => $title,
+            'aUsername' => $username,
+            'aOldPassword' => $oldpassword,
+            'aPassword' => $password,
+            'aPassConfirm' => $passconfirm,
+            'aContent' => $content,
+            'heading' => 'Edit author',
+            'is_admin' => true,
+            'bodyclass' => 'edit-author',
+            'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Edit author'
+        ));
+    }
+
+
+});
+
+// Delete author
+get('/author/:name/delete', function ($name) {
+
+    if (login()) {
+        if (is_admin()) {
+            config('views.root', 'system/admin/views');
+            $author = get_author_info($name);
+
+            if (!$author) {
+                not_found();
+            }
+
+            $author = $author[0];
+
+            render('delete-author', array(
+                'title' => 'Delete author - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'a' => $author,
+                'is_admin' => true,
+                'bodyclass' => 'delete-author',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Delete author'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Delete author - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'is_admin' => true,
+                'bodyclass' => 'delete-author',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Delete author'
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Get data Delete author
+post('/author/:name/delete', function () {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if ($proper && login()) {
+        $file = from($_REQUEST, 'file');
+        $destination = from($_GET, 'destination');
+        delete_author($file, $destination);
+    }
+});
+
+// Show authors page
+get('/admin/authors', function () {
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if (is_admin()) {
+            $authors = get_authors();
+
+            render('authors-list', array(
+                'title' => 'Authors list - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'heading' => 'Authors',
+                'authors' => $authors,
+                'is_admin' => true,
+                'bodyclass' => 'authors-list',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Authors list'
+            ));
+        } else {
+            render('denied', array(
+                'title' => 'Authors list - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'heading' => 'Authors',
+                'is_admin' => true,
+                'bodyclass' => 'authors-list',
+                'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; Authors list'
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
 // Edit the profile
 get('/edit/profile', function () {
 
@@ -710,12 +991,10 @@ post('/add/category', function () {
 // Show admin/posts 
 get('/admin/posts', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
     if (login()) {
 
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
 
             config('views.root', 'system/admin/views');
             $page = from($_GET, 'page');
@@ -781,12 +1060,10 @@ get('/admin/posts', function () {
 // Show admin/popular 
 get('/admin/popular', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
     if (login()) {
 
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             config('views.root', 'system/admin/views');
             $page = from($_GET, 'page');
             $page = $page ? (int)$page : 1;
@@ -1092,12 +1369,9 @@ post('/admin/import', function () {
 // Show Config page
 get('/admin/config', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             render('config', array(
                 'title' => 'Config - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
@@ -1158,12 +1432,9 @@ post('/admin/config', function () {
 // Show Config page
 get('/admin/config/custom', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             render('config-custom', array(
                 'title' => 'Config - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
@@ -1226,12 +1497,9 @@ post('/admin/config/custom', function () {
 // Show Config page
 get('/admin/config/reading', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             render('config-reading', array(
                 'title' => 'Config - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
@@ -1293,12 +1561,9 @@ post('/admin/config/reading', function () {
 // Show Config page
 get('/admin/config/widget', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             render('config-widget', array(
                 'title' => 'Config - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
@@ -1360,12 +1625,9 @@ post('/admin/config/widget', function () {
 // Show Config page
 get('/admin/config/metatags', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             render('config-metatags', array(
                 'title' => 'Config - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
@@ -1427,12 +1689,9 @@ post('/admin/config/metatags', function () {
 // Show Config page
 get('/admin/config/performance', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
             render('config-performance', array(
                 'title' => 'Config - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
@@ -1658,12 +1917,10 @@ get('/admin/categories', function () {
 // Show the category page
 get('/admin/categories/:category', function ($category) {
 
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
     if (login()) {
         
         config('views.root', 'system/admin/views');
-        if ($role === 'admin') {
+        if (is_admin()) {
 
             $page = from($_GET, 'page');
             $page = $page ? (int)$page : 1;

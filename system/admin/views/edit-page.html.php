@@ -83,7 +83,7 @@ if ($type == 'is_frontpage') {
 			<div class="row">
 				<div class="col-sm-6">
 					<label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
-					<input type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error'; } } ?>" value="<?php echo $oldtitle ?>"/>
+					<input type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'is-invalid'; } } ?>" value="<?php echo $oldtitle ?>"/>
 					<br>
 					<?php if($type != 'is_frontpage' && $type != 'is_profile') { ?>
 					<label for="pMeta"><?php echo i18n('Meta_description');?> (optional)</label>
@@ -106,7 +106,7 @@ if ($type == 'is_frontpage') {
 				<div class="col-sm-6">
 					<label for="wmd-input"><?php echo i18n('Content');?></label>
 					<div id="wmd-button-bar" class="wmd-button-bar"></div>
-					<textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
+					<textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'is-invalid';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
 					<br>
 					<input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
 					<?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>

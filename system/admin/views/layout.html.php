@@ -97,6 +97,22 @@
           </li>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-users"></i>
+              <p>
+                <?php echo i18n('Authors'); ?> <sup class="font-weight-bold text-danger"><?php echo i18n('Beta'); ?></sup>
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo site_url(); ?>admin/authors" class="nav-link">
+                  <p><?php echo i18n('Authors_list'); ?></p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cogs"></i>
               <p>
                 <?php echo i18n('Settings'); ?>
