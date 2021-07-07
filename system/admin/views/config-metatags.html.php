@@ -5,6 +5,37 @@ $array = array();
 if (file_exists($config_file)) {
   $array = parse_ini_file($config_file, true);
 }
+
+// robots.txt config
+$backup_robots = 'content/data/robots.backup';
+$custom_robots = 'content/data/robots.custom';
+
+if(!file_exists($backup_robots)) {
+  // backup robots.txt dulu jika belum ada backupan
+  $robots = file_get_contents('robots.txt');
+  file_put_contents($backup_robots, $robots);
+}
+
+if(!file_exists($custom_robots)) {
+  // buat custom robots.txt dulu jika belum ada
+  file_put_contents($custom_robots, '');
+}
+
+if(config('custom.robots') === 'true')
+{
+  unlink('robots.txt'); 
+  // create robots.txt custom
+  $robots = file_get_contents($custom_robots);
+  file_put_contents('robots.txt', $robots);
+}
+
+if(config('custom.robots') === 'false')
+{
+  unlink('robots.txt');
+  $robots = file_get_contents($backup_robots);
+  file_put_contents('robots.txt', $robots);
+}
+
 ?>
 <h2><?php echo i18n('Metatags_Settings');?></h2>
 <br>
@@ -38,7 +69,7 @@ if (file_exists($config_file)) {
           </label>
         </div>
       </div>
-	</div>
+	  </div>
   </div>
   <div class="form-group row">
     <label for="description.char" class="col-sm-2 col-form-label"><?php echo i18n('Meta_description_character');?></label>
@@ -50,6 +81,32 @@ if (file_exists($config_file)) {
     <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Breadcrumb_home_text');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-breadcrumb.home" class="form-control" id="breadcrumb.home" value="<?php echo valueMaker(config('breadcrumb.home'));?>" placeholder="<?php echo i18n('Home');?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Enable_custom_robots_txt');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-custom.robots" id="custom.robots1" value="true" <?php if (config('custom.robots') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="robots.type1">
+            <?php echo i18n('Enable');?> 
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-custom.robots" id="custom.robots1" value="false" <?php if (config('custom.robots') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="robots.type2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+	  </div>
+  </div>
+  <div class="form-group row">
+    <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Custom_robots_txt_here');?></label>
+    <div class="col-sm-10">
+    <textarea id="robots1" name="robots" class="form-control" rows="10"><?php echo valueMaker(file_get_contents($custom_robots));?></textarea>   
+	  <small><em><?php echo i18n('Guidelines_for_creating_a_robots_txt_see');?> <a target="_blank" href="https://developers.google.com/search/docs/advanced/robots/create-robots-txt">https://developers.google.com/search/docs/advanced/robots/create-robots-txt</a></em></small>
     </div>
   </div>
   <br>

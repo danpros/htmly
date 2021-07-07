@@ -1710,6 +1710,8 @@ post('/admin/config/metatags', function () {
     ini_set("display_errors", 1);
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $robots = from($_REQUEST, 'robots');
+
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -1725,6 +1727,7 @@ post('/admin/config/metatags', function () {
             }
         }
         save_config($new_config, $new_Keys);
+        file_put_contents('content/data/robots.custom', $robots);  
         $login = site_url() . 'admin/config/metatags';
         header("location: $login");
     } else {

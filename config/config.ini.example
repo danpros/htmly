@@ -96,6 +96,9 @@ description.char = "150"
 ; Post date display as, set "true" display as social media or set "false" as default
 timeago.format = "false"
 
+; Custom robots.txt configuration
+custom.robots = "false"
+
 ; RSS feed count
 rss.count = "10"
 
