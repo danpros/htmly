@@ -53,3 +53,5 @@ license, including:
   Font Awesome - @davegandy <http://fontawesome.io>
   
   Nestable jQuery Plugin - Copyright (c) 2012 David Bushell <http://dbushell.com>
+
+  DataTables - Copyright (C) 2008-2021, SpryMedia Ltd. <https://datatables.net>

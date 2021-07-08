@@ -136,6 +136,61 @@ if (extension_loaded('mcrypt')) {
 
 }
 
+// Move folder and files
+function copy_folders($oldfolder, $newfolder)
+{
+    if (is_dir($oldfolder))
+    {
+        $dir = opendir($oldfolder);
+        if (!is_dir($newfolder))
+        {
+            mkdir($newfolder, 0775, true);
+        }
+        while (($file = readdir($dir)))
+        {
+            if (($file != '.') && ($file != '..'))
+            {
+                if (is_dir($oldfolder . '/' . $file))
+                {
+                    copy_folders($oldfolder . '/' . $file, $newfolder . '/' . $file);
+                }
+                else
+                {
+                    copy($oldfolder . '/' . $file, $newfolder . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+}
+
+// Delete folder and files
+function remove_folders($dir)
+{
+    if (false === file_exists($dir)) {
+        return false;
+    }
+    
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
+
+    foreach ($files as $fileinfo) {
+        if ($fileinfo->isDir()) {
+            if (false === rmdir($fileinfo->getRealPath())) {
+                return false;
+            }
+        } else {
+            if (false === unlink($fileinfo->getRealPath())) {
+                return false;
+            }
+        }
+    }
+
+    return rmdir($dir);
+}
+
 // Based on <https://github.com/mecha-cms/extend.minify>
 // HTML Minifier
 function minify_html($input) {
