@@ -105,7 +105,7 @@ if(config('custom.robots') === 'false')
   <div class="form-group row">
     <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Custom_robots_txt_here');?></label>
     <div class="col-sm-10">
-    <textarea id="robots1" name="robots" class="form-control" rows="10"><?php echo valueMaker(file_get_contents($custom_robots));?></textarea>   
+    <textarea id="robots1" name="robots" class="form-control" rows="10"><?php echo file_get_contents($custom_robots);?></textarea>   
 	  <small><em><?php echo i18n('Guidelines_for_creating_a_robots_txt_see');?> <a target="_blank" href="https://developers.google.com/search/docs/advanced/robots/create-robots-txt">https://developers.google.com/search/docs/advanced/robots/create-robots-txt</a></em></small>
     </div>
   </div>

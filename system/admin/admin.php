@@ -1084,7 +1084,7 @@ function get_backup_files()
         $files = get_zip_files();
         if (!empty($files)) {
             krsort($files);
-            echo '<table class="table backup-list">';
+            echo '<table id="htmly-table" class="table backup-list" style="width:100%">';
             echo '<tr class="head"><th>' . i18n('Filename') . '</th><th>'.i18n('Date').'</th><th>' . i18n('Operations') . '</th></tr>';
             $i = 0;
             $len = count($files);
