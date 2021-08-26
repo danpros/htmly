@@ -151,6 +151,28 @@
     </div>
   </div>
   <br>
+  <h4><?php echo i18n('Matomo');?></h4>
+  <hr>
+  <div class="form-group row">
+    <label for="matamo.url" class="col-sm-2 col-form-label"><?php echo i18n('Matomo_URL');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-matomo.url" class="form-control" id="matomo.url" value="<?php echo valueMaker(config('matomo.url'));?>" placeholder="https://matomo.org/">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="matomo.token" class="col-sm-2 col-form-label"><?php echo i18n('Matomo_Token');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-matomo.token" class="form-control" id="matomo.token" value="<?php echo valueMaker(config('matomo.token'));?>" placeholder="1234567890">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="matomo.id" class="col-sm-2 col-form-label"><?php echo i18n('Matomo_ID');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-matomo.id" class="form-control" id="matomo.id" value="<?php echo valueMaker(config('matomo.id'));?>" placeholder="1">
+    </div>
+  </div>
+
+  <br>
   <h4><?php echo i18n('Social_Media');?></h4>
   <hr>
   <div class="form-group row">
@@ -170,4 +192,5 @@
       <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>
   </div>
+
 </form>

@@ -134,3 +134,8 @@ views.root = "themes/twentyfifteen"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
+
+; Matomo Config
+matomo.url = ""
+matomo.token = ""
+matomo.id = ""
