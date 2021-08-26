@@ -171,6 +171,31 @@
       <input type="text" name="-config-matomo.id" class="form-control" id="matomo.id" value="<?php echo valueMaker(config('matomo.id'));?>" placeholder="1">
     </div>
   </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Matomo_Tracking');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-matomo.tracking" id="matomo.tracking1" value="disable" <?php if (config('matomo.tracking') === 'disable'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="matomo.tracking1">
+            <?php echo i18n('Disabled');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-matomo.tracking" id="matomo.tracking2" value="javascript" <?php if (config('matomo.tracking') === 'javascript'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="matomo.tracking2">
+            Javascript
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-matomo.tracking" id="matomo.tracking3" value="php" <?php if (config('matomo.tracking') === 'php'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="matomo.tracking3">
+            PHP
+          </label>
+        </div>
+      </div>
+	</div>
+  </div>
 
   <br>
   <h4><?php echo i18n('Social_Media');?></h4>
