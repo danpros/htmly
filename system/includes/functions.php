@@ -2030,6 +2030,11 @@ function matomo($title)
     $matomoID       = config('matomo.id');
     $matomoTracking = config('matomo.tracking');
     
+    if($matomoTracking == 'disable')
+    {
+        return;
+    }
+    
     if(empty($matomoURL) || empty($matomoTracking) || empty($matomoID) || empty($matomoToken))
     {
         error_log("Please set all Matomo configuration values", 0);
@@ -2071,10 +2076,6 @@ EOF;
         
         // Track page view
         $matomoTracker->doTrackPageView($title);
-    }
-    else 
-    {
-        return "nothing";
     }
 }
 
