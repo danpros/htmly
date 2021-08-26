@@ -5,6 +5,7 @@ use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
+use function Composer\Autoload\includeFile;
 
 // Get blog post path. Unsorted. Mostly used on widget.
 function get_post_unsorted()
@@ -2018,6 +2019,62 @@ EOF;
         return $gtagScript;
     } elseif (!empty($analytics)) {
         return $script;
+    }
+}
+
+// Matomo 
+function matomo($title)
+{
+    $matomoURL      = config('matomo.url');
+    $matomoToken    = config('matomo.token');
+    $matomoID       = config('matomo.id');
+    $matomoTracking = config('matomo.tracking');
+    
+    if(empty($matomoURL) || empty($matomoTracking) || empty($matomoID) || empty($matomoToken))
+    {
+        error_log("Please set all Matomo configuration values", 0);
+        return;
+    }
+    
+    $script = <<<EOF
+    <script>
+          var _paq = window._paq = window._paq || [];
+          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          (function() {
+            var u="${matomoURL}";
+            _paq.push(['setTrackerUrl', u+'matomo.php']);
+            _paq.push(['setSiteId', '{$matomoID}']);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+          })();
+    </script>
+EOF;
+
+    if($matomoTracking == 'javascript')
+    {
+        return $script;
+    }
+    else if($matomoTracking == 'php')
+    {
+        $url = 'system/plugins/matomo/MatomoTracker.php';
+        require_once ($url);
+        
+        MatomoTracker::$URL = $matomoURL;
+        
+        // Matomo object
+        $matomoTracker = new MatomoTracker((int) $matomoID, $matomoURL);
+        
+        // Set authentication token
+        $matomoTracker->setTokenAuth($matomoToken);
+        
+        // Track page view
+        $matomoTracker->doTrackPageView($title);
+    }
+    else 
+    {
+        return "nothing";
     }
 }
 
