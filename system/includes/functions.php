@@ -2078,6 +2078,9 @@ EOF;
         // Matomo object
         $matomoTracker = new MatomoTracker((int) $matomoID, $matomoURL);
         
+        // do not wait
+       $matomoTracker->setRequestTimeout(1);
+        
         // Set authentication token
         $matomoTracker->setTokenAuth($matomoToken);
         
