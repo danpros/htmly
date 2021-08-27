@@ -2041,14 +2041,29 @@ function matomo($title)
         return;
     }
     
-    $script = <<<EOF
+
+    if($matomoTracking == 'javascript')
+    {
+        $url = $matomoURL;
+        
+        // remove http | https
+        if (startsWith($matomoURL, 'https')) 
+        {
+            $url = replace_first_str('https', '', $matomoURL);
+        }
+        else if (startsWith($matomoURL, 'http'))
+        {
+            $url = replace_first_str('http', '', $matomoURL);
+        }
+        
+        $script = <<<EOF
         <script type="text/javascript">
             var _paq = window._paq || [];
             _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
             _paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
             (function() {
-                var u="{$matomoURL}";
+                var u="{$url}";
                 _paq.push(['setTrackerUrl', u+'matomo.php']);
                 _paq.push(['setSiteId', '{$matomoID}']);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
@@ -2057,9 +2072,7 @@ function matomo($title)
         </script>
         <noscript><p><img src="{$matomoURL}matomo.php?idsite={$matomoID}&amp;rec=1" style="border:0;" alt="" /></p></noscript>
 EOF;
-
-    if($matomoTracking == 'javascript')
-    {
+        
         return $script;
     }
     else if($matomoTracking == 'php')
@@ -2079,7 +2092,7 @@ EOF;
         $matomoTracker = new MatomoTracker((int) $matomoID, $matomoURL);
         
         // do not wait
-       $matomoTracker->setRequestTimeout(1);
+        $matomoTracker->setRequestTimeout(1);
         
         // Set authentication token
         $matomoTracker->setTokenAuth($matomoToken);
@@ -2087,6 +2100,17 @@ EOF;
         // Track page view
         $matomoTracker->doTrackPageView($title);
     }
+}
+
+function startsWith($haystack, $needle) 
+{
+    $length = strlen( $needle );
+    return substr( $haystack, 0, $length ) === $needle;
+}
+
+function replace_first_str($search_str, $replacement_str, $src_str)
+{
+    return (false !== ($pos = strpos($src_str, $search_str))) ? substr_replace($src_str, $replacement_str, $pos, strlen($search_str)) : $src_str;
 }
 
 function slashUrl($url) {
