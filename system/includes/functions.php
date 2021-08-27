@@ -2035,7 +2035,7 @@ function matomo($title)
         return;
     }
     
-    if(empty($matomoURL) || empty($matomoTracking) || empty($matomoID) || empty($matomoToken))
+    if(empty($matomoURL) || empty($matomoTracking) || empty($matomoID))
     {
         error_log("Please set all Matomo configuration values", 0);
         return;
@@ -2064,6 +2064,12 @@ EOF;
     }
     else if($matomoTracking == 'php')
     {
+        if(empty($matomoToken))
+        {
+            error_log("Please set Matomo Token for PHP Tracking Method", 0);
+            return;
+        }
+        
         $url = 'system/plugins/matomo/MatomoTracker.php';
         require_once ($url);
         
