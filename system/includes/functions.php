@@ -2044,16 +2044,23 @@ function matomo($title)
 
     if($matomoTracking == 'javascript')
     {
-        $url = $matomoURL;
+        $jsURL = $matomoURL;
+        $imageURL = $matomoURL;
         
         // remove http | https
         if (startsWith($matomoURL, 'https')) 
         {
-            $url = replace_first_str('https', '', $matomoURL);
+            $jsURL = replace_first_str('https', '', $matomoURL);
         }
         else if (startsWith($matomoURL, 'http'))
         {
-            $url = replace_first_str('http', '', $matomoURL);
+            $jsURL = replace_first_str('http', '', $matomoURL);
+        }
+        
+        if(!endsWith($matomoURL, '/'))
+        {
+            $jsURL = $jsURL . '/';
+            $imageURL = $imageURL . "/";
         }
         
         $script = <<<EOF
@@ -2063,14 +2070,14 @@ function matomo($title)
             _paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
             (function() {
-                var u="{$url}";
+                var u="{$jsURL}";
                 _paq.push(['setTrackerUrl', u+'matomo.php']);
                 _paq.push(['setSiteId', '{$matomoID}']);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                 g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
             })();
         </script>
-        <noscript><p><img src="{$matomoURL}matomo.php?idsite={$matomoID}&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+        <noscript><p><img src="{$imageURL}matomo.php?idsite={$matomoID}&amp;rec=1" style="border:0;" alt="" /></p></noscript>
 EOF;
         
         return $script;
@@ -2083,8 +2090,8 @@ EOF;
             return;
         }
         
-        $url = 'system/plugins/matomo/MatomoTracker.php';
-        require_once ($url);
+        $jsURL = 'system/plugins/matomo/MatomoTracker.php';
+        require_once ($jsURL);
         
         MatomoTracker::$URL = $matomoURL;
         
@@ -2102,10 +2109,25 @@ EOF;
     }
 }
 
-function startsWith($haystack, $needle) 
+
+function startsWith($haystack, $needle, $case = true) 
 {
-    $length = strlen( $needle );
-    return substr( $haystack, 0, $length ) === $needle;
+    if ($case) 
+    {
+        return (strcmp(substr($haystack, 0, strlen($needle)), $needle) === 0);
+    }
+    
+    return (strcasecmp(substr($haystack, 0, strlen($needle)), $needle) === 0);
+}
+
+function endsWith($haystack, $needle, $case = true) 
+{
+    if ($case) 
+    {
+        return (strcmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
+    }
+    
+    return (strcasecmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
 }
 
 function replace_first_str($search_str, $replacement_str, $src_str)
