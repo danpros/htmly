@@ -93,5 +93,6 @@
     </div>
 </div>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
+<?php if (matomo($title)): ?><?php echo matomo($title) ?><?php endif; ?>
 </body>
 </html>

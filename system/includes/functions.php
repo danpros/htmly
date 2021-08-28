@@ -5,6 +5,7 @@ use \Michelf\MarkdownExtra;
 use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
+use function Composer\Autoload\includeFile;
 
 // Get blog post path. Unsorted. Mostly used on widget.
 function get_post_unsorted()
@@ -2019,6 +2020,121 @@ EOF;
     } elseif (!empty($analytics)) {
         return $script;
     }
+}
+
+// Matomo 
+function matomo($title)
+{
+    $matomoURL      = config('matomo.url');
+    $matomoToken    = config('matomo.token');
+    $matomoID       = config('matomo.id');
+    $matomoTracking = config('matomo.tracking');
+    
+    if($matomoTracking == 'disable')
+    {
+        return;
+    }
+    
+    if(empty($matomoURL) || empty($matomoTracking) || empty($matomoID))
+    {
+        error_log("Please set all Matomo configuration values", 0);
+        return;
+    }
+    
+
+    if($matomoTracking == 'javascript')
+    {
+        $jsURL = $matomoURL;
+        $imageURL = $matomoURL;
+        
+        // remove http | https
+        if (startsWith($matomoURL, 'https')) 
+        {
+            $jsURL = replace_first_str('https', '', $matomoURL);
+        }
+        else if (startsWith($matomoURL, 'http'))
+        {
+            $jsURL = replace_first_str('http', '', $matomoURL);
+        }
+        
+        if(!endsWith($matomoURL, '/'))
+        {
+            $jsURL = $jsURL . '/';
+            $imageURL = $imageURL . "/";
+        }
+        
+        $script = <<<EOF
+        <script type="text/javascript">
+            var _paq = window._paq || [];
+            _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+                var u="{$jsURL}";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '{$matomoID}']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+            })();
+        </script>
+        <noscript><p><img src="{$imageURL}matomo.php?idsite={$matomoID}&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+EOF;
+        
+        return $script;
+    }
+    else if($matomoTracking == 'php')
+    {
+        $url = $matomoURL;
+        
+        if(empty($matomoToken))
+        {
+            error_log("Please set Matomo Token for PHP Tracking Method", 0);
+            return;
+        }
+        
+        require_once ('system/plugins/matomo/MatomoTracker.php');
+        
+        MatomoTracker::$URL = $url;
+        
+        // Matomo object
+        $matomoTracker = new MatomoTracker((int) $matomoID, $url);
+        
+        // TODO: async request without waiting?!
+        $matomoTracker->setRequestTimeout(10);
+        
+        // Set authentication token
+        $matomoTracker->setTokenAuth($matomoToken);
+        
+        // Track page view
+        $matomoTracker->doTrackPageView($title);
+        
+    }
+}
+
+
+function startsWith($haystack, $needle, $case = true) 
+{
+    if ($case) 
+    {
+        return (strcmp(substr($haystack, 0, strlen($needle)), $needle) === 0);
+    }
+    
+    return (strcasecmp(substr($haystack, 0, strlen($needle)), $needle) === 0);
+}
+
+function endsWith($haystack, $needle, $case = true) 
+{
+    if ($case) 
+    {
+        return (strcmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
+    }
+    
+    return (strcasecmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
+}
+
+function replace_first_str($search_str, $replacement_str, $src_str)
+{
+    return (false !== ($pos = strpos($src_str, $search_str))) ? substr_replace($src_str, $replacement_str, $pos, strlen($search_str)) : $src_str;
 }
 
 function slashUrl($url) {
