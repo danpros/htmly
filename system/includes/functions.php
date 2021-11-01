@@ -2897,15 +2897,15 @@ EOF;
     if ($role === 'admin') {
         echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
         if (config('views.counter') == 'true') {
-            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
+            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">' . i18n('Popular') . '</a></li>';
         }
     }
-    echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">Pages</a></li>';
+    echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">' . i18n('Pages') . '</a></li>';
     echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
     if ($role === 'admin') {
         echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
     }
-    echo '<li class="tb-import"><a href="' . $base . 'admin/menu">Menu</a></li>';
+    echo '<li class="tb-import"><a href="' . $base . 'admin/menu">' . i18n('Menu') . '</a></li>';
     if ($role === 'admin') {
       echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
     }
