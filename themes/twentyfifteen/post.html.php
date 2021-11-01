@@ -34,13 +34,13 @@
     <style>.related {padding-bottom:2em;}.related p {margin-top:0;margin-bottom:0.5em;} .related ul {margin-left:1em;}</style>
     <div class="related entry-content">
         <hr>
-        <p><strong>Related Posts</strong></p>
+        <p><strong><?php echo i18n('Related_posts');?></strong></p>
         <?php echo get_related($p->related);?>
     </div>
     <div class="author-info">
-        <h2 class="author-heading">Published by</h2>
+        <h2 class="author-heading"><?php echo i18n('Published').' '.i18n('by');?></h2>
         <div class="author-avatar">
-            <img width="56" height="56" class="avatar avatar-56" src="<?php echo site_url();?>themes/twentyfifteen/images/avatar.png" alt="<?php echo $author->name; ?>">    
+            <img width="56" height="56" class="avatar avatar-56" src="<?php echo site_url();?>themes/twentyfifteen/images/avatar.png" alt="<?php echo $author->name; ?>">
         </div><!-- .author-avatar -->
         <div class="author-description">
             <h3 class="author-title"><?php echo $author->name; ?></h3>
@@ -63,9 +63,9 @@
             <?php echo $p->tag; ?>
         </span>
         <?php if (disqus_count()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n('comments');?></a></span>
         <?php } elseif (facebook()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('comments');?></span></a></span>
         <?php } ?>
     </footer>
 </article>
