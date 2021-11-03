@@ -288,7 +288,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The post author + author url
         $post->author = $author;
         $post->authorUrl = site_url() . 'author/' . $author;
-		
+
         $profile = get_author($author);
         if (isset($profile[0])) {
             $post->authorName = $profile[0]->name;
@@ -384,7 +384,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
 
         $post->description = get_content_tag("d", $content, get_description($post->body));
-		
+
         $word_count = str_word_count(strip_tags($post->body));
         $post->readTime = ceil($word_count / 200);
 
@@ -866,7 +866,7 @@ function get_static_post($static)
                 }
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
-				
+
                 $word_count = str_word_count(strip_tags($post->body));
                 $post->readTime = ceil($word_count / 200);
 
@@ -913,7 +913,7 @@ function get_static_sub_post($static, $sub_static)
                 $post->views = get_views($post->file);
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
-				
+
                 $word_count = str_word_count(strip_tags($post->body));
                 $post->readTime = ceil($word_count / 200);
 
@@ -962,7 +962,7 @@ function get_keyword($keyword, $page, $perpage)
         foreach ($words as $word) {
             if (stripos($filter, $word) !== false) {
                 if (!in_array($v, $tmp)) {
-                    $tmp[] = $v; 
+                    $tmp[] = $v;
                 }
             }
         }
@@ -1500,7 +1500,7 @@ function tag_cloud($custom = null)
             foreach ($tag_collection as $tag => $count) {
                 $size = $min_size + (($count - $min_qty) * $step);
                 echo ' <a class="tag-cloud-link" href="'. site_url(). 'tag/'. $tag .'" style="font-size:'. $size .'pt;">'.tag_i18n($tag).'</a> ';
-            }            
+            }
 
         } else {
             return $tag_collection;
@@ -1583,7 +1583,7 @@ function has_pagination($total, $perpage, $page = 1)
         $total = count(get_post_unsorted());
     }
     $totalPage = ceil($total / $perpage);
-    $number = 'Page '. $page . ' of ' . $totalPage;
+    $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;
     $pager = get_pagination($page, $total, $perpage, 2);
     return array(
         'prev' => $page > 1,
@@ -1992,7 +1992,7 @@ function publisher()
 function analytics()
 {
     $analytics = config('google.analytics.id');
-    $gtag = config('google.gtag.id');    
+    $gtag = config('google.gtag.id');
     $script = <<<EOF
     <script>
         (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
@@ -2029,7 +2029,7 @@ function parseNodes($nodes, $child = null, $class = null) {
     if (empty($child)) {
         $ul = '<ul class="nav navbar-nav '.$class.'">';
         foreach ($nodes as $node) {
-            if (isset($node->children)) { 
+            if (isset($node->children)) {
                 $ul .= parseNode($node, true);
             } else {
                 $ul .= parseNode($node);
@@ -2040,7 +2040,7 @@ function parseNodes($nodes, $child = null, $class = null) {
     } else {
         $ul = '<ul class="subnav dropdown-menu" role="menu">';
         foreach ($nodes as $node) {
-            if (isset($node->children)) { 
+            if (isset($node->children)) {
                 $ul .= parseNode($node, true);
             } else {
                 $ul .= parseNode($node);
@@ -2061,7 +2061,7 @@ function parseNode($node, $child = null) {
             if ($url['host'] ==  $su['host']) {
                 if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item active '.$node->class.'">';
-                } else  {                    
+                } else  {
                     $li = '<li class="item nav-item '.$node->class.'">';
                 }
             } else {
@@ -2074,20 +2074,20 @@ function parseNode($node, $child = null) {
                 $li = '<li class="item nav-item '.$node->class.'">';
             }
         }
-        
+
         $li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
-        if (isset($node->children)) { 
+        if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
         $li .= '</li>';
         return $li;
     } else {
-        
+
         if (isset($url['host']) && isset($su['host'])) {
             if ($url['host'] ==  $su['host']) {
                 if (slashUrl($url['path']) == slashUrl($req)) {
                     $li = '<li class="item nav-item dropdown active '.$node->class.'">';
-                } else  {                    
+                } else  {
                     $li = '<li class="item nav-item dropdown '.$node->class.'">';
                 }
             } else {
@@ -2100,13 +2100,13 @@ function parseNode($node, $child = null) {
                 $li = '<li class="item nav-item dropdown '.$node->class.'">';
             }
         }
-        
+
         $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
-        if (isset($node->children)) { 
+        if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
         $li .= '</li>';
-        return $li;            
+        return $li;
     }
 }
 
@@ -2136,15 +2136,15 @@ function menu($class = null)
                     if (stripos($class, 'active')) {
                         $parentClass = $element->parentNode->getAttribute('class') . ' active';
                         $element->parentNode->setAttribute('class', $parentClass);
-                    } 
+                    }
                 }
             }
-            
+
         return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
-            
+
         }
     } else {
-        get_menu($class);    
+        get_menu($class);
     }
 }
 
@@ -2295,13 +2295,13 @@ EOF;
 function not_found()
 {
     $vroot = rtrim(config('views.root'), '/');
-    $lt = $vroot . '/layout--404.html.php'; 
+    $lt = $vroot . '/layout--404.html.php';
     if (file_exists($lt)) {
         $layout = 'layout--404';
     } else {
         $layout = '';
     }
-    
+
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
         'title' => 'This page doesn\'t exist! - ' . blog_title(),
@@ -2897,15 +2897,15 @@ EOF;
     if ($role === 'admin') {
         echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
         if (config('views.counter') == 'true') {
-            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">Popular</a></li>';
+            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">' . i18n('Popular') . '</a></li>';
         }
     }
-    echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">Pages</a></li>';
+    echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">' . i18n('Pages') . '</a></li>';
     echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
     if ($role === 'admin') {
         echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
     }
-    echo '<li class="tb-import"><a href="' . $base . 'admin/menu">Menu</a></li>';
+    echo '<li class="tb-import"><a href="' . $base . 'admin/menu">' . i18n('Menu') . '</a></li>';
     if ($role === 'admin') {
       echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
     }
@@ -3055,12 +3055,12 @@ function get_video_id($url)
     }
 
     $link = parse_url($url);
-    
+
     if(!isset($link['host'])) {
         return $url;
     }
 
-    if (stripos($link['host'], 'youtube.com') !== false || stripos($link['host'], 'youtu.be') !== false) { 
+    if (stripos($link['host'], 'youtube.com') !== false || stripos($link['host'], 'youtu.be') !== false) {
         preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
         return $match[1];
     } elseif (stripos($link['host'], 'vimeo.com') !== false) {
