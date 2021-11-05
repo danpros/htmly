@@ -154,16 +154,16 @@ post('/login', function () {
     } else {
         $message['error'] = '';
         if (empty($user)) {
-            $message['error'] .= '<li class="alert alert-danger">User field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('User_Error') . '</li>';
         }
         if (empty($pass)) {
-            $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Pass_Error') . '</li>';
         }
         if (!$proper) {
-            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
         }
         if (!$captcha) {
-            $message['error'] .= '<li class="alert alert-danger">reCaptcha not correct.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Captcha_Error') . '</li>';
         }
 
         config('views.root', 'system/admin/views');
