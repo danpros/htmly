@@ -2304,7 +2304,7 @@ function not_found()
 
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
-        'title' => 'This page doesn\'t exist! - ' . blog_title(),
+        'title' => i18n('This_page_doesnt_exist') . ' - ' . blog_title(),
         'description' => '404 Not Found',
         'canonical' => site_url(),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
