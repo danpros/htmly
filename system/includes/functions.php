@@ -295,7 +295,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->authorAbout = $profile[0]->about;
         } else {
             $post->authorName = $author;
-            $post->authorAbout = 'Just another HTMLy user';
+            $post->authorAbout = i18n('Author_Description');
         }
 
         $post->type = $type;
@@ -822,9 +822,9 @@ function default_profile($name)
     $author = new stdClass;
 
     $author->name = $name;
-    $author->about = '<p>Just another HTMLy user.</p>';
+    $author->about = '<p>' . i18n('Author_Description') . '</p>';
 
-    $author->description = 'Just another HTMLy user';
+    $author->description = i18n('Author_Description');
 
     return $tmp[] = $author;
 }
