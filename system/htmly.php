@@ -2149,10 +2149,10 @@ get('/search/:keyword', function ($keyword) {
     if (!$posts || $page < 1) {
         // a non-existing page or no search result
         render('404-search', array(
-            'title' => 'Search results not found! - ' . blog_title(),
-            'description' => 'Search results not found!',
+            'title' => i18n('Search_results_not_found') . ' - ' . blog_title(),
+            'description' => i18n('Search_results_not_found'),
             'search' => $tsearch,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; No search results',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('No_search_results'),
             'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
             'is_404search' => true,
