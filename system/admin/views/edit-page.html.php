@@ -26,7 +26,7 @@ if ($type == 'is_frontpage') {
 		$oldcontent = remove_html_comments($content);
 	} else {
 		$oldtitle = $user;
-		$oldcontent = 'Just another HTMLy user.';
+		$oldcontent = i18n('Author_Description');
 	}
 
 } else {
