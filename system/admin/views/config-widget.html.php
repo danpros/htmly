@@ -51,6 +51,12 @@
       <input type="number" name="-config-popular.count" class="form-control" id="popular.count" value="<?php echo config('popular.count');?>">
     </div>
   </div>
+  <div class="form-group row">
+    <label for="tagcloud.count" class="col-sm-2 col-form-label"><?php echo i18n('Tagcloud_widget_at_most');?></label>
+    <div class="col-sm-10">
+      <input type="number" name="-config-tagcloud.count" class="form-control" id="tagcloud.count" value="<?php echo config('tagcloud.count');?>">
+    </div>
+  </div>
   <br>
   <h4><?php echo i18n('Comments');?></h4>
   <hr>

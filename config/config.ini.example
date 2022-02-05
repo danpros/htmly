@@ -81,6 +81,9 @@ recent.count = "5"
 ; Popular posts
 popular.count = "5"
 
+; Tagcloud
+tagcloud.count = "40"
+
 ; Teaser type: set "trimmed" or "full".
 teaser.type = "full"
 

@@ -1458,6 +1458,11 @@ function tag_cloud($custom = null)
 
     $posts = get_post_unsorted();
     $tags = array();
+	
+    $tagcloud_count = config('tagcloud.count');
+    if(empty($tagcloud_count)) {
+        $tagcloud_count = 40;
+    }
 
     if (!empty($posts)) {
 
@@ -1497,7 +1502,11 @@ function tag_cloud($custom = null)
             // this is the increase per tag quantity (times used)
             $step = ($max_size - $min_size)/($spread);
 
-            foreach ($tag_collection as $tag => $count) {
+
+            arsort($tag_collection);
+            $sliced_tags = array_slice($tag_collection, 0, $tagcloud_count, true);
+            ksort($sliced_tags);
+            foreach ($sliced_tags as $tag => $count) {
                 $size = $min_size + (($count - $min_qty) * $step);
                 echo ' <a class="tag-cloud-link" href="'. site_url(). 'tag/'. $tag .'" style="font-size:'. $size .'pt;">'.tag_i18n($tag).'</a> ';
             }
