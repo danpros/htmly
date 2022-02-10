@@ -1667,7 +1667,7 @@ get('/admin/categories/:category', function ($category) {
                 $perpage = 10;    
             }
 
-            $posts = get_category($category, $page, $perpage);
+            $posts = get_category($category, $page, $perpage, false);
             
             $desc = get_category_info($category);
             
@@ -1731,7 +1731,7 @@ get('/category/:category', function ($category) {
         $perpage = 10;    
     }
 
-    $posts = get_category($category, $page, $perpage);
+    $posts = get_category($category, $page, $perpage, false);
     
     $desc = get_category_info($category);
     

@@ -270,6 +270,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $category = default_category();
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
             $post->categoryUrl = $category->url;
+            $post->categorySlug = $category->slug;
+            $post->categoryTitle = $category->title;
             $post->categoryb = '<a itemprop="item" href="' . $category->url . '"><span itemprop="name">' . $category->title . '</span></a>';
         } else {
 
@@ -277,6 +279,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
                 if ($v['0'] === $str[count($str) - 3]) {
                     $post->category = '<a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
                     $post->categoryUrl = site_url() . 'category/' . $v['0'];
+                    $post->categorySlug = $v['0'];
+                    $post->categoryTitle = $v['1'];
                     $post->categoryb = '<a itemprop="item" href="' . site_url() . 'category/' . $v['0'] . '"><span itemprop="name">' . $v['1'] . '</span></a>';
                 }
             }
@@ -362,7 +366,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         $post->tagb = implode(' » ', $bc);
 
-        $post->related = rtrim($arr[1], ',');
+        $post->related = $post->categorySlug. ',' .$post->url;
 
         $more = explode('<!--more-->', $content);
         if (isset($more['1'])) {
@@ -483,9 +487,13 @@ function find_draft($year, $month, $name)
 }
 
 // Return category page.
-function get_category($category, $page, $perpage)
+function get_category($category, $page, $perpage, $random)
 {
     $posts = get_post_sorted();
+	
+    if ($random === true) {
+        shuffle($posts);
+    }
 
     $tmp = array();
 
@@ -577,6 +585,7 @@ function default_category()
 
     $desc->title = i18n("Uncategorized");
     $desc->url = site_url() . 'category/uncategorized';
+    $desc->slug = 'uncategorized';
     $desc->body = '<p>Topics that don&#39;t need a category, or don&#39;t fit into any other existing category.</p>';
 
     $desc->description = 'Topics that don&#39;t need a category, or don&#39;t fit into any other existing category.';
@@ -976,7 +985,7 @@ function get_keyword($keyword, $page, $perpage)
 
 }
 
-// Get related posts base on post tag.
+// Get related posts base on post category.
 function get_related($tag, $custom = null, $count = null)
 {
 
@@ -987,13 +996,11 @@ function get_related($tag, $custom = null, $count = null)
         }
     }
 
-    $posts = get_tag($tag, 1, $count + 1, true);
-    $tmp = array();
-    $req = urldecode($_SERVER['REQUEST_URI']);
+    $exp = explode(',', $tag);
+    $posts = get_category($exp[0], 1, $count + 1, true);
 
     foreach ($posts as $post) {
-        $url = $post->url;
-        if (stripos($url, $req) === false) {
+        if ($post->url !== $exp[1]) {
             $tmp[] = $post;
         }
     }
