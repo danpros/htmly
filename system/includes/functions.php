@@ -996,6 +996,7 @@ function get_related($tag, $custom = null, $count = null)
         }
     }
 
+    $tmp = array();
     $exp = explode(',', $tag);
     $posts = get_category($exp[0], 1, $count + 1, true);
 
@@ -1006,11 +1007,7 @@ function get_related($tag, $custom = null, $count = null)
     }
 
     if (empty($custom)) {
-
-        $total = count($tmp);
-
-        if ($total >= 1) {
-
+        if (!empty($tmp)) {
             $i = 1;
             echo '<ul>';
             foreach ($tmp as $post) {
@@ -1019,7 +1016,6 @@ function get_related($tag, $custom = null, $count = null)
                     break;
             }
             echo '</ul>';
-
         } else {
             echo '<ul><li>' . i18n('No_related_post_found') . '</li></ul>';
         }
