@@ -3,3 +3,4 @@
 /config/config.ini
 /config/users/*.ini
 /backup
+/.htaccess
