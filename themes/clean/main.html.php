@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
@@ -31,12 +32,13 @@
             <div class="date">
                 <span itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in
                 <span itemprop="articleSection"><?php echo $p->category ?></span> by
-                <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span>
+                <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->authorName; ?></a></span>
                 <?php if (disqus_count()) { ?> - 
                     <span><a href="<?php echo $p->url ?>#disqus_thread">Comments</a></span>
                 <?php } elseif (facebook()) { ?> -
                     <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> Comments</span></a>
                 <?php } ?>
+				<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
             </div>
             <?php if (!empty($p->image)) { ?>
                 <div class="featured-image">
@@ -45,7 +47,7 @@
             <?php } ?>
             <?php if (!empty($p->video)) { ?>
                 <div class="featured-video">
-                    <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
                 </div>
             <?php } ?>
             <?php if (!empty($p->audio)) { ?>
@@ -61,7 +63,7 @@
             <div class="teaser-body" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
                 <?php echo get_teaser($p->body, $p->url) ?>
-                <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>">Read more</a><?php endif;?>
+                <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>"><?php echo config('read.more'); ?></a><?php endif;?>
             </div>
         </div>
     </div>

@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
@@ -14,7 +15,7 @@
             <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this month"><?php echo format_date($p->date) ?></a></span>
             - Posted in
             <span itemprop="articleSection"><?php echo $p->category ?></span> by
-            <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></span> -
+            <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->authorName; ?></a></span> -
             <span><a href="<?php echo $p->url ?>" rel="permalink">Permalink</a></span>
         </div>
         <?php if (!empty($p->image)) { ?>
@@ -24,7 +25,7 @@
         <?php } ?>
         <?php if (!empty($p->video)) { ?>
             <div class="featured-video">
-                <iframe src="https://www.youtube.com/embed/<?php echo $p->video; ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
             </div>
         <?php } ?>
         <?php if (!empty($p->audio)) { ?>

@@ -9,9 +9,7 @@ blockquote {
 }
 
 .wmd-panel {
-    width: 44%;
     float: left;
-    padding-right: 20px;
 }
 
 .wmd-button-bar {
@@ -30,15 +28,29 @@ blockquote {
 
 .wmd-input {
     min-height: 300px;
-    width: 96%;
-    padding: 2%;
 }
 
 .wmd-preview {
     background-color: #E4EBF1;
-    width: 46%;
     float: left;
     padding: 2%;
+}
+
+.wmd-preview table {
+    margin: 20px 0;
+}
+
+.wmd-preview td, .wmd-preview th {
+    border-right: 1px solid #ccc;
+    padding: 8px 12px;
+}
+
+.wmd-preview td:last-child, .wmd-preview th:last-child {
+    border-right: none;
+}
+
+.wmd-preview td {
+    border-top: 1px solid #ccc;	
 }
 
 .wmd-button-row {
@@ -53,25 +65,19 @@ blockquote {
     background-color: Silver;
     list-style: none;
     float: left;
-    margin: 0.25em 5px;
+    margin: 5px;
 }
 
 .wmd-button {
-    width: 20px;
-    height: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
     list-style: none;
     cursor: pointer;
     float: left;
 }
 
 .wmd-button > span {
-    background-image: url(../img/wmd-buttons.png);
     background-repeat: no-repeat;
     background-position: 0px 0px;
-    width: 20px;
-    height: 20px;
+
     display: inline-block;
 }
 

@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (isset($is_category)):?>
     <header class="page-header"><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
 <?php endif;?>
@@ -27,7 +28,7 @@
     <?php endif; ?>
     <?php if (!empty($p->video)):?>
     <div class="post-thumbnail">
-        <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $p->video; ?>" frameborder="0" allowfullscreen></iframe>
+        <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
     </div>
     <?php endif; ?>
     <?php if (!empty($p->quote)):?>
@@ -46,7 +47,7 @@
 	<?php } ?>
     <div class="entry-content">
         <?php echo get_teaser($p->body, $p->url); ?>
-        <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>">Continue reading</a><?php endif;?>
+        <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
     </div>
     <footer class="entry-footer">
         <span class="posted-on">
@@ -54,7 +55,7 @@
         </span>
         <span class="byline">
             <span class="author vcard">
-                <a href="<?php echo $p->authorUrl; ?>"><?php echo $p->author; ?></a>
+                <a href="<?php echo $p->authorUrl; ?>"><?php echo $p->authorName; ?></a>
             </span>
         </span>
         <span class="cat-links">
@@ -68,6 +69,7 @@
         <?php } elseif (facebook()) { ?>
             <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a></span>
         <?php } ?>
+		<?php if (login()) { echo '<span class="edit-link"><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
     </footer>
 </article>
 <?php endforeach; ?>

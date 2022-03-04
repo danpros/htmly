@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
@@ -13,7 +14,7 @@
                 <?php } ?>
                 <?php if (!empty($p->video)) { ?>
                     <div class="featured featured-video embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $p->video; ?>" frameborder="0" allowfullscreen></iframe>
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
                     </div>
                 <?php } ?>
                 <?php if (!empty($p->audio)) { ?>
@@ -35,7 +36,7 @@
                     <p class="meta">
                         <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in 
                         <span itemprop="articleSection"><?php echo $p->category;?></span> by 
-                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span>
+                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span>
                     </p>
                 </div>
                 <div class="desc text-left" itemprop="articleBody">                                   
@@ -49,8 +50,8 @@
                         <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a>
                     <?php } ?>
                     <span class="share pull-right">
-                        <a target="    " class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
-                        <a target="    " href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
+                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
+                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
                     </span>
                 <div style="clear:both;"></div>
                 </div>

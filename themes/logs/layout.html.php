@@ -1,5 +1,6 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?php echo str_replace('_', '-', config('language'));?>">
 <head>
     <?php echo head_contents() ?>
     <title><?php echo $title;?></title>
@@ -7,8 +8,6 @@
     <link rel="canonical" href="<?php echo $canonical; ?>" />
     <link href="<?php echo site_url() ?>themes/logs/css/style.css" rel="stylesheet"/>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
-    <?php if (publisher()): ?>
-    <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -16,7 +15,7 @@
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo blog_description() ?>" itemprop="description"/>
+    <meta content="<?php echo strip_tags(blog_description()); ?>" itemprop="description"/>
 </div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
@@ -79,14 +78,10 @@
                     <?php echo category_list() ?>
                 </div>
                 <div class="tagcloud">
-                    <h3>Tags</h3>
-					<?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-					<ul>
-						<?php foreach ($tags as $tag => $count):?>
-						<li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-						<?php if ($i++ >= 5) break;?>
-						<?php endforeach;?>
-					</ul>
+                    <h3><?php echo i18n('Tags');?></h3>
+					<div class="tag-cloud">
+						<?php echo tag_cloud();?>
+					</div>
                 </div>
             </aside>
         </div>

@@ -40,29 +40,38 @@ Features
 - User Roles
 - Online Backup
 - File Caching
-- Auto Update
+- Online Update
 - Post Draft
 - i18n
+- Menu builder
 
 Requirements
 ------------
-HTMLy requires PHP 5.3 or greater and php-xml package.
+HTMLy requires PHP 5.3 or greater, PHP-XML package, and PHP-ZIP package for backup feature.
 
 Installations
 -------------
-If you have an OpenSSL enabled server (usually enabled by default), use the [installer.php](https://github.com/danpros/htmly/releases/latest) and read the following [instructions](https://docs.htmly.com/basics/installations) to get started. If you don't have OpenSSL, please download the latest version, extract it, then upload the extracted files to your server. Also, make sure the installation folder is writeable by your server.
+
+Install HTMLy using the source code:
+
+ 1. Download the latest version from the [Github repo](https://github.com/danpros/htmly/releases/latest)
+ 2. Upload and extract the zip file to your web server. You can upload it in the root directory, or in subdirectory such as `htmly`.
+ 3. Visit your domain. If you extract it in root directory visit `https://www.example.com/install.php` and if in subdirectory visit `https://www.example.com/htmly/install.php`.
+ 4. Follow the installer to install HTMLy.
+ 5. The installer will try to delete itself. Please delete the installer manually if the `install.php` still exist. 
+ 
+### Online install
+
+Install HTMLy without downloading the source code and use the online installer:
+
+ 1. Download `online-installer.php` from the [latest release](https://github.com/danpros/htmly/releases/latest)
+ 2. If you upload it in root directory visit `https://www.example.com/online-installer.php` or if in subdirectory visit `https://www.example.com/subdirectory/online-installer.php`.
+ 3. Follow the installer to install HTMLy.
+ 4. Please delete the installer manually if the `online-installer.php` and `install.php` still exist.
 
 Configurations
 --------------
 Set written permission for the `cache` and `content` directories.
-
-Rename `config.ini.example` inside the `config` folder to `config.ini` (or you can create a new `config/config.ini` file) then change the site settings there.
-
-Create `YourUsername.ini` inside the `config/users` folder or simply rename the `username.ini.example` file and write down your password there:
-
-````cfg
-password = YourPassword
-````
 
 In addition, HTMLy support admin user role. To do so, simply add the following line to your choosen user:
 
@@ -266,11 +275,6 @@ Paragraph 1
 
 Paragraph 2 etc.
 ```
-
-Credit
-------
-* [Martin Angelov](http://tutorialzine.com)
-* [Xiaoying Riley](http://themes.3rdwavemedia.com)
 
 Contribute
 ----------

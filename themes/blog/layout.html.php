@@ -1,14 +1,13 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->  
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->  
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
+<!--[if IE 8]> <html lang="<?php echo str_replace('_', '-', config('language'));?>" class="ie8"> <![endif]-->  
+<!--[if IE 9]> <html lang="<?php echo str_replace('_', '-', config('language'));?>" class="ie9"> <![endif]-->  
+<!--[if !IE]><!--> <html lang="<?php echo str_replace('_', '-', config('language'));?>"> <!--<![endif]-->  
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <?php if (publisher()): ?>
-    <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>    
     <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic" rel="stylesheet" type="text/css">     
@@ -34,7 +33,7 @@
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo blog_description() ?>" itemprop="description"/>
+    <meta content="<?php echo strip_tags(blog_description()); ?>" itemprop="description"/>
 </div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
@@ -50,9 +49,8 @@
                 <?php } ?>
                 <p class="desc"><?php echo blog_tagline();?></p>   
                 <ul class="social list-inline">
-                    <li><a href="<?php echo config('social.twitter');?>"><i class="fa fa-twitter"></i></a></li>                   
-                    <li><a href="<?php echo config('social.facebook');?>"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="<?php echo config('social.tumblr');?>"><i class="fa fa-tumblr"></i></a></li>
+                    <?php if(!empty(config('social.twitter'))):?><li><a href="<?php echo config('social.twitter');?>"><i class="fa fa-twitter"></i></a></li><?php endif;?>                   
+                    <?php if(!empty(config('social.facebook'))):?><li><a href="<?php echo config('social.facebook');?>"><i class="fa fa-facebook"></i></a></li><?php endif;?> 
                     <li><a href="<?php echo site_url();?>feed/rss"><i class="fa fa-rss"></i></a></li>                                    
                 </ul> 
             </div><!--//branding-->
@@ -173,15 +171,11 @@
                 </aside><!--//section-->
                 <aside class="category-list aside section">
                     <div class="section-inner">
-                        <h2 class="heading"><?php echo i18n("Popular_tags");?></h2>
+                        <h2 class="heading"><?php echo i18n("Tags");?></h2>
                         <div class="content">
-                        <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-                        <ul>
-                        <?php foreach ($tags as $tag => $count):?>
-                            <li><a href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-                        <?php if ($i++ >= 5) break;?>
-                        <?php endforeach;?>
-                        </ul>
+                        <div class="tagcloud">
+                        <?php echo tag_cloud();?>
+                        </div>
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
@@ -191,7 +185,7 @@
     <!-- ******FOOTER****** --> 
     <footer class="footer">
         <div class="container text-center">
-            <?php echo copyright();?>
+            <?php echo copyright();?><br><span>Design by <a href="https://3rdwavemedia.com/" target="_blank" rel="nofollow">3rd Wave Media</a></span>
         </div><!--//container-->
     </footer><!--//footer-->
     <!-- Javascript -->          

@@ -1,15 +1,14 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo str_replace('_', '-', config('language'));?>">
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <?php if (publisher()): ?>
-    <link href="<?php echo publisher() ?>" rel="publisher" /><?php endif; ?>
     <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo site_url();?>themes/twentyfifteen/css/font.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo site_url();?>themes/twentyfifteen/genericons/genericons.css" type="text/css" media="all"> 
-    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo site_url();?>themes/twentyfifteen/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo site_url();?>themes/twentyfifteen/css/style_v2.css" type="text/css" media="all">
     <!--[if lt IE 9]>
     <link rel='stylesheet' id='twentyfifteen-ie-css'  href='<?php echo site_url();?>themes/twentyfifteen/css/ie.css' type='text/css' media='all' />
     <![endif]-->
@@ -48,51 +47,52 @@
                         </div>
                     </nav>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">About</h2>
+                        <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <p><?php echo blog_description() ?></p>
-                    </aside>                    
+                    </aside>          
+                    <?php if(!empty(config('social.twitter')) || !empty(config('social.facebook'))):?>					
                     <nav id="social-navigation" class="social-navigation" role="navigation">
                         <div class="menu-social-links-container">
                             <ul id="menu-social-links" class="menu">
+							    <?php if(!empty(config('social.twitter'))):?>
                                 <li class="menu-item">
                                     <a href="<?php echo config('social.twitter');?>">
                                     <span class="screen-reader-text">Twitter</span>
                                     </a>
                                 </li>
+								<?php endif;?>
+								<?php if(!empty(config('social.facebook'))):?>
                                 <li class="menu-item">
                                     <a href="<?php echo config('social.facebook');?>">
                                     <span class="screen-reader-text">Facebook</span>
                                     </a>
                                 </li>
-                                <li class="menu-item">
-                                    <a href="<?php echo config('social.google');?>">
-                                    <span class="screen-reader-text">Google</span>
-                                    </a>
-                                </li>
+								<?php endif;?>
                             </ul>
                         </div>
                     </nav>
+					<?php endif;?>
                     <aside class="widget search">
                         <form><input type="search" name="search" class="form-control" placeholder="Type to search"></form>
                     </aside>                            
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Recent Posts</h2>
+                        <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>
                         <?php echo recent_posts() ?>
                     </aside>
                     <?php if (config('views.counter') === 'true') :?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Popular Posts</h2>
+                        <h2 class="widget-title"><?php echo i18n("Popular_posts");?></h2>
                         <?php echo popular_posts() ?>
                     </aside>
                     <?php endif;?>
                     <?php if (disqus()): ?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Recent Comments</h2>
+                        <h2 class="widget-title">Recent comments</h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;}</style>
                     </aside>
                     <?php endif;?>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Archive</h2>
+                        <h2 class="widget-title"><?php echo i18n("Archives");?></h2>
                         <?php echo archive_list() ?>
                     </aside>
                     <aside class="widget widget_meta">
@@ -100,14 +100,10 @@
                         <?php echo category_list() ?>
                     </aside>
                     <aside class="widget widget_meta">
-                        <h2 class="widget-title">Popular Tags</h2>
-                            <?php $i = 1; $tags = tag_cloud(true); arsort($tags); ?>
-                            <ul>
-                            <?php foreach ($tags as $tag => $count):?>
-                                <li><a class="more-link" href="<?php echo site_url();?>tag/<?php echo $tag;?>"><?php echo tag_i18n($tag);?> (<?php echo $count;?>)</a></li>
-                                <?php if ($i++ >= 5) break;?>
-                            <?php endforeach;?>
-                            </ul>
+                        <h2 class="widget-title"><?php echo i18n("Tags");?></h2>
+                        <div class="tag-cloud">
+                            <?php echo tag_cloud();?>
+                        </div>	
                     </aside>
                 </div>
             </div>
@@ -138,3 +134,4 @@
     <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>
+

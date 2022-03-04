@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <article class="post <?php if ($p->type == 'post') {echo 'format-standard';} else { echo 'format-' . $p->type;} ?> hentry single">
 
     <header class="entry-header">
@@ -21,7 +22,7 @@
                         <blockquote><?php echo $p->quote;?></blockquote>
                     <?php endif;?>
                     <?php if (!empty($p->video)):?>
-                        <span class="embed-youtube"><iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $p->video; ?>" frameborder="0" allowfullscreen></iframe></span>
+                        <span class="embed-youtube"><iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe></span>
                     <?php endif; ?>
                     <?php if (!empty($p->audio)):?>
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
@@ -52,7 +53,7 @@
     </div><!-- .entry-content -->
 
     <footer class="entry-footer">
-        <span class="byline"><span class="author vcard"><a href="<?php echo $p->authorUrl;?>"><img alt="<?php echo $p->author;?>" title="<?php echo $p->author;?>" src="<?php echo site_url();?>themes/twentysixteen/img/avatar.png" class="avatar avatar-49 grav-hashed grav-hijack" height="49" width="49"/></a><span class="screen-reader-text">Author </span> <a class="url fn n" href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span></span>
+        <span class="byline"><span class="author vcard"><a href="<?php echo $p->authorUrl;?>"><img alt="<?php echo $p->authorName;?>" title="<?php echo $p->authorName;?>" src="<?php echo site_url();?>themes/twentysixteen/img/avatar.png" class="avatar avatar-49 grav-hashed grav-hijack" height="49" width="49"/></a><span class="screen-reader-text">Author </span> <a class="url fn n" href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span></span>
 
         <span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="<?php echo $p->url;?>" rel="bookmark"><time class="entry-date published"><?php echo format_date($p->date) ?></time></a></span>
 

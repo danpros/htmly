@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
@@ -5,8 +6,8 @@
     <div class="section-inner">
         <div class="content">
             <div class="item">
-                <h1 class="title">Search results not found!</h1>
-                <p>Please search again, or would you like to try our <a href="<?php echo site_url() ?>">homepage</a> instead?</p>
+                <h1 class="title"><?php echo i18n('Search_results_not_found') ?></h1>
+                <p> <?php echo i18n('No_search_results') ?></p>
                 <div class="search-404">
                     <?php echo search() ?>
                 </div>

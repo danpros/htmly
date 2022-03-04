@@ -7,8 +7,8 @@ timezone = "Asia/Jakarta"
 ; Date format. See: https://www.php.net/manual/en/function.strftime
 date.format = "%d %B %Y"
 
-; Your language (currently only "en" for English or "de" for German)
-language = "en"
+; Your language (example "en_US" for English or "de_DE" for German. See lang directory for available language)
+language = "en_US"
 
 ; Blog info
 blog.title = "HTMLy"
@@ -26,14 +26,8 @@ static.frontpage = "false"
 blog.enable = "false"
 
 ; Social account
-social.twitter = "https://twitter.com"
-social.facebook = "https://www.facebook.com"
-social.tumblr = "http://www.tumblr.com"
-
-; Custom menu link. 
-; See example below:
-; "Google->http://www.google.com|Wikipedia->http://www.wikipedia.org". 
-blog.menu = ""
+social.twitter = ""
+social.facebook = ""
 
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
@@ -52,11 +46,11 @@ disqus.shortname = ""
 ; Google Web Master Tool ID verification
 google.wmt.id = ""
 
-; Google+ publisher
-google.publisher = ""
-
 ; Google analytics
 google.analytics.id = ""
+
+; Google gtag analytics
+google.gtag.id = ""
 
 ; Google reCaptcha
 ; https://www.google.com/recaptcha/admin. Options "false" and "true"
@@ -87,8 +81,8 @@ recent.count = "5"
 ; Popular posts
 popular.count = "5"
 
-; Author info on blog post. Set "true" or "false".
-author.info = "true"
+; Tagcloud
+tagcloud.count = "40"
 
 ; Teaser type: set "trimmed" or "full".
 teaser.type = "full"
@@ -107,10 +101,6 @@ rss.count = "10"
 
 ; RSS feed description length. If left empty we will use full page.
 rss.char = "200"
-
-; Enable image thumbnail on teaser, the options is "true" and "false". If set to "true", you can specify the default thumbnail also.
-img.thumbnail = "false"
-default.thumbnail = ""
 
 ; Enable views Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page and popular posts.
 views.counter = "false"
@@ -143,7 +133,7 @@ generation.time = "false"
 cache.timestamp = "false"
 
 ; Set the theme here
-views.root = "themes/twentysixteen"
+views.root = "themes/twentyfifteen"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
