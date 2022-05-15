@@ -101,6 +101,13 @@
             <?php echo strftime('%m/%d/%Y', strtotime($date)); ?>
           </label>
         </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="%Y-%m-%d" <?php if (config('date.format') === '%Y-%m-%d'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format6">
+            <?php echo strftime('%Y-%m-%d', strtotime($date)); ?>
+          </label>
+        </div>
+
       </div>
 	</div>
   </div>
