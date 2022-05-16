@@ -1309,9 +1309,9 @@
                     case "m":
                         doClick(buttons.readmore);
                         break;
-                    case "x":
-                        doClick(buttons.strikethrough);
-                        break;
+                    // case "x":
+                    //     doClick(buttons.strikethrough);
+                    //     break;
                     case "j":
                         doClick(buttons.table);
                         break;
