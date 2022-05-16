@@ -1315,17 +1315,17 @@
                     case "j":
                         doClick(buttons.table);
                         break;
-                    case "y":
-                        doClick(buttons.redo);
-                        break;
-                    case "z":
-                        if (key.shiftKey) {
-                            doClick(buttons.redo);
-                        }
-                        else {
-                            doClick(buttons.undo);
-                        }
-                        break;
+                    // case "y":
+                    //     doClick(buttons.redo);
+                    //     break;
+                    // case "z":
+                    //     if (key.shiftKey) {
+                    //         doClick(buttons.redo);
+                    //     }
+                    //     else {
+                    //         doClick(buttons.undo);
+                    //     }
+                    //     break;
                     default:
                         return;
                 }
