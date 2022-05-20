@@ -200,7 +200,7 @@ function rebuilt_cache($type)
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
                 if(strpos($file, '/draft/') === false) {
-                    $posts_cache_sorted[] = array_merge(pathinfo($file), ['content' => preg_replace('/\s+/', '', (file_get_contents($file)))])
+                    $posts_cache_sorted[] = array_merge(pathinfo($file), ['content' => preg_replace('/\s+/', '', (file_get_contents($file)))]);
                 }
             }
         }
