@@ -1158,7 +1158,7 @@ function keyword_count($keyword)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
+        $filter = $arr[1] . ' ' . $arr[2] . ' ' . $v['content'];
         foreach ($words as $word) {
             if (stripos($filter, $word) !== false) {
                 $tmp[] = $v;
