@@ -104,11 +104,13 @@ class Settings
         if ($dir == '.' || $dir == '..') {
             $dir = '';
         }
-        $port = '';
-        if ($_SERVER["SERVER_PORT"] != "80") {
+        $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
+        if ((($scheme == 'http') && ($_SERVER["SERVER_PORT"] == "80")) ||
+            (($scheme == 'https') && ($_SERVER["SERVER_PORT"] == "443"))) {
+            $port = '';
+        } else {
             $port = ':' . $_SERVER["SERVER_PORT"];
         }
-        $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
         if ($dir === '') {
             $this->siteUrl = $scheme . '://' . trim($_SERVER['SERVER_NAME'], "/") . $port . "/";
             return;
