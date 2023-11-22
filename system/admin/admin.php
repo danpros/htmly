@@ -85,7 +85,7 @@ function remove_accent($str)
 }
 
 // Add content
-function add_content($title, $tag, $url, $content, $user, $description = null, $media = null, $draft, $category, $type)
+function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null)
 {
     
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
@@ -218,7 +218,7 @@ function add_content($title, $tag, $url, $content, $user, $description = null, $
 }
 
 // Edit content
-function edit_content($title, $tag, $url, $content, $oldfile, $destination = null, $description = null, $date = null, $media = null, $revertPost, $publishDraft, $category, $type)
+function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null)
 {
     
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
@@ -775,7 +775,6 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
     } else {
         $post_content = '<!--t ' . $post_title . ' t-->' . "\n" . '<!--tag' . $post_tagmd . 'tag-->' .  "\n\n" . $content;
     }
-
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
         $post_content = stripslashes($post_content);
@@ -789,31 +788,8 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
             file_put_contents($dir . $filename, print_r($post_content, true));
         }
         save_tag_i18n($post_tag, $post_tagmd);
-        // import images
-        if(count($images) > 0) {
-            foreach ($images as $image_url) {
-                $imagefile = basename($image_url);
-                if(!@copy($image_url,'content/images/'.$imagefile))
-                {
-                    $errors= error_get_last();
-                    echo "COPY ERROR: ".$errors['type'];
-                    echo "<br />\n".$errors['message'];
-                } else {
-                    echo "$imagefile copied from remote!<br>\n";
-                    // $images_imported++;
-                }
-            }
-        }
-
         $redirect = site_url() . 'admin/clear-cache';
         header("Location: $redirect");
-    } else {
-        echo "<h1>Found empty Fields:</h1>\r\n";
-        echo "post title: $post_title <br>\n";
-        echo "post tag: $post_tag <br>\n";
-        echo "post url: $post_url <br>\n";
-        echo "post content: ".substr($post_content, 0, 50)."<br>\n";
-        echo "<h2>I WILL NOT IMPORT THIS !!!</h2>\r\n<hr>\r\n";
     }
 }
 
@@ -846,44 +822,7 @@ function get_feed($feed_url, $credit)
             } else {
                 $source = null;
             }
-
-            $images = array();
-            // identify the host-name of the rss feed we are parsing
-            $source_host = parse_url($feed_url);
-            if(empty($source_host['host'])) {
-                $source_host['host'] = $_SERVER['SERVER_NAME']; // seems like we are parsing a local feed
-            }
-
-            $cnt_images = 0;
-            $html = new \SimpleHtmlDom\simple_html_dom($content);
-            foreach ($html->find('img') as $img) {
-                $src = $img->src;
-                // identify host of img url
-                $img_host = parse_url($src, PHP_URL_HOST);
-                $img_path = parse_url($src, PHP_URL_PATH);
-                if(empty($img_host)) {
-                    $img_host = $source_host['host'];
-                }
-                // we only import images if they match the host of the rss feed,
-                // otherwise legal consequences (copyright breach) may occur
-                if($img_host == $source_host['host']) {
-                    $cnt_images ++;
-                    $images[] = $source_host['scheme'].'://'.$img_host.$img_path;
-                    // alter the path of the image, point to local src after import
-                    $img->src = '/content/images/'.basename($src);
-                }
-            }
-
-            // debug
-            /**
-            if($cnt_images > 0) {
-                echo "<h2>IMAGES and bent content</h2>";
-                echo var_export($images, true);
-                echo "<hr>" . htmlspecialchars($html) . "<hr>";
-            }
-             */
-
-            migrate($title, $time, $tags, $html, $url, $user, $images, $source);
+            migrate($title, $time, $tags, $content, $url, $user, $source);
         }
     } else {
         return $str = '<li>Unsupported feed.</li>';

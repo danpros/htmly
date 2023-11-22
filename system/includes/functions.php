@@ -570,7 +570,7 @@ function get_category_info($category)
         }
     }
 
-    if (strtolower($category) == 'uncategorized') {
+    if (strtolower($category ?? '') == 'uncategorized') {
         return default_category();
     }
 
@@ -1432,7 +1432,7 @@ EOF;
                 echo '<ul class="month">';
 
                 foreach ($by_month as $month => $count) {
-                    $name = strftime('%B', mktime(0, 0, 0, $month, 1, 2010));
+                    $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'MMMM');
                     echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
                     echo ' <span class="count">(' . $count . ')</span></li>';
                 }
@@ -1596,7 +1596,7 @@ function has_pagination($total, $perpage, $page = 1)
     }
     $totalPage = ceil($total / $perpage);
     $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;
-    $pager = get_pagination($page, $total, $perpage, 2);
+    $pager = get_pagination($total, $page, $perpage, 2);
     return array(
         'prev' => $page > 1,
         'next' => $total > $page * $perpage,
@@ -1608,7 +1608,7 @@ function has_pagination($total, $perpage, $page = 1)
 }
 
 //function to return the pagination string
-function get_pagination($page = 1, $totalitems, $perpage = 10, $adjacents = 1, $pagestring = '?page=')
+function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $pagestring = '?page=')
 {
     //defaults
     if(!$adjacents) $adjacents = 1;
@@ -2152,7 +2152,7 @@ function menu($class = null)
                 }
             }
 
-        return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
+        return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
 
         }
     } else {
@@ -3225,11 +3225,11 @@ function replace_href($string, $tag, $class, $url)
         if ($_tag->getAttribute('class') == $class) {
             // If match class get the href value
             $old = $_tag->getAttribute('href');
-            $new = $_tag->setAttribute('href', $url . utf8_decode($old));
+            $new = $_tag->setAttribute('href', $url . mb_convert_encoding($old, 'UTF-8'));
         }
     }
 
-    return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', utf8_decode($doc->saveHTML($doc->documentElement)));
+    return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
 
 }
 
@@ -3251,16 +3251,14 @@ function get_language()
 
 }
 
-function format_date($date)
+function format_date($date, $date_format = null)
 {
-
-    $date_format = config('date.format');
-
-    if (!isset($date_format) || empty($date_format)) {
-        return strftime('%e %B %Y', $date);
-    } else {
-        return strftime($date_format, $date);
+    if (empty($date_format)) {
+        $date_format = config('date.format');
     }
+    $formatter = new IntlDateFormatter(config('language'), IntlDateFormatter::LONG, IntlDateFormatter::NONE, config('timezone'), IntlDateFormatter::GREGORIAN, $date_format);
+
+    return $formatter->format($date);
 
 }
 

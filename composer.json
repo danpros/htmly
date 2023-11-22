@@ -1,11 +1,4 @@
 {
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/Youpie/simple-html-dom"
-		}
-	],
-
 	"config": {
 		"vendor-dir": "system/vendor/",
 		"optimize-autoloader": true,
@@ -18,8 +11,7 @@
 		"michelf/php-markdown": "1.*",
 		"suin/php-rss-writer": "1.*",
 		"kanti/hub-updater": "0.*",
-		"jbroadway/urlify": "^1.0",
-		"simple-html-dom/simple-html-dom": "*"
+		"jbroadway/urlify": "^1.0"
     },
 	"autoload": {
 		"files": [
