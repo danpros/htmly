@@ -587,7 +587,7 @@ function default_category()
     $desc->url = site_url() . 'category/uncategorized';
     $desc->slug = 'uncategorized';
     $desc->body = '<p>' . i18n('Uncategorized_comment') . '</p>';
-
+    $desc->md = 'uncategorized';
     $desc->description = i18n('Uncategorized_comment');
 
     return $tmp[] = $desc;
