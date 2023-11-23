@@ -120,7 +120,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 
     $post_date = date('Y-m-d-H-i-s');
     $post_title = safe_html($title);
-    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));
+    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media ?? ''));
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -260,7 +260,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     }
 
     $post_title = safe_html($title);
-    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));
+    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media ?? ''));
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -408,7 +408,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         save_tag_i18n($post_tag, $post_tagmd);
 
         rebuilt_cache('all');
-        clear_post_cache($dt, $post_tag, $post_url, $newfile, $category, $type);
+        clear_post_cache($dt, $post_tag, $post_url, $oldfile, $category, $type);
         if ($destination == 'post') {
             if(!empty($revertPost)) {
                 $drafturl = site_url() . 'admin/draft';

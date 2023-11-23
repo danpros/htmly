@@ -1736,7 +1736,9 @@ get('/category/:category', function ($category) {
     $desc = get_category_info($category);
     
     if(strtolower($category) !== 'uncategorized') {
-       $desc = $desc[0];
+        if(!empty($desc)) {
+            $desc = $desc[0];
+        }
     }
 
     $total = get_categorycount($category);
@@ -2224,7 +2226,11 @@ get('/post/:name', function ($name) {
 
     if (config('permalink.type') != 'post') {
         $post = find_post(null, null, $name);
-        $current = $post['current'];
+        if (is_null($post)) {
+            not_found();
+	    } else {
+            $current = $post['current'];
+        }
         $redir = site_url() . date('Y/m', $current->date) . '/' . $name;
         header("location: $redir", TRUE, 301);
     }
@@ -2237,11 +2243,11 @@ get('/post/:name', function ($name) {
 
     $post = find_post(null, null, $name);
 
-    $current = $post['current'];
-
-    if (!$current) {
+    if (is_null($post)) {
         not_found();
-    }
+	} else {
+		$current = $post['current'];
+	}
 
     if (config("views.counter") == "true") {
         add_view($current->file);
@@ -3230,11 +3236,11 @@ get('/:year/:month/:name', function ($year, $month, $name) {
 
     $post = find_post($year, $month, $name);
 
-    $current = $post['current'];
-
-    if (!$current) {
+    if (is_null($post)) {
         not_found();
-    }
+	} else {
+		$current = $post['current'];
+	}
 
     if (config("views.counter") == "true") {
         add_view($current->file);
