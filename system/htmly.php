@@ -2072,9 +2072,9 @@ get('/archive/:req', function ($req) {
     $date = strtotime($req);
 
     if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
-        $timestamp = format_date($date, 'dd MMMM yyyy');
+        $timestamp = format_date($date, 'd F Y');
     } elseif (isset($time[0]) && isset($time[1])) {
-        $timestamp = format_date($date, 'MMMM yyyy');
+        $timestamp = format_date($date, 'F Y');
     } else {
         $timestamp = $req;
     }

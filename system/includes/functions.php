@@ -1432,7 +1432,7 @@ EOF;
                 echo '<ul class="month">';
 
                 foreach ($by_month as $month => $count) {
-                    $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'MMMM');
+                    $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'F');
                     echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
                     echo ' <span class="count">(' . $count . ')</span></li>';
                 }
@@ -3251,15 +3251,19 @@ function get_language()
 
 }
 
-function format_date($date, $date_format = null)
+function format_date($date, $dateFormat = null)
 {
-    if (empty($date_format)) {
-        $date_format = config('date.format');
+    if (empty($dateFormat)) {
+        $dateFormat = config('date.format');
     }
-    $formatter = new IntlDateFormatter(config('language'), IntlDateFormatter::LONG, IntlDateFormatter::NONE, config('timezone'), IntlDateFormatter::GREGORIAN, $date_format);
-
-    return $formatter->format($date);
-
+    if (extension_loaded('intl')) {
+        $format_map = array('d' => 'dd', 'm' => 'MM', 'M' => 'MMM', 'F' => 'MMMM', 'Y' => 'yyyy');
+        $intlFormat = strtr($dateFormat, $format_map);
+        $formatter = new IntlDateFormatter(config('language'), IntlDateFormatter::NONE, IntlDateFormatter::NONE, config('timezone'), IntlDateFormatter::GREGORIAN, $intlFormat);
+        return $formatter->format($date); 
+    } else {
+        return date($dateFormat, $date);
+    }
 }
 
 function valueMaker($value)

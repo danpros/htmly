@@ -1,6 +1,12 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2><?php echo i18n('General_Settings')?></h2>
 <br>
+<?php if (!extension_loaded('intl')) { ?>
+<div class="callout callout-info">
+<h5><i class="fa fa-info"></i> Note:</h5>
+Please install and enable the INTL extension to format the date format to your local language.
+</div>
+<?php } ?>
 <nav>
   <div class="nav nav-tabs" id="nav-tab">
     <a class="nav-item nav-link active" id="nav-general-tab" href="<?php echo site_url();?>admin/config"><?php echo i18n('General');?></a>
@@ -66,45 +72,45 @@
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format1" value="dd MMMM yyyy" <?php if (config('date.format') === 'dd MMMM yyyy'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format1" value="d F Y" <?php if (config('date.format') === 'd F Y'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format1">
-            <?php echo format_date(strtotime($date), 'dd MMMM yyyy'); ?>
+            <?php echo format_date(strtotime($date), 'd F Y'); ?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format2" value="MMMM dd, yyyy" <?php if (config('date.format') === 'MMMM dd, yyyy'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format2" value="F d, Y" <?php if (config('date.format') === 'F d, Y'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format2">
-            <?php echo format_date(strtotime($date), 'MMMM dd, yyyy'); ?>
+            <?php echo format_date(strtotime($date), 'F d, Y'); ?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format3" value="dd MMM yyyy" <?php if (config('date.format') === 'dd MMM yyyy'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format3" value="d M Y" <?php if (config('date.format') === 'd M Y'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format3">
-            <?php echo format_date(strtotime($date), 'dd MMM yyyy'); ?>
+            <?php echo format_date(strtotime($date), 'd M Y'); ?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format4" value="MMM dd, yyyy" <?php if (config('date.format') === 'MMM dd, yyyy'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format4" value="M d, Y" <?php if (config('date.format') === 'M d, Y'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format4">
-            <?php echo format_date(strtotime($date), 'MMM dd, yyyy'); ?>
+            <?php echo format_date(strtotime($date), 'M d, Y'); ?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format5" value="dd/MM/yyyy" <?php if (config('date.format') === 'dd/MM/yyyy'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format5" value="d/m/Y" <?php if (config('date.format') === 'd/m/Y'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format5">
-            <?php echo format_date(strtotime($date), 'dd/MM/yyyy'); ?>
+            <?php echo format_date(strtotime($date), 'd/m/Y'); ?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="MM/dd/yyyy" <?php if (config('date.format') === 'MM/dd/yyyy'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="m/d/Y" <?php if (config('date.format') === 'm/d/Y'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format6">
-            <?php echo format_date(strtotime($date), 'MM/dd/yyyy'); ?>
+            <?php echo format_date(strtotime($date), 'm/d/Y'); ?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="yyyy-MM-dd" <?php if (config('date.format') === 'yyyy-MM-dd'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="Y-m-d" <?php if (config('date.format') === 'Y-m-d'):?>checked<?php endif;?>>
           <label class="form-check-label" for="date.format6">
-            <?php echo format_date(strtotime($date), 'yyyy-MM-dd'); ?>
+            <?php echo format_date(strtotime($date), 'Y-m-d'); ?>
           </label>
         </div>
 

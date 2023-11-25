@@ -5,7 +5,7 @@ site.url = ""
 timezone = "Asia/Jakarta"
 
 ; Date format. See: https://www.php.net/manual/en/function.strftime
-date.format = "%d %B %Y"
+date.format = "d F Y"
 
 ; Your language (example "en_US" for English or "de_DE" for German. See lang directory for available language)
 language = "en_US"
