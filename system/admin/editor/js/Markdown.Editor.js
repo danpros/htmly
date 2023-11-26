@@ -24,7 +24,7 @@
         italic: "Emphasis <em> Ctrl+I",
         italicexample: "emphasized text",
 		
-        strikethrough: "Strikethrough <s> Ctrl+X",
+        strikethrough: "Strikethrough <s>",
         strikethroughexample: "strikethrough text",
 
         link: "Hyperlink <a> Ctrl+L",
@@ -54,8 +54,8 @@
 		
         table: "Table - Ctrl+J",
 
-        undo: "Undo - Ctrl+Z",
-        redo: "Redo - Ctrl+Y",
+        undo: "Undo",
+        redo: "Redo",
         redomac: "Redo - Ctrl+Shift+Z",
 
         help: "Markdown Editing Help"
