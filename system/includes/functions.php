@@ -570,8 +570,14 @@ function get_category_info($category)
         }
     }
 
-    if (strtolower($category ?? '') == 'uncategorized') {
-        return default_category();
+    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION < 7) {
+        if (strtolower($category) == 'uncategorized') {
+            return default_category();
+        }   
+    } else {
+        if (strtolower($category ?? '') == 'uncategorized') {
+            return default_category();
+        }
     }
 
     return $tmp;
