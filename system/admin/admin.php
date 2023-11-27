@@ -120,11 +120,10 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 
     $post_date = date('Y-m-d-H-i-s');
     $post_title = safe_html($title);
-    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION < 7) {
-        $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));  
-    } else {
-        $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media ?? ''));    	
+    if (is_null($media)) {
+        $media = '';
     }
+    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));  
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -264,11 +263,10 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     }
 
     $post_title = safe_html($title);
-    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION < 7) {
-        $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));  
-    } else {
-        $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media ?? ''));    	
+    if (is_null($media)) {
+        $media = '';
     }
+    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media)); 
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);

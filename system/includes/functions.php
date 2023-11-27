@@ -530,7 +530,7 @@ function get_category($category, $page, $perpage, $random)
 
 // Return category info.
 function get_category_info($category)
-{
+{			
     $posts = get_category_files();
 
     $tmp = array();
@@ -570,14 +570,11 @@ function get_category_info($category)
         }
     }
 
-    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION < 7) {
-        if (strtolower($category) == 'uncategorized') {
-            return default_category();
-        }   
-    } else {
-        if (strtolower($category ?? '') == 'uncategorized') {
-            return default_category();
-        }
+    if (is_null($category)) {
+        $category = '';
+    }
+    if (strtolower($category) == 'uncategorized') {
+        return default_category();
     }
 
     return $tmp;
