@@ -1013,11 +1013,11 @@ get('/admin/scheduled', function () {
 
         if (empty($posts) || $page < 1) {
             render('scheduled', array(
-                'title' => 'Scheduled posts' . ' - ' . blog_title(),
+                'title' => i18n('Scheduled_posts') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'page' => $page,
-                'heading' => 'Scheduled posts',
+                'heading' => i18n('Scheduled_posts'),
                 'posts' => null,
                 'about' => $author->about,
                 'name' => $author->name,
@@ -1031,10 +1031,10 @@ get('/admin/scheduled', function () {
         }
 
         render('scheduled', array(
-            'title' => 'Scheduled posts' . ' - ' . blog_title(),
+            'title' => i18n('Scheduled_posts') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
-            'heading' => 'Scheduled posts',
+            'heading' => i18n('Scheduled_posts'),
             'page' => $page,
             'posts' => $posts,
             'about' => $author->about,
