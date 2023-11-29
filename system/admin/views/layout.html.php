@@ -91,7 +91,7 @@
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/scheduled" class="nav-link">
                   <p>
-				     <?php echo 'Scheduled'; ?>
+				     <?php echo i18n('Scheduled'); ?>
 				  </p>
                 </a>
               </li>

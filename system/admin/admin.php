@@ -127,7 +127,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     $post_t =  explode(',', $post_tag);
     $pret_t = explode(',', $post_tagmd);
     $tags = tag_cloud(true);
-    $timestamp = date('YmdHis', strtotime($dateTime));
+    $timestamp = date('YmdHis');
 
     $combine = array_combine($pret_t, $post_t);
     $inter = array_intersect_key($tags, array_flip($post_t));

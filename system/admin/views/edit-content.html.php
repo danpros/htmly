@@ -165,7 +165,7 @@ $( function() {
 							<label for="pTime"><?php echo i18n('Time');?></label>
 							<input step="1" type="time" id="pTime" name="time" class="form-control text" value="<?php echo $time->format('H:i:s'); ?>">
 						</div>
-						<small style="margin-top:10px;"><em>Publish a post with future date or time, it will go into scheduled posts.</em></small>
+						<small style="margin-top:10px;"><em><?php echo i18n('Scheduled_tips');?></em></small>
 					</div>				
 					<br>
 					<label for="pURL">Url  (<?php echo i18n('optional');?>)</label>
