@@ -109,14 +109,14 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
                 $post_tagmd[] = $t;
             }
         }
-		
+        
         $post_tag = safe_tag(implode(',', $post_tag));
-        $post_tagmd = safe_html(implode(',', $post_tagmd));		
-		
-	} else {
+        $post_tagmd = safe_html(implode(',', $post_tagmd));        
+        
+    } else {
         $post_tag = safe_tag(implode(',', $tag));
-        $post_tagmd = safe_html(implode(',', $tag));		
-	}
+        $post_tagmd = safe_html(implode(',', $tag));        
+    }
 
     $post_date = date('Y-m-d-H-i-s', strtotime($dateTime));
     $post_title = safe_html($title); 
@@ -189,11 +189,11 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
 
         if (empty($draft)) {
-			if (date('Y-m-d-H-i-s') >= $post_date) { 
+            if (date('Y-m-d-H-i-s') >= $post_date) { 
                 $dir = 'content/' . $user . '/blog/' . $category. '/'.$type. '/';
-			} else {
-				$dir = 'content/' . $user . '/blog/' . $category. '/'.$type. '/scheduled/';
-			}
+            } else {
+                $dir = 'content/' . $user . '/blog/' . $category. '/'.$type. '/scheduled/';
+            }
         } else {
             $dir = 'content/' . $user . '/blog/' . $category. '/draft/';
         }
@@ -211,11 +211,11 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename, $category, $type);
 
         if (empty($draft)) {
-			if (date('Y-m-d-H-i-s') >= $post_date) {
-				$redirect = site_url() . 'admin/mine';
-			} else {
-				$redirect = site_url() . 'admin/scheduled';
-			}
+            if (date('Y-m-d-H-i-s') >= $post_date) {
+                $redirect = site_url() . 'admin/mine';
+            } else {
+                $redirect = site_url() . 'admin/scheduled';
+            }
         } else {
             $redirect = site_url() . 'admin/draft';
         }
@@ -249,14 +249,14 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 $post_tagmd[] = $t;
             }
         }
-		
+        
         $post_tag = safe_tag(implode(',', $post_tag));
-        $post_tagmd = safe_html(implode(',', $post_tagmd));		
-		
-	} else {
+        $post_tagmd = safe_html(implode(',', $post_tagmd));        
+        
+    } else {
         $post_tag = safe_tag(implode(',', $tag));
-        $post_tagmd = safe_html(implode(',', $tag));		
-	}
+        $post_tagmd = safe_html(implode(',', $tag));        
+    }
     
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
@@ -319,25 +319,25 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         $post_media = "";
     }
     $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
-	
-	$dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
-	$dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
-	$dirScheduled = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/scheduled/';
+    
+    $dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
+    $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
+    $dirScheduled = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/scheduled/';
 
-	if (is_dir($dirBlog)) {
-	} else {
-		mkdir($dirBlog, 0775, true);
-	}
+    if (is_dir($dirBlog)) {
+    } else {
+        mkdir($dirBlog, 0775, true);
+    }
 
-	if (is_dir($dirDraft)) {
-	} else {
-		mkdir($dirDraft, 0775, true);
-	}
-	
-	if (is_dir($dirScheduled)) {
-	} else {
-		mkdir($dirScheduled, 0775, true);
-	}	
+    if (is_dir($dirDraft)) {
+    } else {
+        mkdir($dirDraft, 0775, true);
+    }
+    
+    if (is_dir($dirScheduled)) {
+    } else {
+        mkdir($dirScheduled, 0775, true);
+    }    
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
@@ -346,11 +346,11 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         if(!empty($revertPost) || !empty($publishDraft)) {
 
             if($dir[4] == 'draft') {
-				if (date('Y-m-d-H-i-s') >= $olddate) { 
+                if (date('Y-m-d-H-i-s') >= $olddate) { 
                     $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-				} else {
-					$filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-				}
+                } else {
+                    $filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                }
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
             }
@@ -361,18 +361,18 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
         } else {
 
-            if ($dir[3] === $category) {			
-				
+            if ($dir[3] === $category) {            
+                
                 if($dir[4] == 'draft') {
                     $newfile = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                 } else {
-					if (date('Y-m-d-H-i-s') >= $olddate) { 
-						$newfile = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-					} else {
-						$newfile = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-					}
+                    if (date('Y-m-d-H-i-s') >= $olddate) { 
+                        $newfile = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    } else {
+                        $newfile = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    }
                 }
-									
+                                    
                 if ($oldfile === $newfile) {
                     file_put_contents($oldfile, print_r($post_content, true));
                 } else {
@@ -384,11 +384,11 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 if($dir[4] == 'draft') {
                     $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                 } else {
-					if (date('Y-m-d-H-i-s') >= $olddate) { 
-						$filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-					} else {
-						$filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-					}
+                    if (date('Y-m-d-H-i-s') >= $olddate) { 
+                        $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    } else {
+                        $filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    }
                 }
 
                 file_put_contents($filename, print_r($post_content, true));
@@ -431,21 +431,21 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 $drafturl = site_url() . 'admin/draft';
                 header("Location: $drafturl");
             } else {
-				if (date('Y-m-d-H-i-s') >= $olddate) { 
-					header("Location: $posturl");
-				} else {
-					$schurl = site_url() . 'admin/scheduled';
-					header("Location: $schurl");
-				}
+                if (date('Y-m-d-H-i-s') >= $olddate) { 
+                    header("Location: $posturl");
+                } else {
+                    $schurl = site_url() . 'admin/scheduled';
+                    header("Location: $schurl");
+                }
             }
         } else {
             if(!empty($publishDraft)) {
                 if (date('Y-m-d-H-i-s') >= $olddate) { 
-					header("Location: $posturl");
-				} else {
-					$schurl = site_url() . 'admin/scheduled';
-					header("Location: $schurl");
-				}
+                    header("Location: $posturl");
+                } else {
+                    $schurl = site_url() . 'admin/scheduled';
+                    header("Location: $schurl");
+                }
             } elseif (!empty($revertPost)) {
                 $drafturl = site_url() . 'admin/draft';
                 header("Location: $drafturl");
@@ -473,18 +473,18 @@ function add_page($title, $url, $content, $description = null)
     } else {
         $post_description = "";
     }
-	
+    
     $posts = get_static_pages();
     $timestamp = date('YmdHis');
     foreach ($posts as $index => $v) {
-		$arr = explode('/', $v);
+        $arr = explode('/', $v);
         if (strtolower($arr[2]) === strtolower($post_url . '.md')) {
             $post_url = $post_url .'-'. $timestamp;
         } else {
             $post_url = $post_url;
         }
     }
-	
+    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
@@ -562,7 +562,7 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
     } else {
         $post_description = "";
     }
-	
+    
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {

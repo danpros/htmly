@@ -190,7 +190,7 @@ function rebuilt_cache($type)
     $posts_cache_unsorted = array();
     $page_cache = array();
     $author_cache = array();
-	$scheduled = array();
+    $scheduled = array();
 
     if (is_dir($dir) === false) {
         mkdir($dir, 0775, true);
@@ -203,7 +203,7 @@ function rebuilt_cache($type)
             foreach ($tmp as $file) {
                 if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
                     $posts_cache_unsorted[] = $file;
-					$posts_cache_sorted[] = pathinfo($file);
+                    $posts_cache_sorted[] = pathinfo($file);
                 }
             }
         }
@@ -229,15 +229,15 @@ function rebuilt_cache($type)
         $string = serialize($category_cache);
         file_put_contents('cache/index/index-category.txt', print_r($string, true));
     } elseif ($type === 'scheduled') {
-		$tmp = array();
-		$tmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
-		if (is_array($tmp)) {
-			foreach ($tmp as $file) {
-				$scheduled[] = pathinfo($file);
-			}
-		}
-		usort($scheduled, "sortfile");
-		$string = serialize($scheduled);
+        $tmp = array();
+        $tmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
+        if (is_array($tmp)) {
+            foreach ($tmp as $file) {
+                $scheduled[] = pathinfo($file);
+            }
+        }
+        usort($scheduled, "sortfile");
+        $string = serialize($scheduled);
         file_put_contents('cache/index/index-scheduled.txt', print_r($string, true));
     } elseif ($type === 'all') {
         rebuilt_cache('posts');
@@ -549,7 +549,7 @@ function find_scheduled($year, $month, $name)
 function get_category($category, $page, $perpage, $random)
 {
     $posts = get_post_sorted();
-	
+    
     if ($random === true) {
         shuffle($posts);
     }
@@ -589,7 +589,7 @@ function get_category($category, $page, $perpage, $random)
 
 // Return category info.
 function get_category_info($category)
-{			
+{            
     $posts = get_category_files();
 
     $tmp = array();
@@ -1576,7 +1576,7 @@ function tag_cloud($custom = null)
 
     $posts = get_post_unsorted();
     $tags = array();
-	
+    
     $tagcloud_count = config('tagcloud.count');
     if(empty($tagcloud_count)) {
         $tagcloud_count = 40;
@@ -3400,19 +3400,19 @@ function valueMaker($value)
 function publish_scheduled() 
 {
     $posts = get_scheduled_posts();
-	if (!empty($posts)) {
-		foreach ($posts as $index => $v) {
-			$str = explode('_', $v['basename']);
-			$old =  $v['dirname'] . '/' . $v['basename'];
-			$new = dirname($v['dirname']) . '/' . $v['basename'];
-			$t = str_replace('-', '', $str[0]);
+    if (!empty($posts)) {
+        foreach ($posts as $index => $v) {
+            $str = explode('_', $v['basename']);
+            $old =  $v['dirname'] . '/' . $v['basename'];
+            $new = dirname($v['dirname']) . '/' . $v['basename'];
+            $t = str_replace('-', '', $str[0]);
             $time = new DateTime($t);
             $timestamp = $time->format("Y m d H:i:s");
-			if (date('Y m d H:i:s') >= $timestamp) {
-				rename($old, $new);
-				rebuilt_cache('all');
-				clear_cache();
-			}
-		}
-	}
+            if (date('Y m d H:i:s') >= $timestamp) {
+                rename($old, $new);
+                rebuilt_cache('all');
+                clear_cache();
+            }
+        }
+    }
 }

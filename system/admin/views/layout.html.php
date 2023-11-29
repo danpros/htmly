@@ -89,6 +89,13 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/scheduled" class="nav-link">
+                  <p>
+				     <?php echo 'Scheduled'; ?>
+				  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/draft" class="nav-link">
                   <p>
 				     <?php echo i18n('Posts_draft'); ?>

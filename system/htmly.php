@@ -2302,7 +2302,7 @@ get('/post/:name', function ($name) {
         $post = find_post(null, null, $name);
         if (is_null($post)) {
             not_found();
-	    } else {
+        } else {
             $current = $post['current'];
         }
         $redir = site_url() . date('Y/m', $current->date) . '/' . $name;
@@ -2319,9 +2319,9 @@ get('/post/:name', function ($name) {
 
     if (is_null($post)) {
         not_found();
-	} else {
-		$current = $post['current'];
-	}
+    } else {
+        $current = $post['current'];
+    }
 
     if (config("views.counter") == "true") {
         add_view($current->file);
@@ -2422,12 +2422,12 @@ get('/post/:name/edit', function ($name) {
 
         if (!$post) {
             $post = find_draft($year, $month, $name);
-			if (!$post) { 
-			    $post = find_scheduled($year, $month, $name);
-				if (!$post) {
-					not_found();
-				}
-			}
+            if (!$post) { 
+                $post = find_scheduled($year, $month, $name);
+                if (!$post) {
+                    not_found();
+                }
+            }
 
         }
 
@@ -2633,12 +2633,12 @@ get('/post/:name/delete', function ($name) {
 
         if (!$post) {
             $post = find_draft($year, $month, $name);
-			if (!$post) { 
-			    $post = find_scheduled($year, $month, $name);
-				if (!$post) {
-					not_found();
-				}
-			}
+            if (!$post) { 
+                $post = find_scheduled($year, $month, $name);
+                if (!$post) {
+                    not_found();
+                }
+            }
 
         }
 
@@ -3092,7 +3092,7 @@ get('/:static/:sub', function ($static, $sub) {
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
     }
-	
+    
     if ($static === 'front') {
         $redir = site_url();
         header("location: $redir", TRUE, 301);
@@ -3320,9 +3320,9 @@ get('/:year/:month/:name', function ($year, $month, $name) {
 
     if (is_null($post)) {
         not_found();
-	} else {
-		$current = $post['current'];
-	}
+    } else {
+        $current = $post['current'];
+    }
 
     if (config("views.counter") == "true") {
         add_view($current->file);
@@ -3423,12 +3423,12 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
 
         if (!$post) {
             $post = find_draft($year, $month, $name);
-			if (!$post) { 
-			    $post = find_scheduled($year, $month, $name);
-				if (!$post) {
-					not_found();
-				}
-			}
+            if (!$post) { 
+                $post = find_scheduled($year, $month, $name);
+                if (!$post) {
+                    not_found();
+                }
+            }
 
         }
 
@@ -3634,12 +3634,12 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
 
         if (!$post) {
             $post = find_draft($year, $month, $name);
-			if (!$post) { 
-			    $post = find_scheduled($year, $month, $name);
-				if (!$post) {
-					not_found();
-				}
-			}
+            if (!$post) { 
+                $post = find_scheduled($year, $month, $name);
+                if (!$post) {
+                    not_found();
+                }
+            }
 
         }
 
