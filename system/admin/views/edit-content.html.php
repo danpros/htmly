@@ -39,7 +39,11 @@ $replaced = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/';
 
 // Category string
 $cat = explode('/', $replaced);
-$category = $cat[count($cat) - 3];
+if ($cat[count($cat) - 2] === 'scheduled') {
+$category = $cat[count($cat) - 4];
+} else {
+$category = $cat[count($cat) - 3];	
+}
 
 $dt = str_replace($replaced, '', $oldurl[0]);
 $t = str_replace('-', '', $dt);
@@ -161,6 +165,7 @@ $( function() {
 							<label for="pTime"><?php echo i18n('Time');?></label>
 							<input step="1" type="time" id="pTime" name="time" class="form-control text" value="<?php echo $time->format('H:i:s'); ?>">
 						</div>
+						<small style="margin-top:10px;"><em>Publish a post with future date or time, it will go into scheduled posts.</em></small>
 					</div>				
 					<br>
 					<label for="pURL">Url  (<?php echo i18n('optional');?>)</label>

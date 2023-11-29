@@ -106,7 +106,18 @@ $( function() {
 				</div>
 					
 				<div class="col-sm-6">
-
+					<div class="form-row">
+						<div class="col">
+							<label for="pDate"><?php echo i18n('Date');?></label>
+							<input type="date" id="pDate" name="date" class="form-control text" value="<?php echo date('Y-m-d'); ?>">
+						</div>
+						<div class="col">
+							<label for="pTime"><?php echo i18n('Time');?></label>
+							<input step="1" type="time" id="pTime" name="time" class="form-control text" value="<?php echo date('H:i:s'); ?>">
+						</div>
+						<small style="margin-top:10px;"><em>Publish a post with future date or time, it will go into scheduled posts.</em></small>
+					</div>				
+					<br>
 					<label for="pURL">Url (<?php echo i18n('optional');?>)</label>
 					<input type="text" class="form-control text" id="pURL" name="url" value="<?php if (isset($postUrl)) { echo $postUrl;} ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_post_title');?>"/>
 					<br>

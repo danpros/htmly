@@ -85,7 +85,7 @@ function remove_accent($str)
 }
 
 // Add content
-function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null)
+function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null)
 {
     
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
@@ -118,12 +118,8 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         $post_tagmd = safe_html(implode(',', $tag));		
 	}
 
-    $post_date = date('Y-m-d-H-i-s');
-    $post_title = safe_html($title);
-    if (is_null($media)) {
-        $media = '';
-    }
-    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media));  
+    $post_date = date('Y-m-d-H-i-s', strtotime($dateTime));
+    $post_title = safe_html($title); 
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -131,7 +127,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     $post_t =  explode(',', $post_tag);
     $pret_t = explode(',', $post_tagmd);
     $tags = tag_cloud(true);
-    $timestamp = date('YmdHis');
+    $timestamp = date('YmdHis', strtotime($dateTime));
 
     $combine = array_combine($pret_t, $post_t);
     $inter = array_intersect_key($tags, array_flip($post_t));
@@ -180,7 +176,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         $tagmd = "";
     }
     if ($media!== null) {
-        $post_media = "\n<!--" .$type. " " . $post_media . " " .$type. "-->";
+        $post_media = "\n<!--" .$type. " " . preg_replace('/\s\s+/', ' ', strip_tags($media)) . " " .$type. "-->";
     } else {
         $post_media = "";
     }
@@ -193,7 +189,11 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
 
         if (empty($draft)) {
-            $dir = 'content/' . $user . '/blog/' . $category. '/'.$type. '/';
+			if (date('Y-m-d-H-i-s') >= $post_date) { 
+                $dir = 'content/' . $user . '/blog/' . $category. '/'.$type. '/';
+			} else {
+				$dir = 'content/' . $user . '/blog/' . $category. '/'.$type. '/scheduled/';
+			}
         } else {
             $dir = 'content/' . $user . '/blog/' . $category. '/draft/';
         }
@@ -211,7 +211,11 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename, $category, $type);
 
         if (empty($draft)) {
-            $redirect = site_url() . 'admin/mine';
+			if (date('Y-m-d-H-i-s') >= $post_date) {
+				$redirect = site_url() . 'admin/mine';
+			} else {
+				$redirect = site_url() . 'admin/scheduled';
+			}
         } else {
             $redirect = site_url() . 'admin/draft';
         }
@@ -263,10 +267,6 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     }
 
     $post_title = safe_html($title);
-    if (is_null($media)) {
-        $media = '';
-    }
-    $post_media = preg_replace('/\s\s+/', ' ', strip_tags($media)); 
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -314,11 +314,30 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         $tagmd = "";
     }
     if ($media !== null) {
-        $post_media = "\n<!--" . $type . " " . $post_media. " " . $type . "-->";
+        $post_media = "\n<!--" . $type . " " . preg_replace('/\s\s+/', ' ', strip_tags($media)) . " " . $type . "-->";
     } else {
         $post_media = "";
     }
     $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+	
+	$dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
+	$dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
+	$dirScheduled = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/scheduled/';
+
+	if (is_dir($dirBlog)) {
+	} else {
+		mkdir($dirBlog, 0775, true);
+	}
+
+	if (is_dir($dirDraft)) {
+	} else {
+		mkdir($dirDraft, 0775, true);
+	}
+	
+	if (is_dir($dirScheduled)) {
+	} else {
+		mkdir($dirScheduled, 0775, true);
+	}	
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
@@ -326,23 +345,14 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
         if(!empty($revertPost) || !empty($publishDraft)) {
 
-            $dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
-            $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
-
             if($dir[4] == 'draft') {
-                $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+				if (date('Y-m-d-H-i-s') >= $olddate) { 
+                    $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+				} else {
+					$filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+				}
             } else {
                 $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-            }
-
-            if (is_dir($dirBlog)) {
-            } else {
-                mkdir($dirBlog, 0775, true);
-            }
-
-            if (is_dir($dirDraft)) {
-            } else {
-                mkdir($dirDraft, 0775, true);
             }
 
             file_put_contents($filename, print_r($post_content, true));
@@ -351,8 +361,18 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
         } else {
 
-            if ($dir[3] === $category) {
-                $newfile = $oldurl[0] . '_' . $post_tag . '_' . $post_url . '.md';
+            if ($dir[3] === $category) {			
+				
+                if($dir[4] == 'draft') {
+                    $newfile = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                } else {
+					if (date('Y-m-d-H-i-s') >= $olddate) { 
+						$newfile = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+					} else {
+						$newfile = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+					}
+                }
+									
                 if ($oldfile === $newfile) {
                     file_put_contents($oldfile, print_r($post_content, true));
                 } else {
@@ -361,23 +381,14 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 }
             } else {
 
-                $dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type. '/';
-                $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
-
                 if($dir[4] == 'draft') {
                     $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                 } else {
-                    $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
-                }
-
-                if (is_dir($dirBlog)) {
-                } else {
-                    mkdir($dirBlog, 0775, true);
-                }
-
-                if (is_dir($dirDraft)) {
-                } else {
-                    mkdir($dirDraft, 0775, true);
+					if (date('Y-m-d-H-i-s') >= $olddate) { 
+						$filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+					} else {
+						$filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+					}
                 }
 
                 file_put_contents($filename, print_r($post_content, true));
@@ -420,11 +431,21 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 $drafturl = site_url() . 'admin/draft';
                 header("Location: $drafturl");
             } else {
-                header("Location: $posturl");
+				if (date('Y-m-d-H-i-s') >= $olddate) { 
+					header("Location: $posturl");
+				} else {
+					$schurl = site_url() . 'admin/scheduled';
+					header("Location: $schurl");
+				}
             }
         } else {
             if(!empty($publishDraft)) {
-                header("Location: $posturl");
+                if (date('Y-m-d-H-i-s') >= $olddate) { 
+					header("Location: $posturl");
+				} else {
+					$schurl = site_url() . 'admin/scheduled';
+					header("Location: $schurl");
+				}
             } elseif (!empty($revertPost)) {
                 $drafturl = site_url() . 'admin/draft';
                 header("Location: $drafturl");
@@ -1079,5 +1100,12 @@ function clear_page_cache($url)
     $p = 'cache/page/' . $b . $url . '.cache';
     if (file_exists($p)) {
         unlink($p);
+    }
+}
+
+function clear_cache()
+{
+    foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
+        unlink($file);
     }
 }

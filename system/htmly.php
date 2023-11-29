@@ -14,6 +14,9 @@ if (config('timezone')) {
     date_default_timezone_set('Asia/Jakarta');
 }
 
+// Publish scheduled post
+publish_scheduled();
+
 // The front page of the blog
 get('/index', function () {
 
@@ -466,6 +469,12 @@ post('/add/content', function () {
     $user = $_SESSION[config("site.url")]['user'];
     $draft = from($_REQUEST, 'draft');
     $category = from($_REQUEST, 'category');
+    $date = from($_REQUEST, 'date');
+    $time = from($_REQUEST, 'time');
+    $dateTime = null;
+    if ($date !== null && $time !== null) {
+        $dateTime = $date . ' ' . $time;
+    }
     
     if (empty($is_post) && empty($is_image) && empty($is_video) && empty($is_audio) && empty($is_link) && empty($is_quote)) {
         $add = site_url() . 'admin/content';
@@ -474,45 +483,45 @@ post('/add/content', function () {
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
         if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
         } else {
             $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
         }
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
         if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
         } else {
             $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
         }
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
         if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
         } else {
             $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
         }
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
         if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
         } else {
             $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
         }
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
         if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
         } else {
             $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
         }
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
         if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
         } else {
             $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link);
+            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
         }
     } else {
         $message['error'] = '';
@@ -969,6 +978,71 @@ get('/admin/draft', function () {
             'is_admin' => true,
             'bodyclass' => 'admin-draft',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
+            'pagination' => has_pagination($total, $perpage, $page)
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/scheduled
+get('/admin/scheduled', function () {
+
+    if (login()) {
+
+        config('views.root', 'system/admin/views');
+
+        $name = $_SESSION[config("site.url")]['user'];
+
+        $page = from($_GET, 'page');
+        $page = $page ? (int)$page : 1;
+        $perpage = config('profile.perpage');
+
+        $posts = get_scheduled($name, $page, $perpage);
+
+        $total = get_scheduledcount($name);
+
+        $author = get_author($name);
+
+        if (isset($author[0])) {
+            $author = $author[0];
+        } else {
+            $author = default_profile($name);
+        }
+
+        if (empty($posts) || $page < 1) {
+            render('scheduled', array(
+                'title' => 'Scheduled posts' . ' - ' . blog_title(),
+                'description' => strip_tags(blog_description()),
+                'canonical' => site_url(),
+                'page' => $page,
+                'heading' => 'Scheduled posts',
+                'posts' => null,
+                'about' => $author->about,
+                'name' => $author->name,
+                'type' => 'is_admin-scheduled',
+                'is_admin' => true,
+                'bodyclass' => 'admin-scheduled',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Scheduled posts for: ' . $author->name,
+                'pagination' => has_pagination($total, $perpage, $page)
+            ));
+            die;
+        }
+
+        render('scheduled', array(
+            'title' => 'Scheduled posts' . ' - ' . blog_title(),
+            'description' => strip_tags(blog_description()),
+            'canonical' => site_url(),
+            'heading' => 'Scheduled posts',
+            'page' => $page,
+            'posts' => $posts,
+            'about' => $author->about,
+            'name' => $author->name,
+            'type' => 'is_admin-scheduled',
+            'is_admin' => true,
+            'bodyclass' => 'admin-scheduled',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Scheduled posts for: ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
@@ -2347,10 +2421,14 @@ get('/post/:name/edit', function ($name) {
         $post = find_post(null, null, $name);
 
         if (!$post) {
-            $post = find_draft(null, null, $name);
-            if (!$post) {
-                not_found();
-            }
+            $post = find_draft($year, $month, $name);
+			if (!$post) { 
+			    $post = find_scheduled($year, $month, $name);
+				if (!$post) {
+					not_found();
+				}
+			}
+
         }
 
         $current = $post['current'];
@@ -2554,10 +2632,14 @@ get('/post/:name/delete', function ($name) {
         $post = find_post(null, null, $name);
 
         if (!$post) {
-            $post = find_draft(null, null, $name);
-            if (!$post) {
-                not_found();
-            }
+            $post = find_draft($year, $month, $name);
+			if (!$post) { 
+			    $post = find_scheduled($year, $month, $name);
+				if (!$post) {
+					not_found();
+				}
+			}
+
         }
 
         $current = $post['current'];
@@ -3341,9 +3423,13 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
 
         if (!$post) {
             $post = find_draft($year, $month, $name);
-            if (!$post) {
-                not_found();
-            }
+			if (!$post) { 
+			    $post = find_scheduled($year, $month, $name);
+				if (!$post) {
+					not_found();
+				}
+			}
+
         }
 
         $current = $post['current'];
@@ -3548,9 +3634,13 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
 
         if (!$post) {
             $post = find_draft($year, $month, $name);
-            if (!$post) {
-                not_found();
-            }
+			if (!$post) { 
+			    $post = find_scheduled($year, $month, $name);
+				if (!$post) {
+					not_found();
+				}
+			}
+
         }
 
         $current = $post['current'];
