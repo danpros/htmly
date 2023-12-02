@@ -1,7 +1,7 @@
 <?php
 
 namespace Kanti;
-
+#[\AllowDynamicProperties]
 class CacheOneFile
 {
     protected $fileName = "";

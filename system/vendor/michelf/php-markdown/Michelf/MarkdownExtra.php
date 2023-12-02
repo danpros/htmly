@@ -1898,7 +1898,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 		#    in:  text ~~deleted~~ from doc
 		#    out: text <del>deleted</del> from doc
 		#
-			$parts = preg_split('/(?<![~])(~~)(?![~])/', $text, null, PREG_SPLIT_DELIM_CAPTURE);
+			$parts = preg_split('/(?<![~])(~~)(?![~])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
 			
 			//don't bother if nothing to do...
 			if(count($parts) <= 1)
