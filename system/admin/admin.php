@@ -231,6 +231,9 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
     $tagslang = "content/data/tags.lang";
+    $newfile = '';
+    $views = array();
+    $viewsFile = "content/data/views.json";
     if (file_exists($tagslang)) {
         $taglang = array_flip(unserialize(file_get_contents($tagslang)));
         $tflip = array_intersect_key($taglang, array_flip($tag));
@@ -347,17 +350,16 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
             if($dir[4] == 'draft') {
                 if (date('Y-m-d-H-i-s') >= $olddate) { 
-                    $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    $newfile = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                 } else {
-                    $filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    $newfile = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                 }
             } else {
-                $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                $newfile = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
             }
 
-            file_put_contents($filename, print_r($post_content, true));
+            file_put_contents($newfile, print_r($post_content, true));
             unlink($oldfile);
-            $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
 
         } else {
 
@@ -382,18 +384,17 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
             } else {
 
                 if($dir[4] == 'draft') {
-                    $filename = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                    $newfile = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                 } else {
                     if (date('Y-m-d-H-i-s') >= $olddate) { 
-                        $filename = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                        $newfile = $dirBlog . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                     } else {
-                        $filename = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
+                        $newfile = $dirScheduled . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
                     }
                 }
 
-                file_put_contents($filename, print_r($post_content, true));
+                file_put_contents($newfile, print_r($post_content, true));
                 unlink($oldfile);
-                $newfile = $olddate . '_' . $post_tag . '_' . $post_url . '.md';
 
             }
 
@@ -426,6 +427,15 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $oldfile, $category, $type);
+        
+        if ($oldfile != $newfile) {
+            if (file_exists($viewsFile)) {
+                $views = json_decode(file_get_contents($viewsFile), true);
+                $arr = replace_key($views, $oldfile, $newfile);
+                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE));                
+            }
+        } 
+
         if ($destination == 'post') {
             if(!empty($revertPost)) {
                 $drafturl = site_url() . 'admin/draft';
@@ -1108,4 +1118,13 @@ function clear_cache()
     foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
         unlink($file);
     }
+}
+
+function replace_key($arr, $oldkey, $newkey) {
+    if(array_key_exists($oldkey, $arr)) {
+        $keys = array_keys($arr);
+        $keys[array_search($oldkey, $keys)] = $newkey;
+        return array_combine($keys, $arr);    
+    }
+    return $arr;    
 }

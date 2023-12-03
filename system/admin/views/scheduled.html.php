@@ -12,19 +12,7 @@
             <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
-        <?php $i = 0;
-        $len = count($posts); ?>
         <?php foreach ($posts as $p): ?>
-            <?php
-            if ($i == 0) {
-                $class = 'item first';
-            } elseif ($i == $len - 1) {
-                $class = 'item last';
-            } else {
-                $class = 'item';
-            }
-            $i++;
-            ?>
             <tr class="<?php echo $class ?>">
                 <td><?php echo $p->title ?></td>
                 <td><?php echo format_date($p->date, 'd F Y, H:i:s') ?></td>

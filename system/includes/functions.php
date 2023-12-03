@@ -1437,7 +1437,9 @@ function popular_posts($custom = null, $count = null)
                     if (empty($custom)) {
                         echo '<ul>';
                         foreach ($posts as $post) {
-                            echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+                            if (strpos($post->file, '/scheduled/') == false && strpos($post->file, '/draft/') == false) {
+                                echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+                            }
                         }
                         echo '</ul>';
                     }
