@@ -2250,7 +2250,7 @@ function menu($class = null)
             $html = parseNodes($nodes, null, $class);
             libxml_use_internal_errors(true);
             $doc = new DOMDocument();
-            $doc->loadHTML($html);
+            $doc->loadHTML('<meta charset="utf8">' . $html);
 
             $finder = new DOMXPath($doc);
             $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' dropdown-menu ')]");
@@ -3334,7 +3334,7 @@ function replace_href($string, $tag, $class, $url)
 
     // Load the HTML in DOM
     $doc = new DOMDocument();
-    $doc->loadHTML($string);
+    $doc->loadHTML('<meta charset="utf8">' . $string);
     // Then select all anchor tags
     $all_anchor_tags = $doc->getElementsByTagName($tag);
     foreach ($all_anchor_tags as $_tag) {
