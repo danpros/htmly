@@ -144,14 +144,14 @@ post('/login', function () {
             config('views.root', 'system/admin/views');
 
             render('login', array(
-                'title' => 'Login - ' . blog_title(),
-                'description' => 'Login page on ' . blog_title(),
+                'title' => i18n('Login') . ' - ' . blog_title(),
+                'description' => i18n('Login') . ' ' . blog_title(),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $log . '</ul>',
                 'type' => 'is_login',
                 'is_login' => true,
                 'bodyclass' => 'in-login',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
             ));
         }
     } else {
@@ -172,8 +172,8 @@ post('/login', function () {
         config('views.root', 'system/admin/views');
 
         render('login', array(
-            'title' => 'Login - ' . blog_title(),
-            'description' => 'Login page on ' . blog_title(),
+            'title' => i18n('Login') . ' - ' . blog_title(),
+            'description' => i18n('Login') . ' ' . blog_title(),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
             'username' => $user,
@@ -181,7 +181,7 @@ post('/login', function () {
             'type' => 'is_login',
             'is_login' => true,
             'bodyclass' => 'in-login',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
         ));
     }
 });
@@ -241,8 +241,8 @@ get('/author/:name', function ($name) {
 
     if (empty($posts) || $page < 1) {
         render($pview, array(
-            'title' => 'Profile for:  ' . $author->name . ' - ' . blog_title(),
-            'description' => 'Profile page and all posts by ' . $author->name . ' on ' . blog_title() . '.',
+            'title' => i18n('Profile_for') . ' ' . $author->name . ' - ' . blog_title(),
+            'description' => get_description($author->about),
             'canonical' => site_url() . 'author/' . $name,
             'page' => $page,
             'posts' => null,
@@ -250,7 +250,7 @@ get('/author/:name', function ($name) {
             'name' => $author->name,
             'type' => 'is_profile',
             'bodyclass' => 'in-profile author-' . $name,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Profile_for') . ' ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page),
             'is_profile' => true,
         ), $layout);
@@ -258,8 +258,8 @@ get('/author/:name', function ($name) {
     }
 
     render($pview, array(
-        'title' => 'Profile for:  ' . $author->name . ' - ' . blog_title(),
-        'description' => 'Profile page and all posts by ' . $author->name . ' on ' . blog_title() . '.',
+        'title' => i18n('Profile_for') . ' ' . $author->name . ' - ' . blog_title(),
+        'description' => get_description($author->about),
         'canonical' => site_url() . 'author/' . $name,
         'page' => $page,
         'posts' => $posts,
@@ -267,7 +267,7 @@ get('/author/:name', function ($name) {
         'name' => $author->name,
         'type' => 'is_profile',
         'bodyclass' => 'in-profile author-' . $name,
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Profile_for') . ' ' . $author->name,
         'pagination' => has_pagination($total, $perpage, $page),
         'is_profile' => true,
     ), $layout);
@@ -280,13 +280,13 @@ get('/edit/profile', function () {
 
         config('views.root', 'system/admin/views');
         render('edit-page', array(
-            'title' => 'Edit profile - ' . blog_title(),
+            'title' => i18n('Edit_profile') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_profile',
             'is_admin' => true,
             'bodyclass' => 'edit-profile',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('Edit_profile'),
         ));
     } else {
         $login = site_url() . 'login';
@@ -2038,8 +2038,8 @@ get('/type/:type', function ($type) {
     }
     
     render($pview, array(
-        'title' => 'Posts with type: ' . ucfirst($type) . ' - ' . blog_title(),
-        'description' => 'All posts with type: ' . ucfirst($type) . ' on ' . blog_title() . '.',
+        'title' => i18n('Posts_with_type') . ' ' . ucfirst($type) . ' - ' . blog_title(),
+        'description' => i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title() . '.',
         'canonical' => site_url() . 'type/' . strtolower($type),
         'page' => $page,
         'posts' => $posts,
@@ -2103,14 +2103,14 @@ get('/tag/:tag', function ($tag) {
     }
     
     render($pview, array(
-        'title' => 'Posts tagged: ' . tag_i18n($tag) . ' - ' . blog_title(),
-        'description' => 'All posts tagged: ' . tag_i18n($tag) . ' on ' . blog_title() . '.',
+        'title' => i18n('Posts_tagged') . ' ' . tag_i18n($tag) . ' - ' . blog_title(),
+        'description' => i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title() . '.',
         'canonical' => site_url() . 'tag/' . strtolower($tag),
         'page' => $page,
         'posts' => $posts,
         'tag' => $ttag,
         'bodyclass' => 'in-tag tag-' . strtolower($tag),
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Posts tagged: ' . tag_i18n($tag),
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Posts_tagged') . ' ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
         'is_tag' => true,
     ), $layout);
@@ -2178,14 +2178,14 @@ get('/archive/:req', function ($req) {
     }
 
     render($pview, array(
-        'title' => 'Archive for: ' . $timestamp . ' - ' . blog_title(),
-        'description' => 'Archive page for: ' . $timestamp . ' on ' . blog_title() . '.',
+        'title' => i18n('Archive_for') . ' ' . $timestamp . ' - ' . blog_title(),
+        'description' =>i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title() . '.',
         'canonical' => site_url() . 'archive/' . $req,
         'page' => $page,
         'posts' => $posts,
         'archive' => $tarchive,
         'bodyclass' => 'in-archive archive-' . strtolower($req),
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Archive for: ' . $timestamp,
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Archive_for') . ' ' . $timestamp,
         'pagination' => has_pagination($total, $perpage, $page),
         'is_archive' => true,
     ), $layout);
@@ -2246,14 +2246,14 @@ get('/search/:keyword', function ($keyword) {
     }
 
     render($pview, array(
-        'title' => 'Search results for: ' . tag_i18n($keyword) . ' - ' . blog_title(),
-        'description' => 'Search results for: ' . tag_i18n($keyword) . ' on ' . blog_title() . '.',
+        'title' => i18n('Search_results_for') . ' ' . tag_i18n($keyword) . ' - ' . blog_title(),
+        'description' => i18n('Search_results_for') . ' ' . tag_i18n($keyword) . ' ' . i18n('by') . ' ' . blog_title() . '.',
         'canonical' => site_url() . 'search/' . strtolower($keyword),
         'page' => $page,
         'posts' => $posts,
         'search' => $tsearch,
         'bodyclass' => 'in-search search-' . strtolower($keyword),
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Search results for: ' . tag_i18n($keyword),
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search_results_for') . ' ' . tag_i18n($keyword),
         'pagination' => has_pagination($total, $perpage, $page),
         'is_search' => true,
     ), $layout);

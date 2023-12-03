@@ -947,6 +947,8 @@ function get_static_post($static)
                 $post->url = site_url() . str_replace('.md', '', $url);
 
                 $post->file = $v;
+				
+                $post->md = str_replace('.md', '', $url);
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($v);
@@ -996,6 +998,10 @@ function get_static_sub_post($static, $sub_static)
                 $post->url = site_url() . $static . "/" . str_replace('.md', '', $url);
 
                 $post->file = $v;
+				
+				$post->md = str_replace('.md', '', $url);
+				
+				$post->parent = $static;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($v);
@@ -1327,7 +1333,7 @@ function recent_posts($custom = null, $count = null)
             echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
         }
         if (empty($posts)) {
-            echo '<li>No recent posts found</li>';
+            echo '<li>' . i18n('No_posts_found') . '</li>';
         }
         echo '</ul>';
     }
@@ -1747,11 +1753,11 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
     {
         $pagination .= '<ul class="pagination">';
 
-        //previous button
+        //newer button
         if ($page > 1)
-            $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $prev .'">« Prev</a></li>';
+            $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $prev .'">« '. i18n('Newer') .'</a></li>';
         else
-            $pagination .= '<li class="page-item disabled"><span class="page-link">« Prev</span></li>';
+            $pagination .= '<li class="page-item disabled"><span class="page-link">« '. i18n('Newer') . '</span></li>';
 
         //pages
         if ($lastpage < 7 + ($adjacents * 2))    //not enough pages to bother breaking it up
@@ -1813,11 +1819,11 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
             }
         }
 
-        //next button
+        //older button
         if ($page < $counter - 1)
-            $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $next .'">Next »</a></li>';
+            $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $next .'">'. i18n('Older') .' »</a></li>';
         else
-            $pagination .= '<li class="page-item disabled"><span class="page-link">Next »</span></li>';
+            $pagination .= '<li class="page-item disabled"><span class="page-link">'. i18n('Older') .' »</span></li>';
         $pagination .= '</ul>';
     }
 
@@ -2434,9 +2440,9 @@ function not_found()
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
         'title' => i18n('This_page_doesnt_exist') . ' - ' . blog_title(),
-        'description' => '404 Not Found',
+        'description' => i18n('This_page_doesnt_exist'),
         'canonical' => site_url(),
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; 404 Not Found',
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('This_page_doesnt_exist'),
         'bodyclass' => 'error-404',
         'is_404' => true,
     ), $layout);
