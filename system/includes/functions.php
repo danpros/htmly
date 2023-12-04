@@ -53,7 +53,7 @@ function get_static_pages()
 }
 
 // Get static page path. Unsorted.
-function get_static_sub_pages()
+function get_static_sub_pages($static = null)
 {
     static $_sub_page = array();
 
@@ -64,7 +64,16 @@ function get_static_sub_pages()
         }
         $_sub_page = unserialize(file_get_contents($url));
     }
-
+    if ($static != null) {
+        $stringLen = strlen($static);
+        return array_filter($_sub_page, function ($sub_page) use ($static, $stringLen) {
+            $x = explode("/", $sub_page);
+            if ($x[count($x) - 2] == $static) {
+                return true;
+            }
+            return false;
+        });
+    }
     return $_sub_page;
 }
 
@@ -970,14 +979,14 @@ function get_static_post($static)
 // Return static page.
 function get_static_sub_post($static, $sub_static)
 {
-    $posts = get_static_sub_pages();
+    $posts = get_static_sub_pages($static);
 
     $tmp = array();
 
     if (!empty($posts)) {
 
-        foreach ($posts as $index => $v) { 
-            if (stripos($v, $sub_static . '.md') !== false && stripos($v, $static) !== false) {
+        foreach ($posts as $index => $v) {
+            if (stripos($v, $sub_static . '.md') !== false) {
 
                 $post = new stdClass;
 
@@ -986,7 +995,6 @@ function get_static_sub_post($static, $sub_static)
 
                 // The static page URL
                 $url = str_replace($replaced, '', $v);
-
                 $post->url = site_url() . $static . "/" . str_replace('.md', '', $url);
 
                 $post->file = $v;
@@ -2339,7 +2347,7 @@ function get_menu($custom)
                 $active = '';
             }
 
-            $subPages = get_static_sub_pages();
+            $subPages = get_static_sub_pages(str_replace('.md', '', $base));
             if (!empty($subPages)) {
                 asort($subPages);
                 echo '<li class="' . $class . $active .' dropdown">';
