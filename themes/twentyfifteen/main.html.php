@@ -9,7 +9,7 @@
     <header class="page-header"><h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1></header>
 <?php endif;?>
 <?php if (isset($is_search)):?>
-    <header class="page-header"><h1 class="page-title">Search: <?php echo $search->title;?></h1></header>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1></header>
 <?php endif;?>
 <?php if (isset($is_type)):?>
     <header class="page-header"><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1></header>
