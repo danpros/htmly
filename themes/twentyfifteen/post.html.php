@@ -63,9 +63,9 @@
             <?php echo $p->tag; ?>
         </span>
         <?php if (disqus_count()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n('comments');?></a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n('Comments');?></a></span>
         <?php } elseif (facebook()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('comments');?></span></a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('Comments');?></span></a></span>
         <?php } ?>
     </footer>
 </article>
