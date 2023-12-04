@@ -105,7 +105,7 @@ class Settings
             $dir = '';
         }
         $port = '';
-        if ($_SERVER["SERVER_PORT"] != "80") {
+        if ($_SERVER["SERVER_PORT"] != "80" && $_SERVER["SERVER_PORT"] != "443") {
             $port = ':' . $_SERVER["SERVER_PORT"];
         }
         $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';

@@ -1,4 +1,4 @@
-; The URL of your blog. Include the http or https if you are using Facebook or Disqus comment. 
+; The URL of your blog.
 site.url = ""
 
 ; Your timezone
