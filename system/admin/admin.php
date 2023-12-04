@@ -559,7 +559,8 @@ function add_sub_page($title, $url, $content, $static, $description = null)
 function edit_page($title, $url, $content, $oldfile, $destination = null, $description = null, $static = null)
 {
     $dir = substr($oldfile, 0, strrpos($oldfile, '/'));
-
+    $views = array();
+    $viewsFile = "content/data/views.json";
     $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -602,6 +603,15 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
+	
+        if ($oldfile != $newfile) {
+            if (file_exists($viewsFile)) {
+                $views = json_decode(file_get_contents($viewsFile), true);
+                $arr = replace_key($views, $oldfile, $newfile);
+                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE));                
+            }
+        } 		
+
         if ($destination == 'post') {
             header("Location: $posturl");
         } else {
