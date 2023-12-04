@@ -45,30 +45,30 @@
             </section>
             <aside id="sidebar">
                 <div class="about">
-                    <h3>About</h3>
+                    <h3><?php echo i18n('About');?></h3>
                     <p><?php echo blog_description() ?></p>
                 </div>
                 <div class="social">
-                    <h3>Follow</h3>
+                    <h3><?php echo i18n('Follow');?></h3>
                     <?php echo social() ?>
                 </div>
                 <div class="recent">
-                    <h3>Recent Posts</h3>
+                    <h3><?php echo i18n('Recent_posts');?></h3>
                     <?php echo recent_posts() ?>
                 </div>
                 <?php if(config('views.counter') === 'true') :?>
                 <div class="popular">
-                    <h3>Popular Posts</h3>
+                    <h3><?php echo i18n('Popular_posts');?></h3>
                     <?php echo popular_posts() ?>
                 </div>
                 <?php endif;?>
                 <div class="archive">
-                    <h3>Archive</h3>
+                    <h3><?php echo i18n('Archives');?></h3>
                     <?php echo archive_list() ?>
                 </div>
                 <?php if (disqus()): ?>
                     <div class="comments">
-                        <h3>Comments</h3>                    
+                        <h3><?php echo i18n('Comments');?></h3>                    
                         <?php echo recent_comments() ?>
                         <style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
                     </div>

@@ -8,24 +8,24 @@
         <div class="bio" itemprop="description"><?php echo $about ?></div>
     </div>
 </div>
-<h2 class="post-index">Posts by this author</h2>
+<h2 class="post-index"><?php echo i18n('Post_by_author');?></h2>
 <?php if (!empty($posts)) { ?>
     <ul class="post-list">
         <?php foreach ($posts as $p): ?>
             <li class="item">
-                <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> on
-                <span><?php echo format_date($p->date) ?></span> - Posted in <span><?php echo $p->category; ?></span>
+                <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> <?php echo i18n('by');?>
+                <span><?php echo format_date($p->date) ?></span> - <?php echo i18n('Posted_in');?> <span><?php echo $p->category; ?></span>
             </li>
         <?php endforeach; ?>
     </ul>
     <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
         <div class="pager">
             <?php if (!empty($pagination['prev'])): ?>
-                <span class="newer" ><a href="?page=<?php echo $page - 1 ?>" rel="prev">&laquo; Newer</a></span>
+                <span class="newer" ><a href="?page=<?php echo $page - 1 ?>" rel="prev">&laquo; <?php echo i18n('Newer');?></a></span>
             <?php endif; ?>
             <span class="page-number"><?php echo $pagination['pagenum'];?></span>
             <?php if (!empty($pagination['next'])): ?>
-                <span class="older"><a href="?page=<?php echo $page + 1 ?>" rel="next">Older  &raquo;</a></span>
+                <span class="older"><a href="?page=<?php echo $page + 1 ?>" rel="next"><?php echo i18n('Older');?>  &raquo;</a></span>
             <?php endif; ?>
         </div>
     <?php endif; ?>

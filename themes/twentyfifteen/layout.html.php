@@ -73,7 +73,7 @@
                     </nav>
 					<?php endif;?>
                     <aside class="widget search">
-                        <form><input type="search" name="search" class="form-control" placeholder="Type to search"></form>
+                        <form><input type="search" name="search" class="form-control" placeholder="<?php echo i18n('Type_to_search');?>"></form>
                     </aside>                            
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>

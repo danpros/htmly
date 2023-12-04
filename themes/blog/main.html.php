@@ -59,13 +59,13 @@
                         <h2 class="title" itemprop="headline"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
                     <?php } ?>
                     <p class="meta">
-                        <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in 
-                        <span itemprop="articleSection"><?php echo $p->category;?></span> by 
+                        <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - <?php echo i18n("Posted_in");?> 
+                        <span itemprop="articleSection"><?php echo $p->category;?></span> <?php echo i18n("by");?> 
                         <span class="author" itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span>
                         <?php if (disqus_count()) { ?> 
-                            with <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
+                            - <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n("Comments");?></a></span>
                         <?php } elseif (facebook()) { ?> 
-                            with <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a>
+                            - <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                         <?php } ?>
 						<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
                     </p>

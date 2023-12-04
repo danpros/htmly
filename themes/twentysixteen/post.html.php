@@ -62,9 +62,9 @@
         <span class="tags-links"><span class="screen-reader-text">Tags </span><?php echo $p->tag;?></span>
 
         <?php if (disqus_count()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n('Comments');?></a></span>
         <?php } elseif (facebook()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('Comments');?></span></a></span>
         <?php } ?>
 
     </footer><!-- .entry-footer -->
@@ -82,7 +82,7 @@
     <?php if (facebook() || disqus()): ?>
         <div class="comments-area" id="comments">
         
-            <h2 class="comments-title">Comments on “<?php echo $p->title;?>”</h2>
+            <h2 class="comments-title"><?php echo i18n('Comments');?> “<?php echo $p->title;?>”</h2>
             
             <?php if (facebook()): ?>
                 <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
@@ -99,10 +99,10 @@
     <h2 class="screen-reader-text">Post navigation</h2>
     <div class="nav-links">
         <?php if (!empty($prev)): ?>
-            <div class="nav-previous"><a rel="prev" href="<?php echo($prev['url']); ?>"><span aria-hidden="true" class="meta-nav">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title"><?php echo($prev['title']); ?></span></a></div>
+            <div class="nav-previous"><a rel="prev" href="<?php echo($prev['url']); ?>"><span aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> <span class="screen-reader-text">Previous post:</span> <span class="post-title"><?php echo($prev['title']); ?></span></a></div>
         <?php endif;?>
         <?php if (!empty($next)): ?>
-            <div class="nav-next"><a rel="next" href="<?php echo($next['url']); ?>"><span aria-hidden="true" class="meta-nav">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title"><?php echo($next['title']); ?></span></a></div>
+            <div class="nav-next"><a rel="next" href="<?php echo($next['url']); ?>"><span aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> <span class="screen-reader-text">Next post:</span> <span class="post-title"><?php echo($next['title']); ?></span></a></div>
         <?php endif;?>
     </div>
 </nav>

@@ -21,13 +21,13 @@
                 <h2 class="title-index" itemprop="name"><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></h2>
             <?php } ?>
             <div class="date">
-                <span itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in
-                <span itemprop="articleSection"><?php echo $p->category ?></span> by
+                <span itemprop="datePublished"><?php echo format_date($p->date) ?></span> - <?php echo i18n('Posted_in');?>
+                <span itemprop="articleSection"><?php echo $p->category ?></span> <?php echo i18n('by');?>
                 <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->authorName; ?></a></span>
                 <?php if (disqus_count()) { ?> - 
-                    <span><a href="<?php echo $p->url ?>#disqus_thread">Comments</a></span>
+                    <span><a href="<?php echo $p->url ?>#disqus_thread"><?php echo i18n('Comments');?></a></span>
                 <?php } elseif (facebook()) { ?> - 
-                    <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> Comments</span></a>
+                    <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('Comments');?></span></a>
                 <?php } ?>
 				<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
             </div>
@@ -62,11 +62,11 @@
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
     <div class="pager">
         <?php if (!empty($pagination['prev'])): ?>
-            <span class="newer" ><a href="?page=<?php echo $page - 1 ?>" rel="prev">&laquo; Newer</a></span>
+            <span class="newer" ><a href="?page=<?php echo $page - 1 ?>" rel="prev">&laquo; <?php echo i18n('Newer');?></a></span>
         <?php endif; ?>
         <span class="page-number"><?php echo $pagination['pagenum'];?></span>
         <?php if (!empty($pagination['next'])): ?>
-            <span class="older"><a href="?page=<?php echo $page + 1 ?>" rel="next">Older  &raquo;</a></span>
+            <span class="older"><a href="?page=<?php echo $page + 1 ?>" rel="next"><?php echo i18n('Older');?>  &raquo;</a></span>
         <?php endif; ?>
     </div>
 <?php endif; ?>

@@ -13,8 +13,8 @@
             <?php } ?>
         <div class="date">
             <span itemprop="datePublished"><a href="<?php echo $p->archive ?>" title="Show all posts made on this month"><?php echo format_date($p->date) ?></a></span>
-            - Posted in
-            <span itemprop="articleSection"><?php echo $p->category ?></span> by
+            - <?php echo i18n('Posted_in');?>
+            <span itemprop="articleSection"><?php echo $p->category ?></span> <?php echo i18n('by');?>
             <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->authorName; ?></a></span> -
             <span><a href="<?php echo $p->url ?>" rel="permalink">Permalink</a></span>
         </div>
@@ -41,12 +41,12 @@
         <div class="post-body" itemprop="articleBody">
             <?php echo $p->body; ?>
         </div>
-        <div class="tags"><strong>Tags:</strong> <?php echo $p->tag;?></div>
+        <div class="tags"><strong><?php echo i18n('Tags');?></strong> <?php echo $p->tag;?></div>
     </div>
     <div class="separator">&rarr;</div>
     <div class="share-box">
         <div class="author-info">
-            <h4>By <strong><?php echo $author->name ?></strong></h4>
+            <h4><?php echo i18n('Posts_by');?> <strong><?php echo $author->name ?></strong></h4>
             <?php echo $author->about ?>
         </div>
                 <div class="share">
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="related">
-        <h4>Related posts</h4>
+        <h4><?php echo i18n('Related_posts');?></h4>
         <?php echo get_related($p->related)?>
     </div>
     <div id="comments" class="comments border">

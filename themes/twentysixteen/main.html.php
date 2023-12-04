@@ -55,9 +55,9 @@
         <span class="cat-links"><span class="screen-reader-text"><?php echo i18n('Category');?> </span><?php echo $p->category;?></span>
         <span class="tags-links"><span class="screen-reader-text">Tags </span><?php echo $p->tag;?></span>
         <?php if (disqus_count()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n('Comments');?></a></span>
         <?php } elseif (facebook()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('Comments');?></span></a></span>
         <?php } ?>
         <?php if (login()) { echo '<span class="edit-link"><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
     </footer><!-- .entry-footer -->

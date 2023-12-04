@@ -87,14 +87,14 @@
                     
                     <?php if (config('views.counter') === 'true') :?>
                     <section id="popular-posts" class="widget widget_popular_entries">        
-                        <h2 class="widget-title">Popular Posts</h2>
+                        <h2 class="widget-title"><?php echo i18n('Popular_posts');?></h2>
                         <?php echo popular_posts();?>
                     </section>
                     <?php endif;?>
 
                     <?php if (disqus()): ?>
                     <section id="recent-comments" class="widget widget_recent_comments">
-                        <h2 class="widget-title">Recent Comments</h2>
+                        <h2 class="widget-title"><?php echo i18n('Comments');?></h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;} .dsq-widget-list {margin-left:0;}</style>
                     </section>
                     <?php endif;?>
