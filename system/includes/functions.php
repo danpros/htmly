@@ -1238,7 +1238,7 @@ function get_scheduledcount($var)
         $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
 
         $str = explode('/', $replaced);
-        $cat = $str[count($str) - 5];
+        $cat = $str[count($str) - 6];
 
         if (stripos($cat, "$var") !== false) {
             $tmp[] = $v;
