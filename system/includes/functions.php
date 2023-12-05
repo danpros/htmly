@@ -1904,7 +1904,7 @@ function get_thumbnail($text, $url = null)
             libxml_use_internal_errors(true);
             $default = config('default.thumbnail');
             $dom = new DOMDocument();
-            $dom->loadHtml($text);
+            $dom->loadHtml('<meta charset="utf8">' . $text);
             $imgTags = $dom->getElementsByTagName('img');
             $vidTags = $dom->getElementsByTagName('iframe');
             if ($imgTags->length > 0) {
@@ -1947,7 +1947,7 @@ function get_image($text)
 {
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
-    $dom->loadHtml($text);
+    $dom->loadHtml('<meta charset="utf8">' . $text);
     $imgTags = $dom->getElementsByTagName('img');
     $vidTags = $dom->getElementsByTagName('iframe');
     if ($imgTags->length > 0) {
