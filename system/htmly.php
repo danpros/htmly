@@ -415,13 +415,13 @@ get('/add/content', function () {
         config('views.root', 'system/admin/views');
 
         render('add-content', array(
-            'title' => i18n('Add_content') . ' - ' . blog_title(),
+            'title' => i18n('Add_new_post') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => $type,
             'is_admin' => true,
             'bodyclass' => 'add-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add content'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187;' . i18n('Add_new_post')
         ));
     } else {
         $login = site_url() . 'login';
@@ -562,7 +562,7 @@ post('/add/content', function () {
         
         config('views.root', 'system/admin/views');
         render('add-content', array(
-            'title' => 'Add content - ' . blog_title(),
+            'title' => i18n('Add_content') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -578,7 +578,7 @@ post('/add/content', function () {
             'type' => $type,
             'is_admin' => true,
             'bodyclass' => 'add-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add content'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_content')
         ));
     }
     
@@ -592,13 +592,13 @@ get('/add/page', function () {
         config('views.root', 'system/admin/views');
 
         render('add-page', array(
-            'title' => 'Add page - ' . blog_title(),
+            'title' => i18n('Add_new_page') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_page',
             'is_admin' => true,
             'bodyclass' => 'add-page',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_new_page')
         ));
     } else {
         $login = site_url() . 'login';
@@ -635,7 +635,7 @@ post('/add/page', function () {
         }
         config('views.root', 'system/admin/views');
         render('add-page', array(
-            'title' => 'Add page - ' . blog_title(),
+            'title' => i18n('Add_new_page') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -645,7 +645,7 @@ post('/add/page', function () {
             'type' => 'is_page',
             'is_admin' => true,
             'bodyclass' => 'add-page',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_new_page')
         ));
     }
 });
@@ -658,13 +658,13 @@ get('/add/category', function () {
         config('views.root', 'system/admin/views');
 
         render('add-page', array(
-            'title' => 'Add page - ' . blog_title(),
+            'title' =>i18n('Add_category') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'add-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add category'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_category')
         ));
     } else {
         $login = site_url() . 'login';
@@ -701,7 +701,7 @@ post('/add/category', function () {
         }
         config('views.root', 'system/admin/views');
         render('add-page', array(
-            'title' => 'Add page - ' . blog_title(),
+            'title' => i18n('Add_category') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -711,7 +711,7 @@ post('/add/category', function () {
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'add-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Add category'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_category')
         ));
     }
 });
@@ -743,7 +743,7 @@ get('/admin/posts', function () {
                     'description' => strip_tags(blog_description()),
                     'canonical' => site_url(),
                     'bodyclass' => 'no-posts',
-                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; All posts list'
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('All_blog_posts')
                 ));
 
                 die;
@@ -767,7 +767,7 @@ get('/admin/posts', function () {
                 'bodyclass' => 'all-posts',
                 'type' => 'is_admin-posts',
                 'is_admin' => true,
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; All posts list',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('All_blog_posts'),
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
         } else {
@@ -778,7 +778,7 @@ get('/admin/posts', function () {
                 'type' => 'is_admin-posts',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('All_blog_posts')
             ));
         }
     } else {
@@ -809,12 +809,12 @@ get('/admin/popular', function () {
 
                 // a non-existing page
                 render('no-posts', array(
-                    'title' => 'Popular posts - ' . blog_title(),
+                    'title' => i18n('Popular_posts') . ' - ' . blog_title(),
                     'description' => strip_tags(blog_description()),
                     'canonical' => site_url(),
                     'is_admin' => true,
                     'bodyclass' => 'admin-popular',
-                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Popular posts'
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Popular_posts')
                 ));
 
                 die;
@@ -829,7 +829,7 @@ get('/admin/popular', function () {
             }
 
             render('popular-posts', array(
-                'title' => 'Popular posts - ' . blog_title(),
+                'title' => i18n('Popular_posts') .  ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'heading' => 'Popular posts',
@@ -837,17 +837,17 @@ get('/admin/popular', function () {
                 'posts' => $posts,
                 'is_admin' => true,
                 'bodyclass' => 'admin-popular',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Popular posts',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Popular_posts'),
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
         } else {
             render('denied', array(
-                'title' => 'Popular posts - ' . blog_title(),
+                'title' => i18n('Popular_posts') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Popular_posts')
             ));
         }
     } else {
@@ -883,7 +883,7 @@ get('/admin/mine', function () {
 
         if (empty($posts) || $page < 1) {
             render('user-posts', array(
-                'title' => 'My blog posts - ' . blog_title(),
+                'title' => i18n('My_posts') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'page' => $page,
@@ -894,14 +894,14 @@ get('/admin/mine', function () {
                 'type' => 'is_admin-mine',
                 'is_admin' => true,
                 'bodyclass' => 'admin-mine',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('My_posts') . ': '. $author->name,
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
             die;
         }
 
         render('user-posts', array(
-            'title' => 'My blog posts - ' . blog_title(),
+            'title' => i18n('My_posts') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'heading' => i18n('My_posts'),
@@ -912,7 +912,7 @@ get('/admin/mine', function () {
             'type' => 'is_admin-mine',
             'is_admin' => true,
             'bodyclass' => 'admin-mine',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Profile for: ' . $author->name,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('My_posts') . ': '. $author->name,
             'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
@@ -959,7 +959,7 @@ get('/admin/draft', function () {
                 'type' => 'is_admin-draft',
                 'is_admin' => true,
                 'bodyclass' => 'admin-draft',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('My_draft'). ': ' . $author->name,
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
             die;
@@ -977,7 +977,7 @@ get('/admin/draft', function () {
             'type' => 'is_admin-draft',
             'is_admin' => true,
             'bodyclass' => 'admin-draft',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Draft for: ' . $author->name,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('My_draft') . ': ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
@@ -1024,7 +1024,7 @@ get('/admin/scheduled', function () {
                 'type' => 'is_admin-scheduled',
                 'is_admin' => true,
                 'bodyclass' => 'admin-scheduled',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Scheduled posts for: ' . $author->name,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Scheduled_posts') . ': ' . $author->name,
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
             die;
@@ -1042,7 +1042,7 @@ get('/admin/scheduled', function () {
             'type' => 'is_admin-scheduled',
             'is_admin' => true,
             'bodyclass' => 'admin-scheduled',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Scheduled posts for: ' . $author->name,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Scheduled_posts') . ': ' . $author->name,
             'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
@@ -1096,13 +1096,13 @@ get('/admin/import', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('import', array(
-            'title' => 'Import feed - ' . blog_title(),
+            'title' => i18n('Import_Feed') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-import',
             'is_admin' => true,
             'bodyclass' => 'admin-import',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Import feed'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Import_Feed')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1128,14 +1128,14 @@ post('/admin/import', function () {
             config('views.root', 'system/admin/views');
 
             render('import', array(
-                'title' => 'Import feed - ' . blog_title(),
+                'title' => i18n('Import_Feed') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'error' => '<ul>' . $log . '</ul>',
                 'type' => 'is_admin-import',
                 'is_admin' => true,
                 'bodyclass' => 'admin-import',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Import feed'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Import_Feed')
             ));
         }
     } else {
@@ -1150,7 +1150,7 @@ post('/admin/import', function () {
         config('views.root', 'system/admin/views');
 
         render('import', array(
-            'title' => 'Import feed - ' . blog_title(),
+            'title' => i18n('Import_Feed') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -1158,7 +1158,7 @@ post('/admin/import', function () {
             'type' => 'is_admin-import',
             'is_admin' => true,
             'bodyclass' => 'admin-import',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Import_Feed')
         ));
     }
 });
@@ -1173,23 +1173,23 @@ get('/admin/config', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
             render('config', array(
-                'title' => 'Config - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'admin-config',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         } else {
             render('denied', array(
-                'title' => 'Config page - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         }
     } else {
@@ -1239,23 +1239,23 @@ get('/admin/config/custom', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
             render('config-custom', array(
-                'title' => 'Config - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'admin-config',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         } else {
             render('denied', array(
-                'title' => 'Config page - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         }
     } else {
@@ -1307,23 +1307,23 @@ get('/admin/config/reading', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
             render('config-reading', array(
-                'title' => 'Config - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'admin-config',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         } else {
             render('denied', array(
-                'title' => 'Config page - ' . blog_title(),
+                'title' => i18n('Config') . '- ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         }
     } else {
@@ -1374,23 +1374,23 @@ get('/admin/config/widget', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
             render('config-widget', array(
-                'title' => 'Config - ' . blog_title(),
+                'title' => i18n('Config') . '- ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'admin-config',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         } else {
             render('denied', array(
-                'title' => 'Config page - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         }
     } else {
@@ -1441,23 +1441,23 @@ get('/admin/config/metatags', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
             render('config-metatags', array(
-                'title' => 'Config - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'admin-config',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         } else {
             render('denied', array(
-                'title' => 'Config page - ' . blog_title(),
+                'title' => i18n('Config') . '- ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         }
     } else {
@@ -1508,23 +1508,23 @@ get('/admin/config/performance', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
             render('config-performance', array(
-                'title' => 'Config - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'admin-config',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Config'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         } else {
             render('denied', array(
-                'title' => 'Config page - ' . blog_title(),
+                'title' => i18n('Config') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'type' => 'is_admin-config',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
             ));
         }
     } else {
@@ -1570,13 +1570,13 @@ get('/admin/backup', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('backup', array(
-            'title' => 'Backup content - ' . blog_title(),
+            'title' => i18n('Backup') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-backup',
             'is_admin' => true,
             'bodyclass' => 'admin-backup',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Backup'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Backup')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1590,13 +1590,13 @@ get('/admin/backup-start', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('backup-start', array(
-            'title' => 'Backup content started - ' . blog_title(),
+            'title' => i18n('Create_backup') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-backup-start',
             'is_admin' => true,
             'bodyclass' => 'admin-backup-start',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Backup started'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Create_backup')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1610,13 +1610,13 @@ get('/admin/clear-cache', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('clear-cache', array(
-            'title' => 'Clearing cache started - ' . blog_title(),
+            'title' => i18n('Clear_cache') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-clear-cache',
             'is_admin' => true,
             'bodyclass' => 'admin-clear-cache',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Clearing cache started'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Clear_cache')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1630,13 +1630,13 @@ get('/admin/update', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('update', array(
-            'title' => 'Check for Update - ' . blog_title(),
+            'title' => i18n('Check_update') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-update',
             'is_admin' => true,
             'bodyclass' => 'admin-update',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Update HTMLy'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' .  i18n('Check_update')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1656,14 +1656,14 @@ get('/admin/update/now/:csrf', function ($CSRF) {
         $updater->update();
         config('views.root', 'system/admin/views');
         render('updated-to', array(
-            'title' => 'Updated - ' . blog_title(),
+            'title' => i18n('Update') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'info' => $updater->getCurrentInfo(),
             'type' => 'is_admin-update',
             'is_admin' => true,
             'bodyclass' => 'admin-update',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Update HTMLy'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Update')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1676,13 +1676,13 @@ get('/admin/menu', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('menu', array(
-            'title' => 'Menu builder - ' . blog_title(),
+            'title' => i18n('Menus') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-menu',
             'is_admin' => true,
             'bodyclass' => 'admin-menu',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Menu builder'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Menus')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1708,13 +1708,13 @@ get('/admin/categories', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('categories', array(
-            'title' => 'Categories - ' . blog_title(),
+            'title' => i18n('Categories') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_admin-categories',
             'is_admin' => true,
             'bodyclass' => 'admin-categories',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Categories'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Categories')
         ));
     } else {
         $login = site_url() . 'login';
@@ -1764,7 +1764,7 @@ get('/admin/categories/:category', function ($category) {
                 'posts' => $posts,
                 'category' => $desc,
                 'bodyclass' => 'in-category category-' . strtolower($category),
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/categories">Categories</a>  &#187; ' . $desc->title,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/categories">' . i18n('Categories') .'</a>  &#187; ' . $desc->title,
                 'pagination' => has_pagination($total, $perpage, $page),
                 'is_category' => true,
             ));
@@ -1873,13 +1873,13 @@ get('/category/:category/edit', function ($category) {
         $post = $post[0];
 
         render('edit-page', array(
-            'title' => 'Edit category - ' . blog_title(),
+            'title' => i18n('Edit_category') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'edit-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Category') . ': ' . $post->title,
             'p' => $post
         ));
     } else {
@@ -1925,7 +1925,7 @@ post('/category/:category/edit', function () {
         config('views.root', 'system/admin/views');
 
         render('edit-page', array(
-            'title' => 'Edit category - ' . blog_title(),
+            'title' => i18n('Edit_category') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -1936,7 +1936,7 @@ post('/category/:category/edit', function () {
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'edit-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit category'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit_category')
         ));
     }
 });
@@ -1956,13 +1956,13 @@ get('/category/:category/delete', function ($category) {
         $post = $post[0];
 
         render('delete-category', array(
-            'title' => 'Delete category - ' . blog_title(),
+            'title' => i18n('Delete') . ' ' . i18n('Category') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_category',
             'is_admin' => true,
             'bodyclass' => 'delete-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Category') . ': ' . $post->title,
             'p' => $post,
             'type' => 'categoryPage',
         ));
@@ -2421,9 +2421,9 @@ get('/post/:name/edit', function ($name) {
         $post = find_post(null, null, $name);
 
         if (!$post) {
-            $post = find_draft($year, $month, $name);
+            $post = find_draft(null, null, $name);
             if (!$post) { 
-                $post = find_scheduled($year, $month, $name);
+                $post = find_scheduled(null, null, $name);
                 if (!$post) {
                     not_found();
                 }
@@ -2615,7 +2615,7 @@ post('/post/:name/edit', function () {
             'is_admin' => true,
             'postContent' => $content,
             'bodyclass' => 'edit-post',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit content'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit_content')
         ));
     }
 });
@@ -2632,9 +2632,9 @@ get('/post/:name/delete', function ($name) {
         $post = find_post(null, null, $name);
 
         if (!$post) {
-            $post = find_draft($year, $month, $name);
+            $post = find_draft(null, null, $name);
             if (!$post) { 
-                $post = find_scheduled($year, $month, $name);
+                $post = find_scheduled(null, null, $name);
                 if (!$post) {
                     not_found();
                 }
@@ -2652,7 +2652,7 @@ get('/post/:name/delete', function ($name) {
 
         if ($user === $current->author || $role === 'admin') {
             render('delete-post', array(
-                'title' => 'Delete post - ' . blog_title(),
+                'title' => i18n('Delete') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
@@ -2730,7 +2730,7 @@ get('/:static', function ($static) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'bodyclass' => 'admin-front',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Admin'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Admin')
             ));
         } else {
             $login = site_url() . 'login';
@@ -2741,22 +2741,22 @@ get('/:static', function ($static) {
         if (session_status() == PHP_SESSION_NONE) session_start();
         config('views.root', 'system/admin/views');
         render('login', array(
-            'title' => 'Login - ' . blog_title(),
+            'title' => i18n('Login').  ' - ' . blog_title(),
             'description' => 'Login page from ' . blog_title() . '.',
             'canonical' => site_url() . '/login',
             'bodyclass' => 'in-login',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Login'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
         ));
         die;
     } elseif ($static === 'logout') {
         if (login()) {
             config('views.root', 'system/admin/views');
             render('logout', array(
-                'title' => 'Logout - ' . blog_title(),
+                'title' => i18n('Logout') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'bodyclass' => 'in-logout',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Logout'
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Logout')
             ));
         } else {
             $login = site_url() . 'login';
@@ -2808,7 +2808,7 @@ get('/:static', function ($static) {
             // a non-existing page
             render('no-posts', array(
                 'title' => 'Blog - ' . blog_title(),
-                'description' => blog_title() . ' Blog Homepage',
+                'description' => blog_title() . ' Blog',
                 'canonical' => site_url(),
                 'bodyclass' => 'no-posts',
                 'is_front' => true,
@@ -2819,7 +2819,7 @@ get('/:static', function ($static) {
 
         render($pview, array(
             'title' => 'Blog - ' . blog_title(),
-            'description' => blog_title() . ' Blog Homepage',
+            'description' => blog_title() . ' Blog',
             'canonical' => site_url() . 'blog',
             'page' => $page,
             'posts' => $posts,
@@ -2904,13 +2904,13 @@ get('/:static/add', function ($static) {
         $post = $post[0];
 
         render('add-page', array(
-            'title' => 'Add page - ' . blog_title(),
+            'title' => i18n('Add_new_page') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'type' => 'is_page',
             'is_admin' => true,
             'bodyclass' => 'add-page',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> Add page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ' . i18n('Add_new_page')
         ));
     } else {
         $login = site_url() . 'login';
@@ -2947,7 +2947,7 @@ post('/:static/add', function ($static) {
         }
         config('views.root', 'system/admin/views');
         render('add-page', array(
-            'title' => 'Add page - ' . blog_title(),
+            'title' => i18n('Add_new_page') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -2957,7 +2957,7 @@ post('/:static/add', function ($static) {
             'type' => 'is_page',
             'is_admin' => true,
             'bodyclass' => 'add-page',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $title . '">' . $title . '</a> Add page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $title . '">' . $title . '</a> &#187; ' . i18n('Add_new_page')
         ));
     }
 });
@@ -2977,7 +2977,7 @@ get('/:static/edit', function ($static) {
         $post = $post[0];
 
         render('edit-page', array(
-            'title' => 'Edit page - ' . blog_title(),
+            'title' => i18n('Edit') .  ': ' . $post->title . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'edit-page',
@@ -3028,7 +3028,7 @@ post('/:static/edit', function () {
         config('views.root', 'system/admin/views');
 
         render('edit-page', array(
-            'title' => 'Edit page - ' . blog_title(),
+            'title' => i18n('Edit') .  ': ' . $post->title . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -3038,7 +3038,7 @@ post('/:static/edit', function () {
             'postContent' => $content,
             'bodyclass' => 'edit-page',
             'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
         ));
     }
 });
@@ -3058,12 +3058,12 @@ get('/:static/delete', function ($static) {
         $post = $post[0];
 
         render('delete-page', array(
-            'title' => 'Delete page - ' . blog_title(),
+            'title' => i18n('Delete') . ': ' . $post->title . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'delete-page',
             'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Delete') . ': ' . $post->title,
             'p' => $post,
             'type' => 'staticPage',
         ));
@@ -3176,12 +3176,12 @@ get('/:static/:sub/edit', function ($static, $sub) {
         $page = $page[0];
 
         render('edit-page', array(
-            'title' => 'Edit page - ' . blog_title(),
+            'title' => i18n('Edit') . ': ' . $page->title . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'edit-page',
             'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ' . $page->title,
             'p' => $page,
             'type' => 'subPage',
         ));
@@ -3230,7 +3230,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
         config('views.root', 'system/admin/views');
 
         render('edit-page', array(
-            'title' => 'Edit page - ' . blog_title(),
+            'title' => i18n('Edit') . ': ' . $page->title . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'error' => '<ul>' . $message['error'] . '</ul>',
@@ -3242,7 +3242,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
             'sub' => $sub,
             'bodyclass' => 'edit-page',
             'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit page'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
         ));
     }
 });
@@ -3270,12 +3270,12 @@ get('/:static/:sub/delete', function ($static, $sub) {
         $page = $page[0];
 
         render('delete-page', array(
-            'title' => 'Delete page - ' . blog_title(),
+            'title' => i18n('Delete') . ': ' . $page->title . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
             'canonical' => site_url(),
             'bodyclass' => 'delete-page',
             'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a>' . $page->title,
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ' . $page->title,
             'p' => $page,
             'type' => 'subPage',
         ));
@@ -3616,7 +3616,7 @@ post('/:year/:month/:name/edit', function () {
             'postContent' => $content,
             'is_admin' => true,
             'bodyclass' => 'edit-post',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit content'
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $title
         ));
     }
 });
@@ -3647,7 +3647,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
 
         if ($user === $current->author || $role === 'admin') {
             render('delete-post', array(
-                'title' => 'Delete post - ' . blog_title(),
+                'title' => i18n('Delete') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
@@ -3657,7 +3657,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
             ));
         } else {
             render('denied', array(
-                'title' => 'Delete post - ' . blog_title(),
+                'title' => i18n('Delete') . ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
