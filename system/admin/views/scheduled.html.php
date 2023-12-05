@@ -13,7 +13,7 @@
             <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php foreach ($posts as $p): ?>
-            <tr class="<?php echo $class ?>">
+            <tr>
                 <td><?php echo $p->title ?></td>
                 <td><?php echo format_date($p->date, 'd F Y, H:i:s') ?></td>
                 <td><a href="<?php echo str_replace('category', 'admin/categories', $p->categoryUrl); ?>"><?php echo strip_tags($p->category);?></a></td>

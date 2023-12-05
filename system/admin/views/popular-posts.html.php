@@ -16,7 +16,7 @@
         </tr>
         <?php foreach ($posts as $p): ?>
 		<?php if (strpos($p->file, '/scheduled/') == false && strpos($p->file, '/draft/') == false) { ?>
-            <tr class="<?php echo $class ?>">
+            <tr>
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
                 <td><?php echo format_date($p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
