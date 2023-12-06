@@ -275,10 +275,10 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $filepath = $v['dirname'] . '/' . $v['basename'];
 
         // Extract the date
-        $arr = explode('_', $filepath);
+        $arr = explode('_', $v['basename']);
 
         // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+        $replaced = $v['dirname'] . '/';
 
         // Author string
         $str = explode('/', $replaced);
@@ -1372,11 +1372,12 @@ function popular_posts($custom = null, $count = null)
                     $i = 1;
                     foreach ($_views as $key => $val) {
                         if (file_exists($key)) {
-                            if (stripos($key, 'blog') !== false) {
+                            if (stripos($key, '/blog/') !== false && stripos($key, '/scheduled/') == false && stripos($key, '/draft/') == false) {
                                 $tmp[] = pathinfo($key);
                                 if ($i++ >= $count)
                                 break;
                             }
+							
                         }
                     }
 
@@ -1405,9 +1406,7 @@ function popular_posts($custom = null, $count = null)
                     if (empty($custom)) {
                         echo '<ul>';
                         foreach ($posts as $post) {
-                            if (strpos($post->file, '/scheduled/') == false && strpos($post->file, '/draft/') == false) {
-                                echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-                            }
+                            echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
                         }
                         echo '</ul>';
                     }
