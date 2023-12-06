@@ -6,7 +6,7 @@
 <br><br>
 <table class="table category-list">
     <tr class="head">
-        <th>Name</th>
+        <th><?php echo i18n('Name');?></th>
         <th><?php echo i18n('Description');?></th>
         <th><?php echo i18n('Contents');?></th>
         <th><?php echo i18n('Operations');?></th>
