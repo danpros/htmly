@@ -1146,19 +1146,10 @@ function get_categorycount($var)
 
     foreach ($posts as $index => $v) {
 
-         $filepath = $v['dirname'] . '/' . $v['basename'];
-
-        // Extract the date
-        $arr = explode('_', $filepath);
-
-        // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
-        $str = explode('/', $replaced);
-        $cat = '/blog/' . $str[count($str) - 3];
-        if (stripos($cat, "$var") !== false) {
+        if (stripos($v['dirname'], '/' . $var . '/') !== false) {
             $tmp[] = $v;
         }
+		
     }
 
     return count($tmp);
@@ -1173,19 +1164,10 @@ function get_typecount($var)
 
     foreach ($posts as $index => $v) {
 
-         $filepath = $v['dirname'] . '/' . $v['basename'];
-
-        // Extract the date
-        $arr = explode('_', $filepath);
-
-        // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
-        $str = explode('/', $replaced);
-        $tp = '/' . $str[count($str) - 2] . '/';
-        if (stripos($tp, "$var") !== false) {
+        if (stripos($v['dirname'], '/' . $var) !== false) {
             $tmp[] = $v;
         }
+		
     }
 
     return count($tmp);
@@ -1201,22 +1183,11 @@ function get_draftcount($var)
 
     foreach ($posts as $index => $v) {
 
-         $filepath = $v['dirname'] . '/' . $v['basename'];
-
-        // Extract the date
-        $arr = explode('_', $filepath);
-
-        // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
-        $str = explode('/', $replaced);
-        $cat = $str[count($str) - 5];
-
-        if (stripos($cat, "$var") !== false) {
+        if (stripos($v['dirname'], '/' . $var . '/') !== false) {
             $tmp[] = $v;
         }
+		
     }
-
     return count($tmp);
 }
 
@@ -1229,23 +1200,14 @@ function get_scheduledcount($var)
 
     foreach ($posts as $index => $v) {
 
-         $filepath = $v['dirname'] . '/' . $v['basename'];
-
-        // Extract the date
-        $arr = explode('_', $filepath);
-
-        // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
-        $str = explode('/', $replaced);
-        $cat = $str[count($str) - 6];
-
-        if (stripos($cat, "$var") !== false) {
+        if (stripos($v['dirname'], '/' . $var . '/') !== false) {
             $tmp[] = $v;
         }
+		
     }
-
+	
     return count($tmp);
+	
 }
 
 // Return tag count. Matching $var and $str provided.
