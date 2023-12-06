@@ -8,7 +8,7 @@
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Published');?></th><?php if (config("views.counter") == "true"): ?>
-                <th>Views</th><?php endif; ?>
+                <th><?php echo i18n('Views');?></th><?php endif; ?>
             <th><?php echo i18n('Author');?></th>
             <th><?php echo i18n('Category');?></th>
             <th><?php echo i18n('Tags');?></th>
