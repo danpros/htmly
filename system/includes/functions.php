@@ -3307,29 +3307,17 @@ function safe_tag($string)
 }
 
 // rename category folder
-function rename_category_folder($string, $old_url)
+function rename_category_folder($new_name, $old_file)
 {
 
-    $old = str_replace('.md', '/', $old_url);
-    $url = substr($old, 0, strrpos($old, '/'));
-    $ostr = explode('/', $url);
-    $url = '/blog/' . $ostr[count($ostr) - 1];
-
+    $old_name = str_replace('.md', '', basename($old_file));
     $dir = get_category_folder();
-
-    $file = array();
-
     foreach ($dir as $index => $v) {
-        if (stripos($v, $url) !== false) {
+        if (stripos($v, '/' . $old_name . '/') !== false) {
             $str = explode('/', $v);
-            $n = $str[count($ostr) - 4] . '/' . $str[count($ostr) - 3] .'/'. $str[count($ostr) - 2] .'/'. $string . '/';
-            $file[] = array($v, $n);
-        }
-    }
-
-    foreach ($file as $f) {
-        if(is_dir($f[0])) {
-            rename($f[0], $f[1]);
+            $old_folder = $str[0] . '/' . $str[1] . '/' . $str[2] . '/' . $old_name . '/';
+            $new_folder = $str[0] . '/' . $str[1] . '/' . $str[2] . '/' . $new_name . '/';
+            rename($old_folder, $new_folder);
         }
     }
 
