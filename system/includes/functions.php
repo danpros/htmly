@@ -562,18 +562,12 @@ function get_category($category, $page, $perpage, $random)
 
     foreach ($posts as $index => $v) {
 
-        $filepath = $v['dirname'] . '/' . $v['basename'];
-
-        // Extract the date
-        $arr = explode('_', $filepath);
-
         // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+        $replaced = $v['dirname'] . '/';
 
         $str = explode('/', $replaced);
-        $cat = $str[count($str) - 3];
 
-        if (strtolower($category) === strtolower($cat)) {
+        if (strtolower($category) === strtolower($str[3])) {
             $tmp[] = $v;
         }
     }
@@ -602,14 +596,14 @@ function get_category_info($category)
                 $desc = new stdClass;
 
                 // Replaced string
-                $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+                $replaced = dirname($v) . '/';
 
                 // The static page URL
-                $url= str_replace($replaced, '', $v);
+                $url= pathinfo($v, PATHINFO_FILENAME);
 
-                $desc->url = site_url() . 'category/' . str_replace('.md', '', $url);
+                $desc->url = site_url() . 'category/' . $url;
 
-                $desc->md = str_replace('.md', '', $url);
+                $desc->md = $url;
 
                 $desc->file = $v;
 
@@ -711,18 +705,12 @@ function get_type($type, $page, $perpage)
 
     foreach ($posts as $index => $v) {
 
-        $filepath = $v['dirname'] . '/' . $v['basename'];
-
-        // Extract the date
-        $arr = explode('_', $filepath);
-
         // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+        $replaced = $v['dirname'] . '/';
 
         $str = explode('/', $replaced);
-        $tp = $str[count($str) - 2];
 
-        if (strtolower($type) === strtolower($tp)) {
+        if (strtolower($type) === strtolower($str[4])) {
             $tmp[] = $v;
         }
     }
@@ -800,8 +788,7 @@ function get_profile_posts($name, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        $author = $str[count($str) - 4];
-        if (strtolower($name) === strtolower($author)) {
+        if (strtolower($name) === strtolower($str[1])) {
             $tmp[] = $v;
         }
     }
@@ -825,8 +812,7 @@ function get_draft($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        $author = $str[count($str) - 4];
-        if (strtolower($profile) === strtolower($author) || $role === 'admin') {
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
             $tmp[] = $v;
         }
     }
@@ -850,8 +836,7 @@ function get_scheduled($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        $author = $str[count($str) - 5];
-        if (strtolower($profile) === strtolower($author) || $role === 'admin') {
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
             $tmp[] = $v;
         }
     }
@@ -879,15 +864,18 @@ function get_author($name)
             $author = new stdClass;
 
             // Replaced string
-            $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+            $replaced = dirname($v) . '/';
 
             // Author string
             $str = explode('/', $replaced);
-            $profile = $str[count($str) - 2];
+            $profile = $str[1];
 
             if ($name === $profile) {
                 // Profile URL
-                $url = str_replace($replaced, '', $v);
+                $url= pathinfo($v, PATHINFO_BASENAME);
+				
+				$author->file = $url;
+
                 $author->url = site_url() . 'author/' . $profile;
 
                 // Get the contents and convert it to HTML
@@ -940,15 +928,16 @@ function get_static_post($static)
                 $post = new stdClass;
 
                 // Replaced string
-                $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+                $replaced = dirname($v) . '/';
 
                 // The static page URL
-                $url = str_replace($replaced, '', $v);
-                $post->url = site_url() . str_replace('.md', '', $url);
+                $url= pathinfo($v, PATHINFO_FILENAME);
+				
+                $post->url = site_url() . $url;
 
                 $post->file = $v;
 				
-                $post->md = str_replace('.md', '', $url);
+                $post->md = $url;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($v);
@@ -991,15 +980,15 @@ function get_static_sub_post($static, $sub_static)
                 $post = new stdClass;
 
                 // Replaced string
-                $replaced = substr($v, 0, strrpos($v, '/')) . '/';
+                $replaced = dirname($v) . '/';
 
                 // The static page URL
-                $url = str_replace($replaced, '', $v);
-                $post->url = site_url() . $static . "/" . str_replace('.md', '', $url);
+                $url= pathinfo($v, PATHINFO_FILENAME);
+                $post->url = site_url() . $static . "/" . $url;
 
                 $post->file = $v;
 				
-				$post->md = str_replace('.md', '', $url);
+				$post->md = $url;
 				
 				$post->parent = $static;
 
@@ -1458,13 +1447,9 @@ function archive_list($custom = null)
         if (!file_exists($filename)) {
             foreach ($posts as $index => $v) {
 
-                $arr = explode('_', $v);
-
-                // Replaced string
-                $str = $arr[0];
-                $replaced = substr($str, 0, strrpos($str, '/')) . '/';
-
-                $date = str_replace($replaced, '', $arr[0]);
+                $arr = explode('_', pathinfo($v, PATHINFO_FILENAME));
+				
+                $date = $arr[0];
                 $data = explode('-', $date);
                 $col[] = $data;
             }
