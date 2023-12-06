@@ -26,7 +26,7 @@
 				</div>
 				<div class="col-sm-6">
 					<?php if ($type == 'is_page') :?>
-					<label for="pURL">Url (<?php echo i18n('optional');?>)</label>
+					<label for="pURL"><?php echo i18n('Slug');?> (<?php echo i18n('optional');?>)</label>
 					<input type="text" class="form-control text" id="pURL" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_page_title');?>"/>
 					<br>
 					<?php endif;?>

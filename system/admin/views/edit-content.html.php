@@ -146,7 +146,7 @@ $( function() {
 						<?php endforeach;?>
 					</select>
 					<br>
-					<label for="pTag">Tag <span class="required">*</span></label>
+					<label for="pTag"><?php echo i18n('Tags');?> <span class="required">*</span></label>
 					<input type="text" id="pTag" name="tag" class="form-control text <?php if (isset($postTag)) { if (empty($postTag)) { echo 'error'; } } ?>" value="<?php echo $oldtag ?>" placeholder="<?php echo i18n('Comma_separated_values');?>"/>
 					<br>
 
@@ -168,7 +168,7 @@ $( function() {
 						<small style="margin-top:10px;"><em><?php echo i18n('Scheduled_tips');?></em></small>
 					</div>				
 					<br>
-					<label for="pURL">Url  (<?php echo i18n('optional');?>)</label>
+					<label for="pURL"><?php echo i18n('Slug');?>  (<?php echo i18n('optional');?>)</label>
 					<input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_post_title');?>"//>
 					<br>
 
