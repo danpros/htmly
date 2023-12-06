@@ -68,7 +68,7 @@ function get_static_sub_pages($static = null)
         $stringLen = strlen($static);
         return array_filter($_sub_page, function ($sub_page) use ($static, $stringLen) {
             $x = explode("/", $sub_page);
-            if ($x[count($x) - 2] == $static) {
+            if ($x[2] == $static) {
                 return true;
             }
             return false;
@@ -282,8 +282,9 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Author string
         $str = explode('/', $replaced);
-        $author = $str[count($str) - 5];
-        if($str[count($str) - 3] && $str[count($str) - 4]== 'uncategorized') {
+        $author = $str[1];
+		
+        if($str[3] == 'uncategorized') {
             $category = default_category();
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
             $post->categoryUrl = $category->url;
@@ -292,7 +293,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->categoryb = '<a itemprop="item" href="' . $category->url . '"><span itemprop="name">' . $category->title . '</span></a>';
         } else {
             foreach ($catC as $k => $v) {
-                if ($v['0'] === $str[count($str) - 3] || $v['0'] === $str[count($str) - 4]) {
+                if ($v['0'] === $str[3]) {
                     $post->category = '<a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
                     $post->categoryUrl = site_url() . 'category/' . $v['0'];
                     $post->categorySlug = $v['0'];
@@ -302,8 +303,9 @@ function get_posts($posts, $page = 1, $perpage = 0)
             }
 
         }
-        $type = $str[count($str) - 2];
-        $post->ct = $str[count($str) - 3];
+		
+        $type = $str[4];
+        $post->ct = $str[3];
 
         // The post author + author url
         $post->author = $author;
@@ -2449,17 +2451,19 @@ function sitemap_post_path()
 
         $post = new stdClass;
 
+        $post = new stdClass;
+
         $filepath = $v['dirname'] . '/' . $v['basename'];
 
         // Extract the date
-        $arr = explode('_', $filepath);
+        $arr = explode('_', $v['basename']);
 
         // Replaced string
-        $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
+        $replaced = $v['dirname'] . '/';
 
         // Author string
         $str = explode('/', $replaced);
-        $author = $str[count($str) - 5];
+        $author = $str[1];
 
         $post->authorUrl = site_url() . 'author/' . $author;
 
@@ -2741,13 +2745,9 @@ function generate_sitemap($str)
         if($posts) {
             foreach ($posts as $index => $v) {
 
-                $arr = explode('_', $v);
-
-                $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
+                $replaced = dirname($v) . '/';
                 $str = explode('/', $replaced);
-
-                $cats[] = $str[count($str) - 3];
+                $cats[] = $str[3];
 
             }
 
@@ -2783,13 +2783,9 @@ function generate_sitemap($str)
         if($posts) {
             foreach ($posts as $index => $v) {
 
-                $arr = explode('_', $v);
-
-                $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
+                $replaced = dirname($v) . '/';
                 $str = explode('/', $replaced);
-
-                $types[] = $str[count($str) - 2];
+                $types[] = $str[4];
             }
 
             foreach ($types as $t) {
