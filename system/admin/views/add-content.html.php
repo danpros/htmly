@@ -9,6 +9,7 @@ if ($type != 'is_post' && $type != 'is_image' && $type != 'is_video' && $type !=
 }
 
 $desc = get_category_info(null);
+asort($desc);
 
 $tags = tag_cloud(true);
 $tagslang = "content/data/tags.lang";
