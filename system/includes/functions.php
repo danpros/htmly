@@ -203,7 +203,7 @@ function rebuilt_cache($type)
             foreach ($tmp as $file) {
                 if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
                     $posts_cache_unsorted[] = $file;
-                    $posts_cache_sorted[] = pathinfo($file);
+					$posts_cache_sorted[] = array_merge(pathinfo($file), ['content' => preg_replace('/\s+/', '', (file_get_contents($file)))]);
                 }
             }
         }
@@ -1051,7 +1051,7 @@ function get_keyword($keyword, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
+		$filter = $arr[1] . ' ' . $arr[2] . ' ' . $v['content'];
         foreach ($words as $word) {
             if (stripos($filter, $word) !== false) {
                 if (!in_array($v, $tmp)) {
@@ -1232,7 +1232,7 @@ function keyword_count($keyword)
 
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
+		$filter = $arr[1] . ' ' . $arr[2] . ' ' . $v['content'];
         foreach ($words as $word) {
             if (stripos($filter, $word) !== false) {
                 $tmp[] = $v;
