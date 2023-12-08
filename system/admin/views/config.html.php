@@ -113,7 +113,12 @@ Please install and enable the INTL extension to format the date format to your l
             <?php echo format_date(strtotime($date), 'Y-m-d'); ?>
           </label>
         </div>
-
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-date.format" id="date.format6" value="d.m.Y" <?php if (config('date.format') === 'd.m.Y'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="date.format6">
+            <?php echo format_date(strtotime($date), 'd.m.Y'); ?>
+          </label>
+        </div>
       </div>
 	</div>
   </div>
