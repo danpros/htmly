@@ -7,6 +7,7 @@ if (isset($p->file)) {
 }
 
 $desc = get_category_info(null);
+asort($desc);
 
 $content = file_get_contents($url);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
