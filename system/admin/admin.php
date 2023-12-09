@@ -44,7 +44,7 @@ function session($user, $pass)
 {
     $user_file = 'config/users/' . $user . '.ini';
     if (!file_exists($user_file)) {
-        return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></li></div>';
+        return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
     }
 
     $user_enc = user('encryption', $user);
@@ -60,7 +60,7 @@ function session($user, $pass)
             $_SESSION[config("site.url")]['user'] = $user;
             header('location: admin');
         } else {
-            return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
+            return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         if (session_status() == PHP_SESSION_NONE) session_start();
@@ -68,7 +68,7 @@ function session($user, $pass)
         $_SESSION[config("site.url")]['user'] = $user;
         header('location: admin');
     } else {
-        return $str = '<div class="error-message"><ul><li class="alert alert-danger">ERROR: Invalid username or password.</li></li></div>';
+        return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
     }
 }
 
