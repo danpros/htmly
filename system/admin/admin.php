@@ -854,7 +854,7 @@ function get_feed($feed_url, $credit)
             } elseif (!empty($descriptionB)) {
                 $content = preg_replace('#<br\s*/?>#i', "\n", $descriptionB);
             } else {
-                return $str = '<li>Can not read the feed content.</li>';
+                return $str = '<li>' . i18n('Cannot_read_feed_content') . '</li>';
             }
             $time = new DateTime($entry->pubDate);
             $timestamp = $time->format("Y-m-d H:i:s");
@@ -872,7 +872,7 @@ function get_feed($feed_url, $credit)
             migrate($title, $time, $tags, $content, $url, $user, $source);
         }
     } else {
-        return $str = '<li>Unsupported feed.</li>';
+        return $str = '<li>' . i18n('Unknown_feed_format') . '</li>';
     }
 }
 
