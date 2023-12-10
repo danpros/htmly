@@ -19,13 +19,6 @@
     <link rel="stylesheet" id="twentysixteen-ie7-css"  href="<?php echo theme_path();?>css/ie7.css" type="text/css" media="all" />
     <![endif]-->
 </head>
-<?php     
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-?>
 <body class="<?php echo $bodyclass;?>">
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
