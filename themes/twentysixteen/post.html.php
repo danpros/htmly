@@ -40,7 +40,7 @@
         
         <div class="author-info">
             <div class="author-avatar">
-                <a href="<?php echo $p->authorUrl;?>"><img alt="<?php $author->name;?>" src="<?php echo site_url();?>themes/twentysixteen/img/avatar.png" class="avatar avatar-42" height="42" width="42" /></a>
+                <a href="<?php echo $p->authorUrl;?>"><img alt="<?php $author->name;?>" src="<?php echo theme_path();?>img/avatar.png" class="avatar avatar-42" height="42" width="42" /></a>
             </div><!-- .author-avatar -->
 
             <div class="author-description">
@@ -53,7 +53,7 @@
     </div><!-- .entry-content -->
 
     <footer class="entry-footer">
-        <span class="byline"><span class="author vcard"><a href="<?php echo $p->authorUrl;?>"><img alt="<?php echo $p->authorName;?>" title="<?php echo $p->authorName;?>" src="<?php echo site_url();?>themes/twentysixteen/img/avatar.png" class="avatar avatar-49 grav-hashed grav-hijack" height="49" width="49"/></a><span class="screen-reader-text">Author </span> <a class="url fn n" href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span></span>
+        <span class="byline"><span class="author vcard"><a href="<?php echo $p->authorUrl;?>"><img alt="<?php echo $p->authorName;?>" title="<?php echo $p->authorName;?>" src="<?php echo theme_path();?>img/avatar.png" class="avatar avatar-49 grav-hashed grav-hijack" height="49" width="49"/></a><span class="screen-reader-text">Author </span> <a class="url fn n" href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span></span>
 
         <span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="<?php echo $p->url;?>" rel="bookmark"><time class="entry-date published"><?php echo format_date($p->date) ?></time></a></span>
 

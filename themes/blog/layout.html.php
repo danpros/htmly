@@ -1,8 +1,6 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="<?php echo str_replace('_', '-', config('language'));?>" class="ie8"> <![endif]-->  
-<!--[if IE 9]> <html lang="<?php echo str_replace('_', '-', config('language'));?>" class="ie9"> <![endif]-->  
-<!--[if !IE]><!--> <html lang="<?php echo str_replace('_', '-', config('language'));?>"> <!--<![endif]-->  
+<html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
@@ -12,11 +10,11 @@
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic" rel="stylesheet" type="text/css">     
     <!-- Global CSS -->
-    <link rel="stylesheet" href="<?php echo site_url();?>themes/blog/css/bootstrap.min.css">   
+    <link rel="stylesheet" href="<?php echo theme_path();?>css/bootstrap.min.css">   
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="<?php echo site_url();?>themes/blog/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo theme_path();?>css/font-awesome.min.css">
     <!-- Theme CSS -->  
-    <link id="theme-style" rel="stylesheet" href="<?php echo site_url();?>themes/blog/css/styles.css">
+    <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -40,7 +38,7 @@
     <!-- ******HEADER****** --> 
     <header class="header">
         <div class="container">                       
-            <div class="logo pull-left"><img class="logo-image" src="<?php echo site_url();?>themes/blog/images/logo.png"/></div>
+            <div class="logo pull-left"><img class="logo-image" src="<?php echo theme_path();?>images/logo.png"/></div>
             <div class="branding pull-left">
                 <?php if (is_index()) {?>
                     <h1 class="name"><a href="<?php echo site_url();?>"><?php echo blog_title();?></a></h1>
@@ -189,8 +187,8 @@
         </div><!--//container-->
     </footer><!--//footer-->
     <!-- Javascript -->          
-    <script type="text/javascript" src="<?php echo site_url();?>themes/blog/js/jquery-latest.min.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/blog/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/bootstrap.min.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>    
 </body>
 </html> 

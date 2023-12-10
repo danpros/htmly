@@ -1,19 +1,19 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo str_replace('_', '-', config('language'));?>">
+<html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo site_url();?>themes/twentyfifteen/css/font.css" type="text/css" media="all">
-    <link rel="stylesheet" id="genericons-css" href="<?php echo site_url();?>themes/twentyfifteen/genericons/genericons.css" type="text/css" media="all"> 
-    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo site_url();?>themes/twentyfifteen/css/style_v2.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo theme_path();?>css/font.css" type="text/css" media="all">
+    <link rel="stylesheet" id="genericons-css" href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all"> 
+    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path();?>css/style_v2.css" type="text/css" media="all">
     <!--[if lt IE 9]>
-    <link rel='stylesheet' id='twentyfifteen-ie-css'  href='<?php echo site_url();?>themes/twentyfifteen/css/ie.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='twentyfifteen-ie-css'  href='<?php echo theme_path();?>css/ie.css' type='text/css' media='all' />
     <![endif]-->
     <!--[if lt IE 8]>
-    <link rel='stylesheet' id='twentyfifteen-ie7-css'  href='<?php echo site_url();?>themes/twentyfifteen/css/ie7.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='twentyfifteen-ie7-css'  href='<?php echo theme_path();?>css/ie7.css' type='text/css' media='all' />
     <![endif]-->
 </head>
 <?php     
@@ -126,11 +126,11 @@
     var screenReaderText = {"expand":"<span class=\"screen-reader-text\">expand child menu<\/span>","collapse":"<span class=\"screen-reader-text\">collapse child menu<\/span>"};
     /* ]]> */
     </script>
-    <!--[if lte IE 8]><script type='text/javascript' src='<?php echo site_url();?>themes/twentyfifteen/js/html5.js'></script><![endif]-->
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/jquery.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/jquery-migrate.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/functions.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentyfifteen/js/skip-link-focus-fix.js"></script>
+    <!--[if lte IE 8]><script type='text/javascript' src='<?php echo theme_path();?>js/html5.js'></script><![endif]-->
+    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-migrate.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/skip-link-focus-fix.js"></script>
     <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

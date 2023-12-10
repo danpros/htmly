@@ -1,12 +1,12 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo str_replace('_', '-', config('language'));?>">
+<html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents() ?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <link href="<?php echo site_url() ?>themes/readable/css/style.css" rel="stylesheet"/>
+    <link href="<?php echo theme_path() ?>css/style.css" rel="stylesheet"/>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>

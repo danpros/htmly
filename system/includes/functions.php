@@ -2922,6 +2922,12 @@ function blog_copyright()
     return config('blog.copyright');
 }
 
+// Return blog language
+function blog_language()
+{
+    return str_replace('_', '-', config('language'));
+}
+
 // Return author info. Deprecated
 function authorinfo($name = null, $about = null)
 {

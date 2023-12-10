@@ -1,22 +1,22 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo str_replace('_', '-', config('language'));?>">
+<html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
     <link rel="stylesheet" id="twentysixteen-fonts-css" href="https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&#038;subset=latin%2Clatin-ext" type="text/css" media="all" />
-    <link rel="stylesheet" id="genericons-css"  href="<?php echo site_url();?>themes/twentysixteen/genericons/genericons.css" type="text/css" media="all" />
-    <link rel="stylesheet" id="twentysixteen-style-css"  href="<?php echo site_url();?>themes/twentysixteen/css/style.css" type="text/css" media="all" />
+    <link rel="stylesheet" id="genericons-css"  href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all" />
+    <link rel="stylesheet" id="twentysixteen-style-css"  href="<?php echo theme_path();?>css/style.css" type="text/css" media="all" />
     <!--[if lt IE 10]>
-    <link rel="stylesheet" id="twentysixteen-ie-css"  href="<?php echo site_url();?>themes/twentysixteen/css/ie.css" type="text/css" media="all" />
+    <link rel="stylesheet" id="twentysixteen-ie-css"  href="<?php echo theme_path();?>css/ie.css" type="text/css" media="all" />
     <![endif]-->
     <!--[if lt IE 9]>
-    <link rel="stylesheet" id="twentysixteen-ie8-css"  href="<?php echo site_url();?>themes/twentysixteen/css/ie8.css" type="text/css" media="all" />
+    <link rel="stylesheet" id="twentysixteen-ie8-css"  href="<?php echo theme_path();?>css/ie8.css" type="text/css" media="all" />
     <![endif]-->
     <!--[if lt IE 8]>
-    <link rel="stylesheet" id="twentysixteen-ie7-css"  href="<?php echo site_url();?>themes/twentysixteen/css/ie7.css" type="text/css" media="all" />
+    <link rel="stylesheet" id="twentysixteen-ie7-css"  href="<?php echo theme_path();?>css/ie7.css" type="text/css" media="all" />
     <![endif]-->
 </head>
 <?php     
@@ -145,17 +145,17 @@
     </div><!-- .site -->
 
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/html5.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/html5.js"></script>
     <![endif]-->
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/jquery.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/jquery-migrate.js"></script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/skip-link-focus-fix.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-migrate.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/skip-link-focus-fix.js"></script>
     <script type="text/javascript">
     /* <![CDATA[ */
     var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
     /* ]]> */
     </script>
-    <script type="text/javascript" src="<?php echo site_url();?>themes/twentysixteen/js/functions.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js"></script>
     <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>
