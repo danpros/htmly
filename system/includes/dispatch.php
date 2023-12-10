@@ -34,6 +34,16 @@ function site_path()
     return $_path;
 }
 
+function theme_path()
+{
+
+    if (config('views.root') == null)
+        error(500, '[views.root] is not set');
+
+    return site_url() . rtrim(config('views.root'), '/') . '/';
+
+}
+
 function error($code, $message)
 {
     @header("HTTP/1.0 {$code} {$message}", true, $code);
