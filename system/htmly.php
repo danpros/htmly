@@ -832,7 +832,7 @@ get('/admin/popular', function () {
                 'title' => i18n('Popular_posts') .  ' - ' . blog_title(),
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
-                'heading' => 'Popular posts',
+                'heading' => i18n('Popular_posts'),
                 'page' => $page,
                 'posts' => $posts,
                 'is_admin' => true,
