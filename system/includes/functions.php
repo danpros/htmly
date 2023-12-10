@@ -3324,7 +3324,7 @@ function format_date($date, $dateFormat = null)
         $dateFormat = config('date.format');
     }
     if (extension_loaded('intl')) {
-        $format_map = array('s' => 'ss', 'i' => 'mm', 'H' => 'HH','d' => 'dd', 'm' => 'MM', 'M' => 'MMM', 'F' => 'MMMM', 'Y' => 'yyyy');
+        $format_map = array('s' => 'ss', 'i' => 'mm', 'H' => 'HH', 'G' => 'H', 'd' => 'dd', 'j' => 'd', 'D' => 'EE', 'l' => 'EEEE', 'm' => 'MM', 'M' => 'MMM', 'F' => 'MMMM', 'Y' => 'yyyy');
         $intlFormat = strtr($dateFormat, $format_map);
         $formatter = new IntlDateFormatter(config('language'), IntlDateFormatter::NONE, IntlDateFormatter::NONE, config('timezone'), IntlDateFormatter::GREGORIAN, $intlFormat);
         return $formatter->format($date); 
