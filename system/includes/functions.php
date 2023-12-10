@@ -283,7 +283,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Author string
         $str = explode('/', $replaced);
         $author = $str[1];
-		
+        
         if($str[3] == 'uncategorized') {
             $category = default_category();
             $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
@@ -303,7 +303,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
             }
 
         }
-		
+        
         $type = $str[4];
         $post->ct = $str[3];
 
@@ -328,6 +328,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // The post date
         $post->date = strtotime($timestamp);
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($filepath)));
 
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
@@ -360,7 +361,11 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         if(!empty($tagt)) {
             $tl = explode(',', rtrim($tagt, ','));
-            $tCom = array_combine($t, $tl);
+            if (count($tl) == count($t)) {
+                $tCom = array_combine($t, $tl);
+            } else {
+                $tCom = array_combine($t, $t);    
+            }
             foreach ($tCom as $key => $val) {
                 if(!empty($val)) {
                     $tag[] = array($val, site_url() . 'tag/' . strtolower($key));
@@ -875,8 +880,8 @@ function get_author($name)
             if ($name === $profile) {
                 // Profile URL
                 $url= pathinfo($v, PATHINFO_BASENAME);
-				
-				$author->file = $url;
+                
+                $author->file = $url;
 
                 $author->url = site_url() . 'author/' . $profile;
 
@@ -934,11 +939,12 @@ function get_static_post($static)
 
                 // The static page URL
                 $url= pathinfo($v, PATHINFO_FILENAME);
-				
+                
                 $post->url = site_url() . $url;
 
                 $post->file = $v;
-				
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($v)));
+                
                 $post->md = $url;
 
                 // Get the contents and convert it to HTML
@@ -989,10 +995,11 @@ function get_static_sub_post($static, $sub_static)
                 $post->url = site_url() . $static . "/" . $url;
 
                 $post->file = $v;
-				
-				$post->md = $url;
-				
-				$post->parent = $static;
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($v)));
+                
+                $post->md = $url;
+                
+                $post->parent = $static;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($v);
@@ -1140,7 +1147,7 @@ function get_categorycount($var)
         if (stripos($v['dirname'], '/' . $var . '/') !== false) {
             $tmp[] = $v;
         }
-		
+        
     }
 
     return count($tmp);
@@ -1158,7 +1165,7 @@ function get_typecount($var)
         if (stripos($v['dirname'], '/' . $var) !== false) {
             $tmp[] = $v;
         }
-		
+        
     }
 
     return count($tmp);
@@ -1177,7 +1184,7 @@ function get_draftcount($var)
         if (stripos($v['dirname'], '/' . $var . '/') !== false) {
             $tmp[] = $v;
         }
-		
+        
     }
     return count($tmp);
 }
@@ -1194,11 +1201,11 @@ function get_scheduledcount($var)
         if (stripos($v['dirname'], '/' . $var . '/') !== false) {
             $tmp[] = $v;
         }
-		
+        
     }
-	
+    
     return count($tmp);
-	
+    
 }
 
 // Return tag count. Matching $var and $str provided.
@@ -1368,7 +1375,7 @@ function popular_posts($custom = null, $count = null)
                                 if ($i++ >= $count)
                                 break;
                             }
-							
+                            
                         }
                     }
 
@@ -1450,7 +1457,7 @@ function archive_list($custom = null)
             foreach ($posts as $index => $v) {
 
                 $arr = explode('_', pathinfo($v, PATHINFO_FILENAME));
-				
+                
                 $date = $arr[0];
                 $data = explode('-', $date);
                 $col[] = $data;

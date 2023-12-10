@@ -818,9 +818,9 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
     $post_tagmd = rtrim($post_tagmd, ',');
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     if (!empty($source)) {
-        $post_content = '<!--t ' . $post_title . ' t-->' . "\n" . '<!--tag' . $post_tagmd . 'tag-->' . "\n\n" . $content . "\n\n" . 'Source: <a target="_blank" href="' . $source . '">' . $title . '</a>';
+        $post_content = '<!--t ' . $post_title . ' t-->' . "\n" . '<!--tag ' . $post_tagmd . ' tag-->' . "\n\n" . $content . "\n\n" . 'Source: <a target="_blank" href="' . $source . '">' . $title . '</a>';
     } else {
-        $post_content = '<!--t ' . $post_title . ' t-->' . "\n" . '<!--tag' . $post_tagmd . 'tag-->' .  "\n\n" . $content;
+        $post_content = '<!--t ' . $post_title . ' t-->' . "\n" . '<!--tag ' . $post_tagmd . ' tag-->' .  "\n\n" . $content;
     }
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
