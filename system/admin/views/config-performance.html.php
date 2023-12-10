@@ -37,7 +37,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Cache_timestamp');?></label>
@@ -56,7 +56,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Page_generation_time');?></label>
@@ -75,7 +75,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <br>
   <h4><?php echo i18n('Github_pre_release');?></h4>
@@ -97,7 +97,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <div class="col-sm-10">

@@ -36,14 +36,14 @@ Please install and enable the INTL extension to format the date format to your l
     <label for="blog.tagline" class="col-sm-2 col-form-label"><?php echo i18n('Tagline');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-blog.tagline" class="form-control" id="blog.tagline" value="<?php echo valueMaker(config('blog.tagline'));?>" placeholder="<?php echo i18n('Tagline_Placeholder');?>">
-	  <small><em><?php echo i18n('Tagline_description');?></em></small>
+      <small><em><?php echo i18n('Tagline_description');?></em></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="blog.description" class="col-sm-2 col-form-label"><?php echo i18n('Description');?></label>
     <div class="col-sm-10">
       <textarea id="blog.description" name="-config-blog.description" class="form-control"><?php echo valueMaker(config('blog.description'));?></textarea>   
-	  <small><em><?php echo i18n('Blog_Description');?></em></small>
+      <small><em><?php echo i18n('Blog_Description');?></em></small>
     </div>
   </div>
   <div class="form-group row">
@@ -54,7 +54,7 @@ Please install and enable the INTL extension to format the date format to your l
        <option value="<?php echo pathinfo($file)['filename'];?>" <?php if (config('language') === pathinfo($file)['filename']):?>selected<?php endif;?>><?php echo pathinfo($file)['filename'];?></option>
     <?php } ?>
     </select> 
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="timezone" class="col-sm-2 col-form-label"><?php echo i18n('Timezone');?></label>
@@ -64,7 +64,7 @@ Please install and enable the INTL extension to format the date format to your l
        <option value="<?php echo $zone;?>" <?php if (config('timezone') === $zone):?>selected<?php endif;?>><?php echo $zone;?></option>
     <?php } ?>
     </select> 
-	</div>
+    </div>
   </div>
   <div class="form-group row">
   <?php $time = new DateTime('NOW'); $date = $time->format("Y-m-d H:i:s");?>
@@ -120,18 +120,18 @@ Please install and enable the INTL extension to format the date format to your l
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="views.root" class="col-sm-2 col-form-label"><?php echo i18n('Blog_Theme');?></label>
     <div class="col-sm-10">
     <select class="form-control" id="views.root" name="-config-views.root">
     <?php foreach (glob('themes/*/layout.html.php') as $folder) { ?>
-	   <?php $theme = explode('/',pathinfo($folder)['dirname']); global $config_file; $this_config = parse_ini_file($config_file, true);?>
+       <?php $theme = explode('/',pathinfo($folder)['dirname']); global $config_file; $this_config = parse_ini_file($config_file, true);?>
        <option value="<?php echo pathinfo($folder)['dirname'];?>" <?php if ($this_config['views.root'] === pathinfo($folder)['dirname']):?>selected<?php endif;?>><?php echo $theme['1'];?></option>
     <?php } ?>
     </select> 
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="blog.copyright" class="col-sm-2 col-form-label"><?php echo i18n('Copyright_Line');?></label>

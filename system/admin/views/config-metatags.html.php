@@ -38,7 +38,7 @@ if (file_exists($config_file)) {
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="description.char" class="col-sm-2 col-form-label"><?php echo i18n('Meta_description_character');?></label>

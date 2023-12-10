@@ -43,7 +43,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="popular.count" class="col-sm-2 col-form-label"><?php echo i18n('Popular_posts_widget_at_most');?></label>
@@ -84,7 +84,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="disqus.shortname" class="col-sm-2 col-form-label"><?php echo i18n('Disqus_shortname');?></label>
@@ -119,7 +119,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="google.reCaptcha.public" class="col-sm-2 col-form-label"><?php echo i18n('Site_Key');?></label>
@@ -146,14 +146,14 @@
     <label for="google.analytics.id" class="col-sm-2 col-form-label"><?php echo i18n('Google_Analytics_legacy');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-google.analytics.id" class="form-control" id="google.analytics.id" value="<?php echo valueMaker(config('google.analytics.id'));?>" placeholder="<?php echo i18n('widget_key_placeholder');?>">
-	  <small><em><?php echo i18n('This_is_legacy_code_usually_new_created_analytics_using_gtag_js');?></em></small>
+      <small><em><?php echo i18n('This_is_legacy_code_usually_new_created_analytics_using_gtag_js');?></em></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="google.wmt.id" class="col-sm-2 col-form-label"><?php echo i18n('Google_Search_Console');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-google.wmt.id" class="form-control" id="google.wmt.id" value="<?php echo valueMaker(config('google.wmt.id'));?>" placeholder="<?php echo i18n('widget_key_placeholder');?>">
-	  <small><em><?php echo i18n('For_google_site_verification_meta');?></em></small>
+      <small><em><?php echo i18n('For_google_site_verification_meta');?></em></small>
     </div>
   </div>
   <br>

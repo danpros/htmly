@@ -12,14 +12,14 @@
                 echo 'error';
             }
         } ?>" name="user" placeholder="<?php echo i18n('User'); ?>"/>
-		<br>
+        <br>
         <label><?php echo i18n('Password');?> <span class="required">*</span></label>
         <input type="password" class="form-control <?php if (isset($password)) {
             if (empty($password)) {
                 echo 'error';
             }
         } ?>" name="password" placeholder="<?php echo i18n('Password'); ?>"/>
-		<br>
+        <br>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if (config('google.reCaptcha') === 'true'): ?>
             <script src='https://www.google.com/recaptcha/api.js'></script>

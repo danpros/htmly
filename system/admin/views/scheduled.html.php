@@ -25,19 +25,19 @@
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <br>
     <div class="pager">
-	<ul class="pagination">
+    <ul class="pagination">
         <?php if (!empty($pagination['prev'])) { ?>
             <li class="newer page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>" rel="prev">&#8592; <?php echo i18n('Newer');?></a></li>
         <?php } else { ?>
-		<li class="page-item disabled" ><span class="page-link">&#8592; <?php echo i18n('Newer');?></span></li>
-		<?php } ?>
+        <li class="page-item disabled" ><span class="page-link">&#8592; <?php echo i18n('Newer');?></span></li>
+        <?php } ?>
         <li class="page-number page-item disabled"><span class="page-link"><?php echo $pagination['pagenum'];?></span></li>
         <?php if (!empty($pagination['next'])) { ?>
             <li class="older page-item" ><a class="page-link" href="?page=<?php echo $page + 1 ?>" rel="next"><?php echo i18n('Older');?> &#8594;</a></li>
         <?php } else { ?>
-			<li class="page-item disabled" ><span class="page-link"><?php echo i18n('Older');?> &#8594;</span></li>
-		<?php } ?>
-		</ul>
+            <li class="page-item disabled" ><span class="page-link"><?php echo i18n('Older');?> &#8594;</span></li>
+        <?php } ?>
+        </ul>
     </div>
 <?php endif; ?>
 <?php } else {

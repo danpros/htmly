@@ -31,7 +31,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Enable_blog_URL');?></label>
@@ -50,7 +50,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="posts.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_front_page_show_at_most');?></label>
@@ -75,7 +75,7 @@
           </label>
         </div>
       </div>
-	</div>
+    </div>
   </div>
   <div class="form-group row">
     <label for="teaser.char" class="col-sm-2 col-form-label"><?php echo i18n('Summary_character');?></label>

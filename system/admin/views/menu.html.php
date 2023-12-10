@@ -3,86 +3,86 @@
 $menu = '';
 $filename = "content/data/menu.json";
 if (file_exists($filename)) {
-	$json = json_decode(file_get_contents('content/data/menu.json', true));
-	$menus = json_decode($json);
+    $json = json_decode(file_get_contents('content/data/menu.json', true));
+    $menus = json_decode($json);
     if (!empty($menus)) {
-	    $menu = parseMenus($menus);		
+        $menu = parseMenus($menus);        
     }
 }
 
 function parseMenus($menus) {
-	$ol = '<ol class="dd-list">';
-	foreach ($menus as $menu) {
-		$ol .= parseMenu($menu); 
-	}
-	$ol .= '</ol>';
-	return $ol;
+    $ol = '<ol class="dd-list">';
+    foreach ($menus as $menu) {
+        $ol .= parseMenu($menu); 
+    }
+    $ol .= '</ol>';
+    return $ol;
 }
 
 function parseMenu($menu) {
-	$li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" data-slug="'.htmlspecialchars($menu->slug, FILTER_SANITIZE_URL).'">';
-	$li .= '<div class="dd-handle">'.$menu->name.'</div>';
-	$li .= '<span class="button-delete btn btn-danger btn-xs" style="margin-right:0.5rem" data-owner-id="'.$menu->id.'">'.i18n('Delete').'</span>';
-	$li .= '<span class="button-edit btn btn-primary btn-xs" data-owner-id="'.$menu->id.'">'.i18n('Edit').'</span>';
-	if (isset($menu->children)) { 
-		$li .= parseMenus($menu->children);
-	}
-	$li .= '</li>';
-	return $li;
+    $li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" data-slug="'.htmlspecialchars($menu->slug, FILTER_SANITIZE_URL).'">';
+    $li .= '<div class="dd-handle">'.$menu->name.'</div>';
+    $li .= '<span class="button-delete btn btn-danger btn-xs" style="margin-right:0.5rem" data-owner-id="'.$menu->id.'">'.i18n('Delete').'</span>';
+    $li .= '<span class="button-edit btn btn-primary btn-xs" data-owner-id="'.$menu->id.'">'.i18n('Edit').'</span>';
+    if (isset($menu->children)) { 
+        $li .= parseMenus($menu->children);
+    }
+    $li .= '</li>';
+    return $li;
 }
 
 ?>
 
 <div class="row">
-	<div class="col-md-6">
-		<div class="dd nestable"><?php if (!empty($menu)) {echo $menu;} else {echo '<span>'.i18n('At_the_moment_you_are_using_auto_generated_menu').'</span><ol class="dd-list"></ol>';}?></div>
-	</div>
+    <div class="col-md-6">
+        <div class="dd nestable"><?php if (!empty($menu)) {echo $menu;} else {echo '<span>'.i18n('At_the_moment_you_are_using_auto_generated_menu').'</span><ol class="dd-list"></ol>';}?></div>
+    </div>
 
-	<div class="col-md-6">
-		<form id="menu-add">
-			<h4><?php echo i18n('Add_menu');?></h4>
-			<div class="form-group">
-			<label for="addInputName"><?php echo i18n('Name');?></label>
-			<input type="text" class="form-control" id="addInputName" placeholder="<?php echo i18n('Link_name')?>" required>
-			</div>
-			<div class="form-group">
-			<label for="addInputSlug"><?php echo i18n('Slug');?></label>
-			<input type="text" class="form-control" id="addInputSlug" placeholder="<?php echo i18n('item_slug');?>" required>
-			</div>
-			<div class="form-group">
-			<label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
-			<input type="text" class="form-control" id="addInputClass" placeholder="<?php echo i18n('item_class');?>">
-			</div>
-			<button class="btn btn-primary btn-sm" id="addButton"><?php echo i18n('Add_link');?></button>
-		</form>
-		<form id="menu-editor" style="display: none;">
-			<h4>Editing <span id="currentEditName"></span></h4>
-			<div class="form-group">
-			<label for="addInputName"><?php echo i18n('Name')?></label>
-			<input type="text" class="form-control" id="editInputName" placeholder="<?php echo i18n('Link_name')?>" required>
-			</div>
-			<div class="form-group">
-			<label for="addInputSlug"><?php echo i18n('Slug');?></label>
-			<input type="text" class="form-control" id="editInputSlug" placeholder="<?php echo i18n('item_slug');?>">
-			</div>
-			<div class="form-group">
-			<label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
-			<input type="text" class="form-control" id="editInputClass" placeholder="<?php echo i18n('item_class');?>">
-			</div>
-			<button class="btn btn-primary btn-sm" id="editButton"><?php echo i18n('Save_Edit');?></button>
-		</form>
-	</div>
+    <div class="col-md-6">
+        <form id="menu-add">
+            <h4><?php echo i18n('Add_menu');?></h4>
+            <div class="form-group">
+            <label for="addInputName"><?php echo i18n('Name');?></label>
+            <input type="text" class="form-control" id="addInputName" placeholder="<?php echo i18n('Link_name')?>" required>
+            </div>
+            <div class="form-group">
+            <label for="addInputSlug"><?php echo i18n('Slug');?></label>
+            <input type="text" class="form-control" id="addInputSlug" placeholder="<?php echo i18n('item_slug');?>" required>
+            </div>
+            <div class="form-group">
+            <label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
+            <input type="text" class="form-control" id="addInputClass" placeholder="<?php echo i18n('item_class');?>">
+            </div>
+            <button class="btn btn-primary btn-sm" id="addButton"><?php echo i18n('Add_link');?></button>
+        </form>
+        <form id="menu-editor" style="display: none;">
+            <h4>Editing <span id="currentEditName"></span></h4>
+            <div class="form-group">
+            <label for="addInputName"><?php echo i18n('Name')?></label>
+            <input type="text" class="form-control" id="editInputName" placeholder="<?php echo i18n('Link_name')?>" required>
+            </div>
+            <div class="form-group">
+            <label for="addInputSlug"><?php echo i18n('Slug');?></label>
+            <input type="text" class="form-control" id="editInputSlug" placeholder="<?php echo i18n('item_slug');?>">
+            </div>
+            <div class="form-group">
+            <label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
+            <input type="text" class="form-control" id="editInputClass" placeholder="<?php echo i18n('item_class');?>">
+            </div>
+            <button class="btn btn-primary btn-sm" id="editButton"><?php echo i18n('Save_Edit');?></button>
+        </form>
+    </div>
 </div>
 
 <div class="row">
-	<div class="output-container">
-		<div class="col">
-			<button class="btn btn-primary" id="saveButton"><?php echo i18n('Save_Menu');?></button>
-			<form class="form" style="display:none;">
-				<textarea class="form-control" id="json-output" rows="5"></textarea>
-			</form>
-		</div>
-	</div>	
+    <div class="output-container">
+        <div class="col">
+            <button class="btn btn-primary" id="saveButton"><?php echo i18n('Save_Menu');?></button>
+            <form class="form" style="display:none;">
+                <textarea class="form-control" id="json-output" rows="5"></textarea>
+            </form>
+        </div>
+    </div>    
 </div>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.nestable.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.nestable++.js"></script>
@@ -96,7 +96,7 @@ function parseMenu($menu) {
   $('#addMenu').click(function() {
     $('#menu-add').fadeIn();
   });
-	
+    
   $("#saveButton").click(function(){
     updateOutput($('.dd.nestable').data('output', $('#json-output')));
     var js = $('#json-output').val();
@@ -108,7 +108,7 @@ function parseMenu($menu) {
       success: function (response) {
          alert(response.message);
       },
-    });	
+    });    
   });
 </script>
 <style>

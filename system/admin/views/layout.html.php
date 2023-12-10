@@ -6,10 +6,10 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-	<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/font-awesome.css">
-	<link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-	<script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/font-awesome.css">
+    <link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
 </head>
 <?php     
     if (isset($_GET['search'])) {
@@ -84,36 +84,36 @@
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/posts" class="nav-link">
                   <p>
-					 <?php echo i18n('Posts_list'); ?>
-				  </p>
+                     <?php echo i18n('Posts_list'); ?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/scheduled" class="nav-link">
                   <p>
-				     <?php echo i18n('Scheduled'); ?>
-				  </p>
+                     <?php echo i18n('Scheduled'); ?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/draft" class="nav-link">
                   <p>
-				     <?php echo i18n('Posts_draft'); ?>
-				  </p>
+                     <?php echo i18n('Posts_draft'); ?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/pages" class="nav-link">
                   <p>
-					 <?php echo i18n('Static_pages'); ?>
-				  </p>
+                     <?php echo i18n('Static_pages'); ?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/categories" class="nav-link">
                   <p>
-					 <?php echo i18n('Categories');?>
-				  </p>
+                     <?php echo i18n('Categories');?>
+                  </p>
                 </a>
               </li>
             </ul>
@@ -130,15 +130,15 @@
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/config" class="nav-link">
                   <p>
-				  	<?php echo i18n('Config'); ?>
-				  </p>
+                      <?php echo i18n('Config'); ?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/menu" class="nav-link">
                   <p>
-					<?php echo i18n('Menus');?>
-				  </p>
+                    <?php echo i18n('Menus');?>
+                  </p>
                 </a>
               </li>
             </ul>
@@ -155,40 +155,40 @@
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/clear-cache" class="nav-link">
                   <p>
-					<?php echo i18n('Clear_cache');?>
-				  </p>
+                    <?php echo i18n('Clear_cache');?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/update" class="nav-link">
                   <p>
-					<?php echo i18n('Check_update'); ?>
-				  </p>
+                    <?php echo i18n('Check_update'); ?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/backup" class="nav-link">
                   <p>
-					<?php echo i18n('Backup');?>
-				  </p>
+                    <?php echo i18n('Backup');?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/import" class="nav-link">
                   <p>
-					<?php echo i18n('Import_RSS');?>
-				  </p>
+                    <?php echo i18n('Import_RSS');?>
+                  </p>
                 </a>
               </li>
-			  <?php if (config('views.counter') == 'true') { ?>
+              <?php if (config('views.counter') == 'true') { ?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/popular" class="nav-link">
                   <p>
-					<?php echo i18n('Popular_posts');?>
-				  </p>
+                    <?php echo i18n('Popular_posts');?>
+                  </p>
                 </a>
               </li>
-			  <?php } ?>
+              <?php } ?>
             </ul>
           </li>
           <li class="nav-item has-treeview menu-open">
@@ -203,22 +203,22 @@
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/mine" class="nav-link">
                   <p>
-					<?php echo i18n('My_posts');?>
-				  </p>
+                    <?php echo i18n('My_posts');?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
                   <p>
-					<?php echo i18n('Edit_profile');?>
-				  </p>
+                    <?php echo i18n('Edit_profile');?>
+                  </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>logout" class="nav-link">
                   <p>
-					<?php echo i18n('Logout'); ?>
-				  </p>
+                    <?php echo i18n('Logout'); ?>
+                  </p>
                 </a>
               </li>
             </ul>
@@ -236,10 +236,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-			<?php if (!empty($breadcrumb)): ?>
-				<style>.breadcrumb a {margin:0 5px;}</style>
-				<div class="breadcrumb"><?php echo $breadcrumb ?></div>
-			<?php endif; ?>
+            <?php if (!empty($breadcrumb)): ?>
+                <style>.breadcrumb a {margin:0 5px;}</style>
+                <div class="breadcrumb"><?php echo $breadcrumb ?></div>
+            <?php endif; ?>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -253,7 +253,7 @@
           <div class="col" >
             <div class="card card-primary card-outline">
               <div class="card-body">
-					<?php echo content() ?>
+                    <?php echo content() ?>
               </div>
             </div><!-- /.card -->
           </div>
@@ -297,7 +297,7 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg"><?php echo i18n('Sign_in_to_start_your_session');?></p>
-		<?php echo content();?>
+        <?php echo content();?>
     </div>
     <!-- /.login-card-body -->
   </div>
