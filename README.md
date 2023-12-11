@@ -1,8 +1,8 @@
 <a href="https://www.htmly.com" target="_blank">![Logo](https://raw.githubusercontent.com/danpros/htmly/master/system/resources/images/logo-big.png)</a>
 
-HTMLy is an open source Databaseless Blogging Platform or Flat-File Blog prioritizes simplicity and speed written in PHP. HTMLy can be referred to as Flat-File CMS either since it will also manage your content.
+HTMLy is an open source databaseless blogging platform prioritizes simplicity and speed written in PHP. 
 
-You do not need to use a VPS to run HTMLy, shared hosting or even free hosting should work as long as the host supports at least PHP 5.3.
+It uses a unique algorithm to find or list any content based on date, type, category, tag, or author, and it's performance remain fast even if we have ten thousand of posts and hundreds of tags.
 
 Demo
 ----
@@ -152,7 +152,7 @@ This will produce a hash which is to be placed in the `password` field in `usern
 
 Both Online or Offline
 ----------------------
-The built-in editor found in the admin panel, also provides you the ability to write to Markdown files offline by uploading them (see naming convention below) into the `content/username/blog/category/type/`:
+The built-in editor found in the admin panel. HTMLy also allows you to write the markdown files offline and then uploading them into eg. `content/username/blog/category/type/` (see the naming convention below):
 
 * `username` must match `config/users/username.ini`.
 * `category` must match the `category.md` inside `content/data/category/category.md` except the `uncategorized` category.
