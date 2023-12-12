@@ -125,23 +125,24 @@ $( function() {
                     
                     <?php if ($type == 'is_audio'):?>
                     <label for="pAudio"><?php echo i18n('Featured_Audio');?> <span class="required">*</span> (e.g Soundcloud)</label>
-                    <textarea rows="2" cols="20" class="form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php if (isset($postAudio)) { echo $postAudio;} ?></textarea>
+                    <textarea rows="2" cols="20" class="media-uploader form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php if (isset($postAudio)) { echo $postAudio;} ?></textarea>
                     <input type="hidden" name="is_audio" value="is_audio">
                     <br>
                     <?php endif;?>
 
                     <?php if ($type == 'is_video'):?>
                     <label for="pVideo"><?php echo i18n('Featured_Video');?> <span class="required">*</span> (e.g Youtube)</label>
-                    <textarea rows="2" cols="20" class="form-control text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" id="pVideo" name="video"><?php if (isset($postVideo)) { echo $postVideo;} ?></textarea>
+                    <textarea rows="2" cols="20" class="media-uploader form-control text <?php if (isset($postVideo)) { if (empty($postVideo)) { echo 'error';} } ?>" id="pVideo" name="video"><?php if (isset($postVideo)) { echo $postVideo;} ?></textarea>
                     <input type="hidden" name="is_video" value="is_video">
                     <br>
                     <?php endif;?>
 
                     <?php if ($type == 'is_image'):?>
                     <label for="pImage"><?php echo i18n('Featured_Image');?> <span class="required">*</span></label>
-                    <textarea rows="2" cols="20" class="form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" id="pImage" name="image"><?php if (isset($postImage)) { echo $postImage;} ?></textarea>
+                    <textarea rows="2" cols="20" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" id="pImage" name="image"><?php if (isset($postImage)) { echo $postImage;} ?></textarea>
                     <input type="hidden" name="is_image" value="is_image">
                     <br>
+                    <label class="btn btn-primary btn-sm" id="insertButton"><?php echo i18n('Insert_Image');?></label>
                     <?php endif;?>
 
                     <?php if ($type == 'is_quote'):?>
@@ -214,8 +215,38 @@ $( function() {
             </div>
         </div>
     </div>
+	
+    <div class="modal fade" id="insertMediaDialog" tabindex="-1" role="dialog" aria-labelledby="insertMediaDialogTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+                    <button type="button" class="close" id="insertMediaDialogClose" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="insertMediaDialogURL">URL</label>
+                        <input type="text" class="form-control" id="insertMediaDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
+                        <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
+                    <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+                </div>
+            </div>
+        </div>
+    </div>	
+	
 </div>
 
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
+<script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
