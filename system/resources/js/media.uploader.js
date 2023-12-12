@@ -9,7 +9,9 @@
     };
     $('#insertMediaDialogInsert').click( function() {
         $('.media-uploader').val('');
+        $('.imgPrev > img').remove();
         $('.media-uploader').val( $('#insertMediaDialogURL').val().length > 0 ? $('#insertMediaDialogURL').val() : null );
+        $('.imgPrev').prepend($('<img>',{id:'imgFile',src: $('#insertMediaDialogURL').val()}));
         dialogClose();
     });
     $('#insertMediaDialogClose').click( function() {
@@ -33,7 +35,9 @@
                 if (response.error == '0')
                 {
                     $('.media-uploader').val('');
+                    $('.imgPrev > img').remove();
                     $('.media-uploader').val(base_path + response.path);
+                    $('.imgPrev').prepend($('<img>',{id:'imgFile',src: base_path + response.path}));
                     dialogClose();
                 }
                 else
@@ -54,7 +58,7 @@
             }
         });//ajax
     });//oninput
-	
+    
     $('#insertButton').click(function() {
         $('#insertMediaDialog').modal('show');
     });

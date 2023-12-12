@@ -138,8 +138,10 @@ $( function() {
                     <?php endif;?>
 
                     <?php if ($type == 'is_image'):?>
+                    <style>.imgPrev img {width:60%;} </style>
                     <label for="pImage"><?php echo i18n('Featured_Image');?> <span class="required">*</span></label>
-                    <textarea rows="2" cols="20" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';} } ?>" id="pImage" name="image"><?php if (isset($postImage)) { echo $postImage;} ?></textarea>
+                    <div class="imgPrev card"><?php if (isset($postImage)) { echo '<img id="imgFile" src="' . $postImage . '"/>';} ?></div> 
+                    <input type="text" style="display:none" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';}} ?>" id="pImage" name="image" readonly value="<?php if (isset($postImage)) { echo $postImage;} ?>">
                     <input type="hidden" name="is_image" value="is_image">
                     <br>
                     <label class="btn btn-primary btn-sm" id="insertButton"><?php echo i18n('Insert_Image');?></label>
@@ -215,7 +217,7 @@ $( function() {
             </div>
         </div>
     </div>
-	
+    
     <div class="modal fade" id="insertMediaDialog" tabindex="-1" role="dialog" aria-labelledby="insertMediaDialogTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -242,8 +244,8 @@ $( function() {
                 </div>
             </div>
         </div>
-    </div>	
-	
+    </div>    
+    
 </div>
 
 <!-- Declare the base path. Important -->
