@@ -16,7 +16,11 @@ $tagslang = "content/data/tags.lang";
 if (file_exists($tagslang)) {
     $ptags = unserialize(file_get_contents($tagslang));
     $tkey = array_keys($tags);
-    $newlang = array_intersect_key($ptags, array_flip($tkey));
+    if (!empty($ptags)) {
+        $newlang = array_intersect_key($ptags, array_flip($tkey));
+    } else {
+        $newlang = array_combine($tkey, $tkey);
+    }
     $tmp = serialize($newlang);
     file_put_contents($tagslang, print_r($tmp, true));
 }
