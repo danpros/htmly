@@ -1628,7 +1628,7 @@ function has_prev($prev)
             'link' => $prev->link,
             'categoryUrl' => $prev->categoryUrl,
             'readTime' => $prev->readTime,
-            'readTime' => $prev->lastMod
+            'lastMod' => $prev->lastMod
         );
     }
 }
@@ -1661,7 +1661,7 @@ function has_next($next)
             'link' => $next->link,
             'categoryUrl' => $next->categoryUrl,
             'readTime' => $next->readTime,
-            'readTime' => $next->lastMod
+            'lastMod' => $next->lastMod
         );
     }
 }
