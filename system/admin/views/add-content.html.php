@@ -138,13 +138,16 @@ $( function() {
                     <?php endif;?>
 
                     <?php if ($type == 'is_image'):?>
-                    <style>.imgPrev img {width:60%;} </style>
+                    <style>.imgPrev img {width:50%;} </style>
                     <label for="pImage"><?php echo i18n('Featured_Image');?> <span class="required">*</span></label>
-                    <div class="imgPrev card"><?php if (isset($postImage)) { echo '<img id="imgFile" src="' . $postImage . '"/>';} ?></div> 
-                    <input type="text" style="display:none" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';}} ?>" id="pImage" name="image" readonly value="<?php if (isset($postImage)) { echo $postImage;} ?>">
-                    <input type="hidden" name="is_image" value="is_image">
                     <br>
                     <label class="btn btn-primary btn-sm" id="insertButton"><?php echo i18n('Insert_Image');?></label>
+                    <br>
+                    <div class="imgPrev"><?php if (isset($postImage)) { echo '<img id="imgFile" src="' . $postImage . '"/>';} ?></div>
+                    <br>
+                    <input type="text" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';}} ?>" id="pImage" name="image" readonly value="<?php if (isset($postImage)) { echo $postImage;} ?>">
+                    <input type="hidden" name="is_image" value="is_image">
+                    <br>
                     <?php endif;?>
 
                     <?php if ($type == 'is_quote'):?>

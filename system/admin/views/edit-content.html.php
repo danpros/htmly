@@ -192,13 +192,16 @@ $( function() {
                     <?php endif;?>
 
                     <?php if ($type == 'is_image'):?>
-                    <style>.imgPrev img {width:60%;} </style>
+                    <style>.imgPrev img {width:50%;} </style>
                     <label for="pImage"><?php echo i18n('Featured_Image');?> <span class="required">*</span></label>
-                    <div class="imgPrev"><img id="imgFile" src="<?php echo $oldimage; ?>"/></div> 
-                    <input style="display:none" type="text" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';}} ?>" id="pImage" name="image" readonly value="<?php echo $oldimage; ?>">
-                    <input type="hidden" name="is_image" value="is_image">
                     <br>
                     <label class="btn btn-primary btn-sm" id="insertButton"><?php echo i18n('Insert_Image');?></label>
+                    <br>
+                    <div class="imgPrev"><img id="imgFile" src="<?php echo $oldimage; ?>"/></div>
+                    <br>
+                    <input type="text" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';}} ?>" id="pImage" name="image" readonly value="<?php echo $oldimage; ?>">
+                    <input type="hidden" name="is_image" value="is_image">
+                    <br>
                     <?php endif;?>
 
                     <?php if ($type == 'is_quote'):?>
@@ -309,4 +312,3 @@ $( function() {
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
-
