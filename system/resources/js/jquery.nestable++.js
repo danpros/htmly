@@ -156,6 +156,11 @@ var addToMenu = function () {
   $(".dd.nestable .button-delete-"+newId).on("click", deleteFromMenu);
   $(".dd.nestable .button-edit-"+newId).on("click", prepareEdit);
 
+  // clear input  
+  $("#addInputName").val('');
+  $("#addInputSlug").val('');
+  $("#addInputClass").val('');
+
 };
 
 
