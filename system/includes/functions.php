@@ -2482,6 +2482,7 @@ function sitemap_post_path()
 
         // The post date
         $post->date = strtotime($timestamp);
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($filepath)));
 
         // The archive per day
         $post->archiveday = site_url() . 'archive/' . date('Y-m-d', $post->date);
@@ -2524,6 +2525,7 @@ function sitemap_page_path()
             // The static page URL
             $url = str_replace($replaced, '', $v);
             $post->url = site_url() . str_replace('.md', '', $url);
+			$post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($v)));
 
             $tmp[] = $post;
         }
@@ -2604,7 +2606,7 @@ function generate_sitemap($str)
 
         foreach ($posts as $p) {
 
-            echo '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority><lastmod>' . date('Y-m-d', $p->date) . '</lastmod></url>';
+            echo '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority><lastmod>' . date('Y-m-d\TH:i:sP', $p->lastMod) . '</lastmod></url>';
         }
 
         echo '</urlset>';
@@ -2622,7 +2624,7 @@ function generate_sitemap($str)
 
         foreach ($posts as $p) {
 
-            echo '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority></url>';
+            echo '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority><lastmod>' . date('Y-m-d\TH:i:sP', $p->lastMod) . '</lastmod></url>';
         }
 
         echo '</urlset>';
