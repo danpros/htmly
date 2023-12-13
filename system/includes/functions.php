@@ -183,12 +183,13 @@ function sortdate($a, $b)
 }
 
 // Rebuilt cache index
-function rebuilt_cache($type)
+function rebuilt_cache($type = null)
 {
     $dir = 'cache/index';
     $posts_cache_sorted = array();
     $posts_cache_unsorted = array();
     $page_cache = array();
+    $subpage_cache = array();
     $author_cache = array();
     $scheduled = array();
 
@@ -196,58 +197,56 @@ function rebuilt_cache($type)
         mkdir($dir, 0775, true);
     }
 
-    if ($type === 'posts') {
-        $tmp = array();
-        $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
-         if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
-                    $posts_cache_unsorted[] = $file;
-                    $posts_cache_sorted[] = pathinfo($file);
-                }
+    // Rebuilt posts index sorted/unsorted
+    $tmp = array();
+    $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
+     if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
+                $posts_cache_unsorted[] = $file;
+                $posts_cache_sorted[] = pathinfo($file);
             }
         }
-        $string_unsorted = serialize($posts_cache_unsorted);
-        file_put_contents('cache/index/index-unsorted.txt', print_r($string_unsorted, true));
-        usort($posts_cache_sorted, "sortfile");
-        $string_sorted = serialize($posts_cache_sorted);
-        file_put_contents('cache/index/index-sorted.txt', print_r($string_sorted, true));
-    } elseif ($type === 'page') {
-        $page_cache = glob('content/static/*.md', GLOB_NOSORT);
-        $string = serialize($page_cache);
-        file_put_contents('cache/index/index-page.txt', print_r($string, true));
-    } elseif ($type === 'subpage') {
-        $page_cache = glob('content/static/*/*.md', GLOB_NOSORT);
-        $string = serialize($page_cache);
-        file_put_contents('cache/index/index-sub-page.txt', print_r($string, true));
-    } elseif ($type === 'author') {
-        $author_cache = glob('content/*/author.md', GLOB_NOSORT);
-        $string = serialize($author_cache);
-        file_put_contents('cache/index/index-author.txt', print_r($string, true));
-    } elseif ($type === 'category') {
-        $category_cache = glob('content/data/category/*.md', GLOB_NOSORT);
-        $string = serialize($category_cache);
-        file_put_contents('cache/index/index-category.txt', print_r($string, true));
-    } elseif ($type === 'scheduled') {
-        $tmp = array();
-        $tmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $scheduled[] = pathinfo($file);
-            }
-        }
-        usort($scheduled, "sortfile");
-        $string = serialize($scheduled);
-        file_put_contents('cache/index/index-scheduled.txt', print_r($string, true));
-    } elseif ($type === 'all') {
-        rebuilt_cache('posts');
-        rebuilt_cache('page');
-        rebuilt_cache('subpage');
-        rebuilt_cache('author');
-        rebuilt_cache('category');
-        rebuilt_cache('scheduled');
     }
+    $string_unsorted = serialize($posts_cache_unsorted);
+    file_put_contents('cache/index/index-unsorted.txt', print_r($string_unsorted, true));
+    usort($posts_cache_sorted, "sortfile");
+    $string_sorted = serialize($posts_cache_sorted);
+    file_put_contents('cache/index/index-sorted.txt', print_r($string_sorted, true));
 
+    // Rebuilt static page index
+    $page_cache = glob('content/static/*.md', GLOB_NOSORT);
+    $page_string = serialize($page_cache);
+    file_put_contents('cache/index/index-page.txt', print_r($page_string, true));
+
+    // Rebuilt subpage index
+    $subpage_cache = glob('content/static/*/*.md', GLOB_NOSORT);
+    $subpage_string = serialize($subpage_cache);
+    file_put_contents('cache/index/index-sub-page.txt', print_r($subpage_string, true));
+
+    // Rebuilt user profile index
+    $author_cache = glob('content/*/author.md', GLOB_NOSORT);
+    $author_string = serialize($author_cache);
+    file_put_contents('cache/index/index-author.txt', print_r($author_string, true));
+
+    // Rebuilt category index
+    $category_cache = glob('content/data/category/*.md', GLOB_NOSORT);
+    $category_string = serialize($category_cache);
+    file_put_contents('cache/index/index-category.txt', print_r($category_string, true));
+
+    // Rebuilt scheduled posts index
+    $stmp = array();
+    $stmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
+    if (is_array($stmp)) {
+        foreach ($stmp as $file) {
+            $scheduled[] = pathinfo($file);
+        }
+    }
+    usort($scheduled, "sortfile");
+    $scheduled_string = serialize($scheduled);
+    file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true));
+
+    // Remove the widget cache
     foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
         unlink($file);
     }
