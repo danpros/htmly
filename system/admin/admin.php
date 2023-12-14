@@ -99,7 +99,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         foreach ($tag as $t) {
             if (array_key_exists($t, $tflip)) {
                 foreach ($tflip as $tfp => $tf){
-                    if($t === $tfp) {
+                    if($t == $tfp) {
                         $post_tag[] = $tf;
                         $post_tagmd[] = $tfp;
                     }
@@ -136,8 +136,8 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     foreach ($combine as $tag => $v) {
         if (array_key_exists($v, $tags)) {
             foreach ($inter as $in => $i){
-                if($v === $in) {
-                    if (strtolower($tag) === strtolower(tag_i18n($in))) {
+                if($v == $in) {
+                    if (strtolower($tag) == strtolower(tag_i18n($in))) {
                         $newtag[$v]= $tag;
                     } else {
                         $newtag[$v.'-'. $timestamp]= $tag;
@@ -242,7 +242,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         foreach ($tag as $t) {
             if (array_key_exists($t, $tflip)) {
                 foreach ($tflip as $tfp => $tf){
-                    if($t === $tfp) {
+                    if($t == $tfp) {
                         $post_tag[] = $tf;
                         $post_tagmd[] = $tfp;
                     }
@@ -287,8 +287,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     foreach ($combine as $tag => $v) {
         if (array_key_exists($v, $tags)) {
             foreach ($inter as $in => $i){
-                if($v === $in) {
-                    if (strtolower($tag) === strtolower(tag_i18n($in))) {
+                if($v == $in) {
+                    if (strtolower($tag) == strtolower(tag_i18n($in))) {
                         $newtag[$v]= $tag;
                     } else {
                         $newtag[$v.'-'. $timestamp]= $tag;

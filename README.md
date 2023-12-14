@@ -172,7 +172,7 @@ New category info etc.
 ````
 The slug for the new category is `new-category` (htmly removing the file extension). And for full file directory:
 ````
-content/username/new-category/post/file.md
+content/username/blog/new-category/post/file.md
 ````
 
 File Naming Convention
