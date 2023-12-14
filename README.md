@@ -185,7 +185,7 @@ When you write a blog post and save it via the admin panel, HTMLy automatically 
 
 Here's the explanation (separated by an underscore):
 
-- `2014-01-31-12-56-40` is the published date. The date format is `yyyy-mm-dd-hh-mm-ss`
+- `2014-01-31-12-56-40` is the published date. The date format is `Y-m-d-H-i-s`
 - `tag1,tag2,tag3` are the tags, separated by commas
 - `databaseless-blogging-platform-flat-file-blog` is the URL
 

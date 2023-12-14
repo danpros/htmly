@@ -184,8 +184,6 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
-        $post_content = stripslashes($post_content);
-
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
 
         if (empty($draft)) {
@@ -344,8 +342,6 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
-        $post_content = stripslashes($post_content);
-
         if(!empty($revertPost) || !empty($publishDraft)) {
 
             if($dir[4] == 'draft') {
@@ -499,8 +495,6 @@ function add_page($title, $url, $content, $description = null)
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
-        $post_content = stripslashes($post_content);
-
         $filename = $post_url . '.md';
         $dir = 'content/static/';
         if (is_dir($dir)) {
@@ -536,8 +530,6 @@ function add_sub_page($title, $url, $content, $static, $description = null)
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
-
-        $post_content = stripslashes($post_content);
 
         $filename = $post_url . '.md';
         $dir = 'content/static/' . $static . '/';
@@ -577,8 +569,6 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
-
-        $post_content = stripslashes($post_content);
 
         $newfile = $dir . '/' . $post_url . '.md';
         if ($oldfile === $newfile) {
@@ -641,8 +631,6 @@ function add_category($title, $url, $content, $description = null)
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
-        $post_content = stripslashes($post_content);
-
         $filename = $post_url . '.md';
         $dir = 'content/data/category/';
         if (is_dir($dir)) {
@@ -679,8 +667,6 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
-        $post_content = stripslashes($post_content);
-
         $newfile = $dir . '/' . $post_url . '.md';
         if ($oldfile === $newfile) {
             file_put_contents($oldfile, print_r($post_content, true));
@@ -709,8 +695,6 @@ function edit_profile($title, $content, $user)
 
     if (!empty($user_title) && !empty($user_content)) {
 
-        $user_content = stripslashes($user_content);
-
         $dir = 'content/' . $user . '/';
         $filename = 'content/' . $user . '/author.md';
         if (is_dir($dir)) {
@@ -732,8 +716,6 @@ function edit_frontpage($title, $content)
     $front_content = '<!--t ' . $front_title . ' t-->' . "\n\n" . $content;
 
     if (!empty($front_title) && !empty($front_content)) {
-
-        $front_content = stripslashes($front_content);
 
         $dir = 'content/data/frontpage';
         $filename = 'content/data/frontpage/frontpage.md';
@@ -823,8 +805,6 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
         $post_content = '<!--t ' . $post_title . ' t-->' . "\n" . '<!--tag ' . $post_tagmd . ' tag-->' .  "\n\n" . $content;
     }
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
-
-        $post_content = stripslashes($post_content);
 
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         $dir = 'content/' . $user . '/blog/uncategorized/post/';
