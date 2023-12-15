@@ -170,6 +170,22 @@ function get_category_folder()
     return $_dfolder;
 }
 
+// Get images in content/images folder
+function get_gallery() {
+    static $_gallery = array();
+    if (empty($_gallery)) {
+        $tmp = array();
+        $tmp = glob('content/images/*', GLOB_NOSORT);
+        if (is_array($tmp)) {
+            foreach ($tmp as $file) {
+                $_gallery[] = pathinfo($file);
+            }
+        }
+        usort($_gallery, "sortfile");
+    }
+    return $_gallery;
+}
+
 // usort function. Sort by filename.
 function sortfile($a, $b)
 {

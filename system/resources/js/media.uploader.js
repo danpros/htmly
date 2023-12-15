@@ -4,6 +4,8 @@
 
     var dialogClose = function() {
         $('#insertMediaDialog').modal('hide');
+        $('#insertImageDialogURL').val('');
+        $('#insertImageDialogFile').val('');
         $('#insertMediaDialogURL').val('');
         $('#insertMediaDialogFile').val('');
     };

@@ -63,6 +63,8 @@ if ($type == 'is_frontpage') {
     }
 }
 
+$images = get_gallery();
+
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
@@ -128,12 +130,32 @@ if ($type == 'is_frontpage') {
         </form>
     </div>
         
-    <style>
-    .wmd-prompt-background {z-index:10!important;}
-    #wmd-preview img {max-width:100%;}
-    </style>
+<style>
+.wmd-prompt-background {z-index:10!important;}
+#wmd-preview img {max-width:100%;}
+.cover-container {
+    height: 200px;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.cover-item {
+    position: relative;
+    display: inline-block;
+    margin: 2px 2px;
+    border-top-right-radius: 2px;
+    width: 200px;
+    height: 150px;
+    vertical-align: top;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>
+
     <div class="modal fade" id="insertImageDialog" tabindex="-1" role="dialog" aria-labelledby="insertImageDialogTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="insertImageDialogTitle"><?php echo i18n('Insert_Image');?></h5>
@@ -142,6 +164,18 @@ if ($type == 'is_frontpage') {
                     </button>
                 </div>
                 <div class="modal-body">
+                    <?php if (!empty($images)) :?>
+                    <div class="form-group">
+                        <div class="row-fluid cover-container">
+                            <?php foreach ($images as $img):?>
+                                <div class="cover-item">
+                                    <img class="img-thumbnail the-img" src="<?php echo site_url() . $img['dirname'] . '/' . $img['basename']?>">
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php endif;?>
                     <div class="form-group">
                         <label for="insertImageDialogURL">URL</label>
                         <input type="text" class="form-control" id="insertImageDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
@@ -163,3 +197,8 @@ if ($type == 'is_frontpage') {
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
+<script>
+  $('.the-img').click(function(e) {
+    $('#insertImageDialogURL').val($(e.target).attr('src'));
+  });
+</script>

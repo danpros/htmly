@@ -9,6 +9,8 @@
         $('#insertImageDialog').modal('hide');
         $('#insertImageDialogURL').val('');
         $('#insertImageDialogFile').val('');
+        $('#insertMediaDialogURL').val('');
+        $('#insertMediaDialogFile').val('');
     };
     $('#insertImageDialogInsert').click( function() {
         callbackFunc( $('#insertImageDialogURL').val().length > 0 ? $('#insertImageDialogURL').val() : null );
