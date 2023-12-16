@@ -333,7 +333,7 @@ function render($view, $locals = null, $layout = null)
 {
     $login = login();
     if (!$login) {
-        $c = str_replace('/', '#', str_replace('?', '~', $_SERVER['REQUEST_URI']));
+        $c = str_replace('/', '#', str_replace('?', '~', rawurldecode($_SERVER['REQUEST_URI'])));
         $dir = 'cache/page';
         $cachefile = $dir . '/' . $c . '.cache';
         if (is_dir($dir) === false) {

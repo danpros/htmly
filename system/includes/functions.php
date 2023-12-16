@@ -3040,7 +3040,7 @@ function file_cache($request)
 
     $now   = time();
 
-    $c = str_replace('/', '#', str_replace('?', '~', $request));
+    $c = str_replace('/', '#', str_replace('?', '~', rawurldecode($request)));
     $cachefile = 'cache/page/' . $c . '.cache';
     if (file_exists($cachefile)) {
         if ($now - filemtime($cachefile) >= 60 * 60 * $hour) {
