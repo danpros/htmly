@@ -315,20 +315,7 @@ post('/edit/profile', function () {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
 
-        render('edit-page', array(
-            'title' => 'Edit profile - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'postTitle' => $title,
-            'postContent' => $content,
-            'type' => 'is_profile',
-            'is_admin' => true,
-            'bodyclass' => 'edit-profile',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile'
-        ));
     }
 });
 
@@ -374,20 +361,7 @@ post('/edit/frontpage', function () {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
 
-        render('edit-page', array(
-            'title' => 'Edit frontpage - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'postTitle' => $title,
-            'postContent' => $content,
-            'type' => 'is_frontpage',
-            'is_admin' => true,
-            'bodyclass' => 'edit-frontpage',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit frontpage'
-        ));
     }
 });
 
@@ -560,26 +534,6 @@ post('/add/content', function () {
             }
         }
         
-        config('views.root', 'system/admin/views');
-        render('add-content', array(
-            'title' => i18n('Add_content') . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'postTitle' => $title,
-            'postImage' => $image,
-            'postVideo' => $video,
-            'postLink' => $link,
-            'postQuote' => $quote,
-            'postAudio' => $audio,
-            'postTag' => $tag,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'type' => $type,
-            'is_admin' => true,
-            'bodyclass' => 'add-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_content')
-        ));
     }
     
 });
@@ -633,20 +587,6 @@ post('/add/page', function () {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
-        render('add-page', array(
-            'title' => i18n('Add_new_page') . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'postTitle' => $title,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'type' => 'is_page',
-            'is_admin' => true,
-            'bodyclass' => 'add-page',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_new_page')
-        ));
     }
 });
 
@@ -699,20 +639,7 @@ post('/add/category', function () {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
-        render('add-page', array(
-            'title' => i18n('Add_category') . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'postTitle' => $title,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'type' => 'is_category',
-            'is_admin' => true,
-            'bodyclass' => 'add-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Add_category')
-        ));
+
     }
 });
 
@@ -1922,22 +1849,7 @@ post('/category/:category/edit', function () {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
 
-        render('edit-page', array(
-            'title' => i18n('Edit_category') . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'oldfile' => $oldfile,
-            'postTitle' => $title,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'type' => 'is_category',
-            'is_admin' => true,
-            'bodyclass' => 'edit-category',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit_category')
-        ));
     }
 });
 
@@ -2606,28 +2518,6 @@ post('/post/:name/edit', function () {
             }
         }
         
-        config('views.root', 'system/admin/views');
-
-        render('edit-content', array(
-            'title' => $title . ' - ' .  blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'oldfile' => $oldfile,
-            'postTitle' => $title,
-            'postImage' => $image,
-            'postVideo' => $video,
-            'postLink' => $link,
-            'postQuote' => $quote,
-            'postAudio' => $audio,
-            'postTag' => $tag,
-            'postUrl' => $url,
-            'type' => $type,
-            'is_admin' => true,
-            'postContent' => $content,
-            'bodyclass' => 'edit-post',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit_content')
-        ));
     }
 });
 
@@ -2956,20 +2846,7 @@ post('/:static/add', function ($static) {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
-        render('add-page', array(
-            'title' => i18n('Add_new_page') . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'postTitle' => $title,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'type' => 'is_page',
-            'is_admin' => true,
-            'bodyclass' => 'add-page',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $title . '">' . $title . '</a> &#187; ' . i18n('Add_new_page')
-        ));
+
     }
 });
 
@@ -3036,21 +2913,7 @@ post('/:static/edit', function () {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
 
-        render('edit-page', array(
-            'title' => i18n('Edit') .  ': ' . $post->title . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'oldfile' => $oldfile,
-            'postTitle' => $title,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'bodyclass' => 'edit-page',
-            'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
-        ));
     }
 });
 
@@ -3238,23 +3101,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
         if (!$proper) {
             $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
         }
-        config('views.root', 'system/admin/views');
 
-        render('edit-page', array(
-            'title' => i18n('Edit') . ': ' . $page->title . ' - ' . blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'oldfile' => $oldfile,
-            'postTitle' => $title,
-            'postUrl' => $url,
-            'postContent' => $content,
-            'static' => $static,
-            'sub' => $sub,
-            'bodyclass' => 'edit-page',
-            'is_admin' => true,
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
-        ));
     }
 });
 
@@ -3607,28 +3454,6 @@ post('/:year/:month/:name/edit', function () {
             }
         }
         
-        config('views.root', 'system/admin/views');
-
-        render('edit-content', array(
-            'title' => $title . ' - ' .  blog_title(),
-            'description' => strip_tags(blog_description()),
-            'canonical' => site_url(),
-            'error' => '<ul>' . $message['error'] . '</ul>',
-            'oldfile' => $oldfile,
-            'postTitle' => $title,
-            'postImage' => $image,
-            'postVideo' => $video,
-            'postLink' => $link,
-            'postQuote' => $quote,
-            'postAudio' => $audio,
-            'postTag' => $tag,
-            'postUrl' => $url,
-            'type' => $type,
-            'postContent' => $content,
-            'is_admin' => true,
-            'bodyclass' => 'edit-post',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $title
-        ));
     }
 });
 
