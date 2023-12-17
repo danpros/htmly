@@ -1522,7 +1522,7 @@ EOF;
                 echo '</li>';
                 echo '</ul>';
             }
-        } elseif ($custom == 'month-year') {
+        } elseif ($custom === 'month-year') {
             foreach ($by_year as $year => $months) {
                 $by_month = array_count_values($months);
                 # Sort the months
@@ -1532,7 +1532,7 @@ EOF;
                 echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . ' ' . $year .'</a> ('.$count.')</li>';
                 }
             }
-        } elseif ($custom == 'year') {
+        } elseif ($custom === 'year') {
             foreach ($by_year as $year => $months) {
                 $by_month = array_count_values($months);
                 # Sort the months
