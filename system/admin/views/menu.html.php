@@ -35,7 +35,7 @@ function parseMenu($menu) {
 
 <div class="row">
     <div class="col-md-6">
-        <div class="dd nestable"><?php if (!empty($menu)) {echo $menu;} else {echo '<span>'.i18n('At_the_moment_you_are_using_auto_generated_menu').'</span><ol class="dd-list"></ol>';}?></div>
+        <div class="dd nestable"><?php if (!empty($menu)) {echo  '<h2>Drag & Drop</h2><br>'. $menu;} else {echo '<span>'.i18n('At_the_moment_you_are_using_auto_generated_menu').'</span><ol class="dd-list"></ol>';}?></div>
     </div>
 
     <div class="col-md-6">
@@ -170,6 +170,7 @@ function parseMenu($menu) {
   border-radius: 3px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
+  cursor: move;
 }
 
 .dd-handle:hover {
