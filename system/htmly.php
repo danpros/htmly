@@ -2972,8 +2972,8 @@ get('/:static/:sub', function ($static, $sub) {
         header("location: $redir", TRUE, 301);
     }
 
-    $father_post = get_static_post($static);
-    if (!$father_post) {
+    $parent_post = get_static_post($static);
+    if (!$parent_post) {
         not_found();
     }
     $post = get_static_sub_post($static, $sub);
@@ -3020,7 +3020,7 @@ get('/:static/:sub', function ($static, $sub) {
         'description' => $post->description,
         'canonical' => $post->url,
         'bodyclass' => 'in-page ' . strtolower($static) . ' ' . strtolower($sub) ,
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $father_post[0]->url . '">' . $father_post[0]->title . '</a> &#187; ' . $post->title,
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $parent_post[0]->url . '">' . $parent_post[0]->title . '</a> &#187; ' . $post->title,
         'p' => $post,
         'type' => 'subPage',
         'is_subpage' => true,
