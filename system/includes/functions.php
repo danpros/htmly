@@ -515,7 +515,7 @@ function find_draft($year, $month, $name)
     }
 }
 
-// Find draft.
+// Find scheduled post.
 function find_scheduled($year, $month, $name)
 {
     $posts = get_scheduled_posts();
@@ -615,7 +615,7 @@ function get_category_info($category)
 
                 $desc = new stdClass;
 
-                // The static page URL
+                // The filename
                 $url= pathinfo($v, PATHINFO_FILENAME);
 
                 $desc->url = site_url() . 'category/' . $url;
@@ -666,7 +666,6 @@ function default_category()
 }
 
 // Return category list
-
 function category_list($custom = null) {
 
     $dir = "cache/widget";
@@ -1192,7 +1191,7 @@ function get_draftcount($var)
     return count($tmp);
 }
 
-// Return draft count. Matching $var
+// Return scheduled post count. Matching $var
 function get_scheduledcount($var)
 {
     $posts = get_scheduled_posts();
@@ -1302,7 +1301,7 @@ function recent_posts($custom = null, $count = null)
     }
 }
 
-// Return recent posts lists
+// Return recent type lists
 function recent_type($type, $custom = null, $count = null)
 {
     if (empty($count)) {
