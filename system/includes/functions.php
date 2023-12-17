@@ -351,7 +351,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $content = file_get_contents($filepath);
 
         // Extract the title and body
-        $post->title = get_content_tag('t', $content, 'Untitled: ' . date('l jS \of F Y', $post->date));
+        $post->title = get_content_tag('t', $content, 'Untitled post: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
         $post->image = get_content_tag('image', $content);
         $post->video = get_content_tag('video', $content);
         $post->link  = get_content_tag('link', $content);
@@ -956,7 +956,7 @@ function get_static_post($static)
                 $content = file_get_contents($v);
 
                 // Extract the title and body
-                $post->title = get_content_tag('t', $content, $static);
+                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
 
                 // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
@@ -1007,7 +1007,7 @@ function get_static_sub_post($static, $sub_static)
                 $content = file_get_contents($v);
 
                 // Extract the title and body
-                $post->title = get_content_tag('t', $content, $sub_static);
+                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
 
                 // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
