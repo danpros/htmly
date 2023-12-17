@@ -1741,16 +1741,16 @@ get('/admin/categories/:category', function ($category) {
                 $perpage = 10;    
             }
 
-            $posts = get_category($category, $page, $perpage, false);
+            $posts = get_category($category, $page, $perpage);
             
             $desc = get_category_info($category);
             
             if(strtolower($category) !== 'uncategorized') {
                $desc = $desc[0];
             }
-
-            $total = get_categorycount($category);
-
+			
+            $total = $desc->count;
+			
             if (empty($posts) || $page < 1) {
                 // a non-existing page
                 not_found();
@@ -1805,7 +1805,7 @@ get('/category/:category', function ($category) {
         $perpage = 10;    
     }
 
-    $posts = get_category($category, $page, $perpage, false);
+    $posts = get_category($category, $page, $perpage);
     
     $desc = get_category_info($category);
     
@@ -1815,7 +1815,7 @@ get('/category/:category', function ($category) {
         }
     }
 
-    $total = get_categorycount($category);
+    $total = $desc->count;
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2008,7 +2008,10 @@ get('/type/:type', function ($type) {
     $total = get_typecount($type);
     
     $ttype = new stdClass;
-    $ttype->title = $type;
+    $ttype->title = ucfirst($type);
+    $ttype->url = site_url() . 'type/' . strtolower($type);
+    $ttype->count = $total;
+    $ttype->description = i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title() . '.';
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2068,12 +2071,15 @@ get('/tag/:tag', function ($tag) {
     $page = $page ? (int)$page : 1;
     $perpage = config('tag.perpage');
 
-    $posts = get_tag($tag, $page, $perpage, false);
+    $posts = get_tag($tag, $page, $perpage);
 
-    $total = get_tagcount($tag, 'basename');
+    $total = get_tagcount($tag);
         
     $ttag = new stdClass;
     $ttag->title = tag_i18n($tag);
+    $ttag->url = site_url() . 'tag/' . strtolower($tag);
+    $ttag->count = $total;
+    $ttag->description = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title() . '.';
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2135,7 +2141,7 @@ get('/archive/:req', function ($req) {
 
     $posts = get_archive($req, $page, $perpage);
 
-    $total = get_count($req, 'basename');
+    $total = get_count($req);
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2155,7 +2161,10 @@ get('/archive/:req', function ($req) {
     
     $tarchive = new stdClass;
     $tarchive->title = $timestamp;
-
+    $tarchive->url = site_url() . 'archive/' . $req;
+    $tarchive->count = $total;
+    $tarchive->description = i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title() . '.';
+ 
     if (!$date) {
         // a non-existing page
         not_found();
@@ -2179,7 +2188,7 @@ get('/archive/:req', function ($req) {
 
     render($pview, array(
         'title' => i18n('Archive_for') . ' ' . $timestamp . ' - ' . blog_title(),
-        'description' =>i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title() . '.',
+        'description' => i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title() . '.',
         'canonical' => site_url() . 'archive/' . $req,
         'page' => $page,
         'posts' => $posts,
@@ -2209,9 +2218,13 @@ get('/search/:keyword', function ($keyword) {
     $perpage = config('search.perpage');
 
     $posts = get_keyword($keyword, $page, $perpage);
-    
+    $total = keyword_count($keyword);
+
     $tsearch = new stdClass;
     $tsearch->title = $keyword;
+    $tsearch->url = site_url() . 'search/' . strtolower($keyword);
+    $tsearch->count = $total;
+    $tsearch->description = i18n('Search_results_for') . ' ' . tag_i18n($keyword) . ' ' . i18n('by') . ' ' . blog_title() . '.';
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -2235,8 +2248,6 @@ get('/search/:keyword', function ($keyword) {
         ), $layout);
         die;
     }
-
-    $total = keyword_count($keyword);
     
     $pv = $vroot . '/main--search.html.php'; 
     if (file_exists($pv)) {

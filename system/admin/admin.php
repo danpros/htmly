@@ -402,8 +402,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
         } else {
-            $replaced = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/';
-            $dt = str_replace($replaced, '', $oldurl[0]);
+            $dirname = dirname($oldurl[0]) . '/';
+            $dt = str_replace($dirname, '', $oldurl[0]);
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
@@ -593,14 +593,14 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
-	
+    
         if ($oldfile != $newfile) {
             if (file_exists($viewsFile)) {
                 $views = json_decode(file_get_contents($viewsFile), true);
                 $arr = replace_key($views, $oldfile, $newfile);
                 file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE));                
             }
-        } 		
+        }         
 
         if ($destination == 'post') {
             header("Location: $posturl");

@@ -281,7 +281,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
     // Extract a specific page with results
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
 
-    $catC = category_list(true);
+    $cList = category_list(true);
 
     foreach ($posts as $index => $v) {
 
@@ -292,33 +292,25 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // Extract the date
         $arr = explode('_', $v['basename']);
 
-        // Replaced string
-        $replaced = $v['dirname'] . '/';
+        // dirname string
+        $dirname = $v['dirname'] . '/';
 
         // Author string
-        $str = explode('/', $replaced);
+        $str = explode('/', $dirname);
         $author = $str[1];
         
-        if($str[3] == 'uncategorized') {
-            $category = default_category();
-            $post->category = '<a href="' . $category->url . '">' . $category->title . '</a>';
-            $post->categoryUrl = $category->url;
-            $post->categorySlug = $category->slug;
-            $post->categoryTitle = $category->title;
-            $post->categoryb = '<a itemprop="item" href="' . $category->url . '"><span itemprop="name">' . $category->title . '</span></a>';
-        } else {
-            foreach ($catC as $k => $v) {
-                if ($v['0'] === $str[3]) {
-                    $post->category = '<a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a>';
-                    $post->categoryUrl = site_url() . 'category/' . $v['0'];
-                    $post->categorySlug = $v['0'];
-                    $post->categoryTitle = $v['1'];
-                    $post->categoryb = '<a itemprop="item" href="' . site_url() . 'category/' . $v['0'] . '"><span itemprop="name">' . $v['1'] . '</span></a>';
-                }
+        foreach ($cList as $a => $t) {
+            if ($t['0'] === $str[3]) {
+                $post->category = '<a href="' . site_url() . 'category/' . $t['0'] . '">' . $t['1'] . '</a>';
+                $post->categoryUrl = site_url() . 'category/' . $t['0'];
+                $post->categoryCount = $t['2'];
+                $post->categorySlug = $t['0'];
+                $post->categoryMd = $t['0'];
+                $post->categoryTitle = $t['1'];
+                $post->categoryb = '<a itemprop="item" href="' . site_url() . 'category/' . $t['0'] . '"><span itemprop="name">' . $t['1'] . '</span></a>';
             }
-
         }
-        
+
         $type = $str[4];
         $post->ct = $str[3];
 
@@ -336,7 +328,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
 
         $post->type = $type;
-        $dt = str_replace($replaced, '', $arr[0]);
+        $dt = str_replace($dirname, '', $arr[0]);
         $t = str_replace('-', '', $dt);
         $time = new DateTime($t);
         $timestamp = $time->format("Y-m-d H:i:s");
@@ -568,7 +560,7 @@ function find_scheduled($year, $month, $name)
 }
 
 // Return category page.
-function get_category($category, $page, $perpage, $random)
+function get_category($category, $page, $perpage, $random = null)
 {
     $posts = get_post_sorted();
     
@@ -584,10 +576,10 @@ function get_category($category, $page, $perpage, $random)
 
     foreach ($posts as $index => $v) {
 
-        // Replaced string
-        $replaced = $v['dirname'] . '/';
+        // dirname string
+        $dirname = $v['dirname'] . '/';
 
-        $str = explode('/', $replaced);
+        $str = explode('/', $dirname);
 
         if (strtolower($category) === strtolower($str[3])) {
             $tmp[] = $v;
@@ -605,10 +597,16 @@ function get_category($category, $page, $perpage, $random)
 
 // Return category info.
 function get_category_info($category)
-{            
-    $posts = get_category_files();
+{
 
     $tmp = array();
+    if (is_null($category)) {
+        $tmp[] = default_category();
+    } elseif (strtolower($category) == 'uncategorized') {
+        return default_category();
+    }
+    
+    $posts = get_category_files();
 
     if (!empty($posts)) {
 
@@ -617,15 +615,16 @@ function get_category_info($category)
 
                 $desc = new stdClass;
 
-                // Replaced string
-                $replaced = dirname($v) . '/';
-
                 // The static page URL
                 $url= pathinfo($v, PATHINFO_FILENAME);
 
                 $desc->url = site_url() . 'category/' . $url;
 
                 $desc->md = $url;
+                
+                $desc->slug = $url;
+
+                $desc->count = get_categorycount($url);
 
                 $desc->file = $v;
 
@@ -645,13 +644,6 @@ function get_category_info($category)
         }
     }
 
-    if (is_null($category)) {
-        $category = '';
-    }
-    if (strtolower($category) == 'uncategorized') {
-        return default_category();
-    }
-
     return $tmp;
 }
 
@@ -667,6 +659,8 @@ function default_category()
     $desc->body = '<p>' . i18n('Uncategorized_comment') . '</p>';
     $desc->md = 'uncategorized';
     $desc->description = i18n('Uncategorized_comment');
+    $desc->file = '';
+    $desc->count = get_categorycount($desc->md);
 
     return $tmp[] = $desc;
 }
@@ -690,9 +684,9 @@ function category_list($custom = null) {
     } else {
         $arr = get_category_info(null);
         foreach ($arr as $a) {
-            $cat[] = array($a->md, $a->title);
+            $cat[] = array($a->md, $a->title, $a->count);
         }
-        array_push($cat, array('uncategorized', i18n('Uncategorized')));
+
         asort($cat);
         $tmp = serialize($cat);
         file_put_contents($filename, print_r($tmp, true));
@@ -705,8 +699,8 @@ function category_list($custom = null) {
     echo '<ul>';
 
     foreach ($cat as $k => $v) {
-        if (get_categorycount($v['0']) !== 0) {
-            echo '<li><a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1']. '</a></li>';
+        if ($v['2'] !== 0) {
+            echo '<li><a href="' . site_url() . 'category/' . $v['0'] . '">' . $v['1'] . '</a> <span>('. $v['2'] .')</span></li>';
         }
     }
 
@@ -727,10 +721,10 @@ function get_type($type, $page, $perpage)
 
     foreach ($posts as $index => $v) {
 
-        // Replaced string
-        $replaced = $v['dirname'] . '/';
+        // dirname string
+        $dirname = $v['dirname'] . '/';
 
-        $str = explode('/', $replaced);
+        $str = explode('/', $dirname);
 
         if (strtolower($type) === strtolower($str[4])) {
             $tmp[] = $v;
@@ -747,7 +741,7 @@ function get_type($type, $page, $perpage)
 }
 
 // Return tag page.
-function get_tag($tag, $page, $perpage, $random)
+function get_tag($tag, $page, $perpage, $random = null)
 {
     $posts = get_post_sorted();
 
@@ -885,11 +879,11 @@ function get_author($name)
 
             $author = new stdClass;
 
-            // Replaced string
-            $replaced = dirname($v) . '/';
+            // dirname string
+            $dirname = dirname($v) . '/';
 
             // Author string
-            $str = explode('/', $replaced);
+            $str = explode('/', $dirname);
             $profile = $str[1];
 
             if ($name === $profile) {
@@ -949,9 +943,6 @@ function get_static_post($static)
 
                 $post = new stdClass;
 
-                // Replaced string
-                $replaced = dirname($v) . '/';
-
                 // The static page URL
                 $url= pathinfo($v, PATHINFO_FILENAME);
                 
@@ -1001,9 +992,6 @@ function get_static_sub_post($static, $sub_static)
             if (stripos($v, $sub_static . '.md') !== false) {
 
                 $post = new stdClass;
-
-                // Replaced string
-                $replaced = dirname($v) . '/';
 
                 // The static page URL
                 $url= pathinfo($v, PATHINFO_FILENAME);
@@ -1132,15 +1120,15 @@ function get_related($tag, $custom = null, $count = null)
 
 }
 
-// Return post count. Matching $var and $str provided.
-function get_count($var, $str)
+// Return post count. Matching $var.
+function get_count($var)
 {
     $posts = get_post_sorted();
 
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v[$str]);
+        $arr = explode('_', $v['basename']);
         $url = $arr[0];
         if (stripos($url, "$var") !== false) {
             $tmp[] = $v;
@@ -1150,7 +1138,7 @@ function get_count($var, $str)
     return count($tmp);
 }
 
-// Return category count. Matching $var and $str provided.
+// Return category count. Matching $var
 function get_categorycount($var)
 {
     $posts = get_post_sorted();
@@ -1168,7 +1156,7 @@ function get_categorycount($var)
     return count($tmp);
 }
 
-// Return type count. Matching $var and $str provided.
+// Return type count. Matching $var
 function get_typecount($var)
 {
     $posts = get_post_sorted();
@@ -1187,7 +1175,7 @@ function get_typecount($var)
 }
 
 
-// Return draft count. Matching $var and $str provided.
+// Return draft count. Matching $var
 function get_draftcount($var)
 {
     $posts = get_draft_posts();
@@ -1204,7 +1192,7 @@ function get_draftcount($var)
     return count($tmp);
 }
 
-// Return draft count. Matching $var and $str provided.
+// Return draft count. Matching $var
 function get_scheduledcount($var)
 {
     $posts = get_scheduled_posts();
@@ -1223,15 +1211,15 @@ function get_scheduledcount($var)
     
 }
 
-// Return tag count. Matching $var and $str provided.
-function get_tagcount($var, $str)
+// Return tag count. Matching $var
+function get_tagcount($var)
 {
     $posts = get_post_sorted();
 
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v[$str]);
+        $arr = explode('_', $v['basename']);
         $mtag = explode(',', rtrim($arr[1], ','));
         foreach ($mtag as $t) {
             if (strtolower($t) === strtolower($var)) {
@@ -1534,6 +1522,23 @@ EOF;
                 echo '</li>';
                 echo '</ul>';
             }
+        } elseif ($custom == 'month-year') {
+            foreach ($by_year as $year => $months) {
+                $by_month = array_count_values($months);
+                # Sort the months
+                krsort($by_month);
+                foreach ($by_month as $month => $count) {
+                $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'F');
+                echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . ' ' . $year .'</a> ('.$count.')</li>';
+                }
+            }
+        } elseif ($custom == 'year') {
+            foreach ($by_year as $year => $months) {
+                $by_month = array_count_values($months);
+                # Sort the months
+                krsort($by_month);
+                echo '<li class="item"><a href="' . site_url() . 'archive/' . $year . '">' . $year .'</a> ('. count($months) .')</li>';
+            }
         } else {
             return $by_year;
         }
@@ -1628,7 +1633,6 @@ function has_prev($prev)
             'body' => $prev->body,
             'description' => $prev->description,
             'tag' => $prev->tag,
-            'category' => $prev->category,
             'author' => $prev->author,
             'authorName' => $prev->authorName,
             'authorAbout' => $prev->authorAbout,
@@ -1642,7 +1646,12 @@ function has_prev($prev)
             'audio' => $prev->audio,
             'quote' => $prev->quote,
             'link' => $prev->link,
+            'category' => $prev->category,
             'categoryUrl' => $prev->categoryUrl,
+            'categoryCount' => $prev->categoryCount,
+            'categorySlug' => $prev->categorySlug,
+            'categoryMd' => $prev->categoryMd,
+            'categoryTitle' => $prev->categoryTitle,
             'readTime' => $prev->readTime,
             'lastMod' => $prev->lastMod
         );
@@ -1661,7 +1670,6 @@ function has_next($next)
             'body' => $next->body,
             'description' => $next->description,
             'tag' => $next->tag,
-            'category' => $next->category,
             'author' => $next->author,
             'authorName' => $next->authorName,
             'authorAbout' => $next->authorAbout,
@@ -1675,7 +1683,12 @@ function has_next($next)
             'audio' => $next->audio,
             'quote' => $next->quote,
             'link' => $next->link,
+            'category' => $next->category,
             'categoryUrl' => $next->categoryUrl,
+            'categoryCount' => $next->categoryCount,
+            'categorySlug' => $next->categorySlug,
+            'categoryMd' => $next->categoryMd,
+            'categoryTitle' => $next->categoryTitle,
             'readTime' => $next->readTime,
             'lastMod' => $next->lastMod
         );
@@ -2261,11 +2274,10 @@ function get_title_from_file($v)
     // Get the contents and convert it to HTML
     $content = MarkdownExtra::defaultTransform(file_get_contents($v));
 
-    $replaced = substr($v, 0, strrpos($v, '/')) . '/';
-    $base = str_replace($replaced, '', $v);
+    $filename= pathinfo($v, PATHINFO_FILENAME);
 
     // Extract the title and body
-    return get_content_tag('t', $content, str_replace('-', ' ', str_replace('.md', '', $base)));
+    return get_content_tag('t', $content, str_replace('-', ' ', $filename));
 }
 
 // Auto generate menu from static page
@@ -2305,21 +2317,20 @@ function get_menu($custom)
             }
             $i++;
 
-            // Replaced string
-            $replaced = substr($v, 0, strrpos($v, '/')) . '/';
-            $base = str_replace($replaced, '', $v);
-            $url = site_url() . str_replace('.md', '', $base);
+            // Filename string
+            $filename= pathinfo($v, PATHINFO_FILENAME);
+            $url = site_url() . $filename;
 
             $title = get_title_from_file($v);
 
-            if ($req == site_path() . "/" . str_replace('.md', '', $base) || stripos($req, site_path() . "/" . str_replace('.md', '', $base)) !== false) {
+            if ($req == site_path() . "/" . $filename || stripos($req, site_path() . "/" . $filename) !== false) {
                 $active = ' active';
                 $reqBase = '';
             } else {
                 $active = '';
             }
 
-            $subPages = get_static_sub_pages(str_replace('.md', '', $base));
+            $subPages = get_static_sub_pages($filename);
             if (!empty($subPages)) {
                 asort($subPages);
                 echo '<li class="' . $class . $active .' dropdown">';
@@ -2335,13 +2346,12 @@ function get_menu($custom)
                     if ($iSub == $countSub - 1) {
                         $classSub .= " last";
                     }
-                    $replacedSub = substr($sp, 0, strrpos($sp, '/')) . '/';
-                    $baseSub = str_replace($replacedSub, '', $sp);
 
-                    if ($req == site_path() . "/" . str_replace('.md', '', $base) . "/" . str_replace('.md', '', $baseSub)) {
+                    $baseSub= pathinfo($sp, PATHINFO_FILENAME);
+                    if ($req == site_path() . "/" . $filename . "/" . $baseSub) {
                         $classSub .= ' active';
                     }
-                    $urlSub = $url . "/" . str_replace('.md', '', $baseSub);
+                    $urlSub = $url . "/" . $baseSub;
                     echo '<li class="' . $classSub . '"><a href="' . $urlSub . '">' . get_title_from_file($sp) . '</a></li>';
                     $iSub++;
                 }
@@ -2475,23 +2485,21 @@ function sitemap_post_path()
 
         $post = new stdClass;
 
-        $post = new stdClass;
-
         $filepath = $v['dirname'] . '/' . $v['basename'];
 
         // Extract the date
         $arr = explode('_', $v['basename']);
 
-        // Replaced string
-        $replaced = $v['dirname'] . '/';
+        // dirname string
+        $dirname = $v['dirname'] . '/';
 
         // Author string
-        $str = explode('/', $replaced);
+        $str = explode('/', $dirname);
         $author = $str[1];
 
         $post->authorUrl = site_url() . 'author/' . $author;
 
-        $dt = str_replace($replaced, '', $arr[0]);
+        $dt = str_replace($dirname, '', $arr[0]);
         $t = str_replace('-', '', $dt);
         $time = new DateTime($t);
         $timestamp = $time->format("Y-m-d H:i:s");
@@ -2535,13 +2543,10 @@ function sitemap_page_path()
 
             $post = new stdClass;
 
-            // Replaced string
-            $replaced = substr($v, 0, strrpos($v, '/')) . '/';
-
-            // The static page URL
-            $url = str_replace($replaced, '', $v);
-            $post->url = site_url() . str_replace('.md', '', $url);
-			$post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($v)));
+            // Filename
+            $filename= pathinfo($v, PATHINFO_FILENAME);
+            $post->url = site_url() . $filename;
+            $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($v)));
 
             $tmp[] = $post;
         }
@@ -2662,7 +2667,6 @@ function generate_sitemap($str)
             foreach ($posts as $index => $v) {
 
                 $arr = explode('_', $v);
-
                 $data = $arr[1];
                 $mtag = explode(',', $data);
                 foreach ($mtag as $etag) {
@@ -2771,8 +2775,8 @@ function generate_sitemap($str)
         if($posts) {
             foreach ($posts as $index => $v) {
 
-                $replaced = dirname($v) . '/';
-                $str = explode('/', $replaced);
+                $dirname = dirname($v) . '/';
+                $str = explode('/', $dirname);
                 $cats[] = $str[3];
 
             }
@@ -2809,8 +2813,8 @@ function generate_sitemap($str)
         if($posts) {
             foreach ($posts as $index => $v) {
 
-                $replaced = dirname($v) . '/';
-                $str = explode('/', $replaced);
+                $dirname = dirname($v) . '/';
+                $str = explode('/', $dirname);
                 $types[] = $str[4];
             }
 

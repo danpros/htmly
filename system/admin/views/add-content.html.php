@@ -98,7 +98,6 @@ $( function() {
                     <br>
                     <label for="pCategory"><?php echo i18n('Category');?> <span class="required">*</span></label>
                     <select id="pCategory" class="form-control" name="category">
-                        <option value="uncategorized"><?php echo i18n("Uncategorized");?></option>
                         <?php foreach ($desc as $d):?>
                             <option value="<?php echo $d->md;?>"><?php echo $d->title;?></option>
                         <?php endforeach;?>
