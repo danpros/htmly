@@ -160,6 +160,8 @@ The built-in editor found in the admin panel. HTMLy also allows you to write the
 
 For static pages you can upload it to the `content/static` folder.
 
+**Note for offline writing:** Every time new content added (post, category etc.), or you make changes that change the folder structure or file names, simply delete the `index` folder inside `cache` folder so that the changes detected by HTMLy.
+
 Category
 --------
 The default category is `Uncategorized` with slug `uncategorized` and you do not need to creating it inside `content/data/category/` folder. But if you write it offline and want to assign new category to specific post you need to creating it first before you can use those category, example `content/data/category/new-category.md` with the following content:
