@@ -14,6 +14,7 @@ function user($key, $user = null)
     }
 }
 
+// Update the user
 function update_user($userName, $password, $role)
 {
     $file = 'config/users/' . $userName . '.ini';
@@ -26,6 +27,7 @@ function update_user($userName, $password, $role)
     return false;
 }
 
+// Create user
 function create_user($userName, $password, $role = "user")
 {
     $file = 'config/users/' . $userName . '.ini';
@@ -76,6 +78,30 @@ function old_password_verify($pass, $user_enc, $user_pass)
 {
     $password = (strlen($user_enc) > 0 && $user_enc !== 'clear' && $user_enc !== 'none') ? hash($user_enc, $pass) : $pass;
     return ($password === $user_pass);
+}
+
+// Generate csrf token
+function generate_csrf_token()
+{
+    $_SESSION[config("site.url")]['csrf_token'] = sha1(microtime(true) . mt_rand(10000, 90000));
+}
+
+// Get csrf token
+function get_csrf()
+{
+    if (!isset($_SESSION[config("site.url")]['csrf_token']) || empty($_SESSION[config("site.url")]['csrf_token'])) {
+        generate_csrf_token();
+    }
+    return $_SESSION[config("site.url")]['csrf_token'];
+}
+
+// Check the csrf token
+function is_csrf_proper($csrf_token)
+{
+    if ($csrf_token == get_csrf()) {
+        return true;
+    }
+    return false;
 }
 
 // Clean URLs
@@ -151,7 +177,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 
     $post_tag = implode(',', array_keys($newtag));
     
-    $posts = get_post_sorted();
+    $posts = get_blog_posts();
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
         if (strtolower($arr[2]) === strtolower($post_url . '.md')) {
@@ -856,6 +882,120 @@ function get_feed($feed_url, $credit)
     }
 }
 
+// Create Zip files
+function Zip($source, $destination, $include_dir = false)
+{
+    if (!extension_loaded('zip') || !file_exists($source)) {
+        return false;
+    }
+
+    if (file_exists($destination)) {
+        unlink($destination);
+    }
+
+    $zip = new ZipArchive();
+
+    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+        return false;
+    }
+
+    if (is_dir($source) === true) {
+
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file) {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                continue;
+
+            if (is_dir($file) === true) {
+                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+            } elseif (is_file($file) === true) {
+                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+            }
+        }
+    } elseif (is_file($source) === true) {
+        $zip->addFromString(basename($source), file_get_contents($source));
+    }
+
+    return $zip->close();
+}
+
+// Return toolbar
+function toolbar()
+{
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    $base = site_url();
+
+    echo <<<EOF
+    <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
+EOF;
+    echo '<div id="toolbar"><ul>';
+    echo '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
+    echo '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
+    if ($role === 'admin') {
+        echo '<li class="tb-posts"><a href="' . $base . 'admin/posts">' . i18n('Posts') . '</a></li>';
+        if (config('views.counter') == 'true') {
+            echo '<li class="tb-popular"><a href="' . $base . 'admin/popular">' . i18n('Popular') . '</a></li>';
+        }
+    }
+    echo '<li class="tb-mine"><a href="' . $base . 'admin/pages">' . i18n('Pages') . '</a></li>';
+    echo '<li class="tb-draft"><a href="' . $base . 'admin/scheduled">' . i18n('Scheduled') . '</a></li>';
+    echo '<li class="tb-draft"><a href="' . $base . 'admin/draft">' . i18n('Draft') . '</a></li>';
+    if ($role === 'admin') {
+        echo '<li class="tb-categories"><a href="' . $base . 'admin/categories">' . i18n('Categories') . '</a></li>';
+    }
+    echo '<li class="tb-import"><a href="' . $base . 'admin/menu">' . i18n('Menu') . '</a></li>';
+    if ($role === 'admin') {
+      echo '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
+    }
+    echo '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
+    echo '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
+    echo '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+    echo '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
+    echo '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
+
+    echo '</ul></div>';
+}
+
+// save the i18n tag
+function save_tag_i18n($tag,$tagDisplay)
+{
+
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+    $filename = "content/data/tags.lang";
+    $tags = array();
+    $tmp = array();
+    $views = array();
+
+    $tt = explode(',', rtrim($tag, ','));
+    $tl = explode(',', rtrim($tagDisplay, ','));
+    $tags = array_combine($tt,$tl);
+
+    if (file_exists($filename)) {
+        $views = unserialize(file_get_contents($filename));
+        foreach ($tags as $key => $val) {
+            if (isset($views[$key])) {
+                $views[$key] = $val;
+            } else {
+                $views[$key] = $val;
+            }
+        }
+    } else {
+        $views = $tags;
+    }
+
+    $tmp = serialize($views);
+    file_put_contents($filename, print_r($tmp, true));
+
+}
+
 function clear_post_cache($post_date, $post_tag, $post_url, $filename, $category, $type)
 {
     $b = str_replace('/', '#', site_path() . '/');
@@ -975,6 +1115,21 @@ function clear_cache()
     }
 }
 
+function valueMaker($value)
+{
+    if (is_string($value))
+        return htmlspecialchars($value);
+
+    if ($value === true)
+        return "true";
+    if ($value === false)
+        return "false";
+
+    if ($value == false)
+        return "0";
+    return (string)$value;
+}
+
 function replace_key($arr, $oldkey, $newkey) {
     if(array_key_exists($oldkey, $arr)) {
         $keys = array_keys($arr);
@@ -982,4 +1137,21 @@ function replace_key($arr, $oldkey, $newkey) {
         return array_combine($keys, $arr);    
     }
     return $arr;    
+}
+
+// rename category folder
+function rename_category_folder($new_name, $old_file)
+{
+
+    $old_name = str_replace('.md', '', basename($old_file));
+    $dir = get_category_folder();
+    foreach ($dir as $index => $v) {
+        if (stripos($v, '/' . $old_name . '/') !== false) {
+            $str = explode('/', $v);
+            $old_folder = $str[0] . '/' . $str[1] . '/' . $str[2] . '/' . $old_name . '/';
+            $new_folder = $str[0] . '/' . $str[1] . '/' . $str[2] . '/' . $new_name . '/';
+            rename($old_folder, $new_folder);
+        }
+    }
+
 }

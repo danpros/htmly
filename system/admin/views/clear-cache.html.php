@@ -1,9 +1,15 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php
 
-rebuilt_cache('all');
-
 foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
+    unlink($file);
+}
+
+foreach (glob('cache/index/*.txt', GLOB_NOSORT) as $file) {
+    unlink($file);
+}
+
+foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
     unlink($file);
 }
 
