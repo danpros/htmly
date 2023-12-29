@@ -1,15 +1,17 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php
 if (isset($p->file)) {
-    $url = $p->file;
+    $file_path = pathinfo($p->file);
 } else {
-    $url = $oldfile;
+    $file_path = pathinfo($oldfile);
 }
+
+$filename = $file_path['dirname'] . '/' . $file_path['basename'];
 
 $desc = get_category_info(null);
 asort($desc);
 
-$content = file_get_contents($url);
+$content = file_get_contents($filename);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
 $olddescription = get_content_tag('d', $content);
 $oldtag = get_content_tag('tag', $content);
@@ -21,32 +23,26 @@ $oldvideo = get_content_tag('video', $content);
 $oldlink = get_content_tag('link', $content);
 $oldquote = get_content_tag('quote', $content);
 
-$dir = substr($url, 0, strrpos($url, '/'));
+$dir = $file_path['dirname'];
 $isdraft = explode('/', $dir);
-$oldurl = explode('_', $url);
+$oldurl = explode('_', $file_path['basename']);
 
 if (empty($oldtag)) {
     $oldtag = $oldurl[1];
 }
 
-$oldmd = str_replace('.md', '', $oldurl[2]);
+$oldmd = $file_path['filename'];
 
 if (isset($_GET['destination'])) {
     $destination = _h($_GET['destination']);
 } else {
     $destination = 'admin';
 }
-$replaced = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/';
 
-// Category string
-$cat = explode('/', $replaced);
-if ($cat[count($cat) - 2] === 'scheduled') {
-$category = $cat[count($cat) - 4];
-} else {
-$category = $cat[count($cat) - 3];    
-}
+$cat = explode('/', $dir);
+$category = $cat[3];
 
-$dt = str_replace($replaced, '', $oldurl[0]);
+$dt = $oldurl[0];
 $t = str_replace('-', '', $dt);
 $time = new DateTime($t);
 $timestamp = $time->format("Y-m-d H:i:s");
@@ -222,7 +218,7 @@ $( function() {
                     <?php if ($type == 'is_post'):?>
                     <input type="hidden" name="is_post" value="is_post">
                     <?php endif;?>
-                    <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+                    <input type="hidden" name="oldfile" class="text" value="<?php echo $filename; ?>"/>
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                 </div>
             </div>
