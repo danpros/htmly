@@ -31,7 +31,7 @@ if (empty($oldtag)) {
     $oldtag = $oldurl[1];
 }
 
-$oldmd = $file_path['filename'];
+$oldmd = str_replace('.md', '', $oldurl[2]);
 
 if (isset($_GET['destination'])) {
     $destination = _h($_GET['destination']);
