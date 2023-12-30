@@ -509,8 +509,7 @@ function add_page($title, $url, $content, $description = null)
     $posts = get_static_pages();
     $timestamp = date('YmdHis');
     foreach ($posts as $index => $v) {
-        $arr = explode('/', $v);
-        if (strtolower($arr[2]) === strtolower($post_url . '.md')) {
+        if (strtolower($v['basename']) === strtolower($post_url . '.md')) {
             $post_url = $post_url .'-'. $timestamp;
         } else {
             $post_url = $post_url;
