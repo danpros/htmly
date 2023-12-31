@@ -444,7 +444,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 function get_pages($pages, $page = 1, $perpage = 0) 
 {
     if (empty($pages)) {
-        $pages = get_static_page();
+        $pages = get_static_pages();
     }
 
     $tmp = array();
