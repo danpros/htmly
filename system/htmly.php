@@ -65,6 +65,7 @@ get('/index', function () {
             'bodyclass' => 'in-front',
             'breadcrumb' => '',
             'p' => $front,
+            'static' => $front,
             'type' => 'is_frontpage',
             'is_front' => true,
         ), $layout);
@@ -1748,9 +1749,9 @@ get('/admin/categories/:category', function ($category) {
             if(strtolower($category) !== 'uncategorized') {
                $desc = $desc[0];
             }
-			
+            
             $total = $desc->count;
-			
+            
             if (empty($posts) || $page < 1) {
                 // a non-existing page
                 not_found();
@@ -1880,7 +1881,8 @@ get('/category/:category/edit', function ($category) {
             'is_admin' => true,
             'bodyclass' => 'edit-category',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Category') . ': ' . $post->title,
-            'p' => $post
+            'p' => $post,
+            'static' => $post,
         ));
     } else {
         $login = site_url() . 'login';
@@ -1964,6 +1966,7 @@ get('/category/:category/delete', function ($category) {
             'bodyclass' => 'delete-category',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Category') . ': ' . $post->title,
             'p' => $post,
+            'static' => $post,
             'type' => 'categoryPage',
         ));
     } else {
@@ -2409,6 +2412,7 @@ get('/post/:name', function ($name) {
         'description' => $current->description,
         'canonical' => $current->url,
         'p' => $current,
+        'post' => $current,
         'author' => $author,
         'bodyclass' => 'in-post category-' . $current->ct . ' type-' . $current->type,
         'breadcrumb' => '<style>.breadcrumb-list {margin:0; padding:0;} .breadcrumb-list li {display: inline-block; list-style: none;}</style><ol class="breadcrumb-list" itemscope itemtype="http://schema.org/BreadcrumbList"><li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . '"><span itemprop="name">' . config('breadcrumb.home') . '</span></a><meta itemprop="position" content="1" /></li> &#187; '. $blog . '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">' . $current->categoryb . '<meta itemprop="position" content="3" /></li>' . ' &#187; ' . $current->title . '</ol>',
@@ -2464,6 +2468,7 @@ get('/post/:name/edit', function ($name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'type' => $type,
                 'is_admin' => true,
                 'bodyclass' => 'edit-post',
@@ -2475,6 +2480,7 @@ get('/post/:name/edit', function ($name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'bodyclass' => 'denied',
                 'is_admin' => true,
                 'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->categoryb . ' &#187; ' . $current->title
@@ -2667,6 +2673,7 @@ get('/post/:name/delete', function ($name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'is_admin' => true,
                 'bodyclass' => 'delete-post',
                 'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->categoryb . ' &#187; ' . $current->title
@@ -2677,6 +2684,7 @@ get('/post/:name/delete', function ($name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'is_admin' => true,
                 'bodyclass' => 'delete-post',
                 'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->categoryb . ' &#187; ' . $current->title
@@ -2853,12 +2861,24 @@ get('/:static', function ($static) {
         }
 
         $post = get_static_post($static);
+        
+        if (array_key_exists('prev', $post)) {
+            $prev = $post['prev'];
+        } else {
+            $prev = array();
+        }
+
+        if (array_key_exists('next', $post)) {
+            $next = $post['next'];
+        } else {
+            $next = array();
+        }
 
         if (!$post) {
             not_found();
         }
 
-        $post = $post[0];
+        $post = $post['current'];
 
         if (config("views.counter") == "true") {
             add_view($post->file);
@@ -2893,7 +2913,10 @@ get('/:static', function ($static) {
             'bodyclass' => 'in-page ' . strtolower($static),
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
+            'static' => $post,
             'type' => 'staticPage',
+            'prev' => static_prev($prev),
+            'next' => static_next($next),
             'is_page' => true,
         ), $layout);
     }
@@ -2912,7 +2935,7 @@ get('/:static/add', function ($static) {
             not_found();
         }
 
-        $post = $post[0];
+        $post = $post['current'];
 
         render('add-page', array(
             'title' => i18n('Add_new_page') . ' - ' . blog_title(),
@@ -2985,7 +3008,7 @@ get('/:static/edit', function ($static) {
             not_found();
         }
 
-        $post = $post[0];
+        $post = $post['current'];
 
         render('edit-page', array(
             'title' => i18n('Edit') .  ': ' . $post->title . ' - ' . blog_title(),
@@ -2995,6 +3018,7 @@ get('/:static/edit', function ($static) {
             'is_admin' => true,
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
+            'static' => $post,
             'type' => 'staticPage',
         ));
     } else {
@@ -3066,7 +3090,7 @@ get('/:static/delete', function ($static) {
             not_found();
         }
 
-        $post = $post[0];
+        $post = $post['current'];
 
         render('delete-page', array(
             'title' => i18n('Delete') . ': ' . $post->title . ' - ' . blog_title(),
@@ -3076,6 +3100,7 @@ get('/:static/delete', function ($static) {
             'is_admin' => true,
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Delete') . ': ' . $post->title,
             'p' => $post,
+            'static' => $post,
             'type' => 'staticPage',
         ));
     } else {
@@ -3114,10 +3139,23 @@ get('/:static/:sub', function ($static, $sub) {
         not_found();
     }
     $post = get_static_sub_post($static, $sub);
+    
+    if (array_key_exists('prev', $post)) {
+        $prev = $post['prev'];
+    } else {
+        $prev = array();
+    }
+
+    if (array_key_exists('next', $post)) {
+        $next = $post['next'];
+    } else {
+        $next = array();
+    }
+    
     if (!$post) {
         not_found();
     }
-    $post = $post[0];
+    $post = $post['current'];
 
     if (config("views.counter") == "true") {
         add_view($post->file);
@@ -3157,8 +3195,11 @@ get('/:static/:sub', function ($static, $sub) {
         'description' => $post->description,
         'canonical' => $post->url,
         'bodyclass' => 'in-page ' . strtolower($static) . ' ' . strtolower($sub) ,
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $parent_post[0]->url . '">' . $parent_post[0]->title . '</a> &#187; ' . $post->title,
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $parent_post['current']->url . '">' . $parent_post['current']->title . '</a> &#187; ' . $post->title,
         'p' => $post,
+        'static' => $post,
+        'prev' => static_prev($prev),
+        'next' => static_next($next),
         'type' => 'subPage',
         'is_subpage' => true,
     ), $layout);
@@ -3176,7 +3217,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
             not_found();
         }
 
-        $post = $post[0];
+        $post = $post['current'];
 
         $page = get_static_sub_post($static, $sub);
 
@@ -3184,7 +3225,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
             not_found();
         }
 
-        $page = $page[0];
+        $page = $page['current'];
 
         render('edit-page', array(
             'title' => i18n('Edit') . ': ' . $page->title . ' - ' . blog_title(),
@@ -3194,6 +3235,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
             'is_admin' => true,
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ' . $page->title,
             'p' => $page,
+            'static' => $page,
             'type' => 'subPage',
         ));
     } else {
@@ -3270,7 +3312,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
             not_found();
         }
 
-        $post = $post[0];
+        $post = $post['current'];
 
         $page = get_static_sub_post($static, $sub);
 
@@ -3278,7 +3320,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
             not_found();
         }
 
-        $page = $page[0];
+        $page = $page['current'];
 
         render('delete-page', array(
             'title' => i18n('Delete') . ': ' . $page->title . ' - ' . blog_title(),
@@ -3288,6 +3330,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
             'is_admin' => true,
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $post->url . '">' . $post->title . '</a> &#187; ' . $page->title,
             'p' => $page,
+            'static' => $page,
             'type' => 'subPage',
         ));
     } else {
@@ -3410,6 +3453,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         'description' => $current->description,
         'canonical' => $current->url,
         'p' => $current,
+        'post' => $current,
         'author' => $author,
         'bodyclass' => 'in-post category-' . $current->ct . ' type-' . $current->type,
         'breadcrumb' => '<style>.breadcrumb-list {margin:0; padding:0;} .breadcrumb-list li {display: inline-block; list-style: none;}</style><ol class="breadcrumb-list" itemscope itemtype="http://schema.org/BreadcrumbList"><li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . '"><span itemprop="name">' . config('breadcrumb.home') . '</span></a><meta itemprop="position" content="1" /></li> &#187; '. $blog . '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">' . $current->categoryb . '<meta itemprop="position" content="3" /></li>' . ' &#187; ' . $current->title . '</ol>',
@@ -3465,6 +3509,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'type' => $type,
                 'bodyclass' => 'edit-post',
                 'is_admin' => true,
@@ -3476,6 +3521,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'bodyclass' => 'denied',
                 'is_admin' => true,
                 'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->categoryb . ' &#187; ' . $current->title
@@ -3662,6 +3708,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'bodyclass' => 'delete-post',
                 'is_admin' => true,
                 'breadcrumb' => '<span><a rel="v:url" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->categoryb . ' &#187; ' . $current->title
@@ -3672,6 +3719,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
                 'description' => strip_tags(blog_description()),
                 'canonical' => site_url(),
                 'p' => $current,
+                'post' => $current,
                 'bodyclass' => 'delete-post',
                 'is_admin' => true,
                 'breadcrumb' => '<span><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></span> &#187; ' . $current->categoryb . ' &#187; ' . $current->title

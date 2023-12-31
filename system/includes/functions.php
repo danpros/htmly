@@ -37,7 +37,7 @@ function get_static_pages()
 }
 
 // Get static page path. Unsorted.
-function get_static_sub_pages($static = null)
+function get_static_subpages($static = null)
 {
     static $_sub_page = array();
 
@@ -105,7 +105,7 @@ function get_draft_posts()
                 $_draft[] = pathinfo($file);
             }
         }
-        usort($_draft, "sortfile");
+        usort($_draft, "sortfile_a");
     }
     return $_draft;
 }
@@ -165,13 +165,19 @@ function get_gallery() {
                 $_gallery[] = pathinfo($file);
             }
         }
-        usort($_gallery, "sortfile");
+        usort($_gallery, "sortfile_d");
     }
     return $_gallery;
 }
 
 // usort function. Sort by filename.
-function sortfile($a, $b)
+function sortfile_a($a, $b)
+{
+    return $a['basename'] == $b['basename'] ? 0 : (($a['basename'] > $b['basename']) ? 1 : -1);
+}
+
+// usort function. 
+function sortfile_d($a, $b)
 {
     return $a['basename'] == $b['basename'] ? 0 : (($a['basename'] < $b['basename']) ? 1 : -1);
 }
@@ -196,7 +202,7 @@ function rebuilt_cache($type = null)
         mkdir($dir, 0775, true);
     }
 
-    // Rebuilt posts index sorted/unsorted
+    // Rebuilt posts index
     $tmp = array();
     $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
      if (is_array($tmp)) {
@@ -206,7 +212,7 @@ function rebuilt_cache($type = null)
             }
         }
     }
-    usort($posts_cache, "sortfile");
+    usort($posts_cache, "sortfile_d");
     $string_posts = serialize($posts_cache);
     file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));
 
@@ -218,7 +224,7 @@ function rebuilt_cache($type = null)
             $page_cache[] = pathinfo($file);
         }
     }
-    usort($page_cache, "sortfile");
+    usort($page_cache, "sortfile_a");
     $page_string = serialize($page_cache);
     file_put_contents('cache/index/index-pages.txt', print_r($page_string, true));
 
@@ -230,7 +236,7 @@ function rebuilt_cache($type = null)
             $subpage_cache[] = pathinfo($file);
         }
     }
-    usort($subpage_cache, "sortfile");
+    usort($subpage_cache, "sortfile_a");
     $subpage_string = serialize($subpage_cache);
     file_put_contents('cache/index/index-sub-pages.txt', print_r($subpage_string, true));
 
@@ -242,7 +248,7 @@ function rebuilt_cache($type = null)
             $author_cache[] = pathinfo($file);
         }
     }
-    usort($author_cache, "sortfile");
+    usort($author_cache, "sortfile_a");
     $author_string = serialize($author_cache);
     file_put_contents('cache/index/index-author.txt', print_r($author_string, true));
 
@@ -254,7 +260,7 @@ function rebuilt_cache($type = null)
             $category_cache[] = pathinfo($file);
         }
     }
-    usort($category_cache, "sortfile");
+    usort($category_cache, "sortfile_a");
     $category_string = serialize($category_cache);
     file_put_contents('cache/index/index-category.txt', print_r($category_string, true));
 
@@ -266,7 +272,7 @@ function rebuilt_cache($type = null)
             $scheduled[] = pathinfo($file);
         }
     }
-    usort($scheduled, "sortfile");
+    usort($scheduled, "sortfile_d");
     $scheduled_string = serialize($scheduled);
     file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true));
 
@@ -433,6 +439,106 @@ function get_posts($posts, $page = 1, $perpage = 0)
     }
 
     return $tmp;
+}
+
+function get_pages($pages, $page = 1, $perpage = 0) 
+{
+    if (empty($pages)) {
+        $pages = get_static_page();
+    }
+
+    $tmp = array();
+
+    // Extract a specific page with results
+    $pages = array_slice($pages, ($page - 1) * $perpage, $perpage);
+    
+    foreach ($pages as $index => $v) {
+        $post = new stdClass;
+
+        // The static page URL
+        $url= $v['filename'];
+        
+        $post->url = site_url() . $url;
+
+        $post->file = $v['dirname'] . '/' . $v['basename'];
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+        
+        $post->md = $url;
+
+        // Get the contents and convert it to HTML
+        $content = file_get_contents($post->file);
+
+        // Extract the title and body
+        $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+        // Get the contents and convert it to HTML
+        $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+        if (config('views.counter') == 'true') {
+            $post->views = get_views($post->file);
+        }
+
+        $post->description = get_content_tag("d", $content, get_description($post->body));
+
+        $word_count = str_word_count(strip_tags($post->body));
+        $post->readTime = ceil($word_count / 200);
+
+        $tmp[] = $post;            
+    }
+    
+    return $tmp;
+        
+}
+
+function get_subpages($sub_pages, $page = 1, $perpage = 0) 
+{
+    if (empty($sub_pages)) {
+        $sub_pages = get_static_subpages();
+    }
+
+    $tmp = array();
+
+    // Extract a specific page with results
+    $sub_pages = array_slice($sub_pages, ($page - 1) * $perpage, $perpage);
+    
+    foreach ($sub_pages as $index => $v) {
+        
+        $post = new stdClass;
+        
+        $static = str_replace(dirname($v['dirname']) . '/', '', $v['dirname']);
+
+        // The static page URL
+        $url= $v['filename'];
+        $post->url = site_url() . $static . "/" . $url;
+
+        $post->file = $v['dirname'] . '/' . $v['basename'];
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+        
+        $post->md = $url;
+        
+        $post->parent = $static;
+
+        // Get the contents and convert it to HTML
+        $content = file_get_contents($post->file);
+
+        // Extract the title and body
+        $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+        // Get the contents and convert it to HTML
+        $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+        $post->views = get_views($post->file);
+
+        $post->description = get_content_tag("d", $content, get_description($post->body));
+
+        $word_count = str_word_count(strip_tags($post->body));
+        $post->readTime = ceil($word_count / 200);
+
+        $tmp[] = $post;        
+    }
+    
+    return $tmp;
+        
 }
 
 // Find post by year, month and name, previous, and next.
@@ -653,7 +759,7 @@ function get_category_info($category)
             }
         }
     }
-
+    
     return $tmp;
 }
 
@@ -939,17 +1045,14 @@ function default_profile($name)
 }
 
 // Return static page.
-function get_static_post($static)
+function get_static_post($static = null)
 {
-    $posts = get_static_pages();
+    $pages = get_static_pages();
 
-    $tmp = array();
+    if (!empty($pages)) {
 
-    if (!empty($posts)) {
-
-        foreach ($posts as $index => $v) {
-            if (stripos($v['basename'], $static . '.md') !== false) {
-
+        foreach ($pages as $index => $v) {
+            if (is_null($static)) {
                 $post = new stdClass;
 
                 // The static page URL
@@ -980,26 +1083,61 @@ function get_static_post($static)
                 $word_count = str_word_count(strip_tags($post->body));
                 $post->readTime = ceil($word_count / 200);
 
-                $tmp[] = $post;
+                $tmp[] = $post;         
+				
+            } elseif (stripos($v['basename'], $static . '.md') !== false) {
+
+                // Use the get_posts method to return
+                // a properly parsed object
+
+                $ar = get_pages($pages, $index + 1, 1);
+                $nx = get_pages($pages, $index, 1);
+                $pr = get_pages($pages, $index + 2, 1);
+
+                if ($index == 0) {
+                    if (isset($pr[0])) {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => $pr[0]
+                        );
+                    } else {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => null
+                        );
+                    }
+                } elseif (count($pages) == $index + 1) {
+                    return array(
+                        'current' => $ar[0],
+                        'next' => $nx[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'next' => $nx[0],
+                        'prev' => $pr[0]
+                    );
+                }
             }
         }
     }
-
+    
     return $tmp;
 }
 
 // Return static page.
-function get_static_sub_post($static, $sub_static)
+function get_static_sub_post($static, $sub_static = null)
 {
-    $posts = get_static_sub_pages($static);
+    $sub_pages = get_static_subpages($static);
 
     $tmp = array();
 
-    if (!empty($posts)) {
+    if (!empty($sub_pages)) {
 
-        foreach ($posts as $index => $v) {
-            if (stripos($v['basename'], $sub_static . '.md') !== false) {
-
+        foreach ($sub_pages as $index => $v) {
+            
+            if (is_null($sub_static)) {
+                
                 $post = new stdClass;
 
                 // The static page URL
@@ -1030,6 +1168,40 @@ function get_static_sub_post($static, $sub_static)
                 $post->readTime = ceil($word_count / 200);
 
                 $tmp[] = $post;
+                
+            } elseif (stripos($v['basename'], $sub_static . '.md') !== false) {
+
+                // Use the get_posts method to return
+                // a properly parsed object
+
+                $ar = get_subpages($sub_pages, $index + 1, 1);
+                $nx = get_subpages($sub_pages, $index, 1);
+                $pr = get_subpages($sub_pages, $index + 2, 1);
+
+                if ($index == 0) {
+                    if (isset($pr[0])) {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => $pr[0]
+                        );
+                    } else {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => null
+                        );
+                    }
+                } elseif (count($sub_pages) == $index + 1) {
+                    return array(
+                        'current' => $ar[0],
+                        'next' => $nx[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'next' => $nx[0],
+                        'prev' => $pr[0]
+                    );
+                }
             }
         }
     }
@@ -1704,6 +1876,38 @@ function has_next($next)
     }
 }
 
+function static_prev($prev) 
+{
+    if (!empty($prev)) {
+        return array(
+            'url' => $prev->url,
+            'title' => $prev->title,
+            'body' => $prev->body,
+            'description' => $prev->description,
+            'views' => $prev->views,
+            'file' => $prev->file,
+            'readTime' => $prev->readTime,
+            'lastMod' => $prev->lastMod
+        );
+    }    
+}
+
+function static_next($next) 
+{
+    if (!empty($next)) {
+        return array(
+            'url' => $next->url,
+            'title' => $next->title,
+            'body' => $next->body,
+            'description' => $next->description,
+            'views' => $next->views,
+            'file' => $next->file,
+            'readTime' => $next->readTime,
+            'lastMod' => $next->lastMod
+        );
+    }    
+}
+
 // Helper function to determine whether
 // to show the pagination buttons
 function has_pagination($total, $perpage, $page = 1)
@@ -2331,7 +2535,7 @@ function get_menu($custom)
                 $active = '';
             }
 
-            $subPages = get_static_sub_pages($filename);
+            $subPages = get_static_subpages($filename);
             if (!empty($subPages)) {
                 asort($subPages);
                 echo '<li class="' . $class . $active .' dropdown">';
