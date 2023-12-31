@@ -42,7 +42,7 @@ function get_static_subpages($static = null)
     static $_sub_page = array();
 
     if (empty($_sub_page)) {
-        $url = 'cache/index/index-sub-pages.txt';
+        $url = 'cache/index/index-subpages.txt';
         if (!file_exists($url)) {
             rebuilt_cache('all');
         }
@@ -238,7 +238,7 @@ function rebuilt_cache($type = null)
     }
     usort($subpage_cache, "sortfile_a");
     $subpage_string = serialize($subpage_cache);
-    file_put_contents('cache/index/index-sub-pages.txt', print_r($subpage_string, true));
+    file_put_contents('cache/index/index-subpages.txt', print_r($subpage_string, true));
 
     // Rebuilt user profile index
     $atmp = array();
