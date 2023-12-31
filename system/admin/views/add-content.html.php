@@ -29,12 +29,8 @@ $images = get_gallery();
 
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
+<link rel="stylesheet" href="<?php echo site_url() ?>system/admin/editor.md/css/editormd.css" />
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
 <script>
 $( function() {
@@ -49,7 +45,7 @@ $( function() {
     function extractLast( term ) {
       return split( term ).pop();
     }
- 
+
     $( "#pTag" )
       // don't navigate away from the field on tab when selecting an item
       .on( "keydown", function( event ) {
@@ -110,7 +106,7 @@ $( function() {
                     <textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_leave_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
                     <br>
                 </div>
-                    
+
                 <div class="col-sm-6">
                     <div class="form-row">
                         <div class="col">
@@ -127,7 +123,7 @@ $( function() {
                     <label for="pURL"><?php echo i18n('Slug');?> (<?php echo i18n('optional');?>)</label>
                     <input type="text" class="form-control text" id="pURL" name="url" value="<?php if (isset($postUrl)) { echo $postUrl;} ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_post_title');?>"/>
                     <br>
-                    
+
                     <?php if ($type == 'is_audio'):?>
                     <label for="pAudio"><?php echo i18n('Featured_Audio');?> <span class="required">*</span> (e.g Soundcloud)</label>
                     <textarea rows="2" cols="20" class="media-uploader form-control text <?php if (isset($postAudio)) { if (empty($postAudio)) { echo 'error';} } ?>" id="pAudio" name="audio"><?php if (isset($postAudio)) { echo $postAudio;} ?></textarea>
@@ -179,16 +175,22 @@ $( function() {
                 <div class="col-sm-6">
                     <div>
                         <label for="wmd-input"><?php echo i18n('Content');?></label>
-                        <div id="wmd-button-bar" class="wmd-button-bar"></div>
-                        <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br>
-                        <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
-                        <br><br>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <label><?php echo i18n('Preview');?></label>
-                    <br>
-                    <div id="wmd-preview" class="wmd-panel wmd-preview" style="width:100%;overflow:auto;"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="htmly-editormd" >
+                        <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" style="display:none;"><?php if (isset($postContent)) { echo $postContent;} ?></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
                 </div>
             </div>
         </form>
@@ -298,12 +300,11 @@ $( function() {
         </div>
     </div>
     <?php endif;?>
-    
+
 </div>
 
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
 <script>
   $('.the-img').click(function(e) {
@@ -311,3 +312,19 @@ $( function() {
     $('#insertImageDialogURL').val($(e.target).attr('src'));
   });
 </script>
+<script src="<?php echo site_url() ?>system/admin/editor.md/editormd.min.js"></script>
+<script type="text/javascript">
+    var htmlyEditor;
+    $(function() {
+        htmlyEditor = editormd("htmly-editormd", {
+            width   : "100%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "<?php echo site_url() ?>system/admin/editor.md/lib/",
+            imageUpload : true,
+            imageFormats : ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'gif'],
+            imageUploadURL : "<?php echo site_url() ?>system/admin/editor.md/upload.php",
+        });
+    });
+</script>
+<script src="<?php echo site_url() ?>system/admin/editor.md/languages/en.js"></script>

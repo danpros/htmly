@@ -66,13 +66,9 @@ if ($type == 'is_frontpage') {
 $images = get_gallery();
 
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Sanitizer.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
+<link rel="stylesheet" href="<?php echo site_url() ?>system/admin/editor.md/css/editormd.css" />
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
 
 <?php if (isset($error)) { ?>
@@ -103,33 +99,41 @@ $images = get_gallery();
                     <?php } ?>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-sm-6">
-                    <label for="wmd-input"><?php echo i18n('Content');?></label>
-                    <div id="wmd-button-bar" class="wmd-button-bar"></div>
-                    <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
-                    <br>
-                    <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-                    <?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
-                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/>
-                    <?php } elseif ($type == 'is_category') {?>
-                        <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save_category');?>"/>
-                    <?php } else {?>
-                        <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
-                    <?php } ?>
+                    <div>
+                        <label for="wmd-input"><?php echo i18n('Content');?></label>
+                    </div>
                 </div>
                 <div class="col-sm-6">
                     <label><?php echo i18n('Preview');?></label>
-                    <br>
-                    <div id="wmd-preview" class="wmd-panel wmd-preview" style="width:100%;overflow:auto;"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="htmly-editormd" >
+                        <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" style="display:none;"><?php echo $oldcontent ?></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
+                <?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
+                    <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/>
+                <?php } elseif ($type == 'is_category') {?>
+                    <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+                    <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save_category');?>"/>
+                <?php } else {?>
+                    <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+                    <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
+                <?php } ?>
                 </div>
             </div>
         </form>
     </div>
-        
+
 <style>
 .wmd-prompt-background {z-index:10!important;}
 #wmd-preview img {max-width:100%;}
@@ -196,9 +200,24 @@ $images = get_gallery();
 </div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
-<script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script>
   $('.the-img').click(function(e) {
     $('#insertImageDialogURL').val($(e.target).attr('src'));
   });
 </script>
+<script src="<?php echo site_url() ?>system/admin/editor.md/editormd.min.js"></script>
+<script type="text/javascript">
+    var htmlyEditor;
+    $(function() {
+        htmlyEditor = editormd("htmly-editormd", {
+            width   : "100%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "<?php echo site_url() ?>system/admin/editor.md/lib/",
+            imageUpload : true,
+            imageFormats : ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'gif'],
+            imageUploadURL : "<?php echo site_url() ?>system/admin/editor.md/upload.php",
+        });
+    });
+</script>
+<script src="<?php echo site_url() ?>system/admin/editor.md/languages/en.js"></script>
