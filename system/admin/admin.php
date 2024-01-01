@@ -1265,7 +1265,7 @@ function find_draft_page($static = null)
 }
 
 // Return draft static subpage.
-function find_draft_subpage($static = null, $sub_static = null)
+function find_draft_subpage($sub_static = null)
 {
     $posts = get_draft_subpages();
 
@@ -1278,9 +1278,7 @@ function find_draft_subpage($static = null, $sub_static = null)
 
                 $post = new stdClass;
                 
-                if (is_null($static)) {
-                    $static = str_replace('content/static/', '', dirname($v['dirname']));
-                }
+                $static = str_replace('content/static/', '', dirname($v['dirname']));
 
                 // The static page URL
                 $url= $v['filename'];
