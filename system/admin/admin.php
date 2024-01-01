@@ -599,7 +599,6 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
 function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null)
 {
     $dir = pathinfo($oldfile, PATHINFO_DIRNAME);
-    $dirDraft = $dir . '/draft/';
     $views = array();
     $viewsFile = "content/data/views.json";
     $post_title = safe_html($title);
@@ -617,18 +616,14 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
     
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
-    if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
-		
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775, true);
-        }
-
-        if (!is_dir($dirDraft)) {
-            mkdir($dirDraft, 0775, true);
-        }   
+    if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {  
         
         if(!empty($revertPage)) {
-            $newfile = $dirDraft . $post_url . '.md';
+            $dir = $dir . '/draft';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $newfile = $dir . '/' . $post_url . '.md';
             file_put_contents($newfile, print_r($post_content, true));
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
@@ -642,8 +637,8 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             file_put_contents($newfile, print_r($post_content, true));
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
-                if(is_dir($dir . '/' . $old)) {
-                    rename($dir . '/' . $old, $dir . '/' . $post_url);
+                if(is_dir(dirname($dir) . '/' . $old)) {
+                    rename(dirname($dir) . '/' . $old, dirname($dir) . '/' . $post_url);
                 }
             }
             unlink($oldfile);
