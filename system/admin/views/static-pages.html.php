@@ -4,7 +4,7 @@
 <a class="btn btn-primary right" href="<?php echo site_url();?>add/page"><?php echo i18n('Add_new_page');?></a>
 <br><br>
 <?php if (isset($_SESSION[config("site.url")]['user'])):?>
-    <?php $posts = get_static_post();
+    <?php $posts = find_page();
     if (!empty($posts)): ?>
         <table class="table post-list">
         <tr class="head">
@@ -25,7 +25,7 @@
 				<td><a class="btn btn-primary btn-xs" href="<?php echo $p->url;?>/add?destination=admin/pages"><?php echo i18n('Add_sub');?></a> <a class="btn btn-primary btn-xs" href="<?php echo $p->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a> <?php if ($count == 0):?><a class="btn btn-danger btn-xs" href="<?php echo $p->url;?>/delete?destination=admin/pages"><?php echo i18n('Delete');?></a><?php endif;?></td>
 				<td>
 					<table>
-						<?php $subPages = get_static_sub_post($p->md);
+						<?php $subPages = find_subpage($p->md);
 						foreach ($subPages as $sp):?>
 														
 						<div class="row">

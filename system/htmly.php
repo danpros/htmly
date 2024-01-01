@@ -938,9 +938,9 @@ get('/admin/draft', function () {
 
         $posts = get_draft($name, $page, $perpage);
         
-        $draftPages = find_draft_pages();
+        $draftPages = find_draft_page();
         
-        $draftSubpages = find_draft_subpages();
+        $draftSubpages = find_draft_subpage();
 
         $total = get_draftcount($name);
 
@@ -2864,7 +2864,7 @@ get('/:static', function ($static) {
             }
         }
 
-        $post = get_static_post($static);
+        $post = find_page($static);
         
         if (array_key_exists('prev', $post)) {
             $prev = $post['prev'];
@@ -2933,7 +2933,7 @@ get('/:static/add', function ($static) {
 
         config('views.root', 'system/admin/views');
 
-        $post = get_static_post($static);
+        $post = find_page($static);
 
         if (!$post) {
             not_found();
@@ -3007,10 +3007,10 @@ get('/:static/edit', function ($static) {
     if (login()) {
 
         config('views.root', 'system/admin/views');
-        $post = get_static_post($static);
+        $post = find_page($static);
 
         if (!$post) {
-            $post = find_draft_pages($static);
+            $post = find_draft_page($static);
             if (!$post) {
                 not_found();
             } else {
@@ -3096,10 +3096,10 @@ get('/:static/delete', function ($static) {
     if (login()) {
 
         config('views.root', 'system/admin/views');
-        $post = get_static_post($static);
+        $post = find_page($static);
 
         if (!$post) {
-            $post = find_draft_pages($static);
+            $post = find_draft_page($static);
             if (!$post) {
                 not_found();
             } else {
@@ -3151,11 +3151,11 @@ get('/:static/:sub', function ($static, $sub) {
         header("location: $redir", TRUE, 301);
     }
 
-    $parent_post = get_static_post($static);
+    $parent_post = find_page($static);
     if (!$parent_post) {
         not_found();
     }
-    $post = get_static_sub_post($static, $sub);
+    $post = find_subpage($static, $sub);
     
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -3228,7 +3228,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
     if (login()) {
 
         config('views.root', 'system/admin/views');
-        $post = get_static_post($static);
+        $post = find_page($static);
 
         if (!$post) {
             not_found();
@@ -3236,10 +3236,10 @@ get('/:static/:sub/edit', function ($static, $sub) {
 
         $post = $post['current'];
 
-        $page = get_static_sub_post($static, $sub);
+        $page = find_subpage($static, $sub);
 
         if (!$page) {
-            $page = find_draft_subpages($static, $sub);
+            $page = find_draft_subpage($static, $sub);
             if (!$page) {
                 not_found();
             } else {
@@ -3330,7 +3330,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
     if (login()) {
 
         config('views.root', 'system/admin/views');
-        $post = get_static_post($static);
+        $post = find_page($static);
 
         if (!$post) {
             not_found();
@@ -3338,10 +3338,10 @@ get('/:static/:sub/delete', function ($static, $sub) {
 
         $post = $post['current'];
 
-        $page = get_static_sub_post($static, $sub);
+        $page = find_subpage($static, $sub);
 
         if (!$page) {
-            $page = find_draft_subpages($static, $sub);
+            $page = find_draft_subpage($static, $sub);
             if (!$page) {
                 not_found();
             } else {

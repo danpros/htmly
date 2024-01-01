@@ -1214,8 +1214,8 @@ function rename_category_folder($new_name, $old_file)
 
 }
 
-// Return static page.
-function find_draft_pages($static = null)
+// Return draft static page.
+function find_draft_page($static = null)
 {
     $posts = get_draft_pages();
 
@@ -1264,8 +1264,8 @@ function find_draft_pages($static = null)
     return $tmp;
 }
 
-// Return static page.
-function find_draft_subpages($static = null, $sub_static = null)
+// Return draft static subpage.
+function find_draft_subpage($static = null, $sub_static = null)
 {
     $posts = get_draft_subpages();
 

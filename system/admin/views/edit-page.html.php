@@ -118,7 +118,7 @@ $images = get_gallery();
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save_category');?>"/>
                     <?php } else {?>
                         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-                        <?php $count = count(get_static_sub_post($oldmd)); ?>
+                        <?php $count = count(find_subpage($oldmd)); ?>
                         <?php if (stripos($dir . '/', '/draft/') !== false) { ?>
                         <input type="submit" name="publishdraft" class="btn btn-primary submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="btn btn-primary draft" value="<?php echo i18n('Update_draft');?>"/> <?php if ($count == 0 && $type != 'is_page'):?><a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>        
                         

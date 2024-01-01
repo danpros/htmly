@@ -1083,7 +1083,7 @@ function default_profile($name)
 }
 
 // Return static page.
-function get_static_post($static = null)
+function find_page($static = null)
 {
     $pages = get_static_pages();
     
@@ -1165,8 +1165,8 @@ function get_static_post($static = null)
     return $tmp;
 }
 
-// Return static page.
-function get_static_sub_post($static, $sub_static = null)
+// Return static subpage.
+function find_subpage($static, $sub_static = null)
 {
     $sub_pages = array_values(get_static_subpages($static));
 
