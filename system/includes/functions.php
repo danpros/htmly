@@ -1168,7 +1168,7 @@ function get_static_post($static = null)
 // Return static page.
 function get_static_sub_post($static, $sub_static = null)
 {
-    $sub_pages = get_static_subpages($static);
+    $sub_pages = array_values(get_static_subpages($static));
 
     $tmp = array();
 
