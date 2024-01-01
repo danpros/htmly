@@ -42,7 +42,7 @@
                     <br>
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                     <?php if ($type == 'is_page') :?>
-                    <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/>
+                    <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
                     <?php endif;?>
                     <?php if ($type == 'is_category') :?>
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_category');?>"/>

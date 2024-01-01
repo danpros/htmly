@@ -110,6 +110,40 @@ function get_draft_posts()
     return $_draft;
 }
 
+// Get static page draft.
+function get_draft_pages()
+{
+    static $_draftPage = array();
+    if (empty($_draftPage)) {
+        $tmp = array();
+        $tmp = glob('content/static/draft/*.md', GLOB_NOSORT);
+        if (is_array($tmp)) {
+            foreach ($tmp as $file) {
+                $_draftPage[] = pathinfo($file);
+            }
+        }
+        usort($_draftPage, "sortfile_a");
+    }
+    return $_draftPage;
+}
+
+// Get static subpage draft.
+function get_draft_subpages()
+{
+    static $_draftSubpage = array();
+    if (empty($_draftSubpage)) {
+        $tmp = array();
+        $tmp = glob('content/static/*/draft/*.md', GLOB_NOSORT);
+        if (is_array($tmp)) {
+            foreach ($tmp as $file) {
+                $_draftSubpage[] = pathinfo($file);
+            }
+        }
+        usort($_draftSubpage, "sortfile_a");
+    }
+    return $_draftSubpage;
+}
+
 // Get scheduled posts.
 function get_scheduled_posts()
 {
@@ -221,7 +255,9 @@ function rebuilt_cache($type = null)
     $ptmp =  glob('content/static/*.md', GLOB_NOSORT);
     if (is_array($ptmp)) {
         foreach ($ptmp as $file) {
-            $page_cache[] = pathinfo($file);
+            if(strpos($file, '/draft/') === false) {
+                $page_cache[] = pathinfo($file);
+            }
         }
     }
     usort($page_cache, "sortfile_a");
@@ -233,7 +269,9 @@ function rebuilt_cache($type = null)
     $sptmp =  glob('content/static/*/*.md', GLOB_NOSORT);
     if (is_array($sptmp)) {
         foreach ($sptmp as $file) {
-            $subpage_cache[] = pathinfo($file);
+            if(strpos($file, '/draft/') === false) {
+                $subpage_cache[] = pathinfo($file);
+            }
         }
     }
     usort($subpage_cache, "sortfile_a");
@@ -1048,6 +1086,8 @@ function default_profile($name)
 function get_static_post($static = null)
 {
     $pages = get_static_pages();
+    
+    $tmp = array();
 
     if (!empty($pages)) {
 
@@ -1084,7 +1124,7 @@ function get_static_post($static = null)
                 $post->readTime = ceil($word_count / 200);
 
                 $tmp[] = $post;         
-				
+                
             } elseif (stripos($v['basename'], $static . '.md') !== false) {
 
                 // Use the get_posts method to return

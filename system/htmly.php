@@ -616,12 +616,13 @@ post('/add/page', function () {
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
     $description = from($_REQUEST, 'description');
+    $draft = from($_REQUEST, 'draft');
     if ($proper && !empty($title) && !empty($content) && login()) {
         if (!empty($url)) {
-            add_page($title, $url, $content, $description);
+            add_page($title, $url, $content, $draft, $description);
         } else {
             $url = $title;
-            add_page($title, $url, $content, $description);
+            add_page($title, $url, $content, $draft, $description);
         }
     } else {
         $message['error'] = '';
@@ -936,6 +937,10 @@ get('/admin/draft', function () {
         $perpage = config('profile.perpage');
 
         $posts = get_draft($name, $page, $perpage);
+        
+        $draftPages = find_draft_pages();
+        
+        $draftSubpages = find_draft_subpages();
 
         $total = get_draftcount($name);
 
@@ -955,6 +960,8 @@ get('/admin/draft', function () {
                 'page' => $page,
                 'heading' => i18n('My_draft'),
                 'posts' => null,
+                'draftPages' => $draftPages,
+                'draftSubpages' => $draftSubpages,
                 'about' => $author->about,
                 'name' => $author->name,
                 'type' => 'is_admin-draft',
@@ -965,7 +972,7 @@ get('/admin/draft', function () {
             ));
             die;
         }
-
+        
         render('user-draft', array(
             'title' => i18n('My_draft') . ' - ' . blog_title(),
             'description' => strip_tags(blog_description()),
@@ -973,6 +980,8 @@ get('/admin/draft', function () {
             'heading' => i18n('My_draft'),
             'page' => $page,
             'posts' => $posts,
+            'draftPages' => $draftPages,
+            'draftSubpages' => $draftSubpages,
             'about' => $author->about,
             'name' => $author->name,
             'type' => 'is_admin-draft',
@@ -1752,11 +1761,6 @@ get('/admin/categories/:category', function ($category) {
             
             $total = $desc->count;
             
-            if (empty($posts) || $page < 1) {
-                // a non-existing page
-                not_found();
-            }
-            
             render('category-list', array(
                 'title' => $desc->title . ' - ' . blog_title(),
                 'description' => $desc->description,
@@ -2381,7 +2385,7 @@ get('/post/:name', function ($name) {
     } else {
         $blog = '';
     }
-    
+
     $vroot = rtrim(config('views.root'), '/');
     
     $lt = $vroot . '/layout--post--' . $current->ct . '.html.php'; 
@@ -2961,12 +2965,13 @@ post('/:static/add', function ($static) {
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
     $description = from($_REQUEST, 'description');
+    $draft = from($_REQUEST, 'draft');
     if ($proper && !empty($title) && !empty($content) && login()) {
         if (!empty($url)) {
-            add_sub_page($title, $url, $content, $static, $description);
+            add_sub_page($title, $url, $content, $static, $draft, $description);
         } else {
             $url = $title;
-            add_sub_page($title, $url, $content, $static, $description);
+            add_sub_page($title, $url, $content, $static, $draft, $description);
         }
     } else {
         $message['error'] = '';
@@ -3005,10 +3010,15 @@ get('/:static/edit', function ($static) {
         $post = get_static_post($static);
 
         if (!$post) {
-            not_found();
+            $post = find_draft_pages($static);
+            if (!$post) {
+                not_found();
+            } else {
+                $post = $post[0];
+            }
+        } else {
+            $post = $post['current'];            
         }
-
-        $post = $post['current'];
 
         render('edit-page', array(
             'title' => i18n('Edit') .  ': ' . $post->title . ' - ' . blog_title(),
@@ -3042,12 +3052,14 @@ post('/:static/edit', function () {
     $oldfile = from($_REQUEST, 'oldfile');
     $destination = from($_GET, 'destination');
     $description = from($_REQUEST, 'description');
+    $revertPage = from($_REQUEST, 'revertpage');
+    $publishDraft = from($_REQUEST, 'publishdraft');
     if ($proper && !empty($title) && !empty($content)) {
         if (!empty($url)) {
-            edit_page($title, $url, $content, $oldfile, $destination, $description);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
         } else {
             $url = $title;
-            edit_page($title, $url, $content, $oldfile, $destination, $description);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
         }
     } else {
         $message['error'] = '';
@@ -3087,10 +3099,15 @@ get('/:static/delete', function ($static) {
         $post = get_static_post($static);
 
         if (!$post) {
-            not_found();
+            $post = find_draft_pages($static);
+            if (!$post) {
+                not_found();
+            } else {
+                $post = $post[0];
+            }
+        } else {
+            $post = $post['current'];            
         }
-
-        $post = $post['current'];
 
         render('delete-page', array(
             'title' => i18n('Delete') . ': ' . $post->title . ' - ' . blog_title(),
@@ -3222,10 +3239,15 @@ get('/:static/:sub/edit', function ($static, $sub) {
         $page = get_static_sub_post($static, $sub);
 
         if (!$page) {
-            not_found();
+            $page = find_draft_subpages($static, $sub);
+            if (!$page) {
+                not_found();
+            } else {
+                $page = $page[0];
+            }
+        } else {
+            $page = $page['current'];            
         }
-
-        $page = $page['current'];
 
         render('edit-page', array(
             'title' => i18n('Edit') . ': ' . $page->title . ' - ' . blog_title(),
@@ -3259,15 +3281,17 @@ post('/:static/:sub/edit', function ($static, $sub) {
     $oldfile = from($_REQUEST, 'oldfile');
     $destination = from($_GET, 'destination');
     $description = from($_REQUEST, 'description');
+    $revertPage = from($_REQUEST, 'revertpage');
+    $publishDraft = from($_REQUEST, 'publishdraft');
     if ($destination === null) {
         $destination = $static . "/" . $sub;
     }
     if ($proper && !empty($title) && !empty($content)) {
         if (!empty($url)) {
-            edit_page($title, $url, $content, $oldfile, $destination, $description, $static);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
         } else {
             $url = $title;
-            edit_page($title, $url, $content, $oldfile, $destination, $description, $static);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
         }
     } else {
         $message['error'] = '';
@@ -3317,10 +3341,15 @@ get('/:static/:sub/delete', function ($static, $sub) {
         $page = get_static_sub_post($static, $sub);
 
         if (!$page) {
-            not_found();
+            $page = find_draft_subpages($static, $sub);
+            if (!$page) {
+                not_found();
+            } else {
+                $page = $page[0];
+            }
+        } else {
+            $page = $page['current'];            
         }
-
-        $page = $page['current'];
 
         render('delete-page', array(
             'title' => i18n('Delete') . ': ' . $page->title . ' - ' . blog_title(),

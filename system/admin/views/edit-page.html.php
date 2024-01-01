@@ -46,9 +46,9 @@ if ($type == 'is_frontpage') {
     } else {
         $destination = 'admin';
     }
-    $dir = substr($url, 0, strrpos($url, '/'));
-    $oldurl = str_replace($dir . '/', '', $url);
-    $oldmd = str_replace('.md', '', $oldurl);
+    $dir = pathinfo($url, PATHINFO_DIRNAME);
+    $oldurl = pathinfo($url, PATHINFO_BASENAME);
+    $oldmd = pathinfo($url, PATHINFO_FILENAME);
 
     if (isset($p->url)) {
         $delete = $p->url . '/delete?destination=' . $destination;
@@ -118,7 +118,13 @@ $images = get_gallery();
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save_category');?>"/>
                     <?php } else {?>
                         <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
-                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
+						<?php $count = count(get_static_sub_post($oldmd)); ?>
+						<?php if (stripos($dir . '/', '/draft/') !== false) { ?>
+						<input type="submit" name="publishdraft" class="btn btn-primary submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="btn btn-primary draft" value="<?php echo i18n('Update_draft');?>"/> <?php if ($count == 0 && $type != 'is_page'):?><a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>		
+						
+						<?php } else { ?>
+                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <input type="submit" name="revertpage" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <?php if ($count == 0 && $type != 'is_page'):?><a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>
+						<?php } ?>
                     <?php } ?>
                 </div>
                 <div class="col-sm-6">

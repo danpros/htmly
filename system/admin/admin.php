@@ -1,6 +1,8 @@
 <?php
 if (!defined('HTMLY')) die('HTMLy');
 
+use \Michelf\MarkdownExtra;
+
 // Return username.ini value
 function user($key, $user = null)
 {
@@ -351,18 +353,15 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
     $dirScheduled = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/scheduled/';
 
-    if (is_dir($dirBlog)) {
-    } else {
+    if (!is_dir($dirBlog)) {
         mkdir($dirBlog, 0775, true);
     }
 
-    if (is_dir($dirDraft)) {
-    } else {
+    if (!is_dir($dirDraft)) {
         mkdir($dirDraft, 0775, true);
     }
     
-    if (is_dir($dirScheduled)) {
-    } else {
+    if (!is_dir($dirScheduled)) {
         mkdir($dirScheduled, 0775, true);
     }    
 
@@ -490,7 +489,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 }
 
 // Add static page
-function add_page($title, $url, $content, $description = null)
+function add_page($title, $url, $content, $draft, $description = null)
 {
 
     $post_title = safe_html($title);
@@ -522,22 +521,37 @@ function add_page($title, $url, $content, $description = null)
 
         $filename = $post_url . '.md';
         $dir = 'content/static/';
-        if (is_dir($dir)) {
+        $dirDraft = 'content/static/draft/';
+        
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+
+        if (!is_dir($dirDraft)) {
+            mkdir($dirDraft, 0775, true);
+        }        
+        
+        if (empty($draft)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
-            mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dirDraft . $filename, print_r($post_content, true));
         }
 
         rebuilt_cache('all');
         clear_page_cache($post_url);
-        $redirect = site_url() . 'admin/pages';
-        header("Location: $redirect");
+        
+        if (empty($draft)) {
+            $redirect = site_url() . 'admin/pages';
+            header("Location: $redirect");
+        } else {
+            $redirect = site_url() . 'admin/draft';
+            header("Location: $redirect");            
+        }
     }
 }
 
 // Add static sub page
-function add_sub_page($title, $url, $content, $static, $description = null)
+function add_sub_page($title, $url, $content, $static, $draft, $description = null)
 {
 
     $post_title = safe_html($title);
@@ -558,11 +572,20 @@ function add_sub_page($title, $url, $content, $static, $description = null)
 
         $filename = $post_url . '.md';
         $dir = 'content/static/' . $static . '/';
-        if (is_dir($dir)) {
+        $dirDraft = 'content/static/' . $static . '/draft/';
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+
+        if (!is_dir($dirDraft)) {
+            mkdir($dirDraft, 0775, true);
+        }
+        
+        if (empty($draft)) {
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
-            mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dirDraft . $filename, print_r($post_content, true));
         }
 
         rebuilt_cache('all');
@@ -573,9 +596,9 @@ function add_sub_page($title, $url, $content, $static, $description = null)
 }
 
 // Edit static page and sub page
-function edit_page($title, $url, $content, $oldfile, $destination = null, $description = null, $static = null)
+function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null)
 {
-    $dir = substr($oldfile, 0, strrpos($oldfile, '/'));
+    $dir = pathinfo($oldfile, PATHINFO_DIRNAME);
     $views = array();
     $viewsFile = "content/data/views.json";
     $post_title = safe_html($title);
@@ -594,18 +617,39 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
-
-        $newfile = $dir . '/' . $post_url . '.md';
-        if ($oldfile === $newfile) {
-            file_put_contents($oldfile, print_r($post_content, true));
-        } else {
-            rename($oldfile, $newfile);
+        
+        if(!empty($revertPage)) {
+            $newfile = $dir . '/draft/' . $post_url . '.md';
             file_put_contents($newfile, print_r($post_content, true));
             if (empty($static)) {
-                $path = pathinfo($oldfile);
-                $old = substr($path['filename'], strrpos($path['filename'], '/'));
+                $old = pathinfo($oldfile, PATHINFO_FILENAME);
                 if(is_dir($dir . '/' . $old)) {
                     rename($dir . '/' . $old, $dir . '/' . $post_url);
+                }
+            }
+            unlink($oldfile);
+        } elseif(!empty($publishDraft)) {
+            $newfile = dirname($dir) . '/' . $post_url . '.md';
+            file_put_contents($newfile, print_r($post_content, true));
+            if (empty($static)) {
+                $old = pathinfo($oldfile, PATHINFO_FILENAME);
+                if(is_dir($dir . '/' . $old)) {
+                    rename($dir . '/' . $old, $dir . '/' . $post_url);
+                }
+            }
+            unlink($oldfile);
+        }else { 
+            $newfile = $dir . '/' . $post_url . '.md';
+            if ($oldfile === $newfile) {
+                file_put_contents($oldfile, print_r($post_content, true));
+            } else {
+                rename($oldfile, $newfile);
+                file_put_contents($newfile, print_r($post_content, true));
+                if (empty($static)) {
+                    $old = pathinfo($oldfile, PATHINFO_FILENAME);
+                    if(is_dir($dir . '/' . $old)) {
+                        rename($dir . '/' . $old, $dir . '/' . $post_url);
+                    }
                 }
             }
         }
@@ -628,7 +672,12 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
         }         
 
         if ($destination == 'post') {
-            header("Location: $posturl");
+            if(!empty($revertPage)) {
+                $drafturl = site_url() . 'admin/draft';
+                header("Location: $drafturl");
+            } else {
+                header("Location: $posturl");
+            }
         } else {
             $redirect = site_url() . $destination;
             header("Location: $redirect");
@@ -639,7 +688,6 @@ function edit_page($title, $url, $content, $oldfile, $destination = null, $descr
 // Add category
 function add_category($title, $url, $content, $description = null)
 {
-
     $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -675,7 +723,7 @@ function add_category($title, $url, $content, $description = null)
 // Edit category
 function edit_category($title, $url, $content, $oldfile, $destination = null, $description = null)
 {
-    $dir = substr($oldfile, 0, strrpos($oldfile, '/'));
+    $dir = pathinfo($oldfile, PATHINFO_DIRNAME);
 
     $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
@@ -1153,4 +1201,107 @@ function rename_category_folder($new_name, $old_file)
         }
     }
 
+}
+
+// Return static page.
+function find_draft_pages($static = null)
+{
+    $posts = get_draft_pages();
+
+    $tmp = array();
+
+    if (!empty($posts)) {
+
+        foreach ($posts as $index => $v) {
+            if (stripos($v['basename'], $static . '.md') !== false) {
+
+                $post = new stdClass;
+
+                // The static page URL
+                $url= $v['filename'];
+                
+                $post->url = site_url() . $url;
+
+                $post->file = $v['dirname'] . '/' . $v['basename'];
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                
+                $post->md = $url;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($post->file);
+
+                // Extract the title and body
+                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+                // Get the contents and convert it to HTML
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                if (config('views.counter') == 'true') {
+                    $post->views = get_views($post->file);
+                }
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
+
+                $tmp[] = $post;
+            }
+        }
+    }
+    
+    return $tmp;
+}
+
+// Return static page.
+function find_draft_subpages($static = null, $sub_static = null)
+{
+    $posts = get_draft_subpages();
+
+    $tmp = array();
+
+    if (!empty($posts)) {
+
+        foreach ($posts as $index => $v) {
+            if (stripos($v['basename'], $sub_static . '.md') !== false) {
+
+                $post = new stdClass;
+                
+                if (is_null($static)) {
+                    $static = str_replace('content/static/', '', dirname($v['dirname']));
+                }
+
+                // The static page URL
+                $url= $v['filename'];
+                $post->url = site_url() . $static . "/" . $url;
+
+                $post->file = $v['dirname'] . '/' . $v['basename'];
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                
+                $post->md = $url;
+                
+                $post->parent = $static;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($post->file);
+
+                // Extract the title and body
+                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+                // Get the contents and convert it to HTML
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                $post->views = get_views($post->file);
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
+
+                $tmp[] = $post;
+            }
+        }
+    }
+
+    return $tmp;
 }
