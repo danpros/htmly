@@ -16,7 +16,7 @@
 			<th>Sub Pages</th>
 		</tr>
         <?php foreach ($posts as $p):?>
-			<?php $count = count(get_static_sub_post($p->md)); ?>
+			<?php $count = count(find_subpage($p->md)); ?>
             <tr>
 				<td><a target="_blank" href="<?php echo $p->url;?>"><?php echo $p->title;?></a></td>
 				<?php if (config("views.counter") == "true"):?>
