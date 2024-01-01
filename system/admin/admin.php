@@ -619,11 +619,11 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {  
         
         if(!empty($revertPage)) {
-            $dir = $dir . '/draft';
-            if (!is_dir($dir)) {
+            $dirDraft = $dir . '/draft';
+            if (!is_dir($dirDraft)) {
                 mkdir($dir, 0775, true);
             }
-            $newfile = $dir . '/' . $post_url . '.md';
+            $newfile = $dirDraft . '/' . $post_url . '.md';
             file_put_contents($newfile, print_r($post_content, true));
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
@@ -651,8 +651,15 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                 file_put_contents($newfile, print_r($post_content, true));
                 if (empty($static)) {
                     $old = pathinfo($oldfile, PATHINFO_FILENAME);
-                    if(is_dir($dir . '/' . $old)) {
-                        rename($dir . '/' . $old, $dir . '/' . $post_url);
+                    $dd = explode('/', $dir);
+                    if ($dd[2] === 'draft') {
+                        if(is_dir(dirname($dir) . '/' . $old)) {
+                            rename(dirname($dir) . '/' . $old, dirname($dir) . '/' . $post_url);
+                        }
+                    } else {
+                        if(is_dir($dir . '/' . $old)) {
+                            rename($dir . '/' . $old, $dir . '/' . $post_url);
+                        }                        
                     }
                 }
             }
