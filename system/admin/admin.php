@@ -1214,6 +1214,74 @@ function rename_category_folder($new_name, $old_file)
 
 }
 
+// Find draft.
+function find_draft($year, $month, $name)
+{
+    $posts = get_draft_posts();
+
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['basename']);
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+
+            // Use the get_posts method to return
+            // a properly parsed object
+
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }
+        }
+    }
+}
+
+// Return draft list
+function get_draft($profile, $page, $perpage)
+{
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    $posts = get_draft_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+        $str = explode('/', $v['dirname']);
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+            $tmp[] = $v;
+        }
+    }
+
+    if (empty($tmp)) {
+        return false;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage);
+}
+
 // Return draft static page.
 function find_draft_page($static = null)
 {
@@ -1318,4 +1386,72 @@ function find_draft_subpage($sub_static = null)
     }
 
     return $tmp;
+}
+
+// Find scheduled post.
+function find_scheduled($year, $month, $name)
+{
+    $posts = get_scheduled_posts();
+
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['basename']);
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+
+            // Use the get_posts method to return
+            // a properly parsed object
+
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }
+        }
+    }
+}
+
+// Return scheduled list
+function get_scheduled($profile, $page, $perpage)
+{
+
+    $user = $_SESSION[config("site.url")]['user'];
+    $role = user('role', $user);
+    $posts = get_scheduled_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+        $str = explode('/', $v['dirname']);
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+            $tmp[] = $v;
+        }
+    }
+
+    if (empty($tmp)) {
+        return false;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage);
 }

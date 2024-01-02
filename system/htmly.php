@@ -243,8 +243,8 @@ get('/author/:name', function ($name) {
     if (empty($posts) || $page < 1) {
         render($pview, array(
             'title' => i18n('Profile_for') . ' ' . $author->name . ' - ' . blog_title(),
-            'description' => get_description($author->about),
-            'canonical' => site_url() . 'author/' . $name,
+            'description' => $author->description,
+            'canonical' => $author->url,
             'page' => $page,
             'posts' => null,
             'about' => $author->about,
@@ -260,8 +260,8 @@ get('/author/:name', function ($name) {
 
     render($pview, array(
         'title' => i18n('Profile_for') . ' ' . $author->name . ' - ' . blog_title(),
-        'description' => get_description($author->about),
-        'canonical' => site_url() . 'author/' . $name,
+        'description' => $author->description,
+        'canonical' => $author->url,
         'page' => $page,
         'posts' => $posts,
         'about' => $author->about,
@@ -272,6 +272,25 @@ get('/author/:name', function ($name) {
         'pagination' => has_pagination($total, $perpage, $page),
         'is_profile' => true,
     ), $layout);
+});
+
+// Show the RSS feed
+get('/author/:name/feed', function ($name) {
+
+    header('Content-Type: application/rss+xml');
+	
+    $posts = get_profile_posts($name, 1, config('rss.count'));
+
+    $author = get_author($name);
+
+    if (isset($author[0])) {
+        $author = $author[0];
+    } else {
+        $author = default_profile($name);
+    }
+
+    // Show an RSS feed
+    echo generate_rss($posts, $author);
 });
 
 // Edit the profile
@@ -1863,6 +1882,25 @@ get('/category/:category', function ($category) {
     ), $layout);
 });
 
+// Show the RSS feed
+get('/category/:category/feed', function ($category) {
+
+    header('Content-Type: application/rss+xml');
+    
+    $posts = get_category($category, 1, config('rss.count'));
+    
+    $data = get_category_info($category);
+    
+    if(strtolower($category) !== 'uncategorized') {
+        if(!empty($data)) {
+            $data = $data[0];
+        }
+    }
+
+    // Show an RSS feed
+    echo generate_rss($posts, $data);
+});
+
 // Show edit the category page
 get('/category/:category/edit', function ($category) {
 
@@ -2018,7 +2056,7 @@ get('/type/:type', function ($type) {
     $ttype->title = ucfirst($type);
     $ttype->url = site_url() . 'type/' . strtolower($type);
     $ttype->count = $total;
-    $ttype->description = i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title() . '.';
+    $ttype->description = i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title();
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2049,7 +2087,7 @@ get('/type/:type', function ($type) {
     
     render($pview, array(
         'title' => i18n('Posts_with_type') . ' ' . ucfirst($type) . ' - ' . blog_title(),
-        'description' => i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title() . '.',
+        'description' => i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title(),
         'canonical' => site_url() . 'type/' . strtolower($type),
         'page' => $page,
         'posts' => $posts,
@@ -2059,6 +2097,21 @@ get('/type/:type', function ($type) {
         'pagination' => has_pagination($total, $perpage, $page),
         'is_type' => true,
     ), $layout);
+});
+
+// Show the RSS feed
+get('/type/:type/feed', function ($type) {
+
+    header('Content-Type: application/rss+xml');
+	
+    $posts = get_type($type, 1, config('rss.count'));
+    $data = new stdClass;
+    $data->title = ucfirst($type);
+    $data->url = site_url() . 'type/' . strtolower($type);
+    $data->body = i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title();
+
+    // Show an RSS feed
+    echo generate_rss($posts, $data);
 });
 
 // Show the tag page
@@ -2086,7 +2139,7 @@ get('/tag/:tag', function ($tag) {
     $ttag->title = tag_i18n($tag);
     $ttag->url = site_url() . 'tag/' . strtolower($tag);
     $ttag->count = $total;
-    $ttag->description = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title() . '.';
+    $ttag->description = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2117,7 +2170,7 @@ get('/tag/:tag', function ($tag) {
     
     render($pview, array(
         'title' => i18n('Posts_tagged') . ' ' . tag_i18n($tag) . ' - ' . blog_title(),
-        'description' => i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title() . '.',
+        'description' => i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title(),
         'canonical' => site_url() . 'tag/' . strtolower($tag),
         'page' => $page,
         'posts' => $posts,
@@ -2127,6 +2180,21 @@ get('/tag/:tag', function ($tag) {
         'pagination' => has_pagination($total, $perpage, $page),
         'is_tag' => true,
     ), $layout);
+});
+
+// Show the RSS feed
+get('/tag/:tag/feed', function ($tag) {
+
+    header('Content-Type: application/rss+xml');
+	
+    $posts = get_tag($tag, 1, config('rss.count'));
+    $data = new stdClass;
+    $data->title = tag_i18n($tag);
+    $data->url = site_url() . 'tag/' . strtolower($tag);
+    $data->body = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
+
+    // Show an RSS feed
+    echo generate_rss($posts, $data);
 });
 
 // Show the archive page
@@ -2170,7 +2238,7 @@ get('/archive/:req', function ($req) {
     $tarchive->title = $timestamp;
     $tarchive->url = site_url() . 'archive/' . $req;
     $tarchive->count = $total;
-    $tarchive->description = i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title() . '.';
+    $tarchive->description = i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title();
  
     if (!$date) {
         // a non-existing page
@@ -2195,7 +2263,7 @@ get('/archive/:req', function ($req) {
 
     render($pview, array(
         'title' => i18n('Archive_for') . ' ' . $timestamp . ' - ' . blog_title(),
-        'description' => i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title() . '.',
+        'description' => i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title(),
         'canonical' => site_url() . 'archive/' . $req,
         'page' => $page,
         'posts' => $posts,
@@ -2205,6 +2273,33 @@ get('/archive/:req', function ($req) {
         'pagination' => has_pagination($total, $perpage, $page),
         'is_archive' => true,
     ), $layout);
+});
+
+// Show the RSS feed
+get('/archive/:req/feed', function ($req) {
+
+    header('Content-Type: application/rss+xml');
+	
+    $posts = get_archive($req, 1, config('rss.count'));
+	
+    $time = explode('-', $req);
+    $date = strtotime($req);
+
+    if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
+        $timestamp = format_date($date, 'd F Y');
+    } elseif (isset($time[0]) && isset($time[1])) {
+        $timestamp = format_date($date, 'F Y');
+    } else {
+        $timestamp = $req;
+    }
+    
+    $data = new stdClass;
+    $data->title = $timestamp;
+    $data->url = site_url() . 'archive/' . $req;
+    $data->body = i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title();
+
+    // Show an RSS feed
+    echo generate_rss($posts, $data);
 });
 
 // Show the search page
@@ -2231,7 +2326,7 @@ get('/search/:keyword', function ($keyword) {
     $tsearch->title = $keyword;
     $tsearch->url = site_url() . 'search/' . strtolower($keyword);
     $tsearch->count = $total;
-    $tsearch->description = i18n('Search_results_for') . ' ' . tag_i18n($keyword) . ' ' . i18n('by') . ' ' . blog_title() . '.';
+    $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -2264,17 +2359,33 @@ get('/search/:keyword', function ($keyword) {
     }
 
     render($pview, array(
-        'title' => i18n('Search_results_for') . ' ' . tag_i18n($keyword) . ' - ' . blog_title(),
-        'description' => i18n('Search_results_for') . ' ' . tag_i18n($keyword) . ' ' . i18n('by') . ' ' . blog_title() . '.',
+        'title' => i18n('Search_results_for') . ' ' . $keyword . ' - ' . blog_title(),
+        'description' => i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title(),
         'canonical' => site_url() . 'search/' . strtolower($keyword),
         'page' => $page,
         'posts' => $posts,
         'search' => $tsearch,
         'bodyclass' => 'in-search search-' . strtolower($keyword),
-        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search_results_for') . ' ' . tag_i18n($keyword),
+        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search_results_for') . ' ' . $keyword,
         'pagination' => has_pagination($total, $perpage, $page),
         'is_search' => true,
     ), $layout);
+});
+
+// Show the RSS feed
+get('/search/:keyword/feed', function ($keyword) {
+
+    header('Content-Type: application/rss+xml');
+	
+    $posts = get_keyword($keyword, 1, config('rss.count'));
+
+    $data = new stdClass;
+    $data->title = $keyword;
+    $data->url = site_url() . 'search/' . strtolower($keyword);
+    $data->body = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
+
+    // Show an RSS feed
+    echo generate_rss($posts, $data);
 });
 
 // The JSON API

@@ -623,92 +623,171 @@ function find_post($year, $month, $name)
     }
 }
 
-// Find draft.
-function find_draft($year, $month, $name)
+// Return static page.
+function find_page($static = null)
 {
-    $posts = get_draft_posts();
+    $pages = get_static_pages();
+    
+    $tmp = array();
 
-    foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+    if (!empty($pages)) {
 
-            // Use the get_posts method to return
-            // a properly parsed object
+        foreach ($pages as $index => $v) {
+            if (is_null($static)) {
+                $post = new stdClass;
 
-            $ar = get_posts($posts, $index + 1, 1);
-            $nx = get_posts($posts, $index, 1);
-            $pr = get_posts($posts, $index + 2, 1);
+                // The static page URL
+                $url= $v['filename'];
+                
+                $post->url = site_url() . $url;
 
-            if ($index == 0) {
-                if (isset($pr[0])) {
+                $post->file = $v['dirname'] . '/' . $v['basename'];
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                
+                $post->md = $url;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($post->file);
+
+                // Extract the title and body
+                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+                // Get the contents and convert it to HTML
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                if (config('views.counter') == 'true') {
+                    $post->views = get_views($post->file);
+                }
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
+
+                $tmp[] = $post;         
+                
+            } elseif (stripos($v['basename'], $static . '.md') !== false) {
+
+                // Use the get_posts method to return
+                // a properly parsed object
+
+                $ar = get_pages($pages, $index + 1, 1);
+                $nx = get_pages($pages, $index, 1);
+                $pr = get_pages($pages, $index + 2, 1);
+
+                if ($index == 0) {
+                    if (isset($pr[0])) {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => $pr[0]
+                        );
+                    } else {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => null
+                        );
+                    }
+                } elseif (count($pages) == $index + 1) {
                     return array(
                         'current' => $ar[0],
-                        'prev' => $pr[0]
+                        'next' => $nx[0]
                     );
                 } else {
                     return array(
                         'current' => $ar[0],
-                        'prev' => null
+                        'next' => $nx[0],
+                        'prev' => $pr[0]
                     );
                 }
-            } elseif (count($posts) == $index + 1) {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0]
-                );
-            } else {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0],
-                    'prev' => $pr[0]
-                );
             }
         }
     }
+    
+    return $tmp;
 }
 
-// Find scheduled post.
-function find_scheduled($year, $month, $name)
+// Return static subpage.
+function find_subpage($static, $sub_static = null)
 {
-    $posts = get_scheduled_posts();
+    $sub_pages = array_values(get_static_subpages($static));
 
-    foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+    $tmp = array();
 
-            // Use the get_posts method to return
-            // a properly parsed object
+    if (!empty($sub_pages)) {
 
-            $ar = get_posts($posts, $index + 1, 1);
-            $nx = get_posts($posts, $index, 1);
-            $pr = get_posts($posts, $index + 2, 1);
+        foreach ($sub_pages as $index => $v) {
+            
+            if (is_null($sub_static)) {
+                
+                $post = new stdClass;
 
-            if ($index == 0) {
-                if (isset($pr[0])) {
+                // The static page URL
+                $url= $v['filename'];
+                $post->url = site_url() . $static . "/" . $url;
+
+                $post->file = $v['dirname'] . '/' . $v['basename'];
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                
+                $post->md = $url;
+                
+                $post->parent = $static;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($post->file);
+
+                // Extract the title and body
+                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+                // Get the contents and convert it to HTML
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                $post->views = get_views($post->file);
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
+
+                $tmp[] = $post;
+                
+            } elseif (stripos($v['basename'], $sub_static . '.md') !== false) {
+
+                // Use the get_posts method to return
+                // a properly parsed object
+
+                $ar = get_subpages($sub_pages, $index + 1, 1);
+                $nx = get_subpages($sub_pages, $index, 1);
+                $pr = get_subpages($sub_pages, $index + 2, 1);
+
+                if ($index == 0) {
+                    if (isset($pr[0])) {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => $pr[0]
+                        );
+                    } else {
+                        return array(
+                            'current' => $ar[0],
+                            'prev' => null
+                        );
+                    }
+                } elseif (count($sub_pages) == $index + 1) {
                     return array(
                         'current' => $ar[0],
-                        'prev' => $pr[0]
+                        'next' => $nx[0]
                     );
                 } else {
                     return array(
                         'current' => $ar[0],
-                        'prev' => null
+                        'next' => $nx[0],
+                        'prev' => $pr[0]
                     );
                 }
-            } elseif (count($posts) == $index + 1) {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0]
-                );
-            } else {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0],
-                    'prev' => $pr[0]
-                );
             }
         }
     }
+
+    return $tmp;
 }
 
 // Return category page.
@@ -969,54 +1048,6 @@ function get_profile_posts($name, $page, $perpage)
     return $tmp = get_posts($tmp, $page, $perpage);
 }
 
-// Return draft list
-function get_draft($profile, $page, $perpage)
-{
-
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-    $posts = get_draft_posts();
-
-    $tmp = array();
-
-    foreach ($posts as $index => $v) {
-        $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
-            $tmp[] = $v;
-        }
-    }
-
-    if (empty($tmp)) {
-        return false;
-    }
-
-    return $tmp = get_posts($tmp, $page, $perpage);
-}
-
-// Return scheduled list
-function get_scheduled($profile, $page, $perpage)
-{
-
-    $user = $_SESSION[config("site.url")]['user'];
-    $role = user('role', $user);
-    $posts = get_scheduled_posts();
-
-    $tmp = array();
-
-    foreach ($posts as $index => $v) {
-        $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
-            $tmp[] = $v;
-        }
-    }
-
-    if (empty($tmp)) {
-        return false;
-    }
-
-    return $tmp = get_posts($tmp, $page, $perpage);
-}
-
 // Return author info.
 function get_author($name)
 {
@@ -1055,6 +1086,12 @@ function get_author($name)
 
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
+				
+                $author->body = $author->about;
+				
+                $author->title = $author->name;
+				
+                $author->description = $author->about;
 
                 $tmp[] = $author;
             }
@@ -1075,178 +1112,14 @@ function default_profile($name)
     $author = new stdClass;
 
     $author->name = $name;
+    $author->title = $name;
     $author->about = '<p>' . i18n('Author_Description') . '</p>';
-
+    $author->body = '<p>' . i18n('Author_Description') . '</p>';
     $author->description = i18n('Author_Description');
+    $author->url = site_url(). 'author/' . $name;
+    $author->file = '';
 
     return $tmp[] = $author;
-}
-
-// Return static page.
-function find_page($static = null)
-{
-    $pages = get_static_pages();
-    
-    $tmp = array();
-
-    if (!empty($pages)) {
-
-        foreach ($pages as $index => $v) {
-            if (is_null($static)) {
-                $post = new stdClass;
-
-                // The static page URL
-                $url= $v['filename'];
-                
-                $post->url = site_url() . $url;
-
-                $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
-                $post->md = $url;
-
-                // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
-
-                // Extract the title and body
-                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
-
-                // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
-                if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
-                }
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
-
-                $word_count = str_word_count(strip_tags($post->body));
-                $post->readTime = ceil($word_count / 200);
-
-                $tmp[] = $post;         
-                
-            } elseif (stripos($v['basename'], $static . '.md') !== false) {
-
-                // Use the get_posts method to return
-                // a properly parsed object
-
-                $ar = get_pages($pages, $index + 1, 1);
-                $nx = get_pages($pages, $index, 1);
-                $pr = get_pages($pages, $index + 2, 1);
-
-                if ($index == 0) {
-                    if (isset($pr[0])) {
-                        return array(
-                            'current' => $ar[0],
-                            'prev' => $pr[0]
-                        );
-                    } else {
-                        return array(
-                            'current' => $ar[0],
-                            'prev' => null
-                        );
-                    }
-                } elseif (count($pages) == $index + 1) {
-                    return array(
-                        'current' => $ar[0],
-                        'next' => $nx[0]
-                    );
-                } else {
-                    return array(
-                        'current' => $ar[0],
-                        'next' => $nx[0],
-                        'prev' => $pr[0]
-                    );
-                }
-            }
-        }
-    }
-    
-    return $tmp;
-}
-
-// Return static subpage.
-function find_subpage($static, $sub_static = null)
-{
-    $sub_pages = array_values(get_static_subpages($static));
-
-    $tmp = array();
-
-    if (!empty($sub_pages)) {
-
-        foreach ($sub_pages as $index => $v) {
-            
-            if (is_null($sub_static)) {
-                
-                $post = new stdClass;
-
-                // The static page URL
-                $url= $v['filename'];
-                $post->url = site_url() . $static . "/" . $url;
-
-                $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
-                $post->md = $url;
-                
-                $post->parent = $static;
-
-                // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
-
-                // Extract the title and body
-                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
-
-                // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
-                $post->views = get_views($post->file);
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
-
-                $word_count = str_word_count(strip_tags($post->body));
-                $post->readTime = ceil($word_count / 200);
-
-                $tmp[] = $post;
-                
-            } elseif (stripos($v['basename'], $sub_static . '.md') !== false) {
-
-                // Use the get_posts method to return
-                // a properly parsed object
-
-                $ar = get_subpages($sub_pages, $index + 1, 1);
-                $nx = get_subpages($sub_pages, $index, 1);
-                $pr = get_subpages($sub_pages, $index + 2, 1);
-
-                if ($index == 0) {
-                    if (isset($pr[0])) {
-                        return array(
-                            'current' => $ar[0],
-                            'prev' => $pr[0]
-                        );
-                    } else {
-                        return array(
-                            'current' => $ar[0],
-                            'prev' => null
-                        );
-                    }
-                } elseif (count($sub_pages) == $index + 1) {
-                    return array(
-                        'current' => $ar[0],
-                        'next' => $nx[0]
-                    );
-                } else {
-                    return array(
-                        'current' => $ar[0],
-                        'next' => $nx[0],
-                        'prev' => $pr[0]
-                    );
-                }
-            }
-        }
-    }
-
-    return $tmp;
 }
 
 // Return frontpage content
@@ -2678,18 +2551,26 @@ function not_found()
 }
 
 // Turn an array of posts into an RSS feed
-function generate_rss($posts)
+function generate_rss($posts, $data = null)
 {
     $feed = new Feed();
     $channel = new Channel();
     $rssLength = config('rss.char');
-
+	$data = $data;
+	
+	if (is_null($data)) {
     $channel
         ->title(blog_title())
         ->description(blog_description())
         ->url(site_url())
         ->appendTo($feed);
-
+	} else {
+    $channel
+        ->title($data->title)
+        ->description(strip_tags($data->body))
+        ->url($data->url)
+        ->appendTo($feed);		
+	}
     foreach ($posts as $p) {
 
         if (!empty($rssLength)) {
@@ -2717,7 +2598,7 @@ function generate_rss($posts)
             ->appendTo($channel);
     }
 
-    echo $feed;
+    return $feed;
 }
 
 // Return post, archive url for sitemap

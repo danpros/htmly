@@ -8,6 +8,7 @@ namespace Suin\RSSWriter;
  */
 class SimpleXMLElement extends \SimpleXMLElement
 {
+    #[\ReturnTypeWillChange]
     public function addChild($name, $value = null, $namespace = null)
     {
         if ($value !== null and is_string($value) === true) {
