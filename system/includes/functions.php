@@ -1101,7 +1101,7 @@ function get_author($name)
                 
                 $author->title = $author->name;
                 
-                $author->description = $author->about;
+                $author->description = strip_tags($author->about);
 
                 $tmp[] = $author;
             }
