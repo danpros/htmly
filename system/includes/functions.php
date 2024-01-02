@@ -2556,21 +2556,21 @@ function generate_rss($posts, $data = null)
     $feed = new Feed();
     $channel = new Channel();
     $rssLength = config('rss.char');
-	$data = $data;
+    $data = $data;
 	
-	if (is_null($data)) {
+    if (is_null($data)) {
     $channel
         ->title(blog_title())
         ->description(blog_description())
         ->url(site_url())
         ->appendTo($feed);
-	} else {
+    } else {
     $channel
         ->title($data->title)
         ->description(strip_tags($data->body))
         ->url($data->url)
         ->appendTo($feed);		
-	}
+    }
     foreach ($posts as $p) {
 
         if (!empty($rssLength)) {
