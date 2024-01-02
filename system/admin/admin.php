@@ -621,7 +621,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         if(!empty($revertPage)) {
             $dirDraft = $dir . '/draft';
             if (!is_dir($dirDraft)) {
-                mkdir($dir, 0775, true);
+                mkdir($dirDraft, 0775, true);
             }
             $newfile = $dirDraft . '/' . $post_url . '.md';
             file_put_contents($newfile, print_r($post_content, true));
