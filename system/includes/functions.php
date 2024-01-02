@@ -128,7 +128,7 @@ function get_draft_pages()
 }
 
 // Get static subpage draft.
-function get_draft_subpages()
+function get_draft_subpages($static = null)
 {
     static $_draftSubpage = array();
     if (empty($_draftSubpage)) {
@@ -141,6 +141,16 @@ function get_draft_subpages()
         }
         usort($_draftSubpage, "sortfile_a");
     }
+    if ($static != null) {
+        $stringLen = strlen($static);
+        return array_filter($_draftSubpage, function ($sub_page) use ($static, $stringLen) {
+            $x = explode("/", $sub_page['dirname']);
+            if ($x[2] == $static) {
+                return true;
+            }
+            return false;
+        });
+    }    
     return $_draftSubpage;
 }
 
@@ -1086,11 +1096,11 @@ function get_author($name)
 
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
-				
+                
                 $author->body = $author->about;
-				
+                
                 $author->title = $author->name;
-				
+                
                 $author->description = $author->about;
 
                 $tmp[] = $author;
@@ -2557,7 +2567,7 @@ function generate_rss($posts, $data = null)
     $channel = new Channel();
     $rssLength = config('rss.char');
     $data = $data;
-	
+    
     if (is_null($data)) {
     $channel
         ->title(blog_title())
@@ -2569,7 +2579,7 @@ function generate_rss($posts, $data = null)
         ->title($data->title)
         ->description(strip_tags($data->body))
         ->url($data->url)
-        ->appendTo($feed);		
+        ->appendTo($feed);        
     }
     foreach ($posts as $p) {
 

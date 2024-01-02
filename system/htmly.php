@@ -3350,7 +3350,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
         $page = find_subpage($static, $sub);
 
         if (!$page) {
-            $page = find_draft_subpage($sub);
+            $page = find_draft_subpage($static, $sub);
             if (!$page) {
                 not_found();
             } else {
@@ -3452,7 +3452,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
         $page = find_subpage($static, $sub);
 
         if (!$page) {
-            $page = find_draft_subpage($sub);
+            $page = find_draft_subpage($static, $sub);
             if (!$page) {
                 not_found();
             } else {
