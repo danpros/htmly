@@ -1,16 +1,14 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if (!empty($breadcrumb)): ?>
+<?php if ($breadcrumb): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<?php if (config('category.info') === 'true'):?>
-    <?php if (!empty($category)): ?>
-        <div class="category">
-            <h2 class="category-title"><?php echo $category->title;?></h2>
-            <div class="category-content">                                   
-                <?php echo $category->body; ?>
-            </div>
+<?php if ($is_category): ?>
+    <div class="category">
+        <h2 class="category-title"><?php echo $category->title;?></h2>
+        <div class="category-content">                                   
+            <?php echo $category->body; ?>
         </div>
-    <?php endif; ?>
+    </div>
 <?php endif; ?>
 <?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
@@ -24,7 +22,7 @@
     $i++; ?>
     <div class="<?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
         <div class="main">
-            <?php if (!empty($p->link)) { ?>
+            <?php if ($p->link) { ?>
                 <h2 class="title-index" itemprop="name"><a href="<?php echo $p->link ?>"><?php echo $p->title ?> &rarr;</a></h2>
             <?php } else { ?>
                 <h2 class="title-index" itemprop="name"><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></h2>
@@ -38,24 +36,24 @@
                 <?php } elseif (facebook()) { ?> -
                     <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                 <?php } ?>
-				<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
+                <?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
             </div>
-            <?php if (!empty($p->image)) { ?>
+            <?php if ($p->image) { ?>
                 <div class="featured-image">
                     <a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
                 </div>
             <?php } ?>
-            <?php if (!empty($p->video)) { ?>
+            <?php if ($p->video) { ?>
                 <div class="featured-video">
                     <iframe src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
                 </div>
             <?php } ?>
-            <?php if (!empty($p->audio)) { ?>
+            <?php if ($p->audio) { ?>
                 <div class="featured-audio">
                     <iframe width="560" height="315" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
                 </div>
             <?php } ?>
-            <?php if (!empty($p->quote)) { ?>
+            <?php if ($p->quote) { ?>
                 <div class="featured-quote">
                     <blockquote><?php echo $p->quote ?></blockquote>
                 </div>
@@ -68,13 +66,13 @@
         </div>
     </div>
 <?php endforeach; ?>
-<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
+<?php if ($pagination['prev'] || $pagination['next']): ?>
     <div class="pager">
-        <?php if (!empty($pagination['prev'])): ?>
+        <?php if ($pagination['prev']): ?>
             <span><a href="?page=<?php echo $page - 1 ?>" class="pagination-arrow newer" rel="prev"><?php echo i18n('Newer'); ?></a></span>
         <?php endif; ?>
          <span class="page-number"><?php echo $pagination['pagenum']; ?></span>
-        <?php if (!empty($pagination['next'])): ?>
+        <?php if ($pagination['next']): ?>
             <span><a href="?page=<?php echo $page + 1 ?>" class="pagination-arrow older" rel="next"><?php echo i18n('Older'); ?></a></span>
         <?php endif; ?>
     </div>

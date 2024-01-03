@@ -1,12 +1,12 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if (!empty($breadcrumb)): ?>
+<?php if ($breadcrumb): ?>
     <div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
 <?php if (login()) { echo tab($p); } ?>
 <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="main">
         <a name="more"></a>
-            <?php if (!empty($p->link)) { ?>
+            <?php if ($p->link) { ?>
                 <h1 class="title-post" itemprop="name"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title ?> &rarr;</a></h1>
             <?php } else { ?>
                 <h1 class="title-post" itemprop="name"><?php echo $p->title ?></h1>
@@ -18,22 +18,22 @@
             <span itemprop="author"><a href="<?php echo $p->authorUrl ?>"><?php echo $p->authorName; ?></a></span> -
             <span><a href="<?php echo $p->url ?>" rel="permalink">Permalink</a></span>
         </div>
-        <?php if (!empty($p->image)) { ?>
+        <?php if ($p->image) { ?>
             <div class="featured-image">
                 <a href="<?php echo $p->url ?>"><img src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
             </div>
         <?php } ?>
-        <?php if (!empty($p->video)) { ?>
+        <?php if ($p->video) { ?>
             <div class="featured-video">
                 <iframe src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" width="560" height="315" frameborder="0" allowfullscreen></iframe>
             </div>
         <?php } ?>
-        <?php if (!empty($p->audio)) { ?>
+        <?php if ($p->audio) { ?>
             <div class="featured-audio">
                 <iframe width="560" height="315" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
             </div>
         <?php } ?>
-        <?php if (!empty($p->quote)) { ?>
+        <?php if ($p->quote) { ?>
             <div class="featured-quote">
                 <blockquote><?php echo $p->quote ?></blockquote>
             </div>
@@ -70,10 +70,10 @@
         <?php endif; ?>
     </div>
     <div class="postnav">
-        <?php if (!empty($next)): ?>
+        <?php if ($next): ?>
             <span class="newer">&laquo; <a href="<?php echo($next['url']); ?>" rel="next"><?php echo($next['title']); ?></a></span>
         <?php endif; ?>
-        <?php if (!empty($prev)): ?>
+        <?php if ($prev): ?>
             <span class="older"><a href="<?php echo($prev['url']); ?>" rel="prev"><?php echo($prev['title']); ?></a> &raquo;</span>
         <?php endif; ?>
     </div>

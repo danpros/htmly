@@ -1,59 +1,48 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if (!empty($breadcrumb)): ?>
+<?php if ($breadcrumb): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<?php if (config('category.info') === 'true'):?>
-    <?php if (!empty($category)): ?>
-        <div class="section">
-            <div class="section-inner">
-                <div class="content">
-                    <div class="item">
-                    <h2 class="title"><?php echo $category->title;?></h2>
-                    <div class="text-left">                                   
-                        <?php echo $category->body; ?>
-                    </div><!--//desc-->
-                    </div><!--//item-->                       
-                </div><!--//content-->  
-            </div>
+<?php if ($is_category): ?>
+    <div class="section">
+        <div class="section-inner">
+            <div class="content">
+                <div class="item">
+                <h2 class="title"><?php echo $category->title;?></h2>
+                <div class="text-left">                                   
+                    <?php echo $category->body; ?>
+                </div><!--//desc-->
+                </div><!--//item-->                       
+            </div><!--//content-->  
         </div>
-    <?php endif; ?>
+    </div>
 <?php endif; ?>
-<?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
-    <?php if ($i == 0) {
-        $class = 'post first';
-    } elseif ($i == $len - 1) {
-        $class = 'post last';
-    } else {
-        $class = 'post';
-    }
-    $i++; ?>
-<section class="post section <?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+<section class="post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="section-inner">
         <div class="content">
             <div class="item">
-                <?php if (!empty($p->image)) { ?>
+                <?php if ($p->image) { ?>
                     <div class="featured featured-image">
                         <a href="<?php echo $p->url ?>"><img  itemprop="image" src="<?php echo $p->image; ?>" alt="<?php echo $p->title ?>"/></a>
                     </div>
                 <?php } ?>
-                <?php if (!empty($p->video)) { ?>
+                <?php if ($p->video) { ?>
                     <div class="featured featured-video embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
                     </div>
                 <?php } ?>
-                <?php if (!empty($p->audio)) { ?>
+                <?php if ($p->audio) { ?>
                     <div class="featured featured-audio embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
                     </div>
                 <?php } ?>
-                <?php if (!empty($p->quote)) { ?>
+                <?php if ($p->quote) { ?>
                     <div class="featured featured-quote">
                         <blockquote class="quote"><i class="fa fa-quote-left"></i> <?php echo $p->quote ?> <i class="fa fa-quote-right"></i></blockquote>
                     </div>
                 <?php } ?>
                 <div class="info text-left">
-                    <?php if (!empty($p->link)) { ?>
+                    <?php if ($p->link) { ?>
                         <h2 class="title" itemprop="headline"><a target="_blank" href="<?php echo $p->link ?>"><?php echo $p->title;?> <i class="fa fa-external-link"></i></a></h2>
                     <?php } else {?>
                         <h2 class="title" itemprop="headline"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
@@ -67,7 +56,7 @@
                         <?php } elseif (facebook()) { ?> 
                             - <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                         <?php } ?>
-						<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
+                        <?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
                     </p>
                 </div>
                 <div class="desc text-left" itemprop="articleBody">                                    
@@ -88,7 +77,7 @@
     </div><!--//section-inner-->                 
 </section><!--//section-->
 <?php endforeach; ?>
-<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
+<?php if ($pagination['prev'] || $pagination['next']): ?>
     <div class="pagination"><?php echo $pagination['html'];?></div>
 <?php endif; ?>
 <?php if (disqus_count()): ?>

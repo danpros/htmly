@@ -6,7 +6,7 @@
     <div class="entry-content">
         <?php echo $about ?>
         <h2 class="post-index"><?php echo i18n('Post_by_author');?></h2>
-        <?php if (!empty($posts)) { ?>
+        <?php if ($posts) { ?>
             <ul class="post-list">
                 <?php foreach ($posts as $p): ?>
                     <li class="item">
@@ -20,15 +20,15 @@
         } ?>
     </div>
 </article>
-<?php if (!empty($posts)) { ?>
-<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
+<?php if ($posts) { ?>
+<?php if ($pagination['prev'] || $pagination['next']): ?>
 <div class="navigation pagination">
     <div class="nav-links">
-        <?php if (!empty($pagination['prev'])): ?>
+        <?php if ($pagination['prev']): ?>
             <a class="prev page-numbers" href="?page=<?php echo $page - 1 ?>">«</a>
         <?php endif; ?>
         <span class="page-numbers"><?php echo $pagination['pagenum'];?></span>
-        <?php if (!empty($pagination['next'])): ?>
+        <?php if ($pagination['next']): ?>
             <a class="next page-numbers" href="?page=<?php echo $page + 1 ?>">»</a>
         <?php endif; ?>
     </div>
