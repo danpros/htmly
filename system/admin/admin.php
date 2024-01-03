@@ -115,7 +115,7 @@ function remove_accent($str)
 // Add content
 function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null)
 {
-    
+
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
     $tagslang = "content/data/tags.lang";
@@ -137,10 +137,10 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
                 $post_tagmd[] = $t;
             }
         }
-        
+
         $post_tag = safe_tag(implode(',', $post_tag));
         $post_tagmd = safe_html(implode(',', $post_tagmd));        
-        
+
     } else {
         $post_tag = safe_tag(implode(',', $tag));
         $post_tagmd = safe_html(implode(',', $tag));        
@@ -151,7 +151,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
-    
+
     $post_t =  explode(',', $post_tag);
     $pret_t = explode(',', $post_tagmd);
     $tags = tag_cloud(true);
@@ -178,7 +178,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     }
 
     $post_tag = implode(',', array_keys($newtag));
-    
+
     $posts = get_blog_posts();
     foreach ($posts as $index => $v) {
         $arr = explode('_', $v['basename']);
@@ -188,7 +188,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
             $post_url = $post_url;
         }
     }
-    
+
     if ($description !== null) {
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
@@ -253,7 +253,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 // Edit content
 function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null)
 {
-    
+
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
     $tagslang = "content/data/tags.lang";
@@ -278,15 +278,14 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 $post_tagmd[] = $t;
             }
         }
-        
+
         $post_tag = safe_tag(implode(',', $post_tag));
-        $post_tagmd = safe_html(implode(',', $post_tagmd));        
-        
+        $post_tagmd = safe_html(implode(',', $post_tagmd));
     } else {
         $post_tag = safe_tag(implode(',', $tag));
         $post_tagmd = safe_html(implode(',', $tag));        
     }
-    
+
     $oldurl = explode('_', $oldfile);
     $dir = explode('/', $oldurl[0]);
     $olddate = date('Y-m-d-H-i-s', strtotime($date));
@@ -522,18 +521,16 @@ function add_page($title, $url, $content, $draft, $description = null)
         $filename = $post_url . '.md';
         $dir = 'content/static/';
         $dirDraft = 'content/static/draft/';
-        
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775, true);
-        }
 
-        if (!is_dir($dirDraft)) {
-            mkdir($dirDraft, 0775, true);
-        }        
-        
         if (empty($draft)) {
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
             file_put_contents($dir . $filename, print_r($post_content, true));
         } else {
+            if (!is_dir($dirDraft)) {
+                mkdir($dirDraft, 0775, true);
+            } 
             file_put_contents($dirDraft . $filename, print_r($post_content, true));
         }
 
@@ -566,6 +563,17 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
     } else {
         $post_description = "";
     }
+
+    $posts = get_static_subpages();
+    $timestamp = date('YmdHis');
+    foreach ($posts as $index => $v) {
+        if (strtolower($v['basename']) === strtolower($post_url . '.md')) {
+            $post_url = $post_url .'-'. $timestamp;
+        } else {
+            $post_url = $post_url;
+        }
+    }	
+
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
