@@ -54,6 +54,10 @@ function session($user, $pass)
     $user_enc = user('encryption', $user);
     $user_pass = user('password', $user);
     $user_role = user('role', $user);
+	
+    if(is_null($user_enc) || is_null($user_pass) || is_null($user_role)) {
+        return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
+    }
 
     if ($user_enc == "password_hash") {
         if (password_verify($pass, $user_pass)) {
