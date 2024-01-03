@@ -238,9 +238,8 @@ get('/author/:name', function ($name) {
     $posts = get_profile_posts($name, $page, $perpage);
 
     $total = get_count('/'.$name.'/', 'dirname');
-    $username = 'config/users/' . $name . '.ini';
 
-    if ($total === 0 && !file_exists($username)) {
+    if ($total === 0) {
         not_found();
     }
 
@@ -2299,7 +2298,7 @@ get('/archive/:req', function ($req) {
 
     $posts = get_archive($req, $page, $perpage);
 
-    $total = get_count($req);
+    $total = get_count($req, 'basename');
 
     if (empty($posts) || $page < 1) {
         // a non-existing page

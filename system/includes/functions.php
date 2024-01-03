@@ -1063,8 +1063,6 @@ function get_author($name)
 {
     $names = get_author_name();
 
-    $username = 'config/users/' . $name . '.ini';
-
     $tmp = array();
 
     if (!empty($names)) {
@@ -1108,7 +1106,7 @@ function get_author($name)
         }
     }
 
-    if (!empty($tmp) || file_exists($username)) {
+    if (!empty($tmp)) {
         return $tmp;
     } else {
         return false;
@@ -1224,15 +1222,15 @@ function get_related($tag, $custom = null, $count = null)
 
 }
 
-// Return post count. Matching $var.
-function get_count($var)
+// Return post count. Matching $var and $str provided.
+function get_count($var, $str)
 {
     $posts = get_blog_posts();
 
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
+        $arr = explode('_', $v[$str]);
         $url = $arr[0];
         if (stripos($url, "$var") !== false) {
             $tmp[] = $v;
@@ -2583,31 +2581,33 @@ function generate_rss($posts, $data = null)
         ->url($data->url)
         ->appendTo($feed);        
     }
-    foreach ($posts as $p) {
+    if ($posts) {
+        foreach ($posts as $p) {
 
-        if (!empty($rssLength)) {
-            if (strlen(strip_tags($p->body)) < config('rss.char')) {
-                $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
-                $body = $string . '...';
+            if (!empty($rssLength)) {
+                if (strlen(strip_tags($p->body)) < config('rss.char')) {
+                    $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
+                    $body = $string . '...';
+                } else {
+                    $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
+                    $string = substr($string, 0, config('rss.char'));
+                    $string = substr($string, 0, strrpos($string, ' '));
+                    $body = $string . '...';
+                }
             } else {
-                $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
-                $string = substr($string, 0, config('rss.char'));
-                $string = substr($string, 0, strrpos($string, ' '));
-                $body = $string . '...';
+                $body = $p->body;
             }
-        } else {
-            $body = $p->body;
-        }
 
-        $item = new Item();
-        $item
-            ->category(strip_tags($p->category));
-        $item
-            ->title($p->title)
-            ->pubDate($p->date)
-            ->description($body)
-            ->url($p->url)
-            ->appendTo($channel);
+            $item = new Item();
+            $item
+                ->category(strip_tags($p->category));
+            $item
+                ->title($p->title)
+                ->pubDate($p->date)
+                ->description($body)
+                ->url($p->url)
+                ->appendTo($channel);
+        }
     }
 
     return $feed;
@@ -3063,18 +3063,7 @@ function head_contents()
 {
     $output = '';
     $wmt_id = config('google.wmt.id');
-    static $_version = array();
-
-    $filename = "cache/installedVersion.json";
-    if (file_exists($filename)) {
-        $_version = json_decode(file_get_contents($filename), true);
-    }
-
-    if (isset($_version['tag_name'])) {
-        $version = 'HTMLy ' . $_version['tag_name'];
-    } else {
-        $version = 'HTMLy';
-    }
+    $version = 'HTMLy ' . constant('HTMLY_VERSION');
 
     $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
     $charset = '<meta charset="utf-8" />';
