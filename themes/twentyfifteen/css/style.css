@@ -880,7 +880,7 @@ a:focus {
 	content: "\f516";
 }
 
-.social-navigation a[href$="/feed/rss"]:before {
+.social-navigation a[href*="/feed"]:before {
 	content: "\f413";
 }
 

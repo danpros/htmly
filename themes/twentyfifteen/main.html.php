@@ -1,18 +1,18 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if ($is_category):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
+    <header class="page-header"><span class="social-navigation" style="margin:0 auto;float:right;"><a style="height:100%" href="<?php echo $category->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
 <?php endif;?>
 <?php if ($is_tag):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Tags');?>: <?php echo $tag->title;?></h1></header>
+    <header class="page-header"><span class="social-navigation" style="margin:0 auto;float:right;"><a style="height:100%" href="<?php echo $tag->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span><h1 class="page-title"><?php echo i18n('Tags');?>: <?php echo $tag->title;?></h1></header>
 <?php endif;?>
 <?php if ($is_archive):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1></header>
+    <header class="page-header"><span class="social-navigation" style="margin:0 auto;float:right;"><a style="height:100%" href="<?php echo $archive->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span><h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1></header>
 <?php endif;?>
 <?php if ($is_search):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1></header>
+    <header class="page-header"><span class="social-navigation" style="margin:0 auto;float:right;"><a style="height:100%" href="<?php echo $search->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1></header>
 <?php endif;?>
 <?php if ($is_type):?>
-    <header class="page-header"><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1></header>
+    <header class="page-header"><span class="social-navigation" style="margin:0 auto;float:right;"><a style="height:100%" href="<?php echo $type->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1></header>
 <?php endif;?>
 <?php foreach ($posts as $p): ?>
 <article class="post type-post hentry <?php if ($p->image || $p->audio || $p->video):?>has-post-thumbnail<?php endif;?>">

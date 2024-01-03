@@ -1,10 +1,10 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <article class="page type-page hentry">
     <header class="entry-header">
-        <h1 class="entry-title"><?php echo $name ?></h1>
+        <h1 class="entry-title"><?php echo $author->name ?></h1><span class="social-navigation" style="float:right;"><a href="<?php echo $author->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
     </header>
     <div class="entry-content">
-        <?php echo $about ?>
+        <?php echo $author->about ?>
         <h2 class="post-index"><?php echo i18n('Post_by_author');?></h2>
         <?php if ($posts) { ?>
             <ul class="post-list">
