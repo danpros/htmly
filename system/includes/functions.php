@@ -327,8 +327,7 @@ function rebuilt_cache($type = null)
     if (is_array($ftmp)) {
         foreach ($ftmp as $file) {
             $category_cache[] = pathinfo($file);
-            $x = explode('/', $file);
-            $cf[] = $x[2];             
+            $cf[] = pathinfo($file, PATHINFO_FILENAME);            
         }
     }
     usort($category_cache, "sortfile_a");
