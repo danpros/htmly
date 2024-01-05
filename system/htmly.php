@@ -1826,8 +1826,8 @@ get('/admin/categories/:category', function ($category) {
             
             $desc = get_category_info($category);
             
-            if(strtolower($category) !== 'uncategorized') {
-               $desc = $desc[0];
+            if(!empty($desc)) {
+                $desc = $desc[0];
             }
             
             $total = $desc->count;
@@ -1885,10 +1885,9 @@ get('/category/:category', function ($category) {
     
     $desc = get_category_info($category);
     
-    if(strtolower($category) !== 'uncategorized') {
-        if(!empty($desc)) {
-            $desc = $desc[0];
-        }
+    
+    if(!empty($desc)) {
+        $desc = $desc[0];
     }
 
     $total = $desc->count;
@@ -1953,10 +1952,8 @@ get('/category/:category/feed', function ($category) {
     
     $data = get_category_info($category);
     
-    if(strtolower($category) !== 'uncategorized') {
-        if(!empty($data)) {
-            $data = $data[0];
-        }
+    if(!empty($data)) {
+        $data = $data[0];
     }
 
     // Show an RSS feed

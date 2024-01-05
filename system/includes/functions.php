@@ -173,7 +173,7 @@ function get_category_files()
 {
     static $_desc = array();
     if (empty($_desc)) {
-        $url = 'cache/index/index-category.txt';
+        $url = 'cache/index/index-category-files.txt';
         if (!file_exists($url)) {
             rebuilt_cache('all');
         }
@@ -196,6 +196,20 @@ function get_category_folder()
         }
     }
     return $_dfolder;
+}
+
+// Get category info files.
+function get_category_slug()
+{
+    static $_cslug = array();
+    if (empty($_cslug)) {
+        $url = 'cache/index/index-category.txt';
+        if (!file_exists($url)) {
+            rebuilt_cache('all');
+        }
+        $_cslug = unserialize(file_get_contents($url));
+    }
+    return $_cslug;
 }
 
 // Get images in content/images folder
@@ -241,6 +255,8 @@ function rebuilt_cache($type = null)
     $subpage_cache = array();
     $author_cache = array();
     $scheduled = array();
+    $category_cache = array();
+    $ctmp = array();
 
     if (is_dir($dir) === false) {
         mkdir($dir, 0775, true);
@@ -259,6 +275,13 @@ function rebuilt_cache($type = null)
     usort($posts_cache, "sortfile_d");
     $string_posts = serialize($posts_cache);
     file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));
+
+    // Collect category slug    
+    foreach ($posts_cache as $key => $c) {
+        $cd = explode('/', $c['dirname']);
+        $ctmp[] = $cd[3];
+    }
+    file_put_contents('cache/index/index-category.txt', print_r(serialize(array_unique($ctmp, SORT_REGULAR)), true));    
 
     // Rebuilt static page index
     $ptmp = array();
@@ -300,7 +323,7 @@ function rebuilt_cache($type = null)
     $author_string = serialize($author_cache);
     file_put_contents('cache/index/index-author.txt', print_r($author_string, true));
 
-    // Rebuilt category index
+    // Rebuilt category files index
     $ctmp = array();
     $ctmp =  glob('content/data/category/*.md', GLOB_NOSORT);
     if (is_array($ctmp)) {
@@ -310,7 +333,7 @@ function rebuilt_cache($type = null)
     }
     usort($category_cache, "sortfile_a");
     $category_string = serialize($category_cache);
-    file_put_contents('cache/index/index-category.txt', print_r($category_string, true));
+    file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true));
 
     // Rebuilt scheduled posts index
     $stmp = array();
@@ -837,21 +860,44 @@ function get_category($category, $page, $perpage, $random = null)
 }
 
 // Return category info.
-function get_category_info($category)
+function get_category_info($category = null)
 {
 
     $tmp = array();
-    if (is_null($category)) {
-        $tmp[] = default_category();
-    } elseif (strtolower($category) == 'uncategorized') {
-        return default_category();
+    $cslug= get_category_slug();
+
+    if (!empty($cslug)) {
+        if (is_null($category)) {
+            foreach ($cslug as $key => $c){
+                $ctmp = read_category_info($c);
+                if (!empty($ctmp[0])) {
+                    $tmp[] = $ctmp[0];
+                } else {
+                    $tmp[] = default_category($c);
+                }            
+            }
+        } else {
+            foreach ($cslug as $key => $c){
+                if ($c === $category) {
+                    $ctmp = read_category_info($category);
+                    if (!empty($ctmp[0])) {
+                        $tmp[] = $ctmp[0];
+                    } else {
+                        $tmp[] = default_category($category);
+                    }
+                }
+            }    
+        }
     }
-    
-    $posts = get_category_files();
+    return $tmp;
+}
 
-    if (!empty($posts)) {
-
-        foreach ($posts as $index => $v) {
+function read_category_info($category) 
+{
+    $cFiles = get_category_files();
+    $tmp = array();
+    if (!empty($cFiles)) {
+        foreach ($cFiles as $index => $v) {
             if (stripos($v['basename'], $category . '.md') !== false) {
 
                 $desc = new stdClass;
@@ -883,27 +929,37 @@ function get_category_info($category)
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
 
                 $tmp[] = $desc;
-            }
+            } 
         }
     }
-    
-    return $tmp;
+    return $tmp;    
 }
 
 // Return default category
-function default_category()
+function default_category($category = null)
 {
     $tmp = array();
     $desc = new stdClass;
 
-    $desc->title = i18n("Uncategorized");
-    $desc->url = site_url() . 'category/uncategorized';
-    $desc->slug = 'uncategorized';
-    $desc->body = '<p>' . i18n('Uncategorized_comment') . '</p>';
-    $desc->md = 'uncategorized';
-    $desc->description = i18n('Uncategorized_comment');
-    $desc->file = '';
-    $desc->count = get_categorycount($desc->md);
+    if ($category == 'uncategorized') {
+        $desc->title = i18n("Uncategorized");
+        $desc->url = site_url() . 'category/uncategorized';
+        $desc->slug = 'uncategorized';
+        $desc->body = '<p>' . i18n('Uncategorized_comment') . '</p>';
+        $desc->md = 'uncategorized';
+        $desc->description = i18n('Uncategorized_comment');
+        $desc->file = '';
+        $desc->count = get_categorycount($desc->md);
+    } else {
+        $desc->title = $category;
+        $desc->url = site_url() . 'category/' . $category;
+        $desc->slug = $category;
+        $desc->body = '<p>' . i18n('All_blog_posts') . ': ' . $category . '</p>';
+        $desc->md = $category;
+        $desc->description = i18n('All_blog_posts') . ': ' . $category;
+        $desc->file = '';
+        $desc->count = get_categorycount($category);        
+    }
 
     return $tmp[] = $desc;
 }
@@ -925,11 +981,10 @@ function category_list($custom = null) {
         $cat = unserialize(file_get_contents($filename));
     } else {
         $arr = get_category_info(null);
-        foreach ($arr as $a) {
-            $cat[] = array($a->md, $a->title, $a->count);
+        foreach ($arr as $i => $a) {
+            $cat[] = array($a->md, $a->title, $a->count, $a->description);
         }
 
-        asort($cat);
         $tmp = serialize($cat);
         file_put_contents($filename, print_r($tmp, true));
     }
