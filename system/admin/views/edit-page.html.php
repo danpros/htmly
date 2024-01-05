@@ -29,6 +29,13 @@ if ($type == 'is_frontpage') {
         $oldcontent = i18n('Author_Description');
     }
 
+} elseif ($type == 'is_category') {
+    $content = $p->body;
+    $oldtitle = $p->title;
+    $olddescription = $p->description;
+    $oldcontent = $p->body;
+    $oldmd = $p->md;
+    $url = 'content/data/category/'. $p->md;
 } else {
 
     if (isset($p->file)) {

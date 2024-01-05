@@ -269,18 +269,14 @@ function rebuilt_cache($type = null)
         foreach ($tmp as $file) {
             if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
                 $posts_cache[] = pathinfo($file);
+                $cd = explode('/', $file);
+                $ctmp[] = $cd[3];
             }
         }
     }
     usort($posts_cache, "sortfile_d");
     $string_posts = serialize($posts_cache);
     file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));
-
-    // Collect category slug    
-    foreach ($posts_cache as $key => $c) {
-        $cd = explode('/', $c['dirname']);
-        $ctmp[] = $cd[3];
-    }
     file_put_contents('cache/index/index-category.txt', print_r(serialize(array_unique($ctmp, SORT_REGULAR)), true));    
 
     // Rebuilt static page index

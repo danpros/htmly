@@ -1830,6 +1830,11 @@ get('/admin/categories/:category', function ($category) {
                 $desc = $desc[0];
             }
             
+            if (empty($posts) || $page < 1) {
+                // a non-existing page
+                not_found();
+            }
+    
             $total = $desc->count;
             
             render('category-list', array(
@@ -1890,12 +1895,12 @@ get('/category/:category', function ($category) {
         $desc = $desc[0];
     }
 
-    $total = $desc->count;
-
     if (empty($posts) || $page < 1) {
         // a non-existing page
         not_found();
     }
+    
+    $total = $desc->count;
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -1968,7 +1973,8 @@ get('/category/:category/edit', function ($category) {
         config('views.root', 'system/admin/views');
         $post = get_category_info($category);
 
-        if (!$post) {
+
+        if(empty($post)) {
             not_found();
         }
 
@@ -2052,7 +2058,7 @@ get('/category/:category/delete', function ($category) {
         config('views.root', 'system/admin/views');
         $post = get_category_info($category);
 
-        if (!$post) {
+        if(empty($post)) {
             not_found();
         }
 

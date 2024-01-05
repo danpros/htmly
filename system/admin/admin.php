@@ -54,7 +54,7 @@ function session($user, $pass)
     $user_enc = user('encryption', $user);
     $user_pass = user('password', $user);
     $user_role = user('role', $user);
-	
+    
     if(is_null($user_enc) || is_null($user_pass) || is_null($user_role)) {
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
     }
@@ -576,7 +576,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
         } else {
             $post_url = $post_url;
         }
-    }	
+    }    
 
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
@@ -755,11 +755,18 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
         $newfile = $dir . '/' . $post_url . '.md';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
         if ($oldfile === $newfile) {
             file_put_contents($oldfile, print_r($post_content, true));
         } else {
-            rename($oldfile, $newfile);
-            file_put_contents($newfile, print_r($post_content, true));
+            if (file_exists($oldfile)) {
+                rename($oldfile, $newfile);
+                file_put_contents($newfile, print_r($post_content, true));
+            } else {
+                file_put_contents($newfile, print_r($post_content, true));
+            }
         }
 
         rename_category_folder($post_url, $oldfile);
