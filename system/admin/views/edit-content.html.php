@@ -9,7 +9,6 @@ if (isset($p->file)) {
 $filename = $file_path['dirname'] . '/' . $file_path['basename'];
 
 $desc = get_category_info(null);
-asort($desc);
 
 $content = file_get_contents($filename);
 $oldtitle = get_content_tag('t', $content, 'Untitled');

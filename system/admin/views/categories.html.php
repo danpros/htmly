@@ -1,7 +1,6 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php
 $desc = get_category_info(null);
-asort($desc);
 ?>
 <h2><?php echo i18n("Categories");?></h2>
 <br>

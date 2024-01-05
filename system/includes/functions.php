@@ -865,8 +865,8 @@ function get_category_info($category = null)
 
     $tmp = array();
     $cslug= get_category_slug();
-
     if (!empty($cslug)) {
+        asort($cslug);
         if (is_null($category)) {
             foreach ($cslug as $key => $c){
                 $ctmp = read_category_info($c);
@@ -894,8 +894,8 @@ function get_category_info($category = null)
 
 function read_category_info($category) 
 {
-    $cFiles = get_category_files();
     $tmp = array();
+    $cFiles = get_category_files();
     if (!empty($cFiles)) {
         foreach ($cFiles as $index => $v) {
             if (stripos($v['basename'], $category . '.md') !== false) {
