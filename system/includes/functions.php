@@ -256,7 +256,6 @@ function rebuilt_cache($type = null)
     $author_cache = array();
     $scheduled = array();
     $category_cache = array();
-    $ctmp = array();
 
     if (is_dir($dir) === false) {
         mkdir($dir, 0775, true);
@@ -264,20 +263,20 @@ function rebuilt_cache($type = null)
 
     // Rebuilt posts index
     $tmp = array();
+    $ctmp = array();
     $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
      if (is_array($tmp)) {
         foreach ($tmp as $file) {
             if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
                 $posts_cache[] = pathinfo($file);
-                $cd = explode('/', $file);
-                $ctmp[] = $cd[3];
+                $pc = explode('/', $file);
+                $ctmp[] = $pc[3];
             }
         }
     }
     usort($posts_cache, "sortfile_d");
     $string_posts = serialize($posts_cache);
-    file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));
-    file_put_contents('cache/index/index-category.txt', print_r(serialize(array_unique($ctmp, SORT_REGULAR)), true));    
+    file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));   
 
     // Rebuilt static page index
     $ptmp = array();
@@ -320,16 +319,25 @@ function rebuilt_cache($type = null)
     file_put_contents('cache/index/index-author.txt', print_r($author_string, true));
 
     // Rebuilt category files index
-    $ctmp = array();
-    $ctmp =  glob('content/data/category/*.md', GLOB_NOSORT);
-    if (is_array($ctmp)) {
-        foreach ($ctmp as $file) {
+    $ftmp = array();
+    $cf = array();
+    $dirc = array();
+    $dirm = array();
+    $ftmp =  glob('content/data/category/*.md', GLOB_NOSORT);
+    if (is_array($ftmp)) {
+        foreach ($ftmp as $file) {
             $category_cache[] = pathinfo($file);
+            $x = explode('/', $file);
+            $cf[] = $x[2];             
         }
     }
     usort($category_cache, "sortfile_a");
     $category_string = serialize($category_cache);
     file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true));
+    
+    $dirc = array_unique($ctmp, SORT_REGULAR);
+    $dirm = array_unique(array_merge($dirc, $cf), SORT_REGULAR); 
+    file_put_contents('cache/index/index-category.txt', print_r(serialize($dirm), true)); 
 
     // Rebuilt scheduled posts index
     $stmp = array();
