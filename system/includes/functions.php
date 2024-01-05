@@ -98,14 +98,11 @@ function get_draft_posts()
 {
     static $_draft = array();
     if (empty($_draft)) {
-        $tmp = array();
-        $tmp = glob('content/*/*/*/draft/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_draft[] = pathinfo($file);
-            }
+        $url = 'cache/index/index-draft.txt';
+        if (!file_exists($url)) {
+            rebuilt_cache('all');
         }
-        usort($_draft, "sortfile_a");
+        $_draft = unserialize(file_get_contents($url));
     }
     return $_draft;
 }
@@ -198,7 +195,7 @@ function get_category_folder()
     return $_dfolder;
 }
 
-// Get category info files.
+// Get category slug.
 function get_category_slug()
 {
     static $_cslug = array();
@@ -254,8 +251,9 @@ function rebuilt_cache($type = null)
     $page_cache = array();
     $subpage_cache = array();
     $author_cache = array();
-    $scheduled = array();
+    $scheduled_cache = array();
     $category_cache = array();
+    $draft_cache = array();
 
     if (is_dir($dir) === false) {
         mkdir($dir, 0775, true);
@@ -278,6 +276,52 @@ function rebuilt_cache($type = null)
     $string_posts = serialize($posts_cache);
     file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));   
 
+    // Rebuilt scheduled posts index
+    $stmp = array();
+    $stmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
+    if (is_array($stmp)) {
+        foreach ($stmp as $file) {
+            $scheduled_cache[] = pathinfo($file);
+            $ss = explode('/', $file);
+            $ctmp[] = $ss[3];
+        }
+    }
+    usort($scheduled_cache, "sortfile_d");
+    $scheduled_string = serialize($scheduled_cache);
+    file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true));
+    
+    // Rebuilt draft posts index
+    $drf = array();
+    $drf = glob('content/*/*/*/draft/*.md', GLOB_NOSORT);
+    if (is_array($drf)) {
+        foreach ($drf as $file) {
+            $draft_cache[] = pathinfo($file);
+            $dd = explode('/', $file);
+            $ctmp[] = $dd[3];
+        }
+    }
+    usort($draft_cache, "sortfile_d");
+    $draft_string = serialize($draft_cache);
+    file_put_contents('cache/index/index-draft.txt', print_r($draft_string, true));
+    
+    // Rebuilt category files index
+    $ftmp = array();
+    $ftmp =  glob('content/data/category/*.md', GLOB_NOSORT);
+    if (is_array($ftmp)) {
+        foreach ($ftmp as $file) {
+            $category_cache[] = pathinfo($file);
+            $ctmp[] = pathinfo($file, PATHINFO_FILENAME);            
+        }
+    }
+    usort($category_cache, "sortfile_a");
+    $category_string = serialize($category_cache);
+    file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true));
+    
+    // Rebuilt category slug index
+    $dirc = array();
+    $dirc = array_unique($ctmp, SORT_REGULAR); 
+    file_put_contents('cache/index/index-category.txt', print_r(serialize($dirc), true));
+    
     // Rebuilt static page index
     $ptmp = array();
     $ptmp =  glob('content/static/*.md', GLOB_NOSORT);
@@ -317,38 +361,6 @@ function rebuilt_cache($type = null)
     usort($author_cache, "sortfile_a");
     $author_string = serialize($author_cache);
     file_put_contents('cache/index/index-author.txt', print_r($author_string, true));
-
-    // Rebuilt category files index
-    $ftmp = array();
-    $cf = array();
-    $dirc = array();
-    $dirm = array();
-    $ftmp =  glob('content/data/category/*.md', GLOB_NOSORT);
-    if (is_array($ftmp)) {
-        foreach ($ftmp as $file) {
-            $category_cache[] = pathinfo($file);
-            $cf[] = pathinfo($file, PATHINFO_FILENAME);            
-        }
-    }
-    usort($category_cache, "sortfile_a");
-    $category_string = serialize($category_cache);
-    file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true));
-    
-    $dirc = array_unique($ctmp, SORT_REGULAR);
-    $dirm = array_unique(array_merge($dirc, $cf), SORT_REGULAR); 
-    file_put_contents('cache/index/index-category.txt', print_r(serialize($dirm), true)); 
-
-    // Rebuilt scheduled posts index
-    $stmp = array();
-    $stmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
-    if (is_array($stmp)) {
-        foreach ($stmp as $file) {
-            $scheduled[] = pathinfo($file);
-        }
-    }
-    usort($scheduled, "sortfile_d");
-    $scheduled_string = serialize($scheduled);
-    file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true));
 
     // Remove the widget cache
     foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {

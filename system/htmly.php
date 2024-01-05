@@ -1830,7 +1830,7 @@ get('/admin/categories/:category', function ($category) {
                 $desc = $desc[0];
             }
             
-            if (empty($posts) || $page < 1) {
+            if (empty($desc)) {
                 // a non-existing page
                 not_found();
             }
