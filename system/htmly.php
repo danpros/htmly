@@ -321,7 +321,7 @@ post('/edit/profile', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
@@ -380,7 +380,7 @@ post('/edit/frontpage', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
@@ -488,7 +488,7 @@ post('/add/content', function () {
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
     $description = from($_REQUEST, 'description');
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $draft = from($_REQUEST, 'draft');
     $category = from($_REQUEST, 'category');
     $date = from($_REQUEST, 'date');
@@ -742,7 +742,7 @@ post('/add/category', function () {
 // Show admin/posts 
 get('/admin/posts', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if (login()) {
 
@@ -813,7 +813,7 @@ get('/admin/posts', function () {
 // Show admin/popular 
 get('/admin/popular', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if (login()) {
 
@@ -886,7 +886,7 @@ get('/admin/mine', function () {
 
         config('views.root', 'system/admin/views');
 
-        $name = $_SESSION[config("site.url")]['user'];
+        $name = $_SESSION[site_url()]['user'];
 
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
@@ -951,7 +951,7 @@ get('/admin/draft', function () {
 
         config('views.root', 'system/admin/views');
 
-        $name = $_SESSION[config("site.url")]['user'];
+        $name = $_SESSION[site_url()]['user'];
 
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
@@ -1024,7 +1024,7 @@ get('/admin/scheduled', function () {
 
         config('views.root', 'system/admin/views');
 
-        $name = $_SESSION[config("site.url")]['user'];
+        $name = $_SESSION[site_url()]['user'];
 
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
@@ -1197,7 +1197,7 @@ post('/admin/import', function () {
 // Show Config page
 get('/admin/config', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
 
     if (login()) {
@@ -1263,7 +1263,7 @@ post('/admin/config', function () {
 // Show Config page
 get('/admin/config/custom', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
 
     if (login()) {
@@ -1331,7 +1331,7 @@ post('/admin/config/custom', function () {
 // Show Config page
 get('/admin/config/reading', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
 
     if (login()) {
@@ -1398,7 +1398,7 @@ post('/admin/config/reading', function () {
 // Show Config page
 get('/admin/config/widget', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
 
     if (login()) {
@@ -1465,7 +1465,7 @@ post('/admin/config/widget', function () {
 // Show Config page
 get('/admin/config/metatags', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
 
     if (login()) {
@@ -1532,7 +1532,7 @@ post('/admin/config/metatags', function () {
 // Show Config page
 get('/admin/config/performance', function () {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
 
     if (login()) {
@@ -1757,7 +1757,7 @@ get('/admin/categories', function () {
 // Show the category page
 get('/admin/categories/:category', function ($category) {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if (login()) {
         
@@ -2549,7 +2549,7 @@ get('/post/:name/edit', function ($name) {
 
     if (login()) {
 
-        $user = $_SESSION[config("site.url")]['user'];
+        $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
 
         config('views.root', 'system/admin/views');
@@ -2762,7 +2762,7 @@ get('/post/:name/delete', function ($name) {
 
     if (login()) {
 
-        $user = $_SESSION[config("site.url")]['user'];
+        $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
 
         config('views.root', 'system/admin/views');
@@ -3615,7 +3615,7 @@ get('/:year/:month/:name/edit', function ($year, $month, $name) {
 
     if (login()) {
 
-        $user = $_SESSION[config("site.url")]['user'];
+        $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
 
         config('views.root', 'system/admin/views');
@@ -3828,7 +3828,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
 
     if (login()) {
 
-        $user = $_SESSION[config("site.url")]['user'];
+        $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
 
         config('views.root', 'system/admin/views');

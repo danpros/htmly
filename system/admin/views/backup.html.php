@@ -23,7 +23,7 @@ Please install the ZIP extension to use the backup feature.
     <br><br>
 <?php 
 
-if (isset($_SESSION[config("site.url")]['user'])) {
+if (isset($_SESSION[site_url()]['user'])) {
     $files = get_zip_files();
     if (!empty($files)) {
         krsort($files);

@@ -14,8 +14,8 @@ if ($type == 'is_frontpage') {
     }
 } elseif ($type == 'is_profile') {
 
-    if (isset($_SESSION[config("site.url")]['user'])) {
-        $user = $_SESSION[config("site.url")]['user'];
+    if (isset($_SESSION[site_url()]['user'])) {
+        $user = $_SESSION[site_url()]['user'];
     }
 
     $filename = 'content/' . $user . '/author.md';

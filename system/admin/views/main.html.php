@@ -5,8 +5,8 @@
 <br><br>
 <?php 
 
-if (isset($_SESSION[config("site.url")]['user'])) {
-    $posts = get_profile_posts($_SESSION[config("site.url")]['user'], 1, 5);
+if (isset($_SESSION[site_url()]['user'])) {
+    $posts = get_profile_posts($_SESSION[site_url()]['user'], 1, 5);
     if (!empty($posts)) {
         echo '<table class="table post-list">';
         echo '<tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';

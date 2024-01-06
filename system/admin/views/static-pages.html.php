@@ -3,7 +3,7 @@
 <br>
 <a class="btn btn-primary right" href="<?php echo site_url();?>add/page"><?php echo i18n('Add_new_page');?></a>
 <br><br>
-<?php if (isset($_SESSION[config("site.url")]['user'])):?>
+<?php if (isset($_SESSION[site_url()]['user'])):?>
     <?php $posts = find_page();
     if (!empty($posts)): ?>
         <table class="table post-list">

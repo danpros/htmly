@@ -2171,7 +2171,7 @@ function get_image($text)
 // Return edit tab on post
 function tab($p)
 {
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if (isset($p->author)) {
         if ($user === $p->author || $role === 'admin') {

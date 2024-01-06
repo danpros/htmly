@@ -65,7 +65,7 @@ function session($user, $pass)
             if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
                 update_user($user, $pass, $user_role);
             }
-            $_SESSION[config("site.url")]['user'] = $user;
+            $_SESSION[site_url()]['user'] = $user;
             header('location: admin');
         } else {
             return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
@@ -73,7 +73,7 @@ function session($user, $pass)
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         if (session_status() == PHP_SESSION_NONE) session_start();
         update_user($user, $pass, $user_role);
-        $_SESSION[config("site.url")]['user'] = $user;
+        $_SESSION[site_url()]['user'] = $user;
         header('location: admin');
     } else {
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
@@ -89,16 +89,16 @@ function old_password_verify($pass, $user_enc, $user_pass)
 // Generate csrf token
 function generate_csrf_token()
 {
-    $_SESSION[config("site.url")]['csrf_token'] = sha1(microtime(true) . mt_rand(10000, 90000));
+    $_SESSION[site_url()]['csrf_token'] = sha1(microtime(true) . mt_rand(10000, 90000));
 }
 
 // Get csrf token
 function get_csrf()
 {
-    if (!isset($_SESSION[config("site.url")]['csrf_token']) || empty($_SESSION[config("site.url")]['csrf_token'])) {
+    if (!isset($_SESSION[site_url()]['csrf_token']) || empty($_SESSION[site_url()]['csrf_token'])) {
         generate_csrf_token();
     }
-    return $_SESSION[config("site.url")]['csrf_token'];
+    return $_SESSION[site_url()]['csrf_token'];
 }
 
 // Check the csrf token
@@ -936,7 +936,7 @@ function get_feed($feed_url, $credit)
             $tags = $entry->category;
             $title = rtrim($entry->title, ' \,\.\-');
             $title = ltrim($title, ' \,\.\-');
-            $user = $_SESSION[config("site.url")]['user'];
+            $user = $_SESSION[site_url()]['user'];
             $url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($title)));
             if ($credit == 'yes') {
                 $source = $entry->link;
@@ -994,7 +994,7 @@ function Zip($source, $destination, $include_dir = false)
 // Return toolbar
 function toolbar()
 {
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     $base = site_url();
 
@@ -1272,7 +1272,7 @@ function find_draft($year, $month, $name)
 function get_draft($profile, $page, $perpage)
 {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     $posts = get_draft_posts();
 
@@ -1451,7 +1451,7 @@ function find_scheduled($year, $month, $name)
 function get_scheduled($profile, $page, $perpage)
 {
 
-    $user = $_SESSION[config("site.url")]['user'];
+    $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     $posts = get_scheduled_posts();
 
