@@ -21,7 +21,7 @@ function get_blog_posts()
     return $_posts;
 }
 
-// Get static page path. Unsorted.
+// Get static page path.
 function get_static_pages()
 {
     static $_page = array();
@@ -36,7 +36,7 @@ function get_static_pages()
     return $_page;
 }
 
-// Get static page path. Unsorted.
+// Get static subpage path.
 function get_static_subpages($static = null)
 {
     static $_sub_page = array();
@@ -61,7 +61,7 @@ function get_static_subpages($static = null)
     return $_sub_page;
 }
 
-// Get author name. Unsorted.
+// Get author name.
 function get_author_name()
 {
     static $_author = array();
@@ -77,23 +77,7 @@ function get_author_name()
     return $_author;
 }
 
-// Get backup file.
-function get_zip_files()
-{
-    static $_zip = array();
-
-    if (empty($_zip)) {
-
-        // Get the names of all the
-        // zip files.
-
-        $_zip = glob('backup/*.zip');
-    }
-
-    return $_zip;
-}
-
-// Get user draft.
+// Get posts draft.
 function get_draft_posts()
 {
     static $_draft = array();
@@ -209,6 +193,22 @@ function get_category_slug()
     return $_cslug;
 }
 
+// Get backup file.
+function get_zip_files()
+{
+    static $_zip = array();
+
+    if (empty($_zip)) {
+
+        // Get the names of all the
+        // zip files.
+
+        $_zip = glob('backup/*.zip');
+    }
+
+    return $_zip;
+}
+
 // Get images in content/images folder
 function get_gallery() {
     static $_gallery = array();
@@ -265,7 +265,7 @@ function rebuilt_cache($type = null)
     $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
      if (is_array($tmp)) {
         foreach ($tmp as $file) {
-            if(strpos($file, '/draft/') === false && strpos($file, '/scheduled/') === false) {
+            if(strpos($file, '/draft/') === false) {
                 $posts_cache[] = pathinfo($file);
                 $pc = explode('/', $file);
                 $ctmp[] = $pc[3];
@@ -273,8 +273,8 @@ function rebuilt_cache($type = null)
         }
     }
     usort($posts_cache, "sortfile_d");
-    $string_posts = serialize($posts_cache);
-    file_put_contents('cache/index/index-posts.txt', print_r($string_posts, true));   
+    $posts_string = serialize($posts_cache);
+    file_put_contents('cache/index/index-posts.txt', print_r($posts_string, true));   
 
     // Rebuilt scheduled posts index
     $stmp = array();
@@ -923,6 +923,7 @@ function read_category_info($category)
 {
     $tmp = array();
     $cFiles = get_category_files();
+
     if (!empty($cFiles)) {
         foreach ($cFiles as $index => $v) {
             if (stripos($v['basename'], $category . '.md') !== false) {
@@ -3130,14 +3131,6 @@ function blog_copyright()
 function blog_language()
 {
     return str_replace('_', '-', config('language'));
-}
-
-// Return author info. Deprecated
-function authorinfo($name = null, $about = null)
-{
-    if (config('author.info') == 'true') {
-        return '<div class="author-info"><h4>by <strong>' . $name . '</strong></h4>' . $about . '</div>';
-    }
 }
 
 // Output head contents
