@@ -14,11 +14,32 @@ function _log($message)
 
 function site_url()
 {
-    if (config('site.url') == null)
-        error(500, '[site.url] is not set');
+    if (config('multi.site') == "true"){
+        return rtrim(generateSiteUrl(), '/') . '/';
+    } else {
+        if (config('site.url') == null)
+            error(500, '[site.url] is not set');
+        // Forcing the forward slash
+        return rtrim(config('site.url'), '/') . '/';
+    }
+}
 
-    // Forcing the forward slash
-    return rtrim(config('site.url'), '/') . '/';
+function generateSiteUrl()
+{
+    $dir = trim(dirname(substr($_SERVER["SCRIPT_FILENAME"], strlen($_SERVER["DOCUMENT_ROOT"]))), '/');
+    if ($dir == '.' || $dir == '..') {
+        $dir = '';
+    }
+    $port = '';
+    if ($_SERVER["SERVER_PORT"] != "80" && $_SERVER["SERVER_PORT"] != "443") {
+        $port = ':' . $_SERVER["SERVER_PORT"];
+    }
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
+    if ($dir === '') {
+        $siteUrl = $scheme . '://' . trim($_SERVER['SERVER_NAME'], "/") . $port . "/";
+        return;
+    }
+    return $siteUrl = $scheme . '://' . trim($_SERVER['SERVER_NAME'], "/") . $port . "/" . $dir . '/';
 }
 
 function site_path()
@@ -29,7 +50,7 @@ function site_path()
         error(500, '[site.url] is not set');
 
     if (!$_path)
-        $_path = rtrim(parse_url(config('site.url'), PHP_URL_PATH), '/');
+        $_path = rtrim(parse_url(site_url(), PHP_URL_PATH), '/');
 
     return $_path;
 }

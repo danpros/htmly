@@ -132,6 +132,9 @@ generation.time = "false"
 ; Switch on and off the cache timestamp. Options "false" and "true"
 cache.timestamp = "false"
 
+; The site.url depends on where you are visiting from. Same installation 
+multi.site = "false"
+
 ; Set the theme here
 views.root = "themes/twentyfifteen"
 

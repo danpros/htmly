@@ -78,6 +78,28 @@
     </div>
   </div>
   <br>
+  <h4>Multisite</h4>
+  <hr>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Multisite</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-multi.site" id="multi.site1" value="true" <?php if (config('multi.site') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="multi.site1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-multi.site" id="multi.site2" value="false" <?php if (config('multi.site') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="multi.site2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
   <h4><?php echo i18n('Github_pre_release');?></h4>
   <hr>
   <div class="form-group row">
