@@ -1,12 +1,12 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <article class="page type-page hentry">
     <header class="entry-header">
-        <h1 class="entry-title"><?php echo $author->name ?></h1><span class="social-navigation" style="margin:0 auto;float:right;"><a style="height:100%" href="<?php echo $author->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+        <h1 class="entry-title"><?php echo $name ?></h1>
     </header>
     <div class="entry-content">
-        <?php echo $author->about ?>
+        <?php echo $about ?>
         <h2 class="post-index"><?php echo i18n('Post_by_author');?></h2>
-        <?php if ($posts) { ?>
+        <?php if (!empty($posts)) { ?>
             <ul class="post-list">
                 <?php foreach ($posts as $p): ?>
                     <li class="item">
@@ -20,15 +20,15 @@
         } ?>
     </div>
 </article>
-<?php if ($posts) { ?>
-<?php if ($pagination['prev'] || $pagination['next']): ?>
+<?php if (!empty($posts)) { ?>
+<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <div class="navigation pagination">
     <div class="nav-links">
-        <?php if ($pagination['prev']): ?>
+        <?php if (!empty($pagination['prev'])): ?>
             <a class="prev page-numbers" href="?page=<?php echo $page - 1 ?>">«</a>
         <?php endif; ?>
         <span class="page-numbers"><?php echo $pagination['pagenum'];?></span>
-        <?php if ($pagination['next']): ?>
+        <?php if (!empty($pagination['next'])): ?>
             <a class="next page-numbers" href="?page=<?php echo $page + 1 ?>">»</a>
         <?php endif; ?>
     </div>

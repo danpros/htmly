@@ -1,5 +1,5 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if ($breadcrumb): ?>
+<?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
 <div class="profile-wrapper" itemprop="accountablePerson" itemscope="itemscope">
@@ -9,7 +9,7 @@
     </div>
 </div>
 <h2 class="post-index"><?php echo i18n("Post_by_author");?></h2>
-<?php if ($posts) { ?>
+<?php if (!empty($posts)) { ?>
     <ul class="post-list">
         <?php foreach ($posts as $p): ?>
             <li class="item">
@@ -18,13 +18,13 @@
             </li>
         <?php endforeach; ?>
     </ul>
-    <?php if ($pagination['prev'] || $pagination['next']): ?>
+    <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
         <div class="pager">
-            <?php if ($pagination['prev']): ?>
+            <?php if (!empty($pagination['prev'])): ?>
                 <span><a href="?page=<?php echo $page - 1 ?>" class="pagination-arrow newer" rel="prev">Newer</a></span>
             <?php endif; ?>
              <span class="page-number"><?php echo $pagination['pagenum']; ?></span>
-            <?php if ($pagination['next']): ?>
+            <?php if (!empty($pagination['next'])): ?>
                 <span><a href="?page=<?php echo $page + 1 ?>" class="pagination-arrow older" rel="next">Older</a></span>
             <?php endif; ?>
         </div>

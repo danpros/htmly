@@ -1,5 +1,5 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if ($breadcrumb): ?>
+<?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
 <section class="inprofile post section">
@@ -11,7 +11,7 @@
                     <?php echo $about; ?>
                 </div><!--//desc-->
                 <h3><?php echo i18n("Post_by_author");?></h3>
-                <?php if ($posts) { ?>
+                <?php if (!empty($posts)) { ?>
                     <ul class="post-list">
                         <?php foreach ($posts as $p): ?>
                             <li class="item">
@@ -27,8 +27,8 @@
         </div><!--//content--> 
     </div><!--//section-inner-->
 </section><!--//section-->
-<?php if ($posts) { ?>
-<?php if ($pagination['prev'] || $pagination['next']): ?>
+<?php if (!empty($posts)) { ?>
+<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 	<div class="pagination"><?php echo $pagination['html'];?></div>
 <?php endif; ?>
 <?php } ?>

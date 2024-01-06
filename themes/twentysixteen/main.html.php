@@ -1,31 +1,31 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if ($is_category):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?> </h1><span class="social-navigation" style="display:inline;margin:0 auto;float:right;"><a href="<?php echo $category->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span><div class="taxonomy-description"><?php echo $category->body;?> </div> </header>
+<?php if (isset($is_category)):?>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
 <?php endif;?>
-<?php if ($is_tag):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Tags');?>: <?php echo $tag->title;?></h1><span class="social-navigation" style="float:right;"><a href="<?php echo $tag->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span></header>
+<?php if (isset($is_tag)):?>
+    <header class="page-header"><h1 class="page-title">Tag: <?php echo $tag->title;?></h1></header>
 <?php endif;?>
-<?php if ($is_archive):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1><span class="social-navigation" style="float:right;"><a href="<?php echo $archive->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span></header>
+<?php if (isset($is_archive)):?>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1></header>
 <?php endif;?>
-<?php if ($is_search):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1><span class="social-navigation" style="float:right;"><a href="<?php echo $search->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span></header>
+<?php if (isset($is_search)):?>
+    <header class="page-header"><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1></header>
 <?php endif;?>
-<?php if ($is_type):?>
-    <header class="page-header"><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1><span class="social-navigation" style="float:right;"><a href="<?php echo $type->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span></header>
+<?php if (isset($is_type)):?>
+    <header class="page-header"><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1></header>
 <?php endif;?>
 <?php foreach ($posts as $p):?>
 <article class="post <?php if ($p->type == 'post') {echo 'format-standard';} else { echo 'format-' . $p->type;} ?> hentry single">
 
     <header class="entry-header">
-        <?php if ($p->link) {?>
+        <?php if (!empty($p->link)) {?>
             <div class="post-link"><h2 class="entry-title"><a target="_blank" href="<?php echo $p->link;?>"><?php echo $p->title;?></a></h2></div>
         <?php } else { ?>
             <h2 class="entry-title"><a href="<?php echo $p->url;?>"><?php echo $p->title;?></a></h2>
         <?php } ?>
     </header><!-- .entry-header -->
 
-    <?php if ($p->image):?>
+    <?php if (!empty($p->image)):?>
     <a class="post-thumbnail" href="<?php echo $p->url;?>"><img alt="<?php echo $p->title;?>" src="<?php echo $p->image;?>" width="100%"/></a>
     <?php endif;?>
         
@@ -33,13 +33,13 @@
         <div class="content">
             <div class="clearfix text-formatted field field--name-body">
                 <div class="content">
-                    <?php if ($p->quote):?>
+                    <?php if (!empty($p->quote)):?>
                         <blockquote><?php echo $p->quote;?></blockquote>
                     <?php endif;?>
-                    <?php if ($p->video):?>
+                    <?php if (!empty($p->video)):?>
                         <span class="embed-youtube"><iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe></span>
                     <?php endif; ?>
-                    <?php if ($p->audio):?>
+                    <?php if (!empty($p->audio)):?>
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
                     <?php endif; ?>
                     <?php echo get_teaser($p->body, $p->url);?>
@@ -64,14 +64,14 @@
 </article><!-- #post-## -->
 <?php endforeach;?>
 
-<?php if ($pagination['prev'] || $pagination['next']): ?>
+<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <div class="navigation pagination">
     <div class="nav-links">
-        <?php if ($pagination['prev']): ?>
+        <?php if (!empty($pagination['prev'])): ?>
             <a class="prev page-numbers" href="?page=<?php echo $page - 1 ?>">«</a>
         <?php endif; ?>
         <span class="page-numbers"><?php echo $pagination['pagenum'];?></span>
-        <?php if ($pagination['next']): ?>
+        <?php if (!empty($pagination['next'])): ?>
             <a class="next page-numbers" href="?page=<?php echo $page + 1 ?>">»</a>
         <?php endif; ?>
     </div>

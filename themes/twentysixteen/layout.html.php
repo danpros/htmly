@@ -125,7 +125,6 @@
                     <ul class="social-links-menu" id="menu-social-links">
                         <?php if(!empty(config('social.twitter'))):?><li><a href="<?php echo config('social.twitter');?>"><span class="screen-reader-text">Twitter</span></a></li><?php endif;?>
                         <?php if(!empty(config('social.facebook'))):?><li><a href="<?php echo config('social.facebook');?>"><span class="screen-reader-text">Facebook</span></a></li><?php endif;?>
-                        <li><a href="<?php echo site_url();?>feed/rss"><span class="screen-reader-text">RSS</span></a></li>
                     </ul>
                     </div>                
                 </nav>

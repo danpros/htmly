@@ -1,21 +1,21 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<article class="post type-post hentry <?php if ($p->image || $p->audio || $p->video):?>has-post-thumbnail<?php endif;?>">
-    <?php if ($p->image):?>
+<article class="post type-post hentry <?php if (!empty($p->image) || !empty ($p->audio) || !empty ($p->video)):?>has-post-thumbnail<?php endif;?>">
+    <?php if (!empty($p->image)):?>
     <div class="post-thumbnail">
         <img style="width:100%;" title="<?php echo $p->title; ?>" alt="<?php echo $p->title; ?>" class="attachment-post-thumbnail wp-post-image" src="<?php echo $p->image; ?>">
     </div>
     <?php endif; ?>
-    <?php if ($p->audio):?>
+    <?php if (!empty($p->audio)):?>
     <div class="post-thumbnail">
         <iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe>
     </div>
     <?php endif; ?>
-    <?php if ($p->video):?>
+    <?php if (!empty($p->video)):?>
     <div class="post-thumbnail">
         <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
     </div>
     <?php endif; ?>
-    <?php if ($p->quote):?>
+    <?php if (!empty($p->quote)):?>
     <div class="post-blockquote">
         <blockquote class="quote"><?php echo $p->quote ?></blockquote>
     </div>
@@ -88,10 +88,10 @@
 <nav role="navigation" class="navigation post-navigation">
     <h2 class="screen-reader-text">Post navigation</h2>
     <div class="nav-links">
-        <?php if ($prev): ?>
+        <?php if (!empty($prev)): ?>
             <div class="nav-previous"><a style="background-image: url(<?php echo($prev['image']); ?>);<?php if (!empty($prev['image'])):?>color:#fff;<?php endif;?>" rel="prev" href="<?php echo($prev['url']); ?>"><span style="<?php if (!empty($prev['image'])):?>color:#fff;<?php endif;?>" aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> <span class="screen-reader-text">Previous post:</span> <span class="post-title"><?php echo($prev['title']); ?></span></a></div>
         <?php endif; ?>
-        <?php if ($next): ?>
+        <?php if (!empty($next)): ?>
             <div class="nav-next"><a style="background-image: url(<?php echo($next['image']); ?>);<?php if (!empty($next['image'])):?>color:#fff;<?php endif;?>" rel="next" href="<?php echo($next['url']); ?>"><span style="<?php if (!empty($next['image'])):?>color:#fff;<?php endif;?>" aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> <span class="screen-reader-text">Next post:</span> <span class="post-title"><?php echo($next['title']); ?></span></a></div>
         <?php endif; ?>
     </div>

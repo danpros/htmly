@@ -1,5 +1,5 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<?php if ($breadcrumb): ?>
+<?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
 <section class="inpage post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">

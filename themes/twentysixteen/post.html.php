@@ -3,14 +3,14 @@
 
     <header class="entry-header">
         <?php if (login()) { echo tab($p); } ?>
-        <?php if ($p->link) {?>
+        <?php if (!empty($p->link)) {?>
             <div class="post-link"><h1 class="entry-title"><a target="_blank" href="<?php echo $p->link;?>"><?php echo $p->title;?></a></h1></div>
         <?php } else { ?>
             <h1 class="entry-title"><?php echo $p->title;?></h1>
         <?php } ?>
     </header><!-- .entry-header -->
 
-    <?php if ($p->image):?>
+    <?php if (!empty($p->image)):?>
         <a class="post-thumbnail" href="<?php echo $p->url;?>"><img alt="<?php echo $p->title;?>" src="<?php echo $p->image;?>" width="100%"/></a>
     <?php endif;?>
 
@@ -18,13 +18,13 @@
         <div class="content">
             <div class="clearfix text-formatted field field--name-body">
                 <div class="content">
-                    <?php if ($p->quote):?>
+                    <?php if (!empty($p->quote)):?>
                         <blockquote><?php echo $p->quote;?></blockquote>
                     <?php endif;?>
-                    <?php if ($p->video):?>
+                    <?php if (!empty($p->video)):?>
                         <span class="embed-youtube"><iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe></span>
                     <?php endif; ?>
-                    <?php if ($p->audio):?>
+                    <?php if (!empty($p->audio)):?>
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
                     <?php endif; ?>
                     <?php echo $p->body;?>
@@ -98,10 +98,10 @@
 <nav role="navigation" class="navigation post-navigation">
     <h2 class="screen-reader-text">Post navigation</h2>
     <div class="nav-links">
-        <?php if ($prev): ?>
+        <?php if (!empty($prev)): ?>
             <div class="nav-previous"><a rel="prev" href="<?php echo($prev['url']); ?>"><span aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> <span class="screen-reader-text">Previous post:</span> <span class="post-title"><?php echo($prev['title']); ?></span></a></div>
         <?php endif;?>
-        <?php if ($next): ?>
+        <?php if (!empty($next)): ?>
             <div class="nav-next"><a rel="next" href="<?php echo($next['url']); ?>"><span aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> <span class="screen-reader-text">Next post:</span> <span class="post-title"><?php echo($next['title']); ?></span></a></div>
         <?php endif;?>
     </div>
