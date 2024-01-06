@@ -1,7 +1,7 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php
 
-unset($_SESSION[config("site.url")]);
+unset($_SESSION[site_url()]);
 
 header('location: login');
 
