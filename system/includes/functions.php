@@ -562,6 +562,8 @@ function get_pages($pages, $page = 1, $perpage = 0)
 
         if (config('views.counter') == 'true') {
             $post->views = get_views($post->file);
+        } else {
+            $post->views = null;
         }
 
         $post->description = get_content_tag("d", $content, get_description($post->body));
@@ -613,7 +615,11 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-        $post->views = get_views($post->file);
+        if (config('views.counter') == 'true') {
+            $post->views = get_views($post->file);
+        } else {
+            $post->views = null;
+        }
 
         $post->description = get_content_tag("d", $content, get_description($post->body));
 
@@ -705,6 +711,8 @@ function find_page($static = null)
 
                 if (config('views.counter') == 'true') {
                     $post->views = get_views($post->file);
+                } else {
+                    $post->views = null;
                 }
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
@@ -789,7 +797,11 @@ function find_subpage($static, $sub_static = null)
                 // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                $post->views = get_views($post->file);
+                if (config('views.counter') == 'true') {
+                    $post->views = get_views($post->file);
+                } else {
+                    $post->views = null;
+                }
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
 

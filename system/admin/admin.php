@@ -1327,6 +1327,8 @@ function find_draft_page($static = null)
 
                 if (config('views.counter') == 'true') {
                     $post->views = get_views($post->file);
+                } else {
+                    $post->views = null;
                 }
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
@@ -1382,7 +1384,11 @@ function find_draft_subpage($static = null, $sub_static = null)
                 // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                $post->views = get_views($post->file);
+                if (config('views.counter') == 'true') {
+                    $post->views = get_views($post->file);
+                } else {
+                    $post->views = null;
+                }
 
                 $post->description = get_content_tag("d", $content, get_description($post->body));
 
