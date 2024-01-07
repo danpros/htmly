@@ -2623,6 +2623,7 @@ EOF;
 // The not found error
 function not_found()
 {
+    if (!config('views.root')) die('HTMLy is not installed!');
     $vroot = rtrim(config('views.root'), '/');
     $lt = $vroot . '/layout--404.html.php';
     if (file_exists($lt)) {
@@ -3161,8 +3162,7 @@ function head_contents()
 function file_cache($request)
 {
     if (config('cache.off') == 'true') return;
-
-    $hour = str_replace(',', '.', config('cache.expiration'));
+    $hour = config('cache.expiration');
     if (empty($hour)) {
         $hour = 6;
     }

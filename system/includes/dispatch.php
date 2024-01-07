@@ -14,11 +14,9 @@ function _log($message)
 
 function site_url()
 {
-    if (config('multi.site') == "true"){
+    if (config('multi.site') == "true" || config('site.url') == null){
         return rtrim(generateSiteUrl(), '/') . '/';
     } else {
-        if (config('site.url') == null)
-            error(500, '[site.url] is not set');
         // Forcing the forward slash
         return rtrim(config('site.url'), '/') . '/';
     }
@@ -44,9 +42,6 @@ function generateSiteUrl()
 function site_path()
 {
     static $_path;
-
-    if (config('site.url') == null)
-        error(500, '[site.url] is not set');
 
     if (!$_path)
         $_path = rtrim(parse_url(site_url(), PHP_URL_PATH), '/');
