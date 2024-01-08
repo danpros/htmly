@@ -69,6 +69,7 @@ function error($code, $message)
 function i18n($key, $value = null)
 {
     static $_i18n = array();
+    $key = strtolower($key);
 
     if ($key === 'source') {
       if (file_exists($value))
