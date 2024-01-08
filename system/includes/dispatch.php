@@ -347,12 +347,11 @@ function content($value = null)
 
 function render($view, $locals = null, $layout = null)
 {
-    $login = login();
-    if (!$login) {
+    if (!login()) {
         $c = str_replace('/', '#', str_replace('?', '~', rawurldecode($_SERVER['REQUEST_URI'])));
         $dir = 'cache/page';
         $cachefile = $dir . '/' . $c . '.cache';
-        if (is_dir($dir) === false) {
+        if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
     }
@@ -385,13 +384,11 @@ function render($view, $locals = null, $layout = null)
             ob_start();
             require $layout;
         }
-        if (!$login && $view != '404') {
-            if (!file_exists($cachefile)) {
-                if (config('cache.timestamp') == 'true') {
-                    echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
-                }
-                file_put_contents($cachefile, ob_get_contents());
+        if (!login() && $view != '404' && config('cache.off') == "false") {
+            if (config('cache.timestamp') == 'true') {
+                echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
+            file_put_contents($cachefile, ob_get_contents());
         }
         echo trim(ob_get_clean());
     } else {
