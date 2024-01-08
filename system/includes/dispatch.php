@@ -184,15 +184,15 @@ function delete_cookie()
         setcookie($ck, '', -10, '/');
 }
 
-// if we have APC loaded, enable cache functions
-if (extension_loaded('apc')) {
+// if we have APCu loaded, enable cache functions
+if (extension_loaded('apcu')) {
 
     function cache($key, $func, $ttl = 0)
     {
-        if (($data = apc_fetch($key)) === false) {
+        if (($data = apcu_fetch($key)) === false) {
             $data = call_user_func($func);
             if ($data !== null) {
-                apc_store($key, $data, $ttl);
+                apcu_store($key, $data, $ttl);
             }
         }
         return $data;
@@ -201,7 +201,7 @@ if (extension_loaded('apc')) {
     function cache_invalidate()
     {
         foreach (func_get_args() as $key) {
-            apc_delete($key);
+            apcu_delete($key);
         }
     }
 

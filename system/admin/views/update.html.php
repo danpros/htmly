@@ -10,6 +10,26 @@ $updater = new HubUpdater(array(
     'prerelease' => !!config("prerelease"),
 ));
 
+$dir = 'cache/';
+if (!is_dir($dir)) {
+    mkdir($dir, 0775, true);
+}
+if (defined("JSON_PRETTY_PRINT")) {
+    file_put_contents(
+        'cache/installedVersion.json',
+        json_encode(array(
+            "tag_name" => constant('HTMLY_VERSION')
+        ), JSON_PRETTY_PRINT)
+    );
+} else {
+    file_put_contents(
+        'cache/installedVersion.json',
+        json_encode(array(
+            "tag_name" => constant('HTMLY_VERSION')
+        ))
+    );
+}
+
 if (empty($updater->getNewestInfo())) {
     echo '<h2>'.i18n('Update').'</h2><hr>';
     echo "Can't check Github server for latest version. You are probably offline.";

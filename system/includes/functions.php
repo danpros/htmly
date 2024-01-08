@@ -255,7 +255,7 @@ function rebuilt_cache($type = null)
     $category_cache = array();
     $draft_cache = array();
 
-    if (is_dir($dir) === false) {
+    if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 
@@ -1001,7 +1001,7 @@ function category_list($custom = null) {
     $cat = array();
     $list = array();
 
-    if (is_dir($dir) === false) {
+    if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 
@@ -1455,7 +1455,7 @@ function recent_posts($custom = null, $count = null)
     $tmp = array();
     $posts = array();
 
-    if (is_dir($dir) === false) {
+    if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 
@@ -1502,7 +1502,7 @@ function recent_type($type, $custom = null, $count = null)
     $tmp = array();
     $posts = array();
 
-    if (is_dir($dir) === false) {
+    if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 
@@ -1572,7 +1572,7 @@ function popular_posts($custom = null, $count = null)
                     $ar = array();
                     $posts = array();
 
-                    if (is_dir($dir) === false) {
+                    if (!is_dir($dir)) {
                         mkdir($dir, 0775, true);
                     }
 
@@ -1631,7 +1631,7 @@ function archive_list($custom = null)
     $filename = "cache/widget/archive.cache";
     $ar = array();
 
-    if (is_dir($dir) === false) {
+    if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 
@@ -1738,7 +1738,7 @@ function tag_cloud($custom = null)
     $filename = "cache/widget/tags.cache";
     $tg = array();
 
-    if (is_dir($dir) === false) {
+    if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 
