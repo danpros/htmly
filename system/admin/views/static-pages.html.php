@@ -13,7 +13,7 @@
             <th><?php echo i18n('Views');?></th>
             <?php endif;?>
             <th><?php echo i18n('Operations');?></th>
-            <th>Sub Pages</th>
+            <th>Subpages</th>
         </tr>
         <?php foreach ($posts as $p):?>
             <?php $dd = find_subpage($p->md); ?>

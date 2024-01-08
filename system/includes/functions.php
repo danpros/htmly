@@ -263,7 +263,7 @@ function rebuilt_cache($type = null)
     $tmp = array();
     $ctmp = array();
     $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
-     if (is_array($tmp)) {
+    if (is_array($tmp)) {
         foreach ($tmp as $file) {
             if(strpos($file, '/draft/') === false) {
                 $posts_cache[] = pathinfo($file);
