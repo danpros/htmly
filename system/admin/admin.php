@@ -874,6 +874,256 @@ function delete_page($file, $destination)
     }
 }
 
+// Find draft.
+function find_draft($year, $month, $name)
+{
+    $posts = get_draft_posts();
+
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['basename']);
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+
+            // Use the get_posts method to return
+            // a properly parsed object
+
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }
+        }
+    }
+}
+
+// Return draft list
+function get_draft($profile, $page, $perpage)
+{
+
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    $posts = get_draft_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+        $str = explode('/', $v['dirname']);
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+            $tmp[] = $v;
+        }
+    }
+
+    if (empty($tmp)) {
+        return false;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage);
+}
+
+// Return draft static page.
+function find_draft_page($static = null)
+{
+    $posts = get_draft_pages();
+
+    $tmp = array();
+
+    if (!empty($posts)) {
+
+        foreach ($posts as $index => $v) {
+            if (stripos($v['basename'], $static . '.md') !== false) {
+
+                $post = new stdClass;
+
+                // The static page URL
+                $url= $v['filename'];
+                
+                $post->url = site_url() . $url;
+
+                $post->file = $v['dirname'] . '/' . $v['basename'];
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                
+                $post->md = $url;
+                $post->slug = $url;
+                $post->parent = null;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($post->file);
+
+                // Extract the title and body
+                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+                // Get the contents and convert it to HTML
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                if (config('views.counter') == 'true') {
+                    $post->views = get_views($post->file);
+                } else {
+                    $post->views = null;
+                }
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
+
+                $tmp[] = $post;
+            }
+        }
+    }
+    
+    return $tmp;
+}
+
+// Return draft static subpage.
+function find_draft_subpage($static = null, $sub_static = null)
+{
+    $posts = get_draft_subpages($static);
+
+    $tmp = array();
+
+    if (!empty($posts)) {
+
+        foreach ($posts as $index => $v) {
+            if (stripos($v['basename'], $sub_static . '.md') !== false) {
+                
+                $post = new stdClass;
+                
+                // The static file
+                $url= $v['filename'];
+                
+                if (is_null($static)) {
+                    $parent = str_replace('content/static/', '', dirname($v['dirname'])); 
+                    $post->parent = $parent;
+                    $post->url = site_url() . $parent . "/" . $url;
+                } else {
+                    $post->parent = $static;
+                    $post->url = site_url() . $static . "/" . $url;
+                }
+                
+                $post->file = $v['dirname'] . '/' . $v['basename'];
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                
+                $post->md = $url;
+                $post->slug = $url;
+
+                // Get the contents and convert it to HTML
+                $content = file_get_contents($post->file);
+
+                // Extract the title and body
+                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
+
+                // Get the contents and convert it to HTML
+                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+                if (config('views.counter') == 'true') {
+                    $post->views = get_views($post->file);
+                } else {
+                    $post->views = null;
+                }
+
+                $post->description = get_content_tag("d", $content, get_description($post->body));
+
+                $word_count = str_word_count(strip_tags($post->body));
+                $post->readTime = ceil($word_count / 200);
+
+                $tmp[] = $post;
+            }
+        }
+    }
+
+    return $tmp;
+}
+
+// Find scheduled post.
+function find_scheduled($year, $month, $name)
+{
+    $posts = get_scheduled_posts();
+
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['basename']);
+        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
+
+            // Use the get_posts method to return
+            // a properly parsed object
+
+            $ar = get_posts($posts, $index + 1, 1);
+            $nx = get_posts($posts, $index, 1);
+            $pr = get_posts($posts, $index + 2, 1);
+
+            if ($index == 0) {
+                if (isset($pr[0])) {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => $pr[0]
+                    );
+                } else {
+                    return array(
+                        'current' => $ar[0],
+                        'prev' => null
+                    );
+                }
+            } elseif (count($posts) == $index + 1) {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0]
+                );
+            } else {
+                return array(
+                    'current' => $ar[0],
+                    'next' => $nx[0],
+                    'prev' => $pr[0]
+                );
+            }
+        }
+    }
+}
+
+// Return scheduled list
+function get_scheduled($profile, $page, $perpage)
+{
+
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    $posts = get_scheduled_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+        $str = explode('/', $v['dirname']);
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+            $tmp[] = $v;
+        }
+    }
+
+    if (empty($tmp)) {
+        return false;
+    }
+
+    return $tmp = get_posts($tmp, $page, $perpage);
+}
+
 // Import RSS feed
 function migrate($title, $time, $tags, $content, $url, $user, $source)
 {
@@ -1212,254 +1462,4 @@ function rename_category_folder($new_name, $old_file)
         }
     }
 
-}
-
-// Find draft.
-function find_draft($year, $month, $name)
-{
-    $posts = get_draft_posts();
-
-    foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
-
-            // Use the get_posts method to return
-            // a properly parsed object
-
-            $ar = get_posts($posts, $index + 1, 1);
-            $nx = get_posts($posts, $index, 1);
-            $pr = get_posts($posts, $index + 2, 1);
-
-            if ($index == 0) {
-                if (isset($pr[0])) {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => $pr[0]
-                    );
-                } else {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => null
-                    );
-                }
-            } elseif (count($posts) == $index + 1) {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0]
-                );
-            } else {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0],
-                    'prev' => $pr[0]
-                );
-            }
-        }
-    }
-}
-
-// Return draft list
-function get_draft($profile, $page, $perpage)
-{
-
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
-    $posts = get_draft_posts();
-
-    $tmp = array();
-
-    foreach ($posts as $index => $v) {
-        $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
-            $tmp[] = $v;
-        }
-    }
-
-    if (empty($tmp)) {
-        return false;
-    }
-
-    return $tmp = get_posts($tmp, $page, $perpage);
-}
-
-// Return draft static page.
-function find_draft_page($static = null)
-{
-    $posts = get_draft_pages();
-
-    $tmp = array();
-
-    if (!empty($posts)) {
-
-        foreach ($posts as $index => $v) {
-            if (stripos($v['basename'], $static . '.md') !== false) {
-
-                $post = new stdClass;
-
-                // The static page URL
-                $url= $v['filename'];
-                
-                $post->url = site_url() . $url;
-
-                $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
-                $post->md = $url;
-                $post->slug = $url;
-                $post->parent = null;
-
-                // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
-
-                // Extract the title and body
-                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
-
-                // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
-                if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
-                } else {
-                    $post->views = null;
-                }
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
-
-                $word_count = str_word_count(strip_tags($post->body));
-                $post->readTime = ceil($word_count / 200);
-
-                $tmp[] = $post;
-            }
-        }
-    }
-    
-    return $tmp;
-}
-
-// Return draft static subpage.
-function find_draft_subpage($static = null, $sub_static = null)
-{
-    $posts = get_draft_subpages($static);
-
-    $tmp = array();
-
-    if (!empty($posts)) {
-
-        foreach ($posts as $index => $v) {
-            if (stripos($v['basename'], $sub_static . '.md') !== false) {
-                
-                $post = new stdClass;
-                
-                // The static file
-                $url= $v['filename'];
-                
-                if (is_null($static)) {
-                    $parent = str_replace('content/static/', '', dirname($v['dirname'])); 
-                    $post->parent = $parent;
-                    $post->url = site_url() . $parent . "/" . $url;
-                } else {
-                    $post->parent = $static;
-                    $post->url = site_url() . $static . "/" . $url;
-                }
-                
-                $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
-                $post->md = $url;
-                $post->slug = $url;
-
-                // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
-
-                // Extract the title and body
-                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
-
-                // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
-                if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
-                } else {
-                    $post->views = null;
-                }
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
-
-                $word_count = str_word_count(strip_tags($post->body));
-                $post->readTime = ceil($word_count / 200);
-
-                $tmp[] = $post;
-            }
-        }
-    }
-
-    return $tmp;
-}
-
-// Find scheduled post.
-function find_scheduled($year, $month, $name)
-{
-    $posts = get_scheduled_posts();
-
-    foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        if (strpos($arr[0], "$year-$month") !== false && strtolower($arr[2]) === strtolower($name . '.md') || strtolower($arr[2]) === strtolower($name . '.md')) {
-
-            // Use the get_posts method to return
-            // a properly parsed object
-
-            $ar = get_posts($posts, $index + 1, 1);
-            $nx = get_posts($posts, $index, 1);
-            $pr = get_posts($posts, $index + 2, 1);
-
-            if ($index == 0) {
-                if (isset($pr[0])) {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => $pr[0]
-                    );
-                } else {
-                    return array(
-                        'current' => $ar[0],
-                        'prev' => null
-                    );
-                }
-            } elseif (count($posts) == $index + 1) {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0]
-                );
-            } else {
-                return array(
-                    'current' => $ar[0],
-                    'next' => $nx[0],
-                    'prev' => $pr[0]
-                );
-            }
-        }
-    }
-}
-
-// Return scheduled list
-function get_scheduled($profile, $page, $perpage)
-{
-
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
-    $posts = get_scheduled_posts();
-
-    $tmp = array();
-
-    foreach ($posts as $index => $v) {
-        $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
-            $tmp[] = $v;
-        }
-    }
-
-    if (empty($tmp)) {
-        return false;
-    }
-
-    return $tmp = get_posts($tmp, $page, $perpage);
 }
