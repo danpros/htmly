@@ -290,13 +290,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         $post_tagmd = safe_html(implode(',', $tag));        
     }
 
-    $oldurl = explode('_', $oldfile);
-    $dir = explode('/', $oldurl[0]);
+    $dir = explode('/', pathinfo($oldfile, PATHINFO_DIRNAME));
     $olddate = date('Y-m-d-H-i-s', strtotime($date));
-
-    if ($date !== null) {
-        $oldurl[0] = substr($oldurl[0], 0, strrpos($oldurl[0], '/')) . '/' . $olddate;
-    }
 
     $post_title = safe_html($title);
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
@@ -430,8 +425,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
         } else {
-            $dirname = dirname($oldurl[0]) . '/';
-            $dt = str_replace($dirname, '', $oldurl[0]);
+            $fn = explode('_', pathinfo($oldfile, PATHINFO_FILENAME));
+            $dt = $fn[0];
             $t = str_replace('-', '', $dt);
             $time = new DateTime($t);
             $timestamp = $time->format("Y-m-d");
@@ -833,11 +828,10 @@ function delete_post($file, $destination)
     $deleted_content = $file;
 
     // Get cache file
-    $arr = explode('_', $file);
-    $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-    $str = explode('/', $replaced);
-    $dt = str_replace($replaced, '', $arr[0]);
-    clear_post_cache($dt, $arr[1], str_replace('.md', '', $arr[2]), $file, $str[count($str) - 3], $str[count($str) - 2]);
+    $info = pathinfo($file);
+    $fn = explode('_', $info['basename']);
+    $dr = explode('/', $info['dirname']);
+    clear_post_cache($fn[0], $fn[1], str_replace('.md', '', $fn[2]), $file, $dr[3], $dr[4]);
 
     if (!empty($deleted_content)) {
         unlink($deleted_content);
@@ -864,9 +858,7 @@ function delete_page($file, $destination)
             unlink($file);
         }
     } else {
-        $replaced = substr($file, 0, strrpos($file, '/')) . '/';
-        $url = str_replace($replaced, '', $file);
-        clear_page_cache($url);
+        clear_page_cache(pathinfo($file, PATHINFO_BASENAME));
     }
 
     if (!empty($deleted_content)) {
@@ -1153,16 +1145,14 @@ function clear_post_cache($post_date, $post_tag, $post_url, $filename, $category
     }
 
     // Get cache post author
-    $arr = explode('_', $filename);
-    $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-    $str = explode('/', $replaced);
-    $author = $str[count($str) - 5];
+    $arr = pathinfo($filename, PATHINFO_DIRNAME);
+    $x = explode('/', $arr);
     // Delete author post list cache
-    $a = 'cache/page/' . $b . 'author#' . $author . '.cache';
+    $a = 'cache/page/' . $b . 'author#' . $x[1] . '.cache';
     if (file_exists($a)) {
         unlink($a);
     }
-    foreach (glob('cache/page/' . $b . 'author#' . $author . '~*.cache', GLOB_NOSORT) as $file) {
+    foreach (glob('cache/page/' . $b . 'author#' . $x[1] . '~*.cache', GLOB_NOSORT) as $file) {
         unlink($file);
     }
 }
