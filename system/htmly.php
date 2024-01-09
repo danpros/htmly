@@ -894,7 +894,7 @@ get('/admin/mine', function () {
 
         $posts = get_profile_posts($name, $page, $perpage);
 
-        $total = get_count($name, 'dirname');
+        $total = get_count('/'.$name.'/', 'dirname');
 
         $author = get_author($name);
 

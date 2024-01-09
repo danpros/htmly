@@ -445,7 +445,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         } else {
             $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
         }
-		
+
         $post->slug = str_replace('.md', '', $arr[2]);
 
         $post->file = $filepath;
@@ -1321,10 +1321,16 @@ function get_count($var, $str)
     $tmp = array();
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v[$str]);
-        $url = $arr[0];
-        if (stripos($url, "$var") !== false) {
-            $tmp[] = $v;
+        if ($str === 'basename') {
+            $arr = explode('_', $v[$str]);
+            $url = $arr[0];
+            if (stripos($url, "$var") !== false) {
+                $tmp[] = $v;
+            }
+        } else {
+            if (stripos($v[$str], $var) !== false) {
+                $tmp[] = $v;
+            }            
         }
     }
 
