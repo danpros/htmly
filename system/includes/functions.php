@@ -2802,7 +2802,7 @@ function generate_sitemap($str)
 
     echo '<?xml version="1.0" encoding="UTF-8"?>';
 
-    if ($str == 'index') {
+    if ($str == 'index.xml') {
 
         echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
@@ -2840,7 +2840,7 @@ function generate_sitemap($str)
 
         echo '</sitemapindex>';
 
-    } elseif ($str == 'base') {
+    } elseif ($str == 'base.xml') {
 
         $priority = (config('sitemap.priority.base')) ? config('sitemap.priority.base') : '1.0';
 
@@ -2852,7 +2852,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'post') {
+    } elseif ($str == 'post.xml') {
 
         $priority = (config('sitemap.priority.post')) ? config('sitemap.priority.post') : $default_priority;
 
@@ -2870,7 +2870,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'static') {
+    } elseif ($str == 'static.xml') {
 
         $priority = (config('sitemap.priority.static')) ? config('sitemap.priority.static') : $default_priority;
 
@@ -2888,7 +2888,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'tag') {
+    } elseif ($str == 'tag.xml') {
 
         $priority = (config('sitemap.priority.tag')) ? config('sitemap.priority.tag') : $default_priority;
 
@@ -2928,7 +2928,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'archive') {
+    } elseif ($str == 'archive.xml') {
 
         $priorityDay = (config('sitemap.priority.archiveDay')) ? config('sitemap.priority.archiveDay') : $default_priority;
         $priorityMonth = (config('sitemap.priority.archiveMonth')) ? config('sitemap.priority.archiveMonth') : $default_priority;
@@ -2971,7 +2971,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'author') {
+    } elseif ($str == 'author.xml') {
 
         $priority = (config('sitemap.priority.author')) ? config('sitemap.priority.author') : $default_priority;
 
@@ -2997,7 +2997,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'category') {
+    } elseif ($str == 'category.xml') {
 
         $priority = (config('sitemap.priority.category')) ? config('sitemap.priority.category') : $default_priority;
 
@@ -3035,7 +3035,7 @@ function generate_sitemap($str)
 
         echo '</urlset>';
 
-    } elseif ($str == 'type') {
+    } elseif ($str == 'type.xml') {
 
         $priority = (config('sitemap.priority.type')) ? config('sitemap.priority.type') : $default_priority;
 

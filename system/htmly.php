@@ -2836,30 +2836,14 @@ get('/:static', function ($static) {
         header("Location: $url");
     }
 
-    if ($static === 'sitemap.xml' || $static === 'sitemap.base.xml' || $static === 'sitemap.post.xml' || $static === 'sitemap.static.xml' || $static === 'sitemap.tag.xml' || $static === 'sitemap.archive.xml' || $static === 'sitemap.author.xml' || $static === 'sitemap.category.xml' || $static === 'sitemap.type.xml') {
-
-        header('Content-Type: text/xml');
-
+    if (strpos($static, ".xml") !== false) {
         if ($static === 'sitemap.xml') {
-            generate_sitemap('index');
-        } elseif ($static === 'sitemap.base.xml') {
-            generate_sitemap('base');
-        } elseif ($static === 'sitemap.post.xml') {
-            generate_sitemap('post');
-        } elseif ($static === 'sitemap.static.xml') {
-            generate_sitemap('static');
-        } elseif ($static === 'sitemap.tag.xml') {
-            generate_sitemap('tag');
-        } elseif ($static === 'sitemap.archive.xml') {
-            generate_sitemap('archive');
-        } elseif ($static === 'sitemap.author.xml') {
-            generate_sitemap('author');
-        } elseif ($static === 'sitemap.category.xml') {
-            generate_sitemap('category');
-        } elseif ($static === 'sitemap.type.xml') {
-            generate_sitemap('type');
+            $sitemap = 'index.xml';
+        } else {
+            $sitemap = str_replace('sitemap.', '', $static);
         }
-
+        header('Content-Type: text/xml');
+        generate_sitemap($sitemap);
         die;
     } elseif ($static === 'admin') {
         if (login()) {
@@ -2981,7 +2965,11 @@ get('/:static', function ($static) {
         }
 
         $post = find_page($static);
-        
+
+        if (!$post) {
+            not_found();
+        }
+		
         if (array_key_exists('prev', $post)) {
             $prev = $post['prev'];
         } else {
@@ -2992,10 +2980,6 @@ get('/:static', function ($static) {
             $next = $post['next'];
         } else {
             $next = array();
-        }
-
-        if (!$post) {
-            not_found();
         }
 
         $post = $post['current'];
