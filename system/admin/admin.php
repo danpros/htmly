@@ -1315,6 +1315,8 @@ function find_draft_page($static = null)
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
                 
                 $post->md = $url;
+                $post->slug = $url;
+                $post->parent = null;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($post->file);
@@ -1374,6 +1376,7 @@ function find_draft_subpage($static = null, $sub_static = null)
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
                 
                 $post->md = $url;
+                $post->slug = $url;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($post->file);

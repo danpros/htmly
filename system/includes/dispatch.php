@@ -65,6 +65,24 @@ function error($code, $message)
     die($message);
 }
 
+// Set the language
+function get_language()
+{
+
+    $langID = config('language');
+    $langFile = 'lang/'. $langID . '.ini';
+
+    // Settings for the language
+    if (file_exists($langFile)) {
+        i18n('source', $langFile);
+        setlocale(LC_ALL, $langID . '.utf8');
+    } else {
+        i18n('source', 'lang/en_US.ini'); // Load the English language file
+        setlocale(LC_ALL, 'en_US.utf8'); // Change locale to English
+    }
+
+}
+
 // i18n provides strings in the current language
 function i18n($key, $value = null)
 {

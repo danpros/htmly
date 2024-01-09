@@ -445,6 +445,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
         } else {
             $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
         }
+		
+        $post->slug = str_replace('.md', '', $arr[2]);
 
         $post->file = $filepath;
 
@@ -550,6 +552,8 @@ function get_pages($pages, $page = 1, $perpage = 0)
         $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
         
         $post->md = $url;
+        $post->slug = $url;
+        $post->parent = null;
 
         // Get the contents and convert it to HTML
         $content = file_get_contents($post->file);
@@ -603,7 +607,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
         
         $post->md = $url;
-        
+        $post->slug = $url;
         $post->parent = $static;
 
         // Get the contents and convert it to HTML
@@ -699,6 +703,8 @@ function find_page($static = null)
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
                 
                 $post->md = $url;
+                $post->slug = $url;
+                $post->parent = null;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($post->file);
@@ -785,7 +791,7 @@ function find_subpage($static, $sub_static = null)
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
                 
                 $post->md = $url;
-                
+                $post->slug = $url;
                 $post->parent = $static;
 
                 // Get the contents and convert it to HTML
@@ -1168,6 +1174,7 @@ function get_author($name)
                 $author->file = $filename;
 
                 $author->url = site_url() . 'author/' . $profile;
+                $author->slug = $profile;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($author->file);
@@ -1208,6 +1215,7 @@ function default_profile($name)
     $author->body = '<p>' . i18n('Author_Description') . '</p>';
     $author->description = i18n('Author_Description');
     $author->url = site_url(). 'author/' . $name;
+    $author->slug = $name;
     $author->file = '';
 
     return $tmp[] = $author;
@@ -1889,6 +1897,9 @@ function static_prev($prev)
             'body' => $prev->body,
             'description' => $prev->description,
             'views' => $prev->views,
+            'md' => $prev->md,
+            'slug' => $prev->slug,
+            'parent' => $prev->parent,
             'file' => $prev->file,
             'readTime' => $prev->readTime,
             'lastMod' => $prev->lastMod
@@ -1905,6 +1916,9 @@ function static_next($next)
             'body' => $next->body,
             'description' => $next->description,
             'views' => $next->views,
+            'md' => $next->md,
+            'slug' => $next->slug,
+            'parent' => $next->parent,
             'file' => $next->file,
             'readTime' => $next->readTime,
             'lastMod' => $next->lastMod
@@ -3168,7 +3182,6 @@ function file_cache($request)
     }
 
     $now   = time();
-
     $c = str_replace('/', '#', str_replace('?', '~', rawurldecode($request)));
     $cachefile = 'cache/page/' . $c . '.cache';
     if (file_exists($cachefile)) {
@@ -3370,25 +3383,6 @@ function replace_href($string, $tag, $class, $url)
     }
 
     return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
-
-}
-
-// Set the language
-function get_language()
-{
-
-    $langID = config('language');
-    $langFile = 'lang/'. $langID . '.ini';
-    $local = $langID;
-
-    // Settings for the language
-    if (!isset($langID) || config('language') === 'en' || config('language') === 'en_US' || !file_exists($langFile)) {
-        i18n('source', 'lang/en_US.ini'); // Load the English language file
-        setlocale(LC_ALL, 'en_US.utf8'); // Change locale to English
-    } else {
-        i18n('source', $langFile);
-        setlocale(LC_ALL, $local . '.utf8');
-    }
 
 }
 
