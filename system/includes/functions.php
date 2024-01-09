@@ -393,7 +393,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $arr = explode('_', $v['basename']);
 
         // dirname string
-        $dirname = $v['dirname'] . '/';
+        $dirname = $v['dirname'];
 
         // Author string
         $str = explode('/', $dirname);
@@ -874,7 +874,7 @@ function get_category($category, $page, $perpage, $random = null)
     foreach ($posts as $index => $v) {
 
         // dirname string
-        $dirname = $v['dirname'] . '/';
+        $dirname = $v['dirname'];
 
         $str = explode('/', $dirname);
 
@@ -1053,7 +1053,7 @@ function get_type($type, $page, $perpage)
     foreach ($posts as $index => $v) {
 
         // dirname string
-        $dirname = $v['dirname'] . '/';
+        $dirname = $v['dirname'];
 
         $str = explode('/', $dirname);
 
@@ -2728,7 +2728,7 @@ function sitemap_post_path()
         $arr = explode('_', $v['basename']);
 
         // dirname string
-        $dirname = $v['dirname'] . '/';
+        $dirname = $v['dirname'];
 
         // Author string
         $str = explode('/', $dirname);
@@ -3013,7 +3013,7 @@ function generate_sitemap($str)
         if($posts) {
             foreach ($posts as $index => $v) {
 
-                $dirname = $v['dirname'] . '/';
+                $dirname = $v['dirname'];
                 $str = explode('/', $dirname);
                 $cats[] = $str[3];
 
@@ -3051,7 +3051,7 @@ function generate_sitemap($str)
         if($posts) {
             foreach ($posts as $index => $v) {
 
-                $dirname = $v['dirname'] . '/';
+                $dirname = $v['dirname'];
                 $str = explode('/', $dirname);
                 $types[] = $str[4];
             }
