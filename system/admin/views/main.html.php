@@ -13,18 +13,8 @@ if (isset($_SESSION[site_url()]['user'])) {
         if (config("views.counter") == "true")
             echo '<th>'.i18n('Views').'</th>';
         echo '<th>' . i18n('Category') . '</th><th>' . i18n('Tags') . '</th><th>' . i18n('Operations') . '</th></tr>';
-        $i = 0;
-        $len = count($posts);
         foreach ($posts as $p) {
-            if ($i == 0) {
-                $class = 'item first';
-            } elseif ($i == $len - 1) {
-                $class = 'item last';
-            } else {
-                $class = 'item';
-            }
-            $i++;
-            echo '<tr class="' . $class . '">';
+            echo '<tr>';
             echo '<td><a target="_blank" href="' . $p->url . '">' . $p->title . '</a></td>';
             echo '<td>' . format_date($p->date) . '</td>';
             if (config("views.counter") == "true")

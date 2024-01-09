@@ -11,13 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
 </head>
-<?php     
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-?>
 <?php if (login()) { ?>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
