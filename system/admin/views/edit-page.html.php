@@ -35,7 +35,7 @@ if ($type == 'is_frontpage') {
     $olddescription = $p->description;
     $oldcontent = $p->body;
     $oldmd = $p->md;
-    $url = 'content/data/category/'. $p->md;
+    $url = 'content/data/category/'. $p->md . '.md';
 } else {
 
     if (isset($p->file)) {
