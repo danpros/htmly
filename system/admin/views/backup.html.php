@@ -29,37 +29,17 @@ if (isset($_SESSION[site_url()]['user'])) {
         krsort($files);
         echo '<table class="table backup-list">';
         echo '<tr class="head"><th>' . i18n('Filename') . '</th><th>'.i18n('Date').'</th><th>' . i18n('Operations') . '</th></tr>';
-        $i = 0;
-        $len = count($files);
         foreach ($files as $file) {
 
-            if ($i == 0) {
-                $class = 'item first';
-            } elseif ($i == $len - 1) {
-                $class = 'item last';
-            } else {
-                $class = 'item';
-            }
-            $i++;
-
-            // Extract the date
-            $arr = explode('_', $file);
-
-            // Replaced string
-            $replaced = substr($arr[0], 0, strrpos($arr[0], '/')) . '/';
-
-            $name = str_replace($replaced, '', $file);
-
-            $date = str_replace('.zip', '', $arr[1]);
-            $t = str_replace('-', '', $date);
-            $time = new DateTime($t);
-            $timestamp = $time->format("D, d F Y, H:i:s");
-
+            $arr = explode('_', pathinfo($file, PATHINFO_FILENAME));
+            $t = str_replace('-', '', $arr[1]);
+            $dt = new DateTime($t);
+            $timestamp = $dt->format("D, d F Y, H:i:s");
             $url = site_url() . $file;
-            echo '<tr class="' . $class . '">';
-            echo '<td>' . $name . '</td>';
+            echo '<tr>';
+            echo '<td>' . pathinfo($file, PATHINFO_BASENAME) . '</td>';
             echo '<td>' . $timestamp . '</td>';
-            echo '<td><a class="btn btn-primary btn-xs" target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . $name . '"/><input type="submit" class="btn btn-danger btn-xs" name="submit" value="Delete"/></form></td>';
+            echo '<td><a class="btn btn-primary btn-xs" target="_blank" href="' . $url . '">Download</a> <form method="GET"><input type="hidden" name="file" value="' . pathinfo($file, PATHINFO_BASENAME) . '"/><input type="submit" class="btn btn-danger btn-xs" name="submit" value="Delete"/></form></td>';
             echo '</tr>';
         }
         echo '</table>';
