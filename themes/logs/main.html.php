@@ -2,15 +2,13 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<?php if (config('category.info') === 'true'):?>
-    <?php if (!empty($category)): ?>
-        <div class="category">
-            <h2 class="category-title"><?php echo $category->title;?></h2>
-            <div class="category-content">                                   
-                <?php echo $category->body; ?>
-            </div>
+<?php if (!empty($category)): ?>
+    <div class="category">
+        <h2 class="category-title"><?php echo $category->title;?></h2>
+        <div class="category-content">                                   
+            <?php echo $category->body; ?>
         </div>
-    <?php endif; ?>
+    </div>
 <?php endif; ?>
 <?php foreach ($posts as $p): ?>
     <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
@@ -29,7 +27,7 @@
                 <?php } elseif (facebook()) { ?> - 
                     <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('Comments');?></span></a>
                 <?php } ?>
-				<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
+                <?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
             </div>
             <?php if (!empty($p->image)) { ?>
                 <div class="featured-image">

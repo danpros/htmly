@@ -10,4 +10,12 @@
             <?php echo $p->body; ?>
         </div>
     </div>
+    <div class="postnav">
+        <?php if (!empty($next)): ?>
+            <span><a href="<?php echo($next['url']); ?>" class="pagination-arrow newer" rel="next"><?php echo($next['title']); ?></a></span>
+        <?php endif; ?>
+        <?php if (!empty($prev)): ?>
+            <span><a href="<?php echo($prev['url']); ?>" class="pagination-arrow older" rel="prev"><?php echo($prev['title']); ?></a></span>
+        <?php endif; ?>
+    </div>
 </div>

@@ -61,6 +61,11 @@
                                     </a>
                                 </li>
 								<?php endif;?>
+                                <li class="menu-item">
+                                    <a href="<?php echo site_url();?>feed/rss">
+                                    <span class="screen-reader-text">RSS</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>

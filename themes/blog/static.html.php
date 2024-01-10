@@ -11,6 +11,16 @@
                 <div class="desc text-left" itemprop="articleBody">
                     <?php echo $p->body; ?>
                 </div><!--//desc-->
+                <div style="margin-top:30px;position:relative;">
+                    <hr>
+                    <?php if (!empty($next)): ?>
+                        <span class="newer"><a href="<?php echo($next['url']); ?>" rel="next"><i class="fa fa-long-arrow-left"></i> <?php echo $p->title;?></a></span>
+                    <?php endif; ?>
+                    <?php if (!empty($prev)): ?>
+                        <span class="older pull-right"><a href="<?php echo($prev['url']); ?>" rel="prev"><?php echo $p->title;?> <i class="fa fa-long-arrow-right"></i></a></span>
+                    <?php endif; ?>
+                    <div style="clear:both;"></div>
+                </div>
             </div><!--//item-->
         </div><!--//content-->
     </div><!--//section-inner-->

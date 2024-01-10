@@ -880,7 +880,7 @@ a:focus {
 	content: "\f516";
 }
 
-.social-navigation a[href$="/feed/rss"]:before {
+.social-navigation a[href*="/feed"]:before {
 	content: "\f413";
 }
 
@@ -6129,4 +6129,14 @@ ul.month {
 	.main-navigation {
 		margin: 0 auto 9.0909%;
 	}
+}
+
+.feed-link {
+	display:inline;
+	margin:0 0 0 10px;
+	float:right;	
+}
+
+.feed-link a {
+	height:100%;
 }

@@ -1023,7 +1023,7 @@ a:active {
 	content: "\f516";
 }
 
-.social-navigation a[href$="/feed/"]:before {
+.social-navigation a[href*="/feed"]:before {
 	content: "\f413";
 }
 
@@ -4059,4 +4059,10 @@ ul.month {
 
 .nav li.active .dropdown-toggle, .nav .dropdown-menu li.active a {
 	font-weight: 700;
+}
+
+.feed-link {
+	display:inline;
+	margin:0 0 0 10px;
+	float:right;	
 }

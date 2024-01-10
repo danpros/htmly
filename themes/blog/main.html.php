@@ -2,21 +2,20 @@
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
-<?php if (config('category.info') === 'true'):?>
-    <?php if (!empty($category)): ?>
-        <div class="section">
-            <div class="section-inner">
-                <div class="content">
-                    <div class="item">
-                    <h2 class="title"><?php echo $category->title;?></h2>
-                    <div class="text-left">                                   
-                        <?php echo $category->body; ?>
-                    </div><!--//desc-->
-                    </div><!--//item-->                       
-                </div><!--//content-->  
-            </div>
+<?php if (!empty($category)): ?>
+    <div class="section">
+        <div class="section-inner">
+            <div class="content">
+                <div class="item">
+                <h2 class="title"><?php echo $category->title;?></h2>
+                <span class="social-navigation feed-link"><a href="<?php echo $category->url;?>/feed"><i class="fa fa-rss"></i></a></span>
+                <div class="text-left">                                   
+                    <?php echo $category->body; ?>
+                </div><!--//desc-->
+                </div><!--//item-->                       
+            </div><!--//content-->  
         </div>
-    <?php endif; ?>
+    </div>
 <?php endif; ?>
 <?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
@@ -67,7 +66,7 @@
                         <?php } elseif (facebook()) { ?> 
                             - <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                         <?php } ?>
-						<?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
+                        <?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
                     </p>
                 </div>
                 <div class="desc text-left" itemprop="articleBody">                                    

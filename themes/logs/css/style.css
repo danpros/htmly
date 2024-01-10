@@ -484,7 +484,7 @@ ul li, ol li {
     margin-bottom: 1.5em;
 }
 
-.in-post .post {
+.in-post .post, .in-page .post, .in-subpage .post {
     border: none;
 }
 

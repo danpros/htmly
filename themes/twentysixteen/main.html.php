@@ -1,18 +1,34 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (isset($is_category)):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1><div class="taxonomy-description"><?php echo $category->body;?></div></header>
+    <header class="page-header">
+		<h1 class="page-title"><?php echo i18n('Category');?>: <?php echo $category->title;?></h1>
+		<span class="social-navigation feed-link"><a href="<?php echo $category->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+		<div class="taxonomy-description"><?php echo $category->body;?></div>
+	</header>
 <?php endif;?>
 <?php if (isset($is_tag)):?>
-    <header class="page-header"><h1 class="page-title">Tag: <?php echo $tag->title;?></h1></header>
+    <header class="page-header">
+		<h1 class="page-title"><?php echo i18n('Tag');?>: <?php echo $tag->title;?></h1>
+		<span class="social-navigation feed-link"><a href="<?php echo $tag->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+	</header>
 <?php endif;?>
 <?php if (isset($is_archive)):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1></header>
+    <header class="page-header">
+		<h1 class="page-title"><?php echo i18n('Archives');?>: <?php echo $archive->title;?></h1>
+		<span class="social-navigation feed-link"><a href="<?php echo $archive->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+	</header>
 <?php endif;?>
 <?php if (isset($is_search)):?>
-    <header class="page-header"><h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1></header>
+    <header class="page-header">
+		<h1 class="page-title"><?php echo i18n('Search');?>: <?php echo $search->title;?></h1>
+		<span class="social-navigation feed-link"><a href="<?php echo $search->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+	</header>
 <?php endif;?>
 <?php if (isset($is_type)):?>
-    <header class="page-header"><h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1></header>
+    <header class="page-header">
+		<h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1>
+		<span class="social-navigation feed-link"><a href="<?php echo $type->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+	</header>
 <?php endif;?>
 <?php foreach ($posts as $p):?>
 <article class="post <?php if ($p->type == 'post') {echo 'format-standard';} else { echo 'format-' . $p->type;} ?> hentry single">
