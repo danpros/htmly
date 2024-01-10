@@ -34,7 +34,7 @@
     <div class="archive"><h3><?php echo i18n('Archives');?></h3><?php echo archive_list() ?></div>
     <div class="category-list"><h3><?php echo i18n('Category');?></h3><?php echo category_list() ?></div>
     <div class="tagcloud">
-        <h3>Tags</h3>
+        <h3><?php echo i18n('Tags');?></h3>
         <div class="tag-cloud">
             <?php echo tag_cloud();?>
         </div>			

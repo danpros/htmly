@@ -50,7 +50,6 @@
             <?php echo $author->about ?>
         </div>
         <div class="share">
-            <h4>Share this post</h4>
             <a class="twitter" target="_blank"
                href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>">Twitter</a>
             <a class="facebook" target="_blank"
