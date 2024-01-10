@@ -61,6 +61,8 @@ Here's the explanation:
 * `tag1,tag2` are the tags, separated by commas
 * `my-post-slug` is the URL
 
+**Note:** the filename metadata (data, tags, slug) separated by an underscore.
+
 With a structure like above, the post can now be visited even though it's just a folder structure and filename.
 
 To claim this content or log in to dashboard, simply create `my-username.ini` in the `config/users/` folder (see `username.ini.example`).
