@@ -8,44 +8,6 @@ Demo
 ----
 Visit <a href="https://demo.htmly.com" target="_blank">HTMLy demo</a> as blog.
 
-Features
----------
-- Admin Panel
-- Markdown editor with live preview and image upload
-- Categorization with category and tags (multiple tagging support)
-- Static Pages (e.g. Contact Page, About Page)
-- Meta canonical, description, and rich snippets for SEO
-- Pagination
-- Author Page
-- Multi author support
-- Social Links
-- Disqus Comments (optional)
-- Facebook Comments (optional)
-- Google Analytics
-- Built-in Search
-- Related Posts
-- Per Post Navigation (previous and next post)
-- Body class for easy theming
-- Breadcrumb
-- Archive page (by year, year-month, or year-month-day)
-- JSON API
-- OPML
-- RSS Feed
-- RSS 2.0 Importer (basic)
-- Sitemap.xml
-- Archive and Tag Cloud Widget
-- SEO Friendly URLs
-- Teaser thumbnail for images and Youtube videos
-- Responsive Design
-- User Roles
-- Online Backup
-- File Caching
-- Online Update
-- Post Draft
-- i18n
-- Menu builder
-- Scheduled posts
-
 Requirements
 ------------
 HTMLy requires PHP 5.3 or greater, PHP-XML package, PHP-INTL package, and PHP-ZIP package for backup feature.
@@ -85,111 +47,55 @@ Users assigned with the admin role can edit/delete all users posts.
 To access the admin panel, add `/login` to the end of your site's URL.
 e.g. `www.yoursite.com/login`
 
-### Lighttpd
-The following is an example configuration for lighttpd:
 
-````php
-$HTTP["url"] =~ "^/config" {
-  url.access-deny = ( "" )
-}
-$HTTP["url"] =~ "^/system/includes" {
-  url.access-deny = ( "" )
-}
-$HTTP["url"] =~ "^/system/admin/views" {
-  url.access-deny = ( "" )
-}
-
-url.rewrite-once = (
-  "^/(themes|system|vendor)/(.*)" => "$0",
-  "^/(.*\.php)" => "$0",
-
-  # Everything else is handles by htmly
-  "^/(.*)$" => "/index.php/$1"
-)
-````
-
-### Nginx
-The following is a basic configuration for Nginx:
-
-````nginx
-server {
-  listen 80;
-
-  server_name example.com www.example.com;
-  root /usr/share/nginx/html;
-
-  access_log /var/log/nginx/access.log;
-  error_log /var/log/nginx/error.log error;
-
-  index index.php;
-
-  location ~ /config/ {
-     deny all;
-  }
-
-  location / {
-    try_files $uri $uri/ /index.php?$args;
-  }
-
-  location ~ \.php$ {
-        fastcgi_pass   127.0.0.1:9000;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
-        include        fastcgi_params;
-  }
-}
-````
-
-Making a secure password
+Content Structure
 ----------------------
-Passwords can be stored in `username.ini` (where "username" is the user's username) in either plaintext, encryption algorithms supported by php `hash` or bcrypt (recommended). To generate a bcrypt encrypted password:
-````
-$ php -a
-> echo password_hash('desiredpassword', PASSWORD_BCRYPT);
-````
-This will produce a hash which is to be placed in the `password` field in `username.ini`. Ensure that the `encryption` field is set to `password_hash`.
 
+If you are using the dashboard to write your blog post then the following information is just knowledge about the HTMLy folder and filename structure.
 
-Both Online or Offline
-----------------------
-The built-in editor found in the admin panel. HTMLy also allows you to write the markdown files offline and then uploading them into eg. `content/username/blog/category/type/` (see the naming convention below):
+Like traditional static pages, even though HTMLy is a dynamic PHP application, most important metadata such as username, category, type, tags, publication date, and slug are in the folder name and filename. Example:
 
-* `username` must match `config/users/username.ini`.
-* `category` must match the `category.md` inside `content/data/category/category.md` except the `uncategorized` category.
-* `type` is the content type. Available content type `post`, `video`, `audio`, `link`, `quote`.
+```
+content/my-username/blog/my-category/post/2024-01-10-25-35-45_tag1,tag2_my-post-slug.md
+```
+Here's the explanation:
 
-For static pages you can upload it to the `content/static` folder.
+* `my-username` is the username.
+* `my-category` is the content category.
+* `post` is the content type. Available content type `post`, `video`, `audio`, `link`, `quote`.
+* `2024-01-10-25-35-45` is the published date. The date format is `Y-m-d-H-i-s`
+* `tag1,tag2` are the tags, separated by commas
+* `my-post-slug` is the URL
 
-**Note for offline writing:** Every time new content added (post, category etc.), or you make changes that change the folder structure or file names, simply delete the `index` folder inside `cache` folder so that the changes detected by HTMLy.
+With a structure like above, the post can now be visited even though it's just a folder structure and filename.
 
-Category
---------
-The default category is `Uncategorized` with slug `uncategorized` and you do not need to creating it inside `content/data/category/` folder. But if you write it offline and want to assign new category to specific post you need to creating it first before you can use those category, example `content/data/category/new-category.md` with the following content:
+To claim this content and be able to edit or log in to admin, simply create `my-username.ini` in the `config/users/` folder (see `username.ini.example`). 
+
+And to add information about the author, create `author.md` in `content/my-username/`, example:
 
 ```html
-<!--t New category title t-->
-<!--d New category meta description d-->
+<!--t My Cool Name t-->
 
-New category info etc.
-````
-The slug for the new category is `new-category` (htmly removing the file extension). And for full file directory:
-````
-content/username/blog/new-category/post/file.md
-````
+Just another HTMLy user
+```
 
-File Naming Convention
-----------------------
-When you write a blog post and save it via the admin panel, HTMLy automatically create a .md file extension with the following name, example:
+Information about `my-category` can be added by creating `my-category.md` inside the `content/data/category/` folder.
 
-````
-2014-01-31-12-56-40_tag1,tag2,tag3_databaseless-blogging-platform-flat-file-blog.md
-````
+```html
+<!--t My category title t-->
+<!--d My category meta description d-->
 
-Here's the explanation (separated by an underscore):
+This is my category info etc.
+```
 
-- `2014-01-31-12-56-40` is the published date. The date format is `Y-m-d-H-i-s`
-- `tag1,tag2,tag3` are the tags, separated by commas
-- `databaseless-blogging-platform-flat-file-blog` is the URL
+**Note:** The default category is `Uncategorized` with slug `uncategorized` and you do not need to creating it inside `content/data/category/` folder.
+
+**Important:** Every time new content added (post, category etc.), or you make changes that change the folder structure or file names, simply delete the `index` folder inside `cache` folder so that the changes detected by HTMLy.
+
+**Post Views Limitations:** HTMLy using the filename path as the ID for the post/page views counter. So if you edit an post/page without using the dahsboard which results in changes to the folder structure or filename, then you must edit `views.json` in the `content/data/` folder manually to update to correct path.
+
+Static pages
+------------
 
 For static pages, use the following format:
 
@@ -197,7 +103,7 @@ For static pages, use the following format:
 content/static/about.md
 ````
 
-In the example above, the `/about.md` creates the URL: `www.yourblog.com/about`
+In the example above, the `about.md` creates the URL: `www.yourblog.com/about`
 
 Thus, if you write/create files offline, you must name the .md file in the format above.
 
@@ -278,6 +184,70 @@ Paragraph 1
 
 Paragraph 2 etc.
 ```
+
+### Lighttpd
+The following is an example configuration for lighttpd:
+
+````php
+$HTTP["url"] =~ "^/config" {
+  url.access-deny = ( "" )
+}
+$HTTP["url"] =~ "^/system/includes" {
+  url.access-deny = ( "" )
+}
+$HTTP["url"] =~ "^/system/admin/views" {
+  url.access-deny = ( "" )
+}
+
+url.rewrite-once = (
+  "^/(themes|system|vendor)/(.*)" => "$0",
+  "^/(.*\.php)" => "$0",
+
+  # Everything else is handles by htmly
+  "^/(.*)$" => "/index.php/$1"
+)
+````
+
+### Nginx
+The following is a basic configuration for Nginx:
+
+````nginx
+server {
+  listen 80;
+
+  server_name example.com www.example.com;
+  root /usr/share/nginx/html;
+
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log error;
+
+  index index.php;
+
+  location ~ /config/ {
+     deny all;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php?$args;
+  }
+
+  location ~ \.php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+  }
+}
+````
+
+Making a secure password
+----------------------
+Passwords can be stored in `username.ini` (where "username" is the user's username) in either plaintext, encryption algorithms supported by php `hash` or bcrypt (recommended). To generate a bcrypt encrypted password:
+````
+$ php -a
+> echo password_hash('desiredpassword', PASSWORD_BCRYPT);
+````
+This will produce a hash which is to be placed in the `password` field in `username.ini`. Ensure that the `encryption` field is set to `password_hash`.
 
 Contribute
 ----------
