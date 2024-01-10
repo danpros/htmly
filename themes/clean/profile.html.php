@@ -5,7 +5,7 @@
 <div class="profile-wrapper" itemprop="accountablePerson" itemscope="itemscope">
     <div class="profile" itemtype="http://schema.org/Person" itemscope="itemscope" itemprop="Person">
         <h1 class="title-post" itemprop="name"><?php echo $author->name ?></h1>
-        <div class="bio" itemprop="description"><?php echo $$author->about ?></div>
+        <div class="bio" itemprop="description"><?php echo $author->about ?></div>
     </div>
 </div>
 <h2 class="post-index"><?php echo i18n("Post_by_author");?></h2>
