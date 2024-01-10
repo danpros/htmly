@@ -1,9 +1,8 @@
 ;Password
 password = yourpassword
+
+; Encryption. Set to clear, and later it will changed to password_hash automatically during login
 encryption = clear
-; encryption: not set, leave blank or set to clear or none to use plain text password for the user,
-; else set to encryption algoritm supported by hash function of php to use the selected
-; encryption
 
 ;Role
 role = admin

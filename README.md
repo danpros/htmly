@@ -4,10 +4,6 @@ HTMLy is an open source databaseless blogging platform prioritizes simplicity an
 
 It uses a unique algorithm to find or list any content based on date, type, category, tag, or author, and it's performance remain fast even if we have ten thousand of posts and hundreds of tags.
 
-Demo
-----
-Visit <a href="https://demo.htmly.com" target="_blank">HTMLy demo</a> as blog.
-
 Requirements
 ------------
 HTMLy requires PHP 5.3 or greater, PHP-XML package, PHP-INTL package, and PHP-ZIP package for backup feature.
@@ -23,6 +19,8 @@ Install HTMLy using the source code:
  4. Follow the installer to install HTMLy.
  5. The installer will try to delete itself. Please delete the installer manually if the `install.php` still exist. 
  
+**Note:** If you don't need to log in to the dashboard right away, just rename `config.ini.example` to `config.ini`, delete `install.php`, and your are set. It's always good practice to set the `site.url`
+ 
 ### Online install
 
 Install HTMLy without downloading the source code and use the online installer:
@@ -36,12 +34,6 @@ Configurations
 --------------
 Set written permission for the `cache` and `content` directories.
 
-In addition, HTMLy support admin user role. To do so, simply add the following line to your choosen user:
-
-````cfg
-role = admin
-````
-
 Users assigned with the admin role can edit/delete all users posts.
 
 To access the admin panel, add `/login` to the end of your site's URL.
@@ -51,11 +43,13 @@ e.g. `www.yoursite.com/login`
 Content Structure
 ----------------------
 
-If you are using the dashboard to write your blog post then the following information is just knowledge about the HTMLy folder and filename structure.
+Like traditional static pages, even though HTMLy is a dynamic PHP application, most important metadata such as username, category, type, tags, publication date, and slug are in the folder name and filename. 
 
-Like traditional static pages, even though HTMLy is a dynamic PHP application, most important metadata such as username, category, type, tags, publication date, and slug are in the folder name and filename. Example:
+If you use the dashboard to write your posts, the folder structure and filenames will be set by the dashboard automatically.
 
-```
+The following is an example of a folder and file structure from HTMLy:
+
+```html
 content/my-username/blog/my-category/post/2024-01-10-25-35-45_tag1,tag2_my-post-slug.md
 ```
 Here's the explanation:
@@ -69,7 +63,19 @@ Here's the explanation:
 
 With a structure like above, the post can now be visited even though it's just a folder structure and filename.
 
-To claim this content and be able to edit or log in to admin, simply create `my-username.ini` in the `config/users/` folder (see `username.ini.example`). 
+To claim this content or log in to dashboard, simply create `my-username.ini` in the `config/users/` folder (see `username.ini.example`).
+
+```cfg
+;Password
+password = yourpassword
+
+; Encryption: Set to clear, and later it will changed to password_hash automatically during login
+encryption = clear
+
+;Role
+role = admin
+```
+ 
 
 And to add information about the author, create `author.md` in `content/my-username/`, example:
 
@@ -90,18 +96,18 @@ This is my category info etc.
 
 **Note:** The default category is `Uncategorized` with slug `uncategorized` and you do not need to creating it inside `content/data/category/` folder.
 
-**Important:** Every time new content added (post, category etc.), or you make changes that change the folder structure or file names, simply delete the `index` folder inside `cache` folder so that the changes detected by HTMLy.
+**Important:** Every time new content added (post, pages, category etc.), or you make changes that change the folder structure or filenames, simply delete the `index` and `widget` folder inside `cache` folder so that the changes detected by HTMLy.
 
-**Post Views Limitations:** HTMLy using the filename path as the ID for the post/page views counter. So if you edit an post/page without using the dahsboard which results in changes to the folder structure or filename, then you must edit `views.json` in the `content/data/` folder manually to update to correct path.
+**Post Views Limitations:** HTMLy using the filename path as the ID for the post/page views counter. So if you edit a post/page without using the dashboard which results in changes to the folder structure or filename, then you must edit `views.json` in the `content/data/` folder manually to update to correct path.
 
 Static pages
 ------------
 
 For static pages, use the following format:
 
-````
+```html
 content/static/about.md
-````
+```
 
 In the example above, the `about.md` creates the URL: `www.yourblog.com/about`
 
@@ -109,15 +115,15 @@ Thus, if you write/create files offline, you must name the .md file in the forma
 
 For static subpages, use the following format:
 
-````
+```html
 content/static/about/me.md
-````
+```
 
 This will create the URL: `www.yourblog.com/about/me`
 
 Content Tags
 -------------
-If you are writing offline, you need specify the content tags below:
+If you are writing locally, you need specify the content tags below:
 
 **Title**
 ```html
