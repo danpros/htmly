@@ -98,7 +98,9 @@ This is my category info etc.
 
 **Note:** The default category is `Uncategorized` with slug `uncategorized` and you do not need to creating it inside `content/data/category/` folder.
 
-**Important:** Every time new content added (post, pages, category etc.), or you make changes that change the folder structure or filenames, simply delete the `index` and `widget` folder inside `cache` folder so that the changes detected by HTMLy.
+**Note:** Delete the `page` folder inside the `cache` folder to clear the html page cache served to visitors.
+
+**Important:** Every time new content added (post, pages, category), or you make changes that change the folder structure or filenames, simply delete the `index` and `widget` folder inside `cache` folder so that the changes detected by HTMLy. 
 
 **Post Views Limitations:** HTMLy using the filename path as the ID for the post/page views counter. So if you edit a post/page without using the dashboard which results in changes to the folder structure or filename, then you must edit `views.json` in the `content/data/` folder manually to update to correct path.
 
