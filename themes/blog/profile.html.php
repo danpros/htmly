@@ -6,9 +6,9 @@
     <div class="section-inner">
         <div class="content"> 
             <div class="item" itemtype="http://schema.org/Person" itemscope="itemscope" itemprop="Person">
-                <h2 class="title" itemprop="name"><?php echo $name ?></h2>
+                <h2 class="title" itemprop="name"><?php echo $author->name ?></h2>
                 <div class="desc text-left" itemprop="description">                                    
-                    <?php echo $about; ?>
+                    <?php echo $author->about; ?>
                 </div><!--//desc-->
                 <h3><?php echo i18n("Post_by_author");?></h3>
                 <?php if (!empty($posts)) { ?>

@@ -17,17 +17,8 @@
         </div>
     </div>
 <?php endif; ?>
-<?php $i = 0; $len = count($posts); ?>
 <?php foreach ($posts as $p): ?>
-    <?php if ($i == 0) {
-        $class = 'post first';
-    } elseif ($i == $len - 1) {
-        $class = 'post last';
-    } else {
-        $class = 'post';
-    }
-    $i++; ?>
-<section class="post section <?php echo $class ?>" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+<section class="post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="section-inner">
         <div class="content">
             <div class="item">
