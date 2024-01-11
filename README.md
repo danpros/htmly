@@ -61,7 +61,7 @@ Here's the explanation:
 * `tag1,tag2` are the tags, separated by commas
 * `my-post-slug` is the URL
 
-**Note:** the filename metadata (data, tags, slug) separated by an underscore.
+**Note:** the filename metadata (post date, tags, slug) separated by an underscore.
 
 With a structure like above, the post can now be visited even though it's just a folder structure and filename.
 
