@@ -380,8 +380,13 @@ function render($view, $locals = null, $layout = null)
 
     if (($view_root = config('views.root')) == null)
         error(500, "[views.root] is not set");
+	
+    $fnc = "{$view_root}/functions.php";
 
     ob_start();
+    if (file_exists($fnc)) {
+        include $fnc;
+    }
     include "{$view_root}/{$view}.html.php";
     content(trim(ob_get_clean()));
 

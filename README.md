@@ -19,7 +19,7 @@ Install HTMLy using the source code:
  4. Follow the installer to install HTMLy.
  5. The installer will try to delete itself. Please delete the installer manually if the `install.php` still exist. 
  
-**Note:** If you don't need to log in to the dashboard right away, just rename `config.ini.example` to `config.ini`, delete `install.php`, and your are set. It's always good practice to set the `site.url`
+**Note:** If you don't need to log in to the dashboard, just rename `config.ini.example` to `config.ini`, delete `install.php`, and you are set. It's always good practice to set the `site.url`
  
 ### Online install
 
@@ -50,14 +50,14 @@ If you use the dashboard to write your posts, the folder structure and filenames
 The following is an example of a folder and file structure from HTMLy:
 
 ```html
-content/my-username/blog/my-category/post/2024-01-10-25-35-45_tag1,tag2_my-post-slug.md
+content/my-username/blog/my-category/post/2024-01-10-15-35-45_tag1,tag2_my-post-slug.md
 ```
 Here's the explanation:
 
 * `my-username` is the username.
 * `my-category` is the content category.
 * `post` is the content type. Available content type `post`, `video`, `audio`, `link`, `quote`.
-* `2024-01-10-25-35-45` is the published date. The date format is `Y-m-d-H-i-s`
+* `2024-01-10-15-35-45` is the published date. The date format is `Y-m-d-H-i-s`
 * `tag1,tag2` are the tags, separated by commas
 * `my-post-slug` is the URL
 
