@@ -692,42 +692,9 @@ function find_page($static = null)
 
         foreach ($pages as $index => $v) {
             if (is_null($static)) {
-                $post = new stdClass;
 
-                // The static page URL
-                $url= $v['filename'];
-                
-                $post->url = site_url() . $url;
+                return get_pages($pages, 1, null);
 
-                $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
-                $post->md = $url;
-                $post->slug = $url;
-                $post->parent = null;
-
-                // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
-
-                // Extract the title and body
-                $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
-
-                // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
-                if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
-                } else {
-                    $post->views = null;
-                }
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
-
-                $word_count = str_word_count(strip_tags($post->body));
-                $post->readTime = ceil($word_count / 200);
-
-                $tmp[] = $post;         
-                
             } elseif (stripos($v['basename'], $static . '.md') !== false) {
 
                 // Use the get_posts method to return
@@ -781,40 +748,7 @@ function find_subpage($static, $sub_static = null)
             
             if (is_null($sub_static)) {
                 
-                $post = new stdClass;
-
-                // The static page URL
-                $url= $v['filename'];
-                $post->url = site_url() . $static . "/" . $url;
-
-                $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
-                $post->md = $url;
-                $post->slug = $url;
-                $post->parent = $static;
-
-                // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
-
-                // Extract the title and body
-                $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
-
-                // Get the contents and convert it to HTML
-                $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
-                if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
-                } else {
-                    $post->views = null;
-                }
-
-                $post->description = get_content_tag("d", $content, get_description($post->body));
-
-                $word_count = str_word_count(strip_tags($post->body));
-                $post->readTime = ceil($word_count / 200);
-
-                $tmp[] = $post;
+                return get_subpages($sub_pages, 1, null);
                 
             } elseif (stripos($v['basename'], $sub_static . '.md') !== false) {
 
