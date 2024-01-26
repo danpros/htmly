@@ -72,7 +72,7 @@ $front = get_frontpage(); ?>
             <div class="row justify-content-center">
                 <div class="col-lg-12 text-center">
                     <h1 class="mt-0"><?php echo $front->title;?></h1>
-                    <?php if(login()):?><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828.0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <a href="<?php echo $front->url;?>/edit?destination=front">Edit</a></small><?php endif;?>
+                    <?php if(login()):?><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828.0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <a href="<?php echo $front->url;?>/edit?destination=front"><?php echo i18n('edit');?></a></small><?php endif;?>
                 </div>
                 <div class="col-lg-9 col-xl-8 text-center">
                     <div class="lead"><?php echo $front->body;?></div>
