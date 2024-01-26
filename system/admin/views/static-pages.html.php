@@ -55,7 +55,7 @@ $(function() {
                             <span><a target="_blank" href="<?php echo $sp->url;?>"><?php echo $sp->title;?></a></span>
                         </div>
                         <div class="col-sm">
-                            <span><a class="btn btn-primary btn-xs" href="<?php echo $sp->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-xs" href="<?php echo $sp->url;?>/delete?destination=admin/pages"><?php echo i18n('Delete');?></a></span>
+                            <span><a class="btn btn-primary btn-xs" href="<?php echo $sp->url;?>/edit?destination=admin/pages/<?php echo $sp->parent;?>"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-xs" href="<?php echo $sp->url;?>/delete?destination=admin/pages/<?php echo $sp->parent;?>"><?php echo i18n('Delete');?></a></span>
                         </div>
                     </div>                            
                     <?php endforeach;?>    

@@ -628,7 +628,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         
         $post->md = $v['basename'];
         $post->slug = $url;
-        $post->parent = $fd;
+        $post->parent = $static;
 
         // Get the contents and convert it to HTML
         $content = file_get_contents($post->file);
