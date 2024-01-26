@@ -131,8 +131,8 @@ function get_draft_subpages($static = null)
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_draftSubpage, function ($sub_page) use ($static, $stringLen) {
-            $x = str_replace('content/static/', '', $sub_page['dirname']);
-            $y = explode('.', $x);
+            $x = explode('/', $sub_page['dirname']);
+            $y = explode('.', $x[2]);
             if (isset($y[1])) {
                 $z = $y[1];
             } else {
