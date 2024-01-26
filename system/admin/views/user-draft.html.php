@@ -72,7 +72,7 @@
 <?php if (!empty($draftSubpages)):?>
 <br><br>
 <hr>
-<h2 class="post-index"><?php echo i18n('Draft');?>: Subpages</h2>
+<h2 class="post-index"><?php echo i18n('Draft');?>: Sub <?php echo i18n('pages');?></h2>
     <table class="table post-list">
         <tr class="head">
             <th><?php echo i18n('Title');?></th>

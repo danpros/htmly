@@ -984,6 +984,7 @@ function find_draft_page($static = null)
                 $post->md = $v['basename'];
                 $post->slug = $url;
                 $post->parent = null;
+                $post->parentSlug = null;
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($post->file);
@@ -1024,30 +1025,34 @@ function find_draft_subpage($static = null, $sub_static = null)
 
         foreach ($posts as $index => $v) {
             if (stripos($v['basename'], $sub_static . '.md') !== false) {
-                
+
                 $post = new stdClass;
-                
+
+                $fd = str_replace('content/static/', '', dirname($v['dirname']));
+
+                $pr = explode('.', $fd);
+                if (isset($pr[1])) {
+                    $ps = $pr[1];
+                } else {
+                    $ps = $fd;
+                }
+
                 // The static page URL
                 $fn = explode('.', $v['filename']);
                 
                 if (isset($fn[1])) {
                     $url = $fn[1];
                 } else {
-                    $url= $v['filename'];
+                    $url = $v['filename'];
                 }
-                
-                if (is_null($static)) {
-                    $parent = str_replace('content/static/', '', dirname($v['dirname'])); 
-                    $post->parent = $parent;
-                    $post->url = site_url() . $parent . "/" . $url;
-                } else {
-                    $post->parent = $static;
-                    $post->url = site_url() . $static . "/" . $url;
-                }
-                
+
+                $post->parent = $fd;
+                $post->parentSlug = $ps;
+                $post->url = site_url() . $ps . "/" . $url;
+
                 $post->file = $v['dirname'] . '/' . $v['basename'];
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
-                
+
                 $post->md = $v['basename'];
                 $post->slug = $url;
 

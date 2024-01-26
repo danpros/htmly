@@ -560,6 +560,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
         $post->md = $v['basename'];
         $post->slug = $url;
         $post->parent = null;
+        $post->parentSlug = null;
 
         // Get the contents and convert it to HTML
         $content = file_get_contents($post->file);
@@ -628,7 +629,8 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         
         $post->md = $v['basename'];
         $post->slug = $url;
-        $post->parent = $static;
+        $post->parent = $fd;
+        $post->parentSlug = $static;
 
         // Get the contents and convert it to HTML
         $content = file_get_contents($post->file);
@@ -1860,6 +1862,7 @@ function static_prev($prev)
             'md' => $prev->md,
             'slug' => $prev->slug,
             'parent' => $prev->parent,
+            'parentSlug' => $prev->parentSlug,
             'file' => $prev->file,
             'readTime' => $prev->readTime,
             'lastMod' => $prev->lastMod
@@ -1879,6 +1882,7 @@ function static_next($next)
             'md' => $next->md,
             'slug' => $next->slug,
             'parent' => $next->parent,
+            'parentSlug' => $next->parentSlug,
             'file' => $next->file,
             'readTime' => $next->readTime,
             'lastMod' => $next->lastMod
