@@ -1,7 +1,17 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<span><i class="fa fa-pencil" aria-hidden="true"></i> <a href="<?php echo $static->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a></span>
-<h2 class="post-index"><?php echo $static->title ?></h2>
-<div><?php echo $static->description;?></div>
+<ul class="nav nav-pills">
+    <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="<?php echo $static->url;?>"><?php echo i18n('View');?></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="<?php echo $static->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a>
+    </li>
+</ul>
+<br>
+<div class="callout callout-info">
+    <h2 class="post-index"><?php echo $static->title ?></h2>
+    <div><?php echo $static->description;?></div>
+</div>
 <br>
 <a class="btn btn-primary right" href="<?php echo $static->url;?>/add?destination=admin/pages/<?php echo $static->slug;?>"><?php echo i18n('Add_sub');?></a>
 <br><br>
