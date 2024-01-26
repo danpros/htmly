@@ -36,7 +36,7 @@
             
             <div class="row">
                 <div class="col-sm-6">
-                    <label for="wmd-input"><?php echo i18n('Content');?></label>
+                    <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                     <div id="wmd-button-bar" class="wmd-button-bar"></div>
                     <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
                     <br>
