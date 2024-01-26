@@ -875,6 +875,8 @@ function get_category_info($category = null)
                 }
             }    
         }
+    } else {
+        $tmp[] = default_category($category);
     }
     return $tmp;
 }
@@ -929,7 +931,16 @@ function default_category($category = null)
     $tmp = array();
     $desc = new stdClass;
 
-    if ($category == 'uncategorized') {
+    if (is_null($category)) {
+        $desc->title = i18n("Uncategorized");
+        $desc->url = site_url() . 'category/uncategorized';
+        $desc->slug = 'uncategorized';
+        $desc->body = '<p>' . i18n('Uncategorized_comment') . '</p>';
+        $desc->md = 'uncategorized.md';
+        $desc->description = i18n('Uncategorized_comment');
+        $desc->file = '';
+        $desc->count = get_categorycount($desc->slug);
+    } elseif ($category == 'uncategorized') {
         $desc->title = i18n("Uncategorized");
         $desc->url = site_url() . 'category/uncategorized';
         $desc->slug = 'uncategorized';
