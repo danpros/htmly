@@ -119,7 +119,6 @@ function remove_accent($str)
 // Add content
 function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null)
 {
-
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
     $tagslang = "content/data/tags.lang";
@@ -257,7 +256,6 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 // Edit content
 function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null)
 {
-
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
     $tagslang = "content/data/tags.lang";
@@ -489,7 +487,6 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 // Add static page
 function add_page($title, $url, $content, $draft, $description = null)
 {
-
     $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -549,7 +546,6 @@ function add_page($title, $url, $content, $draft, $description = null)
 // Add static sub page
 function add_sub_page($title, $url, $content, $static, $draft, $description = null)
 {
-
     $post = find_page($static);
     $static = pathinfo($post['current']->md, PATHINFO_FILENAME);
     $post_title = safe_html($title);
@@ -1130,7 +1126,6 @@ function find_scheduled($year, $month, $name)
 // Return scheduled list
 function get_scheduled($profile, $page, $perpage)
 {
-
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     $posts = get_scheduled_posts();
@@ -1465,7 +1460,8 @@ function valueMaker($value)
     return (string)$value;
 }
 
-function replace_key($arr, $oldkey, $newkey) {
+function replace_key($arr, $oldkey, $newkey) 
+{
     if(array_key_exists($oldkey, $arr)) {
         $keys = array_keys($arr);
         $keys[array_search($oldkey, $keys)] = $newkey;
@@ -1477,7 +1473,6 @@ function replace_key($arr, $oldkey, $newkey) {
 // rename category folder
 function rename_category_folder($new_name, $old_file)
 {
-
     $old_name = str_replace('.md', '', basename($old_file));
     $dir = get_category_folder();
     foreach ($dir as $index => $v) {
@@ -1488,13 +1483,11 @@ function rename_category_folder($new_name, $old_file)
             rename($old_folder, $new_folder);
         }
     }
-
 }
 
 // reorder the static page
 function reorder_pages($pages = null) 
 {
-
     $i = 1;
     $arr = array();
     $dir = 'content/static/';
@@ -1504,7 +1497,7 @@ function reorder_pages($pages = null)
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
             rename ($dir . $p, $dir . $num . '.' . $arr[1] . '.md');
-            
+
             if (is_dir($dir . $fn)) {
                 rename($dir . $fn, $dir . $num . '.' . $arr[1]);
             }
@@ -1515,13 +1508,13 @@ function reorder_pages($pages = null)
             if (is_dir($dir . $fn)) {
                 rename($dir . $fn, $dir . $num . '.' . $fn);
             }
-            
+
         }
+
         $i++;
     }
-    
+
     rebuilt_cache();
-    
 }
 
 // reorder the subpage
@@ -1541,7 +1534,7 @@ function reorder_subpages($subpages = null)
             rename($dir . $sp, $dn . $num . '.' . $fn . '.md');
         }
 
-    $i++;
+        $i++;
         
     }
     

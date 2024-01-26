@@ -931,7 +931,7 @@ function default_category($category = null)
     $tmp = array();
     $desc = new stdClass;
 
-    if (is_null($category)) {
+    if (is_null($category) || $category == 'uncategorized') {
         $desc->title = i18n("Uncategorized");
         $desc->url = site_url() . 'category/uncategorized';
         $desc->slug = 'uncategorized';
@@ -940,16 +940,7 @@ function default_category($category = null)
         $desc->description = i18n('Uncategorized_comment');
         $desc->file = '';
         $desc->count = get_categorycount($desc->slug);
-    } elseif ($category == 'uncategorized') {
-        $desc->title = i18n("Uncategorized");
-        $desc->url = site_url() . 'category/uncategorized';
-        $desc->slug = 'uncategorized';
-        $desc->body = '<p>' . i18n('Uncategorized_comment') . '</p>';
-        $desc->md = 'uncategorized.md';
-        $desc->description = i18n('Uncategorized_comment');
-        $desc->file = '';
-        $desc->count = get_categorycount($desc->slug);
-    } else {
+    } else{
         $desc->title = $category;
         $desc->url = site_url() . 'category/' . $category;
         $desc->slug = $category;
@@ -964,8 +955,8 @@ function default_category($category = null)
 }
 
 // Return category list
-function category_list($custom = null) {
-
+function category_list($custom = null) 
+{
     $dir = "cache/widget";
     $filename = "cache/widget/category.list.cache";
     $tmp = array();
@@ -1240,7 +1231,6 @@ function get_keyword($keyword, $page, $perpage)
 // Get related posts base on post category.
 function get_related($tag, $custom = null, $count = null)
 {
-
     if (empty($count)) {
         $count = config('related.count');
         if (empty($count)) {
@@ -1516,7 +1506,6 @@ function recent_type($type, $custom = null, $count = null)
 // Return popular posts lists
 function popular_posts($custom = null, $count = null)
 {
-
     static $_views = array();
     $tmp = array();
 
@@ -1605,7 +1594,6 @@ function popular_posts($custom = null, $count = null)
 // Return an archive list, categorized by year and month.
 function archive_list($custom = null)
 {
-
     $dir = "cache/widget";
     $filename = "cache/widget/archive.cache";
     $ar = array();
@@ -1712,7 +1700,6 @@ EOF;
 // Return tag cloud.
 function tag_cloud($custom = null)
 {
-
     $dir = "cache/widget";
     $filename = "cache/widget/tags.cache";
     $tg = array();
@@ -2043,7 +2030,6 @@ function get_description($string, $char = null)
 // Get the teaser
 function get_teaser($string, $url = null, $char = null)
 {
-
     $teaserType = config('teaser.type');
     $more = config('read.more');
 
@@ -2338,11 +2324,13 @@ EOF;
     }
 }
 
-function slashUrl($url) {
+function slashUrl($url)
+{
     return rtrim($url, '/') . '/';
 }
 
-function parseNodes($nodes, $child = null, $class = null) {
+function parseNodes($nodes, $child = null, $class = null) 
+{
     if (empty($child)) {
         $ul = '<ul class="nav navbar-nav '.$class.'">';
         foreach ($nodes as $node) {
@@ -2368,7 +2356,8 @@ function parseNodes($nodes, $child = null, $class = null) {
     }
 }
 
-function parseNode($node, $child = null) {
+function parseNode($node, $child = null)
+{
     $req = strtok($_SERVER["REQUEST_URI"],'?');
     $url = parse_url(slashUrl($node->slug));
     $su = parse_url(site_url());
