@@ -136,7 +136,7 @@ cache.timestamp = "false"
 multi.site = "false"
 
 ; Set the theme here
-views.root = "themes/twentyfifteen"
+views.root = "themes/doks"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
