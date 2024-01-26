@@ -550,6 +550,8 @@ function add_page($title, $url, $content, $draft, $description = null)
 function add_sub_page($title, $url, $content, $static, $draft, $description = null)
 {
 
+    $post = find_page($static);
+    $static = pathinfo($post['current']->md, PATHINFO_FILENAME);
     $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
@@ -604,10 +606,17 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
 function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null)
 {
     $dir = pathinfo($oldfile, PATHINFO_DIRNAME);
+    $fn = explode('.', pathinfo($oldfile, PATHINFO_FILENAME));
+    if (isset($fn[1])) {
+        $num = $fn[0] . '.';
+    } else {
+        $num = null;
+    }
     $views = array();
     $viewsFile = "content/data/views.json";
     $post_title = safe_html($title);
-    $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $pUrl = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $post_url = $num . $pUrl;
     $description = safe_html($description);
     if ($description !== null) {
         if (!empty($description)) {        
@@ -663,10 +672,16 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             }
         }
 
-        if (!empty($static)) {
-            $posturl = site_url() . $static .'/'. $post_url;
+        $cl = explode('.', $post_url);
+        if (isset($cl[1])) {
+            $pu = $cl[1];
         } else {
-            $posturl = site_url() . $post_url;
+            $pu = $post_url;
+        }
+        if (!empty($static)) {
+            $posturl = site_url() . $static .'/'. $pu;
+        } else {
+            $posturl = site_url() . $pu;
         }
 
         rebuilt_cache('all');
@@ -957,14 +972,20 @@ function find_draft_page($static = null)
                 $post = new stdClass;
 
                 // The static page URL
-                $url= $v['filename'];
+                $fn = explode('.', $v['filename']);
+                
+                if (isset($fn[1])) {
+                    $url = $fn[1];
+                } else {
+                    $url= $v['filename'];
+                }
                 
                 $post->url = site_url() . $url;
 
                 $post->file = $v['dirname'] . '/' . $v['basename'];
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
                 
-                $post->md = $url;
+                $post->md = $v['basename'];
                 $post->slug = $url;
                 $post->parent = null;
 
@@ -1010,8 +1031,14 @@ function find_draft_subpage($static = null, $sub_static = null)
                 
                 $post = new stdClass;
                 
-                // The static file
-                $url= $v['filename'];
+                // The static page URL
+                $fn = explode('.', $v['filename']);
+                
+                if (isset($fn[1])) {
+                    $url = $fn[1];
+                } else {
+                    $url= $v['filename'];
+                }
                 
                 if (is_null($static)) {
                     $parent = str_replace('content/static/', '', dirname($v['dirname'])); 
@@ -1025,7 +1052,7 @@ function find_draft_subpage($static = null, $sub_static = null)
                 $post->file = $v['dirname'] . '/' . $v['basename'];
                 $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
                 
-                $post->md = $url;
+                $post->md = $v['basename'];
                 $post->slug = $url;
 
                 // Get the contents and convert it to HTML
@@ -1462,4 +1489,61 @@ function rename_category_folder($new_name, $old_file)
         }
     }
 
+}
+
+// reorder the static page
+function reorder_pages($pages = null) 
+{
+
+    $i = 1;
+    $arr = array();
+    $dir = 'content/static/';
+    foreach ($pages as $p) {
+        $fn = pathinfo($p, PATHINFO_FILENAME);
+        $num = str_pad($i, 2, 0, STR_PAD_LEFT);
+        $arr = explode('.' , $fn);
+        if (isset($arr[1])) {
+            rename ($dir . $p, $dir . $num . '.' . $arr[1] . '.md');
+            
+            if (is_dir($dir . $fn)) {
+                rename($dir . $fn, $dir . $num . '.' . $arr[1]);
+            }
+            
+        } else {
+            rename($dir . $p, $dir . $num . '.' . $fn . '.md');
+            
+            if (is_dir($dir . $fn)) {
+                rename($dir . $fn, $dir . $num . '.' . $fn);
+            }
+            
+        }
+        $i++;
+    }
+    
+    rebuilt_cache();
+    
+}
+
+// reorder the subpage
+function reorder_subpages($subpages = null) 
+{
+    $i = 1;
+    $arr = array();
+    $dir = 'content/static/';
+    foreach ($subpages as $sp) {
+        $dn = $dir . pathinfo($sp, PATHINFO_DIRNAME) . '/';
+        $fn = pathinfo($sp, PATHINFO_FILENAME);
+        $num = str_pad($i, 2, 0, STR_PAD_LEFT);
+        $arr = explode('.' , $fn);
+        if (isset($arr[1])) {
+            rename ($dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
+        } else {
+            rename($dir . $sp, $dn . $num . '.' . $fn . '.md');
+        }
+
+    $i++;
+        
+    }
+    
+    rebuilt_cache();
 }

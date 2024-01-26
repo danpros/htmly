@@ -34,8 +34,8 @@ if ($type == 'is_frontpage') {
     $oldtitle = $p->title;
     $olddescription = $p->description;
     $oldcontent = $p->body;
-    $oldmd = $p->md;
-    $url = 'content/data/category/'. $p->md . '.md';
+    $oldmd = $p->slug;
+    $url = 'content/data/category/'. $p->slug . '.md';
 } else {
 
     if (isset($p->file)) {
@@ -55,7 +55,13 @@ if ($type == 'is_frontpage') {
     }
     $dir = pathinfo($url, PATHINFO_DIRNAME);
     $oldurl = pathinfo($url, PATHINFO_BASENAME);
-    $oldmd = pathinfo($url, PATHINFO_FILENAME);
+    
+    $fn = explode('.', pathinfo($url, PATHINFO_FILENAME));
+    if (isset($fn[1])) {
+        $oldmd = $fn[1];
+    } else {
+        $oldmd = pathinfo($url, PATHINFO_FILENAME);
+    }
 
     if (isset($p->url)) {
         $delete = $p->url . '/delete?destination=' . $destination;

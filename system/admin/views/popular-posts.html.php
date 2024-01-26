@@ -5,6 +5,7 @@
 <br><br>
 <?php if (!empty($posts)) { ?>
     <table class="table post-list">
+        <thead>
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Published');?></th><?php if (config("views.counter") == "true"): ?>
@@ -14,6 +15,8 @@
             <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
+        </thead>
+        <tbody>
         <?php foreach ($posts as $p): ?>
         <?php if (strpos($p->file, '/scheduled/') == false && strpos($p->file, '/draft/') == false) { ?>
             <tr>
@@ -29,6 +32,7 @@
             </tr>
         <?php } ?>
         <?php endforeach; ?>
+        </tbody>
     </table>
 <?php } else {
     echo i18n('No_posts_found') . '!';

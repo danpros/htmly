@@ -5,6 +5,7 @@
 <br><br>
 <?php if (!empty($posts)) { ?>
     <table class="table post-list">
+        <thead>
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Published');?></th><?php if (config("views.counter") == "true"): ?>
@@ -14,6 +15,8 @@
             <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
+        </thead>
+        <tbody>
         <?php foreach ($posts as $p): ?>
             <tr>
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
@@ -27,6 +30,7 @@
                         class="btn btn-danger btn-xs" href="<?php echo $p->url ?>/delete?destination=admin/posts"><?php echo i18n('Delete');?></a></td>
             </tr>
         <?php endforeach; ?>
+        </tbody>
     </table>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <br>

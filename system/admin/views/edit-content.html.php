@@ -143,7 +143,7 @@ $( function() {
                     <label for="pCategory"><?php echo i18n('Category');?> <span class="required">*</span></label>
                     <select id="pCategory" class="form-control" name="category">
                         <?php foreach ($desc as $d):?>
-                            <option value="<?php echo $d->md;?>" <?php if($category === $d->md) { echo 'selected="selected"';} ?>><?php echo $d->title;?></option>
+                            <option value="<?php echo $d->slug;?>" <?php if($category === $d->slug) { echo 'selected="selected"';} ?>><?php echo $d->title;?></option>
                         <?php endforeach;?>
                     </select>
                     <br>

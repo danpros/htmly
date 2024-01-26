@@ -107,6 +107,7 @@ function parseMenu($menu) {
       data: {'json': js},
       success: function (response) {
          alert(response.message);
+         location.reload();
       },
     });    
   });
