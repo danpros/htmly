@@ -119,7 +119,6 @@
                         <?php echo menu('primary-menu');?>
                     </div>
                 </nav><!-- .main-navigation -->
-				<?php if(!empty(config('social.twitter')) || !empty(config('social.facebook'))):?>
                 <nav aria-label="Footer Social Links Menu" role="navigation" class="social-navigation">
                     <div class="menu-social-links-container">
                     <ul class="social-links-menu" id="menu-social-links">
@@ -129,7 +128,6 @@
                     </ul>
                     </div>                
                 </nav>
-				<?php endif;?>
                 <div class="site-info">
                     <span class="site-title"><a href="<?php echo site_url();?>" rel="home"><?php echo blog_title();?></a></span>
                     <span class="copyright"><?php echo copyright();?></span>
