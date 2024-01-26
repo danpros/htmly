@@ -1,5 +1,5 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<ul class="nav nav-pills">
+<ul class="nav nav-tabs">
     <li class="nav-item">
         <a class="nav-link" aria-current="page" href="<?php echo $static->url;?>"><?php echo i18n('View');?></a>
     </li>
@@ -8,7 +8,7 @@
     </li>
 </ul>
 <br>
-<div class="callout callout-info">
+<div>
     <h2 class="post-index"><?php echo $static->title ?></h2>
     <div><?php echo $static->description;?></div>
 </div>

@@ -59,7 +59,7 @@
             <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php foreach ($draftPages as $d): ?>
-        <?php $count = count(find_subpage($d->md)); ?>
+        <?php $count = count(find_subpage($d->slug)); ?>
             <tr>
                 <td><?php echo $d->title ?></td>
                 <td><?php echo format_date($d->lastMod) ?></td>
@@ -81,7 +81,7 @@
             <th><?php echo i18n('Static_pages');?></th>
         </tr>
         <?php foreach ($draftSubpages as $sp): ?>
-        <?php $parent = find_page($sp->parent);?>
+        <?php $parent = find_page($sp->parentSlug);?>
             <tr>
                 <td><?php echo $sp->title ?></td>
                 <td><?php echo format_date($sp->lastMod) ?></td>

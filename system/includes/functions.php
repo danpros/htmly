@@ -51,8 +51,14 @@ function get_static_subpages($static = null)
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_sub_page, function ($sub_page) use ($static, $stringLen) {
-            $x = explode("/", $sub_page['dirname']);
-            if (strpos($x[2], $static) !== false) {
+            $x = str_replace('content/static/', '', $sub_page['dirname']);
+            $y = explode('.', $x);
+            if (isset($y[1])) {
+                $z = $y[1];
+            } else {
+                $z = $x;
+            }
+            if ($z == $static) {
                 return true;
             }
             return false;
@@ -125,8 +131,14 @@ function get_draft_subpages($static = null)
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_draftSubpage, function ($sub_page) use ($static, $stringLen) {
-            $x = explode("/", $sub_page['dirname']);
-            if (strpos($x[2], $static) !== false) {
+            $x = str_replace('content/static/', '', $sub_page['dirname']);
+            $y = explode('.', $x);
+            if (isset($y[1])) {
+                $z = $y[1];
+            } else {
+                $z = $x;
+            }
+            if ($z == $static) {
                 return true;
             }
             return false;
