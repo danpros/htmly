@@ -36,7 +36,7 @@ $(function() {
             <th><?php echo i18n('Title');?> </th>
             <th><?php echo i18n('Description');?></th>
             <th><?php echo i18n('Operations');?></th>
-            <th>Subpages</th>
+            <th>Sub <?php echo i18n('pages');?></th>
         </tr>
         </thead>
         <tbody>
@@ -48,7 +48,7 @@ $(function() {
                 <td><?php echo shorten($p->description, '50');?>...</td>
                 <td><a class="btn btn-primary btn-xs" href="<?php echo $p->url;?>/add?destination=admin/pages/<?php echo $p->slug;?>"><?php echo i18n('Add_sub');?></a> <a class="btn btn-primary btn-xs" href="<?php echo $p->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a> <?php if (empty($dd) && empty($dr)):?><a class="btn btn-danger btn-xs" href="<?php echo $p->url;?>/delete?destination=admin/pages"><?php echo i18n('Delete');?></a><?php endif;?></td>
                 <td>
-                    <div><a class="btn btn-primary btn-xs" href="<?php echo site_url();?>admin/pages/<?php echo $p->slug;?>">Manage subpages</a></div><hr>
+                    <div><a class="btn btn-primary btn-xs" href="<?php echo site_url();?>admin/pages/<?php echo $p->slug;?>"><?php echo i18n('page');?> <?php echo i18n('settings');?></a></div><hr>
                     <?php foreach ($dd as $sp):?>                            
                     <div class="row">
                         <div class="col-sm">
@@ -65,6 +65,6 @@ $(function() {
         </tbody>
         </table>
         <br>
-        <button class="btn btn-primary" style="display:none" id="saveButton">Save page order</button>
+        <button class="btn btn-primary" style="display:none" id="saveButton"><?php echo i18n('save_config');?></button>
     <?php endif;?>
 <?php endif;?>

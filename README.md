@@ -71,7 +71,7 @@ To claim this content or log in to dashboard, simply create `my-username.ini` in
 ;Password
 password = yourpassword
 
-; Encryption: Set to clear, and later it will changed to password_hash automatically during login
+;Encryption: Set to clear, and later it will changed to password_hash automatically during login
 encryption = clear
 
 ;Role

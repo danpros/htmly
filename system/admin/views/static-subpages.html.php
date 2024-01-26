@@ -1,5 +1,5 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
-<a href="<?php echo $static->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a>
+<span><i class="fa fa-pencil" aria-hidden="true"></i> <a href="<?php echo $static->url;?>/edit?destination=admin/pages"><?php echo i18n('Edit');?></a></span>
 <h2 class="post-index"><?php echo $static->title ?></h2>
 <div><?php echo $static->description;?></div>
 <br>
@@ -51,7 +51,7 @@ $(function() {
         </tbody>
     </table>
         <br>
-        <button class="btn btn-primary" style="display:none" id="saveButton">Save page order</button>
+        <button class="btn btn-primary" style="display:none" id="saveButton"><?php echo i18n('save_config');?></button>
 <?php } else {
     echo i18n('No_posts_found') . '!';
 } ?>
