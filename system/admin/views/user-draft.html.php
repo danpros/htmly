@@ -55,7 +55,7 @@
     <table class="table post-list">
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
-            <th><?php echo i18n('Created');?></th>
+            <th><?php echo i18n('Edit');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
         <?php foreach ($draftPages as $d): ?>
@@ -76,7 +76,7 @@
     <table class="table post-list">
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
-            <th><?php echo i18n('Created');?></th>
+            <th><?php echo i18n('Edit');?></th>
             <th><?php echo i18n('Operations');?></th>
             <th><?php echo i18n('Static_pages');?></th>
         </tr>

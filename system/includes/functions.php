@@ -136,7 +136,7 @@ function get_draft_subpages($static = null)
             if (isset($y[1])) {
                 $z = $y[1];
             } else {
-                $z = $x;
+                $z = $y[0];
             }
             if ($z == $static) {
                 return true;
