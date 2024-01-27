@@ -687,8 +687,24 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             if (file_exists($viewsFile)) {
                 $views = json_decode(file_get_contents($viewsFile), true);
                 $arr = replace_key($views, $oldfile, $newfile);
-                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);                
+                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
             }
+            
+            if (empty($static)) {
+                $sPage = find_subpage($pu);
+                $oldSub = 'content/static/' . pathinfo($oldfile, PATHINFO_FILENAME);
+                $newSub = 'content/static/' . pathinfo($newfile, PATHINFO_FILENAME);
+                if (!empty($sPage)) {
+                    foreach ($sPage as $sp) {
+                        if (file_exists($viewsFile)) {
+                            $views = json_decode(file_get_contents($viewsFile), true);
+                            $arr = replace_key($views, $oldSub . '/' . $sp->md, $newSub . '/' . $sp->md);
+                            file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
+                        }
+                    }
+                }
+            }
+            
         }         
 
         if ($destination == 'post') {
@@ -1496,22 +1512,63 @@ function reorder_pages($pages = null)
     $i = 1;
     $arr = array();
     $dir = 'content/static/';
+    $viewsFile = "content/data/views.json";
     foreach ($pages as $p) {
         $fn = pathinfo($p, PATHINFO_FILENAME);
         $num = str_pad($i, 2, 0, STR_PAD_LEFT);
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
+
+            $oldSub = find_subpage($arr[1]);
+
             rename ($dir . $p, $dir . $num . '.' . $arr[1] . '.md');
+
+            if (file_exists($viewsFile)) {
+                $views = json_decode(file_get_contents($viewsFile), true);
+                $mod = replace_key($views, $dir . $p, $dir . $num . '.' . $arr[1] . '.md');
+                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
+            }
 
             if (is_dir($dir . $fn)) {
                 rename($dir . $fn, $dir . $num . '.' . $arr[1]);
+
+                if (!empty($oldSub)) {
+                    foreach ($oldSub as $sp) {
+                        if (file_exists($viewsFile)) {
+                            $views = json_decode(file_get_contents($viewsFile), true);
+                            $mod = replace_key($views, $sp->file, $dir . $num . '.' . $arr[1] . '/' . $sp->md);
+                            file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
+                        }
+                    }
+                }
+
             }
-            
+
         } else {
+
+            $oldSub = find_subpage($fn);
+
             rename($dir . $p, $dir . $num . '.' . $fn . '.md');
-            
+
+            if (file_exists($viewsFile)) {
+                $views = json_decode(file_get_contents($viewsFile), true);
+                $mod = replace_key($views, $dir . $p, $dir . $num . '.' . $fn . '.md');
+                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
+            }
+
             if (is_dir($dir . $fn)) {
                 rename($dir . $fn, $dir . $num . '.' . $fn);
+
+                if (!empty($oldSub)) {
+                    foreach ($oldSub as $sp) {
+                        if (file_exists($viewsFile)) {
+                            $views = json_decode(file_get_contents($viewsFile), true);
+                            $mod = replace_key($views, $sp->file, $dir . $num . '.' . $fn . '/' . $sp->md);
+                            file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
+                        }
+                    }
+                }                
+
             }
 
         }
@@ -1528,6 +1585,7 @@ function reorder_subpages($subpages = null)
     $i = 1;
     $arr = array();
     $dir = 'content/static/';
+    $viewsFile = "content/data/views.json";
     foreach ($subpages as $sp) {
         $dn = $dir . pathinfo($sp, PATHINFO_DIRNAME) . '/';
         $fn = pathinfo($sp, PATHINFO_FILENAME);
@@ -1535,13 +1593,23 @@ function reorder_subpages($subpages = null)
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
             rename ($dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
+            if (file_exists($viewsFile)) {
+                $views = json_decode(file_get_contents($viewsFile), true);
+                $mod = replace_key($views, $dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
+                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);     
+            }
         } else {
             rename($dir . $sp, $dn . $num . '.' . $fn . '.md');
+            if (file_exists($viewsFile)) {
+                $views = json_decode(file_get_contents($viewsFile), true);
+                $mod = replace_key($views, $dir . $sp, $dn . $num . '.' . $fn . '.md');
+                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);         
+            }
         }
 
         $i++;
-        
+
     }
-    
+
     rebuilt_cache();
 }
