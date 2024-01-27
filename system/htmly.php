@@ -428,8 +428,12 @@ get('/front/edit', function () {
 // Show the "Add content" page
 get('/add/content', function () {
 
-    $req = _h($_GET['type']);
-    
+    if (isset($_GET['type'])) {
+        $req = _h($_GET['type']);
+    } else {
+        $req = 'post';
+    }
+
     $type = 'is_' . $req;
 
     if (login()) {
