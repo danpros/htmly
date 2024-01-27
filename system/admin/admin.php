@@ -23,7 +23,7 @@ function update_user($userName, $password, $role)
     if (file_exists($file)) {
         file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
-            "role = " . $role . "\n");
+            "role = " . $role . "\n", LOCK_EX);
         return true;
     }
     return false;
@@ -38,7 +38,7 @@ function create_user($userName, $password, $role = "user")
     } else {
         file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
-            "role = " . $role . "\n");
+            "role = " . $role . "\n", LOCK_EX);
         return true;
     }
 }
@@ -228,10 +228,10 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         }
 
         if (is_dir($dir)) {
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         }
 
         save_tag_i18n($post_tag, $post_tagmd);
@@ -375,7 +375,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 $newfile = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
             }
 
-            file_put_contents($newfile, print_r($post_content, true));
+            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             unlink($oldfile);
 
         } else {
@@ -393,10 +393,10 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 }
                                     
                 if ($oldfile === $newfile) {
-                    file_put_contents($oldfile, print_r($post_content, true));
+                    file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
                 } else {
                     rename($oldfile, $newfile);
-                    file_put_contents($newfile, print_r($post_content, true));
+                    file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
                 }
             } else {
 
@@ -410,7 +410,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                     }
                 }
 
-                file_put_contents($newfile, print_r($post_content, true));
+                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
                 unlink($oldfile);
 
             }
@@ -449,7 +449,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
             if (file_exists($viewsFile)) {
                 $views = json_decode(file_get_contents($viewsFile), true);
                 $arr = replace_key($views, $oldfile, $newfile);
-                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE));                
+                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);                
             }
         } 
 
@@ -522,12 +522,12 @@ function add_page($title, $url, $content, $draft, $description = null)
             if (!is_dir($dir)) {
                 mkdir($dir, 0775, true);
             }
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         } else {
             if (!is_dir($dirDraft)) {
                 mkdir($dirDraft, 0775, true);
             } 
-            file_put_contents($dirDraft . $filename, print_r($post_content, true));
+            file_put_contents($dirDraft . $filename, print_r($post_content, true), LOCK_EX);
         }
 
         rebuilt_cache('all');
@@ -583,12 +583,12 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
             if (!is_dir($dir)) {
                 mkdir($dir, 0775, true);
             }
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         } else {
             if (!is_dir($dirDraft)) {
                 mkdir($dirDraft, 0775, true);
             }
-            file_put_contents($dirDraft . $filename, print_r($post_content, true));
+            file_put_contents($dirDraft . $filename, print_r($post_content, true), LOCK_EX);
         }
 
         rebuilt_cache('all');
@@ -634,7 +634,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                 mkdir($dirDraft, 0775, true);
             }
             $newfile = $dirDraft . '/' . $post_url . '.md';
-            file_put_contents($newfile, print_r($post_content, true));
+            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
                 if(is_dir($dir . '/' . $old)) {
@@ -644,7 +644,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             unlink($oldfile);
         } elseif(!empty($publishDraft)) {
             $newfile = dirname($dir) . '/' . $post_url . '.md';
-            file_put_contents($newfile, print_r($post_content, true));
+            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
                 if(is_dir(dirname($dir) . '/' . $old)) {
@@ -655,10 +655,10 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         }else { 
             $newfile = $dir . '/' . $post_url . '.md';
             if ($oldfile === $newfile) {
-                file_put_contents($oldfile, print_r($post_content, true));
+                file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
             } else {
                 rename($oldfile, $newfile);
-                file_put_contents($newfile, print_r($post_content, true));
+                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
                 if (empty($static)) {
                     $old = pathinfo($oldfile, PATHINFO_FILENAME);
                     if(is_dir($dir . '/' . $old)) {
@@ -687,7 +687,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             if (file_exists($viewsFile)) {
                 $views = json_decode(file_get_contents($viewsFile), true);
                 $arr = replace_key($views, $oldfile, $newfile);
-                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE));                
+                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);                
             }
         }         
 
@@ -727,10 +727,10 @@ function add_category($title, $url, $content, $description = null)
         $filename = $post_url . '.md';
         $dir = 'content/data/category/';
         if (is_dir($dir)) {
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         }
 
         rebuilt_cache('all');
@@ -765,13 +765,13 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
             mkdir($dir, 0775, true);
         }
         if ($oldfile === $newfile) {
-            file_put_contents($oldfile, print_r($post_content, true));
+            file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
         } else {
             if (file_exists($oldfile)) {
                 rename($oldfile, $newfile);
-                file_put_contents($newfile, print_r($post_content, true));
+                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             } else {
-                file_put_contents($newfile, print_r($post_content, true));
+                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             }
         }
 
@@ -798,10 +798,10 @@ function edit_profile($title, $content, $user)
         $dir = 'content/' . $user . '/';
         $filename = 'content/' . $user . '/author.md';
         if (is_dir($dir)) {
-            file_put_contents($filename, print_r($user_content, true));
+            file_put_contents($filename, print_r($user_content, true), LOCK_EX);
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($filename, print_r($user_content, true));
+            file_put_contents($filename, print_r($user_content, true), LOCK_EX);
         }
         rebuilt_cache('all');
         $redirect = site_url() . 'author/' . $user;
@@ -820,10 +820,10 @@ function edit_frontpage($title, $content)
         $dir = 'content/data/frontpage';
         $filename = 'content/data/frontpage/frontpage.md';
         if (is_dir($dir)) {
-            file_put_contents($filename, print_r($front_content, true));
+            file_put_contents($filename, print_r($front_content, true), LOCK_EX);
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($filename, print_r($front_content, true));
+            file_put_contents($filename, print_r($front_content, true), LOCK_EX);
         }
         rebuilt_cache('all');
         $redirect = site_url();
@@ -1172,10 +1172,10 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         $dir = 'content/' . $user . '/blog/uncategorized/post/';
         if (is_dir($dir)) {
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true));
+            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
         }
         save_tag_i18n($post_tag, $post_tagmd);
         $redirect = site_url() . 'admin/clear-cache';
@@ -1329,7 +1329,7 @@ function save_tag_i18n($tag,$tagDisplay)
     }
 
     $tmp = serialize($views);
-    file_put_contents($filename, print_r($tmp, true));
+    file_put_contents($filename, print_r($tmp, true), LOCK_EX);
 
 }
 

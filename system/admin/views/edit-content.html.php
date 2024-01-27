@@ -66,7 +66,7 @@ if (file_exists($tagslang)) {
         $newlang = array_combine($tkey, $tkey);
     }
     $tmp = serialize($newlang);
-    file_put_contents($tagslang, print_r($tmp, true));
+    file_put_contents($tagslang, print_r($tmp, true), LOCK_EX);
 }
 
 $images = get_gallery();

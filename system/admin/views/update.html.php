@@ -19,14 +19,13 @@ if (defined("JSON_PRETTY_PRINT")) {
         'cache/installedVersion.json',
         json_encode(array(
             "tag_name" => constant('HTMLY_VERSION')
-        ), JSON_PRETTY_PRINT)
-    );
+        ), JSON_PRETTY_PRINT), LOCK_EX);
 } else {
     file_put_contents(
         'cache/installedVersion.json',
         json_encode(array(
             "tag_name" => constant('HTMLY_VERSION')
-        ))
+        )), LOCK_EX
     );
 }
 

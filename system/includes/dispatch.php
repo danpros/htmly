@@ -128,7 +128,7 @@ function save_config($data = array(), $new = array())
         $string .= "\n" . $word . ' = "' . $value . '"' . "\n";
     }
     $string = rtrim($string);
-    return file_put_contents($config_file, $string);
+    return file_put_contents($config_file, $string, LOCK_EX);
 }
 
 function to_b64($str)
@@ -411,7 +411,7 @@ function render($view, $locals = null, $layout = null)
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
-            file_put_contents($cachefile, ob_get_contents());
+            file_put_contents($cachefile, ob_get_contents(), LOCK_EX);
         }
         echo trim(ob_get_clean());
     } else {

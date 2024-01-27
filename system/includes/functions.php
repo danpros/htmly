@@ -286,7 +286,7 @@ function rebuilt_cache($type = null)
     }
     usort($posts_cache, "sortfile_d");
     $posts_string = serialize($posts_cache);
-    file_put_contents('cache/index/index-posts.txt', print_r($posts_string, true));   
+    file_put_contents('cache/index/index-posts.txt', print_r($posts_string, true), LOCK_EX);   
 
     // Rebuilt scheduled posts index
     $stmp = array();
@@ -300,7 +300,7 @@ function rebuilt_cache($type = null)
     }
     usort($scheduled_cache, "sortfile_d");
     $scheduled_string = serialize($scheduled_cache);
-    file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true));
+    file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true), LOCK_EX);
     
     // Rebuilt draft posts index
     $drf = array();
@@ -314,7 +314,7 @@ function rebuilt_cache($type = null)
     }
     usort($draft_cache, "sortfile_d");
     $draft_string = serialize($draft_cache);
-    file_put_contents('cache/index/index-draft.txt', print_r($draft_string, true));
+    file_put_contents('cache/index/index-draft.txt', print_r($draft_string, true), LOCK_EX);
     
     // Rebuilt category files index
     $ftmp = array();
@@ -327,12 +327,12 @@ function rebuilt_cache($type = null)
     }
     usort($category_cache, "sortfile_a");
     $category_string = serialize($category_cache);
-    file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true));
+    file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true), LOCK_EX);
     
     // Rebuilt category slug index
     $dirc = array();
     $dirc = array_unique($ctmp, SORT_REGULAR); 
-    file_put_contents('cache/index/index-category.txt', print_r(serialize($dirc), true));
+    file_put_contents('cache/index/index-category.txt', print_r(serialize($dirc), true), LOCK_EX);
     
     // Rebuilt static page index
     $ptmp = array();
@@ -346,7 +346,7 @@ function rebuilt_cache($type = null)
     }
     usort($page_cache, "sortfile_a");
     $page_string = serialize($page_cache);
-    file_put_contents('cache/index/index-pages.txt', print_r($page_string, true));
+    file_put_contents('cache/index/index-pages.txt', print_r($page_string, true), LOCK_EX);
 
     // Rebuilt subpage index
     $sptmp = array();
@@ -360,7 +360,7 @@ function rebuilt_cache($type = null)
     }
     usort($subpage_cache, "sortfile_a");
     $subpage_string = serialize($subpage_cache);
-    file_put_contents('cache/index/index-subpages.txt', print_r($subpage_string, true));
+    file_put_contents('cache/index/index-subpages.txt', print_r($subpage_string, true), LOCK_EX);
 
     // Rebuilt user profile index
     $atmp = array();
@@ -372,7 +372,7 @@ function rebuilt_cache($type = null)
     }
     usort($author_cache, "sortfile_a");
     $author_string = serialize($author_cache);
-    file_put_contents('cache/index/index-author.txt', print_r($author_string, true));
+    file_put_contents('cache/index/index-author.txt', print_r($author_string, true), LOCK_EX);
 
     // Remove the widget cache
     foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
@@ -990,7 +990,7 @@ function category_list($custom = null)
         }
 
         $tmp = serialize($cat);
-        file_put_contents($filename, print_r($tmp, true));
+        file_put_contents($filename, print_r($tmp, true), LOCK_EX);
     }
 
     if(!empty($custom)) {
@@ -1447,12 +1447,12 @@ function recent_posts($custom = null, $count = null)
         if (count($posts) != $count) {
             $posts = get_posts(null, 1, $count);
             $tmp = serialize($posts);
-            file_put_contents($filename, print_r($tmp, true));
+            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
         }
     } else {
        $posts = get_posts(null, 1, $count);
        $tmp = serialize($posts);
-       file_put_contents($filename, print_r($tmp, true));
+       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
     }
 
     if (!empty($custom)) {
@@ -1494,12 +1494,12 @@ function recent_type($type, $custom = null, $count = null)
         if (count($posts) != $count) {
             $posts = get_type($type, 1, $count);
             $tmp = serialize($posts);
-            file_put_contents($filename, print_r($tmp, true));
+            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
         }
     } else {
        $posts = get_type($type, 1, $count);
        $tmp = serialize($posts);
-       file_put_contents($filename, print_r($tmp, true));
+       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
     }
 
     if (!empty($custom)) {
@@ -1563,12 +1563,12 @@ function popular_posts($custom = null, $count = null)
                         if (count($posts) != $count) {
                             $posts = get_posts($tmp, 1, $count);
                             $ar = serialize($posts);
-                            file_put_contents($filecache, print_r($ar, true));
+                            file_put_contents($filecache, print_r($ar, true), LOCK_EX);
                         }
                     } else {
                         $posts = get_posts($tmp, 1, $count);
                         $ar = serialize($posts);
-                        file_put_contents($filecache, print_r($ar, true));
+                        file_put_contents($filecache, print_r($ar, true), LOCK_EX);
                     }
 
                     if (empty($custom)) {
@@ -1640,7 +1640,7 @@ function archive_list($custom = null)
             }
 
             $ar = serialize($by_year);
-            file_put_contents($filename, print_r($ar, true));
+            file_put_contents($filename, print_r($ar, true), LOCK_EX);
 
         } else {
             $by_year = unserialize(file_get_contents($filename));
@@ -1744,7 +1744,7 @@ function tag_cloud($custom = null)
             $tag_collection = array_count_values($tags);
             ksort($tag_collection);
             $tg = serialize($tag_collection);
-            file_put_contents($filename, print_r($tg, true));
+            file_put_contents($filename, print_r($tg, true), LOCK_EX);
         } else {
             $tag_collection = unserialize(file_get_contents($filename));
         }
@@ -3213,7 +3213,7 @@ function add_view($page)
     } else {
         $views[$page] = 1;
     }
-    file_put_contents($filename, json_encode($views, JSON_UNESCAPED_UNICODE));
+    file_put_contents($filename, json_encode($views, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 // Get the page views count

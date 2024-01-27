@@ -135,7 +135,7 @@ class Settings
         $config += $this->convertRequestToConfig();
         $configFile = file_get_contents("config/config.ini.example");
         $configFile = $this->overwriteINI($config, $configFile);
-        file_put_contents("config/config.ini", $configFile);
+        file_put_contents("config/config.ini", $configFile, LOCK_EX);
 
         //save users/[Username].ini
         $userFile = file_get_contents("config/users/username.ini.example");
@@ -152,7 +152,7 @@ class Settings
                 'role' => 'admin',
             ), $userFile);
         }
-        file_put_contents("config/users/" . $this->user . ".ini", $userFile);
+        file_put_contents("config/users/" . $this->user . ".ini", $userFile, LOCK_EX);
     }
 
     protected function testTheEnvironment()
