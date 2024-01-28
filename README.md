@@ -134,6 +134,22 @@ An example pages/subpages content looks like:
 This is my page info etc.
 ```
 
+**Page ordering**
+
+To sort the pages, you just need to add integer value followed by a period.
+
+```html
+content/static/01.contact.md
+content/static/02.about.md
+```
+
+For static subpages:
+
+```html
+content/static/01.contact/01.us.md
+content/static/01.contact/02.me.md
+```
+
 Content Tags
 -------------
 If you are writing locally, you need specify the content tags below:
