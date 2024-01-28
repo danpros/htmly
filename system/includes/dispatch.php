@@ -51,12 +51,10 @@ function site_path()
 
 function theme_path()
 {
-
     if (config('views.root') == null)
         error(500, '[views.root] is not set');
 
     return site_url() . rtrim(config('views.root'), '/') . '/';
-
 }
 
 function error($code, $message)
@@ -68,7 +66,6 @@ function error($code, $message)
 // Set the language
 function get_language()
 {
-
     $langID = config('language');
     $langFile = 'lang/'. $langID . '.ini';
 
@@ -80,7 +77,6 @@ function get_language()
         i18n('source', 'lang/en_US.ini'); // Load the English language file
         setlocale(LC_ALL, 'en_US.utf8'); // Change locale to English
     }
-
 }
 
 // i18n provides strings in the current language
@@ -95,7 +91,7 @@ function i18n($key, $value = null)
       else
         $_i18n = parse_ini_file('lang/en_US.ini', true);
     } elseif ($value == null)
-        return (isset($_i18n[$key]) ? $_i18n[$key] : '_i18n_' . $key . '_i18n_');
+        return (isset($_i18n[$key]) ? $_i18n[$key] : $key);
     else
         $_i18n[$key] = $value;
 }
