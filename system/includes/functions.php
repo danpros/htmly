@@ -2668,16 +2668,18 @@ function not_found($request = null)
         $layout = '';
     }
     
-    if (!is_null($request)) {
-        $filename = "content/data/views.json";
-        $views = array();
-        if (file_exists($filename)) {
-            $views = json_decode(file_get_contents($filename), true);
+    if (config('views.counter') == 'true') {    
+        if (!is_null($request)) {
+            $filename = "content/data/views.json";
+            $views = array();
+            if (file_exists($filename)) {
+                $views = json_decode(file_get_contents($filename), true);
+            }
+            if (isset($views[$request])) {
+                unset($views[$request]);
+            }
+            save_json_pretty($filename, $views);    
         }
-        if (isset($views[$request])) {
-            unset($views[$request]);
-        }
-        save_json_pretty($filename, $views);    
     }
 
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
