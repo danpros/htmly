@@ -2532,22 +2532,19 @@ get('/post/:name', function ($name) {
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
         }
+    } else {
+        add_view('post_' . $name);
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }        
     }
 
     $post = find_post(null, null, $name);
 
     if (is_null($post)) {
-        not_found();
+        not_found('post_' . $name);
     } else {
         $current = $post['current'];
-    }
-
-    if (config("views.counter") == "true") {
-        add_view($current->file);
-
-        if (!login()) {
-            file_cache($_SERVER['REQUEST_URI']);
-        }
     }
 
     $author = new stdClass;
@@ -3047,12 +3044,17 @@ get('/:static', function ($static) {
             if (!login()) {
                 file_cache($_SERVER['REQUEST_URI']);
             }
+        } else {
+            add_view('page_' . $static);
+            if (!login()) {
+                file_cache($_SERVER['REQUEST_URI']);
+            }        
         }
 
         $post = find_page($static);
 
         if (!$post) {
-            not_found();
+            not_found('page_' . $static);
         }
         
         if (array_key_exists('prev', $post)) {
@@ -3068,13 +3070,6 @@ get('/:static', function ($static) {
         }
 
         $post = $post['current'];
-
-        if (config("views.counter") == "true") {
-            add_view($post->file);
-            if (!login()) {
-                file_cache($_SERVER['REQUEST_URI']);
-            }
-        }
         
         $vroot = rtrim(config('views.root'), '/');
         
@@ -3335,12 +3330,27 @@ get('/:static/:sub', function ($static, $sub) {
         $redir = site_url();
         header("location: $redir", TRUE, 301);
     }
+    
+    if (config("views.counter") != "true") {
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }
+    } else {
+        add_view('subpage_' . $static.'.'.$sub);
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }        
+    }
 
     $parent_post = find_page($static);
     if (!$parent_post) {
-        not_found();
+        not_found('subpage_' . $static.'.'.$sub);
     }
     $post = find_subpage($static, $sub);
+    
+    if (!$post) {
+        not_found('subpage_' . $static.'.'.$sub);
+    }
     
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -3354,18 +3364,7 @@ get('/:static/:sub', function ($static, $sub) {
         $next = array();
     }
     
-    if (!$post) {
-        not_found();
-    }
     $post = $post['current'];
-
-    if (config("views.counter") == "true") {
-        add_view($post->file);
-    }
-
-    if (!login()) {
-        file_cache($_SERVER['REQUEST_URI']);
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3400,6 +3399,7 @@ get('/:static/:sub', function ($static, $sub) {
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $parent_post['current']->url . '">' . $parent_post['current']->title . '</a> &#187; ' . $post->title,
         'p' => $post,
         'static' => $post,
+        'parent' => $parent_post,
         'prev' => static_prev($prev),
         'next' => static_next($next),
         'type' => 'subPage',
@@ -3582,22 +3582,19 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
         }
+    } else {
+        add_view('post_' . $name);
+        if (!login()) {
+            file_cache($_SERVER['REQUEST_URI']);
+        }        
     }
 
     $post = find_post($year, $month, $name);
 
     if (is_null($post)) {
-        not_found();
+        not_found('post_'. $name);
     } else {
         $current = $post['current'];
-    }
-
-    if (config("views.counter") == "true") {
-        add_view($current->file);
-
-        if (!login()) {
-            file_cache($_SERVER['REQUEST_URI']);
-        }
     }
 
     $author = new stdClass;

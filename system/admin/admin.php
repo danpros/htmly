@@ -445,13 +445,17 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $oldfile, $category, $type);
         
-        if ($oldfile != $newfile) {
+        $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
+        $old_ex = explode('_', $old_filename);
+        $old_url = $old_ex[2];
+        
+        if ($old_url != $post_url) {
             if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);
-                $arr = replace_key($views, $oldfile, $newfile);
-                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);                
+                $views = json_decode(file_get_contents($viewsFile), true);                
+                $arr = replace_key($views, 'post_' . $old_url, 'post_' . $post_url);
+                save_json_pretty($viewsFile, $arr);                
             }
-        } 
+        }
 
         if ($destination == 'post') {
             if(!empty($revertPost)) {
@@ -674,38 +678,52 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         } else {
             $pu = $post_url;
         }
+        
+        $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
+        $old_ex = explode('.', $old_filename);
+        if (isset($old_ex[1])) {
+            $old_url = $old_ex[1];
+        } else {
+            $old_url = $old_filename;
+        }
+        
+        rebuilt_cache('all');
+        clear_page_cache($post_url);       
+        
         if (!empty($static)) {
             $posturl = site_url() . $static .'/'. $pu;
+            
+            if ($old_url != $pu) {
+                if (file_exists($viewsFile)) {
+                    $views = json_decode(file_get_contents($viewsFile), true);
+                    $arr = replace_key($views, 'subpage_' . $static .'.'. $old_url, 'subpage_' . $static .'.'. $pu);
+                    save_json_pretty($viewsFile, $arr);                
+                }            
+            }            
+
         } else {
             $posturl = site_url() . $pu;
-        }
 
-        rebuilt_cache('all');
-        clear_page_cache($post_url);
-    
-        if ($oldfile != $newfile) {
-            if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);
-                $arr = replace_key($views, $oldfile, $newfile);
-                file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
-            }
-            
-            if (empty($static)) {
+            if ($old_url != $pu) {
+                if (file_exists($viewsFile)) {
+                    $views = json_decode(file_get_contents($viewsFile), true);
+                    $arr = replace_key($views, 'page_' . $old_url, 'page_' . $pu);
+                    save_json_pretty($viewsFile, $arr);                
+                }
+
                 $sPage = find_subpage($pu);
-                $oldSub = 'content/static/' . pathinfo($oldfile, PATHINFO_FILENAME);
-                $newSub = 'content/static/' . pathinfo($newfile, PATHINFO_FILENAME);
                 if (!empty($sPage)) {
                     foreach ($sPage as $sp) {
                         if (file_exists($viewsFile)) {
                             $views = json_decode(file_get_contents($viewsFile), true);
-                            $arr = replace_key($views, $oldSub . '/' . $sp->md, $newSub . '/' . $sp->md);
-                            file_put_contents($viewsFile, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
+                            $arr = replace_key($views, 'subpage_' . $old_url . '.' . $sp->slug, 'subpage_' . $pu . '.' . $sp->slug);
+                            save_json_pretty($viewsFile, $arr);
                         }
                     }
-                }
+                }                
             }
-            
-        }         
+
+        }
 
         if ($destination == 'post') {
             if(!empty($revertPage)) {
@@ -1012,7 +1030,7 @@ function find_draft_page($static = null)
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
+                    $post->views = get_views('page_' . $post->slug, $post->file);
                 } else {
                     $post->views = null;
                 }
@@ -1082,7 +1100,7 @@ function find_draft_subpage($static = null, $sub_static = null)
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if (config('views.counter') == 'true') {
-                    $post->views = get_views($post->file);
+                    $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file);
                 } else {
                     $post->views = null;
                 }
@@ -1518,61 +1536,16 @@ function reorder_pages($pages = null)
         $num = str_pad($i, 2, 0, STR_PAD_LEFT);
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
-
-            $oldSub = find_subpage($arr[1]);
-
             rename ($dir . $p, $dir . $num . '.' . $arr[1] . '.md');
-
-            if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);
-                $mod = replace_key($views, $dir . $p, $dir . $num . '.' . $arr[1] . '.md');
-                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
-            }
-
             if (is_dir($dir . $fn)) {
                 rename($dir . $fn, $dir . $num . '.' . $arr[1]);
-
-                if (!empty($oldSub)) {
-                    foreach ($oldSub as $sp) {
-                        if (file_exists($viewsFile)) {
-                            $views = json_decode(file_get_contents($viewsFile), true);
-                            $mod = replace_key($views, $sp->file, $dir . $num . '.' . $arr[1] . '/' . $sp->md);
-                            file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
-                        }
-                    }
-                }
-
             }
-
         } else {
-
-            $oldSub = find_subpage($fn);
-
             rename($dir . $p, $dir . $num . '.' . $fn . '.md');
-
-            if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);
-                $mod = replace_key($views, $dir . $p, $dir . $num . '.' . $fn . '.md');
-                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
-            }
-
             if (is_dir($dir . $fn)) {
-                rename($dir . $fn, $dir . $num . '.' . $fn);
-
-                if (!empty($oldSub)) {
-                    foreach ($oldSub as $sp) {
-                        if (file_exists($viewsFile)) {
-                            $views = json_decode(file_get_contents($viewsFile), true);
-                            $mod = replace_key($views, $sp->file, $dir . $num . '.' . $fn . '/' . $sp->md);
-                            file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);
-                        }
-                    }
-                }                
-
+                rename($dir . $fn, $dir . $num . '.' . $fn);            
             }
-
         }
-
         $i++;
     }
 
@@ -1593,18 +1566,8 @@ function reorder_subpages($subpages = null)
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
             rename ($dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
-            if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);
-                $mod = replace_key($views, $dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
-                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);     
-            }
         } else {
             rename($dir . $sp, $dn . $num . '.' . $fn . '.md');
-            if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);
-                $mod = replace_key($views, $dir . $sp, $dn . $num . '.' . $fn . '.md');
-                file_put_contents($viewsFile, json_encode($mod, JSON_UNESCAPED_UNICODE), LOCK_EX);         
-            }
         }
 
         $i++;

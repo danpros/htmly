@@ -525,7 +525,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
 
         if (config('views.counter') == 'true') {
-            $post->views = get_views($post->file);
+            $post->views = get_views('post_' . $post->slug, $post->file);               
         } else {
             $post->views = null;
         }
@@ -584,7 +584,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
         if (config('views.counter') == 'true') {
-            $post->views = get_views($post->file);
+            $post->views = get_views('page_' . $post->slug, $post->file);               
         } else {
             $post->views = null;
         }
@@ -652,9 +652,9 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-
+        
         if (config('views.counter') == 'true') {
-            $post->views = get_views($post->file);
+            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file);              
         } else {
             $post->views = null;
         }
@@ -1483,7 +1483,6 @@ function recent_type($type, $custom = null, $count = null)
     $dir = 'cache/widget';
     $filename = 'cache/widget/recent.' . $type . '.cache';
     $tmp = array();
-    $posts = array();
 
     if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
@@ -1522,6 +1521,7 @@ function popular_posts($custom = null, $count = null)
 {
     static $_views = array();
     $tmp = array();
+    $posts_list = get_blog_posts();
 
     if (empty($count)) {
         $count = config('popular.count');
@@ -1539,16 +1539,19 @@ function popular_posts($custom = null, $count = null)
                     arsort($_views);
                     $i = 1;
                     foreach ($_views as $key => $val) {
-                        if (file_exists($key)) {
-                            if (stripos($key, '/blog/') !== false && stripos($key, '/scheduled/') == false && stripos($key, '/draft/') == false) {
-                                $tmp[] = pathinfo($key);
-                                if ($i++ >= $count)
-                                break;
+                        $arr = explode('post_', $key);
+                        if (isset($arr[1])) {
+                            foreach($posts_list as $in => $f) {
+                                if (strpos($f['basename'], $arr[1]) !== false )  {
+                                    $tmp[] = $f;
+                                    if ($i++ >= $count)
+                                    break;    
+                                }
                             }
-                            
                         }
-                    }
 
+                    }
+                    
                     $dir = "cache/widget";
                     $filecache = "cache/widget/popular.cache";
                     $ar = array();
@@ -1577,8 +1580,7 @@ function popular_posts($custom = null, $count = null)
                             echo '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
                         }
                         echo '</ul>';
-                    }
-                    else {
+                    } else {
                         return $posts;
                     }
                 } else {
@@ -2630,7 +2632,7 @@ EOF;
 }
 
 // The not found error
-function not_found()
+function not_found($request = null)
 {
     if (!config('views.root')) die('HTMLy is not installed!');
     $vroot = rtrim(config('views.root'), '/');
@@ -2639,6 +2641,18 @@ function not_found()
         $layout = 'layout--404';
     } else {
         $layout = '';
+    }
+    
+    if (!is_null($request)) {
+        $filename = "content/data/views.json";
+        $views = array();
+        if (file_exists($filename)) {
+            $views = json_decode(file_get_contents($filename), true);
+        }
+        if (isset($views[$request])) {
+            unset($views[$request]);
+        }
+        save_json_pretty($filename, $views);    
     }
 
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
@@ -3213,19 +3227,31 @@ function add_view($page)
     } else {
         $views[$page] = 1;
     }
-    file_put_contents($filename, json_encode($views, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    save_json_pretty($filename, $views);
 }
 
 // Get the page views count
-function get_views($page)
+function get_views($page, $oldID = null)
 {
     $_views = array();
     $filename = "content/data/views.json";
     if (file_exists($filename)) {
         $_views = json_decode(file_get_contents($filename), true);
     }
-    if (isset($_views[$page])) {
-        return $_views[$page];
+    if (!is_null($oldID)) {
+        if (isset($_views[$oldID])) {
+            $arr = replace_key($_views, $oldID, $page);
+            save_json_pretty($filename, $arr);
+            return $_views[$oldID];
+        } else {
+            if (isset($_views[$page])) {
+                return $_views[$page];
+            }            
+        }
+    } else {
+        if (isset($_views[$page])) {
+            return $_views[$page];
+        }
     }
     return -1;
 }

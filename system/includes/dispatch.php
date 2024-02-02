@@ -407,7 +407,8 @@ function render($view, $locals = null, $layout = null)
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
-            file_put_contents($cachefile, ob_get_contents(), LOCK_EX);
+            if (isset($filecache))
+                file_put_contents($cachefile, ob_get_contents(), LOCK_EX);
         }
         echo trim(ob_get_clean());
     } else {
@@ -420,6 +421,15 @@ function json($obj, $code = 200)
     header('Content-type: application/json', true, $code);
     echo json_encode($obj);
     exit;
+}
+
+function save_json_pretty($filename, $arr)
+{
+    if (defined("JSON_PRETTY_PRINT")) {    
+        file_put_contents($filename, json_encode($arr, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
+    } else {
+        file_put_contents($filename, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    }
 }
 
 function condition()
