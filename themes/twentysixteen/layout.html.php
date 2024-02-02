@@ -39,7 +39,7 @@
                     <div id="site-header-menu" class="site-header-menu">
                         <nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
                             <div class="menu-main-container">
-                                <?php echo menu('primary-menu');?>
+                                <?php $primaryMenu = menu('primary-menu'); echo $primaryMenu;?>
                             </div>
                         </nav><!-- .main-navigation -->
                     </div><!-- .site-header-menu -->
@@ -116,7 +116,7 @@
             <footer id="colophon" class="site-footer" role="contentinfo">
                 <nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
                     <div class="menu-main-container">
-                        <?php echo menu('primary-menu');?>
+                        <?php echo $primaryMenu;?>
                     </div>
                 </nav><!-- .main-navigation -->
                 <nav aria-label="Footer Social Links Menu" role="navigation" class="social-navigation">
