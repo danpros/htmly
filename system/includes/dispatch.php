@@ -407,7 +407,7 @@ function render($view, $locals = null, $layout = null)
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
-            if (isset($filecache))
+            if (isset($cachefile))
                 file_put_contents($cachefile, ob_get_contents(), LOCK_EX);
         }
         echo trim(ob_get_clean());
