@@ -43,10 +43,6 @@
         </div>
         <?php endif;?>
 
-        <?php if (isset($is_subpage)):?>
-            <?php $pages = find_page($static->parent); ?>
-        <?php endif;?>
-
     </div>
 
     <div class="docs-navigation d-flex justify-content-between">
@@ -86,8 +82,8 @@
                     </div>
                 </a>                
             <?php } else { ?>
-                <?php if (!empty($pages['next'])): ?>
-                <?php $nextSub = find_subpage($pages['next']->slug); $last = end($nextSub);?>
+                <?php if (!empty($parent['next'])): ?>
+                <?php $nextSub = find_subpage($parent['next']->slug); $last = end($nextSub);?>
                     <?php if (!empty($nextSub)) { ?>
                         <a class="me-auto" href="<?php echo($last->url); ?>">
                             <div class="card my-1">
@@ -97,10 +93,10 @@
                             </div>
                         </a>
                     <?php } else { ?>
-                        <a class="me-auto" href="<?php echo($pages['next']->url); ?>">
+                        <a class="me-auto" href="<?php echo($parent['next']->url); ?>">
                             <div class="card my-1">
                                 <div class="card-body py-2">
-                                    ← <?php echo($pages['next']->title); ?>
+                                    ← <?php echo($parent['next']->title); ?>
                                 </div>
                             </div>
                         </a>
@@ -110,10 +106,10 @@
         <?php endif;?>
 
         <?php if (isset($is_subpage)):?>
-        <a href="<?php echo($pages['current']->url); ?>">
+        <a href="<?php echo($parent['current']->url); ?>">
             <div class="card my-1">
                 <div class="card-body py-2">
-                    Back to <?php echo($pages['current']->title); ?>
+                    Back to <?php echo($parent['current']->title); ?>
                 </div>
             </div>
         </a>
@@ -151,11 +147,11 @@
                     </div>
                 </a>                
             <?php } else { ?>
-                <?php if (!empty($pages['prev'])): ?>
-                <a class="ms-auto" href="<?php echo($pages['prev']->url); ?>">
+                <?php if (!empty($parent['prev'])): ?>
+                <a class="ms-auto" href="<?php echo($parent['prev']->url); ?>">
                     <div class="card my-1">
                         <div class="card-body py-2">
-                            <?php echo($pages['prev']->title); ?> →
+                            <?php echo($parent['prev']->title); ?> →
                         </div>
                     </div>
                 </a>
