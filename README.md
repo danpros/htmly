@@ -102,7 +102,7 @@ This is my category info etc.
 
 **Important:** Every time new content added (post, pages, category), or you make changes that change the folder structure or filenames, simply delete the `index` and `widget` folder inside `cache` folder so that the changes detected by HTMLy. 
 
-**Post Views limitations:** HTMLy using the filename path as the ID for the post/page views counter. So if you edit a post/page without using the dashboard which results in changes to the folder structure or filename, then you must edit `views.json` in the `content/data/` folder manually to update to the correct path.
+**Post Views limitations:** HTMLy using the post/page slug for the post/page views counter ID. So if you edit a post/page slug without using the dashboard, then you must edit `views.json` in the `content/data/` folder manually to update to the correct slug.
 
 Static pages
 ------------
