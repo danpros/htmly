@@ -2741,6 +2741,10 @@ function generate_rss($posts, $data = null)
                 ->description($body)
                 ->url($p->url)
                 ->appendTo($channel);
+                
+            if ($p->image !== null) {
+                $item->enclosure($p->image, 0, "image/" . end(explode('.', $p->image)));
+            }
         }
     }
 
