@@ -3402,16 +3402,16 @@ body.dark .docs-links .nav > li.active  li.active > a,  body.dark .docs-links .n
 }
 
 #toc .h3-toc {
-  text-indent: .25in;
+  margin-left: .25in;
 }
 #toc .h4-toc {
-  text-indent: .50in;
+  margin-left: .50in;
 }
 #toc .h5-toc {
-  text-indent: .75in;
+  margin-left: .75in;
 }
 #toc .h6-toc {
-  text-indent: 1in;
+  margin-left: 1in;
 }
 
 #toc > div {

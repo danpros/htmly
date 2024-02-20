@@ -451,9 +451,13 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         
         if ($old_url != $post_url) {
             if (file_exists($viewsFile)) {
-                $views = json_decode(file_get_contents($viewsFile), true);                
-                $arr = replace_key($views, 'post_' . $old_url, 'post_' . $post_url);
-                save_json_pretty($viewsFile, $arr);                
+                $views = json_decode(file_get_data($viewsFile), true);
+                $oKey = 'post_' . $old_url;
+                $nKey = 'post_' . $post_url;
+                if (isset($views[$oKey])) {
+                    $arr = replace_key($views, $oKey, $nKey);
+                    save_json_pretty($viewsFile, $arr);
+                }
             }
         }
 
@@ -695,9 +699,13 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             
             if ($old_url != $pu) {
                 if (file_exists($viewsFile)) {
-                    $views = json_decode(file_get_contents($viewsFile), true);
-                    $arr = replace_key($views, 'subpage_' . $static .'.'. $old_url, 'subpage_' . $static .'.'. $pu);
-                    save_json_pretty($viewsFile, $arr);                
+                    $views = json_decode(file_get_data($viewsFile), true);
+                    $oKey = 'subpage_' . $static . '.' . $old_url;
+                    $nKey = 'subpage_' . $static . '.' . $pu;
+                    if (isset($views[$oKey])) {
+                        $arr = replace_key($views, $oKey, $nKey);
+                        save_json_pretty($viewsFile, $arr);
+                    }
                 }            
             }            
 
@@ -706,18 +714,26 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
 
             if ($old_url != $pu) {
                 if (file_exists($viewsFile)) {
-                    $views = json_decode(file_get_contents($viewsFile), true);
-                    $arr = replace_key($views, 'page_' . $old_url, 'page_' . $pu);
-                    save_json_pretty($viewsFile, $arr);                
+                    $views = json_decode(file_get_data($viewsFile), true);
+                    $oKey = 'page_' . $old_url;
+                    $nKey = 'page_' . $pu;
+                    if (isset($views[$oKey])) {
+                        $arr = replace_key($views, $oKey, $nKey);
+                        save_json_pretty($viewsFile, $arr);
+                    }
                 }
 
                 $sPage = find_subpage($pu);
                 if (!empty($sPage)) {
                     foreach ($sPage as $sp) {
                         if (file_exists($viewsFile)) {
-                            $views = json_decode(file_get_contents($viewsFile), true);
-                            $arr = replace_key($views, 'subpage_' . $old_url . '.' . $sp->slug, 'subpage_' . $pu . '.' . $sp->slug);
-                            save_json_pretty($viewsFile, $arr);
+                            $views = json_decode(file_get_data($viewsFile), true);
+                            $oKey = 'subpage_' . $old_url . '.' . $sp->slug;
+                            $nKey = 'subpage_' . $pu . '.' . $sp->slug;
+                            if (isset($views[$soKey])) {
+                                $arr = replace_key($views, $oKey, $nKey);
+                                save_json_pretty($viewsFile, $arr);
+                            }
                         }
                     }
                 }                
@@ -1532,7 +1548,6 @@ function reorder_pages($pages = null)
     $i = 1;
     $arr = array();
     $dir = 'content/static/';
-    $viewsFile = "content/data/views.json";
     foreach ($pages as $p) {
         $fn = pathinfo($p, PATHINFO_FILENAME);
         $num = str_pad($i, 2, 0, STR_PAD_LEFT);
@@ -1560,7 +1575,6 @@ function reorder_subpages($subpages = null)
     $i = 1;
     $arr = array();
     $dir = 'content/static/';
-    $viewsFile = "content/data/views.json";
     foreach ($subpages as $sp) {
         $dn = $dir . pathinfo($sp, PATHINFO_DIRNAME) . '/';
         $fn = pathinfo($sp, PATHINFO_FILENAME);

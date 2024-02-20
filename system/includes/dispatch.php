@@ -432,6 +432,19 @@ function save_json_pretty($filename, $arr)
     }
 }
 
+function file_get_data($filename) 
+{
+    $thisFile = fopen($filename, 'r');
+    if (flock($thisFile, LOCK_SH)) {
+        $fileData = file_get_contents($filename);
+        flock($thisFile, LOCK_UN);
+    } else {
+        $fileData = json_encode(array('flock_fail' => 'reading'));
+    }
+    fclose($thisFile);
+    return $fileData;
+}
+
 function condition()
 {
     static $cb_map = array();

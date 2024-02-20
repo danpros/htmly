@@ -2677,8 +2677,8 @@ function not_found($request = null)
             }
             if (isset($views[$request])) {
                 unset($views[$request]);
+                save_json_pretty($filename, $views);
             }
-            save_json_pretty($filename, $views);    
         }
     }
 
@@ -3253,14 +3253,19 @@ function add_view($page)
     $filename = "content/data/views.json";
     $views = array();
     if (file_exists($filename)) {
-        $views = json_decode(file_get_contents($filename), true);
+        $views = json_decode(file_get_data($filename), true);
     }
     if (isset($views[$page])) {
         $views[$page]++;
+        save_json_pretty($filename, $views);
     } else {
-        $views[$page] = 1;
+        if (isset($views['flock_fail'])) {
+            return;
+        } else {
+            $views[$page] = 1;
+            save_json_pretty($filename, $views);
+        }
     }
-    save_json_pretty($filename, $views);
 }
 
 // Get the page views count
@@ -3271,6 +3276,7 @@ function get_views($page, $oldID = null)
     if (file_exists($filename)) {
         $_views = json_decode(file_get_contents($filename), true);
     }
+    
     if (!is_null($oldID)) {
         if (isset($_views[$oldID])) {
             $arr = replace_key($_views, $oldID, $page);
