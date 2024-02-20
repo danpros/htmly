@@ -38,7 +38,7 @@
                 <blockquote><?php echo $p->quote ?></blockquote>
             </div>
         <?php } ?>
-        <div class="post-body" itemprop="articleBody">
+        <div class="post-body post-<?php echo $p->date;?>" itemprop="articleBody">
             <?php echo $p->body; ?>
         </div>
         <div class="tags"><strong><?php echo i18n('Tags');?>:</strong> <?php echo $p->tag;?></div>

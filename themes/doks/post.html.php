@@ -45,7 +45,7 @@
 
     </div>
 
-    <div class="content-body" id="content">
+    <div class="content-body post-<?php echo $p->date;?>" id="content">
 
         <?php echo $post->body;?>
         <p class="post-footer">

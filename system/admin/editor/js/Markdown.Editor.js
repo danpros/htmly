@@ -52,6 +52,8 @@
 		
         readmore: "Read More <!--more--> Ctrl+M",
 		
+        toc: "TOC <!--toc-->",
+		
         table: "Table - Ctrl+J",
 
         undo: "Undo - Ctrl+Z",
@@ -1520,6 +1522,7 @@
             }));
             buttons.hr = makeButton("wmd-hr-button", getString("hr"), "fa fa-ellipsis-h", bindCommand("doHorizontalRule"));
             buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
+            buttons.toc = makeButton("wmd-toc-button", getString("toc"), "fa fa-list-alt", bindCommand("doTOC"));
             //makeSpacer(3);
             buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa fa-undo", null);
             buttons.undo.execute = function (manager) {
@@ -2252,6 +2255,12 @@
 	
     commandProto.doReadMore = function (chunk, postProcessing) {
         chunk.startTag = "<!--more-->";
+        chunk.selection = "";
+        chunk.skipLines(0, 1, true);
+    }
+	
+    commandProto.doTOC = function (chunk, postProcessing) {
+        chunk.startTag = "<!--toc-->";
         chunk.selection = "";
         chunk.skipLines(0, 1, true);
     }

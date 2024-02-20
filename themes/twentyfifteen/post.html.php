@@ -28,7 +28,7 @@
             <h1 class="entry-title"><?php echo $p->title; ?></h1>
         <?php } ?>
     </header>
-    <div class="entry-content">
+    <div class="entry-content post-<?php echo $p->date;?>">
         <?php echo $p->body; ?>
     </div>
     <style>.related {padding-bottom:2em;}.related p {margin-top:0;margin-bottom:0.5em;} .related ul {margin-left:1em;}</style>

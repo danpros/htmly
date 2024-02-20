@@ -39,7 +39,7 @@
                         <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span>
                     </p>
                 </div>
-                <div class="desc text-left" itemprop="articleBody">                                   
+                <div class="desc text-left post-<?php echo $p->date;?>" itemprop="articleBody">                                   
                     <?php echo $p->body; ?>
                 </div><!--//desc-->
                 <div style="margin-top:30px;position:relative;">

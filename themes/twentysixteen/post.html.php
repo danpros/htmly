@@ -17,7 +17,7 @@
     <div class="entry-content">
         <div class="content">
             <div class="clearfix text-formatted field field--name-body">
-                <div class="content">
+                <div class="content post-<?php echo $p->date;?>">
                     <?php if (!empty($p->quote)):?>
                         <blockquote><?php echo $p->quote;?></blockquote>
                     <?php endif;?>
