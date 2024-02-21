@@ -58,6 +58,34 @@
     </div>
   </div>
   <br>
+  <h4>TOC (Table of Contents)</h4>
+  <hr>
+  <div class="form-group row">
+    <label for="toc.label" class="col-sm-2 col-form-label">TOC label</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-toc.label" class="form-control" id="toc.label" value="<?php echo valueMaker(config('toc.label'));?>" placeholder="Table of Contents">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">TOC initial state</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-toc.state" id="toc.state1" value="open" <?php if (config('toc.state') === 'open'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="toc.state1">
+            Open
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-toc.state" id="toc.state2" value="close" <?php if (config('toc.state') === 'close'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="toc.state2">
+            Close
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
   <h4><?php echo i18n('Comments');?></h4>
   <hr>
   <p><?php echo i18n('To_using_Disqus_or_Facebook_comment_you_need_to_provide_Disqus_shortname_or_Facebook_App_ID');?></p>

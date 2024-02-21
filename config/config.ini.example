@@ -135,6 +135,12 @@ cache.timestamp = "false"
 ; The site.url depends on where you are visiting from. Same installation 
 multi.site = "false"
 
+; TOC label
+toc.label = "Table of Contents"
+
+; TOC inital state
+toc.state = "close"
+
 ; Set the theme here
 views.root = "themes/twentysixteen"
 
