@@ -61,7 +61,7 @@
         <h2 class="entry-title"><a href="<?php echo $p->url; ?>"><?php echo $p->title; ?></a></h2>
     </header>
 	<?php } ?>
-    <div class="entry-content">
+    <div class="entry-content post-<?php echo $p->date;?>">
         <?php echo get_teaser($p->body, $p->url); ?>
         <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
     </div>

@@ -521,9 +521,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) { 
             $load = <<<EOF
-            <script>window.onload = function () {generateTOC('.post-{$post->date}');};</script>
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                generateTOC('.post-{$post->date}');
+            });
+            </script>
             EOF;
-            $post->body = $toc['0'] . $load . '<div class="toc" id="toc-wrapper" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div id="toc"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+            $post->body = $toc['0'] . $load . '<div class="toc" id="toc-wrapper.post-'.$post->date.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div id="toc.post-'.$post->date.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
         }
 
         // Convert image tags to figures

@@ -49,7 +49,7 @@
                     <blockquote><?php echo $p->quote ?></blockquote>
                 </div>
             <?php } ?>
-            <div class="teaser-body" itemprop="articleBody">
+            <div class="teaser-body post-<?php echo $p->date;?>" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
                 <?php echo get_teaser($p->body, $p->url) ?>
                 <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>"><?php echo config('read.more'); ?></a><?php endif;?>

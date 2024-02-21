@@ -27,9 +27,9 @@
  */
 function generateTOC (id) {
     var documentRef = document;
-	var selector = id + ' h1,' + id + ' h2,' + id + ' h3,' + id + ' h4,' + id + ' h5,' + id + ' h6';
-    var toc = documentRef.getElementById('toc');
-	var headings = [].slice.call(documentRef.body.querySelectorAll(selector));
+    var selector = id + ' h1,' + id + ' h2,' + id + ' h3,' + id + ' h4,' + id + ' h5,' + id + ' h6';
+    var toc = documentRef.getElementById('toc' + id);
+    var headings = [].slice.call(documentRef.body.querySelectorAll(selector));
     if (headings && headings.length) {
         headings.forEach(function (heading, index) {
             heading.setAttribute('id', 'toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
@@ -47,11 +47,11 @@ function generateTOC (id) {
             var div = documentRef.createElement('div');
             div.setAttribute('class', heading.tagName.toLowerCase() + '-toc');
 
-			heading.appendChild(anchor);
-			div.appendChild(link);
-			toc.appendChild(div);
+            heading.appendChild(anchor);
+            div.appendChild(link);
+            toc.appendChild(div);
         });
-        documentRef.getElementById('toc-wrapper').style.display = 'inline-block';
+        documentRef.getElementById('toc-wrapper' + id).style.display = 'inline-block';
     }
     
     if (window.location.hash) {

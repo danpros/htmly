@@ -46,7 +46,7 @@
     <?php endif;?>
         
     <div class="entry-content">
-        <div class="content">
+        <div class="content post-<?php echo $p->date;?>">
             <div class="clearfix text-formatted field field--name-body">
                 <div class="content">
                     <?php if (!empty($p->quote)):?>

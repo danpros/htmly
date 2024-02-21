@@ -60,7 +60,7 @@
                         <?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
                     </p>
                 </div>
-                <div class="desc text-left" itemprop="articleBody">                                    
+                <div class="desc text-left post-<?php echo $p->date;?>" itemprop="articleBody">                                    
                     <?php echo get_teaser($p->body, $p->url) ?>
                 </div><!--//desc-->
                 <div style="position:relative;">
