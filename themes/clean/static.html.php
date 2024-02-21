@@ -10,6 +10,7 @@
             <?php echo $p->body; ?>
         </div>
     </div>
+    <div class="border"></div>
     <div class="postnav">
         <?php if (!empty($next)): ?>
             <span><a href="<?php echo($next['url']); ?>" class="pagination-arrow newer" rel="next"><?php echo($next['title']); ?></a></span>

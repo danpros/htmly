@@ -32,12 +32,6 @@ function htmlTableOfContents (documentRef) {
     headings.forEach(function (heading, index) {
         heading.setAttribute('id', 'toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
 
-        var anchor = documentRef.createElement('a');
-        anchor.setAttribute('href', '#toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
-        anchor.setAttribute('class', 'anchor');
-        anchor.setAttribute('aria-hidden', 'true');
-        anchor.textContent = '#';
-
         var link = documentRef.createElement('a');
         link.setAttribute('href', '#toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
         link.textContent = heading.textContent;
@@ -45,7 +39,6 @@ function htmlTableOfContents (documentRef) {
         var div = documentRef.createElement('div');
         div.setAttribute('class', heading.tagName.toLowerCase() + '-toc');
 
-        heading.appendChild(anchor);
         div.appendChild(link);
         toc.appendChild(div);
     });
