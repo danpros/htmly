@@ -523,7 +523,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $load = <<<EOF
             <script>
             document.addEventListener("DOMContentLoaded", function() {
-                generateTOC('.post-{$post->date}');
+                if (document.getElementById('toc-wrapper.post-{$post->date}').parentNode.classList.contains('post-{$post->date}')) {
+                    generateTOC('.post-{$post->date}');
+                } else {
+                    document.getElementById('toc-wrapper.post-{$post->date}').parentNode.classList.add('post-{$post->date}');
+                    generateTOC('.post-{$post->date}');
+                }
+                
             });
             </script>
             EOF;
