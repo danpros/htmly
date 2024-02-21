@@ -533,7 +533,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
             });
             </script>
             EOF;
-            $post->body = $toc['0'] . $load . '<div class="toc" id="toc-wrapper.post-'.$post->date.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div id="toc.post-'.$post->date.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+            $post->body = $toc['0'] . $load . '<div class="toc-wrapper" id="toc-wrapper.post-'.$post->date.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div class="toc" id="toc.post-'.$post->date.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
         }
 
         // Convert image tags to figures
@@ -599,6 +599,24 @@ function get_pages($pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
+        $toc = explode('<!--toc-->', $post->body);
+        if (isset($toc['1'])) { 
+            $load = <<<EOF
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                if (document.getElementById('toc-wrapper.page-{$post->slug}').parentNode.classList.contains('page-{$post->slug}')) {
+                    generateTOC('.page-{$post->slug}');
+                } else {
+                    document.getElementById('toc-wrapper.page-{$post->slug}').parentNode.classList.add('page-{$post->slug}');
+                    generateTOC('.page-{$post->slug}');
+                }
+                
+            });
+            </script>
+            EOF;
+            $post->body = $toc['0'] . $load . '<div class="toc-wrapper" id="toc-wrapper.page-'.$post->slug.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div class="toc" id="toc.page-'.$post->slug.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+        }
 
         if (config('views.counter') == 'true') {
             $post->views = get_views('page_' . $post->slug, $post->file);               
@@ -669,6 +687,24 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+        
+        $toc = explode('<!--toc-->', $post->body);
+        if (isset($toc['1'])) { 
+            $load = <<<EOF
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                if (document.getElementById('toc-wrapper.subpage-{$post->slug}').parentNode.classList.contains('subpage-{$post->slug}')) {
+                    generateTOC('.subpage-{$post->slug}');
+                } else {
+                    document.getElementById('toc-wrapper.subpage-{$post->slug}').parentNode.classList.add('subpage-{$post->slug}');
+                    generateTOC('.subpage-{$post->slug}');
+                }
+                
+            });
+            </script>
+            EOF;
+            $post->body = $toc['0'] . $load . '<div class="toc-wrapper" id="toc-wrapper.subpage-'.$post->slug.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div class="toc" id="toc.subpage-'.$post->slug.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+        }
         
         if (config('views.counter') == 'true') {
             $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file);              
@@ -946,6 +982,24 @@ function read_category_info($category)
 
                 // Get the contents and convert it to HTML
                 $desc->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+                
+                $toc = explode('<!--toc-->', $desc->body);
+                if (isset($toc['1'])) { 
+                    $load = <<<EOF
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        if (document.getElementById('toc-wrapper.taxonomy-{$desc->slug}').parentNode.classList.contains('taxonomy-{$desc->slug}')) {
+                            generateTOC('.taxonomy-{$desc->slug}');
+                        } else {
+                            document.getElementById('toc-wrapper.taxonomy-{$desc->slug}').parentNode.classList.add('taxonomy-{$desc->slug}');
+                            generateTOC('.taxonomy-{$desc->slug}');
+                        }
+                        
+                    });
+                    </script>
+                    EOF;
+                    $desc->body = $toc['0'] . $load . '<div class="toc-wrapper" id="toc-wrapper.taxonomy-'.$desc->slug.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div class="toc" id="toc.taxonomy-'.$desc->slug.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+                }
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
 
@@ -1174,6 +1228,24 @@ function get_author($name)
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
                 
+                $toc = explode('<!--toc-->', $author->about);
+                if (isset($toc['1'])) { 
+                    $load = <<<EOF
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        if (document.getElementById('toc-wrapper.profile-{$author->slug}').parentNode.classList.contains('profile-{$author->slug}')) {
+                            generateTOC('.profile-{$author->slug}');
+                        } else {
+                            document.getElementById('toc-wrapper.profile-{$author->slug}').parentNode.classList.add('profile-{$author->slug}');
+                            generateTOC('.profile-{$author->slug}');
+                        }
+                        
+                    });
+                    </script>
+                    EOF;
+                    $author->about = $toc['0'] . $load . '<div class="toc-wrapper" id="toc-wrapper.profile-'.$author->slug.'" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div class="toc" id="toc.profile-'.$author->slug.'"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+                }
+                
                 $author->body = $author->about;
                 
                 $author->title = $author->name;
@@ -1223,6 +1295,23 @@ function get_frontpage()
         $front->url = site_url() . 'front';
         // Get the contents and convert it to HTML
         $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+        $toc = explode('<!--toc-->', $front->body);
+        if (isset($toc['1'])) { 
+            $load = <<<EOF
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                if (document.getElementById('toc-wrapper.page-front').parentNode.classList.contains('page-front')) {
+                    generateTOC('.page-front');
+                } else {
+                    document.getElementById('toc-wrapper.page-front').parentNode.classList.add('page-front');
+                    generateTOC('.page-front');
+                }
+                
+            });
+            </script>
+            EOF;
+            $front->body = $toc['0'] . $load . '<div class="toc-wrapper" id="toc-wrapper.page-front" style="display:none;" ><details><summary title="TOC"><span class="details">Table of Contents</span></summary><div class="inner"><div class="toc" id="toc.page-front"></div></div></details></div><script src="'. site_url().'system/resources/js/toc.js"></script>' . $toc['1'];
+        }
     } else {
         $front->title = 'Welcome';
         $front->url = site_url() . 'front';
