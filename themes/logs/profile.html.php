@@ -13,7 +13,7 @@
     <ul class="post-list">
         <?php foreach ($posts as $p): ?>
             <li class="item">
-                <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> <?php echo i18n('by');?>
+                <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> - 
                 <span><?php echo format_date($p->date) ?></span> - <?php echo i18n('Posted_in');?> <span><?php echo $p->category; ?></span>
             </li>
         <?php endforeach; ?>
