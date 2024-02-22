@@ -2907,7 +2907,7 @@ function generate_rss($posts, $data = null)
     }
     if ($posts) {
         foreach ($posts as $p) {
-
+            $img = get_image($p->body);
             if (!empty($rssLength)) {
                 if (strlen(strip_tags($p->body)) < config('rss.char')) {
                     $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
@@ -2931,10 +2931,13 @@ function generate_rss($posts, $data = null)
                 ->description($body)
                 ->url($p->url)
                 ->appendTo($channel);
-                
-            if ($p->image !== null) {
-                $item->enclosure($p->image, 0, "image/" . end(explode('.', $p->image)));
+
+            if (!empty($p->image)) {
+                $item->enclosure($p->image, 0, "image/" . pathinfo($p->image, PATHINFO_EXTENSION));
+            } elseif (!empty($img)) {
+                $item->enclosure($img, 0, "image/" . pathinfo($img, PATHINFO_EXTENSION));
             }
+
         }
     }
 
