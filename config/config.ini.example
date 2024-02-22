@@ -141,6 +141,9 @@ toc.label = "Table of Contents"
 ; TOC inital state
 toc.state = "close"
 
+; TOC style
+toc.style = "default"
+
 ; Set the theme here
 views.root = "themes/twentysixteen"
 

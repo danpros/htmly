@@ -85,6 +85,25 @@
       </div>
     </div>
   </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">TOC styling</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-toc.style" id="toc.style1" value="default" <?php if (config('toc.style') === 'default'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="toc.style1">
+            Default
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-toc.style" id="toc.style2" value="theme" <?php if (config('toc.style') === 'theme'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="toc.style2">
+            Theme
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <br>
   <h4><?php echo i18n('Comments');?></h4>
   <hr>

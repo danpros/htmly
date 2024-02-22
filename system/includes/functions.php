@@ -528,6 +528,12 @@ function get_posts($posts, $page = 1, $perpage = 0)
             if (empty($label)) {
                 $label = 'Table of Contents';
             }
+            $style = config('toc.style');
+            if ($style == 'default' || empty($style)) {
+                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+            } else {
+                $style = '';
+            }
             $load = <<<EOF
             <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -541,7 +547,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
             });
             </script>
             EOF;
-            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.post-'.$post->date.'" style="display:none;" >'. $load .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.post-'.$post->date.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.post-'.$post->date.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.post-'.$post->date.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
         }
 
         // Convert image tags to figures
@@ -618,6 +624,12 @@ function get_pages($pages, $page = 1, $perpage = 0)
             if (empty($label)) {
                 $label = 'Table of Contents';
             }
+            $style = config('toc.style');
+            if ($style == 'default' || empty($style)) {
+                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+            } else {
+                $style = '';
+            }
             $load = <<<EOF
             <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -631,7 +643,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
             });
             </script>
             EOF;
-            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.page-'.$post->slug.'" style="display:none;" >'. $load .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.page-'.$post->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.page-'.$post->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.page-'.$post->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
         }
 
         if (config('views.counter') == 'true') {
@@ -714,6 +726,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
             if (empty($label)) {
                 $label = 'Table of Contents';
             }
+            $style = config('toc.style');
+            if ($style == 'default' || empty($style)) {
+                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+            } else {
+                $style = '';
+            }
             $load = <<<EOF
             <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -727,7 +745,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
             });
             </script>
             EOF;
-            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.subpage-'.$post->slug.'" style="display:none;" >'. $load .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.subpage-'.$post->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.subpage-'.$post->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.subpage-'.$post->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
         }
         
         if (config('views.counter') == 'true') {
@@ -1017,6 +1035,12 @@ function read_category_info($category)
                     if (empty($label)) {
                         $label = 'Table of Contents';
                     }
+                    $style = config('toc.style');
+                    if ($style == 'default' || empty($style)) {
+                        $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+                    } else {
+                        $style = '';
+                    }
                     $load = <<<EOF
                     <script>
                     document.addEventListener("DOMContentLoaded", function() {
@@ -1030,7 +1054,7 @@ function read_category_info($category)
                     });
                     </script>
                     EOF;
-                    $desc->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.taxonomy-'.$desc->slug.'" style="display:none;" >'. $load .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.taxonomy-'.$desc->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+                    $desc->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.taxonomy-'.$desc->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.taxonomy-'.$desc->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
                 }
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
@@ -1270,6 +1294,12 @@ function get_author($name)
                     if (empty($label)) {
                         $label = 'Table of Contents';
                     }
+                    $style = config('toc.style');
+                    if ($style == 'default' || empty($style)) {
+                        $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+                    } else {
+                        $style = '';
+                    }
                     $load = <<<EOF
                     <script>
                     document.addEventListener("DOMContentLoaded", function() {
@@ -1283,7 +1313,7 @@ function get_author($name)
                     });
                     </script>
                     EOF;
-                    $author->about = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.profile-'.$author->slug.'" style="display:none;" >'. $load .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.profile-'.$author->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+                    $author->about = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.profile-'.$author->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.profile-'.$author->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
                 }
                 
                 $author->body = $author->about;
@@ -1345,6 +1375,12 @@ function get_frontpage()
             if (empty($label)) {
                 $label = 'Table of Contents';
             }
+            $style = config('toc.style');
+            if ($style == 'default' || empty($style)) {
+                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+            } else {
+                $style = '';
+            }
             $load = <<<EOF
             <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -1358,7 +1394,7 @@ function get_frontpage()
             });
             </script>
             EOF;
-            $front->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.page-front" style="display:none;" >'. $load .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.page-front"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $front->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.page-front" style="display:none;" >'. $load . $style . '<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.page-front"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
         }
     } else {
         $front->title = 'Welcome';
