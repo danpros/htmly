@@ -2250,19 +2250,19 @@
     commandProto.doHorizontalRule = function (chunk, postProcessing) {
         chunk.startTag = "----------\n";
         chunk.selection = "";
-        chunk.skipLines(2, 1, true);
+        chunk.skipLines(1, 1, true);
     }
 	
     commandProto.doReadMore = function (chunk, postProcessing) {
         chunk.startTag = "<!--more-->";
         chunk.selection = "";
-        chunk.skipLines(0, 1, true);
+        chunk.skipLines(1, 1, true);
     }
 	
     commandProto.doTOC = function (chunk, postProcessing) {
         chunk.startTag = "<!--toc-->";
         chunk.selection = "";
-        chunk.skipLines(0, 1, true);
+        chunk.skipLines(1, 1, true);
     }
 	
 	commandProto.doStrikethrough = function (chunk, postProcessing) {
