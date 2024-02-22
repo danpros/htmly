@@ -32,16 +32,16 @@ function generateTOC (id) {
     var headings = [].slice.call(documentRef.body.querySelectorAll(selector));
     if (headings && headings.length) {
         headings.forEach(function (heading, index) {
-            heading.setAttribute('id', 'toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
+            heading.setAttribute('id', heading.textContent.replace(/\s+/g, '-').toLowerCase() + id);
             heading.setAttribute('class', 'toc-link');
 
             var anchor = documentRef.createElement('a');
-            anchor.setAttribute('href', '#toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
+            anchor.setAttribute('href', '#' + heading.textContent.replace(/\s+/g, '-').toLowerCase() + id);
             anchor.setAttribute('class', 'anchor');
-            anchor.innerHTML = '<svg fill="currentColor" viewBox="0 0 24 24" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path></svg>';
+            anchor.innerHTML = '<svg fill="currentColor" class="toc-icon" viewBox="0 0 24 24" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path></svg>';
 
             var link = documentRef.createElement('a');
-            link.setAttribute('href', '#toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
+            link.setAttribute('href', '#' + heading.textContent.replace(/\s+/g, '-').toLowerCase() + id);
             link.textContent = heading.textContent;
 
             var div = documentRef.createElement('div');
