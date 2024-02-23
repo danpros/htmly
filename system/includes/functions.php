@@ -417,7 +417,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
                 $post->categoryUrl = site_url() . 'category/' . $t['0'];
                 $post->categoryCount = $t['2'];
                 $post->categorySlug = $t['0'];
-                $post->categoryMd = $t['0'];
+                $post->categoryMd = $t['0'] . '.md';
                 $post->categoryTitle = $t['1'];
                 $post->categoryb = '<a itemprop="item" href="' . site_url() . 'category/' . $t['0'] . '"><span itemprop="name">' . $t['1'] . '</span></a>';
             }
@@ -3407,7 +3407,7 @@ function shorten($string = null, $char = null)
     $string = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($dom->saveHTML($dom->documentElement), 'UTF-8'));    
     $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
     $string = ltrim(rtrim($string));
-    if (strlen(strip_tags($string)) > $char) {
+    if (strlen($string) > $char) {
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
     }
