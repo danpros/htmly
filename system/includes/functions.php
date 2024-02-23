@@ -520,34 +520,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) {
-            $state = config('toc.state');
-            if ($state !== 'open') {
-                $state = '';
-            }
-            $label = config('toc.label');
-            if (empty($label)) {
-                $label = 'Table of Contents';
-            }
-            $style = config('toc.style');
-            if ($style == 'default' || empty($style)) {
-                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
-            } else {
-                $style = '';
-            }
-            $load = <<<EOF
-            <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                if (document.getElementById('toc-wrapper.post-{$post->date}').parentNode.classList.contains('post-{$post->date}')) {
-                    generateTOC('.post-{$post->date}');
-                } else {
-                    document.getElementById('toc-wrapper.post-{$post->date}').parentNode.classList.add('post-{$post->date}');
-                    generateTOC('.post-{$post->date}');
-                }
-                
-            });
-            </script>
-            EOF;
-            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.post-'.$post->date.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.post-'.$post->date.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $post->body = insert_toc($toc['0'], $toc['1'], 'post-' . $post->date);
         }
 
         // Convert image tags to figures
@@ -616,34 +589,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
 
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) {
-            $state = config('toc.state');
-            if ($state !== 'open') {
-                $state = '';
-            }
-            $label = config('toc.label');
-            if (empty($label)) {
-                $label = 'Table of Contents';
-            }
-            $style = config('toc.style');
-            if ($style == 'default' || empty($style)) {
-                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
-            } else {
-                $style = '';
-            }
-            $load = <<<EOF
-            <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                if (document.getElementById('toc-wrapper.page-{$post->slug}').parentNode.classList.contains('page-{$post->slug}')) {
-                    generateTOC('.page-{$post->slug}');
-                } else {
-                    document.getElementById('toc-wrapper.page-{$post->slug}').parentNode.classList.add('page-{$post->slug}');
-                    generateTOC('.page-{$post->slug}');
-                }
-                
-            });
-            </script>
-            EOF;
-            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.page-'.$post->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.page-'.$post->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $post->body = insert_toc($toc['0'], $toc['1'], 'page-' . $post->slug);
         }
 
         if (config('views.counter') == 'true') {
@@ -718,34 +664,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) { 
-            $state = config('toc.state');
-            if ($state !== 'open') {
-                $state = '';
-            }
-            $label = config('toc.label');
-            if (empty($label)) {
-                $label = 'Table of Contents';
-            }
-            $style = config('toc.style');
-            if ($style == 'default' || empty($style)) {
-                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
-            } else {
-                $style = '';
-            }
-            $load = <<<EOF
-            <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                if (document.getElementById('toc-wrapper.subpage-{$post->slug}').parentNode.classList.contains('subpage-{$post->slug}')) {
-                    generateTOC('.subpage-{$post->slug}');
-                } else {
-                    document.getElementById('toc-wrapper.subpage-{$post->slug}').parentNode.classList.add('subpage-{$post->slug}');
-                    generateTOC('.subpage-{$post->slug}');
-                }
-                
-            });
-            </script>
-            EOF;
-            $post->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.subpage-'.$post->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.subpage-'.$post->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $post->body = insert_toc($toc['0'], $toc['1'], 'subpage-' . $post->slug);
         }
         
         if (config('views.counter') == 'true') {
@@ -1027,34 +946,7 @@ function read_category_info($category)
                 
                 $toc = explode('<!--toc-->', $desc->body);
                 if (isset($toc['1'])) {
-                    $state = config('toc.state');
-                    if ($state !== 'open') {
-                        $state = '';
-                    }
-                    $label = config('toc.label');
-                    if (empty($label)) {
-                        $label = 'Table of Contents';
-                    }
-                    $style = config('toc.style');
-                    if ($style == 'default' || empty($style)) {
-                        $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
-                    } else {
-                        $style = '';
-                    }
-                    $load = <<<EOF
-                    <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        if (document.getElementById('toc-wrapper.taxonomy-{$desc->slug}').parentNode.classList.contains('taxonomy-{$desc->slug}')) {
-                            generateTOC('.taxonomy-{$desc->slug}');
-                        } else {
-                            document.getElementById('toc-wrapper.taxonomy-{$desc->slug}').parentNode.classList.add('taxonomy-{$desc->slug}');
-                            generateTOC('.taxonomy-{$desc->slug}');
-                        }
-                        
-                    });
-                    </script>
-                    EOF;
-                    $desc->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.taxonomy-'.$desc->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.taxonomy-'.$desc->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+                    $desc->body = insert_toc($toc['0'], $toc['1'], 'taxonomy-' . $desc->slug);
                 }
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
@@ -1286,34 +1178,7 @@ function get_author($name)
                 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
-                    $state = config('toc.state');
-                    if ($state !== 'open') {
-                        $state = '';
-                    }
-                    $label = config('toc.label');
-                    if (empty($label)) {
-                        $label = 'Table of Contents';
-                    }
-                    $style = config('toc.style');
-                    if ($style == 'default' || empty($style)) {
-                        $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
-                    } else {
-                        $style = '';
-                    }
-                    $load = <<<EOF
-                    <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        if (document.getElementById('toc-wrapper.profile-{$author->slug}').parentNode.classList.contains('profile-{$author->slug}')) {
-                            generateTOC('.profile-{$author->slug}');
-                        } else {
-                            document.getElementById('toc-wrapper.profile-{$author->slug}').parentNode.classList.add('profile-{$author->slug}');
-                            generateTOC('.profile-{$author->slug}');
-                        }
-                        
-                    });
-                    </script>
-                    EOF;
-                    $author->about = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.profile-'.$author->slug.'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.profile-'.$author->slug.'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+                    $author->about = insert_toc($toc['0'], $toc['1'], 'profile-' . $author->slug);
                 }
                 
                 $author->body = $author->about;
@@ -1367,34 +1232,7 @@ function get_frontpage()
         $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
         $toc = explode('<!--toc-->', $front->body);
         if (isset($toc['1'])) {
-            $state = config('toc.state');
-            if ($state !== 'open') {
-                $state = '';
-            }
-            $label = config('toc.label');
-            if (empty($label)) {
-                $label = 'Table of Contents';
-            }
-            $style = config('toc.style');
-            if ($style == 'default' || empty($style)) {
-                $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
-            } else {
-                $style = '';
-            }
-            $load = <<<EOF
-            <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                if (document.getElementById('toc-wrapper.page-front').parentNode.classList.contains('page-front')) {
-                    generateTOC('.page-front');
-                } else {
-                    document.getElementById('toc-wrapper.page-front').parentNode.classList.add('page-front');
-                    generateTOC('.page-front');
-                }
-                
-            });
-            </script>
-            EOF;
-            $front->body = $toc['0'] . '<div class="toc-wrapper" id="toc-wrapper.page-front" style="display:none;" >'. $load . $style . '<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.page-front"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $toc['1'];
+            $front->body = insert_toc($toc['0'], $toc['1'], 'page-front');
         }
     } else {
         $front->title = 'Welcome';
@@ -2278,15 +2116,8 @@ function get_teaser($string, $url = null, $char = null)
         } else {
             return $string;
         }
-    } elseif (strlen(strip_tags($string)) < $char) {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
-        $string = ltrim(rtrim($string));
-        return $string;
     } else {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
-        $string = ltrim(rtrim($string));
-        $string = substr($string, 0, $char);
-        $string = substr($string, 0, strrpos($string, ' '));
+        $string = shorten($string, $char);
         return $string;
     }
 }
@@ -3563,17 +3394,24 @@ function shorten($string = null, $char = null)
         return;
     }
 
-    if (strlen(strip_tags($string)) < $char) {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
-        $string = ltrim(rtrim($string));
-        return $string;
-    } else {
-        $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
-        $string = ltrim(rtrim($string));
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML('<meta charset="utf8">' . $string);
+    $tags_to_remove = array('script', 'style');
+    foreach($tags_to_remove as $tag){
+        $element = $dom->getElementsByTagName($tag);
+        foreach($element  as $item){
+            $item->parentNode->removeChild($item);
+        }
+    }
+    $string = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($dom->saveHTML($dom->documentElement), 'UTF-8'));    
+    $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+    $string = ltrim(rtrim($string));
+    if (strlen(strip_tags($string)) > $char) {
         $string = substr($string, 0, $char);
         $string = substr($string, 0, strrpos($string, ' '));
-        return $string;
     }
+    return $string;
 
 }
 
@@ -3678,4 +3516,38 @@ function publish_scheduled()
             }
         }
     }
+}
+
+// Prepare toc
+function insert_toc($part_1, $part_2, $id)
+{
+    $state = config('toc.state');
+    if ($state !== 'open') {
+        $state = '';
+    }
+    $label = config('toc.label');
+    if (empty($label)) {
+        $label = 'Table of Contents';
+    }
+    $style = config('toc.style');
+    if ($style == 'default' || empty($style)) {
+        $style = '<link rel="stylesheet" id="default-toc-style" href="'. site_url() .'system/resources/css/toc.css" type="text/css" media="all">';
+    } else {
+        $style = '';
+    }
+    $load = <<<EOF
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.getElementById('toc-wrapper.{$id}').parentNode.classList.contains('{$id}')) {
+            generateTOC('.{$id}');
+        } else {
+            document.getElementById('toc-wrapper.{$id}').parentNode.classList.add('{$id}');
+            generateTOC('.{$id}');
+        }
+        
+    });
+    </script>
+    EOF;
+    $result = $part_1 . '<div class="toc-wrapper" id="toc-wrapper.'. $id .'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.'. $id .'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $part_2;
+    return $result;
 }
