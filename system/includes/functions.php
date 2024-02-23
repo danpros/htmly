@@ -513,7 +513,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         $more = explode('<!--more-->', $content);
         if (isset($more['1'])) {
-            $content = $more['0']  . '<a id="more"></a><br>' . "\n\n" . '<!--more-->' . $more['1'];
+            $content = $more['0']  . '<!--more--><div class="more-wrapper"><a id="more"></a></div>' . $more['1'];
         }
 
         // Get the contents and convert it to HTML
@@ -2273,10 +2273,8 @@ function get_teaser($string, $url = null, $char = null)
     if ($teaserType === 'full') {
         $readMore = explode('<!--more-->', $string);
         if (isset($readMore['1'])) {
-            $patterns = array('<a id="more"></a><br>', '<p><a id="more"></a><br></p>');
-            $string = str_replace($patterns, '', $readMore['0']);
-            $string = replace_href($string, 'a', 'footnote-ref', $url);
-            return $string . '<p class="jump-link"><a class="read-more btn btn-cta-secondary" href="'. $url .'#more">' . $more . '</a></p>';
+            $string = replace_href($readMore['0'], 'a', 'footnote-ref', $url);
+            return $string . '<div class="jump-link"><a class="read-more btn btn-cta-secondary" href="'. $url .'#more">' . $more . '</a></div>';
         } else {
             return $string;
         }
