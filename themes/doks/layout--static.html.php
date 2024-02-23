@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<?php echo theme_path();?>css/style.css">
     <meta name="theme-color" content="#fff">
 </head>
-<body class="docs single" onload="htmlTableOfContents();">
+<body class="docs single" <?php if (isset($is_page)):?>onload="htmlTableOfContents('.page-<?php echo $static->slug;?>');"<?php endif;?> <?php if (isset($is_subpage)):?>onload="htmlTableOfContents('.subpage-<?php echo $static->slug;?>');"<?php endif;?>>
 <div class="header-bar fixed-top"></div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>

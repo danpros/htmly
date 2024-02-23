@@ -25,15 +25,15 @@
  * insert the anchor inside the heading 
  * fix browser not scrolling to the hash
  */
-function htmlTableOfContents (documentRef) {
-    var documentRef = documentRef || document;
+function htmlTableOfContents (id) {
+    var documentRef = document;
     var toc = documentRef.getElementById('toc');
     var headings = [].slice.call(documentRef.body.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5, #content h6'));
     headings.forEach(function (heading, index) {
-        heading.setAttribute('id', 'toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
+        heading.setAttribute('id', heading.textContent.replace(/\s+/g, '-').toLowerCase() + id);
 
         var link = documentRef.createElement('a');
-        link.setAttribute('href', '#toc-' + heading.textContent.replace(/\s+/g, '-').toLowerCase());
+        link.setAttribute('href', '#' + heading.textContent.replace(/\s+/g, '-').toLowerCase() + id);
         link.textContent = heading.textContent;
         
         var div = documentRef.createElement('div');
@@ -42,7 +42,7 @@ function htmlTableOfContents (documentRef) {
         div.appendChild(link);
         toc.appendChild(div);
     });
-    
+
     if (window.location.hash) {
         var hash = window.location.hash;
         scrollToHash(hash);
