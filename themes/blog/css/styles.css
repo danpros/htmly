@@ -629,3 +629,10 @@ ul.month {
   margin:0 0 0 10px;
   float:right;	
 }
+
+#more {
+	display:block;
+	height:2rem;
+	margin-top:-2rem;
+	content:""
+}

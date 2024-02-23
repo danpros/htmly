@@ -980,3 +980,10 @@ ul.archivegroup {
 .archivegroup li.expanded, .archivegroup li.collapsed {
     list-style: none;
 }
+
+#more {
+	display:block;
+	height:2rem;
+	margin-top:-2rem;
+	content:""
+}

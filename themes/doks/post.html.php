@@ -31,7 +31,7 @@
     <div class="content-media">
 
         <?php if(!empty($post->image)):?>
-            <img src="<?php echo $post->image;?>"/>
+            <img alt="<?php echo $post->title;?>" src="<?php echo $post->image;?>"/>
         <?php endif;?>
         <?php if(!empty($post->video)):?>
             <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($post->video); ?>" frameborder="0" allowfullscreen></iframe>

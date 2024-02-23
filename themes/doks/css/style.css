@@ -3178,6 +3178,12 @@ table {
   margin-top:-6rem;
   content:""
 }
+#more {
+  display:block;
+  height:6rem;
+  margin-top:-6rem;
+  content:""
+}
 .anchor {
   visibility:hidden;
   padding-left:0.5rem
@@ -3217,12 +3223,11 @@ p.meta {
 .blog.list .card {
   margin-top:2rem;
   margin-bottom:2rem;
-  transition:transform 0.3s
 }
 .home .card:hover,
 .contributors.list .card:hover,
 .blog.list .card:hover {
-  transform:scale(1.025)
+
 }
 .home .card-body,
 .contributors.list .card-body,
@@ -3532,4 +3537,13 @@ body.dark .docs-bar .menu-icon .navicon::before, body.dark .docs-bar .menu-icon 
 
 .float-right {
   float:right;
+}
+
+.jump-link a {
+  border: 1px solid #e9ecef;
+}
+
+.dark .jump-link a {
+  color: #8ed6fb;
+  border: 1px solid #1b1f22;
 }

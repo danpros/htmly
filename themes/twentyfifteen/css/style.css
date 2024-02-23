@@ -6140,3 +6140,10 @@ ul.month {
 .feed-link a {
 	height:100%;
 }
+
+#more {
+	display:block;
+	height:2rem;
+	margin-top:-2rem;
+	content:""
+}

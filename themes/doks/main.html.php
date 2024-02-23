@@ -69,9 +69,9 @@
         <div class="card">
 
             <?php if (!empty($post->image)) {?>
-                <img src="<?php echo $post->image;?>" width="100%">
-            <?php } elseif (!empty($img)) {?>
-                <img src="<?php echo $img;?>" width="100%">
+                <a href="<?php echo $post->url;?>"><img alt="<?php echo $post->title;?>" src="<?php echo $post->image;?>" width="100%"></a>
+            <?php } elseif (!empty($img) && config('teaser.type') === 'trimmed') {?>
+                <a href="<?php echo $post->url;?>"><img alt="<?php echo $post->title;?>" src="<?php echo $img;?>" width="100%"></a>
             <?php } ?>
             
             <?php if(!empty($post->video)):?>
@@ -90,17 +90,18 @@
             <div class="card-body">
 
                 <?php if(!empty($post->link)) { ?>
-                    <h2 class="h3">
-                        <a class="stretched-link text-body" href="<?php echo $post->link;?>" target="_blank"><?php echo $post->title;?> 
+                    <h2>
+                        <a class="text-body" href="<?php echo $post->link;?>" target="_blank"><?php echo $post->title;?> 
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16"><path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/><path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/></svg>
                         </a>
                     </h2>
                 <?php } else {?>
-                    <h2 class="h3"><a class="stretched-link text-body" href="<?php echo $post->url;?>"><?php echo $post->title;?></a></h2>
+                    <h2><a class="text-body" href="<?php echo $post->url;?>"><?php echo $post->title;?></a></h2>
                 <?php } ?>
 
                 <div class="content-body">
-                    <?php echo $post->description;?>
+                    <?php echo get_teaser($post->body, $post->url); ?>
+                    <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $post->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
                 </div>
 
                 <p>
@@ -115,6 +116,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 12a9 9 0 1018 0A9 9 0 003 12"></path><path d="M12 7v5l3 3"></path></svg> 
                             <?php echo $post->readTime;?> min
                         </strong>
+                        <?php if (login()) { echo ' <span class="mx-2">—</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828.0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <span class="edit-post"><a href="'. $post->url .'/edit?destination=post">' . i18n('Edit') . '</a></span>'; } ?>
                     </small>
                 </p>
 

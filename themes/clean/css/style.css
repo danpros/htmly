@@ -950,3 +950,10 @@ ul.archivegroup {
     list-style: none;
     background:none;
 }   
+
+#more {
+	display:block;
+	height:2rem;
+	margin-top:-2rem;
+	content:""
+}
