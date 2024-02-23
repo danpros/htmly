@@ -3547,3 +3547,7 @@ body.dark .docs-bar .menu-icon .navicon::before, body.dark .docs-bar .menu-icon 
   color: #8ed6fb;
   border: 1px solid #1b1f22;
 }
+
+.dark .toc-wrapper {
+  background: rgb(46, 46, 51);	
+}
