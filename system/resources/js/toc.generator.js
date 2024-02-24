@@ -52,6 +52,7 @@ function generateTOC (id) {
             div.appendChild(link);
             toc.appendChild(div);
         });
+        documentRef.getElementById('toc-wrapper' + id).classList.add('visible');
         documentRef.getElementById('toc-wrapper' + id).style.display = 'inline-block';
     }
     
