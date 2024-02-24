@@ -1478,7 +1478,7 @@ function recent_posts($custom = null, $count = null)
 
     if (file_exists($filename)) {
         $posts = unserialize(file_get_contents($filename));
-        if (count($posts) != $count) {
+        if (count($posts) < $count) {
             $posts = get_posts(null, 1, $count);
             $tmp = serialize($posts);
             file_put_contents($filename, print_r($tmp, true), LOCK_EX);
@@ -1490,11 +1490,21 @@ function recent_posts($custom = null, $count = null)
     }
 
     if (!empty($custom)) {
-        return $posts;
+        $arr = array();
+        $i = 1;
+        foreach ($posts as $post) {
+            $arr[] = $post;
+            if ($i++ >= $count)
+                break;  
+        }
+        return $arr;
     } else {
+        $i = 1;
         $recent .= '<ul>';
         foreach ($posts as $post) {
             $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+            if ($i++ >= $count)
+                break;  
         }
         if (empty($posts)) {
             $recent .= '<li>' . i18n('No_posts_found') . '</li>';
@@ -1525,7 +1535,7 @@ function recent_type($type, $custom = null, $count = null)
 
     if (file_exists($filename)) {
         $posts = unserialize(file_get_contents($filename));
-        if (count($posts) != $count) {
+        if (count($posts) < $count) {
             $posts = get_type($type, 1, $count);
             $tmp = serialize($posts);
             file_put_contents($filename, print_r($tmp, true), LOCK_EX);
@@ -1537,12 +1547,21 @@ function recent_type($type, $custom = null, $count = null)
     }
 
     if (!empty($custom)) {
-        return $posts;
+        $arr = array();
+        $i = 1;
+        foreach ($posts as $post) {
+            $arr[] = $post;
+            if ($i++ >= $count)
+                break;  
+        }
+        return $arr;
     } else {
-
+        $i = 1;
         $recent .= '<ul>';
         foreach ($posts as $post) {
             $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+            if ($i++ >= $count)
+                break;
         }
         if (empty($posts)) {
            $recent .= '<li>No recent ' . $type . ' found</li>';
@@ -1582,7 +1601,7 @@ function popular_posts($custom = null, $count = null)
                                 if (strpos($f['basename'], $arr[1]) !== false )  {
                                     $tmp[] = $f;
                                     if ($i++ >= $count)
-                                    break;    
+                                        break;    
                                 }
                             }
                         }
@@ -1600,7 +1619,7 @@ function popular_posts($custom = null, $count = null)
 
                     if (file_exists($filecache)) {
                         $posts = unserialize(file_get_contents($filecache));
-                        if (count($posts) != $count) {
+                        if (count($posts) < $count) {
                             $posts = get_posts($tmp, 1, $count);
                             $ar = serialize($posts);
                             file_put_contents($filecache, print_r($ar, true), LOCK_EX);
@@ -1612,14 +1631,24 @@ function popular_posts($custom = null, $count = null)
                     }
 
                     if (empty($custom)) {
+                        $ix = 1;
                         $pop .= '<ul>';
                         foreach ($posts as $post) {
                             $pop .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+                            if ($ix++ >= $count)
+                                break;
                         }
                         $pop .= '</ul>';
                         return $pop;
                     } else {
-                        return $posts;
+                        $arp = array();
+                        $ix = 1;
+                        foreach ($posts as $post) {
+                            $arp[] = $post;
+                            if ($ix++ >= $count)
+                                break;  
+                        }
+                        return $arp;
                     }
                 } else {
                     if(empty($custom)) {
@@ -1698,60 +1727,85 @@ function archive_list($custom = null)
         $len = count($by_year);
 
         if (empty($custom)) {
-            foreach ($by_year as $year => $months) {
-                if ($i == 0) {
-                    $class = 'expanded';
-                    $arrow = '&#9660;';
-                } else {
-                   $class = 'collapsed';
-                    $arrow = '&#9658;';
+            $cache_d = "cache/widget/archive.default.cache";
+            if (file_exists($cache_d)) {
+                $arch = unserialize(file_get_contents($cache_d));
+                return $arch;
+            } else {
+                foreach ($by_year as $year => $months) {
+                    if ($i == 0) {
+                        $class = 'expanded';
+                        $arrow = '&#9660;';
+                    } else {
+                       $class = 'collapsed';
+                        $arrow = '&#9658;';
+                    }
+                    $i++;
+
+                    $by_month = array_count_values($months);
+                    # Sort the months
+                    krsort($by_month);
+
+                    $script = <<<EOF
+                        if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
+    EOF;
+                    $arch .= '<ul class="archivegroup">';
+                    $arch .= '<li class="' . $class . '">';
+                    $arch .= '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
+                    $arch .= '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
+                    $arch .= '<span class="count">(' . count($months) . ')</span>';
+                    $arch .= '<ul class="month">';
+
+                    foreach ($by_month as $month => $count) {
+                        $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'F');
+                        $arch .= '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
+                        $arch .= ' <span class="count">(' . $count . ')</span></li>';
+                    }
+
+                    $arch .= '</ul>';
+                    $arch .= '</li>';
+                    $arch .= '</ul>';
                 }
-                $i++;
-
-                $by_month = array_count_values($months);
-                # Sort the months
-                krsort($by_month);
-
-                $script = <<<EOF
-                    if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
-EOF;
-                $arch .= '<ul class="archivegroup">';
-                $arch .= '<li class="' . $class . '">';
-                $arch .= '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
-                $arch .= '<a href="' . site_url() . 'archive/' . $year . '">' . $year . '</a> ';
-                $arch .= '<span class="count">(' . count($months) . ')</span>';
-                $arch .= '<ul class="month">';
-
-                foreach ($by_month as $month => $count) {
-                    $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'F');
-                    $arch .= '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . '</a>';
-                    $arch .= ' <span class="count">(' . $count . ')</span></li>';
-                }
-
-                $arch .= '</ul>';
-                $arch .= '</li>';
-                $arch .= '</ul>';
+                
+                $ar = serialize($arch);
+                file_put_contents($cache_d, $ar, LOCK_EX);                
+                return $arch;
             }
-            return $arch;
         } elseif ($custom === 'month-year') {
-            foreach ($by_year as $year => $months) {
-                $by_month = array_count_values($months);
-                # Sort the months
-                krsort($by_month);
-                foreach ($by_month as $month => $count) {
-                $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'F');
-                $arch .= '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . ' ' . $year .'</a> ('.$count.')</li>';
+            $cache_my = "cache/widget/archive.month-year.cache";
+            if (file_exists($cache_my)) {
+                $arch = unserialize(file_get_contents($cache_my));
+                return $arch;
+            } else {
+                foreach ($by_year as $year => $months) {
+                    $by_month = array_count_values($months);
+                    # Sort the months
+                    krsort($by_month);
+                    foreach ($by_month as $month => $count) {
+                        $name = format_date(mktime(0, 0, 0, $month, 1, 2010), 'F');
+                        $arch .= '<li class="item"><a href="' . site_url() . 'archive/' . $year . '-' . $month . '">' . $name . ' ' . $year .'</a> ('.$count.')</li>';
+                    }
                 }
+                $ar = serialize($arch);
+                file_put_contents($cache_my, $ar, LOCK_EX);
+                return $arch;
             }
-            return $arch;
         } elseif ($custom === 'year') {
-            foreach ($by_year as $year => $months) {
-                $by_month = array_count_values($months);
-                # Sort the months
-                krsort($by_month);
-                $arch .= '<li class="item"><a href="' . site_url() . 'archive/' . $year . '">' . $year .'</a> ('. count($months) .')</li>';
+            $cache_y = "cache/widget/archive.year.cache";
+            if (file_exists($cache_y)) {
+                $arch = unserialize(file_get_contents($cache_y));
+                return $arch;
+            } else {
+                foreach ($by_year as $year => $months) {
+                    $by_month = array_count_values($months);
+                    # Sort the months
+                    krsort($by_month);
+                    $arch .= '<li class="item"><a href="' . site_url() . 'archive/' . $year . '">' . $year .'</a> ('. count($months) .')</li>';
+                }
+                $ar = serialize($arch);
+                file_put_contents($cache_y, $ar, LOCK_EX);                
+                return $arch;
             }
-            return $arch;
         } else {
             return $by_year;
         }
@@ -1797,33 +1851,41 @@ function tag_cloud($custom = null)
         }
 
         if(empty($custom)) {
-            // Font sizes
-            $max_size = 22; // max font size in %
-            $min_size = 8; // min font size in %
-
-            // Get the largest and smallest array values
-            $max_qty = max(array_values($tag_collection));
-            $min_qty = min(array_values($tag_collection));
-
-            // Find the range of values
-            $spread = $max_qty - $min_qty;
-            if (0 == $spread) { // we don't want to divide by zero
-                $spread = 1;
-            }
-
-            // Font-size increment
-            // this is the increase per tag quantity (times used)
-            $step = ($max_size - $min_size)/($spread);
-
             $wrapper = '';
-            arsort($tag_collection);
-            $sliced_tags = array_slice($tag_collection, 0, $tagcloud_count, true);
-            ksort($sliced_tags);
-            foreach ($sliced_tags as $tag => $count) {
-                $size = $min_size + (($count - $min_qty) * $step);
-                $wrapper .= ' <a class="tag-cloud-link" href="'. site_url(). 'tag/'. $tag .'" style="font-size:'. $size .'pt;">'.tag_i18n($tag).'</a> ';
+            $cache_t = "cache/widget/tags.default.cache";
+            if (file_exists($cache_t)) {
+                $wrapper = unserialize(file_get_contents($cache_t));
+                return $wrapper;
+            } else {
+                // Font sizes
+                $max_size = 22; // max font size in %
+                $min_size = 8; // min font size in %
+
+                // Get the largest and smallest array values
+                $max_qty = max(array_values($tag_collection));
+                $min_qty = min(array_values($tag_collection));
+
+                // Find the range of values
+                $spread = $max_qty - $min_qty;
+                if (0 == $spread) { // we don't want to divide by zero
+                    $spread = 1;
+                }
+
+                // Font-size increment
+                // this is the increase per tag quantity (times used)
+                $step = ($max_size - $min_size)/($spread);
+
+                arsort($tag_collection);
+                $sliced_tags = array_slice($tag_collection, 0, $tagcloud_count, true);
+                ksort($sliced_tags);
+                foreach ($sliced_tags as $tag => $count) {
+                    $size = $min_size + (($count - $min_qty) * $step);
+                    $wrapper .= ' <a class="tag-cloud-link" href="'. site_url(). 'tag/'. $tag .'" style="font-size:'. $size .'pt;">'.tag_i18n($tag).'</a> ';
+                }
+                $ar = serialize($wrapper);
+                file_put_contents($cache_t, $ar, LOCK_EX);                    
+                return $wrapper;
             }
-            return $wrapper;
 
         } else {
             return $tag_collection;
@@ -2120,6 +2182,34 @@ function get_teaser($string, $url = null, $char = null)
         $string = shorten($string, $char);
         return $string;
     }
+}
+
+// Shorten the string
+function shorten($string = null, $char = null)
+{
+    if(empty($char) || empty($string)) {
+        return;
+    }
+
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML('<meta charset="utf8">' . $string);
+    $tags_to_remove = array('script', 'style');
+    foreach($tags_to_remove as $tag){
+        $element = $dom->getElementsByTagName($tag);
+        foreach($element  as $item){
+            $item->parentNode->removeChild($item);
+        }
+    }
+    $string = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($dom->saveHTML($dom->documentElement), 'UTF-8'));    
+    $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
+    $string = ltrim(rtrim($string));
+    if (strlen($string) > $char) {
+        $string = substr($string, 0, $char);
+        $string = substr($string, 0, strrpos($string, ' '));
+    }
+    return $string;
+
 }
 
 // Get thumbnail from image and Youtube.
@@ -3385,34 +3475,6 @@ function get_video_id($url)
     } else {
         return $url;
     }
-}
-
-// Shorten the string
-function shorten($string = null, $char = null)
-{
-    if(empty($char) || empty($string)) {
-        return;
-    }
-
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $dom->loadHTML('<meta charset="utf8">' . $string);
-    $tags_to_remove = array('script', 'style');
-    foreach($tags_to_remove as $tag){
-        $element = $dom->getElementsByTagName($tag);
-        foreach($element  as $item){
-            $item->parentNode->removeChild($item);
-        }
-    }
-    $string = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($dom->saveHTML($dom->documentElement), 'UTF-8'));    
-    $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
-    $string = ltrim(rtrim($string));
-    if (strlen($string) > $char) {
-        $string = substr($string, 0, $char);
-        $string = substr($string, 0, strrpos($string, ' '));
-    }
-    return $string;
-
 }
 
 // translate tag to i18n

@@ -22,7 +22,7 @@
                 <td><a target="_blank" href="<?php echo $p->url ?>"><?php echo $p->title ?></a></td>
                 <td><?php echo format_date($p->date) ?></td>
                 <?php if (config("views.counter") == "true"): ?>
-                    <td><?php echo $p->views ?></td><?php endif; ?>
+                    <td><?php echo get_views('post_' . $p->slug); ?></td><?php endif; ?>
                 <td><a target="_blank" href="<?php echo $p->authorUrl ?>"><?php echo $p->author ?></a></td>
                 <td><a href="<?php echo str_replace('category', 'admin/categories', $p->categoryUrl); ?>"><?php echo strip_tags($p->category);?></a></td>
                 <td><?php echo $p->tag ?></td>
