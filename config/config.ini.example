@@ -138,11 +138,18 @@ multi.site = "false"
 ; TOC label
 toc.label = "Table of Contents"
 
-; TOC inital state
+; TOC inital state. Option "close and "open"
 toc.state = "close"
 
-; TOC style
+; Load the default style or not. Option "default" and "theme"
 toc.style = "default"
+
+; Automatically add TOC, but first it check if the shortcode available or not
+; Option "true" and "false"
+toc.automatic = "false"
+
+; Automatically insert the TOC in x paragraph
+toc.position = "1"
 
 ; Set the theme here
 views.root = "themes/twentysixteen"

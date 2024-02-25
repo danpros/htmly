@@ -518,9 +518,15 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) {
-            $post->body = insert_toc($toc['0'], $toc['1'], 'post-' . $post->date);
+            $post->body = insert_toc('post-' . $post->date, $toc['0'], $toc['1']);
+        } else {
+            $auto = config('toc.automatic');
+            if ($auto === 'true') {
+                $post->body = automatic_toc($post->body, 'post-' . $post->date);
+            }
         }
 
         // Convert image tags to figures
@@ -589,7 +595,12 @@ function get_pages($pages, $page = 1, $perpage = 0)
 
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) {
-            $post->body = insert_toc($toc['0'], $toc['1'], 'page-' . $post->slug);
+            $post->body = insert_toc('page-' . $post->slug, $toc['0'], $toc['1']);
+        } else {
+            $auto = config('toc.automatic');
+            if ($auto === 'true') {
+                $post->body = automatic_toc($post->body, 'page-' . $post->slug);
+            }
         }
 
         if (config('views.counter') == 'true') {
@@ -664,7 +675,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) { 
-            $post->body = insert_toc($toc['0'], $toc['1'], 'subpage-' . $post->slug);
+            $post->body = insert_toc('subpage-' . $post->slug, $toc['0'], $toc['1']);
+        } else {
+            $auto = config('toc.automatic');
+            if ($auto === 'true') {
+                $post->body = automatic_toc($post->body, 'subpage-' . $post->slug);
+            }
         }
         
         if (config('views.counter') == 'true') {
@@ -946,7 +962,7 @@ function read_category_info($category)
                 
                 $toc = explode('<!--toc-->', $desc->body);
                 if (isset($toc['1'])) {
-                    $desc->body = insert_toc($toc['0'], $toc['1'], 'taxonomy-' . $desc->slug);
+                    $desc->body = insert_toc('taxonomy-' . $desc->slug, $toc['0'], $toc['1']);
                 }
 
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
@@ -1178,7 +1194,7 @@ function get_author($name)
                 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
-                    $author->about = insert_toc($toc['0'], $toc['1'], 'profile-' . $author->slug);
+                    $author->about = insert_toc('profile-' . $author->slug, $toc['0'], $toc['1']);
                 }
                 
                 $author->body = $author->about;
@@ -1232,7 +1248,7 @@ function get_frontpage()
         $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
         $toc = explode('<!--toc-->', $front->body);
         if (isset($toc['1'])) {
-            $front->body = insert_toc($toc['0'], $toc['1'], 'page-front');
+            $front->body = insert_toc('page-front', $toc['0'], $toc['1']);
         }
     } else {
         $front->title = 'Welcome';
@@ -3580,8 +3596,8 @@ function publish_scheduled()
     }
 }
 
-// Prepare toc
-function insert_toc($part_1, $part_2, $id)
+// Insert toc
+function insert_toc($id, $part_1 = null, $part_2 = null)
 {
     $state = config('toc.state');
     if ($state !== 'open') {
@@ -3612,4 +3628,17 @@ function insert_toc($part_1, $part_2, $id)
     EOF;
     $result = $part_1 . '<div class="toc-wrapper" id="toc-wrapper.'. $id .'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.'. $id .'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $part_2;
     return $result;
+}
+
+// Automatically add toc in x paragraph
+function automatic_toc($content, $id)
+{
+    $pos = config('toc.position');
+    $exp = explode('</p>', $content);
+    if (is_null($pos) || $pos > count($exp)){
+        return $content;
+    }
+    array_splice($exp, $pos, 0, insert_toc($id));
+    $content = implode('</p>', $exp);
+    return $content;
 }

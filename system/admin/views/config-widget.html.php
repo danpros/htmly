@@ -63,7 +63,7 @@
   <div class="form-group row">
     <label for="toc.label" class="col-sm-2 col-form-label">TOC label</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-toc.label" class="form-control" id="toc.label" value="<?php echo valueMaker(config('toc.label'));?>" placeholder="Table of Contents">
+      <input type="text" name="-config-toc.label" class="form-control" id="toc.label" value="<?php if(is_null(config('toc.label'))) {echo 'Table of Contents ';} else {echo config('toc.label');};?>" placeholder="Table of Contents">
     </div>
   </div>
   <div class="form-group row">
@@ -77,7 +77,7 @@
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-toc.state" id="toc.state2" value="close" <?php if (config('toc.state') === 'close'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-toc.state" id="toc.state2" value="close" <?php if (config('toc.state') === 'close' || is_null(config('toc.state'))):?>checked<?php endif;?>>
           <label class="form-check-label" for="toc.state2">
             Close
           </label>
@@ -90,7 +90,7 @@
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-toc.style" id="toc.style1" value="default" <?php if (config('toc.style') === 'default'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-toc.style" id="toc.style1" value="default" <?php if (config('toc.style') === 'default' || is_null(config('toc.style'))):?>checked<?php endif;?>>
           <label class="form-check-label" for="toc.style1">
             Default
           </label>
@@ -102,6 +102,32 @@
           </label>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Automatic TOC</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-toc.automatic" id="toc.automatic1" value="true" <?php if (config('toc.automatic') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="toc.automatic1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-toc.automatic" id="toc.automatic2" value="false" <?php if (config('toc.automatic') === 'false' || is_null(config('toc.automatic'))):?>checked<?php endif;?>>
+          <label class="form-check-label" for="toc.automatic2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+      <small><em>It will check the shortcode first before add the TOC to <code>post</code> or <code>page/subpage</code></em></small>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="toc.position" class="col-sm-2 col-form-label">TOC position in x paragraph</label>
+    <div class="col-sm-10">
+      <input type="number" name="-config-toc.position" class="form-control" id="toc.position" value="<?php echo config('toc.position');?>">
     </div>
   </div>
   <br>
