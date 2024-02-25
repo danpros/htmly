@@ -4069,7 +4069,6 @@ ul.month {
 
 #more {
 	display:block;
-	height:2rem;
-	margin-top:-2rem;
-	content:""
+	box-shadow: none;
+	border: none;
 }

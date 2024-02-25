@@ -952,8 +952,9 @@ ul.archivegroup {
 }   
 
 #more {
-	display:block;
-	height:2rem;
-	margin-top:-2rem;
-	content:""
+    display:block;
+    height:1rem;
+    margin-top:-1rem;
+    box-shadow: none;
+    border: none;
 }
