@@ -28,7 +28,7 @@
         if (file_exists($config_file)) {
             $array = parse_ini_file($config_file, true);
         }
-        $configList = json_decode(file_get_contents('content/data/configList.json', true));
+        $configList = json_decode(file_get_contents('system/configList.json', true));
         foreach ($array as $key => $value) {
             if (!in_array($key, $configList)) {
                 echo '<tr>';
