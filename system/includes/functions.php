@@ -3638,7 +3638,7 @@ function automatic_toc($content, $id)
     if (is_null($pos) || $pos > count($exp)){
         return $content;
     }
-    array_splice($exp, $pos, 0, insert_toc($id));
+    array_splice($exp, $pos, 0, insert_toc($id) . '<p>');
     $content = implode('</p>', $exp);
     return $content;
 }
