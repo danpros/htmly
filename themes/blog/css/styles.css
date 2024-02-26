@@ -637,3 +637,7 @@ ul.month {
   box-shadow: none;
   border: none;
 }
+
+.social-logo a:before {
+  padding-top:6px;
+}

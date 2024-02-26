@@ -3549,5 +3549,26 @@ body.dark .docs-bar .menu-icon .navicon::before, body.dark .docs-bar .menu-icon 
 }
 
 .dark .toc-wrapper {
-  background: rgb(46, 46, 51);	
+  background: #1b1f22;
+  border: 1px solid #1b1f22;
+}
+
+.dark .toc-wrapper a {
+  color: #dee2e6;
+}
+
+.social-logo a {
+  padding: 0.5625em 0.25rem 0.5rem 0.125rem;
+  line-height:1;
+  height:24px;
+  color: #1d2d35;
+}
+
+body.dark .social-logo a {
+  color: #dee2e6;
+}
+
+body.dark .social-logo a:hover, .dark .toc-wrapper a:hover {
+  color: #8ed6fb;
+  text-decoration:none;
 }
