@@ -125,7 +125,7 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="toc.position" class="col-sm-2 col-form-label">TOC position in x paragraph</label>
+    <label for="toc.position" class="col-sm-2 col-form-label">TOC position after x paragraph</label>
     <div class="col-sm-10">
       <input type="number" name="-config-toc.position" class="form-control" id="toc.position" value="<?php echo config('toc.position');?>">
     </div>

@@ -3654,7 +3654,7 @@ function insert_toc($id, $part_1 = null, $part_2 = null)
     return $result;
 }
 
-// Automatically add toc in x paragraph
+// Automatically add toc after x paragraph
 function automatic_toc($content, $id)
 {
     $pos = config('toc.position');

@@ -28,6 +28,12 @@ blog.enable = "false"
 ; Social account
 social.twitter = ""
 social.facebook = ""
+social.instagram = ""
+social.linkedin = ""
+social.github = ""
+social.youtube = ""
+social.mastodon = ""
+social.tiktok = ""
 
 ; Breadcrumb home text. Useful when installed on subfolder.
 breadcrumb.home = "Home"
@@ -148,7 +154,7 @@ toc.style = "default"
 ; Option "true" and "false"
 toc.automatic = "false"
 
-; Automatically insert the TOC in x paragraph
+; Automatically insert the TOC after x paragraph
 toc.position = "1"
 
 ; Set the theme here
