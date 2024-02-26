@@ -1337,6 +1337,9 @@ post('/admin/config', function () {
         }
         save_config($new_config, $new_Keys);
         $login = site_url() . 'admin/config';
+        foreach (glob('cache/widget/archive*.cache', GLOB_NOSORT) as $file) {
+            unlink($file);
+        }
         header("location: $login");
     } else {
         $login = site_url() . 'login';
@@ -1539,6 +1542,9 @@ post('/admin/config/widget', function () {
         }
         save_config($new_config, $new_Keys);
         $login = site_url() . 'admin/config/widget';
+        foreach (glob('cache/widget/tags*.cache', GLOB_NOSORT) as $file) {
+            unlink($file);
+        }
         header("location: $login");
     } else {
         $login = site_url() . 'login';

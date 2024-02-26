@@ -63,7 +63,7 @@
   <div class="form-group row">
     <label for="toc.label" class="col-sm-2 col-form-label">TOC label</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-toc.label" class="form-control" id="toc.label" value="<?php if(is_null(config('toc.label'))) {echo 'Table of Contents ';} else {echo config('toc.label');};?>" placeholder="Table of Contents">
+      <input type="text" name="-config-toc.label" class="form-control" id="toc.label" value="<?php if(is_null(config('toc.label'))) {echo 'Table of Contents';} else {echo config('toc.label');};?>" placeholder="Table of Contents">
     </div>
   </div>
   <div class="form-group row">
@@ -233,15 +233,45 @@
   <h4><?php echo i18n('Social_Media');?></h4>
   <hr>
   <div class="form-group row">
-    <label for="google.reCaptcha.private" class="col-sm-2 col-form-label"><?php echo i18n('Twitter_account');?></label>
+    <label for="social.twitter" class="col-sm-2 col-form-label">Twitter</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-social.twitter" class="form-control" id="social.twitter" value="<?php echo valueMaker(config('social.twitter'));?>" placeholder="https://twitter.com/gohtmly">
+      <input type="text" name="-config-social.twitter" class="form-control" id="social.twitter" value="<?php echo config('social.twitter');?>" placeholder="https://twitter.com/gohtmly">
     </div>
   </div>
   <div class="form-group row">
-    <label for="google.reCaptcha.private" class="col-sm-2 col-form-label"><?php echo i18n('Facebook_page');?></label>
+    <label for="social.facebook" class="col-sm-2 col-form-label">Facebook</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-social.facebook" class="form-control" id="social.facebook" value="<?php echo valueMaker(config('social.facebook'));?>" placeholder="https://www.facebook.com/gohtmly">
+      <input type="text" name="-config-social.facebook" class="form-control" id="social.facebook" value="<?php echo config('social.facebook');?>" placeholder="https://www.facebook.com/gohtmly">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="social.instagram" class="col-sm-2 col-form-label">Instagram</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.instagram" class="form-control" id="social.instagram" value="<?php echo config('social.instagram');?>" placeholder="https://www.instagram.com/username">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="social.linkedin" class="col-sm-2 col-form-label">Linkedin</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.linkedin" class="form-control" id="social.linkedin" value="<?php echo config('social.linkedin');?>" placeholder="https://www.linkedin.com/in/username">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="social.github" class="col-sm-2 col-form-label">Github</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.github" class="form-control" id="social.github" value="<?php echo config('social.github');?>" placeholder="https://github.com/username">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="social.mastodon" class="col-sm-2 col-form-label">Mastodon</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.mastodon" class="form-control" id="social.mastodon" value="<?php echo config('social.mastodon');?>" placeholder="https://mastodon.social/@username">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="social.tiktok" class="col-sm-2 col-form-label">TikTok</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.tiktok" class="form-control" id="social.tiktok" value="<?php echo config('social.tiktok');?>" placeholder="https://tiktok.com/@username">
     </div>
   </div>
   <div class="form-group row">

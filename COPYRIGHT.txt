@@ -1,4 +1,4 @@
-Copyright (c) 2014-2023 Danang Probo Sayekti.
+Copyright (c) 2014-2024 Danang Probo Sayekti.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,35 +21,37 @@ license, including:
   Dispatch - (c) 2014 Jesus A. Domingo <jesus.domingo@gmail.com>
 
   Composer - (c) 2011 Nils Adermann, Jordi Boggiano
-  
+
   PHP Markdown & Extra - (c) 2004-2009 Michel Fortin
-  
+
   Markdown - (c) 2003-2006 John Gruber
 
   RSSWriter - (c) Suin <https://github.com/suin>
-  
+
   Showdown code - (c) 2007 John Fraser
-  
+
   Pagedown modifications and bugfixes - (c) 2009 Dana Robinson
-  
+
   Pagedown modifications and bugfixes - (c) 2009-2013 Stack Exchange Inc.
 
   jQuery - (c) The jQuery Foundation
-  
+
   jQuery UI - (c) The jQuery Foundation
-  
+
   Hub Updater - (c) Kanti.de <https://github.com/Kanti>
-  
+
   Password Compat - (c) Anthony Ferrara <https://github.com/ircmaxell>
-  
+
   URLify for PHP by jbroadway <https://github.com/jbroadway> based on URLify.js - (c) Django Software Foundation and individual contributors
-  
+
   Twenty Fifteen & Twenty Sixteen theme - (c) WordPress.org & Automattic.com
-  
+
   Bootstrap - Copyright 2011-2019 The Bootstrap Authors <https://github.com/twbs/bootstrap/graphs/contributors>
-  
+
   AdminLTE - Copyright 2014-2020 Colorlib <http://colorlib.com>
-  
+
   Font Awesome - @davegandy <http://fontawesome.io>
-  
+
   Nestable jQuery Plugin - Copyright (c) 2012 David Bushell <http://dbushell.com>
+
+  Social Logos - (c) Automattic

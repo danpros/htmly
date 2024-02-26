@@ -2321,32 +2321,56 @@ function tab($p)
     return $tab;
 }
 
-// Social links. Deprecated
-function social($imgDir = null)
+// Social links
+function social($class = null)
 {
     $twitter = config('social.twitter');
     $facebook = config('social.facebook');
-    $tumblr = config('social.tumblr');
+    $instagram = config('social.instagram');
+    $linkedin = config('social.linkedin');
+    $github = config('social.github');
+    $youtube = config('social.youtube');
+    $mastodon = config('social.mastodon');
+    $tiktok = config('social.tiktok');
     $rss = site_url() . 'feed/rss';
     $social = '';
 
-    if ($imgDir === null) {
-        $imgDir = "readable/img/";
-    }
-
+    $social .= '<div class="social-logo ' . $class . '">';
+    $social .= '<link rel="stylesheet" id="social-logo-style" href="'. site_url() .'system/resources/css/social-logos.css" type="text/css" media="all">';
     if (!empty($twitter)) {
-        $social .= '<a href="' . $twitter . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'twitter.png" width="32" height="32" alt="Twitter"/></a>';
+        $social .= '<a class="social-logo-twitter-alt" href="' . $twitter . '" target="_blank"><span class="screen-reader-text">Twitter</span></a>';
     }
 
     if (!empty($facebook)) {
-        $social .= '<a href="' . $facebook . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'facebook.png" width="32" height="32" alt="Facebook"/></a>';
+        $social .= '<a class="social-logo-facebook" href="' . $facebook . '" target="_blank"><span class="screen-reader-text">Facebook</span></a>';
+    }
+    
+    if (!empty($instagram)) {
+        $social .= '<a class="social-logo-instagram" href="' . $instagram . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
     }
 
-    if (!empty($tumblr)) {
-        $social .= '<a href="' . $tumblr . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'tumblr.png" width="32" height="32" alt="Tumblr"/></a>';
+    if (!empty($linkedin)) {
+        $social .= '<a class="social-logo-linkedin" href="' . $linkedin . '" target="_blank"><span class="screen-reader-text">Linkedin</span></a>';
     }
+    
+    if (!empty($github)) {
+        $social .= '<a class="social-logo-github" href="' . $github . '" target="_blank"><span class="screen-reader-text">Github</span></a>';
+    }
+    
+    if (!empty($youtube)) {
+        $social .= '<a class="social-logo-youtube" href="' . $youtube . '" target="_blank"><span class="screen-reader-text">Youtube</span></a>';
+    }
+    
+    if (!empty($mastodon)) {
+        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
+    }
+    
+    if (!empty($tiktok)) {
+        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
+    }    
 
-    $social .= '<a href="' . $rss . '" target="_blank"><img src="' . site_url() . 'themes/' . $imgDir . 'rss.png" width="32" height="32" alt="RSS Feed"/></a>';
+    $social .= '<a class="social-logo-feed" href="' . $rss . '" target="_blank"><span class="screen-reader-text">RSS</span></a>';
+    $social .= '</div>';
     return $social;
 }
 
