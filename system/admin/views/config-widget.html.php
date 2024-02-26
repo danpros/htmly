@@ -275,6 +275,12 @@
     </div>
   </div>
   <div class="form-group row">
+    <label for="social.youtube" class="col-sm-2 col-form-label">Youtube</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.youtube" class="form-control" id="social.youtube" value="<?php echo config('social.youtube');?>" placeholder="https://www.youtube.com/user/username">
+    </div>
+  </div>
+  <div class="form-group row">
     <div class="col-sm-10">
       <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>

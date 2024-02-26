@@ -121,11 +121,7 @@
                 </nav><!-- .main-navigation -->
                 <nav aria-label="Footer Social Links Menu" role="navigation" class="social-navigation">
                     <div class="menu-social-links-container">
-                    <ul class="social-links-menu" id="menu-social-links">
-                        <?php if(!empty(config('social.twitter'))):?><li><a href="<?php echo config('social.twitter');?>"><span class="screen-reader-text">Twitter</span></a></li><?php endif;?>
-                        <?php if(!empty(config('social.facebook'))):?><li><a href="<?php echo config('social.facebook');?>"><span class="screen-reader-text">Facebook</span></a></li><?php endif;?>
-                        <li><a href="<?php echo site_url();?>feed/rss"><span class="screen-reader-text">RSS</span></a></li>
-                    </ul>
+                        <?php echo social();?>
                     </div>                
                 </nav>
                 <div class="site-info">

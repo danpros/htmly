@@ -42,34 +42,12 @@
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <p><?php echo blog_description() ?></p>
-                    </aside>          
-                    <?php if(!empty(config('social.twitter')) || !empty(config('social.facebook'))):?>					
+                    </aside>          				
                     <nav id="social-navigation" class="social-navigation" role="navigation">
                         <div class="menu-social-links-container">
-                            <ul id="menu-social-links" class="menu">
-							    <?php if(!empty(config('social.twitter'))):?>
-                                <li class="menu-item">
-                                    <a href="<?php echo config('social.twitter');?>">
-                                    <span class="screen-reader-text">Twitter</span>
-                                    </a>
-                                </li>
-								<?php endif;?>
-								<?php if(!empty(config('social.facebook'))):?>
-                                <li class="menu-item">
-                                    <a href="<?php echo config('social.facebook');?>">
-                                    <span class="screen-reader-text">Facebook</span>
-                                    </a>
-                                </li>
-								<?php endif;?>
-                                <li class="menu-item">
-                                    <a href="<?php echo site_url();?>feed/rss">
-                                    <span class="screen-reader-text">RSS</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            <?php echo social();?>
                         </div>
                     </nav>
-					<?php endif;?>
                     <aside class="widget search">
                         <form><input type="search" name="search" class="form-control" placeholder="<?php echo i18n('Type_to_search');?>"></form>
                     </aside>                            

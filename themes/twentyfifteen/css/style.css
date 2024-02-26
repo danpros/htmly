@@ -892,6 +892,18 @@ a:focus {
 	content: "\f220";
 }
 
+.social-navigation a[href*="tiktok.com"]:before {
+	content:"\f108";
+}
+
+.social-navigation a[href*="linkedin.com"]:before {
+	content:"\f207";
+}
+
+.social-navigation a.social-logo-mastodon:before {
+	content:"\f10a";
+}
+
 .secondary-toggle {
 	background-color: transparent;
 	border: 1px solid #eaeaea;
@@ -6145,4 +6157,9 @@ ul.month {
 	display:block;
 	box-shadow: none;
 	border: none;
+}
+
+.social-logo a {
+	height:35px;
+	width:35px;
 }
