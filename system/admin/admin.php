@@ -730,7 +730,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                             $views = json_decode(file_get_data($viewsFile), true);
                             $oKey = 'subpage_' . $old_url . '.' . $sp->slug;
                             $nKey = 'subpage_' . $pu . '.' . $sp->slug;
-                            if (isset($views[$soKey])) {
+                            if (isset($views[$oKey])) {
                                 $arr = replace_key($views, $oKey, $nKey);
                                 save_json_pretty($viewsFile, $arr);
                             }
