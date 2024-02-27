@@ -266,7 +266,7 @@ License: GPL v2 or later
 	position: relative;
 	font-size: 24px;
 	margin-right: 5px;
-	margin-bottom: 5px;
+	text-decoration: none;
 }
 
 .social-logo a:hover {
