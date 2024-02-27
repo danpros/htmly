@@ -1764,7 +1764,7 @@ function archive_list($custom = null)
 
                     $script = <<<EOF
                         if (this.parentNode.className.indexOf('expanded') > -1){this.parentNode.className = 'collapsed';this.innerHTML = '&#9658;';} else {this.parentNode.className = 'expanded';this.innerHTML = '&#9660;';}
-    EOF;
+EOF;
                     $arch .= '<ul class="archivegroup">';
                     $arch .= '<li class="' . $class . '">';
                     $arch .= '<a href="javascript:void(0)" class="toggle" onclick="' . $script . '">' . $arrow . '</a> ';
@@ -3633,7 +3633,7 @@ function insert_toc($id, $part_1 = null, $part_2 = null)
         
     });
     </script>
-    EOF;
+EOF;
     $result = $part_1 . '<div class="toc-wrapper" id="toc-wrapper.'. $id .'" style="display:none;" >'. $load . $style .'<details '. $state .'><summary title="'. $label .'"><span class="details">'. $label .'</span></summary><div class="inner"><div class="toc" id="toc.'. $id .'"></div></div></details><script src="'. site_url().'system/resources/js/toc.generator.js"></script></div>' . $part_2;
     return $result;
 }
