@@ -1269,6 +1269,22 @@ function get_feed($feed_url, $credit)
     }
 }
 
+// return tag safe string
+function safe_tag($string)
+{
+    $tags = array();
+    $string = preg_replace('/[\s-]+/', ' ', $string);
+    $string = explode(',', $string);
+    $string = array_map('trim', $string);
+        foreach ($string as $str) {
+            $tags[] = $str;
+        }
+    $string = implode(',', $tags);
+    $string = preg_replace('/[\s_]/', '-', $string);
+    return $string;
+
+}
+
 // Create Zip files
 function Zip($source, $destination, $include_dir = false)
 {

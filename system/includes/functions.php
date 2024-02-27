@@ -2362,11 +2362,11 @@ function social($class = null)
     }
     
     if (!empty($mastodon)) {
-        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
+        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank"><span class="screen-reader-text">Mastodon</span></a>';
     }
     
     if (!empty($tiktok)) {
-        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
+        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank"><span class="screen-reader-text">TikTok</span></a>';
     }    
 
     $social .= '<a class="social-logo-feed" href="' . $rss . '" target="_blank"><span class="screen-reader-text">RSS</span></a>';
@@ -2822,7 +2822,7 @@ function not_found($request = null)
             $filename = "content/data/views.json";
             $views = array();
             if (file_exists($filename)) {
-                $views = json_decode(file_get_contents($filename), true);
+                $views = json_decode(file_get_data($filename), true);
             }
             if (isset($views[$request])) {
                 unset($views[$request]);
@@ -3542,22 +3542,6 @@ function safe_html($string)
     $string = preg_replace('/\s\s+/', ' ', $string);
     $string = ltrim(rtrim($string));
     return $string;
-}
-
-// return tag safe string
-function safe_tag($string)
-{
-    $tags = array();
-    $string = preg_replace('/[\s-]+/', ' ', $string);
-    $string = explode(',', $string);
-    $string = array_map('trim', $string);
-        foreach ($string as $str) {
-            $tags[] = $str;
-        }
-    $string = implode(',', $tags);
-    $string = preg_replace('/[\s_]/', '-', $string);
-    return $string;
-
 }
 
 // Replace href
