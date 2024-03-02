@@ -84,6 +84,26 @@
     </div>
   </div>
   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Summary behavior</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-teaser.behave" id="teaser.behave1" value="default" <?php if (config('teaser.behave') === 'default' || is_null(config('teaser.behave'))):?>checked<?php endif;?>>
+          <label class="form-check-label" for="teaser.behave1">
+            Default
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-teaser.behave" id="teaser.behave2" value="check" <?php if (config('teaser.behave') === 'check'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="teaser.behave2">
+            Check shortcode
+          </label>
+        </div>
+      </div>
+      <small><em>In summary mode, whether check the shortcode first or not before trim the content to x char</em></small>
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Read_more_text');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-read.more" class="form-control" id="read.more" value="<?php echo valueMaker(config('read.more'));?>" placeholder="<?php echo i18n('Read_more_text_placeholder');?>">

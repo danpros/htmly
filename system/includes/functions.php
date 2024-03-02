@@ -394,6 +394,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
 
     $cList = category_list(true);
+    
+    if (config('views.counter') == 'true') {
+        $viewsFile = "content/data/views.json";
+        if (file_exists($viewsFile)) {
+            $views = json_decode(file_get_contents($viewsFile), true);
+        }
+    }
 
     foreach ($posts as $index => $v) {
 
@@ -540,7 +547,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
 
         if (config('views.counter') == 'true') {
-            $post->views = get_views('post_' . $post->slug, $post->file);               
+            $post->views = get_views('post_' . $post->slug, $post->file, $views);               
         } else {
             $post->views = null;
         }
@@ -558,6 +565,13 @@ function get_pages($pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+    
+    if (config('views.counter') == 'true') {
+        $viewsFile = "content/data/views.json";
+        if (file_exists($viewsFile)) {
+            $views = json_decode(file_get_contents($viewsFile), true);
+        }
+    }
 
     // Extract a specific page with results
     $pages = array_slice($pages, ($page - 1) * $perpage, $perpage);
@@ -609,7 +623,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
         }
 
         if (config('views.counter') == 'true') {
-            $post->views = get_views('page_' . $post->slug, $post->file);               
+            $post->views = get_views('page_' . $post->slug, $post->file, $views);               
         } else {
             $post->views = null;
         }
@@ -628,6 +642,13 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+    
+    if (config('views.counter') == 'true') {
+        $viewsFile = "content/data/views.json";
+        if (file_exists($viewsFile)) {
+            $views = json_decode(file_get_contents($viewsFile), true);
+        }
+    }
 
     // Extract a specific page with results
     $sub_pages = array_slice($sub_pages, ($page - 1) * $perpage, $perpage);
@@ -689,7 +710,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         }
         
         if (config('views.counter') == 'true') {
-            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file);              
+            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);              
         } else {
             $post->views = null;
         }
@@ -2210,10 +2231,15 @@ function get_teaser($string, $url = null, $char = null)
             return $string;
         }
     } else {
-        $readMore = explode('<!--more-->', $string);
-        if (isset($readMore['1'])) {
-            $string = shorten($readMore[0]);
-            return $string;
+        if (config('teaser.behave') === 'check') {
+            $readMore = explode('<!--more-->', $string);
+            if (isset($readMore['1'])) {
+                $string = shorten($readMore[0]);
+                return $string;
+            } else {
+                $string = shorten($string, $char);
+                return $string;
+            }
         } else {
             $string = shorten($string, $char);
             return $string;
@@ -3440,27 +3466,36 @@ function add_view($page)
 }
 
 // Get the page views count
-function get_views($page, $oldID = null)
+function get_views($page, $oldID = null, $views = null)
 {
-    $_views = array();
     $filename = "content/data/views.json";
-    if (file_exists($filename)) {
-        $_views = json_decode(file_get_contents($filename), true);
+
+    if (is_null($views)) {
+        if (file_exists($filename)) {
+            $views = json_decode(file_get_contents($filename), true);
+        }
     }
     
     if (!is_null($oldID)) {
-        if (isset($_views[$oldID])) {
-            $arr = replace_key($_views, $oldID, $page);
-            save_json_pretty($filename, $arr);
-            return $_views[$oldID];
+        if (isset($views[$oldID])) {
+            if (file_exists($filename)) {
+                $views = json_decode(file_get_data($filename), true);
+            }
+            if (isset($views['flock_fail'])) {
+                return -1;
+            } else {
+                $arr = replace_key($views, $oldID, $page);
+                save_json_pretty($filename, $arr);
+            }
+            return $views[$oldID];
         } else {
-            if (isset($_views[$page])) {
-                return $_views[$page];
+            if (isset($views[$page])) {
+                return $views[$page];
             }            
         }
     } else {
-        if (isset($_views[$page])) {
-            return $_views[$page];
+        if (isset($views[$page])) {
+            return $views[$page];
         }
     }
     return -1;

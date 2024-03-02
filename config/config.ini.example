@@ -7,7 +7,8 @@ timezone = "Asia/Jakarta"
 ; Date format.
 date.format = "d F Y"
 
-; Your language (example "en_US" for English or "de_DE" for German. See lang directory for available language)
+; Your language (example "en_US" for English or "de_DE" for German.
+; See lang directory for available language)
 language = "en_US"
 
 ; Blog info
@@ -90,11 +91,15 @@ popular.count = "5"
 ; Tagcloud
 tagcloud.count = "40"
 
+; Read more link text for "full" teaser type
+read.more = "Read more"
+
 ; Teaser type: set "trimmed" or "full".
 teaser.type = "full"
 
-; Read more link text for "full" teaser type
-read.more = "Read more"
+; In summary mode, whether check the shortcode first or not before trim the content to x char
+; Options: "default" and "check"
+teaser.behave = "default"
 
 ; Teaser character count
 teaser.char = "200"
@@ -108,10 +113,12 @@ rss.count = "10"
 ; RSS feed description length. If left empty we will use full page.
 rss.char = "200"
 
-; Enable views Counter, the options is "true" and "false". If set to "true", you can see the Counts in Admin page and popular posts.
+; Enable views Counter, the options is "true" and "false". 
+; If set to "true", you can see the Counts in Admin page and popular posts.
 views.counter = "false"
 
-; Sitemap priorities between "0.0" and "1.0". Set "false" to disable a sitemap for the given type. (See /sitemap.xml)
+; Sitemap priorities between "0.0" and "1.0". 
+; Set "false" to disable a sitemap for the given type. (See /sitemap.xml)
 sitemap.priority.base = "1.0"
 sitemap.priority.post = "0.5"
 sitemap.priority.static = "0.5"
