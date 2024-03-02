@@ -3558,10 +3558,11 @@ body.dark .docs-bar .menu-icon .navicon::before, body.dark .docs-bar .menu-icon 
 }
 
 .social-logo a {
-  padding: 0.5625em 0.25rem 0.5rem 0.125rem;
+  padding: 0.40em 0.25rem 0.5rem 0.125rem;
   line-height:1;
   height:24px;
   color: #1d2d35;
+  margin-right: 0.5rem!important;
 }
 
 body.dark .social-logo a {

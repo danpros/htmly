@@ -518,6 +518,11 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+		
+        $post->description = get_content_tag("d", $content, get_description($post->body));
+
+        $word_count = str_word_count(strip_tags($post->body));
+        $post->readTime = ceil($word_count / 200);
 
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) {
@@ -539,11 +544,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
         } else {
             $post->views = null;
         }
-
-        $post->description = get_content_tag("d", $content, get_description($post->body));
-
-        $word_count = str_word_count(strip_tags($post->body));
-        $post->readTime = ceil($word_count / 200);
 
         $tmp[] = $post;
     }
@@ -592,6 +592,11 @@ function get_pages($pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+		
+        $post->description = get_content_tag("d", $content, get_description($post->body));
+
+        $word_count = str_word_count(strip_tags($post->body));
+        $post->readTime = ceil($word_count / 200);
 
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) {
@@ -608,11 +613,6 @@ function get_pages($pages, $page = 1, $perpage = 0)
         } else {
             $post->views = null;
         }
-
-        $post->description = get_content_tag("d", $content, get_description($post->body));
-
-        $word_count = str_word_count(strip_tags($post->body));
-        $post->readTime = ceil($word_count / 200);
 
         $tmp[] = $post;            
     }
@@ -672,6 +672,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+		
+        $post->description = get_content_tag("d", $content, get_description($post->body));
+
+        $word_count = str_word_count(strip_tags($post->body));
+        $post->readTime = ceil($word_count / 200);
+
         
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) { 
@@ -688,11 +694,6 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         } else {
             $post->views = null;
         }
-
-        $post->description = get_content_tag("d", $content, get_description($post->body));
-
-        $word_count = str_word_count(strip_tags($post->body));
-        $post->readTime = ceil($word_count / 200);
 
         $tmp[] = $post;        
     }
@@ -959,13 +960,13 @@ function read_category_info($category)
 
                 // Get the contents and convert it to HTML
                 $desc->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+				
+                $desc->description = get_content_tag("d", $content, get_description($desc->body));
                 
                 $toc = explode('<!--toc-->', $desc->body);
                 if (isset($toc['1'])) {
                     $desc->body = insert_toc('taxonomy-' . $desc->slug, $toc['0'], $toc['1']);
                 }
-
-                $desc->description = get_content_tag("d", $content, get_description($desc->body));
 
                 $tmp[] = $desc;
             } 
@@ -1191,6 +1192,8 @@ function get_author($name)
 
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
+				
+                $author->description = strip_tags($author->about);
                 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
@@ -1201,8 +1204,6 @@ function get_author($name)
                 
                 $author->title = $author->name;
                 
-                $author->description = strip_tags($author->about);
-
                 $tmp[] = $author;
             }
         }
@@ -1242,10 +1243,18 @@ function get_frontpage()
 
     if (file_exists($filename)) {
         $content = file_get_contents($filename);
+        $front->file = $filename;
         $front->title = get_content_tag('t', $content, 'Welcome');
         $front->url = site_url() . 'front';
+        $front->slug = 'front';
+        $front->parent = null;
+        $front->parentSlug = null;
         // Get the contents and convert it to HTML
         $front->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
+        $front->description = get_content_tag("d", $content, get_description($front->body));
+        $word_count = str_word_count(strip_tags($front->body));
+        $front->readTime = ceil($word_count / 200);
+        $front->views = null;
         $toc = explode('<!--toc-->', $front->body);
         if (isset($toc['1'])) {
             $front->body = insert_toc('page-front', $toc['0'], $toc['1']);
@@ -1254,6 +1263,14 @@ function get_frontpage()
         $front->title = 'Welcome';
         $front->url = site_url() . 'front';
         $front->body = 'Welcome to our website.';
+        $front->file = null;
+        $front->slug = 'front';
+        $front->parent = null;
+        $front->parentSlug = null;
+        $front->description = $front->body;
+        $word_count = str_word_count(strip_tags($front->body));
+        $front->readTime = ceil($word_count / 200);
+        $front->views = null;
     }
 
     return $front;
@@ -2502,7 +2519,6 @@ EOF;
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', '{$gtag}');
 </script>
 EOF;
@@ -2868,15 +2884,7 @@ function generate_rss($posts, $data = null)
         foreach ($posts as $p) {
             $img = get_image($p->body);
             if (!empty($rssLength)) {
-                if (strlen(strip_tags($p->body)) < config('rss.char')) {
-                    $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
-                    $body = $string . '...';
-                } else {
-                    $string = preg_replace('/\s\s+/', ' ', strip_tags($p->body));
-                    $string = substr($string, 0, config('rss.char'));
-                    $string = substr($string, 0, strrpos($string, ' '));
-                    $body = $string . '...';
-                }
+                $body = shorten($p->body, $rssLength);
             } else {
                 $body = $p->body;
             }
@@ -3630,7 +3638,6 @@ function insert_toc($id, $part_1 = null, $part_2 = null)
             document.getElementById('toc-wrapper.{$id}').parentNode.classList.add('{$id}');
             generateTOC('.{$id}');
         }
-        
     });
     </script>
 EOF;
