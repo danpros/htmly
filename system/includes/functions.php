@@ -518,7 +518,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-		
+
         $post->description = get_content_tag("d", $content, get_description($post->body));
 
         $word_count = str_word_count(strip_tags($post->body));
@@ -592,7 +592,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-		
+
         $post->description = get_content_tag("d", $content, get_description($post->body));
 
         $word_count = str_word_count(strip_tags($post->body));
@@ -672,13 +672,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
 
         // Get the contents and convert it to HTML
         $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-		
+
         $post->description = get_content_tag("d", $content, get_description($post->body));
 
         $word_count = str_word_count(strip_tags($post->body));
         $post->readTime = ceil($word_count / 200);
 
-        
         $toc = explode('<!--toc-->', $post->body);
         if (isset($toc['1'])) { 
             $post->body = insert_toc('subpage-' . $post->slug, $toc['0'], $toc['1']);
@@ -960,9 +959,9 @@ function read_category_info($category)
 
                 // Get the contents and convert it to HTML
                 $desc->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
-				
+
                 $desc->description = get_content_tag("d", $content, get_description($desc->body));
-                
+
                 $toc = explode('<!--toc-->', $desc->body);
                 if (isset($toc['1'])) {
                     $desc->body = insert_toc('taxonomy-' . $desc->slug, $toc['0'], $toc['1']);
@@ -1192,18 +1191,17 @@ function get_author($name)
 
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
-				
+
                 $author->description = strip_tags($author->about);
-                
+
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
                     $author->about = insert_toc('profile-' . $author->slug, $toc['0'], $toc['1']);
                 }
-                
+
                 $author->body = $author->about;
-                
                 $author->title = $author->name;
-                
+
                 $tmp[] = $author;
             }
         }
@@ -2212,15 +2210,21 @@ function get_teaser($string, $url = null, $char = null)
             return $string;
         }
     } else {
-        $string = shorten($string, $char);
-        return $string;
+        $readMore = explode('<!--more-->', $string);
+        if (isset($readMore['1'])) {
+            $string = shorten($readMore[0]);
+            return $string;
+        } else {
+            $string = shorten($string, $char);
+            return $string;
+        }
     }
 }
 
 // Shorten the string
 function shorten($string = null, $char = null)
 {
-    if(empty($char) || empty($string)) {
+    if(empty($string)) {
         return;
     }
 
@@ -2230,16 +2234,18 @@ function shorten($string = null, $char = null)
     $tags_to_remove = array('script', 'style');
     foreach($tags_to_remove as $tag){
         $element = $dom->getElementsByTagName($tag);
-        foreach($element  as $item){
+        foreach($element as $item){
             $item->parentNode->removeChild($item);
         }
     }
     $string = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($dom->saveHTML($dom->documentElement), 'UTF-8'));    
     $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
     $string = ltrim(rtrim($string));
-    if (strlen($string) > $char) {
-        $string = substr($string, 0, $char);
-        $string = substr($string, 0, strrpos($string, ' '));
+    if (!empty($char)) {
+        if (strlen($string) > $char) {
+            $string = substr($string, 0, $char);
+            $string = substr($string, 0, strrpos($string, ' '));
+        }
     }
     return $string;
 
@@ -2510,7 +2516,7 @@ function analytics()
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', '{$analytics}', 'auto');
         ga('send', 'pageview');
-</script>
+    </script>
 EOF;
     $gtagScript = <<<EOF
 <!-- Global site tag (gtag.js) - Google Analytics -->
