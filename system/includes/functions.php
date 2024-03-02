@@ -3353,7 +3353,12 @@ function blog_copyright()
 // Return blog language
 function blog_language()
 {
-    return str_replace('_', '-', config('language'));
+    $lang = config('language');
+    if (!empty($lang)) {
+        $exp = explode('_', $lang);
+        return $exp[0] . '-' . $exp[1];
+    }
+    return 'en-US';
 }
 
 // Output head contents
