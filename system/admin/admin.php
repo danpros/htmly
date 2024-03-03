@@ -1010,7 +1010,9 @@ function find_draft_page($static = null)
 
     $tmp = array();
 	
-    if (config('views.counter') == 'true') {
+    $counter = config('views.counter');
+	
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -1052,7 +1054,7 @@ function find_draft_page($static = null)
                 // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                if (config('views.counter') == 'true') {
+                if ($counter == 'true') {
                     $post->views = get_views('page_' . $post->slug, $post->file, $views);
                 } else {
                     $post->views = null;
@@ -1078,7 +1080,9 @@ function find_draft_subpage($static = null, $sub_static = null)
 
     $tmp = array();
 	
-    if (config('views.counter') == 'true') {
+    $counter = config('views.counter');
+	
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -1129,7 +1133,7 @@ function find_draft_subpage($static = null, $sub_static = null)
                 // Get the contents and convert it to HTML
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                if (config('views.counter') == 'true') {
+                if ($counter == 'true') {
                     $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);
                 } else {
                     $post->views = null;

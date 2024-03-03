@@ -61,7 +61,7 @@
     </div>
 </div>
 <?php endif;?>
-
+<?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
 <?php foreach ($posts as $post):?>
 <?php $img = get_image($post->body);?>
 <article>
@@ -101,7 +101,7 @@
 
                 <div class="content-body">
                     <?php echo get_teaser($post->body, $post->url); ?>
-                    <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $post->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
+                    <?php if ($teaserType === 'trimmed'):?>[...] <a class="more-link" href="<?php echo $post->url; ?>"><?php echo $readMore; ?></a><?php endif;?>
                 </div>
 
                 <p>

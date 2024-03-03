@@ -30,6 +30,7 @@
 		<span class="social-navigation feed-link"><a href="<?php echo $type->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
 	</header>
 <?php endif;?>
+<?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
 <?php foreach ($posts as $p):?>
 <article class="post <?php if ($p->type == 'post') {echo 'format-standard';} else { echo 'format-' . $p->type;} ?> hentry single">
 
@@ -59,7 +60,7 @@
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
                     <?php endif; ?>
                     <?php echo get_teaser($p->body, $p->url);?>
-                    <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
+                    <?php if ($teaserType === 'trimmed'):?>[...] <a class="more-link" href="<?php echo $p->url; ?>"><?php echo $readMore; ?></a><?php endif;?>
                 </div>
             </div>
         </div>

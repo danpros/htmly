@@ -10,6 +10,7 @@
         </div>
     </div>
 <?php endif; ?>
+<?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
 <?php foreach ($posts as $p): ?>
     <div class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
         <div class="main">
@@ -52,7 +53,7 @@
             <div class="teaser-body post-<?php echo $p->date;?>" itemprop="articleBody">
                 <?php echo get_thumbnail($p->body) ?>
                 <?php echo get_teaser($p->body, $p->url) ?>
-                <?php if (config('teaser.type') === 'trimmed'):?><a href="<?php echo $p->url;?>"><?php echo config('read.more'); ?></a><?php endif;?>
+                <?php if ($teaserType === 'trimmed'):?>[...] <a href="<?php echo $p->url;?>"><?php echo $readMore; ?></a><?php endif;?>
             </div>
         </div>
     </div>

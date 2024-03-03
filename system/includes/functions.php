@@ -394,8 +394,12 @@ function get_posts($posts, $page = 1, $perpage = 0)
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
 
     $cList = category_list(true);
-    
-    if (config('views.counter') == 'true') {
+
+    $auto = config('toc.automatic');
+    $counter = config('views.counter');
+    $caption = config('fig.captions');
+
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -535,18 +539,17 @@ function get_posts($posts, $page = 1, $perpage = 0)
         if (isset($toc['1'])) {
             $post->body = insert_toc('post-' . $post->date, $toc['0'], $toc['1']);
         } else {
-            $auto = config('toc.automatic');
             if ($auto === 'true') {
                 $post->body = automatic_toc($post->body, 'post-' . $post->date);
             }
         }
 
         // Convert image tags to figures
-        if (config('fig.captions') == 'true') {
+        if ($caption == 'true') {
             $post->body = preg_replace( '/<p>(<img .*?alt="(.*?)"\s*\/>)<\/p>/', '<figure>$1<figcaption>$2</figcaption></figure>', $post->body );
         }
 
-        if (config('views.counter') == 'true') {
+        if ($counter == 'true') {
             $post->views = get_views('post_' . $post->slug, $post->file, $views);               
         } else {
             $post->views = null;
@@ -565,8 +568,11 @@ function get_pages($pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+	
+    $auto = config('toc.automatic');
+    $counter = config('views.counter');
     
-    if (config('views.counter') == 'true') {
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -616,13 +622,12 @@ function get_pages($pages, $page = 1, $perpage = 0)
         if (isset($toc['1'])) {
             $post->body = insert_toc('page-' . $post->slug, $toc['0'], $toc['1']);
         } else {
-            $auto = config('toc.automatic');
             if ($auto === 'true') {
                 $post->body = automatic_toc($post->body, 'page-' . $post->slug);
             }
         }
 
-        if (config('views.counter') == 'true') {
+        if ($counter == 'true') {
             $post->views = get_views('page_' . $post->slug, $post->file, $views);               
         } else {
             $post->views = null;
@@ -642,8 +647,11 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+	
+    $auto = config('toc.automatic');
+    $counter = config('views.counter');
     
-    if (config('views.counter') == 'true') {
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -703,13 +711,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         if (isset($toc['1'])) { 
             $post->body = insert_toc('subpage-' . $post->slug, $toc['0'], $toc['1']);
         } else {
-            $auto = config('toc.automatic');
             if ($auto === 'true') {
                 $post->body = automatic_toc($post->body, 'subpage-' . $post->slug);
             }
         }
         
-        if (config('views.counter') == 'true') {
+        if ($counter == 'true') {
             $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);              
         } else {
             $post->views = null;
@@ -2210,6 +2217,7 @@ function get_teaser($string, $url = null, $char = null)
 {
     $teaserType = config('teaser.type');
     $more = config('read.more');
+    $behave = config('teaser.behave');
 
     if(empty($more)) {
         $more = 'Read more';
@@ -2231,7 +2239,7 @@ function get_teaser($string, $url = null, $char = null)
             return $string;
         }
     } else {
-        if (config('teaser.behave') === 'check') {
+        if ($behave === 'check') {
             $readMore = explode('<!--more-->', $string);
             if (isset($readMore['1'])) {
                 $string = shorten($readMore[0]);
