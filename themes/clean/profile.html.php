@@ -21,11 +21,11 @@
     <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
         <div class="pager">
             <?php if (!empty($pagination['prev'])): ?>
-                <span><a href="?page=<?php echo $page - 1 ?>" class="pagination-arrow newer" rel="prev">Newer</a></span>
+                <span><a href="?page=<?php echo $page - 1 ?>" class="pagination-arrow newer" rel="prev"><?php echo i18n('Newer'); ?></a></span>
             <?php endif; ?>
              <span class="page-number"><?php echo $pagination['pagenum']; ?></span>
             <?php if (!empty($pagination['next'])): ?>
-                <span><a href="?page=<?php echo $page + 1 ?>" class="pagination-arrow older" rel="next">Older</a></span>
+                <span><a href="?page=<?php echo $page + 1 ?>" class="pagination-arrow older" rel="next"><?php echo i18n('Older'); ?></a></span>
             <?php endif; ?>
         </div>
     <?php endif; ?>

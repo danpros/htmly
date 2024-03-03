@@ -7,7 +7,7 @@
         <div class="lead"><?php echo $author->about;?></div>
     </div>
 </div>
-
+<?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
 <?php if (!empty($posts)):?>
     <?php foreach ($posts as $post):?>
     <?php $img = get_image($post->body);?>
@@ -17,7 +17,7 @@
 
                     <?php if (!empty($post->image)) {?>
                         <a href="<?php echo $post->url;?>"><img alt="<?php echo $post->title;?>" src="<?php echo $post->image;?>" width="100%"></a>
-                    <?php } elseif (!empty($img) && config('teaser.type') === 'trimmed') {?>
+                    <?php } elseif (!empty($img) && $teaserType === 'trimmed') {?>
                         <a href="<?php echo $post->url;?>"><img alt="<?php echo $post->title;?>" src="<?php echo $img;?>" width="100%"></a>
                     <?php } ?>
                     
@@ -48,7 +48,7 @@
 
                         <div class="content-body">
                             <?php echo get_teaser($post->body, $post->url); ?>
-                            <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $post->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
+                            <?php if ($teaserType === 'trimmed'):?>[...] <a class="more-link" href="<?php echo $post->url; ?>"><?php echo $readMore; ?></a><?php endif;?>
                         </div>
 
                         <p>

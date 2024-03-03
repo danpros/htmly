@@ -17,6 +17,7 @@
         </div>
     </div>
 <?php endif; ?>
+<?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
 <?php foreach ($posts as $p): ?>
 <section class="post section" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
     <div class="section-inner">
@@ -61,11 +62,12 @@
                     </p>
                 </div>
                 <div class="desc text-left post-<?php echo $p->date;?>" itemprop="articleBody">                                    
-                    <?php echo get_teaser($p->body, $p->url) ?>
+                    <?php echo get_teaser($p->body, $p->url);?>
+					<?php if ($teaserType === 'trimmed'):?>[...]<?php endif;?>
                 </div><!--//desc-->
                 <div style="position:relative;">
-                   <?php if (config('teaser.type') === 'trimmed'):?>
-                       <span class="more"><a class="btn btn-cta-secondary" href="<?php echo $p->url;?>"><?php echo config('read.more'); ?></a></span>
+                   <?php if ($teaserType === 'trimmed'):?>
+                       <span class="more"><a class="btn btn-cta-secondary" href="<?php echo $p->url;?>"><?php echo $readMore; ?></a></span>
                    <?php endif;?>
                     <span class="share pull-right">
                         <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 

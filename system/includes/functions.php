@@ -394,8 +394,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
 
     $cList = category_list(true);
-    
-    if (config('views.counter') == 'true') {
+
+    $auto = config('toc.automatic');
+    $counter = config('views.counter');
+    $caption = config('fig.captions');
+    $permalink = config('permalink.type');
+
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -459,7 +464,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
 
-        if (config('permalink.type') == 'post') {
+        if ($permalink == 'post') {
             $post->url = site_url() . 'post/' . str_replace('.md', '', $arr[2]);
         } else {
             $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
@@ -535,18 +540,17 @@ function get_posts($posts, $page = 1, $perpage = 0)
         if (isset($toc['1'])) {
             $post->body = insert_toc('post-' . $post->date, $toc['0'], $toc['1']);
         } else {
-            $auto = config('toc.automatic');
             if ($auto === 'true') {
                 $post->body = automatic_toc($post->body, 'post-' . $post->date);
             }
         }
 
         // Convert image tags to figures
-        if (config('fig.captions') == 'true') {
+        if ($caption == 'true') {
             $post->body = preg_replace( '/<p>(<img .*?alt="(.*?)"\s*\/>)<\/p>/', '<figure>$1<figcaption>$2</figcaption></figure>', $post->body );
         }
 
-        if (config('views.counter') == 'true') {
+        if ($counter == 'true') {
             $post->views = get_views('post_' . $post->slug, $post->file, $views);               
         } else {
             $post->views = null;
@@ -565,8 +569,11 @@ function get_pages($pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+	
+    $auto = config('toc.automatic');
+    $counter = config('views.counter');
     
-    if (config('views.counter') == 'true') {
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -616,13 +623,12 @@ function get_pages($pages, $page = 1, $perpage = 0)
         if (isset($toc['1'])) {
             $post->body = insert_toc('page-' . $post->slug, $toc['0'], $toc['1']);
         } else {
-            $auto = config('toc.automatic');
             if ($auto === 'true') {
                 $post->body = automatic_toc($post->body, 'page-' . $post->slug);
             }
         }
 
-        if (config('views.counter') == 'true') {
+        if ($counter == 'true') {
             $post->views = get_views('page_' . $post->slug, $post->file, $views);               
         } else {
             $post->views = null;
@@ -642,8 +648,11 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+	
+    $auto = config('toc.automatic');
+    $counter = config('views.counter');
     
-    if (config('views.counter') == 'true') {
+    if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
             $views = json_decode(file_get_contents($viewsFile), true);
@@ -703,13 +712,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         if (isset($toc['1'])) { 
             $post->body = insert_toc('subpage-' . $post->slug, $toc['0'], $toc['1']);
         } else {
-            $auto = config('toc.automatic');
             if ($auto === 'true') {
                 $post->body = automatic_toc($post->body, 'subpage-' . $post->slug);
             }
         }
         
-        if (config('views.counter') == 'true') {
+        if ($counter == 'true') {
             $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);              
         } else {
             $post->views = null;
@@ -2210,6 +2218,7 @@ function get_teaser($string, $url = null, $char = null)
 {
     $teaserType = config('teaser.type');
     $more = config('read.more');
+    $behave = config('teaser.behave');
 
     if(empty($more)) {
         $more = 'Read more';
@@ -2231,7 +2240,7 @@ function get_teaser($string, $url = null, $char = null)
             return $string;
         }
     } else {
-        if (config('teaser.behave') === 'check') {
+        if ($behave === 'check') {
             $readMore = explode('<!--more-->', $string);
             if (isset($readMore['1'])) {
                 $string = shorten($readMore[0]);
@@ -2387,35 +2396,35 @@ function social($class = null)
     $social .= '<div class="social-logo ' . $class . '">';
     $social .= '<link rel="stylesheet" id="social-logo-style" href="'. site_url() .'system/resources/css/social-logos.css" type="text/css" media="all">';
     if (!empty($twitter)) {
-        $social .= '<a class="social-logo-twitter-alt" href="' . $twitter . '" target="_blank"><span class="screen-reader-text">Twitter</span></a>';
+        $social .= '<a class="social-logo-twitter-alt" href="' . $twitter . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Twitter</span></a>';
     }
 
     if (!empty($facebook)) {
-        $social .= '<a class="social-logo-facebook" href="' . $facebook . '" target="_blank"><span class="screen-reader-text">Facebook</span></a>';
+        $social .= '<a class="social-logo-facebook" href="' . $facebook . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Facebook</span></a>';
     }
     
     if (!empty($instagram)) {
-        $social .= '<a class="social-logo-instagram" href="' . $instagram . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
+        $social .= '<a class="social-logo-instagram" href="' . $instagram . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Instagram</span></a>';
     }
 
     if (!empty($linkedin)) {
-        $social .= '<a class="social-logo-linkedin" href="' . $linkedin . '" target="_blank"><span class="screen-reader-text">Linkedin</span></a>';
+        $social .= '<a class="social-logo-linkedin" href="' . $linkedin . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Linkedin</span></a>';
     }
     
     if (!empty($github)) {
-        $social .= '<a class="social-logo-github" href="' . $github . '" target="_blank"><span class="screen-reader-text">Github</span></a>';
+        $social .= '<a class="social-logo-github" href="' . $github . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Github</span></a>';
     }
     
     if (!empty($youtube)) {
-        $social .= '<a class="social-logo-youtube" href="' . $youtube . '" target="_blank"><span class="screen-reader-text">Youtube</span></a>';
+        $social .= '<a class="social-logo-youtube" href="' . $youtube . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Youtube</span></a>';
     }
     
     if (!empty($mastodon)) {
-        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank"><span class="screen-reader-text">Mastodon</span></a>';
+        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Mastodon</span></a>';
     }
     
     if (!empty($tiktok)) {
-        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank"><span class="screen-reader-text">TikTok</span></a>';
+        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank" rel="nofollow"><span class="screen-reader-text">TikTok</span></a>';
     }    
 
     $social .= '<a class="social-logo-feed" href="' . $rss . '" target="_blank"><span class="screen-reader-text">RSS</span></a>';

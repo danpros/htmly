@@ -30,6 +30,7 @@
 		<h1 class="page-title">Type: <?php echo ucfirst($type->title);?></h1>
 	</header>
 <?php endif;?>
+<?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
 <?php foreach ($posts as $p): ?>
 <article class="post type-post hentry <?php if (!empty($p->image) || !empty ($p->audio) || !empty ($p->video)):?>has-post-thumbnail<?php endif;?>">
     <?php if (!empty($p->image)):?>
@@ -63,7 +64,7 @@
 	<?php } ?>
     <div class="entry-content post-<?php echo $p->date;?>">
         <?php echo get_teaser($p->body, $p->url); ?>
-        <?php if (config('teaser.type') === 'trimmed'):?><a class="more-link" href="<?php echo $p->url; ?>"><?php echo config('read.more'); ?></a><?php endif;?>
+        <?php if ($teaserType === 'trimmed'):?>[...] <a class="more-link" href="<?php echo $p->url; ?>"><?php echo $readMore; ?></a><?php endif;?>
     </div>
     <footer class="entry-footer">
         <span class="posted-on">
