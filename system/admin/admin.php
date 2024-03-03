@@ -1642,10 +1642,12 @@ function image_gallery($images, $page = 1, $perpage = 0)
     }
     $tmp .= '</div><br><div class="row">';
     if (!empty($pagination['prev'])) {
-        $tmp .= '<a class="btn btn-primary left" href="#'. $page - 1 .'" onclick="loadImages(' . $page - 1 . ')">← '. i18n('Prev') .'</a>';    
+        $prev = $page - 1;
+        $tmp .= '<a class="btn btn-primary left" href="#'. $prev .'" onclick="loadImages(' . $prev . ')">← '. i18n('Prev') .'</a>';
     }
     if (!empty($pagination['next'])) {
-        $tmp .= '<a class="btn btn-primary right" href="#'. $page + 1 .'" onclick="loadImages(' . $page + 1 . ')">'. i18n('Next') .' →</a>';    
+        $next = $page + 1;
+        $tmp .= '<a class="btn btn-primary right" href="#'. $next .'" onclick="loadImages(' . $next . ')">'. i18n('Next') .' →</a>';
     }
     $tmp .= '</div>';
     return $tmp;

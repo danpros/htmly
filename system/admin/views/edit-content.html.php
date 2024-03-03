@@ -170,7 +170,7 @@ $( function() {
                     </div>                
                     <br>
                     <label for="pURL"><?php echo i18n('Slug');?>  (<?php echo i18n('optional');?>)</label>
-                    <input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_post_title');?>"//>
+                    <input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_post_title');?>"/>
                     <br>
 
                     <?php if ($type == 'is_audio'):?>
