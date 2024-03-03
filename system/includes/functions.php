@@ -222,19 +222,19 @@ function get_zip_files()
 }
 
 // Get images in content/images folder
-function get_gallery() {
-    static $_gallery = array();
-    if (empty($_gallery)) {
+function scan_images() {
+    static $_images = array();
+    if (empty($_images)) {
         $tmp = array();
         $tmp = glob('content/images/*', GLOB_NOSORT);
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
-                $_gallery[] = pathinfo($file);
+                $_images[] = pathinfo($file);
             }
         }
-        usort($_gallery, "sortfile_d");
+        usort($_images, "sortfile_d");
     }
-    return $_gallery;
+    return $_images;
 }
 
 // usort function. Sort by filename.
