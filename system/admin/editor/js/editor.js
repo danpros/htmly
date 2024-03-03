@@ -11,6 +11,8 @@
         $('#insertImageDialogFile').val('');
         $('#insertMediaDialogURL').val('');
         $('#insertMediaDialogFile').val('');
+        $('#gallery-1').html(initial_image);
+        $('#gallery-2').html(initial_image);		
     };
     $('#insertImageDialogInsert').click( function() {
         callbackFunc( $('#insertImageDialogURL').val().length > 0 ? $('#insertImageDialogURL').val() : null );

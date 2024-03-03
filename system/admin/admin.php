@@ -1009,9 +1009,9 @@ function find_draft_page($static = null)
     $posts = get_draft_pages();
 
     $tmp = array();
-	
+
     $counter = config('views.counter');
-	
+
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
@@ -1079,9 +1079,9 @@ function find_draft_subpage($static = null, $sub_static = null)
     $posts = get_draft_subpages($static);
 
     $tmp = array();
-	
+
     $counter = config('views.counter');
-	
+
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
@@ -1625,4 +1625,28 @@ function reorder_subpages($subpages = null)
     }
 
     rebuilt_cache();
+}
+
+// Return image gallery in pager.
+function image_gallery($images, $page = 1, $perpage = 0) 
+{
+    if (empty($images)) {
+        $images = get_gallery();
+    }
+    $pagination = has_pagination(count($images), $perpage, $page);    
+    $tmp = '';
+    $images = array_slice($images, ($page - 1) * $perpage, $perpage);
+    $tmp .= '<div class="cover-container">';
+    foreach ($images as $index => $v) {
+        $tmp .= '<div class="cover-item"><img loading="lazy" class="img-thumbnail the-img" src="' . site_url() . $v['dirname'] . '/'. $v['basename'].'"></div>';
+    }
+    $tmp .= '</div><br><div class="row">';
+    if (!empty($pagination['prev'])) {
+        $tmp .= '<a class="btn btn-primary left" href="#'. $page - 1 .'" onclick="loadImages(' . $page - 1 . ')">← '. i18n('Prev') .'</a>';    
+    }
+    if (!empty($pagination['next'])) {
+        $tmp .= '<a class="btn btn-primary right" href="#'. $page + 1 .'" onclick="loadImages(' . $page + 1 . ')">'. i18n('Next') .' →</a>';    
+    }
+    $tmp .= '</div>';
+    return $tmp;
 }
