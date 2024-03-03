@@ -398,6 +398,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
     $auto = config('toc.automatic');
     $counter = config('views.counter');
     $caption = config('fig.captions');
+    $permalink = config('permalink.type');
 
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
@@ -463,7 +464,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
 
-        if (config('permalink.type') == 'post') {
+        if ($permalink == 'post') {
             $post->url = site_url() . 'post/' . str_replace('.md', '', $arr[2]);
         } else {
             $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
