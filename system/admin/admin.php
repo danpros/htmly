@@ -1628,15 +1628,14 @@ function reorder_subpages($subpages = null)
 }
 
 // Return image gallery in pager.
-// Return image gallery in pager.
 function image_gallery($images, $page = 1, $perpage = 0) 
 {
     if (empty($images)) {
         $images = scan_images();
     }
     $tmp = '';
-    $images = array_slice($images, ($page - 1) * $perpage, $perpage);
-    $pagination = has_pagination(count($images), $perpage, $page);    
+    $pagination = has_pagination(count($images), $perpage, $page);  
+    $images = array_slice($images, ($page - 1) * $perpage, $perpage);  
     $tmp .= '<div class="cover-container">';
     foreach ($images as $index => $v) {
         $tmp .= '<div class="cover-item"><img loading="lazy" class="img-thumbnail the-img" src="' . site_url() . $v['dirname'] . '/'. $v['basename'].'"></div>';
