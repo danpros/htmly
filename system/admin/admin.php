@@ -1643,11 +1643,11 @@ function image_gallery($images, $page = 1, $perpage = 0)
     $tmp .= '</div><br><div class="row">';
     if (!empty($pagination['prev'])) {
         $prev = $page - 1;
-        $tmp .= '<a class="btn btn-primary left" href="#'. $prev .'" onclick="loadImages(' . $prev . ')">← '. i18n('Prev') .'</a>';
+        $tmp .= '<a class="btn btn-primary left" style="margin: .25rem;" href="#'. $prev .'" onclick="loadImages(' . $prev . ')">← '. i18n('Prev') .'</a>';
     }
     if (!empty($pagination['next'])) {
         $next = $page + 1;
-        $tmp .= '<a class="btn btn-primary right" href="#'. $next .'" onclick="loadImages(' . $next . ')">'. i18n('Next') .' →</a>';
+        $tmp .= '<a class="btn btn-primary right" style="margin: .25rem;" href="#'. $next .'" onclick="loadImages(' . $next . ')">'. i18n('Next') .' →</a>';
     }
     $tmp .= '</div>';
     return $tmp;
