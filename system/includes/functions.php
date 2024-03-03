@@ -2395,35 +2395,35 @@ function social($class = null)
     $social .= '<div class="social-logo ' . $class . '">';
     $social .= '<link rel="stylesheet" id="social-logo-style" href="'. site_url() .'system/resources/css/social-logos.css" type="text/css" media="all">';
     if (!empty($twitter)) {
-        $social .= '<a class="social-logo-twitter-alt" href="' . $twitter . '" target="_blank"><span class="screen-reader-text">Twitter</span></a>';
+        $social .= '<a class="social-logo-twitter-alt" href="' . $twitter . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Twitter</span></a>';
     }
 
     if (!empty($facebook)) {
-        $social .= '<a class="social-logo-facebook" href="' . $facebook . '" target="_blank"><span class="screen-reader-text">Facebook</span></a>';
+        $social .= '<a class="social-logo-facebook" href="' . $facebook . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Facebook</span></a>';
     }
     
     if (!empty($instagram)) {
-        $social .= '<a class="social-logo-instagram" href="' . $instagram . '" target="_blank"><span class="screen-reader-text">Instagram</span></a>';
+        $social .= '<a class="social-logo-instagram" href="' . $instagram . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Instagram</span></a>';
     }
 
     if (!empty($linkedin)) {
-        $social .= '<a class="social-logo-linkedin" href="' . $linkedin . '" target="_blank"><span class="screen-reader-text">Linkedin</span></a>';
+        $social .= '<a class="social-logo-linkedin" href="' . $linkedin . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Linkedin</span></a>';
     }
     
     if (!empty($github)) {
-        $social .= '<a class="social-logo-github" href="' . $github . '" target="_blank"><span class="screen-reader-text">Github</span></a>';
+        $social .= '<a class="social-logo-github" href="' . $github . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Github</span></a>';
     }
     
     if (!empty($youtube)) {
-        $social .= '<a class="social-logo-youtube" href="' . $youtube . '" target="_blank"><span class="screen-reader-text">Youtube</span></a>';
+        $social .= '<a class="social-logo-youtube" href="' . $youtube . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Youtube</span></a>';
     }
     
     if (!empty($mastodon)) {
-        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank"><span class="screen-reader-text">Mastodon</span></a>';
+        $social .= '<a class="social-logo-mastodon" href="' . $mastodon . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Mastodon</span></a>';
     }
     
     if (!empty($tiktok)) {
-        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank"><span class="screen-reader-text">TikTok</span></a>';
+        $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank" rel="nofollow"><span class="screen-reader-text">TikTok</span></a>';
     }    
 
     $social .= '<a class="social-logo-feed" href="' . $rss . '" target="_blank"><span class="screen-reader-text">RSS</span></a>';
