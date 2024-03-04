@@ -1824,6 +1824,14 @@ post('/admin/menu', function () {
     }
 });
 
+post('/admin/gallery', function () {
+
+    if (login()) {
+        $page = from($_REQUEST, 'page');
+        $images = image_gallery(null, $page, 40);
+        echo json_encode(array('images' => $images));
+    }
+});
 
 // Show category page
 get('/admin/categories', function () {

@@ -8,6 +8,8 @@
         $('#insertImageDialogFile').val('');
         $('#insertMediaDialogURL').val('');
         $('#insertMediaDialogFile').val('');
+        $('#gallery-1').html(initial_image);
+        $('#gallery-2').html(initial_image);
     };
     $('#insertMediaDialogInsert').click( function() {
         $('.media-uploader').val('');

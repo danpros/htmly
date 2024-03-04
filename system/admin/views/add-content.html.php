@@ -24,7 +24,7 @@ if (file_exists($tagslang)) {
     file_put_contents($tagslang, print_r($tmp, true), LOCK_EX);
 }
 
-$images = get_gallery();
+$images = image_gallery(null, 1, 40);
 
 ?>
 
@@ -227,18 +227,12 @@ $( function() {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <?php if (!empty($images)) :?>
                     <div class="form-group">
-                        <div class="row-fluid cover-container">
-                            <?php foreach ($images as $img):?>
-                                <div class="cover-item">
-                                    <img class="img-thumbnail the-img" src="<?php echo site_url() . $img['dirname'] . '/' . $img['basename']?>">
-                                </div>
-                            <?php endforeach;?>
+                        <div class="row-fluid img-container" id="gallery-1">
+                            <?php echo $images;?>
                         </div>
                     </div>
                     <hr>
-                    <?php endif;?>
                     <div class="form-group">
                         <label for="insertImageDialogURL">URL</label>
                         <input type="text" class="form-control" id="insertImageDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
@@ -267,18 +261,12 @@ $( function() {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <?php if (!empty($images)) :?>
                     <div class="form-group">
-                        <div class="row-fluid cover-container">
-                            <?php foreach ($images as $img):?>
-                                <div class="cover-item">
-                                    <img class="img-thumbnail the-img" src="<?php echo site_url() . $img['dirname'] . '/' . $img['basename']?>">
-                                </div>
-                            <?php endforeach;?>
+                        <div class="row-fluid img-container" id="gallery-2">
+                            <?php echo $images;?>
                         </div>
                     </div>
                     <hr>
-                    <?php endif;?>
                     <div class="form-group">
                         <label for="insertMediaDialogURL">URL</label>
                         <input type="text" class="form-control" id="insertMediaDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
@@ -301,12 +289,25 @@ $( function() {
 </div>
 
 <!-- Declare the base path. Important -->
-<script type="text/javascript">var base_path = '<?php echo site_url() ?>';</script>
+<script type="text/javascript">var base_path = '<?php echo site_url() ?>'; var initial_image = '<?php echo $images;?>';</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
 <script>
-  $('.the-img').click(function(e) {
-    $('#insertMediaDialogURL').val($(e.target).attr('src'));
-    $('#insertImageDialogURL').val($(e.target).attr('src'));
+function loadImages(page) {
+  $.ajax({
+    url: '<?php echo site_url();?>admin/gallery',
+    type: 'POST',
+    data: { page: page },
+    dataType: 'json',
+      success: function(response) {
+        $('#gallery-1').html(response.images);
+        $('#gallery-2').html(response.images);
+      }
   });
+}
+
+$('.img-container').on("click", ".the-img", function(e) {
+  $('#insertMediaDialogURL').val($(e.target).attr('src'));
+  $('#insertImageDialogURL').val($(e.target).attr('src'));
+});
 </script>
