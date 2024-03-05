@@ -9,7 +9,7 @@
     <a class="nav-item nav-link" id="nav-metatags-tab" href="<?php echo site_url();?>admin/config/metatags"><?php echo i18n('Metatags');?></a>
     <a class="nav-item nav-link" id="nav-performance-tab" href="<?php echo site_url();?>admin/config/performance"><?php echo i18n('Performance');?></a>
     <a class="nav-item nav-link" id="nav-custom-tab" href="<?php echo site_url();?>admin/config/custom"><?php echo i18n('Custom');?></a>
-  </div>    
+  </div>
 </nav>
 <br><br>
 <form method="POST">
@@ -84,23 +84,23 @@
     </div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Summary behavior</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('summary_behavior');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-teaser.behave" id="teaser.behave1" value="default" <?php if (config('teaser.behave') === 'default' || is_null(config('teaser.behave'))):?>checked<?php endif;?>>
           <label class="form-check-label" for="teaser.behave1">
-            Default
+            <?php echo i18n('Default');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-teaser.behave" id="teaser.behave2" value="check" <?php if (config('teaser.behave') === 'check'):?>checked<?php endif;?>>
           <label class="form-check-label" for="teaser.behave2">
-            Check shortcode
+            <?php echo i18n('Check_shortcode');?>
           </label>
         </div>
       </div>
-      <small><em>In summary mode, whether check the shortcode first or not before trim the content to x char</em></small>
+      <small><em><?php echo i18n('in_summary_mode_whether_check_the_shortcode_first_or_not_before_trim_the_content_to_x_char');?></em></small>
     </div>
   </div>
   <div class="form-group row">
