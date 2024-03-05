@@ -6,7 +6,7 @@ use \Kanti\HubUpdater;
 $CSRF = get_csrf();
         
 $updater = new HubUpdater(array(
-    'name' => 'sb0001/htmly',
+    'name' => 'danpros/htmly',
     'prerelease' => !!config("prerelease"),
 ));
 
