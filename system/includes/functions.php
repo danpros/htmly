@@ -3421,12 +3421,18 @@ function head_contents()
     $output = '';
     $wmt_id = config('google.wmt.id');
     $version = 'HTMLy ' . constant('HTMLY_VERSION');
+    $favicon = config('favicon.image');
+    if (empty($favicon)) {
+        $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />' . "\n";
+    } else {
+        $favicon = '<link rel="icon" type="image/'. pathinfo($favicon, PATHINFO_EXTENSION) .'" href="' . $favicon . '" />' . "\n";
+    }
 
     $output .= '<meta charset="utf-8" />' . "\n";
     $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
     $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
     $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
-    $output .= '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />' . "\n";
+    $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
     $output .= '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
     if (!empty($wmt_id)) {

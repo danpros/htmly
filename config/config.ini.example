@@ -180,6 +180,9 @@ default.title.format = "%page_title% - %blog_title%"
 ; Default image for Open Graph
 default.image = ""
 
+; Favicon image
+favicon.image = ""
+
 ; Set the theme here
 views.root = "themes/twentysixteen"
 

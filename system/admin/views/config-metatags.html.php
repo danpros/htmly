@@ -68,9 +68,15 @@ if (empty($defaultFormat)) {
 <form method="POST">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
   <div class="form-group row">
+    <label for="favicon.image" class="col-sm-2 col-form-label">Favicon Image</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-favicon.image" class="form-control" id="favicon.image" value="<?php echo config('favicon.image');?>" placeholder="<?php echo site_url();?>favicon.png">
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="default.image" class="col-sm-2 col-form-label"><?php echo i18n('default');?> Image</label>
     <div class="col-sm-10">
-      <input type="text" name="-config-default.image" class="form-control" id="default.image" value="<?php echo config('default.image');?>" placeholder="<?php echo site_url();?>resources/images/logo-big.png">
+      <input type="text" name="-config-default.image" class="form-control" id="default.image" value="<?php echo config('default.image');?>" placeholder="<?php echo site_url();?>system/resources/images/logo-big.png">
     </div>
   </div>
   <br>
