@@ -84,6 +84,7 @@
     "blog.title.format",
     "default.title.format",
     "default.image",
+    "favicon.image",
     "views.root",
     "views.layout"
 ]
