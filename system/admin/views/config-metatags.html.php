@@ -5,6 +5,52 @@ $array = array();
 if (file_exists($config_file)) {
   $array = parse_ini_file($config_file, true);
 }
+
+$homeFormat = config('home.title.format');
+if (empty($homeFormat)) {
+    $homeFormat = '%blog_title% - %blog_tagline%';
+}
+$postFormat = config('post.title.format');
+if (empty($postFormat)) {
+    $postFormat = '%post_title% - %blog_title%';
+}
+$pageFormat = config('page.title.format');
+if (empty($pageFormat)) {
+    $pageFormat = '%page_title% - %blog_title%';
+}
+$categoryFormat = config('category.title.format');
+if (empty($categoryFormat)) {
+    $categoryFormat = '%category_title% - %blog_title%';
+}
+$tagFormat = config('tag.title.format');
+if (empty($tagFormat)) {
+    $tagFormat = '%tag_title% - %blog_title%';
+}
+$searchFormat = config('search.title.format');
+if (empty($searchFormat)) {
+    $searchFormat = '%search_title% - %blog_title%';
+}
+$archiveFormat = config('archive.title.format');
+if (empty($archiveFormat)) {
+    $archiveFormat = '%archive_title% - %blog_title%';
+}
+$typeFormat = config('type.title.format');
+if (empty($typeFormat)) {
+    $typeFormat = '%type_title% - %blog_title%';
+}
+$blogFormat = config('blog.title.format');
+if (empty($blogFormat)) {
+    $blogFormat = 'Blog - %blog_title%';
+}
+$profileFormat = config('profile.title.format');
+if (empty($profileFormat)) {
+    $profileFormat = '%author_name% - %blog_title%';
+}
+$defaultFormat = config('default.title.format');
+if (empty($defaultFormat)) {
+    $defaultFormat = '%page_title% - %blog_title%';
+}
+
 ?>
 <h2><?php echo i18n('Metatags_Settings');?></h2>
 <br>
@@ -21,6 +67,96 @@ if (file_exists($config_file)) {
 <br><br>
 <form method="POST">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
+  <div class="form-group row">
+    <label for="default.image" class="col-sm-2 col-form-label"><?php echo i18n('default');?> Image</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-default.image" class="form-control" id="default.image" value="<?php echo config('default.image');?>" placeholder="<?php echo site_url();?>resources/images/logo-big.png">
+    </div>
+  </div>
+  <br>
+  <h4>Title formats</h4>
+  <hr>
+  <style>.title-format {margin-top:5px;font-size:95%} .title-format code {display:inline-block;margin-left:10px; margin-bottom:5px;color: #333; background: #fbf7f0; padding: 5px; border-radius: .25rem; border: 1px solid #e4e4e4;}</style>
+  <div class="form-group row">
+    <label for="home.title.format" class="col-sm-2 col-form-label"><?php echo i18n('home');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-home.title.format" class="form-control" id="home.title.format" value="<?php echo $homeFormat;?>" placeholder="%blog_title% - %blog_tagline%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="post.title.format" class="col-sm-2 col-form-label"><?php echo i18n('posts');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-post.title.format" class="form-control" id="post.title.format" value="<?php echo $postFormat;?>" placeholder="%post_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%post_title%</code> <code>%post_description%</code> <code>%post_category%</code> <code>%post_tag%</code> <code>%post_author%</code> <code>%post_type%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="page.title.format" class="col-sm-2 col-form-label"><?php echo i18n('static_page');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-page.title.format" class="form-control" id="page.title.format" value="<?php echo $pageFormat;?>" placeholder="%page_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%page_title%</code> <code>%page_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="category.title.format" class="col-sm-2 col-form-label"><?php echo i18n('category');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-category.title.format" class="form-control" id="category.title.format" value="<?php echo $categoryFormat;?>" placeholder="%category_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%category_title%</code> <code>%category_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="tag.title.format" class="col-sm-2 col-form-label"><?php echo i18n('tag');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-tag.title.format" class="form-control" id="tag.title.format" value="<?php echo $tagFormat;?>" placeholder="%tag_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%tag_title%</code> <code>%tag_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="archive.title.format" class="col-sm-2 col-form-label"><?php echo i18n('archives');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-archive.title.format" class="form-control" id="archive.title.format" value="<?php echo $archiveFormat;?>" placeholder="%archive_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%archive_title%</code> <code>%archive_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="search.title.format" class="col-sm-2 col-form-label"><?php echo i18n('search');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-search.title.format" class="form-control" id="search.title.format" value="<?php echo $searchFormat;?>" placeholder="%search_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%search_title%</code> <code>%search_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="type.title.format" class="col-sm-2 col-form-label">Type</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-type.title.format" class="form-control" id="type.title.format" value="<?php echo $typeFormat;?>" placeholder="%type_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%type_title%</code> <code>%type_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="profile.title.format" class="col-sm-2 col-form-label"><?php echo i18n('author');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-profile.title.format" class="form-control" id="profile.title.format" value="<?php echo $profileFormat;?>" placeholder="%author_name% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%author_name%</code> <code>%author_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.title.format" class="col-sm-2 col-form-label">Blog</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.title.format" class="form-control" id="blog.title.format" value="<?php echo $blogFormat;?>" placeholder="Blog - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code></p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="default.title.format" class="col-sm-2 col-form-label"><?php echo i18n('default');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-default.title.format" class="form-control" id="default.title.format" value="<?php echo $defaultFormat;?>" placeholder="%page_title% - %blog_title%">
+      <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%page_title%</code></p>
+    </div>
+  </div>
+  <br>
+  <h4>Miscellaneous</h4>
+  <hr>  
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Permalink');?></label>
     <div class="col-sm-10">

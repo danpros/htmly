@@ -72,6 +72,18 @@
     "toc.style",
     "toc.automatic",
     "toc.position",
+    "home.title.format",
+    "post.title.format",
+    "page.title.format",
+    "category.title.format",
+    "tag.title.format",
+    "archive.title.format",
+    "search.title.format",
+    "type.title.format",
+    "profile.title.format",
+    "blog.title.format",
+    "default.title.format",
+    "default.image",
     "views.root",
     "views.layout"
 ]

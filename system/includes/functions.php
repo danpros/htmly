@@ -3714,57 +3714,90 @@ function automatic_toc($content, $id)
 function generate_title($type = null, $object = null) 
 {
     if ($type == 'is_front') {
-        $format = '%blog_title% - %blog_tagline%';
+        $format = config('home.title.format');
+        if (empty($format)) {
+            $format = '%blog_title% - %blog_tagline%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description());
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_post') {
-        $format = '%post_title% - %blog_title%';
+        $format = config('post.title.format');
+        if (empty($format)) {
+            $format = '%post_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%post_title%' => $object->title, '%post_description%' => $object->description, '%post_category%' => $object->categoryTitle, '%post_tag%' => $object->tag, '%post_author%' => $object->authorName, '%post_type%' => ucfirst($object->type));
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_page' || $type == 'is_subpage') {
-        $format = '%page_title% - %blog_title%';
+        $format = config('page.title.format');
+        if (empty($format)) {
+            $format = '%page_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%page_title%' => $object->title, '%page_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_profile') {
-        $format = '%author_name% - %blog_title%';
+        $format = config('profile.title.format');
+        if (empty($format)) {
+            $format = '%author_name% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%author_name%' => $object->title, '%author_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_category') {
-        $format = '%category_title% - %blog_title%';
+        $format = config('category.title.format');
+        if (empty($format)) {
+            $format = '%category_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%category_title%' => $object->title, '%category_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_tag') {
-        $format = '%tag_title% - %blog_title%';
+        $format = config('tag.title.format');
+        if (empty($format)) {
+            $format = '%tag_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%tag_title%' => $object->title, '%tag_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_archive') {
-        $format = '%archive_title% - %blog_title%';
+        $format = config('archive.title.format');
+        if (empty($format)) {
+            $format = '%archive_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%archive_title%' => $object->title, '%archive_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_search') {
-        $format = '%search_title% - %blog_title%';
+        $format = config('search.title.format');
+        if (empty($format)) {
+            $format = '%search_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%search_title%' => $object->title, '%search_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_type') {
-        $format = '%type_title% - %blog_title%';
+        $format = config('type.title.format');
+        if (empty($format)) {
+            $format = '%type_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%type_title%' => $object->title, '%type_description%' => $object->description);
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_blog') {
-        $format = 'Blog - %blog_title%';
+        $format = config('blog.title.format');
+        if (empty($format)) {
+            $format = 'Blog - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description());
         $var = strtr($format, $var_map);
         return strip_tags($var);
     } elseif ($type == 'is_default') {
-        $format = '%page_title% - %blog_title%';
+        $format = config('default.title.format');
+        if (empty($format)) {
+            $format = '%page_title% - %blog_title%';
+        }
         $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%page_title%' => $object);
         $var = strtr($format, $var_map);
         return strip_tags($var);

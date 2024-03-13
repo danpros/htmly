@@ -164,6 +164,22 @@ toc.automatic = "false"
 ; Automatically insert the TOC after x paragraph
 toc.position = "1"
 
+; Title formats
+home.title.format = "%blog_title% - %blog_tagline%"
+post.title.format = "%post_title% - %blog_title%"
+page.title.format = "%page_title% - %blog_title%"
+category.title.format = "%category_title% - %blog_title%"
+tag.title.format = "%tag_title% - %blog_title%"
+archive.title.format = "%archive_title% - %blog_title%"
+search.title.format = "%search_title% - %blog_title%"
+type.title.format = "%type_title% - %blog_title%"
+profile.title.format = "%author_name% - %blog_title%"
+blog.title.format = "Blog - %blog_title%"
+default.title.format = "%page_title% - %blog_title%"
+
+; Default image for Open Graph
+default.image = ""
+
 ; Set the theme here
 views.root = "themes/twentysixteen"
 
