@@ -2510,7 +2510,7 @@ function facebook()
 {
     $comment = config('comment.system');
     $appid = config('fb.appid');
-    $lang = config('language');
+    $lang = locale_language();
     $script = <<<EOF
     <div id="fb-root"></div>
     <script>(function (d, s, id) {
@@ -3403,6 +3403,17 @@ function blog_language()
     return 'en-US';
 }
 
+// Return locale language
+function locale_language()
+{
+    $lang = config('language');
+    if (!empty($lang)) {
+        $exp = explode('_', $lang);
+        return $exp[0] . '_' . $exp[1];
+    }
+    return 'en_US';
+}
+
 // Output head contents
 function head_contents()
 {
@@ -3637,7 +3648,7 @@ function format_date($date, $dateFormat = null)
     if (extension_loaded('intl')) {
         $format_map = array('s' => 'ss', 'i' => 'mm', 'H' => 'HH', 'G' => 'H', 'd' => 'dd', 'j' => 'd', 'D' => 'EE', 'l' => 'EEEE', 'm' => 'MM', 'M' => 'MMM', 'F' => 'MMMM', 'Y' => 'yyyy');
         $intlFormat = strtr($dateFormat, $format_map);
-        $formatter = new IntlDateFormatter(config('language'), IntlDateFormatter::NONE, IntlDateFormatter::NONE, config('timezone'), IntlDateFormatter::GREGORIAN, $intlFormat);
+        $formatter = new IntlDateFormatter(locale_language(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, config('timezone'), IntlDateFormatter::GREGORIAN, $intlFormat);
         return $formatter->format($date); 
     } else {
         return date($dateFormat, $date);
@@ -3815,7 +3826,7 @@ function generate_meta($type = null, $object = null)
     $facebook = config('social.facebook');
     $twitter = config('social.twitter');
     if (is_null($object)) {
-        $tags .= '<meta property="og:locale" content="'. config('language') .'" />' . "\n";
+        $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
         $tags .= '<meta property="og:type" content="website" />' . "\n";
         $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
         if ($type == 'is_blog') {
@@ -3843,7 +3854,7 @@ function generate_meta($type = null, $object = null)
                 $image = $defaultImg;
             }
         }
-        $tags .= '<meta property="og:locale" content="'. config('language') .'" />' . "\n";
+        $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
         $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
         $tags .= '<meta property="og:type" content="article" />' . "\n";
         $tags .= '<meta property="og:title" content="'. $object->title .'" />' . "\n";
