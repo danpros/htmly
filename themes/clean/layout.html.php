@@ -6,6 +6,7 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
+    <?php echo $metatags;?>
     <link href="<?php echo theme_path() ?>css/style.css" rel="stylesheet"/>
     <link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700&subset=latin,cyrillic-ext" rel="stylesheet"/>
     <!--[if lt IE 9]>

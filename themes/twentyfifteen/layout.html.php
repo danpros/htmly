@@ -6,6 +6,7 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
+    <?php echo $metatags;?>
     <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo theme_path();?>css/font.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all"> 
     <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path();?>css/style_v2.css" type="text/css" media="all">

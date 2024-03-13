@@ -569,7 +569,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
-	
+    
     $auto = config('toc.automatic');
     $counter = config('views.counter');
     
@@ -648,7 +648,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
-	
+    
     $auto = config('toc.automatic');
     $counter = config('views.counter');
     
@@ -3409,19 +3409,16 @@ function head_contents()
     $wmt_id = config('google.wmt.id');
     $version = 'HTMLy ' . constant('HTMLY_VERSION');
 
-    $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />';
-    $charset = '<meta charset="utf-8" />';
-    $generator = '<meta name="generator" content="' . $version . '" />';
-    $xua = '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
-    $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
-    $sitemap = '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />';
-    $feed = '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />';
-    $webmasterTools = '';
+    $output .= '<meta charset="utf-8" />' . "\n";
+    $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
+    $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
+    $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
+    $output .= '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />' . "\n";
+    $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
+    $output .= '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
     if (!empty($wmt_id)) {
-        $webmasterTools = '<meta name="google-site-verification" content="' . $wmt_id . '" />';
+        $output .=  '<meta name="google-site-verification" content="' . $wmt_id . '" />' . "\n";
     }
-
-    $output .= $charset . "\n" . $xua . "\n" . $viewport . "\n" . $generator . "\n" . $favicon . "\n" . $sitemap . "\n" . $feed . "\n" . $webmasterTools . "\n";
 
     return $output;
 }
@@ -3711,4 +3708,130 @@ function automatic_toc($content, $id)
     array_splice($exp, $pos, 0, insert_toc($id) . '<p>');
     $content = implode('</p>', $exp);
     return $content;
+}
+
+function generate_title($type = null, $object = null) 
+{
+    if ($type == 'is_front') {
+        $format = '%blog_title% - %blog_tagline%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description());
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_post') {
+        $format = '%post_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%post_title%' => $object->title, '%post_description%' => $object->description, '%post_category%' => $object->categoryTitle, '%post_tag%' => $object->tag, '%post_author%' => $object->authorName, '%post_type%' => ucfirst($object->type));
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_page' || $type == 'is_subpage') {
+        $format = '%page_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%page_title%' => $object->title, '%page_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_profile') {
+        $format = '%author_name% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%author_name%' => $object->title, '%author_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_category') {
+        $format = '%category_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%category_title%' => $object->title, '%category_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_tag') {
+        $format = '%tag_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%tag_title%' => $object->title, '%tag_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_archive') {
+        $format = '%archive_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%archive_title%' => $object->title, '%archive_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_search') {
+        $format = '%search_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%search_title%' => $object->title, '%search_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_type') {
+        $format = '%type_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%type_title%' => $object->title, '%type_description%' => $object->description);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_blog') {
+        $format = 'Blog - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description());
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    } elseif ($type == 'is_default') {
+        $format = '%page_title% - %blog_title%';
+        $var_map = array('%blog_title%' => blog_title(), '%blog_tagline%' => blog_tagline(), '%blog_description%' => blog_description(), '%page_title%' => $object);
+        $var = strtr($format, $var_map);
+        return strip_tags($var);
+    }
+}
+
+function generate_meta($type = null, $object = null) 
+{
+    $tags = '';
+    $defaultImg = config('default.image');
+    if (empty($defaultImg)) {
+        $defaultImg = site_url() . 'system/resources/images/logo-big.png';
+    }
+    $facebook = config('social.facebook');
+    $twitter = config('social.twitter');
+    if (is_null($object)) {
+        $tags .= '<meta property="og:locale" content="'. config('language') .'" />' . "\n";
+        $tags .= '<meta property="og:type" content="website" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
+        if ($type == 'is_blog') {
+            $tags .= '<meta property="og:title" content="'. generate_title('is_blog', null) . '" />' . "\n";
+        } else {
+            $tags .= '<meta property="og:title" content="'. generate_title('is_front', null) . '" />' . "\n";
+        }
+        $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
+        $tags .= '<meta property="og:description" content="'. blog_description() .'" />' . "\n";
+        $tags .= '<meta property="og:image" content="'. $defaultImg .'" />' . "\n";
+        $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
+        if(!empty($twitter)) {
+            $twitter = parse_url($twitter);
+            $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
+        }
+    } else {
+        if(!empty($object->image)) {
+            $image = $object->image;
+        } else {
+            $image = get_image($object->body);
+            if(empty($image)) {
+                $image = $defaultImg;
+            }
+        }
+        $tags .= '<meta property="og:locale" content="'. config('language') .'" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
+        $tags .= '<meta property="og:type" content="article" />' . "\n";
+        $tags .= '<meta property="og:title" content="'. $object->title .'" />' . "\n";
+        if ($type == 'is_post') {
+            $tags .= '<meta name="author" content="'. $object->authorName .'" />' . "\n";
+            $tags .= '<meta name="article:published_time" content="'. date('c', $object->date) .'" />' . "\n";
+            $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
+            $tags .= '<meta name="article:section" content="'. $object->categoryTitle .'" />' . "\n";
+            $tags .= '<meta name="article:section_url" content="'. $object->categoryUrl .'" />' . "\n";    
+        }
+        if ($type == 'is_page' || $type == 'is_subpage') {
+            $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
+        }
+        if(!empty($facebook)) {
+            $tags .= '    <meta property="article:publisher" content="'. $facebook .'" />' . "\n";
+        }
+        if(!empty($twitter)) {
+            $twitter = parse_url($twitter);
+            $tags .= '<meta name="twitter:creator" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
+            $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
+        }
+        $tags .= '<meta property="og:url" content="'. $object->url .'" />' . "\n";
+        $tags .= '<meta property="og:description" content="'. $object->description .'" />' . "\n";
+        $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
+        $tags .= '<meta property="og:image" content="'. $image .'" />' . "\n";
+    }
+    
+    return $tags;
 }
