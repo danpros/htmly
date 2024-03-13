@@ -572,7 +572,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
     
     $auto = config('toc.automatic');
     $counter = config('views.counter');
-    
+
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
@@ -648,10 +648,10 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
-    
+
     $auto = config('toc.automatic');
     $counter = config('views.counter');
-    
+
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
         if (file_exists($viewsFile)) {
@@ -3777,6 +3777,7 @@ function generate_meta($type = null, $object = null)
     if (empty($defaultImg)) {
         $defaultImg = site_url() . 'system/resources/images/logo-big.png';
     }
+    $fbApp = config('fb.appid');
     $facebook = config('social.facebook');
     $twitter = config('social.twitter');
     if (is_null($object)) {
@@ -3795,6 +3796,9 @@ function generate_meta($type = null, $object = null)
         if(!empty($twitter)) {
             $twitter = parse_url($twitter);
             $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
+        }
+        if (!empty($fbApp)) {
+            $tags .= '<meta property="fb:app_id" content="'. $fbApp .'" />' . "\n";
         }
     } else {
         if(!empty($object->image)) {
@@ -3820,7 +3824,7 @@ function generate_meta($type = null, $object = null)
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
         }
         if(!empty($facebook)) {
-            $tags .= '    <meta property="article:publisher" content="'. $facebook .'" />' . "\n";
+            $tags .= '<meta property="article:publisher" content="'. $facebook .'" />' . "\n";
         }
         if(!empty($twitter)) {
             $twitter = parse_url($twitter);
@@ -3831,6 +3835,9 @@ function generate_meta($type = null, $object = null)
         $tags .= '<meta property="og:description" content="'. $object->description .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $image .'" />' . "\n";
+        if (!empty($fbApp)) {
+            $tags .= '<meta property="fb:app_id" content="'. $fbApp .'" />' . "\n";
+        }
     }
     
     return $tags;
