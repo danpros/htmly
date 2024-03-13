@@ -2891,9 +2891,10 @@ function not_found($request = null)
 
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
-        'title' => i18n('This_page_doesnt_exist') . ' - ' . blog_title(),
+        'title' => generate_title('is_default', i18n('This_page_doesnt_exist')),
         'description' => i18n('This_page_doesnt_exist'),
         'canonical' => site_url(),
+        'metatags' => generate_meta(null, null),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('This_page_doesnt_exist'),
         'bodyclass' => 'error-404',
         'is_404' => true,
