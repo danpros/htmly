@@ -2510,6 +2510,7 @@ function facebook()
 {
     $comment = config('comment.system');
     $appid = config('fb.appid');
+    $lang = config('language');
     $script = <<<EOF
     <div id="fb-root"></div>
     <script>(function (d, s, id) {
@@ -2517,7 +2518,7 @@ function facebook()
         if (d.getElementById(id)) return;
         js = d.createElement(s);
         js.id = id;
-        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={$appid}";
+        js.src = "//connect.facebook.net/{$lang}/all.js#xfbml=1&appId={$appid}";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
