@@ -3423,7 +3423,7 @@ function head_contents()
     $version = 'HTMLy ' . constant('HTMLY_VERSION');
     $favicon = config('favicon.image');
     if (empty($favicon)) {
-        $favicon = '<link rel="icon" type="image/x-icon" href="' . site_url() . 'favicon.ico" />' . "\n";
+        $favicon = '<link rel="icon" type="image/png" href="' . site_url() . 'favicon.png" />' . "\n";
     } else {
         $favicon = '<link rel="icon" type="image/'. pathinfo($favicon, PATHINFO_EXTENSION) .'" href="' . $favicon . '" />' . "\n";
     }
