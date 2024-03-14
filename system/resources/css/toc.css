@@ -25,6 +25,10 @@ summary {
 	box-shadow:none;
 }
 
+.toc {
+	padding: 5px;
+}
+
 .toc .h3-toc {
 	margin-left: .20in;
 }
