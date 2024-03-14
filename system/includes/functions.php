@@ -1221,7 +1221,7 @@ function get_author($name)
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                $author->description = strip_tags($author->about);
+                $author->description = safe_html(strip_tags($author->about));
 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
