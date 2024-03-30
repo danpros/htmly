@@ -63,7 +63,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 12a9 9 0 1018 0A9 9 0 003 12"></path><path d="M12 7v5l3 3"></path></svg> 
                                     <?php echo $post->readTime;?> min
                                 </strong>
-                                <?php if (login()) { echo ' <span class="mx-2">—</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828.0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <span class="edit-post"><a href="'. $post->url .'/edit?destination=post">' . i18n('Edit') . '</a></span>'; } ?>
+                                <?php if (authorized($post)) { echo ' <span class="mx-2">—</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828.0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <span class="edit-post"><a href="'. $post->url .'/edit?destination=post">' . i18n('Edit') . '</a></span>'; } ?>
                             </small>
                         </p>
 

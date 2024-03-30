@@ -58,7 +58,7 @@
                         <?php } elseif (facebook()) { ?> 
                             - <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                         <?php } ?>
-                        <?php if (login()) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
+                        <?php if (authorized($p)) { echo ' - <span><a href="'. $p->url .'/edit?destination=post">Edit</a></span>'; } ?>
                     </p>
                 </div>
                 <div class="desc text-left post-<?php echo $p->date;?>" itemprop="articleBody">                                    

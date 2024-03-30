@@ -12,7 +12,10 @@
     <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
 </head>
-<?php if (login()) { ?>
+<?php if (login()) { 
+$user = $_SESSION[site_url()]['user'];
+$role = user('role', $user);
+?>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 <style>.error-message ul {margin:0;padding:0;}</style>
@@ -75,10 +78,19 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <?php if ($role === 'editor' || $role === 'admin'):?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/posts" class="nav-link">
                   <p>
                      <?php echo i18n('Posts_list'); ?>
+                  </p>
+                </a>
+              </li>
+			  <?php endif;?>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/mine" class="nav-link">
+                  <p>
+                    <?php echo i18n('My_posts');?>
                   </p>
                 </a>
               </li>
@@ -96,13 +108,16 @@
                   </p>
                 </a>
               </li>
+              <?php if ($role === 'editor' || $role === 'admin'):?>
+              <?php if (config('views.counter') == 'true') : ?>
               <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/pages" class="nav-link">
+                <a href="<?php echo site_url();?>admin/popular" class="nav-link">
                   <p>
-                     <?php echo i18n('Static_pages'); ?>
+                    <?php echo i18n('Popular_posts');?>
                   </p>
                 </a>
               </li>
+              <?php endif; ?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/categories" class="nav-link">
                   <p>
@@ -110,8 +125,17 @@
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/pages" class="nav-link">
+                  <p>
+                     <?php echo i18n('Static_pages'); ?>
+                  </p>
+                </a>
+              </li>
+              <?php endif;?>
             </ul>
           </li>
+          <?php if ($role === 'editor' || $role === 'admin'):?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cogs"></i>
@@ -121,6 +145,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <?php if ($role === 'admin'):?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/config" class="nav-link">
                   <p>
@@ -128,6 +153,8 @@
                   </p>
                 </a>
               </li>
+              <?php endif;?>
+              <?php if ($role === 'editor' || $role === 'admin'):?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/menu" class="nav-link">
                   <p>
@@ -135,8 +162,11 @@
                   </p>
                 </a>
               </li>
+              <?php endif;?>
             </ul>
           </li>
+          <?php endif;?>
+          <?php if ($role === 'editor' || $role === 'admin'):?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-briefcase"></i>
@@ -153,6 +183,7 @@
                   </p>
                 </a>
               </li>
+              <?php if ($role === 'admin'):?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/update" class="nav-link">
                   <p>
@@ -174,17 +205,10 @@
                   </p>
                 </a>
               </li>
-              <?php if (config('views.counter') == 'true') { ?>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/popular" class="nav-link">
-                  <p>
-                    <?php echo i18n('Popular_posts');?>
-                  </p>
-                </a>
-              </li>
-              <?php } ?>
+              <?php endif;?>
             </ul>
           </li>
+          <?php endif;?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-user"></i>
@@ -194,13 +218,6 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/mine" class="nav-link">
-                  <p>
-                    <?php echo i18n('My_posts');?>
-                  </p>
-                </a>
-              </li>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
                   <p>
