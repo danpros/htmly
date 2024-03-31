@@ -3838,11 +3838,12 @@ function generate_meta($type = null, $object = null)
         $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
         if ($type == 'is_blog') {
             $tags .= '<meta property="og:title" content="'. generate_title('is_blog', null) . '" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. blog_title() .' Blog" />' . "\n";
         } else {
             $tags .= '<meta property="og:title" content="'. generate_title('is_front', null) . '" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
         }
         $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
-        $tags .= '<meta property="og:description" content="'. blog_description() .'" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $defaultImg .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         if(!empty($twitter)) {
