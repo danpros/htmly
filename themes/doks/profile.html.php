@@ -17,7 +17,7 @@
 
                     <?php if (!empty($post->image)) {?>
                         <a href="<?php echo $post->url;?>"><img alt="<?php echo $post->title;?>" src="<?php echo $post->image;?>" width="100%"></a>
-                    <?php } elseif (!empty($img) && $teaserType === 'trimmed') {?>
+                    <?php } elseif (!empty($img) && $teaserType === 'trimmed' && empty($post->quote) && empty($post->video) && empty($post->audio)) {?>
                         <a href="<?php echo $post->url;?>"><img alt="<?php echo $post->title;?>" src="<?php echo $img;?>" width="100%"></a>
                     <?php } ?>
                     
