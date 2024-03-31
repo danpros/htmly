@@ -66,7 +66,38 @@ if (empty($defaultFormat)) {
 </nav>
 <br><br>
 <form method="POST">
-<input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
+<input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>"> 
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Permalink');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-permalink.type" id="permalink.type1" value="default" <?php if (config('permalink.type') === 'default'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="permalink.type1">
+            <?php echo i18n('year_month_your_post_slug');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-permalink.type" id="permalink.type1" value="post" <?php if (config('permalink.type') === 'post'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="permalink.type2">
+            <?php echo i18n('post_your_post_slug');?>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description.char" class="col-sm-2 col-form-label"><?php echo i18n('Meta_description_character');?></label>
+    <div class="col-sm-10">
+      <input type="number" name="-config-description.char" class="form-control" id="description.char" value="<?php echo config('description.char');?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Breadcrumb_home_text');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-breadcrumb.home" class="form-control" id="breadcrumb.home" value="<?php echo valueMaker(config('breadcrumb.home'));?>" placeholder="<?php echo i18n('Home');?>">
+    </div>
+  </div>
   <div class="form-group row">
     <label for="favicon.image" class="col-sm-2 col-form-label">Favicon Image</label>
     <div class="col-sm-10">
@@ -158,40 +189,6 @@ if (empty($defaultFormat)) {
     <div class="col-sm-10">
       <input type="text" name="-config-default.title.format" class="form-control" id="default.title.format" value="<?php echo $defaultFormat;?>" placeholder="%page_title% - %blog_title%">
       <p class="title-format">Available shortcode: <code>%blog_title%</code> <code>%blog_tagline%</code> <code>%blog_description%</code> <code>%page_title%</code></p>
-    </div>
-  </div>
-  <br>
-  <h4>Miscellaneous</h4>
-  <hr>  
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label"><?php echo i18n('Permalink');?></label>
-    <div class="col-sm-10">
-      <div class="col-sm-10">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-permalink.type" id="permalink.type1" value="default" <?php if (config('permalink.type') === 'default'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="permalink.type1">
-            <?php echo i18n('year_month_your_post_slug');?>
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-permalink.type" id="permalink.type1" value="post" <?php if (config('permalink.type') === 'post'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="permalink.type2">
-            <?php echo i18n('post_your_post_slug');?>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="description.char" class="col-sm-2 col-form-label"><?php echo i18n('Meta_description_character');?></label>
-    <div class="col-sm-10">
-      <input type="number" name="-config-description.char" class="form-control" id="description.char" value="<?php echo config('description.char');?>">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="read.more" class="col-sm-2 col-form-label"><?php echo i18n('Breadcrumb_home_text');?></label>
-    <div class="col-sm-10">
-      <input type="text" name="-config-breadcrumb.home" class="form-control" id="breadcrumb.home" value="<?php echo valueMaker(config('breadcrumb.home'));?>" placeholder="<?php echo i18n('Home');?>">
     </div>
   </div>
   <br>
