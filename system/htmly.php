@@ -288,9 +288,7 @@ get('/author/:name/feed', function ($name) {
 
 // Edit the profile
 get('/edit/profile', function () {
-
     if (login()) {
-
         config('views.root', 'system/admin/views');
         render('edit-page', array(
             'title' => generate_title('is_default', i18n('Edit_profile')),
@@ -348,6 +346,52 @@ post('/edit/profile', function () {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Edit profile'
         ));
     }
+});
+
+get('/edit/password', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('edit-password', array(
+            'title' => generate_title('is_default', i18n('change_password')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_profile',
+            'is_admin' => true,
+            'bodyclass' => 'edit-password',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('change_password'),
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/edit/password', function() {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $username = from($_REQUEST, 'username');
+        $new_password = from($_REQUEST, 'password');
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        $old_password = user('password', $username);
+        if ($user === $username) {
+            $file = 'config/users/' . $user . '.ini';
+            if (file_exists($file)) {
+                if (!empty($new_password)) {
+                    update_user($user, $new_password, $role);
+                }
+            }
+            $redir = site_url() . 'admin';
+            header("location: $redir");  
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }	
 });
 
 // Edit the frontpage

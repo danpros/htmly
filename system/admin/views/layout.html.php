@@ -231,6 +231,13 @@ if (isset($_GET['search'])) {
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
+                <a href="<?php echo site_url();?>edit/password" class="nav-link">
+                  <p>
+                    <?php echo i18n('Change_password');?>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
                   <p>
                     <?php echo i18n('Edit_profile');?>
