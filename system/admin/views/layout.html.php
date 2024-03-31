@@ -153,6 +153,13 @@ $role = user('role', $user);
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/users" class="nav-link">
+                  <p>
+                      <?php echo i18n('Manage_users'); ?>
+                  </p>
+                </a>
+              </li>
               <?php endif;?>
               <?php if ($role === 'editor' || $role === 'admin'):?>
               <li class="nav-item">

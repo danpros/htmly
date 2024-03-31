@@ -30,7 +30,7 @@ function update_user($userName, $password, $role)
 }
 
 // Create user
-function create_user($userName, $password, $role = "user")
+function create_user($userName, $password, $role)
 {
     $file = 'config/users/' . $userName . '.ini';
     if (file_exists($file)) {

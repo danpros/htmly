@@ -1831,7 +1831,6 @@ post('/admin/config/performance', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
-    die;
 });
 
 // Show Backup page
@@ -2033,7 +2032,6 @@ get('/admin/menu', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
-    die;
 });
 
 post('/admin/menu', function () {
@@ -2051,6 +2049,250 @@ post('/admin/menu', function () {
             $redir = site_url();
             header("location: $redir");
         }
+    }
+});
+
+// Manage users page
+get('/admin/users', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('users', array(
+                'title' => generate_title('is_default', i18n('User')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-users',
+                'is_admin' => true,
+                'bodyclass' => 'admin-users',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('User')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Denied')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-menu',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
+            ));            
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+get('/admin/add/user', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('add-user', array(
+                'title' => generate_title('is_default', i18n('Add_user')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-users',
+                'is_admin' => true,
+                'bodyclass' => 'admin-users',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('add_user')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Denied')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-menu',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
+            ));            
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/add/user', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $username = from($_REQUEST, 'username');
+    $user_role = from($_REQUEST, 'user-role');
+    $password = from($_REQUEST, 'password');
+    if (login() && $proper) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            
+            if (!empty($username) && !empty($password)) {
+                create_user($username, $password, $user_role);
+            } else {
+            
+                $message['error'] = '';
+                if (empty($username)) {
+                    $message['error'] .= '<li class="alert alert-danger">Username field is required.</li>';
+                }
+                if (empty($password)) {
+                    $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
+                }        
+                
+                render('add-user', array(
+                    'title' => generate_title('is_default', i18n('Add_user')),
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'type' => 'is_admin-users',
+                    'is_admin' => true,
+                    'username' => $username,
+                    'user_role' => $user_role,
+                    'password' => $password,
+                    'bodyclass' => 'admin-users',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('add_user')
+                ));
+            }
+            $redir = site_url() . 'admin/users';
+            header("location: $redir");              
+        } else {
+            $redir = site_url();
+            header("location: $redir");              
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+get('/admin/users/:username/edit', function ($username) {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('edit-user', array(
+                'title' => generate_title('is_default', $username),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-users',
+                'username' => $username,
+                'is_admin' => true,
+                'bodyclass' => 'admin-users',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $username
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Denied')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-menu',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
+            ));            
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted Config page data
+post('/admin/users/:username/edit', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $username = from($_REQUEST, 'username');
+        $user_role = from($_REQUEST, 'role-name');
+        $new_password = from($_REQUEST, 'password');
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        $old_password = user('password', $username);
+        if ($role === 'admin') {
+            $file = 'config/users/' . $username . '.ini';
+            if (file_exists($file)) {
+                if (empty($new_password)) {
+                    file_put_contents($file, "password = " . $old_password . "\n" .
+                        "encryption = password_hash\n" .
+                        "role = " . $user_role . "\n", LOCK_EX);
+                } else {
+                    update_user($username, $new_password, $user_role);
+                }
+            }
+            $redir = site_url() . 'admin/users';
+            header("location: $redir");  
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+get('/admin/users/:username/delete', function ($username) {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('delete-user', array(
+                'title' => generate_title('is_default', $username),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-users',
+                'username' => $username,
+                'is_admin' => true,
+                'bodyclass' => 'admin-users',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $username
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Denied')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-menu',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
+            ));            
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/users/:username/delete', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    $file = from($_REQUEST, 'file');
+    $username = from($_REQUEST, 'username');
+    $user_role = user('role', $username);
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if ($proper && login()) {
+        if ($role === 'admin') {
+            if ($user_role !== 'admin') {
+                unlink($file);
+            }
+        }
+        $redir = site_url() . 'admin/users';
+        header("location: $redir");         
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
     }
 });
 
