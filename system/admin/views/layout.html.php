@@ -15,6 +15,11 @@
 <?php if (login()) { 
 $user = $_SESSION[site_url()]['user'];
 $role = user('role', $user);
+if (isset($_GET['search'])) {
+    $search = _h($_GET['search']);
+    $url = site_url() . 'search/' . remove_accent($search);
+    header("Location: $url");
+}
 ?>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
