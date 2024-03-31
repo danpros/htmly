@@ -444,7 +444,7 @@ post('/edit/frontpage', function () {
     $role = user('role', $user);
     $title = from($_REQUEST, 'title');
     $content = from($_REQUEST, 'content');
-    if ($role === 'editor' | $role === 'admin') {    
+    if ($role === 'editor' || $role === 'admin') {    
         if ($proper && !empty($title) && !empty($content)) {
             edit_frontpage($title, $content);
         } else {
@@ -938,7 +938,7 @@ get('/admin/popular', function () {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             config('views.root', 'system/admin/views');
             $page = from($_GET, 'page');
             $page = $page ? (int)$page : 1;
@@ -1229,7 +1229,7 @@ get('/admin/pages', function () {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             render('static-pages', array(
                 'title' => generate_title('is_default', i18n('Static_pages')),
                 'description' => safe_html(strip_tags(blog_description())),
@@ -1280,7 +1280,7 @@ get('/admin/pages/:static', function ($static)
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
 
             $post = find_page($static);
 
@@ -2050,7 +2050,7 @@ get('/admin/menu', function () {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             render('menu', array(
                 'title' => generate_title('is_default', i18n('Menus')),
                 'description' => safe_html(strip_tags(blog_description())),
@@ -2356,7 +2356,7 @@ get('/admin/categories', function () {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             render('categories', array(
                 'title' => generate_title('is_default', i18n('Categories')),
                 'description' => safe_html(strip_tags(blog_description())),
@@ -2543,7 +2543,7 @@ get('/category/:category/edit', function ($category) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = get_category_info($category);
 
             if(empty($post)) {
@@ -2649,7 +2649,7 @@ get('/category/:category/delete', function ($category) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = get_category_info($category);
 
             if(empty($post)) {
@@ -3733,7 +3733,7 @@ get('/:static/add', function ($static) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = find_page($static);
 
             if (!$post) {
@@ -3831,7 +3831,7 @@ get('/:static/edit', function ($static) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = find_page($static);
 
             if (!$post) {
@@ -3940,7 +3940,7 @@ get('/:static/delete', function ($static) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = find_page($static);
 
             if (!$post) {
@@ -4099,7 +4099,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = find_page($static);
 
             if (!$post) {
@@ -4221,7 +4221,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
     $role = user('role', $user);
     if (login()) {
         config('views.root', 'system/admin/views');
-        if ($role === 'editor' | $role === 'admin') {
+        if ($role === 'editor' || $role === 'admin') {
             $post = find_page($static);
 
             if (!$post) {
