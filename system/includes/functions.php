@@ -2262,7 +2262,7 @@ function shorten($string = null, $char = null)
     if(empty($string)) {
         return;
     }
-
+    $string = str_replace('<span class="details">'. config('toc.label') .'</span>', '', $string);
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
     $dom->loadHTML('<meta charset="utf8">' . $string);
