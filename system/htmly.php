@@ -317,9 +317,10 @@ post('/edit/profile', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
+    $description = from($_REQUEST, 'description');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
-        edit_profile($title, $content, $user);
+        edit_profile($title, $content, $user, $description);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -3104,6 +3105,7 @@ get('/post/:name', function ($name) {
     $author = new stdClass;
     $author->url = $current->authorUrl;
     $author->name = $current->authorName;
+    $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
 
     if (array_key_exists('prev', $post)) {
@@ -4281,6 +4283,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     $author = new stdClass;
     $author->url = $current->authorUrl;
     $author->name = $current->authorName;
+    $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
 
     if (array_key_exists('prev', $post)) {

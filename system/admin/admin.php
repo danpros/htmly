@@ -838,10 +838,20 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
 }
 
 // Edit user profile
-function edit_profile($title, $content, $user)
+function edit_profile($title, $content, $user, $description = null)
 {
+    $description = safe_html($description);
+    if ($description !== null) {
+        if (!empty($description)) {        
+            $profile_description = "\n<!--d " . $description . " d-->";
+        } else {
+            $profile_description = "\n<!--d " . get_description($content) . " d-->";
+        }            
+    } else {
+        $profile_description = "";
+    }
     $user_title = safe_html($title);
-    $user_content = '<!--t ' . $user_title . ' t-->' . "\n\n" . $content;
+    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . "\n\n" . $content;
 
     if (!empty($user_title) && !empty($user_content)) {
 

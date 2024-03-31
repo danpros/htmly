@@ -445,9 +445,11 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $profile = get_author($author);
         if (isset($profile[0])) {
             $post->authorName = $profile[0]->name;
+            $post->authorDescription = $profile[0]->description;
             $post->authorAbout = $profile[0]->about;
         } else {
             $post->authorName = $author;
+            $post->authorDescription = i18n('Author_Description');
             $post->authorAbout = i18n('Author_Description');
         }
 
@@ -1221,7 +1223,7 @@ function get_author($name)
                 // Get the contents and convert it to HTML
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
-                $author->description = safe_html(strip_tags($author->about));
+                $author->description = get_content_tag("d", $content, get_description($author->about));
 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 

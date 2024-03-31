@@ -23,9 +23,11 @@ if ($type == 'is_frontpage') {
     if (file_exists($filename)) {
         $content = file_get_contents($filename);
         $oldtitle = get_content_tag('t', $content, 'user');
+        $olddescription = get_content_tag('d', $content, remove_html_comments($content));
         $oldcontent = remove_html_comments($content);
     } else {
         $oldtitle = $user;
+        $olddescription = i18n('Author_Description');
         $oldcontent = i18n('Author_Description');
     }
 
@@ -100,7 +102,7 @@ $images = image_gallery(null, 1, 40);
                     <label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
                     <input type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error'; } } ?>" value="<?php echo $oldtitle ?>"/>
                     <br>
-                    <?php if($type != 'is_frontpage' && $type != 'is_profile') { ?>
+                    <?php if($type != 'is_frontpage') { ?>
                     <label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
                     <br />
                     <textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_leave_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
