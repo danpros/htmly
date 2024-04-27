@@ -12,7 +12,7 @@ if (config('timezone')) {
     date_default_timezone_set('Asia/Jakarta');
 }
 
-$whitelist = array('jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'gif');
+$whitelist = array('jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'gif', 'webp');
 $name      = null;
 $dir       = 'content/images/';
 $error     = null;
