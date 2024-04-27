@@ -903,8 +903,25 @@ function delete_post($file, $destination)
     $role = user('role', $user);
     $arr = explode('/', $file);
     
-    if ($arr[0] !== 'content')
+    // realpath resolves all traversal operations like ../
+    $realFilePath = realpath($file);
+
+    // realpath returns an empty string if the file does not exist
+    if ($realFilePath == '') {
         return;
+    }
+
+    // get the current project working directory
+    $cwd = getcwd();
+
+    // content directory relative to the current project working directory
+    $contentDir = $cwd . '\content';
+
+    // if the file path does not start with $contentDir, it means its accessing
+    // files in folders other than content
+    if (strpos($realFilePath, $contentDir) !== 0) {
+        return;
+    }
 
     // Get cache file
     $info = pathinfo($file);
@@ -937,8 +954,25 @@ function delete_page($file, $destination)
     $role = user('role', $user);
     $arr = explode('/', $file);
     
-    if ($arr[0] !== 'content')
+    // realpath resolves all traversal operations like ../
+    $realFilePath = realpath($file);
+
+    // realpath returns an empty string if the file does not exist
+    if ($realFilePath == '') {
         return;
+    }
+
+    // get the current project working directory
+    $cwd = getcwd();
+
+    // content directory relative to the current project working directory
+    $contentDir = $cwd . '\content';
+
+    // if the file path does not start with $contentDir, it means its accessing
+    // files in folders other than content
+    if (strpos($realFilePath, $contentDir) !== 0) {
+        return;
+    }
 
     if (!empty($menu)) {
         foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
