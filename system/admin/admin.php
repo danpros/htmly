@@ -153,6 +153,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     $post_title = safe_html($title); 
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $category = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($category)));
     $description = safe_html($description);
 
     $post_t =  explode(',', $post_tag);
@@ -294,6 +295,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     $post_title = safe_html($title);
     $post_tag = strtolower(preg_replace(array('/[^a-zA-Z0-9,. \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($post_tag)));
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
+    $category = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($category)));
     $description = safe_html($description);
     
 
@@ -897,6 +899,12 @@ function delete_post($file, $destination)
     if (!login())
         return null;
     $deleted_content = $file;
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    $arr = explode('/', $file);
+    
+    if ($arr[0] !== 'content')
+        return;
 
     // Get cache file
     $info = pathinfo($file);
@@ -905,14 +913,16 @@ function delete_post($file, $destination)
     clear_post_cache($fn[0], $fn[1], str_replace('.md', '', $fn[2]), $file, $dr[3], $dr[4]);
 
     if (!empty($deleted_content)) {
-        unlink($deleted_content);
-        rebuilt_cache('all');
-        if ($destination == 'post') {
-            $redirect = site_url();
-            header("Location: $redirect");
-        } else {
-            $redirect = site_url() . $destination;
-            header("Location: $redirect");
+        if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+            unlink($deleted_content);
+            rebuilt_cache('all');
+            if ($destination == 'post') {
+                $redirect = site_url();
+                header("Location: $redirect");
+            } else {
+                $redirect = site_url() . $destination;
+                header("Location: $redirect");
+            }
         }
     }
 }
@@ -923,6 +933,12 @@ function delete_page($file, $destination)
     if (!login())
         return null;
     $deleted_content = $file;
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    $arr = explode('/', $file);
+    
+    if ($arr[0] !== 'content')
+        return;
 
     if (!empty($menu)) {
         foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
@@ -933,14 +949,16 @@ function delete_page($file, $destination)
     }
 
     if (!empty($deleted_content)) {
-        unlink($deleted_content);
-        rebuilt_cache('all');
-        if ($destination == 'post') {
-            $redirect = site_url();
-            header("Location: $redirect");
-        } else {
-            $redirect = site_url() . $destination;
-            header("Location: $redirect");
+        if ($role === 'editor' || $role === 'admin') {
+            unlink($deleted_content);
+            rebuilt_cache('all');
+            if ($destination == 'post') {
+                $redirect = site_url();
+                header("Location: $redirect");
+            } else {
+                $redirect = site_url() . $destination;
+                header("Location: $redirect");
+            }
         }
     }
 }
