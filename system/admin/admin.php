@@ -840,7 +840,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
 }
 
 // Edit user profile
-function edit_profile($title, $content, $user, $description = null)
+function edit_profile($title, $content, $user, $description = null, $image = null)
 {
     $description = safe_html($description);
     if ($description !== null) {
@@ -852,8 +852,13 @@ function edit_profile($title, $content, $user, $description = null)
     } else {
         $profile_description = "";
     }
+    if ($image !== null) {      
+        $avatar = "\n<!--image " . $image . " image-->";          
+    } else {
+        $avatar = "";
+    }
     $user_title = safe_html($title);
-    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . "\n\n" . $content;
+    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . $avatar . "\n\n" . $content;
 
     if (!empty($user_title) && !empty($user_content)) {
 
@@ -952,7 +957,6 @@ function delete_page($file, $destination)
     $deleted_content = $file;
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
-    $arr = explode('/', $file);
     
     // realpath resolves all traversal operations like ../
     $realFilePath = realpath($file);

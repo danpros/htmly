@@ -15,6 +15,7 @@
 <?php if (login()) { 
 $user = $_SESSION[site_url()]['user'];
 $role = user('role', $user);
+$author = get_author($user);
 if (isset($_GET['search'])) {
     $search = _h($_GET['search']);
     $url = site_url() . 'search/' . remove_accent($search);
@@ -54,7 +55,7 @@ if (isset($_GET['search'])) {
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="<?php echo site_url(); ?>system/resources/images/logo-small.png" class="img-circle elevation-2" alt="HTMLy logo">
+          <img src="<?php echo $author[0]->avatar; ?>" class="img-circle elevation-2" alt="HTMLy logo">
         </div>
         <div class="info">
           <a href="<?php echo site_url();?>admin" class="d-block"><?php echo i18n('Dashboard')?></a>

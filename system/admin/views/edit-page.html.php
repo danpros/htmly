@@ -25,10 +25,12 @@ if ($type == 'is_frontpage') {
         $oldtitle = get_content_tag('t', $content, 'user');
         $olddescription = get_content_tag('d', $content, remove_html_comments($content));
         $oldcontent = remove_html_comments($content);
+        $oldimage = get_content_tag('image', $content);
     } else {
         $oldtitle = $user;
         $olddescription = i18n('Author_Description');
         $oldcontent = i18n('Author_Description');
+        $oldimage = '';
     }
 
 } elseif ($type == 'is_category') {
@@ -116,6 +118,20 @@ $images = image_gallery(null, 1, 40);
                     <input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_page_title');?>"/>
                     <br>
                     <?php } ?>
+
+                    <?php if ($type == 'is_profile'):?>
+                    <style>.imgPrev img {width:50%;} </style>
+                    <label for="pImage">Avatar (<?php echo i18n('optional');?>)</label>
+                    <br>
+                    <label class="btn btn-primary btn-sm" id="insertButton"><?php echo i18n('Insert_Image');?></label>
+                    <br>
+                    <div class="imgPrev"><img id="imgFile" src="<?php echo $oldimage; ?>"/></div>
+                    <br>
+                    <input type="text" class="media-uploader form-control text <?php if (isset($postImage)) { if (empty($postImage)) { echo 'error';}} ?>" id="pImage" name="image" readonly value="<?php echo $oldimage; ?>">
+                    <input type="hidden" name="is_image" value="is_image">
+                    <br>
+                    <?php endif;?>
+
                 </div>
             </div>
             
@@ -209,10 +225,50 @@ $images = image_gallery(null, 1, 40);
             </div>
         </div>
     </div>
+	
+    <?php if ($type == 'is_profile'):?>
+    <div class="modal fade" id="insertMediaDialog" tabindex="-1" role="dialog" aria-labelledby="insertMediaDialogTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+                    <button type="button" class="close" id="insertMediaDialogClose" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row-fluid img-container" id="gallery-2">
+                            <?php echo $images;?>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="insertMediaDialogURL">URL</label>
+                        <input type="text" class="form-control" id="insertMediaDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
+                        <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
+                    <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>	
+	
 </div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">var base_path = '<?php echo site_url() ?>'; var initial_image = '<?php echo $images;?>';</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
+<?php if ($type == 'is_profile'):?>
+<script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
+<?php endif;?>
 <script>
 function loadImages(page) {
   $.ajax({

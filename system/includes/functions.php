@@ -447,10 +447,12 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->authorName = $profile[0]->name;
             $post->authorDescription = $profile[0]->description;
             $post->authorAbout = $profile[0]->about;
+            $post->authorAvatar = $profile[0]->avatar;
         } else {
             $post->authorName = $author;
             $post->authorDescription = i18n('Author_Description');
             $post->authorAbout = i18n('Author_Description');
+            $post->authorAvatar = site_url() . 'system/resources/images/logo-small.png';
         }
 
         $post->type = $type;
@@ -1224,6 +1226,8 @@ function get_author($name)
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $author->description = get_content_tag("d", $content, get_description($author->about));
+				
+                $author->avatar = get_content_tag("image", $content, site_url() . 'system/resources/images/logo-small.png');
 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
@@ -1256,6 +1260,7 @@ function default_profile($name)
     $author->about = '<p>' . i18n('Author_Description') . '</p>';
     $author->body = '<p>' . i18n('Author_Description') . '</p>';
     $author->description = i18n('Author_Description');
+    $author->avatar = site_url() . 'system/resources/images/logo-small.png';
     $author->url = site_url(). 'author/' . $name;
     $author->slug = $name;
     $author->file = '';

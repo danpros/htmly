@@ -316,9 +316,10 @@ post('/edit/profile', function () {
     $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
     $description = from($_REQUEST, 'description');
+    $image = from($_REQUEST, 'image');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
-        edit_profile($title, $content, $user, $description);
+        edit_profile($title, $content, $user, $description, $image);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -340,6 +341,7 @@ post('/edit/profile', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postContent' => $content,
+            'postImage' => $image,
             'type' => 'is_profile',
             'is_admin' => true,
             'bodyclass' => 'edit-profile',
@@ -3151,6 +3153,7 @@ get('/post/:name', function ($name) {
     $author->name = $current->authorName;
     $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
+    $author->avatar = $current->authorAvatar;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -4329,6 +4332,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     $author->name = $current->authorName;
     $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
+    $author->avatar = $current->authorAvatar;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
