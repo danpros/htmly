@@ -2405,7 +2405,7 @@ function social($class = null)
     $social .= '<div class="social-logo ' . $class . '">';
     $social .= '<link rel="stylesheet" id="social-logo-style" href="'. site_url() .'system/resources/css/social-logos.css" type="text/css" media="all">';
     if (!empty($twitter)) {
-        $social .= '<a class="social-logo-twitter-alt" href="' . $twitter . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Twitter</span></a>';
+        $social .= '<a class="social-logo-x" href="' . $twitter . '" target="_blank" rel="nofollow"><span class="screen-reader-text">Twitter</span></a>';
     }
 
     if (!empty($facebook)) {
@@ -2737,16 +2737,16 @@ function get_menu($custom = null, $auto = null)
         
         if (is_null($auto)) {
             if ($req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
-                $menu .= '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
+                $menu .= '<li class="item nav-item first active"><a class="nav-link" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
             } else {
-                $menu .= '<li class="item first"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
+                $menu .= '<li class="item nav-item first"><a class="nav-link" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
             }
 
             if (config('blog.enable') == 'true' ) {
                 if ($req == site_path() . '/blog' || stripos($req, site_path() . '/blog?page') !== false) {
-                    $menu .= '<li class="item active"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                    $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
                 } else {
-                    $menu .= '<li class="item"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                    $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
                 }
             }
         }
@@ -2788,8 +2788,8 @@ function get_menu($custom = null, $auto = null)
             $subPages = get_static_subpages($filename);
             if (!empty($subPages)) {
                 asort($subPages);
-                $menu .= '<li class="' . $class . $active .' dropdown">';
-                $menu .= '<a class="dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
+                $menu .= '<li class="' . $class . $active .' nav-item dropdown">';
+                $menu .= '<a class="dropdown-toggle nav-link" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 $menu .= '<ul class="subnav dropdown-menu" role="menu">';
                 $iSub = 0;
                 $countSub = count($subPages);
@@ -2814,13 +2814,13 @@ function get_menu($custom = null, $auto = null)
                         $classSub .= ' active';
                     }
                     $urlSub = $url . "/" . $baseSub;
-                    $menu .= '<li class="' . $classSub . '"><a href="' . $urlSub . '">' . get_title_from_file($child_file) . '</a></li>';
+                    $menu .= '<li class="' . $classSub . ' nav-item"><a class="nav-link" href="' . $urlSub . '">' . get_title_from_file($child_file) . '</a></li>';
                     $iSub++;
                 }
                 $menu .= '</ul>';
             } else {
-                $menu .= '<li class="' . $class . $active .'">';
-                $menu .= '<a href="' . $url . '">' . ucwords($title) . '</a>';
+                $menu .= '<li class="' . $class . $active .' nav-item">';
+                $menu .= '<a class="nav-link" href="' . $url . '">' . ucwords($title) . '</a>';
             }
             $menu .= '</li>';
         }
@@ -2830,15 +2830,15 @@ function get_menu($custom = null, $auto = null)
 
         $menu .= '<ul class="nav ' . $custom . '">';
         if ($req == site_path() . '/') {
-            $menu .= '<li class="item first active"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
+            $menu .= '<li class="item nav-item first active"><a class="nav-link" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         } else {
-            $menu .= '<li class="item first"><a href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
+            $menu .= '<li class="item nav-item first"><a class="nav-link" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         }
         if (config('blog.enable') == 'true' ) {
             if ($req == site_path() . '/blog' || stripos($req, site_path() . '/blog?page') !== false) {
-                $menu .= '<li class="item active"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
             } else {
-                $menu .= '<li class="item"><a href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
             }
         }
         $menu .= '</ul>';
