@@ -250,13 +250,14 @@ function _h($str, $enc = 'UTF-8', $flags = ENT_QUOTES)
 
 function from($source, $name)
 {
+    $map = array("\r\n" => "\n", "\r" => "\n");
     if (is_array($name)) {
         $data = array();
         foreach ($name as $k)
-            $data[$k] = isset($source[$k]) ? $source[$k] : null;
+            $data[$k] = isset($source[$k]) ? trim(strtr($source[$k], $map)) : null;
         return $data;
     }
-    return isset($source[$name]) ? $source[$name] : null;
+    return isset($source[$name]) ? trim(strtr($source[$name], $map)) : null;
 }
 
 function stash($name, $value = null)
@@ -403,7 +404,7 @@ function render($view, $locals = null, $layout = null)
             ob_start();
             require $layout;
         }
-        if (!login() && $view != '404' && config('cache.off') == "false") {
+        if (!login() && $view != '404' && $view != '404-search' && config('cache.off') == "false") {
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
