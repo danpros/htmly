@@ -40,7 +40,7 @@
     <div class="author-info">
         <h2 class="author-heading"><?php echo i18n('Published').' '.i18n('by');?></h2>
         <div class="author-avatar">
-            <img width="56" height="56" class="avatar avatar-56" src="<?php echo theme_path();?>images/avatar.png" alt="<?php echo $author->name; ?>">
+            <img width="56" height="56" class="avatar avatar-56" src="<?php echo $author->avatar; ?>" alt="<?php echo $author->name; ?>">
         </div><!-- .author-avatar -->
         <div class="author-description">
             <h3 class="author-title"><?php echo $author->name; ?></h3>
