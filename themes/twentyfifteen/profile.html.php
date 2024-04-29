@@ -1,8 +1,8 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <article class="page type-page hentry">
     <header class="entry-header">
+        <span class="social-navigation feed-link"><a href="<?php echo $author->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
         <h1 class="entry-title"><?php echo $author->name ?></h1>
-		<span class="social-navigation feed-link"><a href="<?php echo $author->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
     </header>
     <div class="entry-content">
         <?php echo $author->about ?>
