@@ -2757,9 +2757,9 @@ function get_menu($custom = null, $auto = null)
         foreach ($posts as $index => $v) {
 
             if ($i == $len - 1) {
-                $class = 'item last';
+                $class = 'item nav-item last';
             } else {
-                $class = 'item';
+                $class = 'item nav-item';
             }
             $i++;
 
@@ -2788,13 +2788,13 @@ function get_menu($custom = null, $auto = null)
             $subPages = get_static_subpages($filename);
             if (!empty($subPages)) {
                 asort($subPages);
-                $menu .= '<li class="' . $class . $active .' nav-item dropdown">';
-                $menu .= '<a class="dropdown-toggle nav-link" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
+                $menu .= '<li class="' . $class . $active .' dropdown">';
+                $menu .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 $menu .= '<ul class="subnav dropdown-menu" role="menu">';
                 $iSub = 0;
                 $countSub = count($subPages);
                 foreach ($subPages as $index => $sp) {
-                    $classSub = "item";
+                    $classSub = "item nav-item";
                     if ($iSub == 0) {
                         $classSub .= " first";
                     }
@@ -2814,12 +2814,12 @@ function get_menu($custom = null, $auto = null)
                         $classSub .= ' active';
                     }
                     $urlSub = $url . "/" . $baseSub;
-                    $menu .= '<li class="' . $classSub . ' nav-item"><a class="nav-link" href="' . $urlSub . '">' . get_title_from_file($child_file) . '</a></li>';
+                    $menu .= '<li class="' . $classSub . '"><a class="nav-link" href="' . $urlSub . '">' . get_title_from_file($child_file) . '</a></li>';
                     $iSub++;
                 }
                 $menu .= '</ul>';
             } else {
-                $menu .= '<li class="' . $class . $active .' nav-item">';
+                $menu .= '<li class="' . $class . $active .'">';
                 $menu .= '<a class="nav-link" href="' . $url . '">' . ucwords($title) . '</a>';
             }
             $menu .= '</li>';
