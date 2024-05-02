@@ -920,7 +920,7 @@ function delete_post($file, $destination)
     $cwd = getcwd();
 
     // content directory relative to the current project working directory
-    $contentDir = $cwd . '\content';
+    $contentDir = $cwd . DIRECTORY_SEPARATOR . 'content';
 
     // if the file path does not start with $contentDir, it means its accessing
     // files in folders other than content
@@ -970,7 +970,7 @@ function delete_page($file, $destination)
     $cwd = getcwd();
 
     // content directory relative to the current project working directory
-    $contentDir = $cwd . '\content';
+    $contentDir = $cwd . DIRECTORY_SEPARATOR . 'content';
 
     // if the file path does not start with $contentDir, it means its accessing
     // files in folders other than content
