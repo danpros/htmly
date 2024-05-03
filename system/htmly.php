@@ -1266,7 +1266,7 @@ post('/admin/pages', function () {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'editor' || $role === 'admin') {
-            $json = from($_REQUEST, 'json');
+            $json = $_REQUEST['json'];
             reorder_pages($json);
             echo json_encode(array(
                 'message' => 'Page order saved successfully!',
@@ -1341,7 +1341,7 @@ post('/admin/pages/:static', function ($static) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'editor' || $role === 'admin') {
-            $json = from($_REQUEST, 'json');
+            $json = $_REQUEST['json'];
             reorder_subpages($json);
             echo json_encode(array(
                 'message' => 'Page order saved successfully!',
