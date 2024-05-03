@@ -3573,3 +3573,11 @@ body.dark .social-logo a:hover, .dark .toc-wrapper a:hover {
   color: #8ed6fb;
   text-decoration:none;
 }
+
+.list-unstyled a, .list-unstyled .subnav a {
+  padding: 0.125rem 0;
+}
+
+.list-unstyled li {
+  margin: 0;
+}
