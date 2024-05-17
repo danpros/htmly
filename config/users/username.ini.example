@@ -6,3 +6,6 @@ encryption = clear
 
 ;Role
 role = admin
+
+;MFA Secret - This is generated inside of the admin area, set to "disabled" to turn off MFA for a user.
+mfa_secret = disabled
