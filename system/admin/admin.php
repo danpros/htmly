@@ -17,13 +17,14 @@ function user($key, $user = null)
 }
 
 // Update the user
-function update_user($userName, $password, $role)
+function update_user($userName, $password, $role, $mfa_secret)
 {
     $file = 'config/users/' . $userName . '.ini';
     if (file_exists($file)) {
         file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
-            "role = " . $role . "\n", LOCK_EX);
+            "role = " . $role . "\n" .
+            "mfa_secret = " . $mfa_secret . "\n", LOCK_EX);
         return true;
     }
     return false;
@@ -38,7 +39,8 @@ function create_user($userName, $password, $role)
     } else {
         file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
-            "role = " . $role . "\n", LOCK_EX);
+            "role = " . $role . "\n" .
+            "mfa_secret = none\n", LOCK_EX);
         return true;
     }
 }
@@ -63,7 +65,8 @@ function session($user, $pass)
         if (password_verify($pass, $user_pass)) {
             if (session_status() == PHP_SESSION_NONE) session_start();
             if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
-                update_user($user, $pass, $user_role);
+                $mfa = user('mfa_secret', $user);
+                update_user($user, $pass, $user_role, $mfa);
             }
             $_SESSION[site_url()]['user'] = $user;
             header('location: admin');
@@ -72,7 +75,8 @@ function session($user, $pass)
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         if (session_status() == PHP_SESSION_NONE) session_start();
-        update_user($user, $pass, $user_role);
+        $mfa = user('mfa_secret', $user);
+        update_user($user, $pass, $user_role, $mfa);
         $_SESSION[site_url()]['user'] = $user;
         header('location: admin');
     } else {

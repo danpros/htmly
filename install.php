@@ -145,11 +145,13 @@ class Settings
                 'encryption' => 'sha512',
                 'password' => hash('sha512', $this->userPassword),
                 'role' => 'admin',
+                'mfa_secret' => 'disabled',
             ), $userFile);
         } else {
             $userFile = $this->overwriteINI(array(
                 "password" => $this->userPassword,
                 'role' => 'admin',
+                'mfa_secret' => 'disabled',
             ), $userFile);
         }
         file_put_contents("config/users/" . $this->user . ".ini", $userFile, LOCK_EX);

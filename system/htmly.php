@@ -1,6 +1,8 @@
 <?php
 if (!defined('HTMLY')) die('HTMLy');
 
+use PragmaRX\Google2FA\Google2FA;
+
 // Load the configuration file
 config('source', $config_file);
 
@@ -124,26 +126,71 @@ post('/login', function () {
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
     if ($proper && $captcha && !empty($user) && !empty($pass)) {
+		
+		if (user('mfa_secret', $user) !== "disabled") {
+			$mfa_secret = user('mfa_secret', $user);
+			$mfacode = from($_REQUEST, 'mfacode');
+			$google2fa = new Google2FA();
+			if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
+				session($user, $pass);
+				$log = session($user, $pass);
 
-        session($user, $pass);
-        $log = session($user, $pass);
+				if (!empty($log)) {
 
-        if (!empty($log)) {
+					config('views.root', 'system/admin/views');
 
-            config('views.root', 'system/admin/views');
+					render('login', array(
+						'title' => generate_title('is_default', i18n('Login')),
+						'description' => i18n('Login') . ' ' . blog_title(),
+						'canonical' => site_url(),
+						'metatags' => generate_meta(null, null),
+						'error' => '<ul>' . $log . '</ul>',
+						'type' => 'is_login',
+						'is_login' => true,
+						'bodyclass' => 'in-login',
+						'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+					));
+				}
+			} else {
+				$message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
 
-            render('login', array(
-                'title' => generate_title('is_default', i18n('Login')),
-                'description' => i18n('Login') . ' ' . blog_title(),
-                'canonical' => site_url(),
-                'metatags' => generate_meta(null, null),
-                'error' => '<ul>' . $log . '</ul>',
-                'type' => 'is_login',
-                'is_login' => true,
-                'bodyclass' => 'in-login',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
-            ));
-        }
+				config('views.root', 'system/admin/views');
+
+				render('login', array(
+					'title' => generate_title('is_default', i18n('Login')),
+					'description' => i18n('Login') . ' ' . blog_title(),
+					'canonical' => site_url(),
+					'metatags' => generate_meta(null, null),
+					'error' => '<ul>' . $message['error'] . '</ul>',
+					'username' => $user,
+					'password' => $pass,
+					'type' => 'is_login',
+					'is_login' => true,
+					'bodyclass' => 'in-login',
+					'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+				));
+			}
+		} else {
+			session($user, $pass);
+			$log = session($user, $pass);
+
+			if (!empty($log)) {
+
+				config('views.root', 'system/admin/views');
+
+				render('login', array(
+					'title' => generate_title('is_default', i18n('Login')),
+					'description' => i18n('Login') . ' ' . blog_title(),
+					'canonical' => site_url(),
+					'metatags' => generate_meta(null, null),
+					'error' => '<ul>' . $log . '</ul>',
+					'type' => 'is_login',
+					'is_login' => true,
+					'bodyclass' => 'in-login',
+					'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+				));
+			}
+		}
     } else {
         $message['error'] = '';
         if (empty($user)) {
@@ -376,12 +423,13 @@ post('/edit/password', function() {
         $new_password = from($_REQUEST, 'password');
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        $mfa = user('mfa_secret', $user);
         $old_password = user('password', $username);
         if ($user === $username) {
             $file = 'config/users/' . $user . '.ini';
             if (file_exists($file)) {
                 if (!empty($new_password)) {
-                    update_user($user, $new_password, $role);
+                    update_user($user, $new_password, $role, $mfa);
                 }
             }
             $redir = site_url() . 'admin';
@@ -396,6 +444,67 @@ post('/edit/password', function() {
     }	
 });
 
+get('/edit/mfa', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('edit-mfa', array(
+            'title' => generate_title('is_default', i18n('config_mfa')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_profile',
+            'is_admin' => true,
+            'bodyclass' => 'edit-mfa',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('config_mfa'),
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/edit/mfa', function() {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $username = from($_REQUEST, 'username');
+        $mfa_secret = from($_REQUEST, 'mfa_secret');
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        $password = from($_REQUEST, 'password');
+        if ($user === $username) {
+			if ($mfa_secret !== "disabled") {
+				$mfacode = from($_REQUEST, 'mfacode');
+				$google2fa = new Google2FA();
+				if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
+					$file = 'config/users/' . $user . '.ini';
+					if (file_exists($file)) {
+						if (!empty($mfa_secret)) {
+							update_user($user, $password, $role, $mfa_secret);
+						}
+					}
+					$redir = site_url() . 'admin';
+					header("location: $redir");
+				} else {
+					$redir = site_url() . 'admin';
+					header("location: $redir");
+				}
+			} else {
+				$file = 'config/users/' . $user . '.ini';
+				if (file_exists($file)) {
+					update_user($user, $password, $role, 'disabled');
+				}
+				$redir = site_url() . 'admin';
+				header("location: $redir");
+			}
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }	
+});
 // Edit the frontpage
 get('/edit/frontpage', function () {
     

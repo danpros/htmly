@@ -244,6 +244,13 @@ if (isset($_GET['search'])) {
                 </a>
               </li>
               <li class="nav-item">
+                <a href="<?php echo site_url();?>edit/mfa" class="nav-link">
+                  <p>
+                    <?php echo i18n('config_mfa');?>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
                   <p>
                     <?php echo i18n('Edit_profile');?>

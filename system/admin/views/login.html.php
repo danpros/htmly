@@ -21,6 +21,9 @@
         } ?>" name="password" placeholder="<?php echo i18n('Password'); ?>"/>
         <br>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
+        <label><?php echo i18n('MFACode');?></label>
+        <input type="text" class="form-control" name="mfacode" placeholder="<?php echo i18n('verify_code'); ?>"/>
+        <br>
         <?php if (config('google.reCaptcha') === 'true'): ?>
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <div class="g-recaptcha" data-sitekey="<?php echo config("google.reCaptcha.public"); ?>"></div>
