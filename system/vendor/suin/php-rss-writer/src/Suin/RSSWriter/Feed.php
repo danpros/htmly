@@ -11,7 +11,7 @@ use DOMDocument;
 class Feed implements FeedInterface
 {
     /** @var ChannelInterface[] */
-    protected $channels = array();
+    protected $channels = [];
 
     /**
      * Add channel
@@ -30,7 +30,7 @@ class Feed implements FeedInterface
      */
     public function render()
     {
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><rss version="2.0" />', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" />', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
 
         foreach ($this->channels as $channel) {
             $toDom = dom_import_simplexml($xml);
