@@ -1,249 +1,734 @@
-[
-    {
-        "name": "ircmaxell/password-compat",
-        "version": "v1.0.4",
-        "version_normalized": "1.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ircmaxell/password_compat.git",
-            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/5c5cde8822a69545767f7c7f3058cb15ff84614c",
-            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c",
-            "shasum": ""
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.*"
-        },
-        "time": "2014-11-20T16:49:30+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "lib/password.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
+{
+        "packages": [
+                {
+                        "name": "bacon/bacon-qr-code",
+                        "version": "v3.0.0",
+                        "version_normalized": "3.0.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/Bacon/BaconQrCode.git",
+                                "reference": "510de6eca6248d77d31b339d62437cc995e2fb41"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/510de6eca6248d77d31b339d62437cc995e2fb41",
+                                "reference": "510de6eca6248d77d31b339d62437cc995e2fb41",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "dasprid/enum": "^1.0.3",
+                                "ext-iconv": "*",
+                                "php": "^8.1"
+                        },
+                        "require-dev": {
+                                "phly/keep-a-changelog": "^2.12",
+                                "phpunit/phpunit": "^10.5.11 || 11.0.4",
+                                "spatie/phpunit-snapshot-assertions": "^5.1.5",
+                                "squizlabs/php_codesniffer": "^3.9"
+                        },
+                        "suggest": {
+                                "ext-imagick": "to generate QR code images"
+                        },
+                        "time": "2024-04-18T11:16:25+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "BaconQrCode\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "BSD-2-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Ben Scholzen 'DASPRiD'",
+                                        "email": "mail@dasprids.de",
+                                        "homepage": "https://dasprids.de/",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "BaconQrCode is a QR code generator for PHP.",
+                        "homepage": "https://github.com/Bacon/BaconQrCode",
+                        "support": {
+                                "issues": "https://github.com/Bacon/BaconQrCode/issues",
+                                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.0.0"
+                        },
+                        "install-path": "../bacon/bacon-qr-code"
+                },
+                {
+                        "name": "composer/ca-bundle",
+                        "version": "1.5.0",
+                        "version_normalized": "1.5.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/composer/ca-bundle.git",
+                                "reference": "0c5ccfcfea312b5c5a190a21ac5cef93f74baf99"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/0c5ccfcfea312b5c5a190a21ac5cef93f74baf99",
+                                "reference": "0c5ccfcfea312b5c5a190a21ac5cef93f74baf99",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-openssl": "*",
+                                "ext-pcre": "*",
+                                "php": "^7.2 || ^8.0"
+                        },
+                        "require-dev": {
+                                "phpstan/phpstan": "^1.10",
+                                "psr/log": "^1.0",
+                                "symfony/phpunit-bridge": "^4.2 || ^5",
+                                "symfony/process": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+                        },
+                        "time": "2024-03-15T14:00:32+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-main": "1.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Composer\\CaBundle\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Jordi Boggiano",
+                                        "email": "j.boggiano@seld.be",
+                                        "homepage": "http://seld.be"
+                                }
+                        ],
+                        "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+                        "keywords": [
+                                "cabundle",
+                                "cacert",
+                                "certificate",
+                                "ssl",
+                                "tls"
+                        ],
+                        "support": {
+                                "irc": "irc://irc.freenode.org/composer",
+                                "issues": "https://github.com/composer/ca-bundle/issues",
+                                "source": "https://github.com/composer/ca-bundle/tree/1.5.0"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://packagist.com",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/composer",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "./ca-bundle"
+                },
+                {
+                        "name": "dasprid/enum",
+                        "version": "1.0.5",
+                        "version_normalized": "1.0.5.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/DASPRiD/Enum.git",
+                                "reference": "6faf451159fb8ba4126b925ed2d78acfce0dc016"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/6faf451159fb8ba4126b925ed2d78acfce0dc016",
+                                "reference": "6faf451159fb8ba4126b925ed2d78acfce0dc016",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=7.1 <9.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^7 | ^8 | ^9",
+                                "squizlabs/php_codesniffer": "*"
+                        },
+                        "time": "2023-08-25T16:18:39+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "DASPRiD\\Enum\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "BSD-2-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Ben Scholzen 'DASPRiD'",
+                                        "email": "mail@dasprids.de",
+                                        "homepage": "https://dasprids.de/",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "PHP 7.1 enum implementation",
+                        "keywords": [
+                                "enum",
+                                "map"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/DASPRiD/Enum/issues",
+                                "source": "https://github.com/DASPRiD/Enum/tree/1.0.5"
+                        },
+                        "install-path": "../dasprid/enum"
+                },
+                {
+                        "name": "ircmaxell/password-compat",
+                        "version": "v1.0.4",
+                        "version_normalized": "1.0.4.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/ircmaxell/password_compat.git",
+                                "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/5c5cde8822a69545767f7c7f3058cb15ff84614c",
+                                "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c",
+                                "shasum": ""
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "4.*"
+                        },
+                        "time": "2014-11-20T16:49:30+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "files": [
+                                        "lib/password.php"
+                                ]
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Anthony Ferrara",
+                                        "email": "ircmaxell@php.net",
+                                        "homepage": "http://blog.ircmaxell.com"
+                                }
+                        ],
+                        "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
+                        "homepage": "https://github.com/ircmaxell/password_compat",
+                        "keywords": [
+                                "hashing",
+                                "password"
+                        ],
+                        "install-path": "../ircmaxell/password-compat"
+                },
+                {
+                        "name": "jbroadway/urlify",
+                        "version": "1.2.4-stable",
+                        "version_normalized": "1.2.4.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/jbroadway/urlify.git",
+                                "reference": "d0fafbaa1dc14e8039cdf5c72a932a8d1de1750e"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/jbroadway/urlify/zipball/d0fafbaa1dc14e8039cdf5c72a932a8d1de1750e",
+                                "reference": "d0fafbaa1dc14e8039cdf5c72a932a8d1de1750e",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=7.2",
+                                "voku/portable-ascii": "^2.0",
+                                "voku/stop-words": "^2.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^8.5"
+                        },
+                        "time": "2022-06-15T16:46:46+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "1.0-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "URLify": ""
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "BSD-3-Clause-Clear"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Johnny Broadway",
+                                        "email": "johnny@johnnybroadway.com",
+                                        "homepage": "http://www.johnnybroadway.com/"
+                                }
+                        ],
+                        "description": "A fast PHP slug generator and transliteration library that converts non-ascii characters for use in URLs.",
+                        "homepage": "https://github.com/jbroadway/urlify",
+                        "keywords": [
+                                "ascii",
+                                "blogging",
+                                "blogs",
+                                "downcode",
+                                "encode",
+                                "iconv",
+                                "link",
+                                "seo",
+                                "slug",
+                                "slugify",
+                                "slugs",
+                                "translit",
+                                "transliterate",
+                                "transliteration",
+                                "unicode",
+                                "url",
+                                "urlify"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/jbroadway/urlify/issues",
+                                "source": "https://github.com/jbroadway/urlify/tree/1.2.4-stable"
+                        },
+                        "install-path": "../jbroadway/urlify"
+                },
+                {
+                        "name": "kanti/hub-updater",
+                        "version": "v0.5.1",
+                        "version_normalized": "0.5.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/Kanti/hub-updater.git",
+                                "reference": "014b33c1e3880bd8e037a960a89e7116eb08a26e"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/014b33c1e3880bd8e037a960a89e7116eb08a26e",
+                                "reference": "014b33c1e3880bd8e037a960a89e7116eb08a26e",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "composer/ca-bundle": "^1.0",
+                                "php": ">=5.3.6"
+                        },
+                        "require-dev": {
+                                "codeclimate/php-test-reporter": "0.*",
+                                "friendsofphp/php-cs-fixer": "1.*",
+                                "phpro/grumphp": "0.*",
+                                "phpunit/phpunit": "4.*",
+                                "sebastian/phpcpd": "2.*",
+                                "squizlabs/php_codesniffer": "2.*"
+                        },
+                        "time": "2016-08-02T19:12:55+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Kanti\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "GPL-2.0"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Kanti",
+                                        "email": "git@kanti.de",
+                                        "homepage": "https://kanti.de",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "Simple Github Updater for Web Projects",
+                        "support": {
+                                "forum": "https://github.com/Kanti/hub-updater/issues",
+                                "issues": "https://github.com/Kanti/hub-updater/issues",
+                                "source": "https://github.com/Kanti/hub-updater"
+                        },
+                        "abandoned": true,
+                        "install-path": "../kanti/hub-updater"
+                },
+                {
+                        "name": "michelf/php-markdown",
+                        "version": "1.9.1",
+                        "version_normalized": "1.9.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/michelf/php-markdown.git",
+                                "reference": "5024d623c1a057dcd2d076d25b7d270a1d0d55f3"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/5024d623c1a057dcd2d076d25b7d270a1d0d55f3",
+                                "reference": "5024d623c1a057dcd2d076d25b7d270a1d0d55f3",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": ">=4.3 <5.8"
+                        },
+                        "time": "2021-11-24T02:52:38+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Michelf\\": "Michelf/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "BSD-3-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Michel Fortin",
+                                        "email": "michel.fortin@michelf.ca",
+                                        "homepage": "https://michelf.ca/",
+                                        "role": "Developer"
+                                },
+                                {
+                                        "name": "John Gruber",
+                                        "homepage": "https://daringfireball.net/"
+                                }
+                        ],
+                        "description": "PHP Markdown",
+                        "homepage": "https://michelf.ca/projects/php-markdown/",
+                        "keywords": [
+                                "markdown"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/michelf/php-markdown/issues",
+                                "source": "https://github.com/michelf/php-markdown/tree/1.9.1"
+                        },
+                        "install-path": "../michelf/php-markdown"
+                },
+                {
+                        "name": "paragonie/constant_time_encoding",
+                        "version": "v2.7.0",
+                        "version_normalized": "2.7.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/paragonie/constant_time_encoding.git",
+                                "reference": "52a0d99e69f56b9ec27ace92ba56897fe6993105"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/52a0d99e69f56b9ec27ace92ba56897fe6993105",
+                                "reference": "52a0d99e69f56b9ec27ace92ba56897fe6993105",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": "^7|^8"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^6|^7|^8|^9",
+                                "vimeo/psalm": "^1|^2|^3|^4"
+                        },
+                        "time": "2024-05-08T12:18:48+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "ParagonIE\\ConstantTime\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Paragon Initiative Enterprises",
+                                        "email": "security@paragonie.com",
+                                        "homepage": "https://paragonie.com",
+                                        "role": "Maintainer"
+                                },
+                                {
+                                        "name": "Steve 'Sc00bz' Thomas",
+                                        "email": "steve@tobtu.com",
+                                        "homepage": "https://www.tobtu.com",
+                                        "role": "Original Developer"
+                                }
+                        ],
+                        "description": "Constant-time Implementations of RFC 4648 Encoding (Base-64, Base-32, Base-16)",
+                        "keywords": [
+                                "base16",
+                                "base32",
+                                "base32_decode",
+                                "base32_encode",
+                                "base64",
+                                "base64_decode",
+                                "base64_encode",
+                                "bin2hex",
+                                "encoding",
+                                "hex",
+                                "hex2bin",
+                                "rfc4648"
+                        ],
+                        "support": {
+                                "email": "info@paragonie.com",
+                                "issues": "https://github.com/paragonie/constant_time_encoding/issues",
+                                "source": "https://github.com/paragonie/constant_time_encoding"
+                        },
+                        "install-path": "../paragonie/constant_time_encoding"
+                },
+                {
+                        "name": "pragmarx/google2fa",
+                        "version": "v8.0.1",
+                        "version_normalized": "8.0.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/antonioribeiro/google2fa.git",
+                                "reference": "80c3d801b31fe165f8fe99ea085e0a37834e1be3"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/80c3d801b31fe165f8fe99ea085e0a37834e1be3",
+                                "reference": "80c3d801b31fe165f8fe99ea085e0a37834e1be3",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "paragonie/constant_time_encoding": "^1.0|^2.0",
+                                "php": "^7.1|^8.0"
+                        },
+                        "require-dev": {
+                                "phpstan/phpstan": "^0.12.18",
+                                "phpunit/phpunit": "^7.5.15|^8.5|^9.0"
+                        },
+                        "time": "2022-06-13T21:57:56+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "PragmaRX\\Google2FA\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Antonio Carlos Ribeiro",
+                                        "email": "acr@antoniocarlosribeiro.com",
+                                        "role": "Creator & Designer"
+                                }
+                        ],
+                        "description": "A One Time Password Authentication package, compatible with Google Authenticator.",
+                        "keywords": [
+                                "2fa",
+                                "Authentication",
+                                "Two Factor Authentication",
+                                "google2fa"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/antonioribeiro/google2fa/issues",
+                                "source": "https://github.com/antonioribeiro/google2fa/tree/v8.0.1"
+                        },
+                        "install-path": "../pragmarx/google2fa"
+                },
+                {
+                        "name": "suin/php-rss-writer",
+                        "version": "1.6.0",
+                        "version_normalized": "1.6.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/suin/php-rss-writer.git",
+                                "reference": "78f45e44a2a7cb0d82e4b9efb6f7b7a075b9051c"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/78f45e44a2a7cb0d82e4b9efb6f7b7a075b9051c",
+                                "reference": "78f45e44a2a7cb0d82e4b9efb6f7b7a075b9051c",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.4.0"
+                        },
+                        "require-dev": {
+                                "eher/phpunit": ">=1.6",
+                                "mockery/mockery": ">=0.7.2",
+                                "suin/xoopsunit": ">=1.2"
+                        },
+                        "time": "2017-07-13T10:47:50+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "Suin\\RSSWriter": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "suin",
+                                        "email": "suinyeze@gmail.com"
+                                }
+                        ],
+                        "description": "Yet another simple RSS writer library for PHP 5.4 or later.",
+                        "homepage": "https://github.com/suin/php-rss-writer",
+                        "keywords": [
+                                "feed",
+                                "generator",
+                                "php",
+                                "rss",
+                                "writer"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/suin/php-rss-writer/issues",
+                                "source": "https://github.com/suin/php-rss-writer/tree/master"
+                        },
+                        "install-path": "../suin/php-rss-writer"
+                },
+                {
+                        "name": "voku/portable-ascii",
+                        "version": "2.0.1",
+                        "version_normalized": "2.0.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/voku/portable-ascii.git",
+                                "reference": "b56450eed252f6801410d810c8e1727224ae0743"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/b56450eed252f6801410d810c8e1727224ae0743",
+                                "reference": "b56450eed252f6801410d810c8e1727224ae0743",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=7.0.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
+                        },
+                        "suggest": {
+                                "ext-intl": "Use Intl for transliterator_transliterate() support"
+                        },
+                        "time": "2022-03-08T17:03:00+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "voku\\": "src/voku/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Lars Moelleken",
+                                        "homepage": "http://www.moelleken.org/"
+                                }
+                        ],
+                        "description": "Portable ASCII library - performance optimized (ascii) string functions for php.",
+                        "homepage": "https://github.com/voku/portable-ascii",
+                        "keywords": [
+                                "ascii",
+                                "clean",
+                                "php"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/voku/portable-ascii/issues",
+                                "source": "https://github.com/voku/portable-ascii/tree/2.0.1"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://www.paypal.me/moelleken",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/voku",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://opencollective.com/portable-ascii",
+                                        "type": "open_collective"
+                                },
+                                {
+                                        "url": "https://www.patreon.com/voku",
+                                        "type": "patreon"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/voku/portable-ascii",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "../voku/portable-ascii"
+                },
+                {
+                        "name": "voku/stop-words",
+                        "version": "2.0.1",
+                        "version_normalized": "2.0.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/voku/stop-words.git",
+                                "reference": "8e63c0af20f800b1600783764e0ce19e53969f71"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/voku/stop-words/zipball/8e63c0af20f800b1600783764e0ce19e53969f71",
+                                "reference": "8e63c0af20f800b1600783764e0ce19e53969f71",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=7.0.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "~6.0"
+                        },
+                        "time": "2018-11-23T01:37:27+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "voku\\": "src/voku/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Lars Moelleken",
+                                        "homepage": "http://www.moelleken.org/"
+                                }
+                        ],
+                        "description": "Stop-Words via PHP",
+                        "keywords": [
+                                "stop words",
+                                "stop-words"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/voku/stop-words/issues",
+                                "source": "https://github.com/voku/stop-words/tree/master"
+                        },
+                        "install-path": "../voku/stop-words"
+                }
         ],
-        "authors": [
-            {
-                "name": "Anthony Ferrara",
-                "email": "ircmaxell@php.net",
-                "homepage": "http://blog.ircmaxell.com"
-            }
-        ],
-        "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
-        "homepage": "https://github.com/ircmaxell/password_compat",
-        "keywords": [
-            "hashing",
-            "password"
-        ]
-    },
-    {
-        "name": "jbroadway/urlify",
-        "version": "1.1.3-stable",
-        "version_normalized": "1.1.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jbroadway/urlify.git",
-            "reference": "37fe4e7680a1c8cd68ac43a27dac7ef4be476300"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jbroadway/urlify/zipball/37fe4e7680a1c8cd68ac43a27dac7ef4be476300",
-            "reference": "37fe4e7680a1c8cd68ac43a27dac7ef4be476300",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5"
-        },
-        "time": "2019-06-13T18:30:56+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "URLify": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause-Clear"
-        ],
-        "authors": [
-            {
-                "name": "Johnny Broadway",
-                "email": "johnny@johnnybroadway.com",
-                "homepage": "http://www.johnnybroadway.com/"
-            }
-        ],
-        "description": "PHP port of URLify.js from the Django project. Transliterates non-ascii characters for use in URLs.",
-        "homepage": "https://github.com/jbroadway/urlify",
-        "keywords": [
-            "encode",
-            "iconv",
-            "link",
-            "slug",
-            "translit",
-            "transliterate",
-            "transliteration",
-            "url",
-            "urlify"
-        ]
-    },
-    {
-        "name": "kanti/hub-updater",
-        "version": "v0.4.1",
-        "version_normalized": "0.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Kanti/hub-updater.git",
-            "reference": "c9cdc7ce407c2a3596961e2193673303789e084d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Kanti/hub-updater/zipball/c9cdc7ce407c2a3596961e2193673303789e084d",
-            "reference": "c9cdc7ce407c2a3596961e2193673303789e084d",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "codeclimate/php-test-reporter": "dev-master",
-            "phpunit/phpunit": "4.*",
-            "sebastian/phpcpd": "*",
-            "squizlabs/php_codesniffer": "*"
-        },
-        "time": "2015-11-28T18:52:10+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Kanti\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Kanti",
-                "email": "git@kanti.de",
-                "homepage": "https://kanti.de",
-                "role": "Developer"
-            }
-        ],
-        "description": "Simple Github Updater for Web Projects",
-        "abandoned": true
-    },
-    {
-        "name": "michelf/php-markdown",
-        "version": "1.9.0",
-        "version_normalized": "1.9.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/michelf/php-markdown.git",
-            "reference": "c83178d49e372ca967d1a8c77ae4e051b3a3c75c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/c83178d49e372ca967d1a8c77ae4e051b3a3c75c",
-            "reference": "c83178d49e372ca967d1a8c77ae4e051b3a3c75c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": ">=4.3 <5.8"
-        },
-        "time": "2019-12-02T02:32:27+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Michelf\\": "Michelf/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Michel Fortin",
-                "email": "michel.fortin@michelf.ca",
-                "homepage": "https://michelf.ca/",
-                "role": "Developer"
-            },
-            {
-                "name": "John Gruber",
-                "homepage": "https://daringfireball.net/"
-            }
-        ],
-        "description": "PHP Markdown",
-        "homepage": "https://michelf.ca/projects/php-markdown/",
-        "keywords": [
-            "markdown"
-        ]
-    },
-    {
-        "name": "suin/php-rss-writer",
-        "version": "1.3.2",
-        "version_normalized": "1.3.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/suin/php-rss-writer.git",
-            "reference": "51840d2fad4087a4bdd93fb6937aa4b324b5c94f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/51840d2fad4087a4bdd93fb6937aa4b324b5c94f",
-            "reference": "51840d2fad4087a4bdd93fb6937aa4b324b5c94f",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2016-03-01T12:09:17+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Suin\\RSSWriter": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Hidehito Nozawa aka Suin",
-                "email": "suinyeze@gmail.com"
-            }
-        ],
-        "description": "Yet another simple RSS writer library for PHP 5.3 or later.",
-        "homepage": "https://github.com/suin/php-rss-writer",
-        "keywords": [
-            "feed",
-            "generator",
-            "php",
-            "rss",
-            "writer"
-        ]
-    }
-]
+        "dev": true,
+        "dev-package-names": []
+}

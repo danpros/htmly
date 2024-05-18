@@ -1,9 +1,21 @@
-# URLify for PHP [![Build Status](https://travis-ci.org/jbroadway/urlify.png)](https://travis-ci.org/jbroadway/urlify)
+# URLify for PHP
 
-A PHP port of [URLify.js](https://github.com/django/django/blob/master/django/contrib/admin/static/admin/js/urlify.js)
-from the Django project. Handles symbols from Latin languages as well as Arabic, Azerbaijani, Czech, German, Greek, Kazakh,
-Latvian, Lithuanian, Persian, Polish, Romanian, Bulgarian, Russian, Serbian, Turkish, Ukrainian, Vietnamese and Slovak. Symbols it cannot
-transliterate it will simply omit.
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/jbroadway/urlify/Continuous%20Integration/master)
+![Packagist License](https://img.shields.io/packagist/l/jbroadway/urlify)
+![Packagist Version](https://img.shields.io/packagist/v/jbroadway/urlify)
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/jbroadway/urlify)
+![Packagist Downloads](https://img.shields.io/packagist/dt/jbroadway/urlify)
+
+A fast PHP slug generator and transliteration library, started as a PHP port of
+[URLify.js](https://github.com/django/django/blob/master/django/contrib/admin/static/admin/js/urlify.js)
+from the Django project.
+
+Handles symbols from latin languages, Arabic, Azerbaijani, Bulgarian, Burmese, Croatian, Czech, Danish, Esperanto,
+Estonian, Finnish, French, Switzerland (French), Austrian (French), Georgian, German, Switzerland (German),
+Austrian (German), Greek, Hindi, Kazakh, Latvian, Lithuanian, Norwegian, Persian, Polish, Romanian, Russian, Swedish,
+Serbian, Slovak, Turkish, Ukrainian and Vietnamese, and many other via `ASCII::to_transliterate()`.
+
+Symbols it cannot transliterate it can omit or replace with a specified character.
 
 ## Installation
 
@@ -15,15 +27,21 @@ $ composer require jbroadway/urlify
 
 ## Usage
 
+First, include Composer's autoloader:
+
+```php
+require_once 'vendor/autoload.php';
+```
+
 To generate slugs for URLs:
 
 ```php
 <?php
 
-echo URLify::filter (' J\'étudie le français ');
+echo URLify::slug (' J\'étudie le français ');
 // "jetudie-le-francais"
 
-echo URLify::filter ('Lo siento, no hablo español.');
+echo URLify::slug ('Lo siento, no hablo español.');
 // "lo-siento-no-hablo-espanol"
 ```
 

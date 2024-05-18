@@ -1,0 +1,20 @@
+parameters:
+  git_dir: .
+  bin_dir: vendor/bin
+  tasks:
+    phpcsfixer:
+      level: psr2
+      verbose: true
+    phpcs:
+      standard: PSR2
+      show_warnings: false
+      metadata:
+        priority: 300
+    phpunit:
+      config_file: tests/phpunit.xml
+      group: [fast]
+      metadata:
+        priority: 200
+    composer:
+      no_check_lock: true
+    yamllint: ~

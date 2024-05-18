@@ -4,7 +4,7 @@
  *
  * @package   php-markdown
  * @author    Michel Fortin <michel.fortin@michelf.com>
- * @copyright 2004-2019 Michel Fortin <https://michelf.com/projects/php-markdown/>
+ * @copyright 2004-2021 Michel Fortin <https://michelf.com/projects/php-markdown/>
  * @copyright (Original Markdown) 2004-2006 John Gruber <https://daringfireball.net/projects/markdown/>
  */
 
@@ -18,7 +18,7 @@ class Markdown implements MarkdownInterface {
 	 * Define the package version
 	 * @var string
 	 */
-	const MARKDOWNLIB_VERSION = "1.9.0";
+	const MARKDOWNLIB_VERSION = "1.9.1";
 
 	/**
 	 * Simple function interface - Initialize the parser and return the result
@@ -354,7 +354,7 @@ class Markdown implements MarkdownInterface {
 		$block_tags_b_re = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|address|'.
 						   'script|noscript|style|form|fieldset|iframe|math|svg|'.
 						   'article|section|nav|aside|hgroup|header|footer|'.
-						   'figure';
+						   'figure|details|summary';
 
 		// Regular expression for the content of a block tag.
 		$nested_tags_level = 4;

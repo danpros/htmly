@@ -17,8 +17,11 @@ class Item implements ItemInterface
     /** @var string */
     protected $description;
 
+    /** @var string */
+    protected $contentEncoded;
+
     /** @var array */
-    protected $categories = array();
+    protected $categories = [];
 
     /** @var string */
     protected $guid;
@@ -34,6 +37,11 @@ class Item implements ItemInterface
 
     /** @var string */
     protected $author;
+
+    /** @var string */
+    protected $creator;
+
+    protected $preferCdata = false;
 
     public function title($title)
     {
@@ -53,9 +61,15 @@ class Item implements ItemInterface
         return $this;
     }
 
+    public function contentEncoded($content)
+    {
+        $this->contentEncoded = $content;
+        return $this;
+    }
+
     public function category($name, $domain = null)
     {
-        $this->categories[] = array($name, $domain);
+        $this->categories[] = [$name, $domain];
         return $this;
     }
 
@@ -74,13 +88,25 @@ class Item implements ItemInterface
 
     public function enclosure($url, $length = 0, $type = 'audio/mpeg')
     {
-        $this->enclosure = array('url' => $url, 'length' => $length, 'type' => $type);
+        $this->enclosure = ['url' => $url, 'length' => $length, 'type' => $type];
         return $this;
     }
 
     public function author($author)
     {
         $this->author = $author;
+        return $this;
+    }
+
+    public function creator($creator)
+    {
+        $this->creator = $creator;
+        return $this;
+    }
+
+    public function preferCdata($preferCdata)
+    {
+        $this->preferCdata = (bool)$preferCdata;
         return $this;
     }
 
@@ -93,9 +119,24 @@ class Item implements ItemInterface
     public function asXML()
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><item></item>', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
-        $xml->addChild('title', $this->title);
+
+        if ($this->preferCdata) {
+            $xml->addCdataChild('title', $this->title);
+        } else {
+            $xml->addChild('title', $this->title);
+        }
+
         $xml->addChild('link', $this->url);
-        $xml->addChild('description', $this->description);
+
+        if ($this->preferCdata) {
+            $xml->addCdataChild('description', $this->description);
+        } else {
+            $xml->addChild('description', $this->description);
+        }
+
+        if ($this->contentEncoded) {
+            $xml->addCdataChild('xmlns:content:encoded', $this->contentEncoded);
+        }
 
         foreach ($this->categories as $category) {
             $element = $xml->addChild('category', $category[0]);
@@ -129,6 +170,10 @@ class Item implements ItemInterface
 
         if (!empty($this->author)) {
             $xml->addChild('author', $this->author);
+        }
+
+        if (!empty($this->creator)) {
+            $xml->addChild('dc:creator', $this->creator,"http://purl.org/dc/elements/1.1/");
         }
 
         return $xml;
