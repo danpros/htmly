@@ -35,6 +35,7 @@ $images = image_gallery(null, 1, 40);
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
+<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/autosave.css">
 <script>
 $( function() {
     var availableTags = [
@@ -86,7 +87,7 @@ $( function() {
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
-
+<div class="notice" id="response"></div>
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
@@ -177,6 +178,7 @@ $( function() {
             <div class="row">
                 <div class="col-sm-6">
                     <div>
+						<input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                         <div id="wmd-button-bar" class="wmd-button-bar"></div>
                         <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br>
@@ -311,3 +313,4 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
 </script>
+<script src="<?php echo site_url() ?>system/resources/js/save_draft.js"></script>
