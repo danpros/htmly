@@ -313,4 +313,6 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
 </script>
-<script src="<?php echo site_url() ?>system/resources/js/save_draft.js"></script>
+<?php if (config('autosave.enable') == 'true' ) {
+	echo '<script src="'.site_url().'system/resources/js/save_draft.js"></script>';
+} ?>

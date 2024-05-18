@@ -174,35 +174,38 @@ if (login()) {
 	$draft = 'true';	
 	$posttype = $_POST['posttype'];
 	
-	if ($posttype == 'is_page') {
-		$response = auto_save_page($title, $url, $content, $draft, $description);
-	} else {
-		$user = $_SESSION[site_url()]['user'];
-		$tag = $_POST['tag'];
-		$category = $_POST['category'];
-		$dateTime = $_POST['dateTime'];
-		if ($posttype == 'is_image') {
-			$type = 'image';
-			$media = $_POST['pimage'];
-		} elseif ($posttype == 'is_video') {
-			$type = 'video';
-			$media = $_POST['pvideo'];
-		} elseif ($posttype == 'is_link') {
-			$type = 'link';
-			$media = $_POST['plink'];
-		} elseif ($posttype == 'is_quote') {
-			$type = 'quote';
-			$media = $_POST['pquote'];
-		} elseif ($posttype == 'is_audio') {
-			$type = 'audio';
-			$media = $_POST['paudio'];
-		} elseif ($posttype == 'is_post') {
-			$type = 'post';
-			$media = null;
+	if (!empty($content)) {
+		if ($posttype == 'is_page') {
+			$response = auto_save_page($title, $url, $content, $draft, $description);
+		} else {
+			$user = $_SESSION[site_url()]['user'];
+			$tag = $_POST['tag'];
+			$category = $_POST['category'];
+			$dateTime = $_POST['dateTime'];
+			if ($posttype == 'is_image') {
+				$type = 'image';
+				$media = $_POST['pimage'];
+			} elseif ($posttype == 'is_video') {
+				$type = 'video';
+				$media = $_POST['pvideo'];
+			} elseif ($posttype == 'is_link') {
+				$type = 'link';
+				$media = $_POST['plink'];
+			} elseif ($posttype == 'is_quote') {
+				$type = 'quote';
+				$media = $_POST['pquote'];
+			} elseif ($posttype == 'is_audio') {
+				$type = 'audio';
+				$media = $_POST['paudio'];
+			} elseif ($posttype == 'is_post') {
+				$type = 'post';
+				$media = null;
+			}
+			$response = auto_save_post($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime);
 		}
-		$response = auto_save_post($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime);
+	} else {
+		$response = "No content to save.";
 	}
-	
 	echo $response;
 } else {
     $login = site_url() . 'login';

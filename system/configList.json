@@ -86,5 +86,6 @@
     "default.image",
     "favicon.image",
     "views.root",
-    "views.layout"
+    "views.layout",
+    "autosave.enable"
 ]
