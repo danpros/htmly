@@ -560,10 +560,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->views = null;
         }
 
-        // Automatically convert URLs to clickable links
-        $urlpattern = '#(https?://[^\s]+)#i';
-        $post->body = preg_replace($urlpattern, '<a href="$1">$1</a>', $post->body);
-
         $tmp[] = $post;
     }
 
@@ -642,10 +638,6 @@ function get_pages($pages, $page = 1, $perpage = 0)
             $post->views = null;
         }
 
-        // Automatically convert URLs to clickable links
-        $urlpattern = '#(https?://[^\s]+)#i';
-        $post->body = preg_replace($urlpattern, '<a href="$1">$1</a>', $post->body);
-		
         $tmp[] = $post;            
     }
     
@@ -735,10 +727,6 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
             $post->views = null;
         }
 
-        // Automatically convert URLs to clickable links
-        $urlpattern = '#(https?://[^\s]+)#i';
-        $post->body = preg_replace($urlpattern, '<a href="$1">$1</a>', $post->body);
-		
         $tmp[] = $post;        
     }
     
