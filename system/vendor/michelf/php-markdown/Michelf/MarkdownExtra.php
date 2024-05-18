@@ -139,6 +139,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 		);
 		$this->span_gamut += array(
 			"doFootnotes"        => 5,
+			"doStrikethrough"    => 55,
 			"doAbbreviations"    => 70,
 		);
 
