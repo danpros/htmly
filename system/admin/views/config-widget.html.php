@@ -134,7 +134,7 @@
   <br>
   <h4><?php echo i18n('Comments');?></h4>
   <hr>
-  <p><?php echo i18n('To_using_Disqus_or_Facebook_comment_you_need_to_provide_Disqus_shortname_or_Facebook_App_ID');?></p>
+  <p><?php echo i18n('To_use_Disqus_or_Facebook_comment_you_need_to_provide_Disqus_shortname_or_Facebook_App_ID');?></p>
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Comment_system');?></label>
     <div class="col-sm-10">
