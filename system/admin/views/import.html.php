@@ -3,7 +3,7 @@
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
 <h1><?php echo i18n('Import_RSS_Feed_2.0');?></h1>
-<p><?php echo i18n('By_using_this_importer_you_are_agree_if_the_feed_is_yours_or_at_least_you_have_the_authority_to_publish_it');?></p>
+<p><?php echo i18n('By_using_this_importer_you_confirm_that_the_feed_is_yours_or_that_at_least_you_have_the_authority_to_publish_it');?></p>
 <form method="POST">
     <label><?php echo i18n('Feed_Url');?> <span class="required">*</span></label><input type="url" class="form-control text <?php if (isset($url)) {
         if (empty($url)) {

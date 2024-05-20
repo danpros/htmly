@@ -107,7 +107,7 @@ $images = image_gallery(null, 1, 40);
                     <?php if($type != 'is_frontpage') { ?>
                     <label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
                     <br />
-                    <textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_leave_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
+                    <textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_left_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description;} else {echo $olddescription;}?></textarea>
                     <br /><br />
                     <?php } ?>
                 </div>
@@ -115,7 +115,7 @@ $images = image_gallery(null, 1, 40);
                     <?php if($type != 'is_frontpage' && $type != 'is_profile') { ?>
                     <label for="pURL"><?php echo i18n('Slug');?> (<?php echo i18n('optional');?>)</label>
                     <br>
-                    <input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="<?php echo i18n('If_the_url_leave_empty_we_will_use_the_page_title');?>"/>
+                    <input type="text" id="pURL" name="url" class="form-control text" value="<?php echo $oldmd ?>" placeholder="<?php echo i18n('If_the_url_is_left_empty_we_will_use_the_page_title');?>"/>
                     <br>
                     <?php } ?>
 
