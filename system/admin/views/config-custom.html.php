@@ -14,7 +14,7 @@
 </nav>
 <br><br>
 <p><?php echo i18n('hint_Use_CtrlCMDF_to_search_for_your_config_key_or_value');?></p>
-<p><?php echo i18n('pro_tips_You_can_creating_custom_config_key_and_print_out_your_config_key_value_anywhere_in_your_template');?></p>
+<p><?php echo i18n('pro_tips_You_can_create_custom_config_key_and_print_out_your_config_key_value_anywhere_in_your_template');?></p>
 <p><code>&lt;?php echo config('<?php echo i18n('your_key');?>'); ?&gt;</code></p>
 <form method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
