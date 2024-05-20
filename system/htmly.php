@@ -3001,7 +3001,7 @@ get('/tag/:tag', function ($tag) {
     $ttag->title = tag_i18n($tag);
     $ttag->url = site_url() . 'tag/' . strtolower($tag);
     $ttag->count = $total;
-    $ttag->description = i18n('All_tagged_posts') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
+    $ttag->description = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
     $ttag->body = $ttag->description;
 
     if (empty($posts) || $page < 1) {
@@ -3055,7 +3055,7 @@ get('/tag/:tag/feed', function ($tag) {
     $data = new stdClass;
     $data->title = tag_i18n($tag);
     $data->url = site_url() . 'tag/' . strtolower($tag);
-    $data->body = i18n('All_tagged_posts') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
+    $data->body = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
 
     // Show an RSS feed
     echo generate_rss($posts, $data);
