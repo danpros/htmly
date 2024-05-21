@@ -59,12 +59,13 @@ google.analytics.id = ""
 ; Google gtag analytics
 google.gtag.id = ""
 
-; Google reCaptcha
-; https://www.google.com/recaptcha/admin. Options "false" and "true"
+; Login protection system  Choose "google", "cloudflare", or "disable".
+; https://www.google.com/recaptcha/admin
+; https://developers.cloudflare.com/turnstile/
 
-google.reCaptcha = "false"
-google.reCaptcha.public = ""
-google.reCaptcha.private = ""
+login.protect.system = "disable"
+login.protect.public = ""
+login.protect.private = ""
 
 ; Pagination, RSS, and JSON
 posts.perpage = "10"

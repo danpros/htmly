@@ -3561,16 +3561,42 @@ function remove_html_comments($content)
 // Google recaptcha
 function isCaptcha($reCaptchaResponse)
 {
-    if (config('google.reCaptcha') != 'true') {
-        return true;
-    }
     $url = "https://www.google.com/recaptcha/api/siteverify";
     $options = array(
-        "secret" => config("google.reCaptcha.private"),
+        "secret" => config("login.protect.private"),
         "response" => $reCaptchaResponse,
         "remoteip" => $_SERVER['REMOTE_ADDR'],
     );
     $fileContent = @file_get_contents($url . "?" . http_build_query($options));
+    if ($fileContent === false) {
+        return false;
+    }
+    $json = json_decode($fileContent, true);
+    if ($json == false) {
+        return false;
+    }
+    return ($json['success']);
+}
+
+// Cloudflare Turnstile
+function isTurnstile($turnstileResponse)
+{
+	$public = config("login.protect.public");
+	$private = config("login.protect.private");
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    $data = array('secret' => $private, 'response' => $turnstileResponse, 'remoteip' => $ip);
+
+    $options = array(
+        'http' => array(
+        'method' => 'POST',
+        'content' => http_build_query($data))
+    );
+
+    $stream = stream_context_create($options);
+    $fileContent = file_get_contents($url, false, $stream);
+ 
     if ($fileContent === false) {
         return false;
     }
