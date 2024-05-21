@@ -288,6 +288,30 @@
       <input type="text" name="-config-social.youtube" class="form-control" id="social.youtube" value="<?php echo config('social.youtube');?>" placeholder="https://www.youtube.com/user/username">
     </div>
   </div>
+  <br>
+  <h4><?php echo i18n('mfa_config');?></h4>
+  <hr>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('set_mfa_globally');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-mfa.state" id="mfa.state1" value="true" <?php if (config('mfa.state') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="mfa.state1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-mfa.state" id="mfa.state2" value="false" <?php if (config('mfa.state') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="mfa.state2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+	  <small><em><?php echo i18n('explain_mfa');?></em></small>
+    </div>
+  </div>
+  <hr />
   <div class="form-group row">
     <div class="col-sm-10">
       <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>

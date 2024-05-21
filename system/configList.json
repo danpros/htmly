@@ -87,5 +87,6 @@
     "favicon.image",
     "views.root",
     "views.layout",
-    "autosave.enable"
+    "autosave.enable",
+	"mfa.state"
 ]
