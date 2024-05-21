@@ -243,7 +243,7 @@ if (isset($_GET['search'])) {
                   </p>
                 </a>
               </li>
-			  <?php if (config('mfa.state') === 'true'): ?>
+              <?php if (config('mfa.state') === 'true'): ?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/mfa" class="nav-link">
                   <p>
@@ -251,7 +251,7 @@ if (isset($_GET['search'])) {
                   </p>
                 </a>
               </li>
-			  <?php endif;?>
+              <?php endif;?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
                   <p>
