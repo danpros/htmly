@@ -121,7 +121,13 @@ get('/index', function () {
 post('/login', function () {
 
     $proper = (is_csrf_proper(from($_REQUEST, 'csrf_token')));
+    if (config('login.protect.system') === 'google') {
     $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
+    } elseif (config('login.protect.system') === 'cloudflare') {
+        $captcha = isTurnstile(from($_REQUEST, 'cf-turnstile-response'));
+    } else {
+        $captcha = true;
+    }
 
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
