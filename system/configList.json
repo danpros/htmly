@@ -88,5 +88,6 @@
     "views.root",
     "views.layout",
     "autosave.enable",
-    "mfa.state"
+    "mfa.state",
+    "show.version"
 ]

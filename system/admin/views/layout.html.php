@@ -328,7 +328,7 @@ if (isset($_GET['search'])) {
       <small><?php echo i18n('Admin_panel_style_based_on');?> <a rel="nofollow" target="_blank" href="https://github.com/ColorlibHQ/AdminLTE">AdminLTE</a></small>
     </div>
     <!-- Default to the left -->
-    <?php echo i18n('Proudly_powered_by');?> <a href="https://www.htmly.com" target="_blank">HTMLy</a>
+    <?php echo i18n('Proudly_powered_by');?> <a href="https://www.htmly.com" target="_blank"><?php echo 'HTMLy ' . constant('HTMLY_VERSION'); ?></a>
   </footer>
 </div>
 <!-- ./wrapper -->
