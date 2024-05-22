@@ -141,6 +141,27 @@ Please install and enable the INTL extension to format the date format to your l
     </div>
   </div>
   <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('set_version_publicly');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-show.version" id="show.version1" value="true" <?php if (config('show.version') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="show.version1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-show.version" id="show.version2" value="false" <?php if (config('show.version') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="show.version2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+	  <small><em><?php echo i18n('explain_version');?></em></small>
+    </div>
+  </div>
+  <hr />
+  <div class="form-group row">
     <div class="col-sm-10">
       <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>
