@@ -121,82 +121,82 @@ get('/index', function () {
 post('/login', function () {
 
     $proper = (is_csrf_proper(from($_REQUEST, 'csrf_token')));
-    if (config('login.protect.system') === 'google') {
-    $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
-    } elseif (config('login.protect.system') === 'cloudflare') {
-        $captcha = isTurnstile(from($_REQUEST, 'cf-turnstile-response'));
-    } else {
+    $captcha = config('login.protect.system');
+    if (is_null($captcha) || $captcha === 'disabled') {
         $captcha = true;
+    } elseif ($captcha === 'cloudflare') {
+        $captcha = isTurnstile(from($_REQUEST, 'cf-turnstile-response'));
+    } elseif ($captcha === 'google') {
+        $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
     }
 
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
-    if ($proper && $captcha && !empty($user) && !empty($pass)) {
-		
-		if (user('mfa_secret', $user) !== "disabled") {
-			$mfa_secret = user('mfa_secret', $user);
-			$mfacode = from($_REQUEST, 'mfacode');
-			$google2fa = new Google2FA();
-			if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
-				session($user, $pass);
-				$log = session($user, $pass);
+    $mfa_secret = user('mfa_secret', $user);
+    if ($proper && $captcha && !empty($user) && !empty($pass)) {    
+        if (!is_null($mfa_secret) && $mfa_secret !== "disabled") {
+            $mfacode = from($_REQUEST, 'mfacode');
+            $google2fa = new Google2FA();
+            if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
+                session($user, $pass);
+                $log = session($user, $pass);
 
-				if (!empty($log)) {
+                if (!empty($log)) {
 
-					config('views.root', 'system/admin/views');
+                    config('views.root', 'system/admin/views');
 
-					render('login', array(
-						'title' => generate_title('is_default', i18n('Login')),
-						'description' => i18n('Login') . ' ' . blog_title(),
-						'canonical' => site_url(),
-						'metatags' => generate_meta(null, null),
-						'error' => '<ul>' . $log . '</ul>',
-						'type' => 'is_login',
-						'is_login' => true,
-						'bodyclass' => 'in-login',
-						'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
-					));
-				}
-			} else {
-				$message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+                    render('login', array(
+                        'title' => generate_title('is_default', i18n('Login')),
+                        'description' => i18n('Login') . ' ' . blog_title(),
+                        'canonical' => site_url(),
+                        'metatags' => generate_meta(null, null),
+                        'error' => '<ul>' . $log . '</ul>',
+                        'type' => 'is_login',
+                        'is_login' => true,
+                        'bodyclass' => 'in-login',
+                        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+                    ));
+                }
+            } else {
+                $message['error'] = '';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+                config('views.root', 'system/admin/views');
 
-				config('views.root', 'system/admin/views');
+                render('login', array(
+                    'title' => generate_title('is_default', i18n('Login')),
+                    'description' => i18n('Login') . ' ' . blog_title(),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'username' => $user,
+                    'password' => $pass,
+                    'type' => 'is_login',
+                    'is_login' => true,
+                    'bodyclass' => 'in-login',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+                ));
+            }
+        } else {
+            session($user, $pass);
+            $log = session($user, $pass);
 
-				render('login', array(
-					'title' => generate_title('is_default', i18n('Login')),
-					'description' => i18n('Login') . ' ' . blog_title(),
-					'canonical' => site_url(),
-					'metatags' => generate_meta(null, null),
-					'error' => '<ul>' . $message['error'] . '</ul>',
-					'username' => $user,
-					'password' => $pass,
-					'type' => 'is_login',
-					'is_login' => true,
-					'bodyclass' => 'in-login',
-					'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
-				));
-			}
-		} else {
-			session($user, $pass);
-			$log = session($user, $pass);
+            if (!empty($log)) {
 
-			if (!empty($log)) {
+                config('views.root', 'system/admin/views');
 
-				config('views.root', 'system/admin/views');
-
-				render('login', array(
-					'title' => generate_title('is_default', i18n('Login')),
-					'description' => i18n('Login') . ' ' . blog_title(),
-					'canonical' => site_url(),
-					'metatags' => generate_meta(null, null),
-					'error' => '<ul>' . $log . '</ul>',
-					'type' => 'is_login',
-					'is_login' => true,
-					'bodyclass' => 'in-login',
-					'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
-				));
-			}
-		}
+                render('login', array(
+                    'title' => generate_title('is_default', i18n('Login')),
+                    'description' => i18n('Login') . ' ' . blog_title(),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $log . '</ul>',
+                    'type' => 'is_login',
+                    'is_login' => true,
+                    'bodyclass' => 'in-login',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+                ));
+            }
+        }
     } else {
         $message['error'] = '';
         if (empty($user)) {
@@ -447,7 +447,7 @@ post('/edit/password', function() {
     } else {
         $login = site_url() . 'login';
         header("location: $login");
-    }	
+    }    
 });
 
 get('/edit/mfa', function () {
@@ -474,34 +474,57 @@ post('/edit/mfa', function() {
     if (login() && $proper) {
         $username = from($_REQUEST, 'username');
         $mfa_secret = from($_REQUEST, 'mfa_secret');
+        $mfacode = from($_REQUEST, 'mfacode');
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        $old_password = user('password', $user);
         $password = from($_REQUEST, 'password');
+        $message['error'] = '';
         if ($user === $username) {
-			if ($mfa_secret !== "disabled") {
-				$mfacode = from($_REQUEST, 'mfacode');
-				$google2fa = new Google2FA();
-				if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
-					$file = 'config/users/' . $user . '.ini';
-					if (file_exists($file)) {
-						if (!empty($mfa_secret)) {
-							update_user($user, $password, $role, $mfa_secret);
-						}
-					}
-					$redir = site_url() . 'admin';
-					header("location: $redir");
-				} else {
-					$redir = site_url() . 'admin';
-					header("location: $redir");
-				}
-			} else {
-				$file = 'config/users/' . $user . '.ini';
-				if (file_exists($file)) {
-					update_user($user, $password, $role, 'disabled');
-				}
-				$redir = site_url() . 'admin';
-				header("location: $redir");
-			}
+            if (!is_null($mfa_secret) && $mfa_secret !== "disabled") {
+                $google2fa = new Google2FA();
+                if ($google2fa->verifyKey($mfa_secret, $mfacode)) {
+                    if (password_verify($password, $old_password)) {
+                        if (!empty($mfa_secret)) {
+                            update_user($user, $password, $role, $mfa_secret);
+                        }
+                    } else {
+                        $message['error'] .= '<li class="alert alert-danger">' . i18n('Pass_Error') . '</li>';
+                    }
+                } else {
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+                }
+                config('views.root', 'system/admin/views');
+                render('edit-mfa', array(
+                    'title' => generate_title('is_default', i18n('config_mfa')),
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'type' => 'is_profile',
+                    'is_admin' => true,
+                    'bodyclass' => 'edit-mfa',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('config_mfa'),
+                ));
+            } else {
+                if (password_verify($password, $old_password)) {
+                    update_user($user, $password, $role, 'disabled');
+                } else {
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('Pass_Error') . '</li>';
+                }
+                config('views.root', 'system/admin/views');
+                render('edit-mfa', array(
+                    'title' => generate_title('is_default', i18n('config_mfa')),
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'type' => 'is_profile',
+                    'is_admin' => true,
+                    'bodyclass' => 'edit-mfa',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('config_mfa'),
+                ));    
+            }
         } else {
             $redir = site_url();
             header("location: $redir");    
@@ -509,8 +532,9 @@ post('/edit/mfa', function() {
     } else {
         $login = site_url() . 'login';
         header("location: $login");
-    }	
+    }    
 });
+
 // Edit the frontpage
 get('/edit/frontpage', function () {
     

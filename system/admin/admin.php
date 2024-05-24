@@ -40,7 +40,7 @@ function create_user($userName, $password, $role)
         file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
             "role = " . $role . "\n" .
-            "mfa_secret = none\n", LOCK_EX);
+            "mfa_secret = disabled\n", LOCK_EX);
         return true;
     }
 }
@@ -56,6 +56,7 @@ function session($user, $pass)
     $user_enc = user('encryption', $user);
     $user_pass = user('password', $user);
     $user_role = user('role', $user);
+    $mfa = user('mfa_secret', $user);
     
     if(is_null($user_enc) || is_null($user_pass) || is_null($user_role)) {
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
@@ -65,7 +66,6 @@ function session($user, $pass)
         if (password_verify($pass, $user_pass)) {
             if (session_status() == PHP_SESSION_NONE) session_start();
             if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
-                $mfa = user('mfa_secret', $user);
                 update_user($user, $pass, $user_role, $mfa);
             }
             $_SESSION[site_url()]['user'] = $user;
@@ -75,7 +75,6 @@ function session($user, $pass)
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         if (session_status() == PHP_SESSION_NONE) session_start();
-        $mfa = user('mfa_secret', $user);
         update_user($user, $pass, $user_role, $mfa);
         $_SESSION[site_url()]['user'] = $user;
         header('location: admin');

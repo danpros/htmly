@@ -1226,7 +1226,7 @@ function get_author($name)
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $author->description = get_content_tag("d", $content, get_description($author->about));
-				
+                
                 $author->avatar = get_content_tag("image", $content, site_url() . 'system/resources/images/logo-small.png');
 
                 $toc = explode('<!--toc-->', $author->about);
@@ -3440,9 +3440,9 @@ function head_contents()
     $output .= '<meta charset="utf-8" />' . "\n";
     $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
     $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
-	if (config('show.version') == 'true') {
-		$output .= '<meta name="generator" content="' . $version . '" />' . "\n";
-	}
+    if (config('show.version') == 'true') {
+        $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
+    }
     $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
     $output .= '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
@@ -3583,8 +3583,8 @@ function isCaptcha($reCaptchaResponse)
 // Cloudflare Turnstile
 function isTurnstile($turnstileResponse)
 {
-	$public = config("login.protect.public");
-	$private = config("login.protect.private");
+    $public = config("login.protect.public");
+    $private = config("login.protect.private");
     $ip = $_SERVER['REMOTE_ADDR'];
 
     $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
