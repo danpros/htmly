@@ -99,7 +99,7 @@ $images = image_gallery(null, 1, 40);
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
-            <div class="row">
+            <div id="post-settings" class="row">
                 <div class="col-sm-6">
                     <label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
                     <input type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error'; } } ?>" value="<?php echo $oldtitle ?>"/>
@@ -159,6 +159,7 @@ $images = image_gallery(null, 1, 40);
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <?php if (empty($dd) && empty($dr) && $type != 'is_page'):?><input type="submit" name="revertpage" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>
                         <?php } ?>
                     <?php } ?>
+                        <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
                 </div>
                 <div class="col-sm-6">
                     <label><?php echo i18n('Preview');?></label>
@@ -295,6 +296,21 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertMediaDialogURL').val($(e.target).attr('src'));
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
+</script>
+<script>
+    function toggleDivs() {
+        var div1 = document.getElementById('post-settings');
+        if (div1.style.display === 'none') {
+            div1.style.display = '';
+			document.body.classList.add("sidebar-mini");
+			document.body.classList.remove("sidebar-collapse")
+        } else {
+            div1.style.display = 'none';
+			document.body.classList.remove("sidebar-mini")
+			document.body.classList.add("sidebar-collapse");
+        }
+    }
+    document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <?php if (stripos($dir . '/', '/draft/') !== false): ?>
