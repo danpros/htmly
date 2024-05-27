@@ -119,13 +119,13 @@ rss.char = "200"
 views.counter = "false"
 
 ; Sitemap priorities between "0.0" and "1.0". 
-; Set "false" to disable a sitemap for the given type. (See /sitemap.xml)
+; Set "-1" (minus one) to disable a sitemap for the given type. (See /sitemap.xml)
 sitemap.priority.base = "1.0"
 sitemap.priority.post = "0.5"
 sitemap.priority.static = "0.5"
 sitemap.priority.category = "0.5"
 sitemap.priority.tag = "0.5"
-sitemap.priority.archiveDay = "0.5"
+sitemap.priority.archiveDay = "-1"
 sitemap.priority.archiveMonth = "0.5"
 sitemap.priority.archiveYear = "0.5"
 sitemap.priority.author = "0.5"

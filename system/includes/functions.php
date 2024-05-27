@@ -2964,11 +2964,15 @@ function generate_rss($posts, $data = null)
 }
 
 // Return post, archive url for sitemap
-function sitemap_post_path()
+function sitemap_post_path($posts, $page = 1, $perpage = 0)
 {
-    $posts = get_blog_posts();
+    if (empty($posts)) {
+        $posts = get_blog_posts();
+    }
 
     $tmp = array();
+    
+    $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
 
     foreach ($posts as $index => $v) {
 
@@ -3065,35 +3069,35 @@ function generate_sitemap($str)
 
         $map .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        if (config('sitemap.priority.base') !== 'false') {
+        if (config('sitemap.priority.base') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.base.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.post') !== 'false') {
+        if (config('sitemap.priority.post') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.post.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.static') !== 'false') {
+        if (config('sitemap.priority.static') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.static.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.category') !== 'false') {
+        if (config('sitemap.priority.category') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.category.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.tag') !== 'false') {
+        if (config('sitemap.priority.tag') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.tag.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.archiveDay') !== 'false' || config('sitemap.priority.archiveMonth') !== 'false' || config('sitemap.priority.archiveYear') !== 'false') {
+        if (config('sitemap.priority.archiveDay') !== '-1' || config('sitemap.priority.archiveMonth') !== '-1' || config('sitemap.priority.archiveYear') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.archive.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.author') !== 'false') {
+        if (config('sitemap.priority.author') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.author.xml</loc></sitemap>';
         }
 
-        if (config('sitemap.priority.type') !== 'false') {
+        if (config('sitemap.priority.type') !== '-1') {
             $map .= '<sitemap><loc>' . site_url() . 'sitemap.type.xml</loc></sitemap>';
         }
 
@@ -3105,36 +3109,57 @@ function generate_sitemap($str)
 
         $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
             $map .= '<url><loc>' . site_url() . '</loc><priority>' . $priority . '</priority></url>';
         }
 
         $map .= '</urlset>';
 
-    } elseif ($str == 'post.xml') {
+    } elseif (strpos($str, 'post.') !== false ) {
+        
+        $totalPosts = array();
+        $totalPosts = get_blog_posts();
 
-        $priority = (config('sitemap.priority.post')) ? config('sitemap.priority.post') : $default_priority;
+        if ($str == 'post.xml') {
 
-        $posts = array();
-        if ($priority !== 'false') {
-            $posts = sitemap_post_path();
+            $map .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+            $total = count($totalPosts);
+            $totalPage = ceil($total / 500);
+            
+            for ($i = 1; $i <= $totalPage; $i++) {
+                $map .= '<sitemap><loc>' . site_url() . 'sitemap.post.'. $i .'.xml</loc></sitemap>';
+            }
+            
+            $map .= '</sitemapindex>';
+            
+        } else {
+            
+            $priority = (config('sitemap.priority.post')) ? config('sitemap.priority.post') : $default_priority;
+            
+            $posts = array();
+            $arr = explode('.', $str);
+            if ($priority !== '-1') {
+                $posts = sitemap_post_path(null, $arr[1], 500);
+            }
+
+            $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+            foreach ($posts as $p) {
+
+                $map .= '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority><lastmod>' . date('Y-m-d\TH:i:sP', $p->lastMod) . '</lastmod></url>';
+            }
+
+            $map .= '</urlset>';
+        
         }
-
-        $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
-        foreach ($posts as $p) {
-
-            $map .= '<url><loc>' . $p->url . '</loc><priority>' . $priority . '</priority><lastmod>' . date('Y-m-d\TH:i:sP', $p->lastMod) . '</lastmod></url>';
-        }
-
-        $map .= '</urlset>';
 
     } elseif ($str == 'static.xml') {
 
         $priority = (config('sitemap.priority.static')) ? config('sitemap.priority.static') : $default_priority;
 
         $posts = array();
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
             $posts = sitemap_page_path();
         }
 
@@ -3152,7 +3177,7 @@ function generate_sitemap($str)
         $priority = (config('sitemap.priority.tag')) ? config('sitemap.priority.tag') : $default_priority;
 
         $posts = array();
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
             $posts = get_blog_posts();
         }
 
@@ -3193,7 +3218,7 @@ function generate_sitemap($str)
         $priorityMonth = (config('sitemap.priority.archiveMonth')) ? config('sitemap.priority.archiveMonth') : $default_priority;
         $priorityYear = (config('sitemap.priority.archiveYear')) ? config('sitemap.priority.archiveYear') : $default_priority;
 
-        $posts = sitemap_post_path();
+        $posts = sitemap_post_path(null, 1, null);
         $day = array();
         $month = array();
         $year = array();
@@ -3210,19 +3235,19 @@ function generate_sitemap($str)
 
         $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        if ($priorityDay !== 'false') {
+        if ($priorityDay !== '-1') {
             foreach ($day as $d) {
                 $map .= '<url><loc>' . $d . '</loc><priority>' . $priorityDay . '</priority></url>';
             }
         }
 
-        if ($priorityMonth !== 'false') {
+        if ($priorityMonth !== '-1') {
             foreach ($month as $m) {
                 $map .= '<url><loc>' . $m . '</loc><priority>' . $priorityMonth . '</priority></url>';
             }
         }
 
-        if ($priorityYear !== 'false') {
+        if ($priorityYear !== '-1') {
             foreach ($year as $y) {
                 $map .= '<url><loc>' . $y . '</loc><priority>' . $priorityYear . '</priority></url>';
             }
@@ -3235,9 +3260,9 @@ function generate_sitemap($str)
         $priority = (config('sitemap.priority.author')) ? config('sitemap.priority.author') : $default_priority;
 
         $author = array();
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
 
-            $posts = sitemap_post_path();
+            $posts = sitemap_post_path(null, 1, null);
 
             foreach ($posts as $p) {
                 $author[] = $p->authorUrl;
@@ -3248,7 +3273,7 @@ function generate_sitemap($str)
 
         $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
             foreach ($author as $a) {
                 $map .= '<url><loc>' . $a . '</loc><priority>' . $priority . '</priority></url>';
             }
@@ -3261,7 +3286,7 @@ function generate_sitemap($str)
         $priority = (config('sitemap.priority.category')) ? config('sitemap.priority.category') : $default_priority;
 
         $posts = array();
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
             $posts = get_blog_posts();
         }
 
@@ -3299,7 +3324,7 @@ function generate_sitemap($str)
         $priority = (config('sitemap.priority.type')) ? config('sitemap.priority.type') : $default_priority;
 
         $posts = array();
-        if ($priority !== 'false') {
+        if ($priority !== '-1') {
             $posts = get_blog_posts();
         }
 
