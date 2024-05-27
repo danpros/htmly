@@ -16,6 +16,7 @@ function updateData() {
   var pDate = $("#pDate").val();
   var pTime = $("#pTime").val();
   var dateTime = pDate + " " + pTime;
+  var autoSave = 'autoSave';
 
   // Prepare data to send to PHP
   var data = {
@@ -27,31 +28,35 @@ function updateData() {
     category: category,
     posttype: posttype,
     pimage: pimage,
-	paudio: paudio,
-	pvideo: pvideo,
-	pquote: pquote,
-	plink: plink,
-    dateTime: dateTime
+    paudio: paudio,
+    pvideo: pvideo,
+    pquote: pquote,
+    plink: plink,
+    dateTime: dateTime,
+    autoSave: autoSave,
+    addEdit: addEdit,
+    oldfile: oldfile,
+	parent_page: parent_page
   };
   
   $.ajax({
-	url: base_path + 'autosave.php',
+    url: base_path + 'admin/autosave',
     type: "POST",
     data: data,
     success: function(response) {
       $("#response").html(response);
-	  $("#response").fadeIn(600, function() {
+      $("#response").fadeIn(600, function() {
         $("#response").css("display", "block");
-	  });
-	  setTimeout(function() {
-		$("#response").fadeOut(600, function() {
+      });
+      setTimeout(function() {
+        $("#response").fadeOut(600, function() {
           $("#response").css("display", "none");
         });
-	  }, 3000);
+      }, 3000);
     }
   });
 }
 
 $(document).ready(function() {
-  setInterval(updateData, 60000);
+  setInterval(updateData, saveInterval);
 });

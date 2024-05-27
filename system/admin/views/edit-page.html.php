@@ -95,7 +95,7 @@ $images = image_gallery(null, 1, 40);
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
-
+<div class="notice" id="response"></div>
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
@@ -141,6 +141,7 @@ $images = image_gallery(null, 1, 40);
                     <div id="wmd-button-bar" class="wmd-button-bar"></div>
                     <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
                     <br>
+                    <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                     <?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/>
@@ -264,7 +265,14 @@ $images = image_gallery(null, 1, 40);
 	
 </div>
 <!-- Declare the base path. Important -->
-<script type="text/javascript">var base_path = '<?php echo site_url() ?>'; var initial_image = '<?php echo $images;?>';</script>
+<script type="text/javascript">
+    var base_path = '<?php echo site_url() ?>';
+    var initial_image = '<?php echo $images;?>';
+    var parent_page = '<?php echo $parent;?>';
+    var oldfile = '<?php echo $url;?>';
+    var addEdit = 'edit';
+    var saveInterval = 60000;
+</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <?php if ($type == 'is_profile'):?>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
@@ -288,3 +296,8 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
 </script>
+<?php if (config('autosave.enable') == 'true' ):?>
+<?php if (stripos($dir . '/', '/draft/') !== false): ?>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<?php endif;?>
+<?php endif;?>

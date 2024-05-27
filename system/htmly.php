@@ -120,7 +120,7 @@ get('/index', function () {
 // Get submitted login data
 post('/login', function () {
 
-    $proper = (is_csrf_proper(from($_REQUEST, 'csrf_token')));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $captcha = config('login.protect.system');
     if (is_null($captcha) || $captcha === 'disabled') {
         $captcha = true;
@@ -714,6 +714,9 @@ post('/add/content', function () {
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
+    if (empty($url)) {
+        $url = $title;
+    }
     
     if (empty($is_post) && empty($is_image) && empty($is_video) && empty($is_audio) && empty($is_link) && empty($is_quote)) {
         $add = site_url() . 'admin/content';
@@ -721,47 +724,17 @@ post('/add/content', function () {
     }
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -876,14 +849,12 @@ post('/add/page', function () {
     $draft = from($_REQUEST, 'draft');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content) && login()) {
-            if (!empty($url)) {
-                add_page($title, $url, $content, $draft, $description);
-            } else {
-                $url = $title;
-                add_page($title, $url, $content, $draft, $description);
-            }
+            add_page($title, $url, $content, $draft, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -914,6 +885,93 @@ post('/add/page', function () {
     } else {
         $redir = site_url();
         header("location: $redir");            
+    }
+});
+
+// Autosave
+post('/admin/autosave', function () {
+
+    if (login()) {
+        $title = $_REQUEST['title'];
+        $url = $_REQUEST['url'];
+        $content = $_REQUEST['content'];
+        $description = $_REQUEST['description'];
+        $draft = 'draft';    
+        $posttype = $_REQUEST['posttype'];
+        $autoSave = $_REQUEST['autoSave'];
+        $addEdit = $_REQUEST['addEdit'];
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+
+        if (empty($url)) {
+            $url = $title;
+        }
+
+        if ($addEdit == 'edit') {
+            $revertPage = '';
+            $revertPost = '';
+            $publishDraft = '';
+            $oldfile = $_REQUEST['oldfile'];
+            $destination = null;
+        }
+
+        if (!empty($title) && !empty($content)) {
+            if ($posttype == 'is_page') {
+                if ($role === 'editor' || $role === 'admin') {
+                    if ($addEdit == 'add') {
+                        $response = add_page($title, $url, $content, $draft, $description, $autoSave);
+                    } else {
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave);
+                    }
+                }
+            } elseif ($posttype == 'is_subpage') {
+                if ($role === 'editor' || $role === 'admin') {
+                    $static = $_REQUEST['parent_page'];
+                    if ($addEdit == 'add') {
+                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave);
+                    } else {
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave);
+                    }
+                }
+            } else {
+                $tag = $_REQUEST['tag'];
+                $category = $_REQUEST['category'];
+                $dateTime = $_REQUEST['dateTime'];
+                if ($posttype == 'is_image') {
+                    $type = 'image';
+                    $media = $_REQUEST['pimage'];
+                } elseif ($posttype == 'is_video') {
+                    $type = 'video';
+                    $media = $_REQUEST['pvideo'];
+                } elseif ($posttype == 'is_link') {
+                    $type = 'link';
+                    $media = $_REQUEST['plink'];
+                } elseif ($posttype == 'is_quote') {
+                    $type = 'quote';
+                    $media = $_REQUEST['pquote'];
+                } elseif ($posttype == 'is_audio') {
+                    $type = 'audio';
+                    $media = $_REQUEST['paudio'];
+                } elseif ($posttype == 'is_post') {
+                    $type = 'post';
+                    $media = null;
+                }
+                
+                if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
+                    if ($addEdit == 'add') {
+                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave);
+                    } else {
+                        $arr = explode('/', $oldfile);
+                        if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                            $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                        }
+                    }
+                }
+            }
+        } else {
+            $response = "No content to save.";
+        }
+        echo $response;
     }
 });
 
@@ -966,14 +1024,12 @@ post('/add/category', function () {
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                add_category($title, $url, $content, $description);
-            } else {
-                $url = $title;
-                add_category($title, $url, $content, $description);
-            }
+            add_category($title, $url, $content, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -1452,7 +1508,7 @@ get('/admin/pages/:static', function ($static)
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/pages">' .i18n('pages').'</a> &#187; ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'staticSubpage',
+                'type' => 'is_subpage',
                 'prev' => static_prev($prev),
                 'next' => static_next($next),
                 'is_page' => true
@@ -1463,7 +1519,7 @@ get('/admin/pages/:static', function ($static)
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'staticSubpage',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '',
@@ -2811,14 +2867,12 @@ post('/category/:category/edit', function () {
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                edit_category($title, $url, $content, $oldfile, $destination, $description);
-            } else {
-                $url = $title;
-                edit_category($title, $url, $content, $oldfile, $destination, $description);
-            }
+            edit_category($title, $url, $content, $oldfile, $destination, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -3557,44 +3611,37 @@ post('/post/:name/edit', function () {
     } elseif (!empty($is_post)) {
         $type = 'is_post';
     }
+    
+    if (empty($url)) {
+        $url = $title;
+    }
+    
     $arr = explode('/', $oldfile); 
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
             
         } else {
@@ -3931,7 +3978,7 @@ get('/:static', function ($static) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
             'static' => $post,
-            'type' => 'staticPage',
+            'type' => 'is_page',
             'prev' => static_prev($prev),
             'next' => static_next($next),
             'is_page' => true
@@ -3959,7 +4006,8 @@ get('/:static/add', function ($static) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'is_page',
+                'type' => 'is_subpage',
+                'parent' => $static,
                 'is_admin' => true,
                 'bodyclass' => 'add-page',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/pages/' . $post->slug . '">' . $post->title . '</a> &#187; ' . i18n('Add_new_page')
@@ -3996,14 +4044,12 @@ post('/:static/add', function ($static) {
     $draft = from($_REQUEST, 'draft');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                add_sub_page($title, $url, $content, $static, $draft, $description);
-            } else {
-                $url = $title;
-                add_sub_page($title, $url, $content, $static, $draft, $description);
-            }
+            add_sub_page($title, $url, $content, $static, $draft, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4025,7 +4071,7 @@ post('/:static/add', function ($static) {
                 'postTitle' => $title,
                 'postUrl' => $url,
                 'postContent' => $content,
-                'type' => 'is_page',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'add-page',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $title . '">' . $title . '</a> &#187; ' . i18n('Add_new_page')
@@ -4067,7 +4113,8 @@ get('/:static/edit', function ($static) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="'. site_url() .'admin/pages">' .i18n('pages').'</a> &#187; ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'staticPage',
+                'type' => 'is_page',
+                'parent' => ''
             ));
         } else {
             render('denied', array(
@@ -4075,7 +4122,7 @@ get('/:static/edit', function ($static) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'staticPage',
+                'type' => 'is_page',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
@@ -4104,14 +4151,12 @@ post('/:static/edit', function () {
     $publishDraft = from($_REQUEST, 'publishdraft');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
-            } else {
-                $url = $title;
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
-            }
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4137,6 +4182,8 @@ post('/:static/edit', function () {
                 'postContent' => $content,
                 'bodyclass' => 'edit-page',
                 'is_admin' => true,
+                'type' => 'is_page',
+                'parent' => '',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
             ));
         }
@@ -4176,7 +4223,7 @@ get('/:static/delete', function ($static) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Delete') . ': ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'staticPage',
+                'type' => 'is_page',
             ));
         } else {
             render('denied', array(
@@ -4300,7 +4347,7 @@ get('/:static/:sub', function ($static, $sub) {
         'parent' => $parent_post,
         'prev' => static_prev($prev),
         'next' => static_next($next),
-        'type' => 'subPage',
+        'type' => 'is_subpage',
         'is_subpage' => true
     ), $layout);
 });
@@ -4343,7 +4390,8 @@ get('/:static/:sub/edit', function ($static, $sub) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/pages/' . $post->slug . '">' . $post->title . '</a> &#187; ' . $page->title,
                 'p' => $page,
                 'static' => $page,
-                'type' => 'subPage',
+                'type' => 'is_subpage',
+                'parent' => $static
             ));
         } else {
             render('denied', array(
@@ -4351,7 +4399,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'subPage',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
@@ -4383,14 +4431,12 @@ post('/:static/:sub/edit', function ($static, $sub) {
     }
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
-            } else {
-                $url = $title;
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
-            }
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4416,8 +4462,10 @@ post('/:static/:sub/edit', function ($static, $sub) {
                 'postContent' => $content,
                 'static' => $static,
                 'sub' => $sub,
+                'type' => 'is_subpage',
                 'bodyclass' => 'edit-page',
                 'is_admin' => true,
+                'parent' => $static,
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
             ));
         }
@@ -4465,7 +4513,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/pages/' . $post->slug . '">' . $post->title . '</a> &#187; ' . $page->title,
                 'p' => $page,
                 'static' => $page,
-                'type' => 'subPage',
+                'type' => 'is_subpage',
             ));
         } else {
             render('denied', array(
@@ -4473,7 +4521,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'subPage',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
@@ -4737,46 +4785,38 @@ post('/:year/:month/:name/edit', function () {
     } elseif (!empty($is_post)) {
         $type = 'is_post';
     }
-    
+
+    if (empty($url)) {
+        $url = $title;
+    }
+
     $arr = explode('/', $oldfile); 
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
 
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
             
         } else {

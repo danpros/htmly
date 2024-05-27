@@ -131,7 +131,7 @@ $( function() {
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
-
+<div class="notice" id="response"></div>
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
@@ -224,6 +224,7 @@ $( function() {
             <div class="row">
                 <div class="col-sm-6">
                     <div>
+                        <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                         <div id="wmd-button-bar" class="wmd-button-bar"></div>
                         <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php echo $oldcontent ?></textarea><br>
@@ -339,7 +340,14 @@ $( function() {
     
 </div>
 <!-- Declare the base path. Important -->
-<script type="text/javascript">var base_path = '<?php echo site_url() ?>'; var initial_image = '<?php echo $images;?>';</script>
+<script type="text/javascript">
+    var base_path = '<?php echo site_url() ?>';
+    var initial_image = '<?php echo $images;?>';
+    var parent_page = '';
+    var oldfile = '<?php echo $filename;?>';
+    var addEdit = 'edit';
+    var saveInterval = 60000;
+</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
 <script>
@@ -361,3 +369,8 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
 </script>
+<?php if (config('autosave.enable') == 'true' ):?>
+<?php if ($isdraft[4] == 'draft') : ?>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<?php endif;?>
+<?php endif;?>

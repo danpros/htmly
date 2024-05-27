@@ -8,7 +8,6 @@
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
-<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/autosave.css">
 
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
@@ -27,7 +26,7 @@
                     <br>
                 </div>
                 <div class="col-sm-6">
-                    <?php if ($type == 'is_page') :?>
+                    <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
                     <label for="pURL"><?php echo i18n('Slug');?> (<?php echo i18n('optional');?>)</label>
                     <input type="text" class="form-control text" id="pURL" name="url" value="<?php if (isset($postUrl)) {echo $postUrl;} ?>" placeholder="<?php echo i18n('If_the_url_is_left_empty_we_will_use_the_page_title');?>"/>
                     <br>
@@ -43,7 +42,7 @@
                     <br>
 					<input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-                    <?php if ($type == 'is_page') :?>
+                    <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
                     <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
                     <?php endif;?>
                     <?php if ($type == 'is_category') :?>
@@ -118,7 +117,14 @@
     </div>
 </div>
 <!-- Declare the base path. Important -->
-<script type="text/javascript">var base_path = '<?php echo site_url() ?>'; var initial_image = '<?php echo $images;?>';</script>
+<script type="text/javascript">
+    var base_path = '<?php echo site_url() ?>';
+    var initial_image = '<?php echo $images;?>';
+    var parent_page = '<?php echo $parent;?>';
+    var oldfile = '';
+    var addEdit = 'add';
+    var saveInterval = 60000;
+</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script>
 function loadImages(page) {
@@ -139,6 +145,6 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
 </script>
-<?php if (config('autosave.enable') == 'true' ) {
-	echo '<script src="'.site_url().'system/resources/js/save_draft.js"></script>';
-} ?>
+<?php if (config('autosave.enable') == 'true' ):?>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<?php endif;?>

@@ -35,7 +35,6 @@ $images = image_gallery(null, 1, 40);
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
-<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/autosave.css">
 <script>
 $( function() {
     var availableTags = [
@@ -291,7 +290,14 @@ $( function() {
 </div>
 
 <!-- Declare the base path. Important -->
-<script type="text/javascript">var base_path = '<?php echo site_url() ?>'; var initial_image = '<?php echo $images;?>';</script>
+<script type="text/javascript">
+    var base_path = '<?php echo site_url() ?>';
+    var initial_image = '<?php echo $images;?>';
+    var parent_page = '';
+    var oldfile = '';
+    var addEdit = 'add';
+    var saveInterval = 60000;
+</script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
 <script>
@@ -313,6 +319,6 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
 </script>
-<?php if (config('autosave.enable') == 'true' ) {
-	echo '<script src="'.site_url().'system/resources/js/save_draft.js"></script>';
-} ?>
+<?php if (config('autosave.enable') == 'true' ):?>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<?php endif;?>
