@@ -957,7 +957,7 @@ post('/admin/autosave', function () {
                     $media = null;
                 }
                 
-                if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
+                if (!empty($title) && !empty($tag) && !empty($content)) {
                     if ($addEdit == 'add') {
                         $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave);
                     } else {
