@@ -16,7 +16,7 @@
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
-            <div class="row">
+            <div id="post-settings" class="row">
                 <div class="col-sm-6">
                     <label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
                     <input type="text" class="form-control text <?php if (isset($postTitle)) {if (empty($postTitle)) {echo 'error';}} ?>" id="pTitle" name="title" value="<?php if (isset($postTitle)) {echo $postTitle;} ?>"/>
@@ -48,6 +48,7 @@
                     <?php if ($type == 'is_category') :?>
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_category');?>"/>
                     <?php endif;?>
+                    <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
                 </div>
                 <div class="col-sm-6">
                     <label><?php echo i18n('Preview');?></label>
@@ -144,6 +145,21 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertMediaDialogURL').val($(e.target).attr('src'));
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
+</script>
+<script>
+    function toggleDivs() {
+        var div1 = document.getElementById('post-settings');
+        if (div1.style.display === 'none') {
+            div1.style.display = '';
+			document.body.classList.add("sidebar-mini");
+			document.body.classList.remove("sidebar-collapse")
+        } else {
+            div1.style.display = 'none';
+			document.body.classList.remove("sidebar-mini")
+			document.body.classList.add("sidebar-collapse");
+        }
+    }
+    document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>

@@ -90,7 +90,7 @@ $( function() {
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
-            <div class="row">
+            <div id="post-settings" class="row">
                 <div class="col-sm-6">
                     <label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
                     <input autofocus type="text" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';}} ?>" id="pTitle" name="title" value="<?php if (isset($postTitle)) { echo $postTitle;} ?>"/>
@@ -181,7 +181,7 @@ $( function() {
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                         <div id="wmd-button-bar" class="wmd-button-bar"></div>
                         <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br>
-                        <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
+                        <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/> <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
                         <br><br>
                     </div>
                 </div>
@@ -318,6 +318,21 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertMediaDialogURL').val($(e.target).attr('src'));
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
+</script>
+<script>
+    function toggleDivs() {
+        var div1 = document.getElementById('post-settings');
+        if (div1.style.display === 'none') {
+            div1.style.display = '';
+			document.body.classList.add("sidebar-mini");
+			document.body.classList.remove("sidebar-collapse")
+        } else {
+            div1.style.display = 'none';
+			document.body.classList.remove("sidebar-mini")
+			document.body.classList.add("sidebar-collapse");
+        }
+    }
+    document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>

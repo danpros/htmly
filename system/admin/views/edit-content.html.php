@@ -135,7 +135,7 @@ $( function() {
 <div class="row">
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
-            <div class="row">
+            <div id="post-settings" class="row">
                 <div class="col-sm-6">
                     <label for="pTitle"><?php echo i18n('Title');?> <span class="required">*</span></label>
                     <input autofocus type="text" id="pTitle" name="title" class="form-control text <?php if (isset($postTitle)) { if (empty($postTitle)) { echo 'error';} } ?>" value="<?php echo $oldtitle ?>"/>
@@ -233,6 +233,7 @@ $( function() {
                         <?php } else { ?>
                             <input type="submit" name="updatepost" class="btn btn-primary submit" value="<?php echo i18n('Update_post');?>"/> <input type="submit" name="revertpost" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
                         <?php }?>
+                            <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
                         <br><br>
                     </div>
                 </div>
@@ -368,6 +369,21 @@ $('.img-container').on("click", ".the-img", function(e) {
   $('#insertMediaDialogURL').val($(e.target).attr('src'));
   $('#insertImageDialogURL').val($(e.target).attr('src'));
 });
+</script>
+<script>
+    function toggleDivs() {
+        var div1 = document.getElementById('post-settings');
+        if (div1.style.display === 'none') {
+            div1.style.display = '';
+			document.body.classList.add("sidebar-mini");
+			document.body.classList.remove("sidebar-collapse")
+        } else {
+            div1.style.display = 'none';
+			document.body.classList.remove("sidebar-mini")
+			document.body.classList.add("sidebar-collapse");
+        }
+    }
+    document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <?php if ($isdraft[4] == 'draft') : ?>
