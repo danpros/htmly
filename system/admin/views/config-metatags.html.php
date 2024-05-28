@@ -198,12 +198,14 @@ if (empty($defaultFormat)) {
   <p><?php echo i18n('Valid_values_range_from_0_to_1.0._See');?> <a target="_blank" href="https://www.sitemaps.org/protocol.html">https://www.sitemaps.org/protocol.html</a></p>
   <?php foreach($array as $key => $value) {?>
   <?php if (stripos($key, 'sitemap.priority') !== false):?>
+  <?php if ($key !== 'sitemap.priority.archiveDay'):?>
   <div class="form-group row">
     <label for="<?php echo $key;?>" class="col-sm-2 col-form-label"><?php echo $key;?></label>
     <div class="col-sm-10">
       <input step="any" type="number" name="-config-<?php echo $key;?>" class="form-control" id="<?php echo $key;?>" value="<?php echo $value;?>">
     </div>
-  </div>  
+  </div>
+  <?php endif;?>
   <?php endif; ?> 
   <?php } ?>
   <div class="form-group row">

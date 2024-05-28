@@ -3001,13 +3001,10 @@ function sitemap_post_path($posts, $page = 1, $perpage = 0)
         $post->date = strtotime($timestamp);
         $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($filepath)));
 
-        // The archive per day
-        $post->archiveday = site_url() . 'archive/' . date('Y-m-d', $post->date);
-
-        // The archive per day
+        // The archive per month
         $post->archivemonth = site_url() . 'archive/' . date('Y-m', $post->date);
 
-        // The archive per day
+        // The archive per year
         $post->archiveyear = site_url() . 'archive/' . date('Y', $post->date);
 
         // The post URL
@@ -3214,32 +3211,22 @@ function generate_sitemap($str)
 
     } elseif ($str == 'archive.xml') {
 
-        $priorityDay = (config('sitemap.priority.archiveDay')) ? config('sitemap.priority.archiveDay') : $default_priority;
         $priorityMonth = (config('sitemap.priority.archiveMonth')) ? config('sitemap.priority.archiveMonth') : $default_priority;
         $priorityYear = (config('sitemap.priority.archiveYear')) ? config('sitemap.priority.archiveYear') : $default_priority;
 
         $posts = sitemap_post_path(null, 1, null);
-        $day = array();
         $month = array();
         $year = array();
 
         foreach ($posts as $p) {
-            $day[] = $p->archiveday;
             $month[] = $p->archivemonth;
             $year[] = $p->archiveyear;
         }
 
-        $day = array_unique($day, SORT_REGULAR);
         $month = array_unique($month, SORT_REGULAR);
         $year = array_unique($year, SORT_REGULAR);
 
         $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
-        if ($priorityDay !== '-1') {
-            foreach ($day as $d) {
-                $map .= '<url><loc>' . $d . '</loc><priority>' . $priorityDay . '</priority></url>';
-            }
-        }
 
         if ($priorityMonth !== '-1') {
             foreach ($month as $m) {
