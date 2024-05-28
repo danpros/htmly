@@ -81,6 +81,7 @@ return array(
     'DASPRiD\\Enum\\Exception\\UnserializeNotSupportedException' => $vendorDir . '/dasprid/enum/src/Exception/UnserializeNotSupportedException.php',
     'DASPRiD\\Enum\\NullValue' => $vendorDir . '/dasprid/enum/src/NullValue.php',
     'Kanti\\CacheOneFile' => $vendorDir . '/kanti/hub-updater/src/CacheOneFile.php',
+    'Kanti\\HelperClass' => $vendorDir . '/kanti/hub-updater/src/HelperClass.php',
     'Kanti\\HubUpdater' => $vendorDir . '/kanti/hub-updater/src/HubUpdater.php',
     'Michelf\\Markdown' => $vendorDir . '/michelf/php-markdown/Michelf/Markdown.php',
     'Michelf\\MarkdownExtra' => $vendorDir . '/michelf/php-markdown/Michelf/MarkdownExtra.php',

@@ -176,6 +176,7 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
         'DASPRiD\\Enum\\Exception\\UnserializeNotSupportedException' => __DIR__ . '/..' . '/dasprid/enum/src/Exception/UnserializeNotSupportedException.php',
         'DASPRiD\\Enum\\NullValue' => __DIR__ . '/..' . '/dasprid/enum/src/NullValue.php',
         'Kanti\\CacheOneFile' => __DIR__ . '/..' . '/kanti/hub-updater/src/CacheOneFile.php',
+        'Kanti\\HelperClass' => __DIR__ . '/..' . '/kanti/hub-updater/src/HelperClass.php',
         'Kanti\\HubUpdater' => __DIR__ . '/..' . '/kanti/hub-updater/src/HubUpdater.php',
         'Michelf\\Markdown' => __DIR__ . '/..' . '/michelf/php-markdown/Michelf/Markdown.php',
         'Michelf\\MarkdownExtra' => __DIR__ . '/..' . '/michelf/php-markdown/Michelf/MarkdownExtra.php',
