@@ -3113,13 +3113,13 @@ function generate_sitemap($str)
         $map .= '</urlset>';
 
     } elseif (strpos($str, 'post.') !== false ) {
-        
-        $totalPosts = array();
-        $totalPosts = get_blog_posts();
 
         if ($str == 'post.xml') {
 
             $map .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+	
+            $totalPosts = array();
+            $totalPosts = get_blog_posts();
 
             $total = count($totalPosts);
             $totalPage = ceil($total / 500);
