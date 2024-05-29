@@ -67,6 +67,9 @@ login.protect.system = "disable"
 login.protect.public = ""
 login.protect.private = ""
 
+; Multi-factor authentication
+mfa.state = "false"
+
 ; Pagination, RSS, and JSON
 posts.perpage = "10"
 category.perpage = "10"
@@ -182,6 +185,12 @@ default.image = ""
 
 ; Favicon image
 favicon.image = ""
+
+; Autosave
+autosave.enable = "true"
+
+; Show HTMLy version
+show.version = "true"
 
 ; Set the theme here
 views.root = "themes/twentysixteen"
