@@ -154,10 +154,10 @@ $images = image_gallery(null, 1, 40);
                         <?php $dd = find_subpage($oldmd); ?>
                         <?php $dr = find_draft_subpage($oldmd);?>
                         <?php if (stripos($dir . '/', '/draft/') !== false) { ?>
-                        <input type="submit" name="publishdraft" class="btn btn-primary submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="btn btn-primary draft" value="<?php echo i18n('Update_draft');?>"/> <?php if (empty($dd) && empty($dr) && $type != 'is_page'):?><a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>
+                        <input type="submit" name="publishdraft" class="btn btn-primary submit" value="<?php echo i18n('Publish_draft');?>"/> <input type="submit" name="updatedraft" class="btn btn-primary draft" value="<?php echo i18n('Update_draft');?>"/> <?php if (empty($dd) && empty($dr)):?><a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>
 
                         <?php } else { ?>
-                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <?php if (empty($dd) && empty($dr) && $type != 'is_page'):?><input type="submit" name="revertpage" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>
+                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/> <?php if (empty($dd) && empty($dr)):?><input type="submit" name="revertpage" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a><?php endif;?>
                         <?php } ?>
                     <?php } ?>
                 </div>
@@ -269,8 +269,8 @@ $images = image_gallery(null, 1, 40);
 <script type="text/javascript">
     var base_path = '<?php echo site_url() ?>';
     var initial_image = '<?php echo $images;?>';
-    var parent_page = '<?php echo $parent;?>';
-    var oldfile = '<?php echo $url;?>';
+    var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
+    var oldfile = '<?php echo isset($url) ? $url : '';?>';
     var addEdit = 'edit';
     var saveInterval = 60000;
 </script>
@@ -312,8 +312,10 @@ $('.img-container').on("click", ".the-img", function(e) {
     }
     document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
-<?php if (config('autosave.enable') == 'true' ):?>
+<?php if (config('autosave.enable') == 'true'):?>
+<?php if ($type !== 'is_category' || $type !== 'is_profile') :?>
 <?php if (stripos($dir . '/', '/draft/') !== false): ?>
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<?php endif;?>
 <?php endif;?>
 <?php endif;?>

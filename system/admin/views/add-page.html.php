@@ -121,7 +121,7 @@
 <script type="text/javascript">
     var base_path = '<?php echo site_url() ?>';
     var initial_image = '<?php echo $images;?>';
-    var parent_page = '<?php echo $parent;?>';
+    var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
     var oldfile = '';
     var addEdit = 'add';
     var saveInterval = 60000;
@@ -162,5 +162,7 @@ $('.img-container').on("click", ".the-img", function(e) {
     document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
+<?php if ($type == 'is_page' || $type == 'is_subpage') :?>
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<?php endif;?>
 <?php endif;?>
