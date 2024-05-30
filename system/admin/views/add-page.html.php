@@ -8,6 +8,7 @@
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
+<script src="<?php echo site_url() ?>system/resources/js/autosize.min.js"></script>
 
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
@@ -166,3 +167,6 @@ $('.img-container').on("click", ".the-img", function(e) {
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
 <?php endif;?>
 <?php endif;?>
+<script>
+	autosize(document.querySelectorAll('textarea'));
+</script>
