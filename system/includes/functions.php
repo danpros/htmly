@@ -2969,6 +2969,8 @@ function sitemap_post_path($posts, $page = 1, $perpage = 0)
     if (empty($posts)) {
         $posts = get_blog_posts();
     }
+	
+    krsort($posts);
 
     $tmp = array();
     
@@ -3228,15 +3230,15 @@ function generate_sitemap($str)
 
         $map .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        if ($priorityMonth !== '-1') {
-            foreach ($month as $m) {
-                $map .= '<url><loc>' . $m . '</loc><priority>' . $priorityMonth . '</priority></url>';
-            }
-        }
-
         if ($priorityYear !== '-1') {
             foreach ($year as $y) {
                 $map .= '<url><loc>' . $y . '</loc><priority>' . $priorityYear . '</priority></url>';
+            }
+        }
+
+        if ($priorityMonth !== '-1') {
+            foreach ($month as $m) {
+                $map .= '<url><loc>' . $m . '</loc><priority>' . $priorityMonth . '</priority></url>';
             }
         }
 
