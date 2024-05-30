@@ -88,6 +88,7 @@ $( function() {
 <?php } ?>
 <div class="notice" id="response"></div>
 <div class="row">
+    <div class="hide-button" style="margin-bottom:1em;"><input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/></div>
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
             <div id="post-settings" class="row">
@@ -181,7 +182,7 @@ $( function() {
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                         <div id="wmd-button-bar" class="wmd-button-bar"></div>
                         <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br>
-                        <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/> <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
+                        <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
                         <br><br>
                     </div>
                 </div>

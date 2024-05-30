@@ -133,6 +133,7 @@ $( function() {
 <?php } ?>
 <div class="notice" id="response"></div>
 <div class="row">
+    <div class="hide-button" style="margin-bottom:1em;"><input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/></div>
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
             <div id="post-settings" class="row">
@@ -233,7 +234,6 @@ $( function() {
                         <?php } else { ?>
                             <input type="submit" name="updatepost" class="btn btn-primary submit" value="<?php echo i18n('Update_post');?>"/> <input type="submit" name="revertpost" class="btn btn-primary revert" value="<?php echo i18n('Revert_to_draft');?>"/> <a class="btn btn-danger" href="<?php echo $delete ?>"><?php echo i18n('Delete');?></a>
                         <?php }?>
-                            <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
                         <br><br>
                     </div>
                 </div>

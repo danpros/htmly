@@ -14,6 +14,7 @@
 <?php } ?>
 <div class="notice" id="response"></div>
 <div class="row">
+    <div class="hide-button" style="margin-bottom:1em;"><input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/></div>
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
             <div id="post-settings" class="row">
@@ -48,7 +49,6 @@
                     <?php if ($type == 'is_category') :?>
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_category');?>"/>
                     <?php endif;?>
-                    <input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/>
                 </div>
                 <div class="col-sm-6">
                     <label><?php echo i18n('Preview');?></label>
