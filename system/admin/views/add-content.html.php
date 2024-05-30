@@ -88,7 +88,7 @@ $( function() {
 <?php } ?>
 <div class="notice" id="response"></div>
 <div class="row">
-    <div class="hide-button" style="margin-bottom:1em;"><input type="button" id="hideButton" class="btn btn-secondary" value="<?php echo i18n('Focus_mode');?>"/></div>
+    <div class="hide-button" style="margin-bottom:1em;width:100%;"><input style="float:right" type="button" id="hideButton" class="btn btn-secondary btn-xs" value="<?php echo i18n('Focus_mode');?>"/></div>
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
             <div id="post-settings" class="row">
