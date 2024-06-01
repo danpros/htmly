@@ -35,7 +35,6 @@ $images = image_gallery(null, 1, 40);
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/Markdown.Extra.js"></script>
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
-<script src="<?php echo site_url() ?>system/resources/js/autosize.min.js"></script>
 <script>
 $( function() {
     var availableTags = [
@@ -89,7 +88,7 @@ $( function() {
 <?php } ?>
 <div class="notice" id="response"></div>
 <div class="row">
-    <div class="hide-button" style="margin-bottom:1em;width:100%;"><input style="float:right" type="button" id="hideButton" class="btn btn-secondary btn-xs" value="<?php echo i18n('Focus_mode');?>"/></div>
+    <div class="hide-button" style="margin-bottom:1em;width:100%;text-align:right;"><button type="button" title="<?php echo i18n('Focus_mode');?>" id="hideButton" class="note-btn btn btn-light btn-sm" style="width:38px;height:38px;font-size:18px;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>
     <div class="wmd-panel" style="width:100%;">
         <form method="POST">
             <div id="post-settings" class="row">
@@ -177,7 +176,12 @@ $( function() {
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12" style="text-align:right;">
+                    <button class="note-btn btn btn-light btn-sm" style="width:38px;height:38px;font-size:18px;" type="button" title="Toggle <?php echo i18n('Preview');?>" id="preview-toggle" class="btn btn-secondary btn-xs"><i class="fa fa-columns" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6" id="editor-col">
                     <div>
 						<input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
@@ -187,7 +191,7 @@ $( function() {
                         <br><br>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" id="preview-col">
                     <label><?php echo i18n('Preview');?></label>
                     <br>
                     <div id="wmd-preview" class="wmd-panel wmd-preview" style="width:100%;overflow:auto;"></div>
@@ -322,25 +326,45 @@ $('.img-container').on("click", ".the-img", function(e) {
 });
 </script>
 <script>
-    var ta = document.querySelector('#wmd-input');
-    autosize(ta);
     function toggleDivs() {
         var div1 = document.getElementById('post-settings');
         if (div1.style.display === 'none') {
-            autosize.destroy(ta);
             div1.style.display = '';
             document.body.classList.add("sidebar-mini");
             document.body.classList.remove("sidebar-collapse");
         } else {
-            autosize.destroy(ta);
             div1.style.display = 'none';
             document.body.classList.remove("sidebar-mini");
             document.body.classList.add("sidebar-collapse");
         }
-        autosize(ta);
     }
     document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
 <?php endif;?>
+<script>
+    if (localStorage.getItem("preview-state") === "open") {
+        document.getElementById("editor-col").classList.remove('col-sm-12');
+        document.getElementById("editor-col").classList.add('col-sm-6');
+        document.getElementById("preview-col").style.display = '';
+    } else if (localStorage.getItem("preview-state") === "close") {
+        document.getElementById("editor-col").classList.remove('col-sm-6');
+        document.getElementById("editor-col").classList.add('col-sm-12');
+        document.getElementById("preview-col").style.display = 'none';
+    }
+    document.getElementById("preview-toggle").addEventListener("click", () => {
+        if (document.getElementById("editor-col").className.includes("col-sm-6")) {
+            document.getElementById("editor-col").classList.remove('col-sm-6');
+            document.getElementById("editor-col").classList.add('col-sm-12');
+            document.getElementById("preview-col").style.display = 'none';
+            localStorage.setItem("preview-state", 'close');
+        } else {
+            document.getElementById("editor-col").classList.remove('col-sm-12');
+            document.getElementById("editor-col").classList.add('col-sm-6');
+            document.getElementById("preview-col").style.display = '';
+            localStorage.setItem("preview-state", 'open');
+        }
+    })
+</script>
+
