@@ -299,17 +299,22 @@ $('.img-container').on("click", ".the-img", function(e) {
 });
 </script>
 <script>
+    var ta = document.querySelector('#wmd-input');
+    autosize(ta);
     function toggleDivs() {
         var div1 = document.getElementById('post-settings');
         if (div1.style.display === 'none') {
+            autosize.destroy(ta);
             div1.style.display = '';
-			document.body.classList.add("sidebar-mini");
-			document.body.classList.remove("sidebar-collapse")
+            document.body.classList.add("sidebar-mini");
+            document.body.classList.remove("sidebar-collapse");
         } else {
+            autosize.destroy(ta);
             div1.style.display = 'none';
-			document.body.classList.remove("sidebar-mini")
-			document.body.classList.add("sidebar-collapse");
+            document.body.classList.remove("sidebar-mini");
+            document.body.classList.add("sidebar-collapse");
         }
+        autosize(ta);
     }
     document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
@@ -320,6 +325,3 @@ $('.img-container').on("click", ".the-img", function(e) {
 <?php endif;?>
 <?php endif;?>
 <?php endif;?>
-<script>
-	autosize(document.querySelectorAll('textarea'));
-</script>
