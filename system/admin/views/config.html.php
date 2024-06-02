@@ -1,6 +1,13 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2><?php echo i18n('General_Settings')?></h2>
 <br>
+<?php 
+if (config('show.version') == 'false') {
+    if(file_exists('cache/installedVersion.json')) {
+        unlink('cache/installedVersion.json');
+    }
+}
+?>
 <?php if (!extension_loaded('intl')) { ?>
 <div class="callout callout-info">
 <h5><i class="fa fa-info"></i> Note:</h5>
@@ -157,7 +164,7 @@ Please install and enable the INTL extension to format the date format to your l
           </label>
         </div>
       </div>
-	  <small><em><?php echo i18n('explain_version');?></em></small>
+      <small><em><?php echo i18n('explain_version');?></em></small>
     </div>
   </div>
   <hr />

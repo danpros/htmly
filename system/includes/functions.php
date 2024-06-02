@@ -2969,7 +2969,7 @@ function sitemap_post_path($posts, $page = 1, $perpage = 0)
     if (empty($posts)) {
         $posts = get_blog_posts();
     }
-	
+    
     krsort($posts);
 
     $tmp = array();
@@ -3119,7 +3119,7 @@ function generate_sitemap($str)
         if ($str == 'post.xml') {
 
             $map .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-	
+    
             $totalPosts = array();
             $totalPosts = get_blog_posts();
 
@@ -3443,20 +3443,21 @@ function head_contents()
 {
     $output = '';
     $wmt_id = config('google.wmt.id');
-    $version = 'HTMLy ' . constant('HTMLY_VERSION');
+    if (config('show.version') !== 'false') {
+        $version = 'HTMLy ' . constant('HTMLY_VERSION');
+    } else {
+        $version = 'HTMLy';
+    }
     $favicon = config('favicon.image');
     if (empty($favicon)) {
         $favicon = '<link rel="icon" type="image/png" href="' . site_url() . 'favicon.png" />' . "\n";
     } else {
         $favicon = '<link rel="icon" type="image/'. pathinfo($favicon, PATHINFO_EXTENSION) .'" href="' . $favicon . '" />' . "\n";
     }
-
     $output .= '<meta charset="utf-8" />' . "\n";
     $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
     $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
-    if (config('show.version') == 'true') {
-        $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
-    }
+    $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
     $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
     $output .= '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";

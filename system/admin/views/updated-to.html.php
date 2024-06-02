@@ -5,4 +5,9 @@
 if (file_exists('install.php')) {
     unlink('install.php');
 }
+if (config('show.version') == 'false') {
+    if(file_exists('cache/installedVersion.json')) {
+        unlink('cache/installedVersion.json');
+    }
+}
 ?>
