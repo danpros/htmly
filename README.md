@@ -6,7 +6,7 @@ It uses a unique algorithm to find or list any content based on date, type, cate
 
 ## Requirements
 
-HTMLy requires PHP 5.3 or greater, PHP-Mbstring, PHP-XML, PHP-INTL, and PHP-ZIP package for backup feature.
+HTMLy requires PHP 7.2 or greater, PHP-Mbstring, PHP-XML, PHP-INTL, PHP-GD, and PHP-ZIP package for backup feature.
 
 ## Installations
 
@@ -57,7 +57,7 @@ Thank you to our [contributors](https://github.com/danpros/htmly/graphs/contribu
 
 ## Sponsors
 
-Support this project by becoming [Sponsor](https://github.com/sponsors/danpros)
+Support this project by becoming a [sponsor](https://github.com/sponsors/danpros)
 
 ## Copyright / License
 

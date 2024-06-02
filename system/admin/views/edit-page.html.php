@@ -317,7 +317,7 @@ $('.img-container').on("click", ".the-img", function(e) {
     document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true'):?>
-<?php if ($type !== 'is_category' && $type !== 'is_profile') :?>
+<?php if ($type !== 'is_category' && $type !== 'is_profile' && $type !== 'is_frontpage') :?>
 <?php if (stripos($dir . '/', '/draft/') !== false): ?>
 <script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
 <?php endif;?>
