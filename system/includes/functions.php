@@ -331,6 +331,7 @@ function rebuilt_cache($type = null)
     
     // Rebuilt category slug index
     $dirc = array();
+    $dirc = array_push($ctmp, 'uncategorized');
     $dirc = array_unique($ctmp, SORT_REGULAR); 
     file_put_contents('cache/index/index-category.txt', print_r(serialize($dirc), true), LOCK_EX);
     
