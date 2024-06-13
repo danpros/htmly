@@ -1096,15 +1096,13 @@ function get_type($type, $page, $perpage)
         // dirname string
         $dirname = $v['dirname'];
 
-        $str = explode('/', $dirname);
-
-        if (strtolower($type) === strtolower($str[4])) {
+        if (strpos($dirname, '/' . strtolower($type)) !== false) {
             $tmp[] = $v;
         }
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
@@ -1138,7 +1136,7 @@ function get_tag($tag, $page, $perpage, $random = null)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
@@ -1583,7 +1581,7 @@ function recent_posts($custom = null, $count = null)
 }
 
 // Return recent type lists
-function recent_type($type, $custom = null, $count = null)
+function recent_type($type, $count = null, $custom = null)
 {
     if (empty($count)) {
         $count = config('recent.count');
@@ -1595,6 +1593,7 @@ function recent_type($type, $custom = null, $count = null)
     $dir = 'cache/widget';
     $filename = 'cache/widget/recent.' . $type . '.cache';
     $tmp = array();
+    $posts = array();
     $recent = '';
 
     if (!is_dir($dir)) {
@@ -1633,6 +1632,64 @@ function recent_type($type, $custom = null, $count = null)
         }
         if (empty($posts)) {
            $recent .= '<li>No recent ' . $type . ' found</li>';
+        }
+        $recent .= '</ul>';
+        return $recent;
+    }
+}
+
+// Return recent tag posts list
+function recent_tag($tag, $count = null, $custom = null)
+{
+    if (empty($count)) {
+        $count = config('recent.count');
+        if (empty($count)) {
+            $count = 5;
+        }
+    }
+
+    $dir = 'cache/widget';
+    $filename = 'cache/widget/recent.' . $tag . '.cache';
+    $tmp = array();
+    $posts = array();
+    $recent = '';
+
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+
+    if (file_exists($filename)) {
+        $posts = unserialize(file_get_contents($filename));
+        if (count($posts) < $count) {
+            $posts = get_tag($tag, 1, $count);
+            $tmp = serialize($posts);
+            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
+        }
+    } else {
+       $posts = get_tag($tag, 1, $count);
+       $tmp = serialize($posts);
+       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
+    }
+
+    if (!empty($custom)) {
+        $arr = array();
+        $i = 1;
+        foreach ($posts as $post) {
+            $arr[] = $post;
+            if ($i++ >= $count)
+                break;  
+        }
+        return $arr;
+    } else {
+        $i = 1;
+        $recent .= '<ul>';
+        foreach ($posts as $post) {
+            $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
+            if ($i++ >= $count)
+                break;
+        }
+        if (empty($posts)) {
+           $recent .= '<li>No recent ' . $tag . ' found</li>';
         }
         $recent .= '</ul>';
         return $recent;
