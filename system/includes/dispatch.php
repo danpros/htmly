@@ -115,13 +115,17 @@ function save_config($data = array(), $new = array())
     $string = file_get_contents($config_file) . "\n";
 
     foreach ($data as $word => $value) {
-        $value = str_replace('"', '\"', $value);
-        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = "' . $value . '"', $string);
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = ' . $value, $string);
     }
     $string = rtrim($string);
     foreach ($new as $word => $value) {
-        $value = str_replace('"', '\"', $value);
-        $string .= "\n" . $word . ' = "' . $value . '"' . "\n";
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string .= "\n" . $word . ' = ' . $value . "\n";
     }
     $string = rtrim($string);
     return file_put_contents($config_file, $string, LOCK_EX);
