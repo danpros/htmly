@@ -1649,7 +1649,7 @@ function recent_tag($tag, $count = null, $custom = null)
     }
 
     $dir = 'cache/widget';
-    $filename = 'cache/widget/recent.' . $tag . '.cache';
+    $filename = 'cache/widget/recent.tag.' . $tag . '.cache';
     $tmp = array();
     $posts = array();
     $recent = '';
