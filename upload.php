@@ -47,7 +47,7 @@ if (login()) {
                 }
 
                $imageFile = pathinfo($path, PATHINFO_FILENAME);
-               $thumbFile = $dirThumb . $imageFile. '-' . $width . '.jpg';
+               $thumbFile = $dirThumb . $imageFile. '-' . $width . '.webp';
                if (!file_exists($thumbFile)) {
                    create_thumb($path, $width);
                }
