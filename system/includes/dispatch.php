@@ -625,6 +625,44 @@ function flash($key, $msg = null, $now = false)
     $x[$key] = $msg;
 }
 
+function create_thumb($src, $desired_width) {
+    
+    $dir = 'content/images/thumbnails';
+
+    if (!is_dir($dir)) {
+        mkdir($dir);
+    }
+
+    $fileName = pathinfo($src, PATHINFO_FILENAME);
+    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . '.jpg';
+
+    if (file_exists($thumbFile)) {
+        return site_url() . $thumbFile;
+    } else {
+
+        /* read the source image */
+        $source_image = imagecreatefromstring(file_get_contents($src));
+        $width = imagesx($source_image);
+        $height = imagesy($source_image);
+
+        /* find the "desired height" of this thumbnail, relative to the desired width  */
+        $desired_height = floor($height * ($desired_width / $width));
+
+        /* create a new, "virtual" image */
+        $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+
+        /* copy source image at a resized size */
+        imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
+
+        /* create the physical thumbnail image to its destination */
+        imagejpeg($virtual_image, $thumbFile);
+        imagedestroy($virtual_image);
+        
+        return site_url() . $thumbFile;
+
+    }
+}
+
 function dispatch()
 {
     $path = $_SERVER['REQUEST_URI'];

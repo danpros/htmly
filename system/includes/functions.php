@@ -226,7 +226,7 @@ function scan_images() {
     static $_images = array();
     if (empty($_images)) {
         $tmp = array();
-        $tmp = glob('content/images/*', GLOB_NOSORT);
+        $tmp = array_filter(glob('content/images/*', GLOB_NOSORT), 'is_file');
         if (is_array($tmp)) {
             foreach ($tmp as $file) {
                 $_images[] = pathinfo($file);
@@ -2402,7 +2402,7 @@ function get_thumbnail($text, $url = null)
 }
 
 // Get image from post and Youtube thumbnail.
-function get_image($text)
+function get_image($text, $width = null)
 {
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
@@ -2412,7 +2412,11 @@ function get_image($text)
     if ($imgTags->length > 0) {
         $imgElement = $imgTags->item(0);
         $imgSource = $imgElement->getAttribute('src');
-        return $imgSource;
+        if(is_null($width)) {
+            return $imgSource;
+        } else {
+            return create_thumb($imgSource, $width);
+        }
     } elseif ($vidTags->length > 0) {
         $vidElement = $vidTags->item(0);
         $vidSource = $vidElement->getAttribute('src');

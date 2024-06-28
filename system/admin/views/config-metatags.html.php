@@ -112,6 +112,12 @@ if (empty($defaultFormat)) {
       <input type="text" name="-config-default.image" class="form-control" id="default.image" value="<?php echo config('default.image');?>" placeholder="<?php echo site_url();?>system/resources/images/logo-big.png">
     </div>
   </div>
+  <div class="form-group row">
+    <label for="thumbnail.width" class="col-sm-2 col-form-label">Thumbnail Width</label>
+    <div class="col-sm-10">
+      <input type="number" name="-config-thumbnail.width" class="form-control" id="thumbnail.width" value="<?php echo config('thumbnail.width');?>">
+    </div>
+  </div>
   <br>
   <h4>Title formats</h4>
   <hr>

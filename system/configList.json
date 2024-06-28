@@ -89,5 +89,6 @@
     "views.layout",
     "autosave.enable",
     "mfa.state",
-    "show.version"
+    "show.version",
+    "thumbnail.width"
 ]
