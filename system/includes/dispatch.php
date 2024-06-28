@@ -634,7 +634,7 @@ function create_thumb($src, $desired_width) {
     }
 
     $fileName = pathinfo($src, PATHINFO_FILENAME);
-    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . '.jpg';
+    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . '.webp';
 
     if (file_exists($thumbFile)) {
         return site_url() . $thumbFile;
@@ -655,7 +655,7 @@ function create_thumb($src, $desired_width) {
         imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
 
         /* create the physical thumbnail image to its destination */
-        imagejpeg($virtual_image, $thumbFile);
+        imagewebp($virtual_image, $thumbFile, 75);
         imagedestroy($virtual_image);
         
         return site_url() . $thumbFile;
