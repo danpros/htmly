@@ -3670,6 +3670,7 @@ function isTurnstile($turnstileResponse)
     $options = array(
         'http' => array(
         'method' => 'POST',
+        'header' => 'Content-Type: application/x-www-form-urlencoded',
         'content' => http_build_query($data))
     );
 
