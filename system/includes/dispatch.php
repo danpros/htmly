@@ -625,16 +625,31 @@ function flash($key, $msg = null, $now = false)
     $x[$key] = $msg;
 }
 
-function create_thumb($src, $desired_width) {
+function create_thumb($src, $desired_width = null, $desired_height = null) {
     
     $dir = 'content/images/thumbnails';
 
     if (!is_dir($dir)) {
         mkdir($dir);
     }
+    
+    $w = config('thumbnail.width');
+    if (empty($w)) {
+        $w = 500;
+    }
+    
+    if (is_null($desired_width)) {
+        $desired_width = $w;
+    }
+    
+    if (!is_null($desired_height)) {
+        $h = 'x' . $desired_height;
+    } else {
+        $h = null;
+    }
 
     $fileName = pathinfo($src, PATHINFO_FILENAME);
-    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . '.webp';
+    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . $h .'.webp';
 
     if (file_exists($thumbFile)) {
         return site_url() . $thumbFile;
@@ -646,13 +661,20 @@ function create_thumb($src, $desired_width) {
         $height = imagesy($source_image);
 
         /* find the "desired height" of this thumbnail, relative to the desired width  */
-        $desired_height = floor($height * ($desired_width / $width));
+        if (is_null($desired_height)) {
+            $desired_height = floor($height * ($desired_width / $width));
+        }
+        
+        $ratio = max($desired_width/$width, $desired_height/$height);
+        $height = $desired_height / $ratio;
+        $x = ($width - $desired_width / $ratio) / 2;
+        $width = $desired_width / $ratio;
 
         /* create a new, "virtual" image */
         $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
 
         /* copy source image at a resized size */
-        imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
+        imagecopyresampled($virtual_image, $source_image, 0, 0, $x, 0, $desired_width, $desired_height, $width, $height);
 
         /* create the physical thumbnail image to its destination */
         imagewebp($virtual_image, $thumbFile, 75);

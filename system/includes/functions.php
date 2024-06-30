@@ -2402,7 +2402,7 @@ function get_thumbnail($text, $url = null)
 }
 
 // Get image from post and Youtube thumbnail.
-function get_image($text, $width = null)
+function get_image($text, $width = null, $height = null)
 {
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
@@ -2415,7 +2415,7 @@ function get_image($text, $width = null)
         if(is_null($width)) {
             return $imgSource;
         } else {
-            return create_thumb($imgSource, $width);
+            return create_thumb($imgSource, $width, $height);
         }
     } elseif ($vidTags->length > 0) {
         $vidElement = $vidTags->item(0);
