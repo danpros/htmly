@@ -1604,13 +1604,17 @@ function recent_type($type, $count = null, $custom = null)
         $posts = unserialize(file_get_contents($filename));
         if (count($posts) < $count) {
             $posts = get_type($type, 1, $count);
+            if (!empty($posts)) {
+                $tmp = serialize($posts);
+                file_put_contents($filename, print_r($tmp, true), LOCK_EX);
+            }
+        }
+    } else {
+        $posts = get_type($type, 1, $count);
+        if (!empty($posts)) {
             $tmp = serialize($posts);
             file_put_contents($filename, print_r($tmp, true), LOCK_EX);
         }
-    } else {
-       $posts = get_type($type, 1, $count);
-       $tmp = serialize($posts);
-       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
     }
 
     if (!empty($custom)) {
@@ -1662,13 +1666,17 @@ function recent_tag($tag, $count = null, $custom = null)
         $posts = unserialize(file_get_contents($filename));
         if (count($posts) < $count) {
             $posts = get_tag($tag, 1, $count);
+            if (!empty($posts)) {
+                $tmp = serialize($posts);
+                file_put_contents($filename, print_r($tmp, true), LOCK_EX);
+            }
+        }
+    } else {
+        $posts = get_tag($tag, 1, $count);
+        if (!empty($posts)) {
             $tmp = serialize($posts);
             file_put_contents($filename, print_r($tmp, true), LOCK_EX);
         }
-    } else {
-       $posts = get_tag($tag, 1, $count);
-       $tmp = serialize($posts);
-       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
     }
 
     if (!empty($custom)) {
