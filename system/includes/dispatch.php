@@ -657,6 +657,9 @@ function create_thumb($src, $desired_width = null, $desired_height = null) {
 
         /* read the source image */
         $source_image = imagecreatefromstring(file_get_contents($src));
+        if ($source_image === false) {
+            return $src;
+        }
         $width = imagesx($source_image);
         $height = imagesy($source_image);
 
