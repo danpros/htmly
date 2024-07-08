@@ -675,6 +675,8 @@ function create_thumb($src, $desired_width = null, $desired_height = null) {
 
         /* create a new, "virtual" image */
         $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+        imageAlphaBlending($virtual_image, false);
+        imageSaveAlpha($virtual_image, true);
 
         /* copy source image at a resized size */
         imagecopyresampled($virtual_image, $source_image, 0, 0, $x, 0, $desired_width, $desired_height, $width, $height);
