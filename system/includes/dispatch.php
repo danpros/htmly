@@ -669,9 +669,9 @@ function create_thumb($src, $desired_width = null, $desired_height = null) {
         }
         
         $ratio = max($desired_width/$width, $desired_height/$height);
-        $height = $desired_height / $ratio;
-        $x = ($width - $desired_width / $ratio) / 2;
-        $width = $desired_width / $ratio;
+        $height = floor($desired_height / $ratio);
+        $x = floor(($width - $desired_width / $ratio) / 2);
+        $width = floor($desired_width / $ratio);
 
         /* create a new, "virtual" image */
         $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
