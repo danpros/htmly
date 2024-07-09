@@ -2338,7 +2338,7 @@ function shorten($string = null, $char = null)
     $string = str_replace('<span class="details">'. config('toc.label') .'</span>', '', $string);
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
-    $dom->loadHTML('<meta charset="utf8">' . $string);
+    $dom->loadHTML('<span class="dom-charset"><meta charset="utf8"></span>' . $string);
     $tags_to_remove = array('script', 'style');
     foreach($tags_to_remove as $tag){
         $element = $dom->getElementsByTagName($tag);
@@ -2349,6 +2349,7 @@ function shorten($string = null, $char = null)
     $string = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($dom->saveHTML($dom->documentElement), 'UTF-8'));    
     $string = preg_replace('/\s\s+/', ' ', strip_tags($string));
     $string = ltrim(rtrim($string));
+    $string = str_replace('<span class="dom-charset"><meta charset="utf8"></span>', '', $string);
     if (!empty($char)) {
         if (strlen($string) > $char) {
             $string = substr($string, 0, $char);
@@ -2753,9 +2754,10 @@ function menu($class = null)
             return get_menu($class);
         } else {
             $html = parseNodes($nodes, null, $class);
+            $output = '';
             libxml_use_internal_errors(true);
             $doc = new DOMDocument();
-            $doc->loadHTML('<meta charset="utf8">' . $html);
+            $doc->loadHTML('<span class="dom-charset"><meta charset="utf8"></span>' . $html);
 
             $finder = new DOMXPath($doc);
             $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' dropdown-menu ')]");
@@ -2772,7 +2774,8 @@ function menu($class = null)
                 }
             }
 
-        return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
+            $output = preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
+            return str_replace('<span class="dom-charset"><meta charset="utf8"></span>', '', $output);
 
         }
     } else {
@@ -3754,7 +3757,8 @@ function replace_href($string, $tag, $class, $url)
 
     // Load the HTML in DOM
     $doc = new DOMDocument();
-    $doc->loadHTML('<meta charset="utf8">' . $string);
+    $doc->loadHTML('<span class="dom-charset"><meta charset="utf8"></span>' . $string);
+    $output = '';
     // Then select all anchor tags
     $all_anchor_tags = $doc->getElementsByTagName($tag);
     foreach ($all_anchor_tags as $_tag) {
@@ -3765,7 +3769,8 @@ function replace_href($string, $tag, $class, $url)
         }
     }
 
-    return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
+    $output =  preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', mb_convert_encoding($doc->saveHTML($doc->documentElement), 'UTF-8'));
+    return str_replace('<span class="dom-charset"><meta charset="utf8"></span>', '', $output);
 
 }
 
