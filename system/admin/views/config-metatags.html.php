@@ -54,6 +54,12 @@ if (empty($defaultFormat)) {
 ?>
 <h2><?php echo i18n('Metatags_Settings');?></h2>
 <br>
+<?php if (!extension_loaded('gd')) { ?>
+<div class="callout callout-info">
+<h5><i class="fa fa-info"></i> Note:</h5>
+Please install and enable the GD extension to use the thumbnail feature.
+</div>
+<?php } ?>
 <nav>  
   <div class="nav nav-tabs" id="nav-tab">
     <a class="nav-item nav-link" id="nav-general-tab" href="<?php echo site_url();?>admin/config"><?php echo i18n('General');?></a>

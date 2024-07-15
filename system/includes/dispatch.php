@@ -627,6 +627,10 @@ function flash($key, $msg = null, $now = false)
 
 function create_thumb($src, $desired_width = null, $desired_height = null) {
     
+    if (!extension_loaded('gd')) {
+        return $src;
+    }
+
     $dir = 'content/images/thumbnails';
 
     if (!is_dir($dir)) {
