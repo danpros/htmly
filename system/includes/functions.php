@@ -3679,17 +3679,21 @@ function isTurnstile($turnstileResponse)
 
     $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
     $data = array('secret' => $private, 'response' => $turnstileResponse, 'remoteip' => $ip);
-
+	
+	$query = http_build_query($data);
     $options = array(
         'http' => array(
-        'method' => 'POST',
-        'header' => 'Content-Type: application/x-www-form-urlencoded',
-        'content' => http_build_query($data))
+			'header' => "Content-Type: application/x-www-form-urlencoded\r\n".
+						"Content-Length: ".strlen($query)."\r\n".
+						"User-Agent:HTMLy/1.0\r\n",
+			'method'  => "POST",
+			'content' => $query,
+		)
     );
 
     $stream = stream_context_create($options);
     $fileContent = file_get_contents($url, false, $stream);
- 
+	
     if ($fileContent === false) {
         return false;
     }
