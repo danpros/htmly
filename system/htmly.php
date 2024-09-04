@@ -99,11 +99,17 @@ get('/index', function () {
 
             die;
         }
+        
+        if ($page > 1) {
+            $CanonicalPageNum = '?page=' . $page;
+        } else {
+            $CanonicalPageNum = NULL;
+        }
 
         render($pview, array(
             'title' => generate_title('is_front', null),
             'description' => safe_html(strip_tags(blog_description())),
-            'canonical' => site_url(),
+            'canonical' => site_url() . $CanonicalPageNum,
             'metatags' => generate_meta(null, null),
             'page' => $page,
             'posts' => $posts,
@@ -301,11 +307,17 @@ get('/author/:name', function ($name) {
         ), $layout);
         die;
     }
+    
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
 
     render($pview, array(
         'title' => generate_title('is_profile', $author),
         'description' => $author->description,
-        'canonical' => $author->url,
+        'canonical' => $author->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_profile', $author),
         'page' => $page,
         'posts' => $posts,
@@ -2843,10 +2855,16 @@ get('/category/:category', function ($category) {
         $pview = 'main';
     }
     
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
+    
     render($pview, array(
         'title' => generate_title('is_category', $desc),
         'description' => $desc->description,
-        'canonical' => $desc->url,
+        'canonical' => $desc->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_category', $desc),
         'page' => $page,
         'posts' => $posts,
@@ -3101,10 +3119,16 @@ get('/type/:type', function ($type) {
         $pview = 'main';
     }
     
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
+    
     render($pview, array(
         'title' => generate_title('is_type', $ttype),
         'description' => $ttype->description,
-        'canonical' => $ttype->url,
+        'canonical' => $ttype->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_type', $ttype),
         'page' => $page,
         'posts' => $posts,
@@ -3186,10 +3210,16 @@ get('/tag/:tag', function ($tag) {
         $pview = 'main';
     }
     
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
+    
     render($pview, array(
         'title' => generate_title('is_tag', $ttag),
         'description' => $ttag->description,
-        'canonical' => $ttag->url,
+        'canonical' => $ttag->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_tag', $ttag),
         'page' => $page,
         'posts' => $posts,
@@ -3280,11 +3310,17 @@ get('/archive/:req', function ($req) {
     } else {
         $pview = 'main';
     }
+    
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
 
     render($pview, array(
         'title' => generate_title('is_archive', $tarchive),
         'description' => $tarchive->description,
-        'canonical' => $tarchive->url,
+        'canonical' => $tarchive->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_archive', $tarchive),
         'page' => $page,
         'posts' => $posts,
@@ -3381,11 +3417,17 @@ get('/search/:keyword', function ($keyword) {
     } else {
         $pview = 'main';
     }
+    
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
 
     render($pview, array(
         'title' => generate_title('is_search', $tsearch),
         'description' => $tsearch->description,
-        'canonical' => $tsearch->url,
+        'canonical' => $tsearch->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_search', $tsearch),
         'page' => $page,
         'posts' => $posts,
@@ -3970,11 +4012,17 @@ get('/:static', function ($static) {
 
             die;
         }
+        
+        if ($page > 1) {
+            $CanonicalPageNum = '?page=' . $page;
+        } else {
+            $CanonicalPageNum = NULL;
+        }
 
         render($pview, array(
             'title' => generate_title('is_blog', null),
             'description' => blog_title() . ' Blog',
-            'canonical' => site_url() . 'blog',
+            'canonical' => site_url() . 'blog' . $CanonicalPageNum,
             'metatags' => generate_meta('is_blog', null),
             'page' => $page,
             'posts' => $posts,
