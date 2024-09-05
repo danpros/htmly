@@ -3968,7 +3968,10 @@ get('/:static', function ($static) {
         die;
     } elseif ($static === blog_path()) {
     
-        if(config('blog.enable') !== 'true') return not_found();
+        if(config('blog.enable') !== 'true') {
+            $url = site_url();
+            header("Location: $url");
+        }
         
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
