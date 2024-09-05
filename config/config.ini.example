@@ -25,6 +25,8 @@ static.frontpage = "false"
 
 ; Show the /blog url as the blog homepage. Options "false" and "true"
 blog.enable = "false"
+blog.path = "blog"
+blog.string = "Blog"
 
 ; Social account
 social.twitter = ""

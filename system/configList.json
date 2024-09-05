@@ -10,6 +10,8 @@
     "permalink.type",
     "static.frontpage",
     "blog.enable",
+    "blog.path",
+    "blog.string",
     "social.twitter",
     "social.facebook",
     "social.instagram",

@@ -55,6 +55,18 @@
     </div>
   </div>
   <div class="form-group row">
+    <label for="blog.path" class="col-sm-2 col-form-label">Blog Path</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.path" class="form-control" id="blog.path" placeholder="blog" value="<?php echo config('blog.path');?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.string" class="col-sm-2 col-form-label">Blog String</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.string" class="form-control" id="blog.string" placeholder="Blog" value="<?php echo config('blog.string');?>">
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="posts.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_front_page_show_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-posts.perpage" class="form-control" id="posts.perpage" value="<?php echo config('posts.perpage');?>">

@@ -3558,7 +3558,7 @@ get('/post/:name', function ($name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . 'blog"><span itemprop="name">Blog</span></a><meta itemprop="position" content="2" /></li> &#187; ';
+        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . blog_path() .'"><span itemprop="name">' . blog_string() . '</span></a><meta itemprop="position" content="2" /></li> &#187; ';
     } else {
         $blog = '';
     }
@@ -3966,7 +3966,7 @@ get('/:static', function ($static) {
             header("location: $login");
         }
         die;
-    } elseif ($static === 'blog') {
+    } elseif ($static === blog_path()) {
     
         if(config('blog.enable') !== 'true') return not_found();
         
@@ -4003,7 +4003,7 @@ get('/:static', function ($static) {
             // a non-existing page
             render('no-posts', array(
                 'title' => generate_title('is_blog', null),
-                'description' => blog_title() . ' Blog',
+                'description' => blog_title() . ' ' . blog_string(),
                 'canonical' => site_url(),
                 'metatags' => generate_meta('is_blog', null),
                 'bodyclass' => 'no-posts',
@@ -4021,13 +4021,13 @@ get('/:static', function ($static) {
 
         render($pview, array(
             'title' => generate_title('is_blog', null),
-            'description' => blog_title() . ' Blog',
-            'canonical' => site_url() . 'blog' . $CanonicalPageNum,
+            'description' => blog_title() . ' ' . blog_string(),
+            'canonical' => site_url() . blog_path() . $CanonicalPageNum,
             'metatags' => generate_meta('is_blog', null),
             'page' => $page,
             'posts' => $posts,
             'bodyclass' => 'in-blog',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Blog',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . blog_string(),
             'pagination' => has_pagination($total, $perpage, $page),
             'is_blog' => true
         ), $layout);
@@ -4737,7 +4737,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . 'blog"><span itemprop="name">Blog</span></a><meta itemprop="position" content="2" /></li> &#187; ';
+        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . blog_path() . '"><span itemprop="name">' . blog_string() . '</span></a><meta itemprop="position" content="2" /></li> &#187; ';
     } else {
         $blog = '';
     }

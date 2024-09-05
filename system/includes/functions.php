@@ -2818,10 +2818,10 @@ function get_menu($custom = null, $auto = null)
             }
 
             if (config('blog.enable') == 'true' ) {
-                if ($req == site_path() . '/blog' || stripos($req, site_path() . '/blog?page') !== false) {
-                    $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                if ($req == site_path() . '/' . blog_path() || stripos($req, site_path() . '/' . blog_path() . '?page') !== false) {
+                    $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . blog_path() . '">' . blog_string() . '</a></li>';
                 } else {
-                    $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                    $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . blog_path() . '">' . blog_string() . '</a></li>';
                 }
             }
         }
@@ -2910,10 +2910,10 @@ function get_menu($custom = null, $auto = null)
             $menu .= '<li class="item nav-item first"><a class="nav-link" href="' . site_url() . '">' . config('breadcrumb.home') . '</a></li>';
         }
         if (config('blog.enable') == 'true' ) {
-            if ($req == site_path() . '/blog' || stripos($req, site_path() . '/blog?page') !== false) {
-                $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+            if ($req == site_path() . '/' . blog_path() || stripos($req, site_path() . '/'. blog_path() .'?page') !== false) {
+                $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . blog_path . '">' . blog_string() . '</a></li>';
             } else {
-                $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . 'blog">' . 'Blog' . '</a></li>';
+                $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . blog_path() . '">' . blog_string() . '</a></li>';
             }
         }
         $menu .= '</ul>';
@@ -3123,6 +3123,28 @@ function sitemap_page_path()
             $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($file)));
 
             $tmp[] = $post;
+
+            $subPages = get_static_subpages($filename);
+
+            foreach ($subPages as $sIndex => $sp) {
+
+                $subpost = new stdClass;
+
+                $bs = explode('.', $sp['filename']);
+
+                if (isset($bs[1])) {
+                    $baseSub = $bs[1];
+                } else {
+                    $baseSub = $sp['filename'];
+                }
+
+                $urlSub = $filename . '/' . $baseSub;
+                $subfile  = $sp['dirname'] . '/' . $sp['basename'];
+                $subpost->url =  site_url() .  $urlSub;
+                $subpost->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($subfile)));
+
+                $tmp[] = $subpost;
+            }
         }
     }
 
@@ -3185,6 +3207,9 @@ function generate_sitemap($str)
 
         if ($priority !== '-1') {
             $map .= '<url><loc>' . site_url() . '</loc><priority>' . $priority . '</priority></url>';
+            if (config('blog.enable') === 'true') {
+                $map .= '<url><loc>' . site_url() . blog_path() .'</loc><priority>' . $priority . '</priority></url>';
+            }
         }
 
         $map .= '</urlset>';
@@ -3460,11 +3485,31 @@ function generate_json($posts)
 function is_index()
 {
     $req = $_SERVER['REQUEST_URI'];
-    if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/blog') !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
+    if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/' . blog_path()) !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
         return true;
     } else {
         return false;
     }
+}
+
+// Return blog path index
+function blog_path()
+{
+    $path = config('blog.path');
+    if (!is_null($path) && !empty($path)) {
+        return $path;
+    }
+    return 'blog';
+}
+
+// Return blog string
+function blog_string()
+{
+    $string = config('blog.string');
+    if (!is_null($string) && !empty($string)) {
+        return $string;
+    }
+    return 'Blog';
 }
 
 // Return blog title
@@ -3972,7 +4017,7 @@ function generate_meta($type = null, $object = null)
         $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
         if ($type == 'is_blog') {
             $tags .= '<meta property="og:title" content="'. generate_title('is_blog', null) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. blog_title() .' Blog" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
         } else {
             $tags .= '<meta property="og:title" content="'. generate_title('is_front', null) . '" />' . "\n";
             $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
