@@ -36,37 +36,6 @@
     </div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label"><?php echo i18n('Enable_blog_URL');?></label>
-    <div class="col-sm-10">
-      <div class="col-sm-10">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable1" value="true" <?php if (config('blog.enable') === 'true'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="blog.enable1">
-            <?php echo i18n('Enable');?>
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable2" value="false" <?php if (config('blog.enable') === 'false'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="blog.enable2">
-            <?php echo i18n('Disable');?>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="blog.path" class="col-sm-2 col-form-label">Blog Path</label>
-    <div class="col-sm-10">
-      <input type="text" name="-config-blog.path" class="form-control" id="blog.path" placeholder="blog" value="<?php echo config('blog.path');?>">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="blog.string" class="col-sm-2 col-form-label">Blog String</label>
-    <div class="col-sm-10">
-      <input type="text" name="-config-blog.string" class="form-control" id="blog.string" placeholder="Blog" value="<?php echo config('blog.string');?>">
-    </div>
-  </div>
-  <div class="form-group row">
     <label for="posts.perpage" class="col-sm-2 col-form-label"><?php echo i18n('Posts_in_front_page_show_at_most');?></label>
     <div class="col-sm-10">
       <input type="number" name="-config-posts.perpage" class="form-control" id="posts.perpage" value="<?php echo config('posts.perpage');?>">

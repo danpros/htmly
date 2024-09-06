@@ -74,26 +74,51 @@ Please install and enable the GD extension to use the thumbnail feature.
 </nav>
 <br><br>
 <form method="POST">
-<input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>"> 
+<input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
+  <h4><?php echo i18n('Permalink');?></h4>
+  <hr>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label"><?php echo i18n('Permalink');?></label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('Enable_blog_URL');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-permalink.type" id="permalink.type1" value="default" <?php if (config('permalink.type') === 'default'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="permalink.type1">
-            <?php echo i18n('year_month_your_post_slug');?>
+          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable1" value="true" <?php if (config('blog.enable') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="blog.enable1">
+            <?php echo i18n('Enable');?>
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-permalink.type" id="permalink.type1" value="post" <?php if (config('permalink.type') === 'post'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="permalink.type2">
-            <?php echo i18n('post_your_post_slug');?>
+          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable2" value="false" <?php if (config('blog.enable') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="blog.enable2">
+            <?php echo i18n('Disable');?>
           </label>
         </div>
       </div>
     </div>
   </div>
+  <div class="form-group row">
+    <label for="blog.path" class="col-sm-2 col-form-label">Blog Path</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.path" class="form-control" id="blog.path" placeholder="blog" value="<?php echo config('blog.path');?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="blog.string" class="col-sm-2 col-form-label">Blog String</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-blog.string" class="form-control" id="blog.string" placeholder="Blog" value="<?php echo config('blog.string');?>">
+    </div>
+  </div>
+  <div class="form-group row">
+	<label for="custom.permalink" class="col-sm-2 col-form-label"><?php echo i18n('Permalink');?> Prefix</label>
+	<div class="col-sm-10">
+	  <input type="text" name="-config-permalink.type" class="form-control" id="permalink.type" value="<?php echo permalink_type();?>" placeholder="default">
+	  <p class="title-format" style="margin-bottom:5px;"><code>default</code> <?php echo i18n('year_month_your_post_slug');?></p>
+	  <p class="title-format" style="margin-bottom:5px;"><code>post</code> <?php echo i18n('post_your_post_slug');?></p>
+	</div>
+  </div>
+  <br>
+  <h4><?php echo i18n('Metatags');?></h4>
+  <hr>
   <div class="form-group row">
     <label for="description.char" class="col-sm-2 col-form-label"><?php echo i18n('Meta_description_character');?></label>
     <div class="col-sm-10">

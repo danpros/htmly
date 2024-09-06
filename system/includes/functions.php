@@ -399,7 +399,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
     $auto = config('toc.automatic');
     $counter = config('views.counter');
     $caption = config('fig.captions');
-    $permalink = config('permalink.type');
 
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
@@ -469,10 +468,10 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
 
-        if ($permalink == 'post') {
-            $post->url = site_url() . 'post/' . str_replace('.md', '', $arr[2]);
-        } else {
+        if (permalink_type() == 'default') {
             $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
+        } else {
+            $post->url = site_url() . permalink_type() . '/' . str_replace('.md', '', $arr[2]);
         }
 
         $post->slug = str_replace('.md', '', $arr[2]);
@@ -3085,10 +3084,10 @@ function sitemap_post_path($posts, $page = 1, $perpage = 0)
         $post->archiveyear = site_url() . 'archive/' . date('Y', $post->date);
 
         // The post URL
-        if (config('permalink.type') == 'post') {
-            $post->url = site_url() . 'post/' . str_replace('.md', '', $arr[2]);
-        } else {
+        if (permalink_type() == 'default') {
             $post->url = site_url() . date('Y/m', $post->date) . '/' . str_replace('.md', '', $arr[2]);
+        } else {
+            $post->url = site_url() . permalink_type() . '/' . str_replace('.md', '', $arr[2]);
         }
 
         $tmp[] = $post;
@@ -3490,6 +3489,16 @@ function is_index()
     } else {
         return false;
     }
+}
+
+// Return post permalink type
+function permalink_type()
+{
+    $permalink = config('permalink.type');
+    if (!is_null($permalink) && !empty($permalink)) {
+        return strtolower($permalink);
+    }
+    return 'default';
 }
 
 // Return blog path index

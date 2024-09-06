@@ -48,11 +48,11 @@ $timestamp = $time->format("Y-m-d H:i:s");
 // The post date
 $postdate = strtotime($timestamp);
 // The post URL
-if (config('permalink.type') == 'post') {
-    $delete = site_url() . 'post/' . $oldmd . '/delete?destination=' . $destination;
+if (permalink_type() == 'default') {
+    $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destination=' . $destination;
 } else {
     // The post URL
-    $delete = site_url() . date('Y/m', $postdate) . '/' . $oldmd . '/delete?destination=' . $destination;
+    $delete = site_url() . permalink_type() . '/' . $oldmd . '/delete?destination=' . $destination;
 }
 
 $tags = tag_cloud(true);

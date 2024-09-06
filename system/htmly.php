@@ -3486,7 +3486,7 @@ get('/feed/opml', function () {
 });
 
 // Show blog post without year-month
-get('/post/:name', function ($name) {
+get('/'. permalink_type() .'/:name', function ($name) {
 
     if (isset($_GET['search'])) {
         $search = _h($_GET['search']);
@@ -3494,7 +3494,7 @@ get('/post/:name', function ($name) {
         header("Location: $url");
     }
 
-    if (config('permalink.type') != 'post') {
+    if (permalink_type() == 'default') {
         $post = find_post(null, null, $name);
         if (is_null($post)) {
             not_found();
@@ -3607,7 +3607,7 @@ get('/post/:name', function ($name) {
 });
 
 // Edit blog post
-get('/post/:name/edit', function ($name) {
+get('/'. permalink_type() .'/:name/edit', function ($name) {
 
     if (login()) {
 
@@ -3677,7 +3677,7 @@ get('/post/:name/edit', function ($name) {
 });
 
 // Get edited data from blog post
-post('/post/:name/edit', function () {
+post('/'. permalink_type() .'/:name/edit', function () {
     if(!login()) {
         $login = site_url() . 'login';
         header("location: $login");
@@ -3825,7 +3825,7 @@ post('/post/:name/edit', function () {
 });
 
 // Delete blog post
-get('/post/:name/delete', function ($name) {
+get('/'. permalink_type() .'/:name/delete', function ($name) {
 
     if (login()) {
 
@@ -3886,7 +3886,7 @@ get('/post/:name/delete', function ($name) {
 });
 
 // Get deleted data from blog post
-post('/post/:name/delete', function () {
+post('/'. permalink_type() .'/:name/delete', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if ($proper && login()) {
@@ -4682,8 +4682,8 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         header("Location: $url");
     }
     
-    if (config('permalink.type') == 'post') {
-        $redir = site_url() . 'post/' . $name;
+    if (permalink_type() !== 'default') {
+        $redir = site_url() . permalink_type() . '/' . $name;
         header("location: $redir", TRUE, 301);
     }
 
