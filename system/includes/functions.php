@@ -3483,11 +3483,26 @@ function generate_json($posts)
 // TRUE if the current page is an index page like frontpage, tag index, archive index and search index.
 function is_index()
 {
-    $req = $_SERVER['REQUEST_URI'];
-    if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/' . blog_path()) !== false || $req == site_path() . '/' || stripos($req, site_path() . '/?page') !== false) {
-        return true;
+    if (blog_path() == permalink_type()) {
+        $req = rtrim(strtok($_SERVER["REQUEST_URI"], '?'), '/') . '/';
+        $in = explode('/' . blog_path(), $req);
+        if (isset($in[1])) {
+            if ($in[1] == '/') {
+                return true;
+            }
+        }
+        if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || $req == site_path() . '/') {
+            return true;
+        } else {
+            return false;
+        }
     } else {
-        return false;
+        $req = strtok($_SERVER["REQUEST_URI"], '?');
+        if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/' . blog_path()) !== false || $req == site_path() . '/') {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -3496,7 +3511,7 @@ function permalink_type()
 {
     $permalink = config('permalink.type');
     if (!is_null($permalink) && !empty($permalink)) {
-        return strtolower($permalink);
+        return strtolower(str_replace('/', '', $permalink));
     }
     return 'default';
 }
@@ -3506,7 +3521,7 @@ function blog_path()
 {
     $path = config('blog.path');
     if (!is_null($path) && !empty($path)) {
-        return $path;
+        return strtolower(str_replace('/', '', $path));
     }
     return 'blog';
 }
