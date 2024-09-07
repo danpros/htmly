@@ -3010,9 +3010,9 @@ function generate_rss($posts, $data = null)
         foreach ($posts as $p) {
             $img = get_image($p->body);
             if (!empty($rssLength)) {
-                $body = shorten($p->body, $rssLength);
+                $description = shorten($p->description, $rssLength);
             } else {
-                $body = $p->body;
+                $description = $p->description;
             }
 
             $item = new Item();
@@ -3021,7 +3021,7 @@ function generate_rss($posts, $data = null)
             $item
                 ->title($p->title)
                 ->pubDate($p->date)
-                ->description($body)
+                ->description($description)
                 ->url($p->url)
                 ->appendTo($channel);
 
