@@ -2074,6 +2074,9 @@ post('/admin/config/metatags', function () {
                 }
             }
             save_config($new_config, $new_Keys);
+            foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
+                unlink($file);
+            }
             $redir = site_url() . 'admin/config/metatags';
             header("location: $redir");
         } else {
