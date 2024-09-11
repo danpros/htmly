@@ -388,13 +388,13 @@ post('/edit/profile', function () {
     } else {
         $message['error'] = '';
         if (empty($title)) {
-            $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
         }
         if (empty($content)) {
-            $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
         }
         if (!$proper) {
-            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
         }
         config('views.root', 'system/admin/views');
 
@@ -603,13 +603,13 @@ post('/edit/frontpage', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -750,37 +750,37 @@ post('/add/content', function () {
     } else {
         $message['error'] = '';
         if (empty($title)) {
-            $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
         }
         if (empty($tag)) {
-            $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_tag') . '</li>';
         }
         if (empty($content)) {
-            $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
         }
         if (!$proper) {
-            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
         }
         
         if (!empty($is_image)) {
             if (empty($image)) {
-                $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_image') . '</li>';
             }
         } elseif (!empty($is_video)) {
             if (empty($video)) {
-                $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_video') . '</li>';
             }
         } elseif (!empty($is_link)) {
             if (empty($link)) {
-                $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_link') . '</li>';
             }
         } elseif (!empty($is_quote)) {
             if (empty($quote)) {
-                $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_quote') . '</li>';
             }
         } elseif (!empty($is_audio)) {
             if (empty($audio)) {
-                $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_audio') . '</li>';
             }
         }
         
@@ -870,13 +870,13 @@ post('/add/page', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
             render('add-page', array(
@@ -1045,13 +1045,13 @@ post('/add/category', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
             render('add-page', array(
@@ -1629,10 +1629,10 @@ post('/admin/import', function () {
         } else {
             $message['error'] = '';
             if (empty($url)) {
-                $message['error'] .= '<li class="alert alert-danger">You need to specify the feed url.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_feedurl') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
 
             config('views.root', 'system/admin/views');
@@ -2536,10 +2536,10 @@ post('/admin/add/user', function () {
             
                 $message['error'] = '';
                 if (empty($username)) {
-                    $message['error'] .= '<li class="alert alert-danger">Username field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_username') . '</li>';
                 }
                 if (empty($password)) {
-                    $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_password') . '</li>';
                 }        
                 
                 render('add-user', array(
@@ -2968,13 +2968,13 @@ post('/category/:category/edit', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -3763,37 +3763,37 @@ post('/'. permalink_type() .'/:name/edit', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_tag') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
 
             if (!empty($is_image)) {
                 if (empty($image)) {
-                    $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_image') . '</li>';
                 }
             } elseif (!empty($is_video)) {
                 if (empty($video)) {
-                    $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_video') . '</li>';
                 }
             } elseif (!empty($is_link)) {
                 if (empty($link)) {
-                    $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_link') . '</li>';
                 }
             } elseif (!empty($is_quote)) {
                 if (empty($quote)) {
-                    $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_quote') . '</li>';
                 }
             } elseif (!empty($is_audio)) {
                 if (empty($audio)) {
-                    $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_audio') . '</li>';
                 }
             }
             
@@ -4178,13 +4178,13 @@ post('/:static/add', function ($static) {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
             render('add-page', array(
@@ -4285,13 +4285,13 @@ post('/:static/edit', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -4565,13 +4565,13 @@ post('/:static/:sub/edit', function ($static, $sub) {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -4947,37 +4947,37 @@ post('/:year/:month/:name/edit', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_tag') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
 
             if (!empty($is_image)) {
                 if (empty($image)) {
-                    $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_image') . '</li>';
                 }
             } elseif (!empty($is_video)) {
                 if (empty($video)) {
-                    $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_video') . '</li>';
                 }
             } elseif (!empty($is_link)) {
                 if (empty($link)) {
-                    $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_link') . '</li>';
                 }
             } elseif (!empty($is_quote)) {
                 if (empty($quote)) {
-                    $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_quote') . '</li>';
                 }
             } elseif (!empty($is_audio)) {
                 if (empty($audio)) {
-                    $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_audio') . '</li>';
                 }
             }
             
