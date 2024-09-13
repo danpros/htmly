@@ -2992,6 +2992,7 @@ function generate_rss($posts, $data = null)
     $channel = new Channel();
     $rssLength = config('rss.char');
     $data = $data;
+    $rssDesc = config('rss.description');
     
     if (is_null($data)) {
     $channel
@@ -3009,12 +3010,19 @@ function generate_rss($posts, $data = null)
     if ($posts) {
         foreach ($posts as $p) {
             $img = get_image($p->body);
-            if (!empty($rssLength)) {
-                $body = shorten($p->body, $rssLength);
+            if ($rssDesc == "meta") {
+                if (!empty($rssLength)) {
+                    $body = shorten($p->description, $rssLength);
+                } else {
+                    $body = $p->description;
+                }
             } else {
-                $body = $p->body;
+                if (!empty($rssLength)) {
+                    $body = shorten($p->body, $rssLength);
+                } else {
+                    $body = $p->body;
+                }
             }
-
             $item = new Item();
             $item
                 ->category(strip_tags($p->category));

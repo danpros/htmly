@@ -92,5 +92,6 @@
     "autosave.enable",
     "mfa.state",
     "show.version",
-    "thumbnail.width"
+    "thumbnail.width",
+    "rss.description"
 ]
