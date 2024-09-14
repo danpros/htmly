@@ -20,7 +20,7 @@
   <hr>
   <p><?php echo i18n('Get_one_here');?>  <a target="_blank" href="https://www.google.com/recaptcha/admin">https://www.google.com/recaptcha/admin</a>
   <p><?php echo i18n('Cloudflare_info');?>  <a target="_blank" href="https://developers.cloudflare.com/turnstile/">https://developers.cloudflare.com/turnstile/</a>
-  <p><?php echo i18n('Friendly_Captcha_info');?>  <a target="_blank" href="https://friendlycaptcha.com/#developers">https://friendlycaptcha.com/#developers</a>
+  <p><?php echo i18n('Friendly_captcha_info');?>  <a target="_blank" href="https://friendlycaptcha.com/#developers">https://friendlycaptcha.com/#developers</a>
   <div class="form-group row">
     <label class="col-sm-2 col-form-label"><?php echo i18n('Recaptcha');?></label>
     <div class="col-sm-10">
