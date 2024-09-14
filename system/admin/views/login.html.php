@@ -33,7 +33,13 @@
         <?php endif; ?>
         <?php if (config('login.protect.system') === 'cloudflare'): ?>
             <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-			<div style="text-align:center;" class="cf-turnstile" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
+	    <div style="text-align:center;" class="cf-turnstile" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
+            <br/>
+        <?php endif; ?>
+	<?php if (config('login.protect.system') === 'friendlycaptcha'): ?>
+            <script type="module" src="<https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js>" async defer></script>
+	    <script nomodule src="<https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.min.js>" async defer></script>
+	    <div class="frc-captcha" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
             <br/>
         <?php endif; ?>
         <input type="submit" class="btn btn-primary" name="submit" value="<?php echo i18n('Login');?>"/>
