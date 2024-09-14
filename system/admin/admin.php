@@ -120,7 +120,7 @@ function remove_accent($str)
 }
 
 // Add content
-function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null)
+function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $comments, $description = null, $media = null, $dateTime = null, $autoSave = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -213,12 +213,17 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     } else {
         $tagmd = "";
     }
-    if ($media!== null) {
-        $post_media = "\n<!--" .$type. " " . preg_replace('/\s\s+/', ' ', strip_tags($media)) . " " .$type. "-->";
+    if ($media !== null) {
+        $post_media = "\n<!--" . $type . " " . preg_replace('/\s\s+/', ' ', strip_tags($media)) . " " . $type . "-->";
     } else {
         $post_media = "";
     }
-    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+    if ($comments == "false") {
+        $comment = "\n<!--no-comments-->";
+    } else {
+        $comment = "";
+    }
+    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $comment . $post_media . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
@@ -273,7 +278,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 }
 
 // Edit content
-function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null, $autoSave = null)
+function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $comments, $destination = null, $description = null, $date = null, $media = null, $autoSave = null)
 {
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
@@ -363,7 +368,12 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     } else {
         $post_media = "";
     }
-    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+    if ($comments == "false") {
+        $comment = "\n<!--no-comments-->";
+    } else {
+        $comment = "";
+    }
+    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $comment . $post_media . "\n\n" . $content;
     
     $dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
     $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';

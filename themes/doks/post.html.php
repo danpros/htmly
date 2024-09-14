@@ -68,20 +68,22 @@
     </div>
 
 </article>
-
-<?php if (disqus()): ?>
-    <?php echo disqus($post->title, $post->url) ?>
-<?php endif; ?>
-
-<?php if (facebook() || disqus()): ?>
-<div class="comments-area" id="comments">
-    <?php if (facebook()): ?>
-        <div class="fb-comments" data-href="<?php echo $post->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
-    <?php endif; ?>
+<?php $no_comments = explode('<!--no-comments-->', $post->body); ?>
+<?php if (!isset($no_comments['1'])): ?>
     <?php if (disqus()): ?>
-        <div id="disqus_thread"></div>
+        <?php echo disqus($post->title, $post->url) ?>
     <?php endif; ?>
-</div>
+
+    <?php if (facebook() || disqus()): ?>
+    <div class="comments-area" id="comments">
+        <?php if (facebook()): ?>
+            <div class="fb-comments" data-href="<?php echo $post->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
+        <?php endif; ?>
+        <?php if (disqus()): ?>
+            <div id="disqus_thread"></div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php if (!empty($next) || !empty($prev)): ?>

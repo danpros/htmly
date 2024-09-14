@@ -93,7 +93,8 @@
         </div><!--//content-->  
     </div><!--//section-inner-->                 
 </section><!--//section-->
-<?php if (facebook() || disqus()): ?>
+<?php $no_comments = explode('<!--no-comments-->', $post->body); ?>
+<?php if (facebook() || disqus()): AND (!isset($no_comments['1'])): ?>
     <section class="comment-wrapper post section">
         <div class="section-inner">
             <div class="content">

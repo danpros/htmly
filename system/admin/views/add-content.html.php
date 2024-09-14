@@ -109,6 +109,12 @@ $( function() {
                     <label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
                     <textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_left_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description;} ?></textarea>
                     <br>
+                    <label for="pComments"><?php echo i18n('Comment_State');?></label>
+                    <select id="pComments" class="form-control" name="comments">
+                        <option value="true" selected><?php echo i18n('Comments_enabled');?></option>
+                        <option value="false"><?php echo i18n('Comments_disabled');?></option>
+                    </select>
+                    <br>
                 </div>
                     
                 <div class="col-sm-6">
