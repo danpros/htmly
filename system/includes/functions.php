@@ -3781,6 +3781,41 @@ function isTurnstile($turnstileResponse)
     return ($json['success']);
 }
 
+// Friendlycaptcha
+function isFriendlycaptcha($friendlyCaptchaResponse)
+{
+    $public = config("login.protect.public");
+    $private = config("login.protect.private");
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    $url = 'https://global.frcapi.com/api/v2/captcha/siteverify';
+    $data = array('sitekey' => $public, 'response' => $friendlyCaptchaResponse);
+
+    // Consider X-API-Key as per this documentation: https://developer.friendlycaptcha.com/docs/getting-started/siteverify
+    $query = http_build_query($data);
+    $options = array(
+        'http' => array(
+            'header' => "Content-Type: application/x-www-form-urlencoded\r\n".
+                        "Content-Length: ".strlen($query)."\r\n".
+                        "User-Agent:HTMLy/1.0\r\n",
+            'method'  => "POST",
+            'content' => $query,
+        )
+    );
+
+    $stream = stream_context_create($options);
+    $fileContent = file_get_contents($url, false, $stream);
+
+    if ($fileContent === false) {
+        return false;
+    }
+    $json = json_decode($fileContent, true);
+    if ($json == false) {
+        return false;
+    }
+    return ($json['success']);
+}
+
 // Get video ID
 function get_video_id($url)
 {
