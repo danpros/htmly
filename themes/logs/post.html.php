@@ -61,8 +61,7 @@
         <?php echo get_related($p->related)?>
     </div>
     <div id="comments" class="comments border">
-        <?php $no_comments = explode('<!--no-comments-->', $post->body); ?>
-        <?php if (!isset($no_comments['1'])): ?>
+        <?php if($p->comments == "true"): ?>
             <?php if (facebook()): ?>
                 <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
             <?php endif; ?>
@@ -79,7 +78,7 @@
             <span class="older"><a href="<?php echo($prev['url']); ?>" rel="prev"><?php echo($prev['title']); ?></a> &raquo;</span>
         <?php endif; ?>
     </div>
-    <?php if (disqus()): AND !isset($no_comments['1'])): ?>
+    <?php if (disqus() AND $p->comments == "true"): ?>
         <?php echo disqus($p->title, $p->url) ?>
     <?php endif; ?>
 </div>

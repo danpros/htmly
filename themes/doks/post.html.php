@@ -68,8 +68,7 @@
     </div>
 
 </article>
-<?php $no_comments = explode('<!--no-comments-->', $post->body); ?>
-<?php if (!isset($no_comments['1'])): ?>
+<?php if($p->comments == "true"): ?>
     <?php if (disqus()): ?>
         <?php echo disqus($post->title, $post->url) ?>
     <?php endif; ?>

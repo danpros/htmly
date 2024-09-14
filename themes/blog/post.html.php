@@ -43,12 +43,14 @@
                     <?php echo $p->body; ?>
                 </div><!--//desc-->
                 <div style="margin-top:30px;position:relative;">
-                    <span class="tags"><i class="fa fa-tags"></i> <?php echo $p->tag;?></span> 
-                    <?php if (disqus_count()) { ?>
-                        <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n("Comments");?></a></span>
-                    <?php } elseif (facebook()) { ?>
-                        <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
-                    <?php } ?>
+                    <span class="tags"><i class="fa fa-tags"></i> <?php echo $p->tag;?></span>
+                    <?php if($p->comments == "true"): ?>
+                        <?php if (disqus_count()) { ?>
+                            <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n("Comments");?></a></span>
+                        <?php } elseif (facebook()) { ?>
+                            <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
+                        <?php } ?>
+                    <?php endif; ?>
                     <span class="share pull-right">
                         <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
                         <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
@@ -65,11 +67,13 @@
                     <?php endif; ?>
                     <div style="clear:both;"></div>
                 </div>
-                <?php if (disqus()): ?>
-                    <?php echo disqus($p->title, $p->url) ?>
-                <?php endif; ?>
-                <?php if (disqus_count()): ?>
-                    <?php echo disqus_count() ?>
+                <?php if($p->comments == "true"): ?>				
+                    <?php if (disqus()): ?>
+                        <?php echo disqus($p->title, $p->url) ?>
+                    <?php endif; ?>
+                    <?php if (disqus_count()): ?>
+                        <?php echo disqus_count() ?>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <?php $tags = get_related($p->related, true, config('related.count'));?>
                 <?php $char = 30; $total = count($tags); $i = 1; if ($total >= 1) { ?>
@@ -93,21 +97,22 @@
         </div><!--//content-->  
     </div><!--//section-inner-->                 
 </section><!--//section-->
-<?php $no_comments = explode('<!--no-comments-->', $post->body); ?>
-<?php if (facebook() || disqus()): AND (!isset($no_comments['1'])): ?>
-    <section class="comment-wrapper post section">
-        <div class="section-inner">
-            <div class="content">
-               <div id="comments">
-                    <h2 class="heading">Comments</h2>
-                    <?php if (facebook()): ?>
-                        <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
-                    <?php endif; ?>
-                    <?php if (disqus()): ?>
-                        <div id="disqus_thread"></div>
-                    <?php endif; ?>
-                </div>
-            </div><!--//content-->  
-        </div><!--//section-inner-->                 
-    </section><!--//section-->
+<?php if($p->comments == "true"): ?>
+    <?php if (facebook() || disqus()): ?>
+        <section class="comment-wrapper post section">
+            <div class="section-inner">
+                <div class="content">
+                   <div id="comments">
+                        <h2 class="heading">Comments</h2>
+                        <?php if (facebook()): ?>
+                            <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
+                        <?php endif; ?>
+                        <?php if (disqus()): ?>
+                            <div id="disqus_thread"></div>
+                        <?php endif; ?>
+                    </div>
+                </div><!--//content-->  
+            </div><!--//section-inner-->                 
+        </section><!--//section-->
+    <?php endif; ?>
 <?php endif; ?>
