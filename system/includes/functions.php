@@ -3793,9 +3793,6 @@ function isFriendlycaptcha($friendlyCaptchaResponse)
     $query = http_build_query($data);
     $options = array(
         'http' => array(
-            'header' => "Content-Type: application/x-www-form-urlencoded\r\n".
-                        "Content-Length: ".strlen($query)."\r\n".
-                        "User-Agent:HTMLy/1.0\r\n",
             'method'  => "POST",
             'content' => $query,
         )
