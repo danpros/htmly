@@ -61,9 +61,10 @@ google.analytics.id = ""
 ; Google gtag analytics
 google.gtag.id = ""
 
-; Login protection system  Choose "google", "cloudflare", or "disable".
+; Login protection system  Choose "google", "cloudflare", "friendlycaptcha", or "disable".
 ; https://www.google.com/recaptcha/admin
 ; https://developers.cloudflare.com/turnstile/
+; https://friendlycaptcha.com/#developers
 
 login.protect.system = "disable"
 login.protect.public = ""
