@@ -135,7 +135,7 @@ post('/login', function () {
     } elseif ($captcha === 'google') {
         $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
     } elseif ($captcha === 'friendlycaptcha') {
-        $captcha = isFriendlycaptcha(from($_REQUEST, 'frc-captcha-response'));
+        $captcha = isFriendlycaptcha(from($_REQUEST, 'frc-captcha-solution'));
     }
 
     $user = from($_REQUEST, 'user');
