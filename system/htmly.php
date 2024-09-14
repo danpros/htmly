@@ -134,7 +134,8 @@ post('/login', function () {
         $captcha = isTurnstile(from($_REQUEST, 'cf-turnstile-response'));
     } elseif ($captcha === 'google') {
         $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
-    }
+    } elseif ($captcha === 'friendlycaptcha') {
+        $captcha = isCaptcha(from($_REQUEST, 'frc-captcha-response'));
 
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
