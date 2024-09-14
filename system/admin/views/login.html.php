@@ -37,8 +37,8 @@
             <br/>
         <?php endif; ?>
 	<?php if (config('login.protect.system') === 'friendlycaptcha'): ?>
-            <script type="module" src="<https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js>" async defer></script>
-	    <script nomodule src="<https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.min.js>" async defer></script>
+	    <script type="module" src="https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@0.1.8/site.min.js" async defer></script>
+	    <script nomodule src="https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@0.1.8/site.compat.min.js" async defer></script>
 	    <div class="frc-captcha" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
             <br/>
         <?php endif; ?>
