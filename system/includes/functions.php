@@ -3786,12 +3786,10 @@ function isFriendlycaptcha($friendlyCaptchaResponse)
 {
     $public = config("login.protect.public");
     $private = config("login.protect.private");
-    $ip = $_SERVER['REMOTE_ADDR'];
 
-    $url = 'https://global.frcapi.com/api/v2/captcha/siteverify';
-    $data = array('sitekey' => $public, 'response' => $friendlyCaptchaResponse);
+    $url = 'https://api.friendlycaptcha.com/api/v1/siteverify';
+    $data = array('secret' => $private, 'sitekey' => $public, 'solution' => $friendlyCaptchaResponse);
 
-    // Consider X-API-Key as per this documentation: https://developer.friendlycaptcha.com/docs/getting-started/siteverify
     $query = http_build_query($data);
     $options = array(
         'http' => array(
