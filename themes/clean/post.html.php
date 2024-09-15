@@ -61,14 +61,11 @@
         <?php echo get_related($p->related)?>
     </div>
     <div id="comments" class="comments border">
-        <?php $no_comments = explode('<!--no-comments-->', $post->body); ?>
-        <?php if (!isset($no_comments['1'])): ?>
-            <?php if (facebook()): ?>
-                <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
-            <?php endif; ?>
-            <?php if (disqus()): ?>
-                <div id="disqus_thread"></div>
-            <?php endif; ?>
+        <?php if (facebook()): ?>
+            <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
+        <?php endif; ?>
+        <?php if (disqus()): ?>
+            <div id="disqus_thread"></div>
         <?php endif; ?>
     </div>
     <div class="postnav">
@@ -79,7 +76,7 @@
             <span><a href="<?php echo($prev['url']); ?>" class="pagination-arrow older" rel="prev" style="margin-bottom:5px;"><?php echo($prev['title']); ?></a></span>
         <?php endif; ?>
     </div>
-    <?php if (disqus()): AND !isset($no_comments['1'])): ?>
+    <?php if (disqus()): ?>
         <?php echo disqus($p->title, $p->url) ?>
     <?php endif; ?>
 </div>
