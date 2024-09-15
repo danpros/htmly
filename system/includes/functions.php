@@ -487,9 +487,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
         $post->link  = get_content_tag('link', $content);
         $post->quote  = get_content_tag('quote', $content);
         $post->audio  = get_content_tag('audio', $content);
-		
-        // Check if comments are enabled
-        $post->comments = check_comments_state($content);
 
         $tag = array();
         $url = array();
@@ -551,7 +548,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
                 $post->body = automatic_toc($post->body, 'post-' . $post->date);
             }
         }
-		
 
         // Convert image tags to figures
         if ($caption == 'true') {
@@ -3724,7 +3720,7 @@ function get_content_tag($tag, $string, $alt = null)
     return $alt;
 }
 
-// Check if comments are disabled inside the markdown files (false = disabled)
+// Check if comments are disabled inside the markdown files (true = disabled)
 function check_comments_state($content)
 {
     $tag = '<!--no-comments-->';
