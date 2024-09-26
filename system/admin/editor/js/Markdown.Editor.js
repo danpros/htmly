@@ -1524,7 +1524,7 @@
             buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
             buttons.toc = makeButton("wmd-toc-button", getString("toc"), "fa fa-list-alt", bindCommand("doTOC"));
             //makeSpacer(3);
-            buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa fa-undo", null);
+            buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa-solid fa-rotate-left", null);
             buttons.undo.execute = function (manager) {
                 if (manager) manager.undo();
             };
@@ -1533,7 +1533,7 @@
                 getString("redo") :
                 getString("redomac"); // mac and other non-Windows platforms
 
-            buttons.redo = makeButton("wmd-redo-button", redoTitle, "fa fa-repeat", null);
+            buttons.redo = makeButton("wmd-redo-button", redoTitle, "fa-solid fa-rotate-right", null);
             buttons.redo.execute = function (manager) {
                 if (manager) manager.redo();
             };
