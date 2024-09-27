@@ -4,3 +4,4 @@
 /config/users/*.ini
 /backup
 /.htaccess
+.DS_Store
