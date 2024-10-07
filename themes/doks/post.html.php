@@ -68,7 +68,6 @@
     </div>
 
 </article>
-
 <?php if (disqus()): ?>
     <?php echo disqus($post->title, $post->url) ?>
 <?php endif; ?>

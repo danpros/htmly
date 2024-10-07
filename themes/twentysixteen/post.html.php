@@ -70,7 +70,6 @@
     </footer><!-- .entry-footer -->
 
 </article><!-- #post-## -->
-
     <?php if (disqus()): ?>
         <?php echo disqus($p->title, $p->url) ?>
     <?php endif; ?>
@@ -93,7 +92,7 @@
             <?php endif; ?>
             
         </div>
-    <?php endif; ?>
+    <?php endif; ?>	
 
 <nav role="navigation" class="navigation post-navigation">
     <h2 class="screen-reader-text">Post navigation</h2>

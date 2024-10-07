@@ -14,6 +14,7 @@ $content = file_get_contents($filename);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
 $olddescription = get_content_tag('d', $content);
 $oldtag = get_content_tag('tag', $content);
+$oldcomment = check_comments_state($content);
 $oldcontent = remove_html_comments($content);
 
 $oldimage = get_content_tag('image', $content);
@@ -154,6 +155,12 @@ $( function() {
 
                     <label for="pMeta"><?php echo i18n('Meta_description');?> (<?php echo i18n('optional');?>)</label>
                     <textarea id="pMeta" class="form-control" name="description" rows="3" cols="20" placeholder="<?php echo i18n('If_left_empty_we_will_excerpt_it_from_the_content_below');?>"><?php if (isset($p->description)) { echo $p->description; } else { echo $olddescription;} ?></textarea>
+                    <br>
+                    <label for="pComments"><?php echo i18n('Comment_State');?></label>
+                    <select id="pComments" class="form-control" name="comments">
+                        <option value="true" <?php if($oldcomment == "true") { echo 'selected="selected"';} ?>><?php echo i18n('Comments_enabled');?></option>
+                        <option value="false" <?php if($oldcomment == "false") { echo 'selected="selected"';} ?>><?php echo i18n('Comments_disabled');?></option>
+                    </select>
                     <br>
                 </div>
                 

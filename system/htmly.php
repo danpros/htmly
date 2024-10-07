@@ -722,6 +722,7 @@ post('/add/content', function () {
     $category = from($_REQUEST, 'category');
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
+    $comments = from($_REQUEST, 'comments');
     $dateTime = null;
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
@@ -736,17 +737,17 @@ post('/add/content', function () {
     }
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime, $comments);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime, $comments);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime, $comments);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime, $comments);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime, $comments);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime, $comments);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -799,6 +800,7 @@ post('/add/content', function () {
             'postAudio' => $audio,
             'postTag' => $tag,
             'postUrl' => $url,
+            'postComments' => $comments,
             'postContent' => $content,
             'type' => $type,
             'is_admin' => true,
@@ -914,6 +916,7 @@ post('/admin/autosave', function () {
         $addEdit = $_REQUEST['addEdit'];
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        $comments = $_REQUEST['comments'];
 
         if (empty($url)) {
             $url = $title;
@@ -971,11 +974,11 @@ post('/admin/autosave', function () {
                 
                 if (!empty($title) && !empty($tag) && !empty($content)) {
                     if ($addEdit == 'add') {
-                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave);
+                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave, $comments);
                     } else {
                         $arr = explode('/', $oldfile);
                         if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-                            $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                            $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave, $comments);
                         }
                     }
                 }
@@ -3706,6 +3709,7 @@ post('/'. permalink_type() .'/:name/edit', function () {
     $description = from($_REQUEST, 'description');
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
+    $comments = from($_REQUEST, 'comments');
     $dateTime = null;
     $revertPost = from($_REQUEST, 'revertpost');
     $publishDraft = from($_REQUEST, 'publishdraft');
@@ -3738,27 +3742,27 @@ post('/'. permalink_type() .'/:name/edit', function () {
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $comments, $destination, $description, $dateTime, $image);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $comments, $destination, $description, $dateTime, $video);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $comments, $destination, $description, $dateTime, $link);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $comments, $destination, $description, $dateTime, $quote);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $comments, $destination, $description, $dateTime, $audio);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $comments, $destination, $description, $dateTime, null);
             
         } else {
             $message['error'] = '';
@@ -3816,6 +3820,7 @@ post('/'. permalink_type() .'/:name/edit', function () {
                 'postUrl' => $url,
                 'type' => $type,
                 'is_admin' => true,
+                'postComments' => $comments,
                 'postContent' => $content,
                 'bodyclass' => 'edit-post',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit_content')
@@ -4889,6 +4894,7 @@ post('/:year/:month/:name/edit', function () {
     $description = from($_REQUEST, 'description');
     $date = from($_REQUEST, 'date');
     $time = from($_REQUEST, 'time');
+    $comments = $_REQUEST['comments'];
     $dateTime = null;
     $revertPost = from($_REQUEST, 'revertpost');
     $publishDraft = from($_REQUEST, 'publishdraft');
@@ -4922,27 +4928,27 @@ post('/:year/:month/:name/edit', function () {
 
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $comments, $destination, $description, $dateTime, $image);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $comments, $destination, $description, $dateTime, $video);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $comments, $destination, $description, $dateTime, $link);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $comments, $destination, $description, $dateTime, $quote);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $comments, $destination, $description, $dateTime, $audio);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $comments, $destination, $description, $dateTime, null);
             
         } else {
             $message['error'] = '';
@@ -5000,6 +5006,7 @@ post('/:year/:month/:name/edit', function () {
                 'postUrl' => $url,
                 'type' => $type,
                 'postContent' => $content,
+                'postComments' => $comments,
                 'is_admin' => true,
                 'bodyclass' => 'edit-post',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $title

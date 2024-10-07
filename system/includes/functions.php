@@ -3720,10 +3720,17 @@ function get_content_tag($tag, $string, $alt = null)
     return $alt;
 }
 
+// Check if comments are disabled inside the markdown files (true = disabled)
+function check_comments_state($content)
+{
+    $tag = '<!--no-comments-->';
+    return strpos($content, $tag) !== false ? "false" : "true";
+}
+
 // Strip html comment
 function remove_html_comments($content)
 {
-    $patterns = array('/(\s|)<!--t(.*)t-->(\s|)/', '/(\s|)<!--d(.*)d-->(\s|)/', '/(\s|)<!--tag(.*)tag-->(\s|)/', '/(\s|)<!--image(.*)image-->(\s|)/', '/(\s|)<!--video(.*)video-->(\s|)/', '/(\s|)<!--audio(.*)audio-->(\s|)/', '/(\s|)<!--link(.*)link-->(\s|)/', '/(\s|)<!--quote(.*)quote-->(\s|)/', '/(\s|)<!--post(.*)post-->(\s|)/');
+    $patterns = array('/(\s|)<!--t(.*)t-->(\s|)/', '/(\s|)<!--d(.*)d-->(\s|)/', '/(\s|)<!--tag(.*)tag-->(\s|)/', '/(\s|)<!--image(.*)image-->(\s|)/', '/(\s|)<!--video(.*)video-->(\s|)/', '/(\s|)<!--audio(.*)audio-->(\s|)/', '/(\s|)<!--link(.*)link-->(\s|)/', '/(\s|)<!--quote(.*)quote-->(\s|)/', '/(\s|)<!--post(.*)post-->(\s|)/', '/(\s|)<!--no-comments-->(\s|)/');
     return preg_replace($patterns, '', $content);
 }
 
