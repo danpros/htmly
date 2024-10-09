@@ -454,10 +454,10 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         $postdate = strtotime($timestamp);
 
         // The post URL
-        if (config('permalink.type') == 'post') {
-            $posturl = site_url() . 'post/' . $post_url;
-        } else {
+        if (permalink_type() == 'default') {
             $posturl = site_url() . date('Y/m', $postdate) . '/' . $post_url;
+        } else {
+            $posturl = site_url() . permalink_type() . '/' . $post_url;
         }
 
         save_tag_i18n($post_tag, $post_tagmd);
