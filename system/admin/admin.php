@@ -120,7 +120,7 @@ function remove_accent($str)
 }
 
 // Add content
-function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null)
+function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null, $oldfile = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -234,12 +234,20 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
             $dir = 'content/' . $user . '/blog/' . $category. '/draft/';
         }
 
-        if (is_dir($dir)) {
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
-        } else {
+        if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+
         }
+
+        $oldfile = $oldfile;
+        $newfile = $dir . $filename;
+        if ($oldfile !== $newfile) {
+            if (file_exists($oldfile)) {
+                rename($oldfile, $newfile);
+            }
+        }
+
+        file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
         
         if (empty($draft)) {
             $draftFile = 'content/' . $user . '/blog/' . $category. '/draft/' . $filename;
@@ -255,7 +263,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         clear_post_cache($post_date, $post_tag, $post_url, $dir . $filename, $category, $type);
         
         if (!is_null($autoSave)) {
-            return "Auto Saved";
+            return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
         }
 
         if (empty($draft)) {
@@ -482,7 +490,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         }
         
         if (!is_null($autoSave)) {
-            return "Auto Saved";
+            return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
         }
 
         if ($destination == 'post') {
@@ -517,12 +525,13 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 }
 
 // Add static page
-function add_page($title, $url, $content, $draft, $description = null, $autoSave = null)
+function add_page($title, $url, $content, $draft, $description = null, $autoSave = null, $oldfile = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
     }
     $post_title = safe_html($title);
+    $newfile = '';
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
     $description = safe_html($description);
     if ($description !== null) {
@@ -565,7 +574,15 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
         } else {
             if (!is_dir($dirDraft)) {
                 mkdir($dirDraft, 0775, true);
-            } 
+            }
+            
+            $oldfile = $oldfile;
+            $newfile = $dirDraft . $filename;
+            if ($oldfile !== $newfile) {
+                if (file_exists($oldfile)) {
+                    rename($oldfile, $newfile);
+                }
+            }
             file_put_contents($dirDraft . $filename, print_r($post_content, true), LOCK_EX);
         }
 
@@ -573,7 +590,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
         clear_page_cache($post_url);
         
         if (!is_null($autoSave)) {
-            return "Auto Saved";
+            return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
         }
         
         if (empty($draft)) {
@@ -587,12 +604,13 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
 }
 
 // Add static sub page
-function add_sub_page($title, $url, $content, $static, $draft, $description = null, $autoSave = null)
+function add_sub_page($title, $url, $content, $static, $draft, $description = null, $autoSave = null, $oldfile = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
     }
     $post = find_page($static);
+    $newfile = '';
     $static = pathinfo($post['current']->md, PATHINFO_FILENAME);
     $post_title = safe_html($title);
     $post_url = strtolower(preg_replace(array('/[^a-zA-Z0-9 \-\p{L}]/u', '/[ -]+/', '/^-|-$/'), array('', '-', ''), remove_accent($url)));
@@ -638,11 +656,19 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
             if (!is_dir($dirDraft)) {
                 mkdir($dirDraft, 0775, true);
             }
+            
+            $oldfile = $oldfile;
+            $newfile = $dirDraft . $filename;
+            if ($oldfile !== $newfile) {
+                if (file_exists($oldfile)) {
+                    rename($oldfile, $newfile);
+                }
+            }
             file_put_contents($dirDraft . $filename, print_r($post_content, true), LOCK_EX);
         }
         
         if (!is_null($autoSave)) {
-            return "Auto Saved";
+            return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
         }
 
         rebuilt_cache('all');
@@ -662,6 +688,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
     } else {
         $num = null;
     }
+    $newfile = '';
     $views = array();
     $viewsFile = "content/data/views.json";
     $post_title = safe_html($title);
@@ -788,7 +815,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         }
 
         if (!is_null($autoSave)) {
-            return "Auto Saved";
+            return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
         }
 
         if ($destination == 'post') {

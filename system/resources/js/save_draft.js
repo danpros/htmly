@@ -15,6 +15,7 @@ function updateData() {
   var plink = $("#pLink").val();
   var pDate = $("#pDate").val();
   var pTime = $("#pTime").val();
+  var oldfile = $("#oldfile").val();
   var dateTime = pDate + " " + pTime;
   var autoSave = 'autoSave';
 
@@ -44,7 +45,8 @@ function updateData() {
     type: "POST",
     data: data,
     success: function(response) {
-      $("#response").html(response);
+      $("#response").html(response.message);
+      $("#oldfile").val(response.file);
       $("#response").fadeIn(600, function() {
         $("#response").css("display", "block");
       });

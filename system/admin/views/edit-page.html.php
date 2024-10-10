@@ -151,10 +151,10 @@ $images = image_gallery(null, 1, 40);
                     <?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save');?>"/>
                     <?php } elseif ($type == 'is_category') {?>
-                        <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+                        <input id="oldfile" type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
                         <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Save_category');?>"/>
                     <?php } else {?>
-                        <input type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
+                        <input id="oldfile" type="hidden" name="oldfile" class="text" value="<?php echo $url ?>"/>
                         <?php $dd = find_subpage($oldmd); ?>
                         <?php $dr = find_draft_subpage($oldmd);?>
                         <?php if (stripos($dir . '/', '/draft/') !== false) { ?>
@@ -274,7 +274,6 @@ $images = image_gallery(null, 1, 40);
     var base_path = '<?php echo site_url() ?>';
     var initial_image = '<?php echo $images;?>';
     var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
-    var oldfile = '<?php echo isset($url) ? $url : '';?>';
     var addEdit = 'edit';
     var saveInterval = 60000;
 </script>
@@ -319,7 +318,7 @@ $('.img-container').on("click", ".the-img", function(e) {
 <?php if (config('autosave.enable') == 'true'):?>
 <?php if ($type !== 'is_category' && $type !== 'is_profile' && $type !== 'is_frontpage') :?>
 <?php if (stripos($dir . '/', '/draft/') !== false): ?>
-<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js?v=1"></script>
 <?php endif;?>
 <?php endif;?>
 <?php endif;?>

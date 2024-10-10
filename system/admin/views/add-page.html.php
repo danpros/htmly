@@ -46,6 +46,7 @@
                     <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
                     <br>
 					<input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
+                    <input id="oldfile" type="hidden" name="oldfile" class="text"/>
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                     <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
                     <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
@@ -126,7 +127,6 @@
     var base_path = '<?php echo site_url() ?>';
     var initial_image = '<?php echo $images;?>';
     var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
-    var oldfile = '';
     var addEdit = 'add';
     var saveInterval = 60000;
 </script>
@@ -167,7 +167,7 @@ $('.img-container').on("click", ".the-img", function(e) {
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
-<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js?v=1"></script>
 <?php endif;?>
 <?php endif;?>
 <script>

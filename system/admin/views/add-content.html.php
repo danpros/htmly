@@ -172,6 +172,7 @@ $( function() {
                     <?php if ($type == 'is_post'):?>
                     <input type="hidden" name="is_post" value="is_post">
                     <?php endif;?>
+                    <input id="oldfile" type="hidden" name="oldfile" class="text"/>
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                 </div>
             </div>
@@ -300,7 +301,6 @@ $( function() {
     var base_path = '<?php echo site_url() ?>';
     var initial_image = '<?php echo $images;?>';
     var parent_page = '';
-    var oldfile = '';
     var addEdit = 'add';
     var saveInterval = 60000;
 </script>
@@ -341,7 +341,7 @@ $('.img-container').on("click", ".the-img", function(e) {
     document.getElementById('hideButton').addEventListener('click', toggleDivs);
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
-<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js?v=1"></script>
 <?php endif;?>
 <script>
     if (localStorage.getItem("preview-state") === "open") {

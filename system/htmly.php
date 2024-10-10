@@ -911,6 +911,7 @@ post('/admin/autosave', function () {
         $draft = 'draft';    
         $posttype = $_REQUEST['posttype'];
         $autoSave = $_REQUEST['autoSave'];
+        $oldfile = $_REQUEST['oldfile'];
         $addEdit = $_REQUEST['addEdit'];
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -923,7 +924,6 @@ post('/admin/autosave', function () {
             $revertPage = '';
             $revertPost = '';
             $publishDraft = '';
-            $oldfile = $_REQUEST['oldfile'];
             $destination = null;
         }
 
@@ -931,7 +931,7 @@ post('/admin/autosave', function () {
             if ($posttype == 'is_page') {
                 if ($role === 'editor' || $role === 'admin') {
                     if ($addEdit == 'add') {
-                        $response = add_page($title, $url, $content, $draft, $description, $autoSave);
+                        $response = add_page($title, $url, $content, $draft, $description, $autoSave, $oldfile);
                     } else {
                         $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave);
                     }
@@ -940,7 +940,7 @@ post('/admin/autosave', function () {
                 if ($role === 'editor' || $role === 'admin') {
                     $static = $_REQUEST['parent_page'];
                     if ($addEdit == 'add') {
-                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave);
+                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave, $oldfile);
                     } else {
                         $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave);
                     }
@@ -971,7 +971,7 @@ post('/admin/autosave', function () {
                 
                 if (!empty($title) && !empty($tag) && !empty($content)) {
                     if ($addEdit == 'add') {
-                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave);
+                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
                     } else {
                         $arr = explode('/', $oldfile);
                         if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
@@ -981,8 +981,9 @@ post('/admin/autosave', function () {
                 }
             }
         } else {
-            $response = "No content to save.";
+            $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));            
         }
+        header('Content-Type: application/json');
         echo $response;
     }
 });

@@ -218,7 +218,7 @@ $( function() {
                     <?php if ($type == 'is_post'):?>
                     <input type="hidden" name="is_post" value="is_post">
                     <?php endif;?>
-                    <input type="hidden" name="oldfile" class="text" value="<?php echo $filename; ?>"/>
+                    <input id="oldfile" type="hidden" name="oldfile" class="text" value="<?php echo $filename; ?>"/>
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                 </div>
             </div>
@@ -350,7 +350,6 @@ $( function() {
     var base_path = '<?php echo site_url() ?>';
     var initial_image = '<?php echo $images;?>';
     var parent_page = '';
-    var oldfile = '<?php echo $filename;?>';
     var addEdit = 'edit';
     var saveInterval = 60000;
 </script>
@@ -392,7 +391,7 @@ $('.img-container').on("click", ".the-img", function(e) {
 </script>
 <?php if (config('autosave.enable') == 'true' ):?>
 <?php if ($isdraft[4] == 'draft') : ?>
-<script src="<?php echo site_url();?>system/resources/js/save_draft.js"></script>
+<script src="<?php echo site_url();?>system/resources/js/save_draft.js?v=1"></script>
 <?php endif;?>
 <?php endif;?>
 <script>
