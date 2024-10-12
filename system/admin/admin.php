@@ -631,7 +631,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
         $post_description = "";
     }
 
-    $posts = get_static_subpages();
+    $posts = get_static_subpages($post['current']->slug);
     $timestamp = date('YmdHis');
     foreach ($posts as $index => $v) {
         $m_url = explode('.', $v['filename']);
