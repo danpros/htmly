@@ -547,7 +547,13 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
     $posts = get_static_pages();
     $timestamp = date('YmdHis');
     foreach ($posts as $index => $v) {
-        if (strtolower($v['basename']) === strtolower($post_url . '.md')) {
+        $m_url = explode('.', $v['filename']);
+        if (isset($m_url[1])) {
+            $b_url = $m_url[1] . '.md';
+        } else {
+            $b_url = $v['basename'];
+        }
+        if (strtolower($b_url) === strtolower($post_url . '.md')) {
             $post_url = $post_url .'-'. $timestamp;
         } else {
             $post_url = $post_url;
@@ -628,12 +634,18 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
     $posts = get_static_subpages();
     $timestamp = date('YmdHis');
     foreach ($posts as $index => $v) {
-        if (strtolower($v['basename']) === strtolower($post_url . '.md')) {
+        $m_url = explode('.', $v['filename']);
+        if (isset($m_url[1])) {
+            $b_url = $m_url[1] . '.md';
+        } else {
+            $b_url = $v['basename'];
+        }
+        if (strtolower($b_url) === strtolower($post_url . '.md')) {
             $post_url = $post_url .'-'. $timestamp;
         } else {
             $post_url = $post_url;
         }
-    }    
+    }   
 
     $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
 
