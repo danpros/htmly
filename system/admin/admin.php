@@ -241,7 +241,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 
         $oldfile = $oldfile;
         $newfile = $dir . $filename;
-        if ($oldfile !== $newfile) {
+        if ($oldfile !== $newfile && !is_null($autoSave)) {
             if (file_exists($oldfile)) {
                 rename($oldfile, $newfile);
             }
@@ -578,12 +578,12 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
             
             $oldfile = $oldfile;
             $newfile = $dirDraft . $filename;
-            if ($oldfile !== $newfile) {
+            if ($oldfile !== $newfile && !is_null($autoSave)) {
                 if (file_exists($oldfile)) {
                     rename($oldfile, $newfile);
                 }
             }
-            file_put_contents($dirDraft . $filename, print_r($post_content, true), LOCK_EX);
+            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
         }
 
         rebuilt_cache('all');
@@ -659,12 +659,12 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
             
             $oldfile = $oldfile;
             $newfile = $dirDraft . $filename;
-            if ($oldfile !== $newfile) {
+            if ($oldfile !== $newfile && !is_null($autoSave)) {
                 if (file_exists($oldfile)) {
                     rename($oldfile, $newfile);
                 }
             }
-            file_put_contents($dirDraft . $filename, print_r($post_content, true), LOCK_EX);
+            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
         }
         
         if (!is_null($autoSave)) {
