@@ -110,11 +110,11 @@ teaser.behave = "default"
 ; Teaser character count
 teaser.char = "200"
 
-; rss description type. body or meta
-rss.description = "body"
-
 ; Description character count
 description.char = "150"
+
+; rss description type. body or meta
+rss.description = "body"
 
 ; RSS feed count
 rss.count = "10"
