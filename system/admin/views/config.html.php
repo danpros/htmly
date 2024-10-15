@@ -168,6 +168,28 @@ Please install and enable the INTL extension to format the date format to your l
       <small><em><?php echo i18n('explain_version');?></em></small>
     </div>
   </div>
+  
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('admin_theme');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-admin.theme" id="admin.theme1" value="light" <?php if (config('admin.theme') === 'light' || is_null(config('admin.theme'))):?>checked<?php endif;?>>
+          <label class="form-check-label" for="admin.theme1">
+            Light
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-admin.theme" id="admin.theme2" value="dark" <?php if (config('admin.theme') === 'dark'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="admin.theme2">
+            Dark
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
   <hr />
   <div class="form-group row">
     <div class="col-sm-10">
