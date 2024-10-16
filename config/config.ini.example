@@ -202,3 +202,6 @@ views.root = "themes/twentysixteen"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
+
+; Admin theme: light or dark mode
+admin.theme = "dark"

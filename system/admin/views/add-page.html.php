@@ -58,7 +58,7 @@
                 <div class="col-sm-6" id="preview-col">
                     <label><?php echo i18n('Preview');?></label>
                     <br>
-                    <div id="wmd-preview" class="wmd-panel wmd-preview" style="width:100%;overflow:auto;"></div>
+                    <div id="wmd-preview" class="wmd-panel wmd-preview <?php if (config('admin.theme') === 'dark'){echo "card";}?>" style="width:100%;overflow:auto;"></div>
                 </div>
             </div>
         </form>

@@ -28,12 +28,12 @@ if (isset($_GET['search'])) {
     header("Location: $url");
 }
 ?>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "light-mode" : "dark-mode"); ?>">
 <div id="top"></div>
 <div class="wrapper">
 <style>.error-message ul {margin:0;padding:0;}</style>
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "navbar-white navbar-light" : "navbar-gray-dark navbar-dark"); ?>">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -54,7 +54,7 @@ if (isset($_GET['search'])) {
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "sidebar-light-primary" : "sidebar-dark-primary"); ?> elevation-4">
 
 
     <!-- Sidebar -->
@@ -335,7 +335,7 @@ if (isset($_GET['search'])) {
 </div>
 <!-- ./wrapper -->
 <?php } else { ?>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "light-mode" : "dark-mode"); ?>">
 <div class="login-box">
   <div class="login-logo">
     <h1><a href="https://www.htmly.com" target="_blank"><img width="200px" src="<?php echo site_url(); ?>system/resources/images/logo-big.png" alt="HTMLy"/></a></h1>

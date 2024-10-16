@@ -93,5 +93,6 @@
     "mfa.state",
     "show.version",
     "thumbnail.width",
-    "rss.description"
+    "rss.description",
+    "admin.theme"
 ]
