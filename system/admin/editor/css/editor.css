@@ -18,10 +18,14 @@ blockquote {
     margin-bottom: 10px;
     width: 100%;
     border: 1px solid #CFDAE5;
+	border-radius:5px;
     display: block;
     float: left;
 }
-
+.dark-mode .wmd-button-bar {
+	background-color: #292d32;
+	border-color: #292d32 !important;
+}
 .wmd-button-bar:hover {
     border: 1px solid #CCCCCC;
 }
@@ -77,10 +81,19 @@ blockquote {
 .wmd-button > span {
     background-repeat: no-repeat;
     background-position: 0px 0px;
-
     display: inline-block;
 }
 
+.dark-mode .wmd-button > span.btn-light {
+	color: #fff;
+	background-color: #292d32;
+	border-color: #292d32;
+	box-shadow: none;
+}
+.dark-mode .wmd-button > span.btn-light:not(.disabled):hover {
+	background-color: #171a1d;
+	border-color: #343a40;
+}
 .wmd-spacer1 {
     left: 50px;
 }
