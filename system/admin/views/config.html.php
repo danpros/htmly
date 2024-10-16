@@ -176,13 +176,13 @@ Please install and enable the INTL extension to format the date format to your l
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-admin.theme" id="admin.theme1" value="light" <?php if (config('admin.theme') === 'light' || is_null(config('admin.theme'))):?>checked<?php endif;?>>
           <label class="form-check-label" for="admin.theme1">
-            Light
+            <?php echo i18n('admin_theme_light');?>
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="-config-admin.theme" id="admin.theme2" value="dark" <?php if (config('admin.theme') === 'dark'):?>checked<?php endif;?>>
           <label class="form-check-label" for="admin.theme2">
-            Dark
+            <?php echo i18n('admin_theme_dark');?>
           </label>
         </div>
       </div>
