@@ -31,7 +31,7 @@ if (isset($_GET['search'])) {
 <body class="hold-transition sidebar-mini <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "light-mode" : "dark-mode"); ?>">
 <div id="top"></div>
 <div class="wrapper">
-<style>.error-message ul {margin:0;padding:0;}</style>
+<style>.error-message ul {margin:0;padding:0;list-style-type:none;}</style>
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "navbar-white navbar-light" : "navbar-gray-dark navbar-dark"); ?>">
     <!-- Left navbar links -->
