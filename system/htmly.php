@@ -26,6 +26,7 @@ get('/index', function () {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -243,6 +244,7 @@ get('/author/:name', function ($name) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -2807,6 +2809,7 @@ get('/category/:category', function ($category) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -3071,6 +3074,7 @@ get('/type/:type', function ($type) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -3166,6 +3170,7 @@ get('/tag/:tag', function ($tag) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -3257,6 +3262,7 @@ get('/archive/:req', function ($req) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -3370,6 +3376,7 @@ get('/search/:keyword', function ($keyword) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (!login()) {
@@ -3496,6 +3503,7 @@ get('/'. permalink_type() .'/:name', function ($name) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (permalink_type() == 'default') {
@@ -3915,6 +3923,7 @@ get('/:static', function ($static) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
 
     if (strpos($static, ".xml") !== false) {
@@ -4394,6 +4403,7 @@ get('/:static/:sub', function ($static, $sub) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
     
     if ($static === 'front') {
@@ -4684,6 +4694,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
         $search = _h($_GET['search']);
         $url = site_url() . 'search/' . remove_accent($search);
         header("Location: $url");
+        die;
     }
     
     if (permalink_type() !== 'default') {
