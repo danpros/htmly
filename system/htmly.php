@@ -19,15 +19,11 @@ if (config('timezone')) {
 // Publish scheduled post
 publish_scheduled();
 
+// Get search query. Redir to /search/
+get_search_query();
+
 // The front page of the blog
 get('/index', function () {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -239,13 +235,6 @@ post('/login', function () {
 
 // Show the author page
 get('/author/:name', function ($name) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -2805,13 +2794,6 @@ get('/admin/categories/:category', function ($category) {
 // Show the category page
 get('/category/:category', function ($category) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -3070,13 +3052,6 @@ post('/category/:category/delete', function () {
 // Show the type page
 get('/type/:type', function ($type) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -3166,13 +3141,6 @@ get('/type/:type/feed', function ($type) {
 // Show the tag page
 get('/tag/:tag', function ($tag) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -3257,13 +3225,6 @@ get('/tag/:tag/feed', function ($tag) {
 
 // Show the archive page
 get('/archive/:req', function ($req) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -3371,13 +3332,6 @@ get('/archive/:req/feed', function ($req) {
 
 // Show the search page
 get('/search/:keyword', function ($keyword) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -3498,13 +3452,6 @@ get('/feed/opml', function () {
 
 // Show blog post without year-month
 get('/'. permalink_type() .'/:name', function ($name) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
 
     if (permalink_type() == 'default') {
         $post = find_post(null, null, $name);
@@ -3918,13 +3865,6 @@ post('/'. permalink_type() .'/:name/delete', function () {
 
 // Show various page (top-level), admin, login, sitemap, static page.
 get('/:static', function ($static) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
 
     if (strpos($static, ".xml") !== false) {
         if ($static === 'sitemap.xml') {
@@ -4398,13 +4338,6 @@ post('/:static/delete', function () {
 
 // Show the sb static page
 get('/:static/:sub', function ($static, $sub) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
     
     if ($static === 'front') {
         $redir = site_url();
@@ -4689,13 +4622,6 @@ post('/:static/:sub/delete', function () {
 
 // Show blog post with year-month
 get('/:year/:month/:name', function ($year, $month, $name) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-        die;
-    }
     
     if (permalink_type() !== 'default') {
         $redir = site_url() . permalink_type() . '/' . $name;

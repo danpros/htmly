@@ -131,6 +131,16 @@ function save_config($data = array(), $new = array())
     return file_put_contents($config_file, $string, LOCK_EX);
 }
 
+function get_search_query()
+{
+    if (isset($_GET['search'])) {
+        $search = _h($_GET['search']);
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+        die;
+    }
+}
+
 function to_b64($str)
 {
     $str = base64_encode($str);

@@ -22,11 +22,6 @@ if (isset($author[0])) {
 } else {
     $author = default_profile($user);
 }
-if (isset($_GET['search'])) {
-    $search = _h($_GET['search']);
-    $url = site_url() . 'search/' . remove_accent($search);
-    header("Location: $url");
-}
 ?>
 <body class="hold-transition sidebar-mini <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "light-mode" : "dark-mode"); ?>">
 <div id="top"></div>
