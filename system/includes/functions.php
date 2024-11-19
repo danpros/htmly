@@ -983,6 +983,8 @@ function read_category_info($category)
                 $desc->count = get_categorycount($url);
 
                 $desc->file = $filename;
+				
+                $desc->rss = $desc->url . '/feed';
 
                 // Get the contents and convert it to HTML
                 $content = file_get_contents($desc->file);
@@ -1022,6 +1024,7 @@ function default_category($category = null)
         $desc->description = i18n('Uncategorized_comment');
         $desc->file = '';
         $desc->count = get_categorycount($desc->slug);
+        $desc->rss = $desc->url . '/feed';
     } else{
         $desc->title = $category;
         $desc->url = site_url() . 'category/' . $category;
@@ -1030,7 +1033,8 @@ function default_category($category = null)
         $desc->md = $category . '.md';
         $desc->description = i18n('All_blog_posts') . ': ' . $category;
         $desc->file = '';
-        $desc->count = get_categorycount($category);        
+        $desc->count = get_categorycount($category);
+        $desc->rss = $desc->url . '/feed';		
     }
 
     return $tmp[] = $desc;
@@ -1226,6 +1230,8 @@ function get_author($name)
                 $author->description = get_content_tag("d", $content, get_description($author->about));
                 
                 $author->avatar = get_content_tag("image", $content, site_url() . 'system/resources/images/logo-small.png');
+				
+                $author->rss = $author->url . '/feed';
 
                 $toc = explode('<!--toc-->', $author->about);
                 if (isset($toc['1'])) { 
@@ -2910,7 +2916,7 @@ function get_menu($custom = null, $auto = null)
         }
         if (config('blog.enable') == 'true' ) {
             if ($req == site_path() . '/' . blog_path() || stripos($req, site_path() . '/'. blog_path() .'?page') !== false) {
-                $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . blog_path . '">' . blog_string() . '</a></li>';
+                $menu .= '<li class="item nav-item active"><a class="nav-link" href="' . site_url() . blog_path() . '">' . blog_string() . '</a></li>';
             } else {
                 $menu .= '<li class="item nav-item"><a class="nav-link" href="' . site_url() . blog_path() . '">' . blog_string() . '</a></li>';
             }

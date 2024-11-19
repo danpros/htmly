@@ -79,6 +79,15 @@ get('/index', function () {
         } else {
             $pview = 'main';
         }
+		
+        $tblog = new stdClass;
+        $tblog->title = blog_tagline();
+        $tblog->url = site_url();
+        $tblog->count = count(get_blog_posts());
+        $tblog->description = blog_description();
+        $tblog->body = $tblog->description;
+        $tblog->rss = site_url() . 'feed/rss';
+        $tblog->slug = site_path();
 
         if (empty($posts) || $page < 1) {
 
@@ -110,11 +119,13 @@ get('/index', function () {
             'metatags' => generate_meta(null, null),
             'page' => $page,
             'posts' => $posts,
+            'taxonomy' => $tblog,
             'bodyclass' => 'in-front',
             'breadcrumb' => '',
             'pagination' => has_pagination($total, $perpage, $page),
             'type' => 'is_frontpage',
-            'is_front' => true
+            'is_front' => true,
+            'is_taxonomy' => true
         ), $layout);
     
     }
@@ -2858,10 +2869,12 @@ get('/category/:category', function ($category) {
         'page' => $page,
         'posts' => $posts,
         'category' => $desc,
+        'taxonomy' => $desc,
         'bodyclass' => 'in-category category-' . strtolower($category),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $desc->title,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_category' => true
+        'is_category' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -3074,6 +3087,8 @@ get('/type/:type', function ($type) {
     $ttype->count = $total;
     $ttype->description = i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title();
     $ttype->body = $ttype->description;
+    $ttype->rss = $ttype->url . '/feed';
+    $ttype->slug = strtolower($type);
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -3116,10 +3131,12 @@ get('/type/:type', function ($type) {
         'page' => $page,
         'posts' => $posts,
         'type' => $ttype,
+        'taxonomy' => $ttype,
         'bodyclass' => 'in-type type-' . strtolower($type),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . ucfirst($type),
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_type' => true
+        'is_type' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -3159,6 +3176,8 @@ get('/tag/:tag', function ($tag) {
     $ttag->count = $total;
     $ttag->description = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
     $ttag->body = $ttag->description;
+    $ttag->rss = $ttag->url . '/feed';
+    $ttag->slug = strtolower($tag);
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -3201,10 +3220,12 @@ get('/tag/:tag', function ($tag) {
         'page' => $page,
         'posts' => $posts,
         'tag' => $ttag,
+        'taxonomy' => $ttag,
         'bodyclass' => 'in-tag tag-' . strtolower($tag),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Posts_tagged') . ' ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_tag' => true
+        'is_tag' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -3260,6 +3281,8 @@ get('/archive/:req', function ($req) {
     $tarchive->count = $total;
     $tarchive->description = i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title();
     $tarchive->body = $tarchive->description;
+    $tarchive->rss = $tarchive->url . '/feed';
+    $tarchive->slug = strtolower($req);
 
     if (!$date) {
         // a non-existing page
@@ -3296,10 +3319,12 @@ get('/archive/:req', function ($req) {
         'page' => $page,
         'posts' => $posts,
         'archive' => $tarchive,
+        'taxonomy' => $tarchive,
         'bodyclass' => 'in-archive archive-' . strtolower($req),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Archive_for') . ' ' . $timestamp,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_archive' => true
+        'is_archive' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -3350,6 +3375,8 @@ get('/search/:keyword', function ($keyword) {
     $tsearch->count = $total;
     $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
     $tsearch->body = $tsearch->description;
+    $tsearch->rss = $tsearch->url . '/feed';
+    $tsearch->slug = strtolower($keyword);
 
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3397,10 +3424,12 @@ get('/search/:keyword', function ($keyword) {
         'page' => $page,
         'posts' => $posts,
         'search' => $tsearch,
+        'taxonomy' => $tsearch,
         'bodyclass' => 'in-search search-' . strtolower($keyword),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search_results_for') . ' ' . $keyword,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_search' => true
+        'is_search' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -3953,6 +3982,15 @@ get('/:static', function ($static) {
         } else {
             $pview = 'main';
         }
+		
+        $tblog = new stdClass;
+        $tblog->title = blog_string();
+        $tblog->url = site_url() . blog_path();
+        $tblog->count = count(get_blog_posts());
+        $tblog->description = i18n('all_blog_posts') . ' ' . i18n('by') . ' ' . blog_title();
+        $tblog->body = $tblog->description;
+        $tblog->rss = site_url() . 'feed/rss';
+        $tblog->slug = blog_path();
 
         if (empty($posts) || $page < 1) {
 
@@ -3982,10 +4020,12 @@ get('/:static', function ($static) {
             'metatags' => generate_meta('is_blog', null),
             'page' => $page,
             'posts' => $posts,
+            'taxonomy' => $tblog,
             'bodyclass' => 'in-blog',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . blog_string(),
             'pagination' => has_pagination($total, $perpage, $page),
-            'is_blog' => true
+            'is_blog' => true,
+            'is_taxonomy' => true
         ), $layout);
     } elseif ($static === 'front') {
 
