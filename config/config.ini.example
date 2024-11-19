@@ -29,6 +29,7 @@ blog.path = "blog"
 blog.string = "Blog"
 
 ; Social account
+social.bluesky = ""
 social.twitter = ""
 social.facebook = ""
 social.instagram = ""
