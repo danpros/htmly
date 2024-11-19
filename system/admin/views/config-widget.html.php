@@ -200,6 +200,12 @@
   <h4><?php echo i18n('Social_Media');?></h4>
   <hr>
   <div class="form-group row">
+    <label for="social.bluesky" class="col-sm-2 col-form-label">Bluesky</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.bluesky" class="form-control" id="social.bluesky" value="<?php echo config('social.bluesky');?>" placeholder="https://bsky.app/profile/username.bsky.social">
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="social.twitter" class="col-sm-2 col-form-label">Twitter</label>
     <div class="col-sm-10">
       <input type="text" name="-config-social.twitter" class="form-control" id="social.twitter" value="<?php echo config('social.twitter');?>" placeholder="https://twitter.com/gohtmly">

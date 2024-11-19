@@ -12,6 +12,7 @@
     "blog.enable",
     "blog.path",
     "blog.string",
+    "social.bluesky",
     "social.twitter",
     "social.facebook",
     "social.instagram",
