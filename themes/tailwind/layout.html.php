@@ -96,7 +96,7 @@
 					<div class="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
 						<div><?php echo copyright();?></div>
 					</div>
-					<div class="mb-8 text-sm text-gray-500 dark:text-gray-400">Based on <a style="te" target="_blank" rel="nofollow" href="https://github.com/timlrx/tailwind-nextjs-starter-blog">Tailwind Starter</a></div>
+					<div class="mb-8 text-sm text-gray-500 dark:text-gray-400">Design by <a style="te" target="_blank" rel="nofollow" href="https://www.timlrx.com/">Timlrx</a></div>
 				</div>
 			</footer>
 		</div>
