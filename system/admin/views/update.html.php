@@ -7,7 +7,7 @@ $CSRF = get_csrf();
         
 $updater = new HubUpdater(array(
     'name' => 'danpros/htmly',
-    'prerelease' => !!config("prerelease"),
+    'prerelease' => config("prerelease"),
 ));
 
 $dir = 'cache/';

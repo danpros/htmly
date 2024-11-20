@@ -1,0 +1,144 @@
+.pr-6 {
+	padding-right:1.5rem
+}
+
+.anchor svg {
+	display:inline;
+}
+
+.dark .toc-wrapper {
+	background-color: var(--tw-prose-pre-bg)!important;
+	border-color: rgb(55 65 81/var(--tw-divide-opacity))!important;
+}
+
+.light .toc-wrapper {
+	border-color: rgb(229 231 235/var(--tw-divide-opacity))!important;
+}
+
+.toc-wrapper a, .related-posts a {
+	text-decoration: none;
+}
+
+.toc-link a {
+	display:none;
+}
+
+.toc-link:hover a{
+	display:inline-block;
+}
+
+.tags a {
+	margin-right: .75rem;
+}
+
+.category a {
+	margin-right: .1rem;	
+}
+
+.category {
+	line-height:3.2rem;
+}
+
+.read-more {
+	text-decoration:inherit;
+}
+
+.nav-top li {
+	display:inline-block;
+    margin-left: 1.5rem;
+	font-weight: 500;
+}
+
+.nav-mobile li{
+	outline-width: 0;
+	outline-style: solid;
+	letter-spacing: .1em;
+	font-weight: 700;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	padding-right: 1rem;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+	margin-bottom: 1rem;
+}
+
+.menu-mobile {
+	display:none;
+}
+
+@media (max-width: 640px) {
+	.nav-top {
+		display:none;
+	}
+	.is-menu-open .menu-mobile {
+		display:block!important;
+	}
+}
+
+.search-form {
+	display:none;
+}
+
+.is-search-open .search-form {
+	display: flex;
+}
+
+.tags a:hover {
+	color:rgb(190 24 93);
+}
+
+
+.dark .tags a:hover {
+	color:rgb(244 114 182);
+}
+
+.thumbnail {
+	position:relative;
+	display:block;
+}
+
+.nav li > ul {
+	display:none;
+}
+
+.footnotes {
+	margin-top:0;
+	border:none;
+}
+
+.footnotes ol {
+	margin-bottom:0;
+	padding-top: 1.5em;
+}
+
+.footnotes > hr {
+	margin:0;
+}
+
+.thumb-icon { 
+	background: rgba(0,0,0,0.7); 
+	color: #fff; 
+	text-align: center; 
+	display: block; 
+	width: 32px; 
+	height: 32px; 
+	position: absolute; 
+	bottom: 50%; 
+	left: 50%; 
+	margin-left: -16px; 
+	margin-bottom: -16px;
+	-webkit-border-radius: 4px; 
+	border-radius: 4px;
+	-moz-transition: all 0.7s ease; 
+	-webkit-transition: all 0.7s ease; 
+	transition: all 0.7s ease;
+}
+
+.thumb-icon svg {
+  margin: 1px 0 0 2px;
+}
+
+.thumbnail:hover .thumb-icon { 
+	background: #fff; 
+	color: #333; 
+}

@@ -397,9 +397,9 @@ span.required {
 			<input name="blog_copyright" value="" placeholder="(c) Your name.">
 			<br/>
 			<br/>
-            <label for="social_bluesky">Bluesky Link:</label>
-            <input name="social_bluesky" type="url" value="" placeholder="https://bsky.app/profile/username.bsky.social">
-            <br/>
+			<label for="social_bluesky">Bluesky Link:</label>
+			<input name="social_bluesky" type="url" value="" placeholder="https://bsky.app/profile/username.bsky.social">
+			<br/>
 			<label for="social_twitter">Twitter Link:</label>
 			<input name="social_twitter" type="url" value="" placeholder="https://twitter.com/gohtmly">
 			<br/>

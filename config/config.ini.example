@@ -199,7 +199,7 @@ autosave.enable = "true"
 show.version = "true"
 
 ; Set the theme here
-views.root = "themes/twentysixteen"
+views.root = "themes/tailwind"
 
 ; Framework config. No need to edit.
 views.layout = "layout"
