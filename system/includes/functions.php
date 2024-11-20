@@ -2091,7 +2091,7 @@ function has_next($next)
             'tag' => $next->tag,
             'author' => $next->author,
             'authorName' => $next->authorName,
-            'authorDescription' => $prev->authorDescription,
+            'authorDescription' => $next->authorDescription,
             'authorAbout' => $next->authorAbout,
             'authorUrl' => $next->authorUrl,
             'authorAvatar' => $next->authorAvatar,
