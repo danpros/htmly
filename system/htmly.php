@@ -3518,6 +3518,8 @@ get('/'. permalink_type() .'/:name', function ($name) {
     $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
     $author->avatar = $current->authorAvatar;
+    $author->rss = $current->authorRss;
+    $author->slug = $current->author;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -4693,6 +4695,8 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
     $author->avatar = $current->authorAvatar;
+    $author->rss = $current->authorRss;
+    $author->slug = $current->author;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];

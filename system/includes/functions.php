@@ -441,6 +441,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
         // The post author + author url
         $post->author = $author;
         $post->authorUrl = site_url() . 'author/' . $author;
+        $post->authorRss = site_url() . 'author/' . $author . '/feed';
 
         $profile = get_author($author);
         if (isset($profile[0])) {
@@ -1268,6 +1269,7 @@ function default_profile($name)
     $author->url = site_url(). 'author/' . $name;
     $author->slug = $name;
     $author->file = '';
+    $author->rss = $author->url . '/feed';
 
     return $tmp[] = $author;
 }
@@ -2048,9 +2050,11 @@ function has_prev($prev)
             'tag' => $prev->tag,
             'author' => $prev->author,
             'authorName' => $prev->authorName,
+            'authorDescription' => $prev->authorDescription,
             'authorAbout' => $prev->authorAbout,
             'authorUrl' => $prev->authorUrl,
             'authorAvatar' => $prev->authorAvatar,
+            'authorRss' => $prev->authorRss,
             'related' => $prev->related,
             'views' => $prev->views,
             'type' => $prev->type,
@@ -2087,9 +2091,11 @@ function has_next($next)
             'tag' => $next->tag,
             'author' => $next->author,
             'authorName' => $next->authorName,
+            'authorDescription' => $prev->authorDescription,
             'authorAbout' => $next->authorAbout,
             'authorUrl' => $next->authorUrl,
             'authorAvatar' => $next->authorAvatar,
+            'authorRss' => $next->authorRss,
             'related' => $next->related,
             'views' => $next->views,
             'type' => $next->type,

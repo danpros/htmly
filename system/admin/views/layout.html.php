@@ -8,7 +8,7 @@
     <link rel="canonical" href="<?php echo $canonical; ?>" />
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css">
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
-    <link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css" rel="stylesheet">
+    <link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css?v=1" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
