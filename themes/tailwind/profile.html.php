@@ -1,7 +1,7 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <div class="space-y-2 pb-8 pt-6 md:space-y-5">
 	<h1 class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"><?php echo $author->title;?>
-		<a class="inline-block" href="<?php echo $author->rss;?>">
+		<a class="inline-block" aria-label="<?php echo $author->title;?> RSS" title="<?php echo $author->title;?> RSS" href="<?php echo $author->rss;?>">
 			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-rss" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/><path d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1"/></svg>
 		</a>
 	</h1>
@@ -24,7 +24,8 @@
 				</dd>
 				
 				<?php if ($teaserType === 'trimmed') :?>
-				<div class="pt-4 pr-6">
+				<dt class="sr-only"><?php echo i18n('featured_image');?></dt>
+				<dd class="pt-4 pr-6">
 						<?php if (!empty($p->image)) {?>
 						<a class="thumbnail" href="<?php echo $p->url;?>"><img src="<?php echo $p->image;?>" width="100%" alt="<?php echo $p->title;?>"></a>
 						<?php } elseif (!empty($p->video)) {?>
@@ -43,7 +44,7 @@
 						<?php } elseif (!empty($img)) {?>
 						<a class="thumbnail" href="<?php echo $p->url;?>"><img src="<?php echo $img;?>" width="100%" alt="<?php echo $p->title;?>"></a>
 						<?php } ?>
-				</div>
+				</dd>
 				<?php endif;?>
 				
 			</dl>

@@ -24,7 +24,8 @@
 				</dd>
 				
 				<?php if ($teaserType === 'trimmed') :?>
-				<div class="pt-4 pr-6">
+				<dt class="sr-only"><?php echo i18n('featured_image');?></dt>
+				<dd class="pt-4 pr-6">
 						<?php if (!empty($p->image)) {?>
 						<a class="thumbnail" href="<?php echo $p->url;?>"><img src="<?php echo $p->image;?>" width="100%" alt="<?php echo $p->title;?>"></a>
 						<?php } elseif (!empty($p->video)) {?>
@@ -43,7 +44,7 @@
 						<?php } elseif (!empty($img)) {?>
 						<a class="thumbnail" href="<?php echo $p->url;?>"><img src="<?php echo $img;?>" width="100%" alt="<?php echo $p->title;?>"></a>
 						<?php } ?>
-				</div>
+				</dd>
 				<?php endif;?>
 				
 			</dl>
