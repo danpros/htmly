@@ -1,6 +1,6 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo blog_language();?>" class="__variable_space scroll-smooth dark" id="html-id">
+<html lang="<?php echo blog_language();?>" class="__variable_space scroll-smooth light" id="html-id">
 <head>
 	<?php echo head_contents();?>
 	<title><?php echo $title;?></title>
