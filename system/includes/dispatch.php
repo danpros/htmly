@@ -14,24 +14,47 @@ function _log($message)
 
 function site_url()
 {
-    if (config('site.url') == null)
-        error(500, '[site.url] is not set');
+    if (config('multi.site') == "true" || config('site.url') == null){
+        return rtrim(generateSiteUrl(), '/') . '/';
+    } else {
+        // Forcing the forward slash
+        return rtrim(config('site.url'), '/') . '/';
+    }
+}
 
-    // Forcing the forward slash
-    return rtrim(config('site.url'), '/') . '/';
+function generateSiteUrl()
+{
+    $dir = trim(dirname(substr($_SERVER["SCRIPT_FILENAME"], strlen($_SERVER["DOCUMENT_ROOT"]))), '/');
+    if ($dir == '.' || $dir == '..') {
+        $dir = '';
+    }
+    $port = '';
+    if ($_SERVER["SERVER_PORT"] != "80" && $_SERVER["SERVER_PORT"] != "443") {
+        $port = ':' . $_SERVER["SERVER_PORT"];
+    }
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
+    if ($dir === '') {
+        return $siteUrl = $scheme . '://' . trim($_SERVER['SERVER_NAME'], "/") . $port . "/";
+    }
+    return $siteUrl = $scheme . '://' . trim($_SERVER['SERVER_NAME'], "/") . $port . "/" . $dir . '/';
 }
 
 function site_path()
 {
     static $_path;
 
-    if (config('site.url') == null)
-        error(500, '[site.url] is not set');
-
     if (!$_path)
-        $_path = rtrim(parse_url(config('site.url'), PHP_URL_PATH), '/');
+        $_path = rtrim(parse_url(site_url(), PHP_URL_PATH), '/');
 
     return $_path;
+}
+
+function theme_path()
+{
+    if (config('views.root') == null)
+        error(500, '[views.root] is not set');
+
+    return site_url() . rtrim(config('views.root'), '/') . '/';
 }
 
 function error($code, $message)
@@ -40,18 +63,35 @@ function error($code, $message)
     die($message);
 }
 
+// Set the language
+function get_language()
+{
+    $langID = config('language');
+    $langFile = 'lang/'. $langID . '.ini';
+
+    // Settings for the language
+    if (file_exists($langFile)) {
+        i18n('source', $langFile);
+        setlocale(LC_ALL, $langID . '.utf8');
+    } else {
+        i18n('source', 'lang/en_US.ini'); // Load the English language file
+        setlocale(LC_ALL, 'en_US.utf8'); // Change locale to English
+    }
+}
+
 // i18n provides strings in the current language
 function i18n($key, $value = null)
 {
     static $_i18n = array();
+    $key = strtolower($key);
 
     if ($key === 'source') {
       if (file_exists($value))
         $_i18n = parse_ini_file($value, true);
       else
-        $_i18n = parse_ini_file('lang/lang-en.ini', true);
+        $_i18n = parse_ini_file('lang/en_US.ini', true);
     } elseif ($value == null)
-        return (isset($_i18n[$key]) ? $_i18n[$key] : '_i18n_' . $key . '_i18n_');
+        return (isset($_i18n[$key]) ? $_i18n[$key] : $key);
     else
         $_i18n[$key] = $value;
 }
@@ -75,16 +115,30 @@ function save_config($data = array(), $new = array())
     $string = file_get_contents($config_file) . "\n";
 
     foreach ($data as $word => $value) {
-        $value = str_replace('"', '\"', $value);
-        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = "' . $value . '"', $string);
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = ' . $value, $string);
     }
     $string = rtrim($string);
     foreach ($new as $word => $value) {
-        $value = str_replace('"', '\"', $value);
-        $string .= "\n" . $word . ' = "' . $value . '"' . "\n";
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string .= "\n" . $word . ' = ' . $value . "\n";
     }
     $string = rtrim($string);
-    return file_put_contents($config_file, $string);
+    return file_put_contents($config_file, $string, LOCK_EX);
+}
+
+function get_search_query()
+{
+    if (isset($_GET['search'])) {
+        $search = _h($_GET['search']);
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+        die;
+    }
 }
 
 function to_b64($str)
@@ -159,15 +213,15 @@ function delete_cookie()
         setcookie($ck, '', -10, '/');
 }
 
-// if we have APC loaded, enable cache functions
-if (extension_loaded('apc')) {
+// if we have APCu loaded, enable cache functions
+if (extension_loaded('apcu')) {
 
     function cache($key, $func, $ttl = 0)
     {
-        if (($data = apc_fetch($key)) === false) {
+        if (($data = apcu_fetch($key)) === false) {
             $data = call_user_func($func);
             if ($data !== null) {
-                apc_store($key, $data, $ttl);
+                apcu_store($key, $data, $ttl);
             }
         }
         return $data;
@@ -176,7 +230,7 @@ if (extension_loaded('apc')) {
     function cache_invalidate()
     {
         foreach (func_get_args() as $key) {
-            apc_delete($key);
+            apcu_delete($key);
         }
     }
 
@@ -210,13 +264,14 @@ function _h($str, $enc = 'UTF-8', $flags = ENT_QUOTES)
 
 function from($source, $name)
 {
+    $map = array("\r\n" => "\n", "\r" => "\n");
     if (is_array($name)) {
         $data = array();
         foreach ($name as $k)
-            $data[$k] = isset($source[$k]) ? $source[$k] : null;
+            $data[$k] = isset($source[$k]) ? trim(strtr($source[$k], $map)) : null;
         return $data;
     }
-    return isset($source[$name]) ? $source[$name] : null;
+    return isset($source[$name]) ? trim(strtr($source[$name], $map)) : null;
 }
 
 function stash($name, $value = null)
@@ -321,12 +376,11 @@ function content($value = null)
 
 function render($view, $locals = null, $layout = null)
 {
-    $login = login();
-    if (!$login) {
-        $c = str_replace('/', '#', str_replace('?', '~', $_SERVER['REQUEST_URI']));
+    if (!login()) {
+        $c = str_replace('/', '#', str_replace('?', '~', rawurldecode($_SERVER['REQUEST_URI'])));
         $dir = 'cache/page';
         $cachefile = $dir . '/' . $c . '.cache';
-        if (is_dir($dir) === false) {
+        if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
     }
@@ -338,7 +392,12 @@ function render($view, $locals = null, $layout = null)
     if (($view_root = config('views.root')) == null)
         error(500, "[views.root] is not set");
 
+    $fnc = "{$view_root}/functions.php";
+
     ob_start();
+    if (file_exists($fnc)) {
+        include $fnc;
+    }
     include "{$view_root}/{$view}.html.php";
     content(trim(ob_get_clean()));
 
@@ -351,28 +410,20 @@ function render($view, $locals = null, $layout = null)
         header('Content-type: text/html; charset=utf-8');
         if (config('generation.time') == 'true') {
             ob_start();
-            $time = microtime();
-            $time = explode(' ', $time);
-            $time = $time[1] + $time[0];
-            $start = $time;
             require $layout;
-            $time = microtime();
-            $time = explode(' ', $time);
-            $time = $time[1] + $time[0];
-            $finish = $time;
-            $total_time = round(($finish - $start), 4);
+            $time = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+            $total_time = round($time, 4);
             echo "\n" . '<!-- Dynamic page generated in '.$total_time.' seconds. -->';
         } else {
             ob_start();
             require $layout;
         }
-        if (!$login && $view != '404') {
-            if (!file_exists($cachefile)) {
-                if (config('cache.timestamp') == 'true') {
-                    echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
-                }
-                file_put_contents($cachefile, ob_get_contents());
+        if (!login() && $view != '404' && $view != '404-search' && config('cache.off') == "false") {
+            if (config('cache.timestamp') == 'true') {
+                echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
+            if (isset($cachefile))
+                file_put_contents($cachefile, ob_get_contents(), LOCK_EX);
         }
         echo trim(ob_get_clean());
     } else {
@@ -385,6 +436,28 @@ function json($obj, $code = 200)
     header('Content-type: application/json', true, $code);
     echo json_encode($obj);
     exit;
+}
+
+function save_json_pretty($filename, $arr)
+{
+    if (defined("JSON_PRETTY_PRINT")) {    
+        file_put_contents($filename, json_encode($arr, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
+    } else {
+        file_put_contents($filename, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    }
+}
+
+function file_get_data($filename) 
+{
+    $thisFile = fopen($filename, 'r');
+    if (flock($thisFile, LOCK_SH)) {
+        $fileData = file_get_contents($filename);
+        flock($thisFile, LOCK_UN);
+    } else {
+        $fileData = json_encode(array('flock_fail' => 'reading'));
+    }
+    fclose($thisFile);
+    return $fileData;
 }
 
 function condition()
@@ -560,6 +633,75 @@ function flash($key, $msg = null, $now = false)
     }
 
     $x[$key] = $msg;
+}
+
+function create_thumb($src, $desired_width = null, $desired_height = null) {
+    
+    if (!extension_loaded('gd')) {
+        return $src;
+    }
+
+    $dir = 'content/images/thumbnails';
+
+    if (!is_dir($dir)) {
+        mkdir($dir);
+    }
+    
+    $w = config('thumbnail.width');
+    if (empty($w)) {
+        $w = 500;
+    }
+    
+    if (is_null($desired_width)) {
+        $desired_width = $w;
+    }
+    
+    if (!is_null($desired_height)) {
+        $h = 'x' . $desired_height;
+    } else {
+        $h = null;
+    }
+
+    $fileName = pathinfo($src, PATHINFO_FILENAME);
+    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . $h .'.webp';
+
+    if (file_exists($thumbFile)) {
+        return site_url() . $thumbFile;
+    } else {
+
+        /* read the source image */
+        $source_image = imagecreatefromstring(file_get_contents($src));
+        if ($source_image === false) {
+            return $src;
+        }
+        $width = imagesx($source_image);
+        $height = imagesy($source_image);
+
+        /* find the "desired height" of this thumbnail, relative to the desired width  */
+        if (is_null($desired_height)) {
+            $desired_height = floor($height * ($desired_width / $width));
+        }
+        
+        $ratio = max($desired_width/$width, $desired_height/$height);
+        $height = floor($desired_height / $ratio);
+        $x = floor(($width - $desired_width / $ratio) / 2);
+        $width = floor($desired_width / $ratio);
+
+        /* create a new, "virtual" image */
+        $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+        imageAlphaBlending($virtual_image, false);
+        imageSaveAlpha($virtual_image, true);
+
+        /* copy source image at a resized size */
+        imagecopyresampled($virtual_image, $source_image, 0, 0, $x, 0, $desired_width, $desired_height, $width, $height);
+
+        /* create the physical thumbnail image to its destination */
+        imagewebp($virtual_image, $thumbFile, 75);
+        imagedestroy($virtual_image);
+        
+        return site_url() . $thumbFile;
+
+    }
 }
 
 function dispatch()

@@ -23,29 +23,38 @@
 
         italic: "Emphasis <em> Ctrl+I",
         italicexample: "emphasized text",
+		
+        strikethrough: "Strikethrough <s> Ctrl+X",
+        strikethroughexample: "strikethrough text",
 
         link: "Hyperlink <a> Ctrl+L",
         linkdescription: "enter link description here",
-        linkdialog: "<p><b>Insert Hyperlink</b></p><p>http://example.com/ \"optional title\"</p>",
+        linkdialog: "<p><b>Insert Hyperlink</b></p><p>https://example.com/ \"optional title\"</p>",
 
         quote: "Blockquote <blockquote> Ctrl+Q",
         quoteexample: "Blockquote",
 
-        code: "Code Sample <pre><code> Ctrl+K",
+        code: "Code <pre><code> Ctrl+K",
         codeexample: "enter code here",
 
         image: "Image <img> Ctrl+G",
         imagedescription: "enter image description here",
-        imagedialog: "<p><b>Insert Image</b></p><p>http://example.com/images/diagram.jpg \"optional title\"<br><br>Need <a href='http://www.google.com/search?q=free+image+hosting' target='_blank'>free image hosting?</a></p>",
+        imagedialog: "<p><b>Insert Image</b></p><p>https://example.com/images/diagram.jpg \"optional title\"<br><br>Need <a href='https://www.google.com/search?q=free+image+hosting' target='_blank'>free image hosting?</a></p>",
 
         olist: "Numbered List <ol> Ctrl+O",
         ulist: "Bulleted List <ul> Ctrl+U",
         litem: "List item",
 
-        heading: "Heading <h1>/<h2> Ctrl+H",
+        heading: "Heading Ctrl+H",
         headingexample: "Heading",
 
         hr: "Horizontal Rule <hr> Ctrl+R",
+		
+        readmore: "Read More <!--more--> Ctrl+M",
+		
+        toc: "TOC <!--toc-->",
+		
+        table: "Table - Ctrl+J",
 
         undo: "Undo - Ctrl+Z",
         redo: "Redo - Ctrl+Y",
@@ -64,9 +73,26 @@
 
     // The default text that appears in the dialog input box when entering
     // links.
-    var imageDefaultText = "http://";
-    var linkDefaultText = "http://";
+    var imageDefaultText = "https://";
+    var linkDefaultText = "https://";
 
+    //Polyfill for node.remove() from MDN
+    // from:https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/remove()/remove().md
+    (function (arr) {
+        arr.forEach(function (item) {
+        if (item.hasOwnProperty('remove')) {
+            return;
+        }
+        Object.defineProperty(item, 'remove', {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: function remove() {
+            this.parentNode.removeChild(this);
+            }
+        });
+        });
+    })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
     // -------------------------------------------------------------------
     //  END OF YOUR CHANGES
     // -------------------------------------------------------------------
@@ -1111,7 +1137,7 @@
                 // Fixes common pasting errors.
                 text = text.replace(/^http:\/\/(https?|ftp):\/\//, '$1://');
                 if (!/^(?:https?|ftp):\/\//.test(text))
-                    text = 'http://' + text;
+                    text = 'https://' + text;
             }
 
             dialog.parentNode.removeChild(dialog);
@@ -1282,17 +1308,26 @@
                     case "r":
                         doClick(buttons.hr);
                         break;
-                    case "y":
-                        doClick(buttons.redo);
+                    case "m":
+                        doClick(buttons.readmore);
                         break;
-                    case "z":
-                        if (key.shiftKey) {
-                            doClick(buttons.redo);
-                        }
-                        else {
-                            doClick(buttons.undo);
-                        }
+                    // case "x":
+                    //     doClick(buttons.strikethrough);
+                    //     break;
+                    case "j":
+                        doClick(buttons.table);
                         break;
+                    // case "y":
+                    //     doClick(buttons.redo);
+                    //     break;
+                    // case "z":
+                    //     if (key.shiftKey) {
+                    //         doClick(buttons.redo);
+                    //     }
+                    //     else {
+                    //         doClick(buttons.undo);
+                    //     }
+                    //     break;
                     default:
                         return;
                 }
@@ -1395,33 +1430,12 @@
 
         function setupButton(button, isEnabled) {
 
-            var normalYShift = "0px";
-            var disabledYShift = "-20px";
-            var highlightYShift = "-40px";
+            var normalYShift = "note-btn btn btn-light btn-sm";
+            var disabledYShift = "note-btn btn btn-light btn-sm disabled";
+            var highlightYShift = "";
             var image = button.getElementsByTagName("span")[0];
             if (isEnabled) {
-                image.style.backgroundPosition = button.XShift + " " + normalYShift;
-                button.onmouseover = function () {
-                    image.style.backgroundPosition = this.XShift + " " + highlightYShift;
-                };
-
-                button.onmouseout = function () {
-                    image.style.backgroundPosition = this.XShift + " " + normalYShift;
-                };
-
-                // IE tries to select the background image "button" text (it's
-                // implemented in a list item) so we have to cache the selection
-                // on mousedown.
-                if (uaSniffed.isIE) {
-                    button.onmousedown = function () {
-                        if (doc.activeElement && doc.activeElement !== panels.input) { // we're not even in the input box, so there's no selection
-                            return;
-                        }
-                        panels.ieCachedRange = document.selection.createRange();
-                        panels.ieCachedScrollTop = panels.input.scrollTop;
-                    };
-                }
-
+                image.className = normalYShift;
                 if (!button.isHelp) {
                     button.onclick = function () {
                         if (this.onmouseout) {
@@ -1433,7 +1447,7 @@
                 }
             }
             else {
-                image.style.backgroundPosition = button.XShift + " " + disabledYShift;
+                image.className = disabledYShift;
                 button.onmouseover = button.onmouseout = button.onclick = function () {
                 };
             }
@@ -1451,25 +1465,27 @@
 
             var buttonBar = panels.buttonBar;
 
-            var normalYShift = "0px";
-            var disabledYShift = "-20px";
-            var highlightYShift = "-40px";
+            var normalYShift = "note-btn btn btn-light btn-sm";
+            var disabledYShift = "note-btn btn btn-light btn-sm disabled";
+            var highlightYShift = "";
 
             var buttonRow = document.createElement("ul");
+            buttonRow.style.padding = "0px 10px";
             buttonRow.id = "wmd-button-row" + postfix;
             buttonRow.className = 'wmd-button-row';
             buttonRow = buttonBar.appendChild(buttonRow);
             var xPosition = 0;
-            var makeButton = function (id, title, XShift, textOp) {
+            var makeButton = function (id, title, XClass, textOp) {
                 var button = document.createElement("li");
                 button.className = "wmd-button";
-                button.style.left = xPosition + "px";
-                xPosition += 25;
                 var buttonImage = document.createElement("span");
+                var buttonIcon = document.createElement("i");
+                buttonImage.className = "note-btn btn btn-light btn-sm";
+                buttonIcon.className = XClass;
+                buttonImage.appendChild(buttonIcon);
                 button.id = id + postfix;
                 button.appendChild(buttonImage);
                 button.title = title;
-                button.XShift = XShift;
                 if (textOp)
                     button.textOp = textOp;
                 setupButton(button, true);
@@ -1481,31 +1497,34 @@
                 spacer.className = "wmd-spacer wmd-spacer" + num;
                 spacer.id = "wmd-spacer" + num + postfix;
                 buttonRow.appendChild(spacer);
-                xPosition += 25;
             }
 
-            buttons.bold = makeButton("wmd-bold-button", getString("bold"), "0px", bindCommand("doBold"));
-            buttons.italic = makeButton("wmd-italic-button", getString("italic"), "-20px", bindCommand("doItalic"));
-            makeSpacer(1);
-            buttons.link = makeButton("wmd-link-button", getString("link"), "-40px", bindCommand(function (chunk, postProcessing) {
-                return this.doLinkOrImage(chunk, postProcessing, false);
-            }));
-            buttons.quote = makeButton("wmd-quote-button", getString("quote"), "-60px", bindCommand("doBlockquote"));
-            buttons.code = makeButton("wmd-code-button", getString("code"), "-80px", bindCommand("doCode"));
-            buttons.image = makeButton("wmd-image-button", getString("image"), "-100px", bindCommand(function (chunk, postProcessing) {
-                return this.doLinkOrImage(chunk, postProcessing, true);
-            }));
-            makeSpacer(2);
-            buttons.olist = makeButton("wmd-olist-button", getString("olist"), "-120px", bindCommand(function (chunk, postProcessing) {
+            buttons.bold = makeButton("wmd-bold-button", getString("bold"), "fa fa-bold", bindCommand("doBold"));
+            buttons.italic = makeButton("wmd-italic-button", getString("italic"), "fa fa-italic", bindCommand("doItalic"));
+            buttons.heading = makeButton("wmd-heading-button", getString("heading"), "fa fa-header", bindCommand("doHeading"));
+            buttons.strikethrough = makeButton("wmd-strikethrough-button", getString("strikethrough"), "fa fa-strikethrough", bindCommand("doStrikethrough"));
+            //makeSpacer(1);
+            buttons.olist = makeButton("wmd-olist-button", getString("olist"), "fa fa-list-ol", bindCommand(function (chunk, postProcessing) {
                 this.doList(chunk, postProcessing, true);
             }));
-            buttons.ulist = makeButton("wmd-ulist-button", getString("ulist"), "-140px", bindCommand(function (chunk, postProcessing) {
+            buttons.ulist = makeButton("wmd-ulist-button", getString("ulist"), "fa fa-list-ul", bindCommand(function (chunk, postProcessing) {
                 this.doList(chunk, postProcessing, false);
             }));
-            buttons.heading = makeButton("wmd-heading-button", getString("heading"), "-160px", bindCommand("doHeading"));
-            buttons.hr = makeButton("wmd-hr-button", getString("hr"), "-180px", bindCommand("doHorizontalRule"));
-            makeSpacer(3);
-            buttons.undo = makeButton("wmd-undo-button", getString("undo"), "-200px", null);
+            buttons.quote = makeButton("wmd-quote-button", getString("quote"), "fa fa-quote-right", bindCommand("doBlockquote"));
+            buttons.code = makeButton("wmd-code-button", getString("code"), "fa fa-code", bindCommand("doCode"));
+            buttons.table = makeButton("wmd-table-button", getString("table"), "fa fa-table", bindCommand("doTable"));
+            //makeSpacer(2);
+            buttons.link = makeButton("wmd-link-button", getString("link"), "fa fa-link", bindCommand(function (chunk, postProcessing) {
+                return this.doLinkOrImage(chunk, postProcessing, false);
+            }));
+            buttons.image = makeButton("wmd-image-button", getString("image"), "fa fa-image", bindCommand(function (chunk, postProcessing) {
+                return this.doLinkOrImage(chunk, postProcessing, true);
+            }));
+            buttons.hr = makeButton("wmd-hr-button", getString("hr"), "fa fa-ellipsis-h", bindCommand("doHorizontalRule"));
+            buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
+            buttons.toc = makeButton("wmd-toc-button", getString("toc"), "fa fa-list-alt", bindCommand("doTOC"));
+            //makeSpacer(3);
+            buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa-solid fa-rotate-left", null);
             buttons.undo.execute = function (manager) {
                 if (manager) manager.undo();
             };
@@ -1514,7 +1533,7 @@
                 getString("redo") :
                 getString("redomac"); // mac and other non-Windows platforms
 
-            buttons.redo = makeButton("wmd-redo-button", redoTitle, "-220px", null);
+            buttons.redo = makeButton("wmd-redo-button", redoTitle, "fa-solid fa-rotate-right", null);
             buttons.redo.execute = function (manager) {
                 if (manager) manager.redo();
             };
@@ -1525,7 +1544,7 @@
                 helpButton.appendChild(helpButtonImage);
                 helpButton.className = "wmd-button wmd-help-button";
                 helpButton.id = "wmd-help-button" + postfix;
-                helpButton.XShift = "-240px";
+                helpButton.XClass = "note-btn btn btn-light btn-sm";
                 helpButton.isHelp = true;
                 helpButton.style.right = "0px";
                 helpButton.title = getString("help");
@@ -1758,7 +1777,7 @@
             // Marks up the link and adds the ref.
             var linkEnteredCallback = function (link) {
 
-                background.parentNode.removeChild(background);
+                background.remove();
 
                 if (link !== null) {
                     // (                          $1
@@ -1781,11 +1800,12 @@
                     // the first bracket could then not act as the "not a backslash" for the second.
                     chunk.selection = (" " + chunk.selection).replace(/([^\\](?:\\\\)*)(?=[[\]])/g, "$1\\").substr(1);
 
-                    var linkDef = " [999]: " + properlyEncoded(link);
+                    // var linkDef = " [999]: " + properlyEncoded(link);
 
-                    var num = that.addLinkDef(chunk, linkDef);
+                    // var num = that.addLinkDef(chunk, linkDef);
                     chunk.startTag = isImage ? "![" : "[";
-                    chunk.endTag = "][" + num + "]";
+                    // chunk.endTag = "][" + num + "]";
+                    chunk.endTag = "](" + properlyEncoded(link) + ")";
 
                     if (!chunk.selection) {
                         if (isImage) {
@@ -2180,7 +2200,7 @@
         if (!chunk.selection) {
             chunk.startTag = "## ";
             chunk.selection = this.getString("headingexample");
-            chunk.endTag = " ##";
+            chunk.endTag = " \n";
             return;
         }
 
@@ -2202,16 +2222,17 @@
         if (/-+/.test(chunk.endTag)) {
             headerLevel = 2;
         }
-
+        
         // Skip to the next line so we can create the header markdown.
         chunk.startTag = chunk.endTag = "";
         chunk.skipLines(1, 1);
 
-        // We make a level 2 header if there is no current header.
+        // We make a level 4 header if there is no current header.
         // If there is a header level, we substract one from the header level.
         // If it's already a level 1 header, it's removed.
-        var headerLevelToCreate = headerLevel == 0 ? 2 : headerLevel - 1;
+        var headerLevelToCreate = headerLevel == 0 ? 4 : headerLevel - 1;
 
+        /*
         if (headerLevelToCreate > 0) {
 
             // The button only creates level 1 and 2 underline headers.
@@ -2226,13 +2247,243 @@
                 chunk.endTag += headerChar;
             }
         }
+        */
+
+        if (headerLevelToCreate > 0) {
+            var hashesToCreate = headerLevelToCreate;
+            while (hashesToCreate--) {
+                chunk.startTag += "#";
+            }
+            chunk.startTag += " "; //So we have #### Header instead of ####Header (optional)
+        }
+
     };
 
     commandProto.doHorizontalRule = function (chunk, postProcessing) {
         chunk.startTag = "----------\n";
         chunk.selection = "";
-        chunk.skipLines(2, 1, true);
+        chunk.skipLines(1, 1, true);
     }
+	
+    commandProto.doReadMore = function (chunk, postProcessing) {
+        chunk.startTag = "<!--more-->";
+        chunk.selection = "";
+        chunk.skipLines(1, 1, true);
+    }
+	
+    commandProto.doTOC = function (chunk, postProcessing) {
+        chunk.startTag = "<!--toc-->";
+        chunk.selection = "";
+        chunk.skipLines(1, 1, true);
+    }
+	
+	commandProto.doStrikethrough = function (chunk, postProcessing) {
+
+		// Get rid of whitespace and fixup newlines.
+		chunk.trimWhitespace();
+		chunk.selection = chunk.selection.replace(/\n{2,}/g, "\n");
+
+		// Look for stars before and after.  Is the chunk already marked up?
+		// note that these regex matches cannot fail
+		var starsBefore = /(~*$)/.exec(chunk.before)[0];
+		var starsAfter = /(^~*)/.exec(chunk.after)[0];
+
+		var prevStars = Math.min(starsBefore.length, starsAfter.length);
+
+		var nStars = 2;
+
+		// Remove stars if we have to since the button acts as a toggle.
+		if ((prevStars >= nStars) && (prevStars != 2 || nStars != 1)) {
+			chunk.before = chunk.before.replace(re("[~]{" + nStars + "}$", ""), "");
+			chunk.after = chunk.after.replace(re("^[~]{" + nStars + "}", ""), "");
+		} else if (!chunk.selection && starsAfter) {
+			// It's not really clear why this code is necessary.  It just moves
+			// some arbitrary stuff around.
+			chunk.after = chunk.after.replace(/^(~*)/, "");
+			chunk.before = chunk.before.replace(/(\s?)$/, "");
+			var whitespace = re.$1;
+			chunk.before = chunk.before + starsAfter + whitespace;
+		} else {
+
+			// In most cases, if you don't have any selected text and click the button
+			// you'll get a selected, marked up region with the default text inserted.
+			if (!chunk.selection && !starsAfter) {
+				chunk.selection = this.getString("strikethroughexample");
+			}
+
+			// Add the true markup.
+			var markup = "~~"; // shouldn't the test be = ?
+			chunk.before = chunk.before + markup;
+			chunk.after = markup + chunk.after;
+		}
+
+		return;
+	};
+	
+    commandProto.doTable = function (chunk) {
+	  // Credit: https://github.com/fcrespo82/atom-markdown-table-formatter
+
+	  var keepFirstAndLastPipes = true,
+		/*
+						  ( # header capture
+							(?:
+							  (?:[^\n]*?\|[^\n]*)       # line w/ at least one pipe
+							  \ *                       # maybe trailing whitespace
+							)?                          # maybe header
+							(?:\n|^)                    # newline
+						  )
+						  ( # format capture
+							(?:
+							  \|\ *:?-+:?\ *            # format starting w/pipe
+							  |\|?(?:\ *:?-+:?\ *\|)+   # or separated by pipe
+							)
+							(?:\ *:?-+:?\ *)?           # maybe w/o trailing pipe
+							\ *                         # maybe trailing whitespace
+							\n                          # newline
+						  )
+						  ( # body capture
+							(?:
+							  (?:[^\n]*?\|[^\n]*)       # line w/ at least one pipe
+							  \ *                       # maybe trailing whitespace
+							  (?:\n|$)                  # newline
+							)+ # at least one
+						  )
+				  */
+		regex = /((?:(?:[^\n]*?\|[^\n]*) *)?(?:\r?\n|^))((?:\| *:?-+:? *|\|?(?: *:?-+:? *\|)+)(?: *:?-+:? *)? *\r?\n)((?:(?:[^\n]*?\|[^\n]*) *(?:\r?\n|$))+)/;
+
+
+	  function padding(len, str) {
+		var result = '';
+		str = str || ' ';
+		len = Math.floor(len);
+		for (var i = 0; i < len; i++) {
+		  result += str;
+		}
+		return result;
+	  }
+
+	  function stripTailPipes(str) {
+		return str.trim().replace(/(^\||\|$)/g, "");
+	  }
+
+	  function splitCells(str) {
+		return str.split('|');
+	  }
+
+	  function addTailPipes(str) {
+		if (keepFirstAndLastPipes) {
+		  return "|" + str + "|";
+		} else {
+		  return str;
+		}
+	  }
+
+	  function joinCells(arr) {
+		return arr.join('|');
+	  }
+
+	  function formatTable(text, appendNewline) {
+		var i, j, len1, ref1, ref2, ref3, k, len2, results, formatline, headerline, just, formatrow, data, line, lines, justify, cell, cells, first, last, ends, columns, content, widths, formatted, front, back;
+		formatline = text[2].trim();
+		headerline = text[1].trim();
+		ref1 = headerline.length === 0 ? [0, text[3]] : [1, text[1] + text[3]], formatrow = ref1[0], data = ref1[1];
+		lines = data.trim().split('\n');
+		justify = [];
+		ref2 = splitCells(stripTailPipes(formatline));
+		for (j = 0, len1 = ref2.length; j < len1; j++) {
+		  cell = ref2[j];
+		  ref3 = cell.trim(), first = ref3[0], last = ref3[ref3.length - 1];
+		  switch ((ends = (first ? first : ':') + (last ? last : ''))) {
+			case '::':
+			case '-:':
+			case ':-':
+			  justify.push(ends);
+			  break;
+			default:
+			  justify.push('--');
+		  }
+		}
+		columns = justify.length;
+		content = [];
+		for (j = 0, len1 = lines.length; j < len1; j++) {
+		  line = lines[j];
+		  cells = splitCells(stripTailPipes(line));
+		  cells[columns - 1] = joinCells(cells.slice(columns - 1));
+		  results = [];
+		  for (k = 0, len2 = cells.length; k < len2; k++) {
+			cell = cells[k];
+			results.push(padding(' ') + ((ref2 = cell ? typeof cell.trim === "function" ? cell.trim() : void 0 : void 0) ? ref2 : '') + padding(' '));
+		  }
+		  content.push(results);
+		}
+		widths = [];
+		for (i = j = 0, ref2 = columns - 1; 0 <= ref2 ? j <= ref2 : j >= ref2; i = 0 <= ref2 ? ++j : --j) {
+		  results = [];
+		  for (k = 0, len1 = content.length; k < len1; k++) {
+			cells = content[k];
+			results.push(cells[i].length);
+		  }
+		  widths.push(Math.max.apply(Math, [2].concat(results)));
+		}
+		just = function (string, col) {
+		  var back, front, length;
+		  length = widths[col] - string.length;
+		  switch (justify[col]) {
+			case '::':
+			  front = padding[0], back = padding[1];
+			  return padding(length / 2) + string + padding((length + 1) / 2);
+			case '-:':
+			  return padding(length) + string;
+			default:
+			  return string + padding(length);
+		  }
+		};
+		formatted = [];
+		for (j = 0, len1 = content.length; j < len1; j++) {
+		  cells = content[j];
+		  results = [];
+		  for (i = k = 0, ref2 = columns - 1; 0 <= ref2 ? k <= ref2 : k >= ref2; i = 0 <= ref2 ? ++k : --k) {
+			results.push(just(cells[i], i));
+		  }
+		  formatted.push(addTailPipes(joinCells(results)));
+		}
+		formatline = addTailPipes(joinCells((function () {
+		  var j, ref2, ref3, results;
+		  results = [];
+		  for (i = j = 0, ref2 = columns - 1; 0 <= ref2 ? j <= ref2 : j >= ref2; i = 0 <= ref2 ? ++j : --j) {
+			ref3 = justify[i], front = ref3[0], back = ref3[1];
+			results.push(front + padding(widths[i] - 2, '-') + back);
+		  }
+		  return results;
+		})()));
+		formatted.splice(formatrow, 0, formatline);
+		var result = (headerline.length === 0 && text[1] !== '' ? '\n' : '') + formatted.join('\n');
+		if (appendNewline !== false) {
+		  result += '\n'
+		}
+		return result;
+	  }
+
+	  if (chunk.before.slice(-1) !== '\n') {
+		chunk.before += '\n';
+	  }
+	  var match = chunk.selection.match(regex);
+	  if (match) {
+		chunk.selection = formatTable(match, chunk.selection.slice(-1) === '\n');
+	  } else {
+		var table = chunk.selection + '|\n-|-\n|';
+		match = table.match(regex);
+		if (!match || match[0].slice(0, table.length) !== table) {
+		  return;
+		}
+		table = formatTable(match);
+		var selectionOffset = keepFirstAndLastPipes ? 1 : 0;
+		var pipePos = table.indexOf('|', selectionOffset);
+		chunk.before += table.slice(0, selectionOffset);
+		chunk.selection = table.slice(selectionOffset, pipePos);
+		chunk.after = table.slice(pipePos) + chunk.after;
+	  }
+    };
 
 
 })();

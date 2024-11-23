@@ -1,7 +1,8 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <article class="post type-post hentry <?php if (!empty($p->image) || !empty ($p->audio) || !empty ($p->video)):?>has-post-thumbnail<?php endif;?>">
     <?php if (!empty($p->image)):?>
     <div class="post-thumbnail">
-        <img style="width:100%;" title="<?php echo $p->title; ?>" alt="<?php echo $p->title; ?>" class="attachment-post-thumbnail wp-post-image" src="<?php echo $p->image; ?>">
+        <a href="<?php echo $p->url; ?>"><img style="width:100%;" title="<?php echo $p->title; ?>" alt="<?php echo $p->title; ?>" class="attachment-post-thumbnail wp-post-image" src="<?php echo $p->image; ?>"></a>
     </div>
     <?php endif; ?>
     <?php if (!empty($p->audio)):?>
@@ -11,7 +12,7 @@
     <?php endif; ?>
     <?php if (!empty($p->video)):?>
     <div class="post-thumbnail">
-        <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $p->video; ?>" frameborder="0" allowfullscreen></iframe>
+        <iframe width="100%" height="315px" class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
     </div>
     <?php endif; ?>
     <?php if (!empty($p->quote)):?>
@@ -27,19 +28,19 @@
             <h1 class="entry-title"><?php echo $p->title; ?></h1>
         <?php } ?>
     </header>
-    <div class="entry-content">
+    <div class="entry-content post-<?php echo $p->date;?>">
         <?php echo $p->body; ?>
     </div>
     <style>.related {padding-bottom:2em;}.related p {margin-top:0;margin-bottom:0.5em;} .related ul {margin-left:1em;}</style>
     <div class="related entry-content">
         <hr>
-        <p><strong>Related Posts</strong></p>
+        <p><strong><?php echo i18n('Related_posts');?></strong></p>
         <?php echo get_related($p->related);?>
     </div>
     <div class="author-info">
-        <h2 class="author-heading">Published by</h2>
+        <h2 class="author-heading"><?php echo i18n('Published').' '.i18n('by');?></h2>
         <div class="author-avatar">
-            <img width="56" height="56" class="avatar avatar-56" src="<?php echo site_url();?>themes/twentyfifteen/images/avatar.png" alt="<?php echo $author->name; ?>">    
+            <img width="56" height="56" class="avatar avatar-56" src="<?php echo $author->avatar; ?>" alt="<?php echo $author->name; ?>">
         </div><!-- .author-avatar -->
         <div class="author-description">
             <h3 class="author-title"><?php echo $author->name; ?></h3>
@@ -52,7 +53,7 @@
         </span>
         <span class="byline">
             <span class="author vcard">
-                <a href="<?php echo $p->authorUrl; ?>"><?php echo $p->author; ?></a>
+                <a href="<?php echo $p->authorUrl; ?>"><?php echo $p->authorName; ?></a>
             </span>
         </span>
         <span class="cat-links">
@@ -62,9 +63,9 @@
             <?php echo $p->tag; ?>
         </span>
         <?php if (disqus_count()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n('Comments');?></a></span>
         <?php } elseif (facebook()) { ?>
-            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a></span>
+            <span class="comments-link"><a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n('Comments');?></span></a></span>
         <?php } ?>
     </footer>
 </article>
@@ -88,10 +89,22 @@
     <h2 class="screen-reader-text">Post navigation</h2>
     <div class="nav-links">
         <?php if (!empty($prev)): ?>
-            <div class="nav-previous"><a style="background-image: url(<?php echo($prev['image']); ?>);<?php if (!empty($prev['image'])):?>color:#fff;<?php endif;?>" rel="prev" href="<?php echo($prev['url']); ?>"><span style="<?php if (!empty($prev['image'])):?>color:#fff;<?php endif;?>" aria-hidden="true" class="meta-nav">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title"><?php echo($prev['title']); ?></span></a></div>
+            <div class="nav-previous" <?php if (!empty($prev['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(<?php echo($prev['image']); ?>);"<?php endif;?>>
+                <a <?php if (!empty($prev['image'])):?>style="color:#fff;"<?php endif;?> rel="prev" href="<?php echo($prev['url']); ?>">
+                    <span <?php if (!empty($prev['image'])):?>style="color:#fff;"<?php endif;?> aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> 
+                    <span class="screen-reader-text">Previous post:</span> 
+                    <span class="post-title"><?php echo($prev['title']); ?></span>
+                </a>
+            </div>
         <?php endif; ?>
         <?php if (!empty($next)): ?>
-            <div class="nav-next"><a style="background-image: url(<?php echo($next['image']); ?>);<?php if (!empty($next['image'])):?>color:#fff;<?php endif;?>" rel="next" href="<?php echo($next['url']); ?>"><span style="<?php if (!empty($next['image'])):?>color:#fff;<?php endif;?>" aria-hidden="true" class="meta-nav">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title"><?php echo($next['title']); ?></span></a></div>
+            <div class="nav-next" <?php if (!empty($next['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(<?php echo($next['image']); ?>);"<?php endif;?>>
+                <a <?php if (!empty($next['image'])):?>style="color:#fff;"<?php endif;?> rel="next" href="<?php echo($next['url']); ?>">
+                    <span <?php if (!empty($next['image'])):?>style="color:#fff;"<?php endif;?> aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> 
+                    <span class="screen-reader-text">Next post:</span> 
+                    <span class="post-title"><?php echo($next['title']); ?></span>
+                </a>
+            </div>
         <?php endif; ?>
     </div>
 </nav>

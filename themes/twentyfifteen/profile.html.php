@@ -1,25 +1,18 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <article class="page type-page hentry">
     <header class="entry-header">
-        <h1 class="entry-title"><?php echo $name ?></h1>
+        <span class="social-navigation feed-link"><a href="<?php echo $author->url;?>/feed"><span class="screen-reader-text">RSS</span></a></span>
+        <h1 class="entry-title"><?php echo $author->name ?></h1>
     </header>
     <div class="entry-content">
-        <?php echo $about ?>
-        <h2 class="post-index">Posts by this author</h2>
+        <?php echo $author->about ?>
+        <h2 class="post-index"><?php echo i18n('Post_by_author');?></h2>
         <?php if (!empty($posts)) { ?>
             <ul class="post-list">
-                <?php $i = 0; $len = count($posts); ?>
                 <?php foreach ($posts as $p): ?>
-                    <?php if ($i == 0) {
-                        $class = 'item first';
-                    } elseif ($i == $len - 1) {
-                        $class = 'item last';
-                    } else {
-                        $class = 'item';
-                    }
-                    $i++; ?>
-                    <li class="<?php echo $class; ?>">
-                        <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> on
-                        <span><?php echo format_date($p->date) ?></span> - <?php echo i18n('Posted_in');?> <span><?php echo $p->tag ?></span>
+                    <li class="item">
+                        <span><a href="<?php echo $p->url ?>"><?php echo $p->title ?></a></span> -
+                        <span><?php echo format_date($p->date) ?></span> - <?php echo i18n('Posted_in');?> <span><?php echo $p->category; ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>

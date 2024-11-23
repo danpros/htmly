@@ -14,6 +14,9 @@ class Channel implements ChannelInterface
     /** @var string */
     protected $url;
 
+    /** @var feedUrl */
+    protected $feedUrl;
+
     /** @var string */
     protected $description;
 
@@ -32,8 +35,11 @@ class Channel implements ChannelInterface
     /** @var int */
     protected $ttl;
 
+    /** @var string[] */
+    protected $pubsubhubbub;
+
     /** @var ItemInterface[] */
-    protected $items = array();
+    protected $items = [];
 
     /**
      * Set channel title
@@ -54,6 +60,17 @@ class Channel implements ChannelInterface
     public function url($url)
     {
         $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * Set URL of this feed
+     * @param string $url
+     * @return $this;
+     */
+    public function feedUrl($url)
+    {
+        $this->feedUrl = $url;
         return $this;
     }
 
@@ -130,6 +147,21 @@ class Channel implements ChannelInterface
     }
 
     /**
+     * Enable PubSubHubbub discovery
+     * @param string $feedUrl
+     * @param string $hubUrl
+     * @return $this
+     */
+    public function pubsubhubbub($feedUrl, $hubUrl)
+    {
+        $this->pubsubhubbub = [
+            'feedUrl' => $feedUrl,
+            'hubUrl' => $hubUrl,
+        ];
+        return $this;
+    }
+
+    /**
      * Add item object
      * @param ItemInterface $item
      * @return $this
@@ -162,6 +194,13 @@ class Channel implements ChannelInterface
         $xml->addChild('link', $this->url);
         $xml->addChild('description', $this->description);
 
+        if($this->feedUrl !== null) {
+            $link = $xml->addChild('atom:link', '', "http://www.w3.org/2005/Atom");
+            $link->addAttribute('href',$this->feedUrl);
+            $link->addAttribute('type','application/rss+xml');
+            $link->addAttribute('rel','self');
+        }
+
         if ($this->language !== null) {
             $xml->addChild('language', $this->language);
         }
@@ -180,6 +219,17 @@ class Channel implements ChannelInterface
 
         if ($this->ttl !== null) {
             $xml->addChild('ttl', $this->ttl);
+        }
+
+        if ($this->pubsubhubbub !== null) {
+            $feedUrl = $xml->addChild('xmlns:atom:link');
+            $feedUrl->addAttribute('rel', 'self');
+            $feedUrl->addAttribute('href', $this->pubsubhubbub['feedUrl']);
+            $feedUrl->addAttribute('type', 'application/rss+xml');
+            
+            $hubUrl = $xml->addChild('xmlns:atom:link');
+            $hubUrl->addAttribute('rel', 'hub');
+            $hubUrl->addAttribute('href', $this->pubsubhubbub['hubUrl']);
         }
 
         foreach ($this->items as $item) {

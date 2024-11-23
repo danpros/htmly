@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        bootstrap="tests/Bootstrap.php"
+        processIsolation="false"
+        verbose="true"
+        strict="false"
+        colors="true">
+    <testsuites>
+        <testsuite name="PHPUnit">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <logging>
+        <log
+                type="coverage-html"
+                target="tests/cover"
+                charset="UTF-8"
+                yui="true"
+                highlight="false"
+                lowUpperBound="35"
+                highLowerBound="70"/>
+    </logging>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <directory suffix="Interface.php">src</directory>
+            </exclude>
+        </whitelist>
+        <blacklist>
+            <directory suffix=".php" group="PHPUNIT">vendor</directory>
+        </blacklist>
+    </filter>
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener"
+                  file="vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"/>
+    </listeners>
+</phpunit>

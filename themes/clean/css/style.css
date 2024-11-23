@@ -211,7 +211,7 @@ h6 {
     text-decoration: none;
 }
 
-.in-front .post, .in-tag .post, .in-archive .post, .in-search .post, .in-profile .post {
+.in-front .post, .in-tag .post, .in-archive .post, .in-search .post, .in-profile .post, .in-category .post, .in-blog .post, .in-type .post{
     border-bottom: 1px solid #dfdfdf;
     padding: 30px 0 10px 0;
 }
@@ -745,15 +745,11 @@ aside .copyright p {
 }
 
 .share a.twitter {
-    background: url(../../default/img/share-twitter.png) left top no-repeat;
+    background: url(../../../system/resources/images/share-twitter.png) left top no-repeat;
 }
 
 .share a.facebook {
-    background: url(../../default/img/share-facebook.png) left top no-repeat;
-}
-
-.share a.googleplus {
-    background: url(../../default/img/share-googleplus.png) left top no-repeat;
+    background: url(../../../system/resources/images/share-facebook.png) left top no-repeat;
 }
 
 .share a:hover {
@@ -949,4 +945,12 @@ ul.archivegroup {
 .archivegroup li.expanded, .archivegroup li.collapsed, .archivegroup li.expanded li, .archivegroup li.collapsed li {
     list-style: none;
     background:none;
-}    
+}   
+
+#more {
+    display:block;
+    height:1rem;
+    margin-top:-1rem;
+    box-shadow: none;
+    border: none;
+}

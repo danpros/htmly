@@ -30,6 +30,13 @@ interface ItemInterface
     public function description($description);
 
     /**
+     * Set content:encoded
+     * @param string $content
+     * @return $this
+     */
+    public function contentEncoded($content);
+
+    /**
      * Set item category
      * @param string $name Category name
      * @param string $domain Category URL

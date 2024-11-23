@@ -880,7 +880,7 @@ a:focus {
 	content: "\f516";
 }
 
-.social-navigation a[href$="/feed/rss"]:before {
+.social-navigation a[href*="/feed"]:before {
 	content: "\f413";
 }
 
@@ -890,6 +890,18 @@ a:focus {
 
 .social-navigation a[href*="skype.com"]:before {
 	content: "\f220";
+}
+
+.social-navigation a[href*="tiktok.com"]:before {
+	content:"\f108";
+}
+
+.social-navigation a[href*="linkedin.com"]:before {
+	content:"\f207";
+}
+
+.social-navigation a.social-logo-mastodon:before {
+	content:"\f10a";
 }
 
 .secondary-toggle {
@@ -6129,4 +6141,25 @@ ul.month {
 	.main-navigation {
 		margin: 0 auto 9.0909%;
 	}
+}
+
+.feed-link {
+	display:inline;
+	margin:0 0 0 10px;
+	float:right;	
+}
+
+.feed-link a {
+	height:100%;
+}
+
+#more {
+	display:block;
+	box-shadow: none;
+	border: none;
+}
+
+.social-logo a {
+	height:35px;
+	width:35px;
 }

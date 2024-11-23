@@ -1,6 +1,11 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <h2 class="post-index"><?php echo $heading ?></h2>
+<br>
+<a class="btn btn-primary right" href="<?php echo site_url();?>admin/content"><?php echo i18n('Add_new_post');?></a>
+<br><br>
 <?php if (!empty($posts)) { ?>
-    <table class="post-list">
+    <table class="table post-list">
+        <thead>
         <tr class="head">
             <th><?php echo i18n('Title');?></th>
             <th><?php echo i18n('Created');?></th>
@@ -8,38 +13,81 @@
             <th><?php echo i18n('Tags');?></th>
             <th><?php echo i18n('Operations');?></th>
         </tr>
-        <?php $i = 0;
-        $len = count($posts); ?>
+        </thead>
+        <tbody>
         <?php foreach ($posts as $p): ?>
-            <?php
-            if ($i == 0) {
-                $class = 'item first';
-            } elseif ($i == $len - 1) {
-                $class = 'item last';
-            } else {
-                $class = 'item';
-            }
-            $i++;
-            ?>
-            <tr class="<?php echo $class ?>">
+            <tr>
                 <td><?php echo $p->title ?></td>
                 <td><?php echo format_date($p->date) ?></td>
-                <td><?php echo strip_tags($p->category) ?></td>
-                <td><?php echo strip_tags($p->tag) ?></td>
-                <td><a href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
+                <td><a href="<?php echo site_url() . 'admin/categories/' . $p->categorySlug; ?>"><?php echo $p->categoryTitle;?></a></td>
+                <td><?php echo str_replace('rel="tag"', 'rel="tag" class="badge badge-light text-primary font-weight-normal"', $p->tag); ?></td>
+                <td><a class="btn btn-primary btn-xs" href="<?php echo $p->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-xs" href="<?php echo $p->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
             </tr>
         <?php endforeach; ?>
+        </tbody>
     </table>
-    <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
-        <div class="pager">
-            <?php if (!empty($pagination['prev'])): ?>
-                <span><a href="?page=<?php echo $page - 1 ?>" class="pagination-arrow newer" rel="prev">Newer</a></span>
-            <?php endif; ?>
-            <?php if (!empty($pagination['next'])): ?>
-                <span><a href="?page=<?php echo $page + 1 ?>" class="pagination-arrow older" rel="next">Older</a></span>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
+<?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
+<br>
+    <div class="pager">
+    <ul class="pagination">
+        <?php if (!empty($pagination['prev'])) { ?>
+            <li class="newer page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>" rel="prev">&#8592; <?php echo i18n('Newer');?></a></li>
+        <?php } else { ?>
+        <li class="page-item disabled" ><span class="page-link">&#8592; <?php echo i18n('Newer');?></span></li>
+        <?php } ?>
+        <li class="page-number page-item disabled"><span class="page-link"><?php echo $pagination['pagenum'];?></span></li>
+        <?php if (!empty($pagination['next'])) { ?>
+            <li class="older page-item" ><a class="page-link" href="?page=<?php echo $page + 1 ?>" rel="next"><?php echo i18n('Older');?> &#8594;</a></li>
+        <?php } else { ?>
+            <li class="page-item disabled" ><span class="page-link"><?php echo i18n('Older');?> &#8594;</span></li>
+        <?php } ?>
+        </ul>
+    </div>
+<?php endif; ?>
 <?php } else {
     echo i18n('No_draft_found') . '!';
 } ?>
+
+<?php if (!empty($draftPages)):?>
+<br><br>
+<hr>
+<h2 class="post-index"><?php echo i18n('Draft');?>: <?php echo i18n('Static_pages');?></h2>
+    <table class="table post-list">
+        <tr class="head">
+            <th><?php echo i18n('Title');?></th>
+            <th><?php echo i18n('Edit');?></th>
+            <th><?php echo i18n('Operations');?></th>
+        </tr>
+        <?php foreach ($draftPages as $d): ?>
+        <?php $count = count(find_subpage($d->slug)); ?>
+            <tr>
+                <td><?php echo $d->title ?></td>
+                <td><?php echo format_date($d->lastMod) ?></td>
+                <td><a class="btn btn-primary btn-xs" href="<?php echo $d->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <?php if ($count == 0):?><a class="btn btn-danger btn-xs" href="<?php echo $d->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a><?php endif;?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endif;?>
+
+<?php if (!empty($draftSubpages)):?>
+<br><br>
+<hr>
+<h2 class="post-index"><?php echo i18n('Draft');?>: Sub <?php echo i18n('pages');?></h2>
+    <table class="table post-list">
+        <tr class="head">
+            <th><?php echo i18n('Title');?></th>
+            <th><?php echo i18n('Edit');?></th>
+            <th><?php echo i18n('Operations');?></th>
+            <th><?php echo i18n('Static_pages');?></th>
+        </tr>
+        <?php foreach ($draftSubpages as $sp): ?>
+        <?php $parent = find_page($sp->parentSlug);?>
+            <tr>
+                <td><?php echo $sp->title ?></td>
+                <td><?php echo format_date($sp->lastMod) ?></td>
+                <td><a class="btn btn-primary btn-xs" href="<?php echo $sp->url ?>/edit?destination=admin/draft"><?php echo i18n('Edit');?></a> <a class="btn btn-danger btn-xs" href="<?php echo $sp->url ?>/delete?destination=admin/draft"><?php echo i18n('Delete');?></a></td>
+                <td><a href="<?php echo $parent['current']->url;?>"><?php echo $parent['current']->title;?></a></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endif;?>

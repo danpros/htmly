@@ -1,3 +1,4 @@
+<?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php if (!empty($breadcrumb)): ?>
     <div class="breadcrumb"><?php echo $breadcrumb ?></div>
 <?php endif; ?>
@@ -13,7 +14,7 @@
                 <?php } ?>
                 <?php if (!empty($p->video)) { ?>
                     <div class="featured featured-video embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo $p->video; ?>" frameborder="0" allowfullscreen></iframe>
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo get_video_id($p->video); ?>" frameborder="0" allowfullscreen></iframe>
                     </div>
                 <?php } ?>
                 <?php if (!empty($p->audio)) { ?>
@@ -33,34 +34,34 @@
 						<h1 class="title" itemprop="headline"><?php echo $p->title;?></h1>
 					<?php } ?>
                     <p class="meta">
-                        <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - Posted in 
-                        <span itemprop="articleSection"><?php echo $p->category;?></span> by 
-                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->author;?></a></span>
+                        <span class="date" itemprop="datePublished"><?php echo format_date($p->date) ?></span> - <?php echo i18n("Posted_in");?> 
+                        <span itemprop="articleSection"><?php echo $p->category;?></span> <?php echo i18n("by");?> 
+                        <span itemprop="author"><a href="<?php echo $p->authorUrl;?>"><?php echo $p->authorName;?></a></span>
                     </p>
                 </div>
-                <div class="desc text-left" itemprop="articleBody">                                   
+                <div class="desc text-left post-<?php echo $p->date;?>" itemprop="articleBody">                                   
                     <?php echo $p->body; ?>
                 </div><!--//desc-->
                 <div style="margin-top:30px;position:relative;">
                     <span class="tags"><i class="fa fa-tags"></i> <?php echo $p->tag;?></span> 
                     <?php if (disqus_count()) { ?>
-                        <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> comments</a></span>
+                        <span><i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#disqus_thread"> <?php echo i18n("Comments");?></a></span>
                     <?php } elseif (facebook()) { ?>
-                        <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> comments</span></a>
+                        <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                     <?php } ?>
                     <span class="share pull-right">
-                        <a target="    " class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
-                        <a target="    " href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
+                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
+                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
                     </span>
                 <div style="clear:both;"></div>
                 </div>
                 <div style="margin-top:30px;position:relative;">
                     <hr>
                     <?php if (!empty($next)): ?>
-                        <span class="newer"><a href="<?php echo($next['url']); ?>" rel="next"><i class="fa fa-long-arrow-left"></i> Next Post</a></span>
+                        <span class="newer"><a href="<?php echo($next['url']); ?>" rel="next"><i class="fa fa-long-arrow-left"></i> <?php echo i18n("Next");?></a></span>
                     <?php endif; ?>
                     <?php if (!empty($prev)): ?>
-                        <span class="older pull-right"><a href="<?php echo($prev['url']); ?>" rel="prev">Previous Post <i class="fa fa-long-arrow-right"></i></a></span>
+                        <span class="older pull-right"><a href="<?php echo($prev['url']); ?>" rel="prev"><?php echo i18n("Prev");?> <i class="fa fa-long-arrow-right"></i></a></span>
                     <?php endif; ?>
                     <div style="clear:both;"></div>
                 </div>
@@ -74,13 +75,13 @@
                 <?php $char = 30; $total = count($tags); $i = 1; if ($total >= 1) { ?>
                     <div class="related related-posts" style="margin-top:30px;position:relative;">
                         <hr>
-                        <h2 class="heading">Related Posts</h2>
+                        <h2 class="heading"><?php echo i18n("Related_posts");?></h2>
                         <?php foreach ($tags as $t):?>
                             <div class="item col-md-4">
                                 <?php if (strlen(strip_tags($t->title)) > $char) { $relatedTitle = shorten($t->title, $char) . '...';} else {$relatedTitle = $t->title;}?>
                                 <h3 class="title"><a href="<?php echo $t->url;?>"><?php echo $relatedTitle;?></a></h3>
                                 <div class="content">
-                                    <p><?php echo shorten($t->body, 60); ?>... <a class="more-link" href="<?php echo $t->url;?>">more</a></p>
+                                    <p><?php echo shorten($t->body, 60); ?>... <a class="more-link" href="<?php echo $t->url;?>"><?php echo i18n("read_more");?></a></p>
                                 </div><!--//content-->
                             </div>
                             <?php if ($i++ >= config('related.count')) break; ?>

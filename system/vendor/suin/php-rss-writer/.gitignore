@@ -1,3 +1,4 @@
-.idea/
-.phpmake
-.DS_Store
+/.idea
+/vendor
+/composer.lock
+/tests/cover

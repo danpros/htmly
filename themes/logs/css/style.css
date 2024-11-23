@@ -484,7 +484,7 @@ ul li, ol li {
     margin-bottom: 1.5em;
 }
 
-.in-post .post {
+.in-post .post, .in-page .post, .in-subpage .post {
     border: none;
 }
 
@@ -553,15 +553,11 @@ ul li, ol li {
 }
 
 .share a.twitter {
-    background: url(../../default/img/share-twitter.png) left top no-repeat;
+    background: url(../../../system/resources/images/share-twitter.png) left top no-repeat;
 }
 
 .share a.facebook {
-    background: url(../../default/img/share-facebook.png) left top no-repeat;
-}
-
-.share a.googleplus {
-    background: url(../../default/img/share-googleplus.png) left top no-repeat;
+    background: url(../../../system/resources/images/share-facebook.png) left top no-repeat;
 }
 
 .share a:hover {
@@ -979,4 +975,12 @@ ul.archivegroup {
 
 .archivegroup li.expanded, .archivegroup li.collapsed {
     list-style: none;
+}
+
+#more {
+    display:block;
+    height:1rem;
+    margin-top:-1rem;
+    box-shadow: none;
+    border: none;
 }
