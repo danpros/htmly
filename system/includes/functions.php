@@ -2197,13 +2197,17 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
         We're actually saving the code to a variable in case we want to draw it more than once.
     */
     $pagination = '';
-    if($lastpage > 1)
+    $curpage = strtok($_SERVER["REQUEST_URI"], '?');
+    
+	if($lastpage > 1)
     {
         $pagination .= '<ul class="pagination">';
 
         //newer button
-        if ($page > 1)
+        if ($page > 2)
             $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $prev .'">« '. i18n('Newer') .'</a></li>';
+		else if ($page == 2)
+			$pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">« '. i18n('Newer') .'</a></li>';			
         else
             $pagination .= '<li class="page-item disabled"><span class="page-link">« '. i18n('Newer') . '</span></li>';
 
@@ -2212,10 +2216,12 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
         {
             for ($counter = 1; $counter <= $lastpage; $counter++)
             {
-                if ($counter == $page)
+				if ($counter == 1 && $counter !== $page) // link 1st pagination page to parent page instead of ?page=1 for SEO
+					$pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
+                else if ($counter == $page)
                     $pagination .= '<li class="page-item active"><span class="page-link">'. $counter.'</span></li>';
                 else
-                    $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                    $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
             }
         }
         elseif($lastpage >= 7 + ($adjacents * 2))    //enough pages to hide some
@@ -2225,19 +2231,21 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
             {
                 for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
                 {
-                    if ($counter == $page)
+					if ($counter == 1) // link 1st pagination page to parent page instead of ?page=1 for SEO
+						$pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
+                    else if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
-                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lastpage .'">'. $lastpage .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lastpage .'">'. $lastpage .'</a></li>';
             }
             //in middle; hide some front and some back
             elseif($lastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2))
             {
-                $pagination .= '<li class="page-item"><a class="page-link" href="' . $pagestring .'1">1</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="' . $curpage .'">1</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'2">2</a></li>';
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++)
@@ -2245,16 +2253,16 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
                     if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
-                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lastpage . '">'. $lastpage .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lastpage . '">'. $lastpage .'</a></li>';
             }
             //close to end; only hide early pages
             else
             {
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'1">1</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'2">2</a></li>';
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 for ($counter = $lastpage - (1 + ($adjacents * 3)); $counter <= $lastpage; $counter++)
@@ -2262,14 +2270,14 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
                     if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
-                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
             }
         }
 
         //older button
         if ($page < $counter - 1)
-            $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $next .'">'. i18n('Older') .' »</a></li>';
+            $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $next .'">'. i18n('Older') .' »</a></li>';
         else
             $pagination .= '<li class="page-item disabled"><span class="page-link">'. i18n('Older') .' »</span></li>';
         $pagination .= '</ul>';
