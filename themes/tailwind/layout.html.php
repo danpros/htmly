@@ -28,7 +28,7 @@
 		<div class="flex h-screen flex-col justify-between font-sans">
 			<header class="flex items-center justify-between py-10">
 				<div>
-					<a aria-label="Quasilinear Musings" href="<?php  echo site_url();?>">
+					<a aria-label="<?php echo blog_title();?>" href="<?php  echo site_url();?>">
 						<div class="flex items-center justify-between">
 							<div class="mr-3">
 								<img width="45" src="<?php echo theme_path();?>logo.png" alt="<?php echo blog_title();?>"/>

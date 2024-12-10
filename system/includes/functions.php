@@ -984,7 +984,7 @@ function read_category_info($category)
                 $desc->count = get_categorycount($url);
 
                 $desc->file = $filename;
-				
+
                 $desc->rss = $desc->url . '/feed';
 
                 // Get the contents and convert it to HTML
@@ -1035,7 +1035,7 @@ function default_category($category = null)
         $desc->description = i18n('All_blog_posts') . ': ' . $category;
         $desc->file = '';
         $desc->count = get_categorycount($category);
-        $desc->rss = $desc->url . '/feed';		
+        $desc->rss = $desc->url . '/feed';
     }
 
     return $tmp[] = $desc;
@@ -1229,9 +1229,9 @@ function get_author($name)
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $author->description = get_content_tag("d", $content, get_description($author->about));
-                
+
                 $author->avatar = get_content_tag("image", $content, site_url() . 'system/resources/images/logo-small.png');
-				
+
                 $author->rss = $author->url . '/feed';
 
                 $toc = explode('<!--toc-->', $author->about);
@@ -2199,15 +2199,15 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
     $pagination = '';
     $curpage = strtok($_SERVER["REQUEST_URI"], '?');
     
-	if($lastpage > 1)
+    if($lastpage > 1)
     {
         $pagination .= '<ul class="pagination">';
 
         //newer button
         if ($page > 2)
             $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $prev .'">« '. i18n('Newer') .'</a></li>';
-		else if ($page == 2)
-			$pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">« '. i18n('Newer') .'</a></li>';			
+        else if ($page == 2)
+            $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">« '. i18n('Newer') .'</a></li>';            
         else
             $pagination .= '<li class="page-item disabled"><span class="page-link">« '. i18n('Newer') . '</span></li>';
 
@@ -2216,8 +2216,8 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
         {
             for ($counter = 1; $counter <= $lastpage; $counter++)
             {
-				if ($counter == 1 && $counter !== $page) // link 1st pagination page to parent page instead of ?page=1 for SEO
-					$pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
+                if ($counter == 1 && $counter !== $page) // link 1st pagination page to parent page instead of ?page=1 for SEO
+                    $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
                 else if ($counter == $page)
                     $pagination .= '<li class="page-item active"><span class="page-link">'. $counter.'</span></li>';
                 else
@@ -2231,8 +2231,8 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
             {
                 for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
                 {
-					if ($counter == 1) // link 1st pagination page to parent page instead of ?page=1 for SEO
-						$pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
+                    if ($counter == 1) // link 1st pagination page to parent page instead of ?page=1 for SEO
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
                     else if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
