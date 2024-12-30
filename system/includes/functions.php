@@ -966,7 +966,7 @@ function read_category_info($category)
 
     if (!empty($cFiles)) {
         foreach ($cFiles as $index => $v) {
-            if (stripos($v['basename'], $category . '.md') !== false) {
+            if ($v['basename'] == $category . '.md' ) {
 
                 $desc = new stdClass;
 
