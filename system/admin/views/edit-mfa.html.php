@@ -8,6 +8,9 @@ use PragmaRX\Google2FA\Google2FA;
 use BaconQrCode\Renderer\GDLibRenderer;
 use BaconQrCode\Writer;
 
+$domain = site_url();
+$domain = str_replace("https://", "", $domain);
+$domain = rtrim($domain, "/");
 $mfa_state = user('mfa_secret', $user);
 
 if (is_null($mfa_state) || $mfa_state == 'disabled') {
@@ -19,7 +22,7 @@ if (is_null($mfa_state) || $mfa_state == 'disabled') {
 
         $g2faUrl = $google2fa->getQRCodeUrl(
             $user,
-            site_url(),
+            $domain,
             $mfasecret
         );
 
@@ -60,7 +63,7 @@ if (is_null($mfa_state) || $mfa_state == 'disabled') {
             </div>
         </div>
         <input type="hidden" name="mfa_secret" value="<?php echo $mfasecret;?>">
-        <input type="submit" class="btn btn-primary" style="width:100px;" value="<?php echo i18n('Save');?>">'
+        <input type="submit" class="btn btn-primary" style="width:100px;" value="<?php echo i18n('Save');?>">
     <?php } else { ?>
         <input type="hidden" name="mfa_secret" value="disabled">    
             <div class="form-group row">
@@ -70,5 +73,5 @@ if (is_null($mfa_state) || $mfa_state == 'disabled') {
                 </div>
             </div>
             <input type="submit" class="btn btn-primary" value="<?php echo i18n('disablemfa');?>">
-    <?php } ?>    
+    <?php } ?>
 </form>
