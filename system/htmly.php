@@ -226,7 +226,7 @@ post('/login-mfa', function () {
     $mfacode = from($_REQUEST, 'mfacode');
     $mfa_secret = user('mfa_secret', $user);
     $google2fa = new Google2FA();
-    if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
+    if ($proper && $google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
         session($user, $pass);
         $log = session($user, $pass);
 
@@ -248,10 +248,14 @@ post('/login-mfa', function () {
         }
     } else {
         $message['error'] = '';
-        $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+        if (!$proper) {
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
+        } else {
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+        }
         config('views.root', 'system/admin/views');
 
-        render('login', array(
+        render('login-mfa', array(
             'title' => generate_title('is_default', i18n('Login')),
             'description' => i18n('Login') . ' ' . blog_title(),
             'canonical' => site_url(),
