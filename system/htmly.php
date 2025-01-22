@@ -998,15 +998,32 @@ post('/admin/autosave', function () {
                     $media = null;
                 }
                 
-                if (!empty($title) && !empty($tag) && !empty($content)) {
-                    if ($addEdit == 'add') {
-                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
-                    } else {
-                        $arr = explode('/', $oldfile);
-                        if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-                            $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                if ($type == 'post') {
+                    if (!empty($title) && !empty($tag) && !empty($content)) {
+                        if ($addEdit == 'add') {
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
+                        } else {
+                            $arr = explode('/', $oldfile);
+                            if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                            }
                         }
+                    } else {
+                        $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));
                     }
+                } else {
+                    if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
+                        if ($addEdit == 'add') {
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
+                        } else {
+                            $arr = explode('/', $oldfile);
+                            if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                            }
+                        }
+                    } else {
+                        $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));
+                    }                        
                 }
             }
         } else {
