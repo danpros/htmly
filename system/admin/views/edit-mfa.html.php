@@ -8,9 +8,8 @@ use PragmaRX\Google2FA\Google2FA;
 use BaconQrCode\Renderer\GDLibRenderer;
 use BaconQrCode\Writer;
 
-$domain = site_url();
-$domain = str_replace("https://", "", $domain);
-$domain = rtrim($domain, "/");
+$domain = parse_url(site_url());
+$domain = rtrim($domain['host'] . $domain['path'], "/");
 $mfa_state = user('mfa_secret', $user);
 
 if (is_null($mfa_state) || $mfa_state == 'disabled') {
