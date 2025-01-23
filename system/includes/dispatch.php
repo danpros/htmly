@@ -418,7 +418,7 @@ function render($view, $locals = null, $layout = null)
             ob_start();
             require $layout;
         }
-        if (!login() && $view != '404' && $view != '404-search' && config('cache.off') == "false") {
+        if (!login() && $view != '404' && $view != '404-search' && $view != 'login-mfa' && config('cache.off') == "false") {
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
