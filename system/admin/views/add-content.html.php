@@ -184,7 +184,7 @@ $( function() {
             <div class="row">
                 <div class="col-sm-6" id="editor-col">
                     <div>
-						<input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
+                        <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                         <div id="wmd-button-bar" class="wmd-button-bar"></div>
                         <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br>
@@ -205,62 +205,67 @@ $( function() {
 .wmd-prompt-background {z-index:10!important;}
 #wmd-preview img {max-width:100%;}
 .cover-container {
-    height: 200px;
+    overflow: auto;
+    max-height: 65vh;
     width: 100%;
     white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
 }
 .cover-item {
     position: relative;
-    display: inline-block;
     margin: 2px 2px;
     border-top-right-radius: 2px;
-    width: 200px;
-    height: 150px;
+    width: 190px;
+	height: 140px;
     vertical-align: top;
     background-position: top left;
     background-repeat: no-repeat;
     background-size: cover;
+    float:left;
 }
 </style>
 
     <div class="modal fade" id="insertImageDialog" tabindex="-1" role="dialog" aria-labelledby="insertImageDialogTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insertImageDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+                    <p class="modal-title" id="insertImageDialogTitle"><?php echo i18n('Insert_Image');?></p>
                     <button type="button" class="close" id="insertImageDialogClose" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row-fluid img-container" id="gallery-1">
-                            <?php echo $images;?>
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="form-group">
+                                <div class="row-fluid img-container" id="gallery-1">
+                                    <?php echo $images;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="insertImageDialogURL">URL</label>
+                                <textarea class="form-control" id="insertImageDialogURL" rows="4" placeholder="<?php echo i18n('Enter_image_URL');?>" ></textarea>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
+                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif" />
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="insertImageDialogInsert"><?php echo i18n('Insert_Image');?></button>    
+                                <button type="button" class="btn btn-secondary"  id="insertImageDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertImageDialogURL">URL</label>
-                        <input type="text" class="form-control" id="insertImageDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
-                        <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="insertImageDialogInsert"><?php echo i18n('Insert_Image');?></button>    
-                    <button type="button" class="btn btn-secondary"  id="insertImageDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
                 </div>
             </div>
         </div>
     </div>   
     <?php if ($type == 'is_image'):?>
     <div class="modal fade" id="insertMediaDialog" tabindex="-1" role="dialog" aria-labelledby="insertMediaDialogTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></h5>
@@ -269,25 +274,30 @@ $( function() {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row-fluid img-container" id="gallery-2">
-                            <?php echo $images;?>
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="form-group">
+                                <div class="row-fluid img-container" id="gallery-2">
+                                    <?php echo $images;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="insertMediaDialogURL">URL</label>
+                                <textarea class="form-control" id="insertMediaDialogURL" rows="4" placeholder="<?php echo i18n('Enter_image_URL');?>"></textarea>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
+                                <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
+                                <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertMediaDialogURL">URL</label>
-                        <input type="text" class="form-control" id="insertMediaDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
-                        <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
-                    <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
                 </div>
             </div>
         </div>
