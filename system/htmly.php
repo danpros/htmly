@@ -148,7 +148,7 @@ post('/login', function () {
     $pass = from($_REQUEST, 'password');
     $mfa_secret = user('mfa_secret', $user);
     if ($proper && $captcha && !empty($user) && !empty($pass)) {
-        if (!is_null($mfa_secret) && $mfa_secret !== "disabled") {
+        if (!is_null($mfa_secret) && $mfa_secret !== "disabled" && config('mfa.state') === 'true') {
             config('views.root', 'system/admin/views');
 
             render('login-mfa', array(
