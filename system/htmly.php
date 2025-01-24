@@ -221,8 +221,8 @@ post('/login', function () {
 post('/login-mfa', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
-    $user = from($_REQUEST, 'user');
-    $pass = from($_REQUEST, 'password');
+    $user = $_SESSION["mfa_uid"];
+    $pass = $_SESSION["mfa_pwd"];
     $mfacode = from($_REQUEST, 'mfacode');
     $mfa_secret = user('mfa_secret', $user);
     $google2fa = new Google2FA();
