@@ -54,7 +54,7 @@ function updateData() {
         $("#response").fadeOut(600, function() {
           $("#response").css("display", "none");
         });
-      }, 3000);
+      }, 6000);
     }
   });
 }

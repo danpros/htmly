@@ -1009,7 +1009,7 @@ post('/admin/autosave', function () {
                             }
                         }
                     } else {
-                        $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));
+                        $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));
                     }
                 } else {
                     if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
@@ -1022,12 +1022,12 @@ post('/admin/autosave', function () {
                             }
                         }
                     } else {
-                        $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));
+                        $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));
                     }                        
                 }
             }
         } else {
-            $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));            
+            $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));            
         }
         header('Content-Type: application/json');
         echo $response;
