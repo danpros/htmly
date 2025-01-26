@@ -1510,7 +1510,7 @@ function get_tagcount($var)
     return count($tmp);
 }
 
-/// Return search result count
+// Return search result count
 function keyword_count($keyword)
 {
     $posts = get_blog_posts();
