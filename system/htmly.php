@@ -1,6 +1,11 @@
 <?php
 if (!defined('HTMLY')) die('HTMLy');
 
+use PragmaRX\Google2FA\Google2FA;
+
+// Get search query. Redir to /search/
+get_search_query();
+
 // Load the configuration file
 config('source', $config_file);
 
@@ -19,12 +24,6 @@ publish_scheduled();
 
 // The front page of the blog
 get('/index', function () {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -80,6 +79,15 @@ get('/index', function () {
         } else {
             $pview = 'main';
         }
+        
+        $tblog = new stdClass;
+        $tblog->title = blog_tagline();
+        $tblog->url = site_url();
+        $tblog->count = count(get_blog_posts());
+        $tblog->description = blog_description();
+        $tblog->body = $tblog->description;
+        $tblog->rss = site_url() . 'feed/rss';
+        $tblog->slug = site_path();
 
         if (empty($posts) || $page < 1) {
 
@@ -97,19 +105,27 @@ get('/index', function () {
 
             die;
         }
+        
+        if ($page > 1) {
+            $CanonicalPageNum = '?page=' . $page;
+        } else {
+            $CanonicalPageNum = NULL;
+        }
 
         render($pview, array(
             'title' => generate_title('is_front', null),
             'description' => safe_html(strip_tags(blog_description())),
-            'canonical' => site_url(),
+            'canonical' => site_url() . $CanonicalPageNum,
             'metatags' => generate_meta(null, null),
             'page' => $page,
             'posts' => $posts,
+            'taxonomy' => $tblog,
             'bodyclass' => 'in-front',
             'breadcrumb' => '',
             'pagination' => has_pagination($total, $perpage, $page),
             'type' => 'is_frontpage',
-            'is_front' => true
+            'is_front' => true,
+            'is_taxonomy' => true
         ), $layout);
     
     }
@@ -118,31 +134,55 @@ get('/index', function () {
 // Get submitted login data
 post('/login', function () {
 
-    $proper = (is_csrf_proper(from($_REQUEST, 'csrf_token')));
-    $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $captcha = config('login.protect.system');
+    if (is_null($captcha) || $captcha === 'disabled') {
+        $captcha = true;
+    } elseif ($captcha === 'cloudflare') {
+        $captcha = isTurnstile(from($_REQUEST, 'cf-turnstile-response'));
+    } elseif ($captcha === 'google') {
+        $captcha = isCaptcha(from($_REQUEST, 'g-recaptcha-response'));
+    }
 
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
+    $mfa_secret = user('mfa_secret', $user);
     if ($proper && $captcha && !empty($user) && !empty($pass)) {
-
-        session($user, $pass);
-        $log = session($user, $pass);
-
-        if (!empty($log)) {
-
+        if (!is_null($mfa_secret) && $mfa_secret !== "disabled" && config('mfa.state') === 'true') {
             config('views.root', 'system/admin/views');
 
-            render('login', array(
+            render('login-mfa', array(
                 'title' => generate_title('is_default', i18n('Login')),
                 'description' => i18n('Login') . ' ' . blog_title(),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'error' => '<ul>' . $log . '</ul>',
+                'username' => $user,
+                'password' => $pass,
                 'type' => 'is_login',
                 'is_login' => true,
                 'bodyclass' => 'in-login',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
             ));
+        } else {
+            session($user, $pass);
+            $log = session($user, $pass);
+
+            if (!empty($log)) {
+
+                config('views.root', 'system/admin/views');
+
+                render('login', array(
+                    'title' => generate_title('is_default', i18n('Login')),
+                    'description' => i18n('Login') . ' ' . blog_title(),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $log . '</ul>',
+                    'type' => 'is_login',
+                    'is_login' => true,
+                    'bodyclass' => 'in-login',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+                ));
+            }
         }
     } else {
         $message['error'] = '';
@@ -177,14 +217,62 @@ post('/login', function () {
     }
 });
 
+// Verify MFA 
+post('/login-mfa', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $user = $_SESSION["mfa_uid"];
+    $pass = $_SESSION["mfa_pwd"];
+    $mfacode = from($_REQUEST, 'mfacode');
+    $mfa_secret = user('mfa_secret', $user);
+    $google2fa = new Google2FA();
+    if ($proper && $google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
+        session($user, $pass);
+        $log = session($user, $pass);
+
+        if (!empty($log)) {
+
+            config('views.root', 'system/admin/views');
+
+            render('login', array(
+                'title' => generate_title('is_default', i18n('Login')),
+                'description' => i18n('Login') . ' ' . blog_title(),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'error' => '<ul>' . $log . '</ul>',
+                'type' => 'is_login',
+                'is_login' => true,
+                'bodyclass' => 'in-login',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+            ));
+        }
+    } else {
+        $message['error'] = '';
+        if (!$proper) {
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
+        } else {
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+        }
+        config('views.root', 'system/admin/views');
+
+        render('login-mfa', array(
+            'title' => generate_title('is_default', i18n('Login')),
+            'description' => i18n('Login') . ' ' . blog_title(),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'username' => $user,
+            'password' => $pass,
+            'type' => 'is_login',
+            'is_login' => true,
+            'bodyclass' => 'in-login',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+        ));
+    }
+});
+
 // Show the author page
 get('/author/:name', function ($name) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -248,11 +336,17 @@ get('/author/:name', function ($name) {
         ), $layout);
         die;
     }
+    
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
 
     render($pview, array(
         'title' => generate_title('is_profile', $author),
         'description' => $author->description,
-        'canonical' => $author->url,
+        'canonical' => $author->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_profile', $author),
         'page' => $page,
         'posts' => $posts,
@@ -316,19 +410,20 @@ post('/edit/profile', function () {
     $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
     $description = from($_REQUEST, 'description');
+    $image = from($_REQUEST, 'image');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
-        edit_profile($title, $content, $user, $description);
+        edit_profile($title, $content, $user, $description, $image);
     } else {
         $message['error'] = '';
         if (empty($title)) {
-            $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
         }
         if (empty($content)) {
-            $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
         }
         if (!$proper) {
-            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
         }
         config('views.root', 'system/admin/views');
 
@@ -340,6 +435,7 @@ post('/edit/profile', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'postTitle' => $title,
             'postContent' => $content,
+            'postImage' => $image,
             'type' => 'is_profile',
             'is_admin' => true,
             'bodyclass' => 'edit-profile',
@@ -374,12 +470,13 @@ post('/edit/password', function() {
         $new_password = from($_REQUEST, 'password');
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        $mfa = user('mfa_secret', $user);
         $old_password = user('password', $username);
         if ($user === $username) {
             $file = 'config/users/' . $user . '.ini';
             if (file_exists($file)) {
                 if (!empty($new_password)) {
-                    update_user($user, $new_password, $role);
+                    update_user($user, $new_password, $role, $mfa);
                 }
             }
             $redir = site_url() . 'admin';
@@ -391,7 +488,92 @@ post('/edit/password', function() {
     } else {
         $login = site_url() . 'login';
         header("location: $login");
-    }	
+    }    
+});
+
+get('/edit/mfa', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('edit-mfa', array(
+            'title' => generate_title('is_default', i18n('config_mfa')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_profile',
+            'is_admin' => true,
+            'bodyclass' => 'edit-mfa',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('config_mfa'),
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/edit/mfa', function() {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $username = from($_REQUEST, 'username');
+        $mfa_secret = from($_REQUEST, 'mfa_secret');
+        $mfacode = from($_REQUEST, 'mfacode');
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        $old_password = user('password', $user);
+        $password = from($_REQUEST, 'password');
+        $message['error'] = '';
+        if ($user === $username) {
+            if (!is_null($mfa_secret) && $mfa_secret !== "disabled") {
+                $google2fa = new Google2FA();
+                if ($google2fa->verifyKey($mfa_secret, $mfacode)) {
+                    if (password_verify($password, $old_password)) {
+                        if (!empty($mfa_secret)) {
+                            update_user($user, $password, $role, $mfa_secret);
+                        }
+                    } else {
+                        $message['error'] .= '<li class="alert alert-danger">' . i18n('Pass_Error') . '</li>';
+                    }
+                } else {
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+                }
+                config('views.root', 'system/admin/views');
+                render('edit-mfa', array(
+                    'title' => generate_title('is_default', i18n('config_mfa')),
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'type' => 'is_profile',
+                    'is_admin' => true,
+                    'bodyclass' => 'edit-mfa',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('config_mfa'),
+                ));
+            } else {
+                if (password_verify($password, $old_password)) {
+                    update_user($user, $password, $role, 'disabled');
+                } else {
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('Pass_Error') . '</li>';
+                }
+                config('views.root', 'system/admin/views');
+                render('edit-mfa', array(
+                    'title' => generate_title('is_default', i18n('config_mfa')),
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'error' => '<ul>' . $message['error'] . '</ul>',
+                    'type' => 'is_profile',
+                    'is_admin' => true,
+                    'bodyclass' => 'edit-mfa',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; '. i18n('config_mfa'),
+                ));    
+            }
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }    
 });
 
 // Edit the frontpage
@@ -450,13 +632,13 @@ post('/edit/frontpage', function () {
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -573,6 +755,9 @@ post('/add/content', function () {
     if ($date !== null && $time !== null) {
         $dateTime = $date . ' ' . $time;
     }
+    if (empty($url)) {
+        $url = $title;
+    }
     
     if (empty($is_post) && empty($is_image) && empty($is_video) && empty($is_audio) && empty($is_link) && empty($is_quote)) {
         $add = site_url() . 'admin/content';
@@ -580,81 +765,51 @@ post('/add/content', function () {
     }
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-        if (!empty($url)) {
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
-        } else {
-            $url = $title;
-            add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
-        }
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
     } else {
         $message['error'] = '';
         if (empty($title)) {
-            $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
         }
         if (empty($tag)) {
-            $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_tag') . '</li>';
         }
         if (empty($content)) {
-            $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
         }
         if (!$proper) {
-            $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
         }
         
         if (!empty($is_image)) {
             if (empty($image)) {
-                $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_image') . '</li>';
             }
         } elseif (!empty($is_video)) {
             if (empty($video)) {
-                $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_video') . '</li>';
             }
         } elseif (!empty($is_link)) {
             if (empty($link)) {
-                $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_link') . '</li>';
             }
         } elseif (!empty($is_quote)) {
             if (empty($quote)) {
-                $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_quote') . '</li>';
             }
         } elseif (!empty($is_audio)) {
             if (empty($audio)) {
-                $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_audio') . '</li>';
             }
         }
         
@@ -735,24 +890,22 @@ post('/add/page', function () {
     $draft = from($_REQUEST, 'draft');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content) && login()) {
-            if (!empty($url)) {
-                add_page($title, $url, $content, $draft, $description);
-            } else {
-                $url = $title;
-                add_page($title, $url, $content, $draft, $description);
-            }
+            add_page($title, $url, $content, $draft, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
             render('add-page', array(
@@ -773,6 +926,111 @@ post('/add/page', function () {
     } else {
         $redir = site_url();
         header("location: $redir");            
+    }
+});
+
+// Autosave
+post('/admin/autosave', function () {
+
+    if (login()) {
+        $title = $_REQUEST['title'];
+        $url = $_REQUEST['url'];
+        $content = $_REQUEST['content'];
+        $description = $_REQUEST['description'];
+        $draft = 'draft';    
+        $posttype = $_REQUEST['posttype'];
+        $autoSave = $_REQUEST['autoSave'];
+        $oldfile = $_REQUEST['oldfile'];
+        $addEdit = $_REQUEST['addEdit'];
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+
+        if (empty($url)) {
+            $url = $title;
+        }
+
+        if ($addEdit == 'edit') {
+            $revertPage = '';
+            $revertPost = '';
+            $publishDraft = '';
+            $destination = null;
+        }
+
+        if (!empty($title) && !empty($content)) {
+            if ($posttype == 'is_page') {
+                if ($role === 'editor' || $role === 'admin') {
+                    if ($addEdit == 'add') {
+                        $response = add_page($title, $url, $content, $draft, $description, $autoSave, $oldfile);
+                    } else {
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave);
+                    }
+                }
+            } elseif ($posttype == 'is_subpage') {
+                if ($role === 'editor' || $role === 'admin') {
+                    $static = $_REQUEST['parent_page'];
+                    if ($addEdit == 'add') {
+                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave, $oldfile);
+                    } else {
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave);
+                    }
+                }
+            } else {
+                $tag = $_REQUEST['tag'];
+                $category = $_REQUEST['category'];
+                $dateTime = $_REQUEST['dateTime'];
+                if ($posttype == 'is_image') {
+                    $type = 'image';
+                    $media = $_REQUEST['pimage'];
+                } elseif ($posttype == 'is_video') {
+                    $type = 'video';
+                    $media = $_REQUEST['pvideo'];
+                } elseif ($posttype == 'is_link') {
+                    $type = 'link';
+                    $media = $_REQUEST['plink'];
+                } elseif ($posttype == 'is_quote') {
+                    $type = 'quote';
+                    $media = $_REQUEST['pquote'];
+                } elseif ($posttype == 'is_audio') {
+                    $type = 'audio';
+                    $media = $_REQUEST['paudio'];
+                } elseif ($posttype == 'is_post') {
+                    $type = 'post';
+                    $media = null;
+                }
+                
+                if ($type == 'post') {
+                    if (!empty($title) && !empty($tag) && !empty($content)) {
+                        if ($addEdit == 'add') {
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
+                        } else {
+                            $arr = explode('/', $oldfile);
+                            if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                            }
+                        }
+                    } else {
+                        $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));
+                    }
+                } else {
+                    if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
+                        if ($addEdit == 'add') {
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
+                        } else {
+                            $arr = explode('/', $oldfile);
+                            if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                            }
+                        }
+                    } else {
+                        $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));
+                    }                        
+                }
+            }
+        } else {
+            $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));            
+        }
+        header('Content-Type: application/json');
+        echo $response;
     }
 });
 
@@ -825,24 +1083,22 @@ post('/add/category', function () {
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                add_category($title, $url, $content, $description);
-            } else {
-                $url = $title;
-                add_category($title, $url, $content, $description);
-            }
+            add_category($title, $url, $content, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
             render('add-page', array(
@@ -1264,7 +1520,7 @@ post('/admin/pages', function () {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'editor' || $role === 'admin') {
-            $json = from($_REQUEST, 'json');
+            $json = $_REQUEST['json'];
             reorder_pages($json);
             echo json_encode(array(
                 'message' => 'Page order saved successfully!',
@@ -1311,7 +1567,7 @@ get('/admin/pages/:static', function ($static)
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/pages">' .i18n('pages').'</a> &#187; ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'staticSubpage',
+                'type' => 'is_subpage',
                 'prev' => static_prev($prev),
                 'next' => static_next($next),
                 'is_page' => true
@@ -1322,7 +1578,7 @@ get('/admin/pages/:static', function ($static)
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'staticSubpage',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '',
@@ -1339,7 +1595,7 @@ post('/admin/pages/:static', function ($static) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'editor' || $role === 'admin') {
-            $json = from($_REQUEST, 'json');
+            $json = $_REQUEST['json'];
             reorder_subpages($json);
             echo json_encode(array(
                 'message' => 'Page order saved successfully!',
@@ -1420,10 +1676,10 @@ post('/admin/import', function () {
         } else {
             $message['error'] = '';
             if (empty($url)) {
-                $message['error'] .= '<li class="alert alert-danger">You need to specify the feed url.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_feedurl') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
 
             config('views.root', 'system/admin/views');
@@ -1664,6 +1920,76 @@ post('/admin/config/reading', function () {
 });
 
 // Show Config page
+get('/admin/config/writing', function () {
+
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-writing', array(
+                'title' => generate_title('is_default', i18n('Config')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Config')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted Config page data
+post('/admin/config/writing', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $new_config = array();
+        $new_Keys = array();
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin') {
+            foreach ($_POST as $name => $value) {
+                if (substr($name, 0, 8) == "-config-") {
+                    $name = str_replace("_", ".", substr($name, 8));
+                    if(!is_null(config($name))) {
+                        $new_config[$name] = $value;
+                    } else {
+                        $new_Keys[$name] = $value;    
+                    }
+                }
+            }
+            save_config($new_config, $new_Keys);
+            $redir = site_url() . 'admin/config/writing';
+            header("location: $redir");
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show Config page
 get('/admin/config/widget', function () {
 
     $user = $_SESSION[site_url()]['user'];
@@ -1795,6 +2121,9 @@ post('/admin/config/metatags', function () {
                 }
             }
             save_config($new_config, $new_Keys);
+            foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
+                unlink($file);
+            }
             $redir = site_url() . 'admin/config/metatags';
             header("location: $redir");
         } else {
@@ -1806,6 +2135,77 @@ post('/admin/config/metatags', function () {
         header("location: $login");
     }
 });
+
+// Show Config page
+get('/admin/config/security', function () {
+
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-security', array(
+                'title' => generate_title('is_default', i18n('Config')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Config')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted Config page data
+post('/admin/config/security', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $new_config = array();
+        $new_Keys = array();
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin') {
+            foreach ($_POST as $name => $value) {
+                if (substr($name, 0, 8) == "-config-") {
+                    $name = str_replace("_", ".", substr($name, 8));
+                    if(!is_null(config($name))) {
+                        $new_config[$name] = $value;
+                    } else {
+                        $new_Keys[$name] = $value;    
+                    }
+                }
+            }
+            save_config($new_config, $new_Keys);
+            $redir = site_url() . 'admin/config/security';
+            header("location: $redir");
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
 
 // Show Config page
 get('/admin/config/performance', function () {
@@ -2183,10 +2583,10 @@ post('/admin/add/user', function () {
             
                 $message['error'] = '';
                 if (empty($username)) {
-                    $message['error'] .= '<li class="alert alert-danger">Username field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_username') . '</li>';
                 }
                 if (empty($password)) {
-                    $message['error'] .= '<li class="alert alert-danger">Password field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_password') . '</li>';
                 }        
                 
                 render('add-user', array(
@@ -2449,12 +2849,6 @@ get('/admin/categories/:category', function ($category) {
 // Show the category page
 get('/category/:category', function ($category) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -2505,18 +2899,26 @@ get('/category/:category', function ($category) {
         $pview = 'main';
     }
     
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
+    
     render($pview, array(
         'title' => generate_title('is_category', $desc),
         'description' => $desc->description,
-        'canonical' => $desc->url,
+        'canonical' => $desc->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_category', $desc),
         'page' => $page,
         'posts' => $posts,
         'category' => $desc,
+        'taxonomy' => $desc,
         'bodyclass' => 'in-category category-' . strtolower($category),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $desc->title,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_category' => true
+        'is_category' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -2600,24 +3002,22 @@ post('/category/:category/edit', function () {
     $description = from($_REQUEST, 'description');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                edit_category($title, $url, $content, $oldfile, $destination, $description);
-            } else {
-                $url = $title;
-                edit_category($title, $url, $content, $oldfile, $destination, $description);
-            }
+            edit_category($title, $url, $content, $oldfile, $destination, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -2709,12 +3109,6 @@ post('/category/:category/delete', function () {
 // Show the type page
 get('/type/:type', function ($type) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -2737,6 +3131,8 @@ get('/type/:type', function ($type) {
     $ttype->count = $total;
     $ttype->description = i18n('Posts_with_type') . ' ' . ucfirst($type) . ' ' . i18n('by') . ' ' . blog_title();
     $ttype->body = $ttype->description;
+    $ttype->rss = $ttype->url . '/feed';
+    $ttype->slug = strtolower($type);
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2765,18 +3161,26 @@ get('/type/:type', function ($type) {
         $pview = 'main';
     }
     
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
+    
     render($pview, array(
         'title' => generate_title('is_type', $ttype),
         'description' => $ttype->description,
-        'canonical' => $ttype->url,
+        'canonical' => $ttype->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_type', $ttype),
         'page' => $page,
         'posts' => $posts,
         'type' => $ttype,
+        'taxonomy' => $ttype,
         'bodyclass' => 'in-type type-' . strtolower($type),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . ucfirst($type),
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_type' => true
+        'is_type' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -2798,12 +3202,6 @@ get('/type/:type/feed', function ($type) {
 // Show the tag page
 get('/tag/:tag', function ($tag) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -2822,6 +3220,8 @@ get('/tag/:tag', function ($tag) {
     $ttag->count = $total;
     $ttag->description = i18n('All_posts_tagged') . ' ' . tag_i18n($tag) . ' ' . i18n('by') . ' ' . blog_title();
     $ttag->body = $ttag->description;
+    $ttag->rss = $ttag->url . '/feed';
+    $ttag->slug = strtolower($tag);
 
     if (empty($posts) || $page < 1) {
         // a non-existing page
@@ -2850,18 +3250,26 @@ get('/tag/:tag', function ($tag) {
         $pview = 'main';
     }
     
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
+    
     render($pview, array(
         'title' => generate_title('is_tag', $ttag),
         'description' => $ttag->description,
-        'canonical' => $ttag->url,
+        'canonical' => $ttag->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_tag', $ttag),
         'page' => $page,
         'posts' => $posts,
         'tag' => $ttag,
+        'taxonomy' => $ttag,
         'bodyclass' => 'in-tag tag-' . strtolower($tag),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Posts_tagged') . ' ' . tag_i18n($tag),
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_tag' => true
+        'is_tag' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -2882,12 +3290,6 @@ get('/tag/:tag/feed', function ($tag) {
 
 // Show the archive page
 get('/archive/:req', function ($req) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
 
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
@@ -2923,6 +3325,8 @@ get('/archive/:req', function ($req) {
     $tarchive->count = $total;
     $tarchive->description = i18n('Archive_page_for') . ' ' . $timestamp . ' ' . i18n('by') . ' ' . blog_title();
     $tarchive->body = $tarchive->description;
+    $tarchive->rss = $tarchive->url . '/feed';
+    $tarchive->slug = strtolower($req);
 
     if (!$date) {
         // a non-existing page
@@ -2944,19 +3348,27 @@ get('/archive/:req', function ($req) {
     } else {
         $pview = 'main';
     }
+    
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
 
     render($pview, array(
         'title' => generate_title('is_archive', $tarchive),
         'description' => $tarchive->description,
-        'canonical' => $tarchive->url,
+        'canonical' => $tarchive->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_archive', $tarchive),
         'page' => $page,
         'posts' => $posts,
         'archive' => $tarchive,
+        'taxonomy' => $tarchive,
         'bodyclass' => 'in-archive archive-' . strtolower($req),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Archive_for') . ' ' . $timestamp,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_archive' => true
+        'is_archive' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -2990,12 +3402,6 @@ get('/archive/:req/feed', function ($req) {
 // Show the search page
 get('/search/:keyword', function ($keyword) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-
     if (!login()) {
         file_cache($_SERVER['REQUEST_URI']);
     }
@@ -3013,6 +3419,8 @@ get('/search/:keyword', function ($keyword) {
     $tsearch->count = $total;
     $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
     $tsearch->body = $tsearch->description;
+    $tsearch->rss = $tsearch->url . '/feed';
+    $tsearch->slug = strtolower($keyword);
 
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3045,19 +3453,27 @@ get('/search/:keyword', function ($keyword) {
     } else {
         $pview = 'main';
     }
+    
+    if ($page > 1) {
+        $CanonicalPageNum = '?page=' . $page;
+    } else {
+        $CanonicalPageNum = NULL;
+    }
 
     render($pview, array(
         'title' => generate_title('is_search', $tsearch),
         'description' => $tsearch->description,
-        'canonical' => $tsearch->url,
+        'canonical' => $tsearch->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_search', $tsearch),
         'page' => $page,
         'posts' => $posts,
         'search' => $tsearch,
+        'taxonomy' => $tsearch,
         'bodyclass' => 'in-search search-' . strtolower($keyword),
         'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search_results_for') . ' ' . $keyword,
         'pagination' => has_pagination($total, $perpage, $page),
-        'is_search' => true
+        'is_search' => true,
+        'is_taxonomy' => true
     ), $layout);
 });
 
@@ -3108,15 +3524,9 @@ get('/feed/opml', function () {
 });
 
 // Show blog post without year-month
-get('/post/:name', function ($name) {
+get('/'. permalink_type() .'/:name', function ($name) {
 
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
-
-    if (config('permalink.type') != 'post') {
+    if (permalink_type() == 'default') {
         $post = find_post(null, null, $name);
         if (is_null($post)) {
             not_found();
@@ -3151,6 +3561,9 @@ get('/post/:name', function ($name) {
     $author->name = $current->authorName;
     $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
+    $author->avatar = $current->authorAvatar;
+    $author->rss = $current->authorRss;
+    $author->slug = $current->author;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -3179,7 +3592,7 @@ get('/post/:name', function ($name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . 'blog"><span itemprop="name">Blog</span></a><meta itemprop="position" content="2" /></li> &#187; ';
+        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . blog_path() .'"><span itemprop="name">' . blog_string() . '</span></a><meta itemprop="position" content="2" /></li> &#187; ';
     } else {
         $blog = '';
     }
@@ -3228,7 +3641,7 @@ get('/post/:name', function ($name) {
 });
 
 // Edit blog post
-get('/post/:name/edit', function ($name) {
+get('/'. permalink_type() .'/:name/edit', function ($name) {
 
     if (login()) {
 
@@ -3298,7 +3711,7 @@ get('/post/:name/edit', function ($name) {
 });
 
 // Get edited data from blog post
-post('/post/:name/edit', function () {
+post('/'. permalink_type() .'/:name/edit', function () {
     if(!login()) {
         $login = site_url() . 'login';
         header("location: $login");
@@ -3345,80 +3758,73 @@ post('/post/:name/edit', function () {
     } elseif (!empty($is_post)) {
         $type = 'is_post';
     }
+    
+    if (empty($url)) {
+        $url = $title;
+    }
+    
     $arr = explode('/', $oldfile); 
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
             
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_tag') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
 
             if (!empty($is_image)) {
                 if (empty($image)) {
-                    $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_image') . '</li>';
                 }
             } elseif (!empty($is_video)) {
                 if (empty($video)) {
-                    $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_video') . '</li>';
                 }
             } elseif (!empty($is_link)) {
                 if (empty($link)) {
-                    $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_link') . '</li>';
                 }
             } elseif (!empty($is_quote)) {
                 if (empty($quote)) {
-                    $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_quote') . '</li>';
                 }
             } elseif (!empty($is_audio)) {
                 if (empty($audio)) {
-                    $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_audio') . '</li>';
                 }
             }
             
@@ -3453,7 +3859,7 @@ post('/post/:name/edit', function () {
 });
 
 // Delete blog post
-get('/post/:name/delete', function ($name) {
+get('/'. permalink_type() .'/:name/delete', function ($name) {
 
     if (login()) {
 
@@ -3514,7 +3920,7 @@ get('/post/:name/delete', function ($name) {
 });
 
 // Get deleted data from blog post
-post('/post/:name/delete', function () {
+post('/'. permalink_type() .'/:name/delete', function () {
 
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if ($proper && login()) {
@@ -3534,12 +3940,6 @@ post('/post/:name/delete', function () {
 
 // Show various page (top-level), admin, login, sitemap, static page.
 get('/:static', function ($static) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
 
     if (strpos($static, ".xml") !== false) {
         if ($static === 'sitemap.xml') {
@@ -3594,9 +3994,12 @@ get('/:static', function ($static) {
             header("location: $login");
         }
         die;
-    } elseif ($static === 'blog') {
+    } elseif ($static === blog_path()) {
     
-        if(config('blog.enable') !== 'true') return not_found();
+        if(config('blog.enable') !== 'true') {
+            $url = site_url();
+            header("Location: $url");
+        }
         
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
@@ -3625,13 +4028,22 @@ get('/:static', function ($static) {
         } else {
             $pview = 'main';
         }
+        
+        $tblog = new stdClass;
+        $tblog->title = blog_string();
+        $tblog->url = site_url() . blog_path();
+        $tblog->count = count(get_blog_posts());
+        $tblog->description = i18n('all_blog_posts') . ' ' . i18n('by') . ' ' . blog_title();
+        $tblog->body = $tblog->description;
+        $tblog->rss = site_url() . 'feed/rss';
+        $tblog->slug = blog_path();
 
         if (empty($posts) || $page < 1) {
 
             // a non-existing page
             render('no-posts', array(
                 'title' => generate_title('is_blog', null),
-                'description' => blog_title() . ' Blog',
+                'description' => blog_title() . ' ' . blog_string(),
                 'canonical' => site_url(),
                 'metatags' => generate_meta('is_blog', null),
                 'bodyclass' => 'no-posts',
@@ -3640,18 +4052,26 @@ get('/:static', function ($static) {
 
             die;
         }
+        
+        if ($page > 1) {
+            $CanonicalPageNum = '?page=' . $page;
+        } else {
+            $CanonicalPageNum = NULL;
+        }
 
         render($pview, array(
             'title' => generate_title('is_blog', null),
-            'description' => blog_title() . ' Blog',
-            'canonical' => site_url() . 'blog',
+            'description' => blog_title() . ' ' . blog_string(),
+            'canonical' => site_url() . blog_path() . $CanonicalPageNum,
             'metatags' => generate_meta('is_blog', null),
             'page' => $page,
             'posts' => $posts,
+            'taxonomy' => $tblog,
             'bodyclass' => 'in-blog',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; Blog',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . blog_string(),
             'pagination' => has_pagination($total, $perpage, $page),
-            'is_blog' => true
+            'is_blog' => true,
+            'is_taxonomy' => true
         ), $layout);
     } elseif ($static === 'front') {
 
@@ -3719,7 +4139,7 @@ get('/:static', function ($static) {
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . $post->title,
             'p' => $post,
             'static' => $post,
-            'type' => 'staticPage',
+            'type' => 'is_page',
             'prev' => static_prev($prev),
             'next' => static_next($next),
             'is_page' => true
@@ -3747,7 +4167,8 @@ get('/:static/add', function ($static) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'is_page',
+                'type' => 'is_subpage',
+                'parent' => $static,
                 'is_admin' => true,
                 'bodyclass' => 'add-page',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/pages/' . $post->slug . '">' . $post->title . '</a> &#187; ' . i18n('Add_new_page')
@@ -3784,24 +4205,22 @@ post('/:static/add', function ($static) {
     $draft = from($_REQUEST, 'draft');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                add_sub_page($title, $url, $content, $static, $draft, $description);
-            } else {
-                $url = $title;
-                add_sub_page($title, $url, $content, $static, $draft, $description);
-            }
+            add_sub_page($title, $url, $content, $static, $draft, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
             render('add-page', array(
@@ -3813,7 +4232,7 @@ post('/:static/add', function ($static) {
                 'postTitle' => $title,
                 'postUrl' => $url,
                 'postContent' => $content,
-                'type' => 'is_page',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'add-page',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . $title . '">' . $title . '</a> &#187; ' . i18n('Add_new_page')
@@ -3855,7 +4274,8 @@ get('/:static/edit', function ($static) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="'. site_url() .'admin/pages">' .i18n('pages').'</a> &#187; ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'staticPage',
+                'type' => 'is_page',
+                'parent' => ''
             ));
         } else {
             render('denied', array(
@@ -3863,7 +4283,7 @@ get('/:static/edit', function ($static) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'staticPage',
+                'type' => 'is_page',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
@@ -3892,24 +4312,22 @@ post('/:static/edit', function () {
     $publishDraft = from($_REQUEST, 'publishdraft');
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
-            } else {
-                $url = $title;
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
-            }
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -3925,6 +4343,8 @@ post('/:static/edit', function () {
                 'postContent' => $content,
                 'bodyclass' => 'edit-page',
                 'is_admin' => true,
+                'type' => 'is_page',
+                'parent' => '',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
             ));
         }
@@ -3964,7 +4384,7 @@ get('/:static/delete', function ($static) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Delete') . ': ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'staticPage',
+                'type' => 'is_page',
             ));
         } else {
             render('denied', array(
@@ -4004,12 +4424,6 @@ post('/:static/delete', function () {
 
 // Show the sb static page
 get('/:static/:sub', function ($static, $sub) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
     
     if ($static === 'front') {
         $redir = site_url();
@@ -4088,7 +4502,7 @@ get('/:static/:sub', function ($static, $sub) {
         'parent' => $parent_post,
         'prev' => static_prev($prev),
         'next' => static_next($next),
-        'type' => 'subPage',
+        'type' => 'is_subpage',
         'is_subpage' => true
     ), $layout);
 });
@@ -4131,7 +4545,8 @@ get('/:static/:sub/edit', function ($static, $sub) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/pages/' . $post->slug . '">' . $post->title . '</a> &#187; ' . $page->title,
                 'p' => $page,
                 'static' => $page,
-                'type' => 'subPage',
+                'type' => 'is_subpage',
+                'parent' => $static
             ));
         } else {
             render('denied', array(
@@ -4139,7 +4554,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'subPage',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
@@ -4171,24 +4586,22 @@ post('/:static/:sub/edit', function ($static, $sub) {
     }
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
+    if (empty($url)) {
+        $url = $title;
+    }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            if (!empty($url)) {
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
-            } else {
-                $url = $title;
-                edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
-            }
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
             config('views.root', 'system/admin/views');
 
@@ -4204,8 +4617,10 @@ post('/:static/:sub/edit', function ($static, $sub) {
                 'postContent' => $content,
                 'static' => $static,
                 'sub' => $sub,
+                'type' => 'is_subpage',
                 'bodyclass' => 'edit-page',
                 'is_admin' => true,
+                'parent' => $static,
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Edit')
             ));
         }
@@ -4253,7 +4668,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/pages/' . $post->slug . '">' . $post->title . '</a> &#187; ' . $page->title,
                 'p' => $page,
                 'static' => $page,
-                'type' => 'subPage',
+                'type' => 'is_subpage',
             ));
         } else {
             render('denied', array(
@@ -4261,7 +4676,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'type' => 'subPage',
+                'type' => 'is_subpage',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
@@ -4293,15 +4708,9 @@ post('/:static/:sub/delete', function () {
 
 // Show blog post with year-month
 get('/:year/:month/:name', function ($year, $month, $name) {
-
-    if (isset($_GET['search'])) {
-        $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
-        header("Location: $url");
-    }
     
-    if (config('permalink.type') == 'post') {
-        $redir = site_url() . 'post/' . $name;
+    if (permalink_type() !== 'default') {
+        $redir = site_url() . permalink_type() . '/' . $name;
         header("location: $redir", TRUE, 301);
     }
 
@@ -4329,6 +4738,9 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     $author->name = $current->authorName;
     $author->description = $current->authorDescription;
     $author->about = $current->authorAbout;
+    $author->avatar = $current->authorAvatar;
+    $author->rss = $current->authorRss;
+    $author->slug = $current->author;
 
     if (array_key_exists('prev', $post)) {
         $prev = $post['prev'];
@@ -4357,7 +4769,7 @@ get('/:year/:month/:name', function ($year, $month, $name) {
     }
     
     if (config('blog.enable') === 'true') {
-        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . 'blog"><span itemprop="name">Blog</span></a><meta itemprop="position" content="2" /></li> &#187; ';
+        $blog = '<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . site_url() . blog_path() . '"><span itemprop="name">' . blog_string() . '</span></a><meta itemprop="position" content="2" /></li> &#187; ';
     } else {
         $blog = '';
     }
@@ -4524,82 +4936,74 @@ post('/:year/:month/:name/edit', function () {
     } elseif (!empty($is_post)) {
         $type = 'is_post';
     }
-    
+
+    if (empty($url)) {
+        $url = $title;
+    }
+
     $arr = explode('/', $oldfile); 
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
 
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-            if (empty($url)) {
-                $url = $title;
-            }
+
             edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
             
         } else {
             $message['error'] = '';
             if (empty($title)) {
-                $message['error'] .= '<li class="alert alert-danger">Title field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_title') . '</li>';
             }
             if (empty($tag)) {
-                $message['error'] .= '<li class="alert alert-danger">Tag field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_tag') . '</li>';
             }
             if (empty($content)) {
-                $message['error'] .= '<li class="alert alert-danger">Content field is required.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_content') . '</li>';
             }
             if (!$proper) {
-                $message['error'] .= '<li class="alert alert-danger">CSRF Token not correct.</li>';
+                $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
             }
 
             if (!empty($is_image)) {
                 if (empty($image)) {
-                    $message['error'] .= '<li class="alert alert-danger">Image field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_image') . '</li>';
                 }
             } elseif (!empty($is_video)) {
                 if (empty($video)) {
-                    $message['error'] .= '<li class="alert alert-danger">Video field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_video') . '</li>';
                 }
             } elseif (!empty($is_link)) {
                 if (empty($link)) {
-                    $message['error'] .= '<li class="alert alert-danger">Link field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_link') . '</li>';
                 }
             } elseif (!empty($is_quote)) {
                 if (empty($quote)) {
-                    $message['error'] .= '<li class="alert alert-danger">Quote field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_quote') . '</li>';
                 }
             } elseif (!empty($is_audio)) {
                 if (empty($audio)) {
-                    $message['error'] .= '<li class="alert alert-danger">Audio field is required.</li>';
+                    $message['error'] .= '<li class="alert alert-danger">' . i18n('msg_error_field_req_audio') . '</li>';
                 }
             }
             

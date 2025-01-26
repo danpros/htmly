@@ -3,7 +3,7 @@
 		"vendor-dir": "system/vendor/",
 		"optimize-autoloader": true,
 		"platform": {
-			"php": "5.3"
+			"php": "7.2"
 		}
 	},
     "require": {
@@ -11,7 +11,9 @@
 		"michelf/php-markdown": "1.*",
 		"suin/php-rss-writer": "1.*",
 		"kanti/hub-updater": "0.*",
-		"jbroadway/urlify": "^1.0"
+		"jbroadway/urlify": "^1.0",
+		"pragmarx/google2fa": "^8.0",
+		"bacon/bacon-qr-code": "^3.0"
     },
 	"autoload": {
 		"files": [

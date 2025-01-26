@@ -6,8 +6,9 @@
     <title><?php echo $title;?></title>
     <meta name="description" content="<?php echo $description; ?>"/>
     <link rel="canonical" href="<?php echo $canonical; ?>" />
-    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/font-awesome.css">
-    <link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css?v=1" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
@@ -15,17 +16,19 @@
 <?php if (login()) { 
 $user = $_SESSION[site_url()]['user'];
 $role = user('role', $user);
-if (isset($_GET['search'])) {
-    $search = _h($_GET['search']);
-    $url = site_url() . 'search/' . remove_accent($search);
-    header("Location: $url");
+$author = get_author($user);
+if (isset($author[0])) {
+    $author = $author[0];
+} else {
+    $author = default_profile($user);
 }
 ?>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "light-mode" : "dark-mode"); ?>">
+<div id="top"></div>
 <div class="wrapper">
-<style>.error-message ul {margin:0;padding:0;}</style>
+<style>.error-message ul {margin:0;padding:0;list-style-type:none;}</style>
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "navbar-white navbar-light" : "navbar-gray-dark navbar-dark"); ?>">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -54,7 +57,7 @@ if (isset($_GET['search'])) {
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="<?php echo site_url(); ?>system/resources/images/logo-small.png" class="img-circle elevation-2" alt="HTMLy logo">
+          <img src="<?php echo $author->avatar; ?>" class="img-circle elevation-2" alt="HTMLy logo">
         </div>
         <div class="info">
           <a href="<?php echo site_url();?>admin" class="d-block"><?php echo i18n('Dashboard')?></a>
@@ -68,7 +71,7 @@ if (isset($_GET['search'])) {
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="<?php echo site_url();?>admin/content" class="nav-link">
-              <i class="nav-icon fa fa-th"></i>
+              <i class="nav-icon fa-solid fa-square-plus"></i>
               <p>
                 <?php echo ucwords(i18n('Add_content')); ?>
               </p>
@@ -237,6 +240,15 @@ if (isset($_GET['search'])) {
                   </p>
                 </a>
               </li>
+              <?php if (config('mfa.state') === 'true'): ?>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>edit/mfa" class="nav-link">
+                  <p>
+                    <?php echo i18n('config_mfa');?>
+                  </p>
+                </a>
+              </li>
+              <?php endif;?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>edit/profile" class="nav-link">
                   <p>
@@ -313,12 +325,12 @@ if (isset($_GET['search'])) {
       <small><?php echo i18n('Admin_panel_style_based_on');?> <a rel="nofollow" target="_blank" href="https://github.com/ColorlibHQ/AdminLTE">AdminLTE</a></small>
     </div>
     <!-- Default to the left -->
-    <?php echo i18n('Proudly_powered_by');?> <a href="https://www.htmly.com" target="_blank">HTMLy</a>
+    <?php echo i18n('Proudly_powered_by');?> <a href="https://www.htmly.com" target="_blank"><?php echo 'HTMLy ' . constant('HTMLY_VERSION'); ?></a>
   </footer>
 </div>
 <!-- ./wrapper -->
 <?php } else { ?>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "light-mode" : "dark-mode"); ?>">
 <div class="login-box">
   <div class="login-logo">
     <h1><a href="https://www.htmly.com" target="_blank"><img width="200px" src="<?php echo site_url(); ?>system/resources/images/logo-big.png" alt="HTMLy"/></a></h1>
@@ -331,13 +343,51 @@ if (isset($_GET['search'])) {
     </div>
     <!-- /.login-card-body -->
   </div>
+  <br>
   <span><a href="<?php echo site_url();?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
 </svg> <?php echo i18n('Back_to'); ?> <?php echo blog_title();?></a></span>
   
 </div>
 <?php } ?>
+<style>
+.top-link {
+visibility: hidden;
+position: fixed;
+bottom: 60px;
+right: 30px;
+z-index: 99;
+background: #ddd;
+width: 42px;
+height: 42px;
+padding: 12px;
+border-radius: 64px;
+transition: visibility 0.5s, opacity 0.8s linear;
+border: none;
+font-size:13px;
+}
 
+.top-link:focus {
+  outline: none;
+}
+</style>
+<a href="#top" aria-label="go to top" title="Go to Top" class="top-link" id="top-link">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z"></path>
+    </svg>
+</a>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+</script>
 <script src="<?php echo site_url() ?>system/resources/js/bootstrap.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/adminlte.min.js"></script>
 </body>

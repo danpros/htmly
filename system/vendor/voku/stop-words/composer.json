@@ -1,0 +1,27 @@
+{
+  "name": "voku/stop-words",
+  "description": "Stop-Words via PHP",
+  "keywords": [
+    "stop-words",
+    "stop words"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Lars Moelleken",
+      "homepage": "http://www.moelleken.org/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "voku\\": "src/voku/"
+    }
+  },
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~6.0"
+  }
+}

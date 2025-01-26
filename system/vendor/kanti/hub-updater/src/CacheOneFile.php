@@ -13,9 +13,9 @@ class CacheOneFile
         $this->holdTime = $holdTime;
     }
 
-    public function is()
+    public function has()
     {
-        if (!HelperClass::fileExists($this->fileName)) {
+        if (!file_exists($this->fileName)) {
             return false;
         }
         clearstatcache();
@@ -37,11 +37,11 @@ class CacheOneFile
         array_pop($parts);
         $directory = '';
         foreach ($parts as $part) {
-            $check_path = $directory . $part;
-            if (is_dir($check_path . DIRECTORY_SEPARATOR) === false) {
-                mkdir($check_path, 0755);
+            $checkPath = $directory . $part;
+            if (is_dir($checkPath . DIRECTORY_SEPARATOR) === false) {
+                mkdir($checkPath, 0755);
             }
-            $directory = $check_path . DIRECTORY_SEPARATOR;
+            $directory = $checkPath . DIRECTORY_SEPARATOR;
         }
         call_user_func_array('file_put_contents', $args);
     }

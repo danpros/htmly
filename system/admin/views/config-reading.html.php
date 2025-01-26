@@ -5,8 +5,10 @@
   <div class="nav nav-tabs" id="nav-tab">
     <a class="nav-item nav-link" id="nav-general-tab" href="<?php echo site_url();?>admin/config"><?php echo i18n('General');?></a>
     <a class="nav-item nav-link active" id="nav-profile-tab" href="<?php echo site_url();?>admin/config/reading"><?php echo i18n('Reading');?></a>
+    <a class="nav-item nav-link" id="nav-writing-tab" href="<?php echo site_url();?>admin/config/writing"><?php echo i18n('Writing');?></a>
     <a class="nav-item nav-link" id="nav-widget-tab" href="<?php echo site_url();?>admin/config/widget"><?php echo i18n('Widget');?></a>
     <a class="nav-item nav-link" id="nav-metatags-tab" href="<?php echo site_url();?>admin/config/metatags"><?php echo i18n('Metatags');?></a>
+    <a class="nav-item nav-link" id="nav-security-tab" href="<?php echo site_url();?>admin/config/security"><?php echo i18n('Security');?></a>
     <a class="nav-item nav-link" id="nav-performance-tab" href="<?php echo site_url();?>admin/config/performance"><?php echo i18n('Performance');?></a>
     <a class="nav-item nav-link" id="nav-custom-tab" href="<?php echo site_url();?>admin/config/custom"><?php echo i18n('Custom');?></a>
   </div>
@@ -25,28 +27,9 @@
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-static.frontpage" id="static.frontpage1" value="true" <?php if (config('static.frontpage') === 'true'):?>checked<?php endif;?>>
+          <input class="form-check-input" type="radio" name="-config-static.frontpage" id="static.frontpage2" value="true" <?php if (config('static.frontpage') === 'true'):?>checked<?php endif;?>>
           <label class="form-check-label" for="static.frontpage2">
             <?php echo i18n('Static_page');?>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label"><?php echo i18n('Enable_blog_URL');?></label>
-    <div class="col-sm-10">
-      <div class="col-sm-10">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable1" value="true" <?php if (config('blog.enable') === 'true'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="blog.enable1">
-            <?php echo i18n('Enable');?>
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="-config-blog.enable" id="blog.enable2" value="false" <?php if (config('blog.enable') === 'false'):?>checked<?php endif;?>>
-          <label class="form-check-label" for="blog.enable2">
-            <?php echo i18n('Disable');?>
           </label>
         </div>
       </div>
@@ -151,6 +134,25 @@
   <br>
   <h4><?php echo i18n('RSS_settings');?></h4>
   <hr>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('RSS_feeds_description_select');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-rss.description" id="rss.description1" value="body" <?php if (config('rss.description') === 'body'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="rss.description1">
+            <?php echo i18n('RSS_description_body');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-rss.description" id="rss.description2" value="meta" <?php if (config('rss.description') === 'meta'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="rss.description2">
+            <?php echo i18n('RSS_description_meta');?>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="form-group row">
     <label for="rss.count" class="col-sm-2 col-form-label"><?php echo i18n('RSS_feeds_show_the_most_recent');?></label>
     <div class="col-sm-10">

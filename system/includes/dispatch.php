@@ -115,16 +115,30 @@ function save_config($data = array(), $new = array())
     $string = file_get_contents($config_file) . "\n";
 
     foreach ($data as $word => $value) {
-        $value = str_replace('"', '\"', $value);
-        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = "' . $value . '"', $string);
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = ' . $value, $string);
     }
     $string = rtrim($string);
     foreach ($new as $word => $value) {
-        $value = str_replace('"', '\"', $value);
-        $string .= "\n" . $word . ' = "' . $value . '"' . "\n";
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string .= "\n" . $word . ' = ' . $value . "\n";
     }
     $string = rtrim($string);
     return file_put_contents($config_file, $string, LOCK_EX);
+}
+
+function get_search_query()
+{
+    if (isset($_GET['search'])) {
+        $search = _h($_GET['search']);
+        $url = site_url() . 'search/' . remove_accent($search);
+        header("Location: $url");
+        die;
+    }
 }
 
 function to_b64($str)
@@ -250,13 +264,14 @@ function _h($str, $enc = 'UTF-8', $flags = ENT_QUOTES)
 
 function from($source, $name)
 {
+    $map = array("\r\n" => "\n", "\r" => "\n");
     if (is_array($name)) {
         $data = array();
         foreach ($name as $k)
-            $data[$k] = isset($source[$k]) ? $source[$k] : null;
+            $data[$k] = isset($source[$k]) ? trim(strtr($source[$k], $map)) : null;
         return $data;
     }
-    return isset($source[$name]) ? $source[$name] : null;
+    return isset($source[$name]) ? trim(strtr($source[$name], $map)) : null;
 }
 
 function stash($name, $value = null)
@@ -403,7 +418,7 @@ function render($view, $locals = null, $layout = null)
             ob_start();
             require $layout;
         }
-        if (!login() && $view != '404' && config('cache.off') == "false") {
+        if (!login() && $view != '404' && $view != '404-search' && $view != 'login-mfa' && config('cache.off') == "false") {
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }
@@ -618,6 +633,75 @@ function flash($key, $msg = null, $now = false)
     }
 
     $x[$key] = $msg;
+}
+
+function create_thumb($src, $desired_width = null, $desired_height = null) {
+    
+    if (!extension_loaded('gd')) {
+        return $src;
+    }
+
+    $dir = 'content/images/thumbnails';
+
+    if (!is_dir($dir)) {
+        mkdir($dir);
+    }
+    
+    $w = config('thumbnail.width');
+    if (empty($w)) {
+        $w = 500;
+    }
+    
+    if (is_null($desired_width)) {
+        $desired_width = $w;
+    }
+    
+    if (!is_null($desired_height)) {
+        $h = 'x' . $desired_height;
+    } else {
+        $h = null;
+    }
+
+    $fileName = pathinfo($src, PATHINFO_FILENAME);
+    $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . $h .'.webp';
+
+    if (file_exists($thumbFile)) {
+        return site_url() . $thumbFile;
+    } else {
+
+        /* read the source image */
+        $source_image = imagecreatefromstring(file_get_contents($src));
+        if ($source_image === false) {
+            return $src;
+        }
+        $width = imagesx($source_image);
+        $height = imagesy($source_image);
+
+        /* find the "desired height" of this thumbnail, relative to the desired width  */
+        if (is_null($desired_height)) {
+            $desired_height = floor($height * ($desired_width / $width));
+        }
+        
+        $ratio = max($desired_width/$width, $desired_height/$height);
+        $height = floor($desired_height / $ratio);
+        $x = floor(($width - $desired_width / $ratio) / 2);
+        $width = floor($desired_width / $ratio);
+
+        /* create a new, "virtual" image */
+        $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+        imageAlphaBlending($virtual_image, false);
+        imageSaveAlpha($virtual_image, true);
+
+        /* copy source image at a resized size */
+        imagecopyresampled($virtual_image, $source_image, 0, 0, $x, 0, $desired_width, $desired_height, $width, $height);
+
+        /* create the physical thumbnail image to its destination */
+        imagewebp($virtual_image, $thumbFile, 75);
+        imagedestroy($virtual_image);
+        
+        return site_url() . $thumbFile;
+
+    }
 }
 
 function dispatch()

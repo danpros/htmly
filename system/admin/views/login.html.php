@@ -21,9 +21,14 @@
         } ?>" name="password" placeholder="<?php echo i18n('Password'); ?>"/>
         <br>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <?php if (config('google.reCaptcha') === 'true'): ?>
+        <?php if (config('login.protect.system') === 'google'): ?>
             <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div class="g-recaptcha" data-sitekey="<?php echo config("google.reCaptcha.public"); ?>"></div>
+            <div class="g-recaptcha" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
+            <br/>
+        <?php endif; ?>
+        <?php if (config('login.protect.system') === 'cloudflare'): ?>
+            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+            <div style="text-align:center;" class="cf-turnstile" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
             <br/>
         <?php endif; ?>
         <input type="submit" class="btn btn-primary" name="submit" value="<?php echo i18n('Login');?>"/>

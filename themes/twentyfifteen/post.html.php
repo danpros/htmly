@@ -40,7 +40,7 @@
     <div class="author-info">
         <h2 class="author-heading"><?php echo i18n('Published').' '.i18n('by');?></h2>
         <div class="author-avatar">
-            <img width="56" height="56" class="avatar avatar-56" src="<?php echo theme_path();?>images/avatar.png" alt="<?php echo $author->name; ?>">
+            <img width="56" height="56" class="avatar avatar-56" src="<?php echo $author->avatar; ?>" alt="<?php echo $author->name; ?>">
         </div><!-- .author-avatar -->
         <div class="author-description">
             <h3 class="author-title"><?php echo $author->name; ?></h3>
@@ -89,10 +89,22 @@
     <h2 class="screen-reader-text">Post navigation</h2>
     <div class="nav-links">
         <?php if (!empty($prev)): ?>
-            <div class="nav-previous"><a style="background-image: url(<?php echo($prev['image']); ?>);<?php if (!empty($prev['image'])):?>color:#fff;<?php endif;?>" rel="prev" href="<?php echo($prev['url']); ?>"><span style="<?php if (!empty($prev['image'])):?>color:#fff;<?php endif;?>" aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> <span class="screen-reader-text">Previous post:</span> <span class="post-title"><?php echo($prev['title']); ?></span></a></div>
+            <div class="nav-previous" <?php if (!empty($prev['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(<?php echo($prev['image']); ?>);"<?php endif;?>>
+                <a <?php if (!empty($prev['image'])):?>style="color:#fff;"<?php endif;?> rel="prev" href="<?php echo($prev['url']); ?>">
+                    <span <?php if (!empty($prev['image'])):?>style="color:#fff;"<?php endif;?> aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> 
+                    <span class="screen-reader-text">Previous post:</span> 
+                    <span class="post-title"><?php echo($prev['title']); ?></span>
+                </a>
+            </div>
         <?php endif; ?>
         <?php if (!empty($next)): ?>
-            <div class="nav-next"><a style="background-image: url(<?php echo($next['image']); ?>);<?php if (!empty($next['image'])):?>color:#fff;<?php endif;?>" rel="next" href="<?php echo($next['url']); ?>"><span style="<?php if (!empty($next['image'])):?>color:#fff;<?php endif;?>" aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> <span class="screen-reader-text">Next post:</span> <span class="post-title"><?php echo($next['title']); ?></span></a></div>
+            <div class="nav-next" <?php if (!empty($next['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(<?php echo($next['image']); ?>);"<?php endif;?>>
+                <a <?php if (!empty($next['image'])):?>style="color:#fff;"<?php endif;?> rel="next" href="<?php echo($next['url']); ?>">
+                    <span <?php if (!empty($next['image'])):?>style="color:#fff;"<?php endif;?> aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> 
+                    <span class="screen-reader-text">Next post:</span> 
+                    <span class="post-title"><?php echo($next['title']); ?></span>
+                </a>
+            </div>
         <?php endif; ?>
     </div>
 </nav>

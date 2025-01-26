@@ -7,7 +7,7 @@ $CSRF = get_csrf();
         
 $updater = new HubUpdater(array(
     'name' => 'danpros/htmly',
-    'prerelease' => !!config("prerelease"),
+    'prerelease' => config("prerelease"),
 ));
 
 $dir = 'cache/';
@@ -54,5 +54,10 @@ if (empty($updater->getNewestInfo())) {
         echo \Michelf\MarkdownExtra::defaultTransform($info['body']);
         echo '</div>';
         echo '<p><a class="btn btn-primary" target="_blank" href="' . $info['html_url'] . '">Read on Github</a></p>';
+        if (config('show.version') == 'false') {
+            if(file_exists('cache/installedVersion.json')) {
+                unlink('cache/installedVersion.json');
+            }
+        }
     }
 }
