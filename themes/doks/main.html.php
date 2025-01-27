@@ -28,9 +28,11 @@
 <?php endif;?>
 
 <?php if (isset($is_search)):?>
-<div class="row justify-content-center" style="padding-top: 4rem;">
+<!-- main.html.php -->
+<div class="row justify-content-center" style="padding-top: 3rem;">
     <div class="col-md-12 text-center">
-        <h1 class="mt-0"><?php echo $search->title;?></h1>
+        <h2 class="mt-0">Search: <span style='color: #628B48;'><?php echo $search->title;?></span> (<?php echo $search->count;?>)</h2>
+        <form><input type="search" name="search" class="form-control is-search" placeholder="<?php echo i18n('Type_to_search');?>"></form>
     </div>
 </div>
 <?php endif;?>

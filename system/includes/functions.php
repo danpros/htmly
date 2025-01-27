@@ -1323,13 +1323,18 @@ function get_keyword($keyword, $page, $perpage)
 
     $tmp = array();
 
-    $words = explode(' ', $keyword);
-
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
-        foreach ($words as $word) {
-            if (stripos($filter, $word) !== false) {
+
+		$filepath = $v['dirname'] . '/' . $v['basename'];
+
+		$findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // Add word boundaries (find whole-words only)
+
+		$findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
+
+		$lines = file($filepath);
+
+        foreach ($lines as $line) {
+			if (preg_match ($findRx, $line)) {
                 if (!in_array($v, $tmp)) {
                     $tmp[] = $v;
                 }
@@ -1512,16 +1517,23 @@ function keyword_count($keyword)
 
     $tmp = array();
 
-    $words = explode(' ', $keyword);
-
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
-        foreach ($words as $word) {
-            if (stripos($filter, $word) !== false) {
-                $tmp[] = $v;
-            }
-        }
+
+		$filepath = $v['dirname'] . '/' . $v['basename'];
+
+		$findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // Add word boundaries (find whole-words only)
+
+		$findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
+
+		$lines = file($filepath);
+
+		foreach ($lines as $line) {
+			if (preg_match ($findRx, $line)) {
+				if (!in_array($v, $tmp)) {
+					$tmp[] = $v;
+            	}
+        	}
+    	}
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
