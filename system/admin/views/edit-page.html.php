@@ -218,7 +218,7 @@ $images = image_gallery(null, 1, 40);
                         <div class="col">
                             <div class="form-group">
                                 <label for="insertImageDialogURL">URL</label>
-                                <textarea class="form-control" id="insertImageDialogURL" rows="4" placeholder="<?php echo i18n('Enter_image_URL');?>" ></textarea>
+                                <textarea class="form-control" id="insertImageDialogURL" rows="5" placeholder="<?php echo i18n('Enter_image_URL');?>" ></textarea>
                             </div>
                             <hr>
                             <div class="form-group">
@@ -241,7 +241,7 @@ $images = image_gallery(null, 1, 40);
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+                    <p class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></p>
                     <button type="button" class="close" id="insertMediaDialogClose" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -258,7 +258,7 @@ $images = image_gallery(null, 1, 40);
                         <div class="col">
                             <div class="form-group">
                                 <label for="insertMediaDialogURL">URL</label>
-                                <textarea class="form-control" id="insertMediaDialogURL" rows="4" placeholder="<?php echo i18n('Enter_image_URL');?>"></textarea>
+                                <textarea class="form-control" id="insertMediaDialogURL" rows="5" placeholder="<?php echo i18n('Enter_image_URL');?>"></textarea>
                             </div>
                             <hr>
                             <div class="form-group">

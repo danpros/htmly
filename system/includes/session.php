@@ -18,7 +18,7 @@ function login()
     }
 }
 
-if (rtrim($_SERVER['REQUEST_URI'], '/') != rtrim(site_path() . '/login-mfa', '/')) {
+if (rtrim($_SERVER['REQUEST_URI'], '/') != site_path() . '/login-mfa') {
     if (isset($_SESSION['mfa_pwd']) && isset($_SESSION['mfa_uid'])) {
         unset($_SESSION['mfa_pwd']);
         unset($_SESSION['mfa_uid']);

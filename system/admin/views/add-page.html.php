@@ -108,7 +108,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="insertImageDialogURL">URL</label>
-                                <textarea class="form-control" id="insertImageDialogURL" rows="4" placeholder="<?php echo i18n('Enter_image_URL');?>" ></textarea>
+                                <textarea class="form-control" id="insertImageDialogURL" rows="5" placeholder="<?php echo i18n('Enter_image_URL');?>" ></textarea>
                             </div>
                             <hr>
                             <div class="form-group">
