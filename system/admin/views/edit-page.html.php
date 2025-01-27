@@ -265,6 +265,7 @@ $images = image_gallery(null, 1, 40);
                                 <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
                                 <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
                             </div>
+                            <hr>
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
                                 <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
