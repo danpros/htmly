@@ -1319,35 +1319,39 @@ function get_frontpage()
 // Return search page.
 function get_keyword($keyword, $page, $perpage)
 {
-    $posts = get_blog_posts();
 
-    $tmp = array();
+	if (strlen($keyword) >= 3) { // three-character or more search, only
 
-    foreach ($posts as $index => $v) {
+		$posts = get_blog_posts();
 
-		$filepath = $v['dirname'] . '/' . $v['basename'];
+		$tmp = array();
 
-		$findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // Add word boundaries (find whole-words only)
+		foreach ($posts as $index => $v) {
 
-		$findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
+			$filepath = $v['dirname'] . '/' . $v['basename'];
 
-		$lines = file($filepath);
+			$findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // Add word boundaries (find whole-words only)
 
-        foreach ($lines as $line) {
-			if (preg_match ($findRx, $line)) {
-                if (!in_array($v, $tmp)) {
-                    $tmp[] = $v;
-                }
-            }
-        }
-    }
+			$findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
 
-    if (empty($tmp)) {
-        return false;
-    }
+			$lines = file($filepath);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+			foreach ($lines as $line) {
+				if (preg_match ($findRx, $line)) {
+					if (!in_array($v, $tmp)) {
+                    	$tmp[] = $v;
+					}
+            	}
+			}
+    	}
 
+    	if (empty($tmp)) {
+        	return false;
+    		}
+
+    	return $tmp = get_posts($tmp, $page, $perpage);
+
+	}
 }
 
 // Get related posts base on post category.
@@ -1513,32 +1517,35 @@ function get_tagcount($var)
 // Return search result count
 function keyword_count($keyword)
 {
-    $posts = get_blog_posts();
 
-    $tmp = array();
+	if (strlen($keyword) >= 3) {    
 
-    foreach ($posts as $index => $v) {
+		$posts = get_blog_posts();
 
-		$filepath = $v['dirname'] . '/' . $v['basename'];
+		$tmp = array();
 
-		$findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // Add word boundaries (find whole-words only)
+		foreach ($posts as $index => $v) {
 
-		$findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
+			$filepath = $v['dirname'] . '/' . $v['basename'];
 
-		$lines = file($filepath);
+			$findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // Add word boundaries (find whole-words only)
 
-		foreach ($lines as $line) {
-			if (preg_match ($findRx, $line)) {
-				if (!in_array($v, $tmp)) {
+			$findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
+
+			$lines = file($filepath);
+
+			foreach ($lines as $line) {
+				if (preg_match ($findRx, $line)) {
+					if (!in_array($v, $tmp)) {
 					$tmp[] = $v;
-            	}
-        	}
-    	}
-    }
+            		}
+        		}
+    		}
+		}
 
-    $tmp = array_unique($tmp, SORT_REGULAR);
-
-    return count($tmp);
+    	$tmp = array_unique($tmp, SORT_REGULAR);
+    	return count($tmp);
+	}
 }
 
 // Return recent posts lists
