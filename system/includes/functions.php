@@ -1347,7 +1347,7 @@ function get_keyword($keyword, $page, $perpage)
 
     	if (empty($tmp)) {
         	return false;
-    		}
+    	}
 
     	return $tmp = get_posts($tmp, $page, $perpage);
 
@@ -1537,7 +1537,7 @@ function keyword_count($keyword)
 			foreach ($lines as $line) {
 				if (preg_match ($findRx, $line)) {
 					if (!in_array($v, $tmp)) {
-					$tmp[] = $v;
+						$tmp[] = $v;
             		}
         		}
     		}
