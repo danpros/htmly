@@ -1347,7 +1347,7 @@ function get_keyword($keyword, $page, $perpage)
 
     	if (empty($tmp)) {
         	return false;
-    		}
+    	}
 
     	return $tmp = get_posts($tmp, $page, $perpage);
 
