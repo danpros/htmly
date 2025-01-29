@@ -1541,9 +1541,9 @@ function keyword_count($keyword)
             }
         }
 
-		$tmp = array_unique($tmp, SORT_REGULAR);
-		return count($tmp);
-	}
+        $tmp = array_unique($tmp, SORT_REGULAR);
+        return count($tmp);
+    }
 }
 
 // Return recent posts lists
