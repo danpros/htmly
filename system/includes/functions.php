@@ -338,6 +338,7 @@ function rebuilt_cache($type = null)
     // Rebuilt static page index
     $ptmp = array();
     $ptmp =  glob('content/static/*.md', GLOB_NOSORT);
+    natsort($ptmp);
     if (is_array($ptmp)) {
         foreach ($ptmp as $file) {
             if(strpos($file, '/draft/') === false) {
@@ -345,13 +346,13 @@ function rebuilt_cache($type = null)
             }
         }
     }
-    usort($page_cache, "sortfile_a");
     $page_string = serialize($page_cache);
     file_put_contents('cache/index/index-pages.txt', print_r($page_string, true), LOCK_EX);
 
     // Rebuilt subpage index
     $sptmp = array();
     $sptmp =  glob('content/static/*/*.md', GLOB_NOSORT);
+    natsort($sptmp);
     if (is_array($sptmp)) {
         foreach ($sptmp as $file) {
             if(strpos($file, '/draft/') === false) {
@@ -359,7 +360,6 @@ function rebuilt_cache($type = null)
             }
         }
     }
-    usort($subpage_cache, "sortfile_a");
     $subpage_string = serialize($subpage_cache);
     file_put_contents('cache/index/index-subpages.txt', print_r($subpage_string, true), LOCK_EX);
 
@@ -2846,8 +2846,6 @@ function get_menu($custom = null, $auto = null)
 
     if (!empty($posts)) {
 
-        asort($posts);
-
         $menu .= '<ul class="nav ' . $custom . '">';
         
         if (is_null($auto)) {
@@ -2902,7 +2900,6 @@ function get_menu($custom = null, $auto = null)
 
             $subPages = get_static_subpages($filename);
             if (!empty($subPages)) {
-                asort($subPages);
                 $menu .= '<li class="' . $class . $active .' dropdown">';
                 $menu .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 $menu .= '<ul class="subnav dropdown-menu" role="menu">';
