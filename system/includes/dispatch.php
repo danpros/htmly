@@ -135,7 +135,7 @@ function get_search_query()
 {
     if (isset($_GET['search'])) {
         $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
+        $url = site_url() . 'search/' . $search;
         header("Location: $url");
         die;
     }
