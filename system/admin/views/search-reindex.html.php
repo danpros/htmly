@@ -42,7 +42,7 @@ for($i = 0, $size = count($tmp); $i < $size; ++$i) {
     ob_flush();
 
     // Sleep one second
-    sleep(1);
+    // sleep(1);
 }
 
 // The process is completed
