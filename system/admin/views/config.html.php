@@ -188,8 +188,25 @@ Please install and enable the INTL extension to format the date format to your l
       </div>
     </div>
   </div>
-  
-  
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Fulltext search</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-fulltext.search" id="fulltext.search1" value="true" <?php if (config('fulltext.search') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="fulltext.search1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-fulltext.search" id="fulltext.search2" value="false" <?php if (config('fulltext.search') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="fulltext.search2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <hr />
   <div class="form-group row">
     <div class="col-sm-10">

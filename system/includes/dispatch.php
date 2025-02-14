@@ -407,7 +407,9 @@ function render($view, $locals = null, $layout = null)
             $layout = ($layout == null) ? 'layout' : $layout;
         }
         $layout = "{$view_root}/{$layout}.html.php";
-        header('Content-type: text/html; charset=utf-8');
+        if ($view != 'search-reindex') {
+            header('Content-type: text/html; charset=utf-8');
+        }
         if (config('generation.time') == 'true') {
             ob_start();
             require $layout;

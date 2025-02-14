@@ -1703,6 +1703,112 @@ post('/admin/import', function () {
     }
 });
 
+// Show admin/search 
+get('/admin/search', function () {
+
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    config('views.root', 'system/admin/views');
+    if (login()) {
+        if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
+            $page = from($_GET, 'page');
+            $page = $page ? (int)$page : 1;
+            $perpage = 40;
+
+            $tmp = array();
+            $search = array();
+            $total = '';
+
+            $searchFile = "content/data/search.json";
+
+            if (file_exists($searchFile)) {
+                $search = json_decode(file_get_contents($searchFile), true);
+            }
+
+            $posts = get_blog_posts();
+            foreach ($posts as $index => $v) {
+                $arr = explode('_', $v['filename']);
+                if (!isset($search['post_' . $arr[2]])) {
+                    $tmp[] = $v;
+                }
+            }
+
+            if (!empty($tmp)) {
+                $posts = get_posts($tmp, $page, $perpage);
+                $total = count($tmp);
+            }
+
+            if (empty($tmp) || $page < 1) {
+
+                render('search', array(
+                    'title' => generate_title('is_default', i18n('Search')),
+					'heading' => i18n('Search') . ' Index',
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'bodyclass' => 'no-posts',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
+                ));
+
+                die;
+            }
+
+            render('search', array(
+                'title' => generate_title('is_default', i18n('Search')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'heading' => i18n('Search') . ' Index',
+                'page' => $page,
+                'posts' => $posts,
+                'bodyclass' => 'all-index-posts',
+                'type' => 'is_admin-index-posts',
+                'is_admin' => true,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search'),
+                'pagination' => has_pagination($total, $perpage, $page)
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Search')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-index-posts',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/search/reindex', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+		$search = json_decode(htmlspecialchars_decode($_POST['search_index']));
+        config('views.root', 'system/admin/views');
+        if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
+            render('search-reindex', array(
+                'title' => generate_title('is_default', i18n('Search')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-search',
+				'search' => $search,
+                'is_admin' => true,
+                'bodyclass' => 'admin-search',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
+            ));
+		}
+        
+    }
+});
+
 // Show Config page
 get('/admin/config', function () {
 
@@ -3409,9 +3515,12 @@ get('/search/:keyword', function ($keyword) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('search.perpage');
+    $total = '';
 
     $posts = get_keyword($keyword, $page, $perpage);
-    $total = keyword_count($keyword);
+    if ($posts) { 
+        $total = $posts[1];
+    }
 
     $tsearch = new stdClass;
     $tsearch->title = $keyword;
@@ -3466,7 +3575,7 @@ get('/search/:keyword', function ($keyword) {
         'canonical' => $tsearch->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_search', $tsearch),
         'page' => $page,
-        'posts' => $posts,
+        'posts' => $posts[0],
         'search' => $tsearch,
         'taxonomy' => $tsearch,
         'bodyclass' => 'in-search search-' . strtolower($keyword),
@@ -3481,8 +3590,12 @@ get('/search/:keyword', function ($keyword) {
 get('/search/:keyword/feed', function ($keyword) {
 
     header('Content-Type: application/rss+xml');
-    
+
+    $posts = array();
     $posts = get_keyword($keyword, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
 
     $data = new stdClass;
     $data->title = $keyword;

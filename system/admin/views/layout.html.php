@@ -198,6 +198,15 @@ if (isset($author[0])) {
                   </p>
                 </a>
               </li>
+              <?php if (config('fulltext.search') == 'true') : ?>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/search" class="nav-link">
+                  <p>
+                    <?php echo i18n('Search');?> Index
+                  </p>
+                </a>
+              </li>
+              <?php endif; ?>
               <?php if ($role === 'admin'):?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/update" class="nav-link">

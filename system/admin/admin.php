@@ -238,12 +238,47 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
             mkdir($dir, 0775, true);
 
         }
+        
+        $searchFile = "content/data/search.json";
+        $search = array();
 
         $oldfile = $oldfile;
         $newfile = $dir . $filename;
         if ($oldfile !== $newfile && !is_null($autoSave)) {
             if (file_exists($oldfile)) {
+                
                 rename($oldfile, $newfile);
+                
+                if (config('fulltext.search') == "true") {
+                
+                    if (file_exists($searchFile)) {
+                        $search = json_decode(file_get_data($searchFile), true);
+                    }
+                    $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
+                    $old_ex = explode('_', $old_filename);
+                    $old_url = $old_ex[2];
+                    $oKey = 'post_' . $old_url;
+                    $nKey = 'post_' . $post_url;
+                    if ($old_url != $post_url) {
+                        if (isset($search[$oKey])) {
+                            $arr = replace_key($search, $oKey, $nKey);
+                            $arr[$nKey] = $post_content;
+                            save_json_pretty($searchFile, $arr);
+                        }
+                    }
+                
+                }
+                
+            }
+        } else {
+            if (config('fulltext.search') == "true") {
+                if (file_exists($searchFile)) {
+                    $search = json_decode(file_get_data($searchFile), true);
+                }
+                if (!isset($search['flock_fail'])) {
+                    $search['post_' . $post_url] = $post_content;
+                    save_json_pretty($searchFile, $search);
+                }
             }
         }
 
@@ -472,22 +507,48 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $oldfile, $category, $type);
+        
+        $searchFile = "content/data/search.json";
+        $search = array();
 
         $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
         $old_ex = explode('_', $old_filename);
         $old_url = $old_ex[2];
         
         if ($old_url != $post_url) {
+            $oKey = 'post_' . $old_url;
+            $nKey = 'post_' . $post_url;
             if (file_exists($viewsFile)) {
                 $views = json_decode(file_get_data($viewsFile), true);
-                $oKey = 'post_' . $old_url;
-                $nKey = 'post_' . $post_url;
+
                 if (isset($views[$oKey])) {
                     $arr = replace_key($views, $oKey, $nKey);
                     save_json_pretty($viewsFile, $arr);
                 }
             }
-        }
+            if (config('fulltext.search') == "true") {
+                if (file_exists($searchFile)) {
+                    $search = json_decode(file_get_data($searchFile), true);
+                    if (isset($search[$oKey])) {
+                        $arr = replace_key($search, $oKey, $nKey);
+                        $arr[$nKey] = $post_content;
+                        save_json_pretty($searchFile, $arr);
+                    }
+                }
+            }
+            
+        } else {
+            if (config('fulltext.search') == "true") {
+                if (file_exists($searchFile)) {
+                    $search = json_decode(file_get_data($searchFile), true);
+                }
+                if (!isset($search['flock_fail'])) {
+                    $search['post_' . $post_url] = $post_content;
+                    save_json_pretty($searchFile, $search);
+                }
+            }
+
+        }    
         
         if (!is_null($autoSave)) {
             return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
@@ -1828,6 +1889,28 @@ function authorized ($data = null)
             } else {
                 return false;
             }
+        }
+    }
+}
+
+// Add search index
+function add_search_index($id, $content)
+{
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+    $filename = "content/data/search.json";
+    $search = array();
+    if (file_exists($filename)) {
+        $search = json_decode(file_get_data($filename), true);
+    }
+    if (isset($search['flock_fail'])) {
+        return;
+    } else {
+        if (!isset($search[$id])) {
+            $search[$id] = $content;
+            save_json_pretty($filename, $search);
         }
     }
 }

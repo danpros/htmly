@@ -11,13 +11,11 @@ function get_blog_posts()
 {
     static $_posts = array();
 
-    if (empty($_posts)) {
-        $url = 'cache/index/index-posts.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_posts = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-posts.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_posts = unserialize(file_get_contents($url));
     return $_posts;
 }
 
@@ -26,13 +24,11 @@ function get_static_pages()
 {
     static $_page = array();
 
-    if (empty($_page)) {
-        $url = 'cache/index/index-pages.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_page = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-pages.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_page = unserialize(file_get_contents($url));
     return $_page;
 }
 
@@ -41,13 +37,12 @@ function get_static_subpages($static = null)
 {
     static $_sub_page = array();
 
-    if (empty($_sub_page)) {
-        $url = 'cache/index/index-subpages.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_sub_page = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-subpages.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_sub_page = unserialize(file_get_contents($url));
+
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_sub_page, function ($sub_page) use ($static, $stringLen) {
@@ -72,13 +67,11 @@ function get_author_name()
 {
     static $_author = array();
 
-    if (empty($_author)) {
-        $url = 'cache/index/index-author.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_author = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-author.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_author = unserialize(file_get_contents($url));
 
     return $_author;
 }
@@ -87,13 +80,13 @@ function get_author_name()
 function get_draft_posts()
 {
     static $_draft = array();
-    if (empty($_draft)) {
-        $url = 'cache/index/index-draft.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_draft = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-draft.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_draft = unserialize(file_get_contents($url));
+
     return $_draft;
 }
 
@@ -101,16 +94,16 @@ function get_draft_posts()
 function get_draft_pages()
 {
     static $_draftPage = array();
-    if (empty($_draftPage)) {
-        $tmp = array();
-        $tmp = glob('content/static/draft/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_draftPage[] = pathinfo($file);
-            }
+
+    $tmp = array();
+    $tmp = glob('content/static/draft/*.md', GLOB_NOSORT);
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $_draftPage[] = pathinfo($file);
         }
-        usort($_draftPage, "sortfile_a");
     }
+    usort($_draftPage, "sortfile_a");
+
     return $_draftPage;
 }
 
@@ -118,16 +111,16 @@ function get_draft_pages()
 function get_draft_subpages($static = null)
 {
     static $_draftSubpage = array();
-    if (empty($_draftSubpage)) {
-        $tmp = array();
-        $tmp = glob('content/static/*/draft/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_draftSubpage[] = pathinfo($file);
-            }
+
+    $tmp = array();
+    $tmp = glob('content/static/*/draft/*.md', GLOB_NOSORT);
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $_draftSubpage[] = pathinfo($file);
         }
-        usort($_draftSubpage, "sortfile_a");
     }
+    usort($_draftSubpage, "sortfile_a");
+
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_draftSubpage, function ($sub_page) use ($static, $stringLen) {
@@ -151,13 +144,13 @@ function get_draft_subpages($static = null)
 function get_scheduled_posts()
 {
     static $_scheduled = array();
-    if (empty($_scheduled)) {
-        $url = 'cache/index/index-scheduled.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_scheduled = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-scheduled.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_scheduled = unserialize(file_get_contents($url));
+
     return $_scheduled;
 }
 
@@ -165,13 +158,13 @@ function get_scheduled_posts()
 function get_category_files()
 {
     static $_desc = array();
-    if (empty($_desc)) {
-        $url = 'cache/index/index-category-files.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_desc = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-category-files.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_desc = unserialize(file_get_contents($url));
+
     return $_desc;
 }
 
@@ -179,15 +172,15 @@ function get_category_files()
 function get_category_folder()
 {
     static $_dfolder = array();
-    if (empty($_dfolder)) {
-        $tmp = array();
-        $tmp = glob('content/*/blog/*/', GLOB_ONLYDIR);
-        if (is_array($tmp)) {
-            foreach ($tmp as $dir) {
-                $_dfolder[] = $dir;
-            }
+
+    $tmp = array();
+    $tmp = glob('content/*/blog/*/', GLOB_ONLYDIR);
+    if (is_array($tmp)) {
+        foreach ($tmp as $dir) {
+            $_dfolder[] = $dir;
         }
     }
+
     return $_dfolder;
 }
 
@@ -195,13 +188,13 @@ function get_category_folder()
 function get_category_slug()
 {
     static $_cslug = array();
-    if (empty($_cslug)) {
-        $url = 'cache/index/index-category.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_cslug = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-category.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_cslug = unserialize(file_get_contents($url));
+
     return $_cslug;
 }
 
@@ -210,13 +203,7 @@ function get_zip_files()
 {
     static $_zip = array();
 
-    if (empty($_zip)) {
-
-        // Get the names of all the
-        // zip files.
-
-        $_zip = glob('backup/*.zip');
-    }
+    $_zip = glob('backup/*.zip');
 
     return $_zip;
 }
@@ -224,16 +211,16 @@ function get_zip_files()
 // Get images in content/images folder
 function scan_images() {
     static $_images = array();
-    if (empty($_images)) {
-        $tmp = array();
-        $tmp = array_filter(glob('content/images/*', GLOB_NOSORT), 'is_file');
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_images[] = pathinfo($file);
-            }
+
+    $tmp = array();
+    $tmp = array_filter(glob('content/images/*', GLOB_NOSORT), 'is_file');
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $_images[] = pathinfo($file);
         }
-        usort($_images, "sortfile_d");
     }
+    usort($_images, "sortfile_d");
+
     return $_images;
 }
 
@@ -390,6 +377,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+    $views = array();
 
     // Extract a specific page with results
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
@@ -398,15 +386,12 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
     $auto = config('toc.automatic');
     $counter = config('views.counter');
-    $caption = config('fig.captions');
 
-    if ($counter == 'true') {
-        $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
-        }
+    $viewsFile = "content/data/views.json";
+    if (file_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(file_get_contents($viewsFile), true);
     }
-
+        
     foreach ($posts as $index => $v) {
 
         $post = new stdClass;
@@ -550,11 +535,6 @@ function get_posts($posts, $page = 1, $perpage = 0)
             }
         }
 
-        // Convert image tags to figures
-        if ($caption == 'true') {
-            $post->body = preg_replace( '/<p>(<img .*?alt="(.*?)"\s*\/>)<\/p>/', '<figure>$1<figcaption>$2</figcaption></figure>', $post->body );
-        }
-
         if ($counter == 'true') {
             $post->views = get_views('post_' . $post->slug, $post->file, $views);               
         } else {
@@ -578,11 +558,9 @@ function get_pages($pages, $page = 1, $perpage = 0)
     $auto = config('toc.automatic');
     $counter = config('views.counter');
 
-    if ($counter == 'true') {
-        $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
-        }
+    $viewsFile = "content/data/views.json";
+    if (file_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(file_get_contents($viewsFile), true);
     }
 
     // Extract a specific page with results
@@ -657,11 +635,9 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     $auto = config('toc.automatic');
     $counter = config('views.counter');
 
-    if ($counter == 'true') {
-        $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
-        }
+    $viewsFile = "content/data/views.json";
+    if (file_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(file_get_contents($viewsFile), true);
     }
 
     // Extract a specific page with results
@@ -1319,38 +1295,45 @@ function get_frontpage()
 // Return search page.
 function get_keyword($keyword, $page, $perpage)
 {
-    if (strlen($keyword) >= 3) { // three-character minimum
+    
+    if (strlen($keyword) < 3) {
+        return false;
+    }
 
-        $posts = get_blog_posts();
+    $posts = get_blog_posts();
 
-        $tmp = array();
+    $tmp = array();
+    $search = array();
+    
+    $searchFile = "content/data/search.json";
+    
+    if (file_exists($searchFile) && config('fulltext.search') == "true") {
+        $search = json_decode(file_get_contents($searchFile), true);
+    }
 
-        foreach ($posts as $index => $v) {
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['filename']);
+        
+        if (isset($search['post_' . $arr[2]])) {
+            $filter = $search['post_' . $arr[2]];
+        } else {
+            $filter = $arr[1] . ' ' . $arr[2];
+        }
 
-            $filepath = $v['dirname'] . '/' . $v['basename'];
-
-            $findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // whole-words only
-
-            $findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
-
-            $lines = file($filepath);
-
-            foreach ($lines as $line) {
-                if (preg_match ($findRx, $line)) {
-                    if (!in_array($v, $tmp)) {
-                        $tmp[] = $v;
-                    }
-                }
+        if (stripos($filter, $keyword) !== false) {
+            if (!in_array($v, $tmp)) {
+                $tmp[] = $v;
             }
         }
-
-        if (empty($tmp)) {
-            return false;
-        }
-
-        return $tmp = get_posts($tmp, $page, $perpage);
-
+        
     }
+
+    if (empty($tmp)) {
+        return false;
+    }
+
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
+
 }
 
 // Get related posts base on post category.
@@ -1516,34 +1499,41 @@ function get_tagcount($var)
 // Return search result count
 function keyword_count($keyword)
 {
-    if (strlen($keyword) >= 3) { // three-character minimum
+    if (strlen($keyword) < 3) {
+        return false;
+    }
 
-        $posts = get_blog_posts();
+    $posts = get_blog_posts();
 
-        $tmp = array();
+    $tmp = array();
+    $search = array();
+    
+    $searchFile = "content/data/search.json";
+    
+    if (file_exists($searchFile) && config('fulltext.search') == "true") {
+        $search = json_decode(file_get_contents($searchFile), true);
+    }
 
-            foreach ($posts as $index => $v) {
-
-            $filepath = $v['dirname'] . '/' . $v['basename'];
-
-            $findRxWhole = '\b' . preg_quote($keyword, '~') . '\b'; // whole-words only
-
-            $findRx = "~{$findRxWhole}~iu"; // Case-insensitive and UTF-8 mode
-
-            $lines = file($filepath);
-
-            foreach ($lines as $line) {
-                if (preg_match ($findRx, $line)) {
-                    if (!in_array($v, $tmp)) {
-                        $tmp[] = $v;
-                    }
-                }
-            }
+    foreach ($posts as $index => $v) {
+        $arr = explode('_', $v['filename']);
+        
+        if (isset($search['post_' . $arr[2]])) {
+            $filter = $search['post_' . $arr[2]];
+        } else {
+            $filter = $arr[1] . ' ' . $arr[2];
         }
 
-        $tmp = array_unique($tmp, SORT_REGULAR);
-        return count($tmp);
+        if (stripos($filter, $keyword) !== false) {
+            if (!in_array($v, $tmp)) {
+                $tmp[] = $v;
+            }
+        }
+        
     }
+
+    $tmp = array_unique($tmp, SORT_REGULAR);
+    return count($tmp);
+
 }
 
 // Return recent posts lists
@@ -3848,11 +3838,9 @@ function tag_i18n($tag)
 {
     static $tags = array();
 
-    if (empty($tags)) {
-        $filename = "content/data/tags.lang";
-        if (file_exists($filename)) {
-            $tags = unserialize(file_get_contents($filename));
-        }
+    $filename = "content/data/tags.lang";
+    if (file_exists($filename)) {
+        $tags = unserialize(file_get_contents($filename));
     }
     if (isset($tags[$tag])) {
         return $tags[$tag];

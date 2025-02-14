@@ -206,3 +206,6 @@ views.layout = "layout"
 
 ; Admin theme mode: light or dark
 admin.theme = "light"
+
+; Fulltext search
+fulltext.search = "false"
