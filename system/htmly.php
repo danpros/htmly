@@ -1742,7 +1742,7 @@ get('/admin/search', function () {
 
                 render('search', array(
                     'title' => generate_title('is_default', i18n('Search')),
-					'heading' => i18n('Search') . ' Index',
+                    'heading' => i18n('Search') . ' Index',
                     'description' => safe_html(strip_tags(blog_description())),
                     'canonical' => site_url(),
                     'metatags' => generate_meta(null, null),
@@ -1785,12 +1785,29 @@ get('/admin/search', function () {
     }
 });
 
+post('/admin/search', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $json = $_REQUEST['json'];
+            if ($json == 'content/data/search.json') {
+                unlink($json);
+            }
+            echo json_encode(array(
+                'message' => 'Search Index cleared successfully!',
+            ));
+        }
+    }
+});
+
 post('/admin/search/reindex', function () {
 
     if (login()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
-		$search = json_decode(htmlspecialchars_decode($_POST['search_index']));
+        $search = json_decode(htmlspecialchars_decode($_POST['search_index']));
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
             render('search-reindex', array(
@@ -1799,12 +1816,12 @@ post('/admin/search/reindex', function () {
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
                 'type' => 'is_admin-search',
-				'search' => $search,
+                'search' => $search,
                 'is_admin' => true,
                 'bodyclass' => 'admin-search',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
             ));
-		}
+        }
         
     }
 });

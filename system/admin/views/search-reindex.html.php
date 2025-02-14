@@ -55,3 +55,5 @@ echo '<a href="' . site_url() .'admin/search">Back to search index</a>';
 
 // Redir
 echo '<script language="javascript">window.location.href = "' .site_url() . 'admin/search"</script>';
+
+?>

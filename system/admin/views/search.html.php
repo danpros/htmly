@@ -54,6 +54,26 @@
 <?php endif; ?>
 <input type="hidden" name="search_index" value="<?php print_r(htmlspecialchars(json_encode($search_index)));?>">
 </form>
-<?php } else {
-    echo count(get_blog_posts()) . ' published posts has been indexed!';
-} ?>
+<?php } else {?>
+<script>
+$(function() {
+
+    var data = 'content/data/search.json';
+    $("#clearButton").click(function(){
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo site_url();?>admin/search',
+            dataType: 'json',
+            data: {'json': data},
+            success: function (response) {
+                alert(response.message);
+                location.reload();
+            },
+        });  
+    });    
+    
+});
+</script>
+<p><?php echo count(get_blog_posts()); ?> published posts has been indexed!</p>
+<p><button class="btn btn-primary" id="clearButton">Clear Search Index</button></p>
+<?php } ?>
