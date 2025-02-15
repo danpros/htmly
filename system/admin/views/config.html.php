@@ -189,7 +189,7 @@ Please install and enable the INTL extension to format the date format to your l
     </div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Fulltext search</label>
+    <label class="col-sm-2 col-form-label"><?php echo i18n('fulltext_search');?></label>
     <div class="col-sm-10">
       <div class="col-sm-10">
         <div class="form-check">

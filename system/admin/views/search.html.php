@@ -3,8 +3,8 @@
 <br>
 <?php $search_index = array(); if (!empty($posts)) { ?>
 <form method="POST" action="<?php echo site_url();?>admin/search/reindex">
-<p>The following are posts on the website that have not yet been included in the website search index.</p>
-<input type="submit" class="btn btn-primary" value="Add below posts to Index">
+<p><?php echo i18n('unindexed_posts');?></p>
+<input type="submit" class="btn btn-primary" value="<?php echo i18n('add_search_index');?>">
 <br><br>
     <table class="table post-list">
         <thead>
@@ -32,7 +32,7 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-    <input type="submit" class="btn btn-primary" value="Add above posts to Index">
+    <input type="submit" class="btn btn-primary" value="<?php echo i18n('add_search_index');?>">
 	<br><br>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <br>
@@ -74,6 +74,6 @@ $(function() {
     
 });
 </script>
-<p><?php echo count(get_blog_posts()); ?> published posts has been indexed!</p>
-<p><button class="btn btn-primary" id="clearButton">Clear Search Index</button></p>
+<p><?php echo count(get_blog_posts()); ?> <?php echo i18n('indexed_posts');?></p>
+<p><button class="btn btn-primary" id="clearButton"><?php echo i18n('clear_search_index');?></button></p>
 <?php } ?>

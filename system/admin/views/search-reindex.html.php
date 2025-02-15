@@ -51,7 +51,7 @@ echo '<script language="javascript">
 document.getElementById("information").innerHTML="Process completed";
 </script>';
 
-echo '<a href="' . site_url() .'admin/search">Back to search index</a>';
+echo '<a href="' . site_url() .'admin/search">'. i18n('back_to') . ' ' . i18n('search_index') .'</a>';
 
 // Redir
 echo '<script language="javascript">window.location.href = "' .site_url() . 'admin/search"</script>';

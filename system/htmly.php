@@ -1741,42 +1741,42 @@ get('/admin/search', function () {
             if (empty($tmp) || $page < 1) {
 
                 render('search', array(
-                    'title' => generate_title('is_default', i18n('Search')),
-                    'heading' => i18n('Search') . ' Index',
+                    'title' => generate_title('is_default', i18n('search_index')),
+                    'heading' => i18n('search_index'),
                     'description' => safe_html(strip_tags(blog_description())),
                     'canonical' => site_url(),
                     'metatags' => generate_meta(null, null),
                     'bodyclass' => 'no-posts',
-                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index')
                 ));
 
                 die;
             }
 
             render('search', array(
-                'title' => generate_title('is_default', i18n('Search')),
+                'title' => generate_title('is_default', i18n('search_index')),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
-                'heading' => i18n('Search') . ' Index',
+                'heading' => i18n('search_index'),
                 'page' => $page,
                 'posts' => $posts,
                 'bodyclass' => 'all-index-posts',
                 'type' => 'is_admin-index-posts',
                 'is_admin' => true,
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search'),
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index'),
                 'pagination' => has_pagination($total, $perpage, $page)
             ));
         } else {
             render('denied', array(
-                'title' => generate_title('is_default', i18n('Search')),
+                'title' => generate_title('is_default', i18n('search_index')),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
                 'type' => 'is_admin-index-posts',
                 'is_admin' => true,
                 'bodyclass' => 'denied',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index')
             ));
         }
     } else {
@@ -1811,7 +1811,7 @@ post('/admin/search/reindex', function () {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
             render('search-reindex', array(
-                'title' => generate_title('is_default', i18n('Search')),
+                'title' => generate_title('is_default', i18n('search_index')),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
@@ -1819,7 +1819,7 @@ post('/admin/search/reindex', function () {
                 'search' => $search,
                 'is_admin' => true,
                 'bodyclass' => 'admin-search',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Search')
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index')
             ));
         }
         
