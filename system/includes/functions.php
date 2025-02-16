@@ -2238,7 +2238,7 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
             {
                 for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
                 {
-                    if ($counter == 1) // link 1st pagination page to parent page instead of ?page=1 for SEO
+                    if ($counter == 1 && $counter !== $page) // link 1st pagination page to parent page instead of ?page=1 for SEO
                         $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
                     else if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
