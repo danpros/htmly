@@ -1318,6 +1318,7 @@ function get_keyword($keyword, $page, $perpage)
             $filter = $search['post_' . $arr[2]];
         } else {
             $filter = $arr[1] . ' ' . $arr[2];
+            $keyword = remove_accent($keyword);
         }
 
         if (stripos($filter, $keyword) !== false) {
@@ -1521,6 +1522,7 @@ function keyword_count($keyword)
             $filter = $search['post_' . $arr[2]];
         } else {
             $filter = $arr[1] . ' ' . $arr[2];
+            $keyword = remove_accent($keyword);
         }
 
         if (stripos($filter, $keyword) !== false) {
