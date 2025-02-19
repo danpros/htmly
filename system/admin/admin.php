@@ -175,11 +175,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         if (array_key_exists($v, $tags)) {
             foreach ($inter as $in => $i){
                 if($v == $in) {
-                    if (strtolower($tag) == strtolower(tag_i18n($in))) {
-                        $newtag[$v]= $tag;
-                    } else {
-                        $newtag[$v.'-'. $timestamp]= $tag;
-                    }
+                    $newtag[$v]= $tag;
                 }
             }
         } else {
@@ -373,11 +369,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         if (array_key_exists($v, $tags)) {
             foreach ($inter as $in => $i){
                 if($v == $in) {
-                    if (strtolower($tag) == strtolower(tag_i18n($in))) {
-                        $newtag[$v]= $tag;
-                    } else {
-                        $newtag[$v.'-'. $timestamp]= $tag;
-                    }
+                    $newtag[$v]= $tag;
                 }
             }
         } else {
