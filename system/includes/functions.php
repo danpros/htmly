@@ -1321,7 +1321,7 @@ function get_keyword($keyword, $page, $perpage)
             $keyword = remove_accent($keyword);
         }
 
-        if (stripos($filter, $keyword) !== false) {
+        if (stripos($filter, trim($keyword)) !== false) {
             if (!in_array($v, $tmp)) {
                 $tmp[] = $v;
             }
@@ -1525,7 +1525,7 @@ function keyword_count($keyword)
             $keyword = remove_accent($keyword);
         }
 
-        if (stripos($filter, $keyword) !== false) {
+        if (stripos($filter, trim($keyword)) !== false) {
             if (!in_array($v, $tmp)) {
                 $tmp[] = $v;
             }

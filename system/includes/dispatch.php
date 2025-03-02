@@ -135,7 +135,7 @@ function get_search_query()
 {
     if (isset($_GET['search'])) {
         $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . $search;
+        $url = site_url() . 'search/' . trim($search);
         header("Location: $url");
         die;
     }
