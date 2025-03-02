@@ -3,11 +3,11 @@ if (!defined('HTMLY')) die('HTMLy');
 
 use PragmaRX\Google2FA\Google2FA;
 
-// Get search query. Redir to /search/
-get_search_query();
-
 // Load the configuration file
 config('source', $config_file);
+
+// Get search query. Redir to /search/
+get_search_query();
 
 // Load the language file
 get_language();
