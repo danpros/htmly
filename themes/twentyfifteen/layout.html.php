@@ -21,7 +21,7 @@
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
     <div id="page" class="hfeed site">
-        <div style="top: 0px;" id="sidebar" class="sidebar">
+        <div id="sidebar" class="sidebar">
             <header id="masthead" class="site-header" role="banner">
                 <div class="site-branding">
                     <?php if (isset($is_front)) {?>
@@ -106,7 +106,7 @@
     <!--[if lte IE 8]><script type='text/javascript' src='<?php echo theme_path();?>js/html5.js'></script><![endif]-->
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-migrate.js"></script>
-    <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js?v=1"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/skip-link-focus-fix.js"></script>
     <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
