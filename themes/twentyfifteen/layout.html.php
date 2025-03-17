@@ -9,7 +9,7 @@
     <?php echo $metatags;?>
     <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo theme_path();?>css/font.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all"> 
-    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path();?>css/style_v2.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path();?>css/style_v2.css?v=1" type="text/css" media="all">
     <!--[if lt IE 9]>
     <link rel='stylesheet' id='twentyfifteen-ie-css'  href='<?php echo theme_path();?>css/ie.css' type='text/css' media='all' />
     <![endif]-->
@@ -91,13 +91,13 @@
                     <?php echo content();?>
                 </main>
             </div>
+            <footer id="colophon" class="site-footer hentry" role="contentinfo">
+                <div class="site-info">
+                     <?php echo copyright();?>
+                </div>
+            </footer>
         </div>
     </div>
-    <footer id="colophon" class="site-footer" role="contentinfo">
-        <div class="site-info">
-            <?php echo copyright();?>
-        </div>
-    </footer>
     <script type="text/javascript">
     /* <![CDATA[ */
     var screenReaderText = {"expand":"<span class=\"screen-reader-text\">expand child menu<\/span>","collapse":"<span class=\"screen-reader-text\">collapse child menu<\/span>"};
