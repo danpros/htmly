@@ -536,10 +536,12 @@ function get_posts($posts, $page = 1, $perpage = 0)
         }
 
         if ($counter == 'true') {
-            $post->views = get_views('post_' . $post->slug, $post->file, $views);               
+            $post->views = get_views('post_' . $post->slug, $views);               
         } else {
             $post->views = null;
         }
+        
+        $post->raw = $content;
 
         $tmp[] = $post;
     }
@@ -612,10 +614,12 @@ function get_pages($pages, $page = 1, $perpage = 0)
         }
 
         if ($counter == 'true') {
-            $post->views = get_views('page_' . $post->slug, $post->file, $views);               
+            $post->views = get_views('page_' . $post->slug, $views);               
         } else {
             $post->views = null;
         }
+        
+        $post->raw = $content;
 
         $tmp[] = $post;            
     }
@@ -699,10 +703,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         }
         
         if ($counter == 'true') {
-            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);              
+            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $views);              
         } else {
             $post->views = null;
         }
+        
+        $post->raw = $content;
 
         $tmp[] = $post;        
     }
@@ -978,6 +984,8 @@ function read_category_info($category)
                 if (isset($toc['1'])) {
                     $desc->body = insert_toc('taxonomy-' . $desc->slug, $toc['0'], $toc['1']);
                 }
+                
+                $desc->raw = $content;
 
                 $tmp[] = $desc;
             } 
@@ -1002,6 +1010,7 @@ function default_category($category = null)
         $desc->file = '';
         $desc->count = get_categorycount($desc->slug);
         $desc->rss = $desc->url . '/feed';
+        $desc->raw = $desc->body;
     } else{
         $desc->title = $category;
         $desc->url = site_url() . 'category/' . $category;
@@ -1012,6 +1021,7 @@ function default_category($category = null)
         $desc->file = '';
         $desc->count = get_categorycount($category);
         $desc->rss = $desc->url . '/feed';
+        $desc->raw = $desc->body;
     }
 
     return $tmp[] = $desc;
@@ -1036,7 +1046,7 @@ function category_list($custom = null)
     } else {
         $arr = get_category_info(null);
         foreach ($arr as $i => $a) {
-            $cat[] = array($a->slug, $a->title, $a->count, $a->description);
+            $cat[] = array($a->slug, $a->title, $a->count, $a->description, $a->body, $a->raw, $a->file, $a->rss);
         }
 
         $tmp = serialize($cat);
@@ -1217,6 +1227,8 @@ function get_author($name)
 
                 $author->body = $author->about;
                 $author->title = $author->name;
+                
+                $author->raw = $content;
 
                 $tmp[] = $author;
             }
@@ -1246,6 +1258,7 @@ function default_profile($name)
     $author->slug = $name;
     $author->file = '';
     $author->rss = $author->url . '/feed';
+    $author->raw = $author->about;
 
     return $tmp[] = $author;
 }
@@ -1275,6 +1288,7 @@ function get_frontpage()
         if (isset($toc['1'])) {
             $front->body = insert_toc('page-front', $toc['0'], $toc['1']);
         }
+        $front->raw = $content;
     } else {
         $front->title = 'Welcome';
         $front->url = site_url() . 'front';
@@ -1287,6 +1301,7 @@ function get_frontpage()
         $word_count = str_word_count(strip_tags($front->body));
         $front->readTime = ceil($word_count / 200);
         $front->views = null;
+        $front->raw = $front->body;
     }
 
     return $front;
@@ -2081,7 +2096,8 @@ function has_prev($prev)
             'categoryMd' => $prev->categoryMd,
             'categoryTitle' => $prev->categoryTitle,
             'readTime' => $prev->readTime,
-            'lastMod' => $prev->lastMod
+            'lastMod' => $prev->lastMod,
+            'raw' => $prev->raw
         );
     }
 }
@@ -2122,7 +2138,8 @@ function has_next($next)
             'categoryMd' => $next->categoryMd,
             'categoryTitle' => $next->categoryTitle,
             'readTime' => $next->readTime,
-            'lastMod' => $next->lastMod
+            'lastMod' => $next->lastMod,
+            'raw' => $next->raw
         );
     }
 }
@@ -2142,7 +2159,8 @@ function static_prev($prev)
             'parentSlug' => $prev->parentSlug,
             'file' => $prev->file,
             'readTime' => $prev->readTime,
-            'lastMod' => $prev->lastMod
+            'lastMod' => $prev->lastMod,
+            'raw' => $prev->raw
         );
     }    
 }
@@ -2162,7 +2180,8 @@ function static_next($next)
             'parentSlug' => $next->parentSlug,
             'file' => $next->file,
             'readTime' => $next->readTime,
-            'lastMod' => $next->lastMod
+            'lastMod' => $next->lastMod,
+            'raw' => $next->raw
         );
     }    
 }
@@ -2995,7 +3014,8 @@ function not_found($request = null)
             if (file_exists($filename)) {
                 $views = json_decode(file_get_data($filename), true);
             }
-            if (isset($views[$request])) {
+
+            if (isset($views[$request]) && !isset($views['flock_fail'])) {
                 unset($views[$request]);
                 save_json_pretty($filename, $views);
             }
@@ -3685,6 +3705,7 @@ function add_view($page)
     if (file_exists($filename)) {
         $views = json_decode(file_get_data($filename), true);
     }
+	
     if (isset($views[$page])) {
         $views[$page]++;
         save_json_pretty($filename, $views);
@@ -3699,7 +3720,7 @@ function add_view($page)
 }
 
 // Get the page views count
-function get_views($page, $oldID = null, $views = null)
+function get_views($page, $views = null)
 {
     $filename = "content/data/views.json";
 
@@ -3707,24 +3728,8 @@ function get_views($page, $oldID = null, $views = null)
         if (file_exists($filename)) {
             $views = json_decode(file_get_contents($filename), true);
         }
-    }
-    
-    if (!is_null($oldID)) {
-        if (isset($views[$oldID])) {
-            if (file_exists($filename)) {
-                $views = json_decode(file_get_data($filename), true);
-            }
-            if (isset($views['flock_fail'])) {
-                return -1;
-            } else {
-                $arr = replace_key($views, $oldID, $page);
-                save_json_pretty($filename, $arr);
-            }
-            return $views[$oldID];
-        } else {
-            if (isset($views[$page])) {
-                return $views[$page];
-            }            
+        if (isset($views[$page])) {
+            return $views[$page];
         }
     } else {
         if (isset($views[$page])) {
@@ -3753,8 +3758,16 @@ function get_content_tag($tag, $string, $alt = null)
 // Strip html comment
 function remove_html_comments($content)
 {
-    $patterns = array('/(\s|)<!--t(.*)t-->(\s|)/', '/(\s|)<!--d(.*)d-->(\s|)/', '/(\s|)<!--tag(.*)tag-->(\s|)/', '/(\s|)<!--image(.*)image-->(\s|)/', '/(\s|)<!--video(.*)video-->(\s|)/', '/(\s|)<!--audio(.*)audio-->(\s|)/', '/(\s|)<!--link(.*)link-->(\s|)/', '/(\s|)<!--quote(.*)quote-->(\s|)/', '/(\s|)<!--post(.*)post-->(\s|)/');
+    $patterns = array('/(\s|)<!--(?!(toc|more)-->).*-->(\s|)/');
     return preg_replace($patterns, '', $content);
+}
+
+function get_field($key, $object = null) 
+{
+    if (is_null($object)) {
+       return false;
+    }
+    return (get_content_tag($key, $object));
 }
 
 // Google recaptcha
