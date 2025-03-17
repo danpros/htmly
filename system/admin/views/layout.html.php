@@ -177,6 +177,13 @@ if (isset($author[0])) {
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/field" class="nav-link">
+                  <p>
+                    <?php echo i18n('custom_fields');?>
+                  </p>
+                </a>
+              </li>
               <?php endif;?>
             </ul>
           </li>

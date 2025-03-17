@@ -9,6 +9,7 @@ if ($type == 'is_frontpage') {
         $oldtitle = get_content_tag('t', $content, 'Welcome');
         $oldcontent = remove_html_comments($content);
     } else {
+        $content = 'Welcome to our website.';
         $oldtitle = 'Welcome';
         $oldcontent = 'Welcome to our website.';
     }
@@ -27,6 +28,7 @@ if ($type == 'is_frontpage') {
         $oldcontent = remove_html_comments($content);
         $oldimage = get_content_tag('image', $content);
     } else {
+        $content = i18n('Author_Description');
         $oldtitle = $user;
         $olddescription = i18n('Author_Description');
         $oldcontent = i18n('Author_Description');
@@ -34,12 +36,20 @@ if ($type == 'is_frontpage') {
     }
 
 } elseif ($type == 'is_category') {
-    $content = $p->body;
-    $oldtitle = $p->title;
-    $olddescription = $p->description;
-    $oldcontent = $p->body;
-    $oldmd = $p->slug;
     $url = 'content/data/category/'. $p->slug . '.md';
+    if (file_exists($url)) {
+        $content = file_get_contents($url);
+        $oldtitle = get_content_tag('t', $content, $p->slug);
+        $olddescription = get_content_tag('d', $content, remove_html_comments($content));
+        $oldcontent = remove_html_comments($content);
+        $oldmd = $p->slug;
+    } else {
+        $content = $p->body;
+        $oldtitle = $p->title;
+        $olddescription = $p->description;
+        $oldcontent = $p->body;
+        $oldmd = $p->slug;
+    }
 } else {
 
     if (isset($p->file)) {
@@ -81,6 +91,24 @@ if ($type == 'is_frontpage') {
 }
 
 $images = image_gallery(null, 1, 40);
+
+$fields = array();
+if ($type == 'is_page' || $type == 'is_frontpage') {
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+} elseif ($type == 'is_subpage') {
+    $field_file = 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+} elseif ($type == 'is_profile') {
+    $field_file = 'content/data/field/profile.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+}
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
@@ -132,7 +160,6 @@ $images = image_gallery(null, 1, 40);
                     <input type="hidden" name="is_image" value="is_image">
                     <br>
                     <?php endif;?>
-
                 </div>
             </div>
              <div class="row">
@@ -146,6 +173,38 @@ $images = image_gallery(null, 1, 40);
                     <div id="wmd-button-bar" class="wmd-button-bar"></div>
                     <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
                     <br>
+                    <?php if(!empty($fields) && $type != 'is_category'):?>
+                    <details id="custom-fields"  >
+                    <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong>Custom fields</strong></summary>
+                    <div class="row">
+                        <div class="col">
+                            <?php foreach ($fields as $fld):?>
+                                <?php if ($fld->type == 'text'):?>
+                                <label><?php echo $fld->label;?></label>
+                                <input type="<?php echo $fld->type;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value="<?php echo get_field($fld->name, $content);?>"/>
+                                <br>
+                                <?php elseif ($fld->type == 'textarea'):?>
+                                <label><?php echo $fld->label;?></label>
+                                <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" name="<?php echo $fld->name;?>"><?php echo get_field($fld->name, $content);?></textarea>
+                                <br>
+                                <?php elseif ($fld->type == 'checkbox'):?>
+                                <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" <?php echo get_field($fld->name, $content);?>>
+                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                <br>
+                                <?php elseif ($fld->type == 'select'):?>
+                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
+                                <?php foreach ($fld->options as $val):?>
+                                    <option value="<?php echo $val->value;?>" <?php if (get_field($fld->name, $content) === $val->value) { echo 'selected="selected"';} ?>><?php echo $val->label;?></option>
+                                <?php endforeach;?>
+                                </select>
+                                <?php endif;?>        
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                    </details>
+                    <br>
+                    <?php endif;?>
                     <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                     <?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
@@ -188,7 +247,7 @@ $images = image_gallery(null, 1, 40);
     margin: 2px 2px;
     border-top-right-radius: 2px;
     width: 190px;
-	height: 140px;
+    height: 140px;
     vertical-align: top;
     background-position: top left;
     background-repeat: no-repeat;
@@ -277,7 +336,7 @@ $images = image_gallery(null, 1, 40);
         </div>
     </div>
     <?php endif;?>
-	
+    
 </div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">
@@ -286,6 +345,7 @@ $images = image_gallery(null, 1, 40);
     var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
     var addEdit = 'edit';
     var saveInterval = 60000;
+    const field = [<?php foreach ($fields as $f){ echo '"' . $f->name . '", ';}?>];
 </script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <?php if ($type == 'is_profile'):?>
@@ -355,4 +415,15 @@ $('.img-container').on("click", ".the-img", function(e) {
             localStorage.setItem("preview-state", 'open');
         }
     })
+    if (localStorage.getItem("custom-fields-state") === "open") {
+        document.getElementById("custom-fields").setAttribute("open", "");
+    }
+    
+    document.getElementById("custom-fields-click").addEventListener("click", () => {
+        if (document.getElementById("custom-fields").open) {
+            localStorage.setItem("custom-fields-state", 'close');
+        } else {
+            localStorage.setItem("custom-fields-state", 'open');
+        }
+    })    
 </script>

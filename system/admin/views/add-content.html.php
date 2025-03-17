@@ -26,6 +26,11 @@ if (file_exists($tagslang)) {
 
 $images = image_gallery(null, 1, 40);
 
+$fields = array();
+$field_file= 'content/data/field/post.json';
+if (file_exists($field_file)) {
+    $fields = json_decode(file_get_contents($field_file, true));
+}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
@@ -188,8 +193,40 @@ $( function() {
                         <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
                         <div id="wmd-button-bar" class="wmd-button-bar"></div>
                         <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) { if (empty($postContent)) { echo 'error'; } } ?>" name="content" cols="20" rows="15"><?php if (isset($postContent)) { echo $postContent;} ?></textarea><br>
+                        <?php if(!empty($fields)):?>
+                        <details id="custom-fields"  >
+                        <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong>Custom fields</strong></summary>
+                        <div class="row">
+                            <div class="col">
+                                <?php foreach ($fields as $fld):?>
+                                    <?php if ($fld->type == 'text'):?>
+                                    <label><?php echo $fld->label;?></label>
+                                    <input type="<?php echo $fld->type;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
+                                    <br>
+                                    <?php elseif ($fld->type == 'textarea'):?>
+                                    <label><?php echo $fld->label;?></label>
+                                    <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" name="<?php echo $fld->name;?>"></textarea>
+                                    <br>
+                                    <?php elseif ($fld->type == 'checkbox'):?>
+                                    <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" >
+                                    <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                    <br>
+                                    <?php elseif ($fld->type == 'select'):?>
+                                    <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                    <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
+                                    <?php foreach ($fld->options as $val):?>
+                                        <option value="<?php echo $val->value;?>" ><?php echo $val->label;?></option>
+                                    <?php endforeach;?>
+                                    </select>
+                                    <?php endif;?>        
+                                <?php endforeach;?>
+                            </div>
+                        </div>
+                        </details>
+                        <br>
+                        <?php endif;?>
                         <input type="submit" name="publish" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
-                        <br><br>
+                        <br>
                     </div>
                 </div>
                 <div class="col-sm-6" id="preview-col">
@@ -215,7 +252,7 @@ $( function() {
     margin: 2px 2px;
     border-top-right-radius: 2px;
     width: 190px;
-	height: 140px;
+    height: 140px;
     vertical-align: top;
     background-position: top left;
     background-repeat: no-repeat;
@@ -314,6 +351,7 @@ $( function() {
     var parent_page = '';
     var addEdit = 'add';
     var saveInterval = 60000;
+    const field = [<?php foreach ($fields as $f){ echo '"' . $f->name . '", ';}?>];
 </script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/resources/js/media.uploader.js"></script>
@@ -377,5 +415,16 @@ $('.img-container').on("click", ".the-img", function(e) {
             localStorage.setItem("preview-state", 'open');
         }
     })
+    if (localStorage.getItem("custom-fields-state") === "open") {
+        document.getElementById("custom-fields").setAttribute("open", "");
+    }
+    
+    document.getElementById("custom-fields-click").addEventListener("click", () => {
+        if (document.getElementById("custom-fields").open) {
+            localStorage.setItem("custom-fields-state", 'close');
+        } else {
+            localStorage.setItem("custom-fields-state", 'open');
+        }
+    })    
 </script>
 

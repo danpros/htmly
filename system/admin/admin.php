@@ -120,7 +120,7 @@ function remove_accent($str)
 }
 
 // Add content
-function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null, $oldfile = null)
+function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null, $oldfile = null, $field = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -214,7 +214,15 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     } else {
         $post_media = "";
     }
-    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }    
+    
+    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . $customField . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
@@ -312,7 +320,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 }
 
 // Edit content
-function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null, $autoSave = null)
+function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null, $autoSave = null, $field = null)
 {
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
@@ -398,7 +406,15 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     } else {
         $post_media = "";
     }
-    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }
+    
+    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . $customField . "\n\n" . $content;
     
     $dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
     $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
@@ -578,7 +594,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 }
 
 // Add static page
-function add_page($title, $url, $content, $draft, $description = null, $autoSave = null, $oldfile = null)
+function add_page($title, $url, $content, $draft, $description = null, $autoSave = null, $oldfile = null, $field = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -613,7 +629,14 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
         }
     }
     
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }
+    
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $customField . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
@@ -663,7 +686,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
 }
 
 // Add static sub page
-function add_sub_page($title, $url, $content, $static, $draft, $description = null, $autoSave = null, $oldfile = null)
+function add_sub_page($title, $url, $content, $static, $draft, $description = null, $autoSave = null, $oldfile = null, $field = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -698,9 +721,16 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
         } else {
             $post_url = $post_url;
         }
-    }   
+    }
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }
 
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $customField . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
@@ -744,7 +774,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
 }
 
 // Edit static page and sub page
-function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null, $autoSave = null)
+function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null, $autoSave = null, $field = null)
 {
     $dir = pathinfo($oldfile, PATHINFO_DIRNAME);
     $fn = explode('.', pathinfo($oldfile, PATHINFO_FILENAME));
@@ -770,7 +800,14 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         $post_description = "";
     }
     
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
+    $customField = "";
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }
+    
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $customField  . "\n\n" . $content;
     
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {  
         
@@ -980,7 +1017,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
 }
 
 // Edit user profile
-function edit_profile($title, $content, $user, $description = null, $image = null)
+function edit_profile($title, $content, $user, $description = null, $image = null, $field)
 {
     $description = safe_html($description);
     if ($description !== null) {
@@ -997,8 +1034,16 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
     } else {
         $avatar = "";
     }
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }
+    
     $user_title = safe_html($title);
-    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . $avatar . "\n\n" . $content;
+    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . $avatar . $customField . "\n\n" . $content;
 
     if (!empty($user_title) && !empty($user_content)) {
 
@@ -1017,10 +1062,18 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
 }
 
 // Edit homepage
-function edit_frontpage($title, $content)
+function edit_frontpage($title, $content, $field = null)
 {
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+        }
+    }
+    
     $front_title = safe_html($title);
-    $front_content = '<!--t ' . $front_title . ' t-->' . "\n\n" . $content;
+    $front_content = '<!--t ' . $front_title . ' t-->' . $customField . "\n\n" . $content;
 
     if (!empty($front_title) && !empty($front_content)) {
 
@@ -1261,7 +1314,7 @@ function find_draft_page($static = null)
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if ($counter == 'true') {
-                    $post->views = get_views('page_' . $post->slug, $post->file, $views);
+                    $post->views = get_views('page_' . $post->slug, $views);
                 } else {
                     $post->views = null;
                 }
@@ -1340,7 +1393,7 @@ function find_draft_subpage($static = null, $sub_static = null)
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if ($counter == 'true') {
-                    $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);
+                    $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $views);
                 } else {
                     $post->views = null;
                 }

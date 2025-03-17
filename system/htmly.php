@@ -406,6 +406,23 @@ post('/edit/profile', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/profile.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
@@ -413,7 +430,7 @@ post('/edit/profile', function () {
     $image = from($_REQUEST, 'image');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
-        edit_profile($title, $content, $user, $description, $image);
+        edit_profile($title, $content, $user, $description, $image, $field);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -621,6 +638,23 @@ post('/edit/frontpage', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
@@ -628,7 +662,7 @@ post('/edit/frontpage', function () {
     $content = from($_REQUEST, 'content');
     if ($role === 'editor' || $role === 'admin') {    
         if ($proper && !empty($title) && !empty($content)) {
-            edit_frontpage($title, $content);
+            edit_frontpage($title, $content, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -712,6 +746,23 @@ post('/add/content', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/post.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }    
+    
     $is_image = from($_REQUEST, 'is_image');
     $is_audio = from($_REQUEST, 'is_audio');
     $is_video = from($_REQUEST, 'is_video');
@@ -765,17 +816,17 @@ post('/add/content', function () {
     }
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime, null, null, $field);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -882,6 +933,23 @@ post('/add/page', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }    
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
@@ -895,7 +963,7 @@ post('/add/page', function () {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content) && login()) {
-            add_page($title, $url, $content, $draft, $description);
+            add_page($title, $url, $content, $draft, $description, null, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -932,7 +1000,8 @@ post('/add/page', function () {
 // Autosave
 post('/admin/autosave', function () {
 
-    if (login()) {
+    if (login()) {    
+        
         $title = $_REQUEST['title'];
         $url = $_REQUEST['url'];
         $content = $_REQUEST['content'];
@@ -944,6 +1013,34 @@ post('/admin/autosave', function () {
         $addEdit = $_REQUEST['addEdit'];
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        
+        $field = array();
+        $aField = array();
+        if ($posttype == 'is_post') {
+            $field_file = 'content/data/field/post.json';
+            if (file_exists($field_file)) {
+                $aField = json_decode(file_get_contents($field_file, true));
+            }
+        } elseif ($posttype == 'is_page') {
+            $field_file = 'content/data/field/page.json';
+            if (file_exists($field_file)) {
+                $aField = json_decode(file_get_contents($field_file, true));
+            }
+        } elseif ($posttype == 'is_subpage') {
+            $field_file = 'content/data/field/subpage.json';
+            if (file_exists($field_file)) {
+                $aField = json_decode(file_get_contents($field_file, true));
+            }
+        }
+        if(!empty($aField)) {
+            foreach ($aField as $af) {
+                if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                    $field[$af->name] = !empty($_REQUEST[$af->name]) ? "checked" : '';
+                } else {
+                    $field[$af->name] = from($_REQUEST, $af->name);
+                }
+            }
+        }    
 
         if (empty($url)) {
             $url = $title;
@@ -960,18 +1057,18 @@ post('/admin/autosave', function () {
             if ($posttype == 'is_page') {
                 if ($role === 'editor' || $role === 'admin') {
                     if ($addEdit == 'add') {
-                        $response = add_page($title, $url, $content, $draft, $description, $autoSave, $oldfile);
+                        $response = add_page($title, $url, $content, $draft, $description, $autoSave, $oldfile, $field);
                     } else {
-                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave);
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave, $field);
                     }
                 }
             } elseif ($posttype == 'is_subpage') {
                 if ($role === 'editor' || $role === 'admin') {
                     $static = $_REQUEST['parent_page'];
                     if ($addEdit == 'add') {
-                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave, $oldfile);
+                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave, $oldfile, $field);
                     } else {
-                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave);
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave, $field);
                     }
                 }
             } else {
@@ -1001,11 +1098,11 @@ post('/admin/autosave', function () {
                 if ($type == 'post') {
                     if (!empty($title) && !empty($tag) && !empty($content)) {
                         if ($addEdit == 'add') {
-                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile, $field);
                         } else {
                             $arr = explode('/', $oldfile);
                             if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave, $field);
                             }
                         }
                     } else {
@@ -1014,11 +1111,11 @@ post('/admin/autosave', function () {
                 } else {
                     if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
                         if ($addEdit == 'add') {
-                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile, $field);
                         } else {
                             $arr = explode('/', $oldfile);
                             if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave, $field);
                             }
                         }
                     } else {
@@ -2969,6 +3066,183 @@ get('/admin/categories/:category', function ($category) {
     }   
 });
 
+// Show admin/field
+get('/admin/field', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field', array(
+            'title' => generate_title('is_default', i18n('custom_fields')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('custom_fields')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/field/post
+get('/admin/field/post', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-post', array(
+            'title' => generate_title('is_default', i18n('post')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('post')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/post', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/post.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Post fields saved successfully!',
+            ));
+        }
+    }
+});
+
+// Show admin/field/page
+get('/admin/field/page', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-page', array(
+            'title' => generate_title('is_default', i18n('page')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('page')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/page', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/page.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Page fields saved successfully!',
+            ));
+        }
+    }
+});
+
+// Show admin/field/subpage
+get('/admin/field/subpage', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-subpage', array(
+            'title' => generate_title('is_default', i18n('subpage')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('subpage')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/subpage', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/subpage.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Subpage fields saved successfully!',
+            ));
+        }
+    }
+});
+
+// Show admin/field/profile
+get('/admin/field/profile', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-profile', array(
+            'title' => generate_title('is_default', i18n('profile')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('profile')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/profile', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/profile.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Profile fields saved successfully!',
+            ));
+        }
+    }
+});
+
 // Show the category page
 get('/category/:category', function ($category) {
 
@@ -3846,6 +4120,23 @@ post('/'. permalink_type() .'/:name/edit', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/post.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $is_post = from($_REQUEST, 'is_post');
@@ -3899,27 +4190,27 @@ post('/'. permalink_type() .'/:name/edit', function () {
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio,null, $field);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null,null, $field);
             
         } else {
             $message['error'] = '';
@@ -4327,6 +4618,23 @@ post('/:static/add', function ($static) {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file= 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
@@ -4340,7 +4648,7 @@ post('/:static/add', function ($static) {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            add_sub_page($title, $url, $content, $static, $draft, $description);
+            add_sub_page($title, $url, $content, $static, $draft, $description, null, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4432,6 +4740,23 @@ post('/:static/edit', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -4447,7 +4772,7 @@ post('/:static/edit', function () {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4462,7 +4787,7 @@ post('/:static/edit', function () {
             config('views.root', 'system/admin/views');
 
             render('edit-page', array(
-                'title' => generate_title('is_default', i18n('Edit') .  ': ' . $post->title),
+                'title' => generate_title('is_default', i18n('Edit') .  ': ' . $title),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
@@ -4703,6 +5028,23 @@ post('/:static/:sub/edit', function ($static, $sub) {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -4721,7 +5063,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4736,7 +5078,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
             config('views.root', 'system/admin/views');
 
             render('edit-page', array(
-                'title' => generate_title('is_default', i18n('Edit') . ': ' . $page->title),
+                'title' => generate_title('is_default', i18n('Edit') . ': ' . $title),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
@@ -5024,6 +5366,23 @@ post('/:year/:month/:name/edit', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/post.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $is_post = from($_REQUEST, 'is_post');
@@ -5078,27 +5437,27 @@ post('/:year/:month/:name/edit', function () {
 
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image, null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio,null, $field);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null,null, $field);
             
         } else {
             $message['error'] = '';

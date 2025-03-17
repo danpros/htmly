@@ -1,5 +1,21 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php $images = image_gallery(null, 1, 40); ?>
+<?php 
+
+$fields = array();
+if ($type == 'is_page') {
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+} elseif ($type == 'is_subpage') {
+    $field_file = 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+}
+
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
@@ -45,7 +61,39 @@
                     <div id="wmd-button-bar" class="wmd-button-bar"></div>
                     <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
                     <br>
-					<input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
+                    <?php if(!empty($fields) && $type != 'is_category'):?>
+                    <details id="custom-fields"  >
+                    <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong>Custom fields</strong></summary>
+                    <div class="row">
+                        <div class="col">
+                            <?php foreach ($fields as $fld):?>
+                                <?php if ($fld->type == 'text'):?>
+                                <label><?php echo $fld->label;?></label>
+                                <input type="<?php echo $fld->type;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
+                                <br>
+                                <?php elseif ($fld->type == 'textarea'):?>
+                                <label><?php echo $fld->label;?></label>
+                                <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" name="<?php echo $fld->name;?>"></textarea>
+                                <br>
+                                <?php elseif ($fld->type == 'checkbox'):?>
+                                <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" >
+                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                <br>
+                                <?php elseif ($fld->type == 'select'):?>
+                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
+                                <?php foreach ($fld->options as $val):?>
+                                    <option value="<?php echo $val->value;?>" ><?php echo $val->label;?></option>
+                                <?php endforeach;?>
+                                </select>
+                                <?php endif;?>        
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                    </details>
+                    <br>
+                    <?php endif;?>
+                    <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input id="oldfile" type="hidden" name="oldfile" class="text"/>
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                     <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
@@ -78,7 +126,7 @@
     margin: 2px 2px;
     border-top-right-radius: 2px;
     width: 190px;
-	height: 140px;
+    height: 140px;
     vertical-align: top;
     background-position: top left;
     background-repeat: no-repeat;
@@ -134,6 +182,7 @@
     var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
     var addEdit = 'add';
     var saveInterval = 60000;
+    const field = [<?php foreach ($fields as $f){ echo '"' . $f->name . '", ';}?>];
 </script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <script>
@@ -198,4 +247,15 @@ $('.img-container').on("click", ".the-img", function(e) {
             localStorage.setItem("preview-state", 'open');
         }
     })
+    if (localStorage.getItem("custom-fields-state") === "open") {
+        document.getElementById("custom-fields").setAttribute("open", "");
+    }
+    
+    document.getElementById("custom-fields-click").addEventListener("click", () => {
+        if (document.getElementById("custom-fields").open) {
+            localStorage.setItem("custom-fields-state", 'close');
+        } else {
+            localStorage.setItem("custom-fields-state", 'open');
+        }
+    })    
 </script>
