@@ -3098,7 +3098,7 @@ get('/admin/field/post', function () {
             'type' => 'is_admin-content',
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('post')
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' . i18n('post')
         ));
     } else {
         $login = site_url() . 'login';
@@ -3138,7 +3138,7 @@ get('/admin/field/page', function () {
             'type' => 'is_admin-content',
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('page')
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' .i18n('page')
         ));
     } else {
         $login = site_url() . 'login';
@@ -3177,7 +3177,7 @@ get('/admin/field/subpage', function () {
             'type' => 'is_admin-content',
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('subpage')
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' .i18n('subpage')
         ));
     } else {
         $login = site_url() . 'login';
@@ -3216,7 +3216,7 @@ get('/admin/field/profile', function () {
             'type' => 'is_admin-content',
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('profile')
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' .i18n('profile')
         ));
     } else {
         $login = site_url() . 'login';
