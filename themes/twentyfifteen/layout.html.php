@@ -106,9 +106,9 @@
     <!--[if lte IE 8]><script type='text/javascript' src='<?php echo theme_path();?>js/html5.js'></script><![endif]-->
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-migrate.js"></script>
-    <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js?v=1"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/theia-sticky-sidebar.min.js"></script>
+    <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js?v=2"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/skip-link-focus-fix.js"></script>
     <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>
-

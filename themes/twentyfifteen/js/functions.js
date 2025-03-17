@@ -75,62 +75,7 @@
 			}
 		} );
 	} )();
-
-	/**
-	 * Add or remove ARIA attributes.
-	 *
-	 * Uses jQuery's width() function to determine the size of the window and add
-	 * the default ARIA attributes for the menu toggle if it's visible.
-	 *
-	 * @since Twenty Fifteen 1.1
-	 */
-	function onResizeARIA() {
-		if ( 955 > $window.width() ) {
-			button.attr( 'aria-expanded', 'false' );
-			secondary.attr( 'aria-expanded', 'false' );
-			button.attr( 'aria-controls', 'secondary' );
-		} else {
-			button.removeAttr( 'aria-expanded' );
-			secondary.removeAttr( 'aria-expanded' );
-			button.removeAttr( 'aria-controls' );
-		}
-	}
-
-	// Sidebar scrolling.
-	function resizeAndScroll() {
-		var windowPos = $window.scrollTop(),
-			windowHeight = $window.height(),
-			sidebarHeight = $sidebar.height(),
-			pageHeight = $( '#page' ).height();
-
-		if ( 955 < $window.width() && pageHeight > sidebarHeight && ( windowPos + windowHeight ) >= sidebarHeight ) {
-			$sidebar.css({
-				position: 'fixed',
-				bottom: sidebarHeight > windowHeight ? 0 : 'auto'
-			});
-		} else {
-			$sidebar.css('position', 'relative');
-		}
-	}
-
-	$( function() {
-		$body          = $( document.body );
-		$window        = $( window );
-		$sidebar       = $( '#sidebar' ).first();
-
-		$window
-			.on( 'scroll.twentyfifteen', resizeAndScroll )
-			.on( 'load.twentyfifteen', onResizeARIA )
-			.on( 'resize.twentyfifteen', function() {
-				clearTimeout( resizeTimer );
-				resizeTimer = setTimeout( resizeAndScroll, 500 );
-				onResizeARIA();
-			} );
-		$sidebar.on( 'click.twentyfifteen keydown.twentyfifteen', 'button', resizeAndScroll );
-
-		for ( var i = 0; i < 6; i++ ) {
-			setTimeout( resizeAndScroll, 100 * i );
-		}
-	} );
+	
+	$('#sidebar, #content').theiaStickySidebar();
 
 } )( jQuery );
