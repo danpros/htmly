@@ -50,3 +50,11 @@ summary {
 	margin-left: 5px;
 	box-shadow:none;
 }
+
+.toc-link a {
+	display:none;
+}
+
+.toc-link:hover a{
+	display:inline-block;
+}
