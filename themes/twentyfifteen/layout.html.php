@@ -43,7 +43,7 @@
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <p><?php echo blog_description() ?></p>
-                    </aside>          				
+                    </aside>
                     <nav id="social-navigation" class="social-navigation" role="navigation">
                         <div class="menu-social-links-container">
                             <?php echo social();?>
@@ -51,7 +51,7 @@
                     </nav>
                     <aside class="widget search">
                         <form><input type="search" name="search" class="form-control" placeholder="<?php echo i18n('Type_to_search');?>"></form>
-                    </aside>                            
+                    </aside>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>
                         <?php echo recent_posts() ?>
@@ -80,11 +80,11 @@
                         <h2 class="widget-title"><?php echo i18n("Tags");?></h2>
                         <div class="tag-cloud">
                             <?php echo tag_cloud();?>
-                        </div>	
+                        </div>
                     </aside>
                 </div>
             </div>
-        </div>                
+        </div>
         <div id="content" class="site-content">
             <div id="primary" class="content-area">
                 <main id="main" class="site-main" role="main">
@@ -92,12 +92,12 @@
                 </main>
             </div>
         </div>
-        <footer id="colophon" class="site-footer" role="contentinfo">
-            <div class="site-info">
-                 <?php echo copyright();?>
-            </div>
-        </footer>
     </div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+        <div class="site-info">
+            <?php echo copyright();?>
+        </div>
+    </footer>
     <script type="text/javascript">
     /* <![CDATA[ */
     var screenReaderText = {"expand":"<span class=\"screen-reader-text\">expand child menu<\/span>","collapse":"<span class=\"screen-reader-text\">collapse child menu<\/span>"};
