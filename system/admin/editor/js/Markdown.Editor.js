@@ -2049,15 +2049,17 @@
             chunk.skipLines(nLinesBack, nLinesForward);
 
             if (!chunk.selection) {
-                chunk.startTag = "    ";
+                chunk.startTag = "```\n";
                 chunk.selection = this.getString("codeexample");
+                chunk.endTag = "\n```";
             }
             else {
                 if (/^[ ]{0,3}\S/m.test(chunk.selection)) {
                     if (/\n/.test(chunk.selection))
-                        chunk.selection = chunk.selection.replace(/^/gm, "    ");
+                        chunk.selection = "```\n" + chunk.selection;
                     else // if it's not multiline, do not select the four added spaces; this is more consistent with the doList behavior
-                        chunk.before += "    ";
+                        chunk.startTag = "```\n";
+                        chunk.endTag  = "\n```";
                 }
                 else {
                     chunk.selection = chunk.selection.replace(/^(?:[ ]{4}|[ ]{0,3}\t)/gm, "");
