@@ -41,6 +41,9 @@ addOptionBtn.addEventListener('click', () => {
     valueInput.type = 'text';
     valueInput.placeholder = 'Option Value';
     valueInput.classList.add('option-value');
+    valueInput.addEventListener('input', () => {
+        valueInput.value = valueInput.value.replace(/\s+/g, ''); // Remove spaces in real-time
+    });
 
     const removeBtn = document.createElement('button');
     removeBtn.textContent = 'Remove';
@@ -65,7 +68,7 @@ addFieldBtn.addEventListener('click', () => {
     if (field.type === 'select') {
         const options = Array.from(document.querySelectorAll('.option-item')).map(item => {
             const label = item.querySelector('.option-label').value.trim();
-            const value = item.querySelector('.option-value').value.trim();
+            const value = item.querySelector('.option-value').value.trim().replace(/\s+/g, ''); // Remove spaces
             return { label, value };
         });
 
@@ -130,8 +133,11 @@ function editField(index) {
             const valueInput = document.createElement('input');
             valueInput.type = 'text';
             valueInput.placeholder = 'Option Value';
-            valueInput.value = opt.value;
+            valueInput.value = opt.value.replace(/\s+/g, ''); // Remove spaces
             valueInput.classList.add('option-value');
+            valueInput.addEventListener('input', () => {
+                valueInput.value = valueInput.value.replace(/\s+/g, ''); // Remove spaces in real-time
+            });
 
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'Remove';
@@ -231,11 +237,19 @@ function updatePreviewAndOutput() {
     addFieldBtn.textContent = "Add Field";
 }
 
-// Real-time removal of spaces in the name field
-nameEl.addEventListener('input', () => {
-    nameEl.value = nameEl.value.replace(/\s+/g, ''); // Remove spaces in real-time
-});
 
 document.addEventListener('DOMContentLoaded', () => {
     updatePreviewAndOutput();
+    
+    // Real-time removal of spaces in the name field
+    nameEl.addEventListener('input', () => {
+        nameEl.value = nameEl.value.replace(/\s+/g, ''); // Remove spaces in real-time
+    });    
+        
+    valueEl.addEventListener('input', () => {
+        if (typeEl.value === 'select') {
+            valueEl.value = valueEl.value.replace(/\s+/g, ''); // Remove spaces
+        }
+    });    
+    
 });
