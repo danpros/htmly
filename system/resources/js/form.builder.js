@@ -170,11 +170,9 @@ function updatePreviewAndOutput() {
         const wrapper = document.createElement('div');
         wrapper.setAttribute('class', 'field-preview form-group');
 
-        if (f.type !== 'checkbox') {
-            const label = document.createElement('label');
-            label.textContent = f.label;
-            wrapper.appendChild(label);
-        }
+        const label = document.createElement('label');
+        label.innerHTML = f.label + " <br><small>Field ID:</small> <code>"+ f.name + "</code>";
+        wrapper.appendChild(label);
 
         let el;
         if (f.type === 'textarea') {
@@ -183,11 +181,13 @@ function updatePreviewAndOutput() {
             el.setAttribute('class', 'form-control');
             el.value = f.value;
         } else if (f.type === 'checkbox') {
+            const spacer = document.createElement('br');
             el = document.createElement('input');
             el.type = 'checkbox';
             el.checked = f.value === 'true';
             const checkboxLabel = document.createElement('span');
             checkboxLabel.textContent = ` ${f.label} `;
+            wrapper.appendChild(spacer);
             wrapper.appendChild(el);
             wrapper.appendChild(checkboxLabel);
             el = null;
@@ -215,13 +215,13 @@ function updatePreviewAndOutput() {
         const editBtn = document.createElement('button');
         editBtn.textContent = 'Edit';
         editBtn.addEventListener('click', () => editField(index));
-        editBtn.setAttribute('class', 'btn btn-primary btn-xs');
+        editBtn.setAttribute('class', 'btn btn-primary btn-xs m-1');
         wrapper.appendChild(editBtn);
 
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
         deleteBtn.addEventListener('click', () => deleteField(index));
-        deleteBtn.setAttribute('class', 'btn btn-danger btn-xs');
+        deleteBtn.setAttribute('class', 'btn btn-danger btn-xs m-1');
         wrapper.appendChild(deleteBtn);
 
         formPreviewEl.appendChild(wrapper);
