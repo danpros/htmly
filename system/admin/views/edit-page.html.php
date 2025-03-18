@@ -181,14 +181,14 @@ if ($type == 'is_page' || $type == 'is_frontpage') {
                             <?php foreach ($fields as $fld):?>
                                 <?php if ($fld->type == 'text'):?>
                                 <label><?php echo $fld->label;?></label>
-                                <input type="<?php echo $fld->type;?>" placeholder="<?php echo $fld->info;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
+                                <input type="<?php echo $fld->type;?>" placeholder="<?php echo $fld->info;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value="<?php echo get_field($fld->name, $content);?>"/>
                                 <br>
                                 <?php elseif ($fld->type == 'textarea'):?>
                                 <label><?php echo $fld->label;?></label>
-                                <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" placeholder="<?php echo $fld->info;?>" name="<?php echo $fld->name;?>"></textarea>
+                                <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" placeholder="<?php echo $fld->info;?>" name="<?php echo $fld->name;?>"><?php echo get_field($fld->name, $content);?></textarea>
                                 <br>
                                 <?php elseif ($fld->type == 'checkbox'):?>
-                                <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" >
+                                <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" <?php echo get_field($fld->name, $content);?>>
                                 <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
                                 <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
                                 <br>
@@ -196,7 +196,7 @@ if ($type == 'is_page' || $type == 'is_frontpage') {
                                 <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
                                 <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
                                 <?php foreach ($fld->options as $val):?>
-                                    <option value="<?php echo $val->value;?>" ><?php echo $val->label;?></option>
+                                    <option value="<?php echo $val->value;?>" <?php if (get_field($fld->name, $content) === $val->value) { echo 'selected="selected"';} ?>><?php echo $val->label;?></option>
                                 <?php endforeach;?>
                                 </select>
                                 <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
