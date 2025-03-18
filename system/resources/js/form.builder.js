@@ -10,6 +10,7 @@ const typeEl = document.getElementById('type');
 const nameEl = document.getElementById('name');
 const labelEl = document.getElementById('label');
 const valueEl = document.getElementById('value');
+const infoEl = document.getElementById('info'); // New element for 'info'
 const optionsContainerEl = document.getElementById('options-container');
 const optionListEl = document.getElementById('option-list');
 const addOptionBtn = document.getElementById('add-option');
@@ -22,6 +23,7 @@ typeEl.addEventListener('change', () => {
     nameEl.value = '';
     labelEl.value = '';
     valueEl.value = '';
+    infoEl.value = ''; // Reset 'info' field
     optionsContainerEl.style.display = typeEl.value === 'select' ? 'block' : 'none';
     optionListEl.innerHTML = '';
     addFieldBtn.textContent = "Add Field";
@@ -34,12 +36,12 @@ addOptionBtn.addEventListener('click', () => {
 
     const labelInput = document.createElement('input');
     labelInput.type = 'text';
-    labelInput.placeholder = 'Option Label';
+    labelInput.placeholder = 'Label (required)';
     labelInput.classList.add('option-label');
 
     const valueInput = document.createElement('input');
     valueInput.type = 'text';
-    valueInput.placeholder = 'Option Value';
+    valueInput.placeholder = 'Value (required)';
     valueInput.classList.add('option-value');
     valueInput.addEventListener('input', () => {
         valueInput.value = valueInput.value.replace(/\s+/g, ''); // Remove spaces in real-time
@@ -62,7 +64,8 @@ addFieldBtn.addEventListener('click', () => {
         type: typeEl.value,
         name: nameEl.value.trim().replace(/\s+/g, ''), // Remove spaces
         label: labelEl.value.trim(),
-        value: valueEl.value.trim()
+        value: valueEl.value.trim(),
+        info: infoEl.value.trim() // Add the 'info' property
     };
 
     if (field.type === 'select') {
@@ -116,6 +119,7 @@ function editField(index) {
     nameEl.value = field.name.replace(/\s+/g, ''); // Remove spaces
     labelEl.value = field.label;
     valueEl.value = field.value || '';
+    infoEl.value = field.info || ''; // Populate 'info' input field
 
     if (field.type === 'select') {
         optionsContainerEl.style.display = 'block';
@@ -126,13 +130,13 @@ function editField(index) {
 
             const labelInput = document.createElement('input');
             labelInput.type = 'text';
-            labelInput.placeholder = 'Option Label';
+            labelInput.placeholder = 'Label (required)';
             labelInput.value = opt.label;
             labelInput.classList.add('option-label');
 
             const valueInput = document.createElement('input');
             valueInput.type = 'text';
-            valueInput.placeholder = 'Option Value';
+            valueInput.placeholder = 'Value (required)';
             valueInput.value = opt.value.replace(/\s+/g, ''); // Remove spaces
             valueInput.classList.add('option-value');
             valueInput.addEventListener('input', () => {
@@ -171,13 +175,13 @@ function updatePreviewAndOutput() {
         wrapper.setAttribute('class', 'field-preview form-group');
 
         const label = document.createElement('label');
-        label.innerHTML = f.label + " <br><small>Field ID:</small> <code>"+ f.name + "</code>";
+        label.innerHTML = `${f.label} <br><small>Field ID:</small> <code>${f.name}</code>`;
         wrapper.appendChild(label);
 
         let el;
         if (f.type === 'textarea') {
             el = document.createElement('textarea');
-            el.placeholder = f.label;
+            el.placeholder = f.info;
             el.setAttribute('class', 'form-control');
             el.value = f.value;
         } else if (f.type === 'checkbox') {
@@ -204,12 +208,18 @@ function updatePreviewAndOutput() {
             el = document.createElement('input');
             el.type = f.type;
             el.value = f.value;
-            el.placeholder = f.label;
+            el.placeholder = f.info;
             el.setAttribute('class', 'form-control');
         }
 
         if (el) {
             wrapper.appendChild(el);
+        }
+        
+        if (f.type === 'checkbox' || f.type === 'select') {        
+            const tip = document.createElement('span');
+            tip.innerHTML = `<small class="d-block mt-1"><em>${f.info}</em></small>`;
+            wrapper.appendChild(tip);
         }
 
         const editBtn = document.createElement('button');
@@ -231,12 +241,12 @@ function updatePreviewAndOutput() {
     nameEl.value = '';
     labelEl.value = '';
     valueEl.value = '';
+    infoEl.value = ''; // Reset 'info' field
     optionsContainerEl.style.display = 'none';
     optionListEl.innerHTML = '';
     typeEl.value = "text";
     addFieldBtn.textContent = "Add Field";
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     updatePreviewAndOutput();

@@ -201,15 +201,16 @@ $( function() {
                                 <?php foreach ($fields as $fld):?>
                                     <?php if ($fld->type == 'text'):?>
                                     <label><?php echo $fld->label;?></label>
-                                    <input type="<?php echo $fld->type;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
+                                    <input type="<?php echo $fld->type;?>" placeholder="<?php echo $fld->info;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
                                     <br>
                                     <?php elseif ($fld->type == 'textarea'):?>
                                     <label><?php echo $fld->label;?></label>
-                                    <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" name="<?php echo $fld->name;?>"></textarea>
+                                    <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" placeholder="<?php echo $fld->info;?>" name="<?php echo $fld->name;?>"></textarea>
                                     <br>
                                     <?php elseif ($fld->type == 'checkbox'):?>
                                     <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" >
                                     <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+									<span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
                                     <br>
                                     <?php elseif ($fld->type == 'select'):?>
                                     <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
@@ -218,6 +219,7 @@ $( function() {
                                         <option value="<?php echo $val->value;?>" ><?php echo $val->label;?></option>
                                     <?php endforeach;?>
                                     </select>
+									<span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
                                     <?php endif;?>        
                                 <?php endforeach;?>
                             </div>
