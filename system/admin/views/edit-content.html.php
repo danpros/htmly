@@ -259,7 +259,7 @@ $( function() {
                                     <?php elseif ($fld->type == 'checkbox'):?>
                                     <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" <?php echo get_field($fld->name, $content);?>>
                                     <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
-									<span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                    <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
                                     <br>
                                     <?php elseif ($fld->type == 'select'):?>
                                     <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
@@ -268,7 +268,7 @@ $( function() {
                                         <option value="<?php echo $val->value;?>" <?php if (get_field($fld->name, $content) === $val->value) { echo 'selected="selected"';} ?>><?php echo $val->label;?></option>
                                     <?php endforeach;?>
                                     </select>
-									<span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                    <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
                                     <?php endif;?>        
                                 <?php endforeach;?>
                             </div>
