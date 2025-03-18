@@ -101,6 +101,11 @@ addFieldBtn.addEventListener('click', () => {
     }
 
     updatePreviewAndOutput();
+
+    document.getElementById(field.name + '-form-preview').scrollIntoView({
+        behavior: 'smooth'
+    });        
+
 });
 
 // Delete field logic
@@ -164,6 +169,10 @@ function editField(index) {
 
     editingIndex = index;
     addFieldBtn.textContent = "Update Field";
+    document.getElementById('input-status').innerHTML = `<div class="callout callout-warning">Editing:</small> <code>${field.label}</div>`;
+    document.getElementById('form-input').scrollIntoView({
+        behavior: 'smooth'
+    });
 }
 
 // Update preview with Edit and Delete buttons
@@ -172,7 +181,9 @@ function updatePreviewAndOutput() {
 
     fields.forEach((f, index) => {
         const wrapper = document.createElement('div');
-        wrapper.setAttribute('class', 'field-preview form-group');
+        wrapper.setAttribute('class', 'field-preview callout callout-info');
+        wrapper.setAttribute('id', f.name + '-form-preview');
+        formID = f.name;
 
         const label = document.createElement('label');
         label.innerHTML = `${f.label} <br><small>Field ID:</small> <code>${f.name}</code>`;
@@ -215,7 +226,7 @@ function updatePreviewAndOutput() {
         if (el) {
             wrapper.appendChild(el);
         }
-        
+
         if (f.type === 'checkbox' || f.type === 'select') {        
             const tip = document.createElement('span');
             tip.innerHTML = `<small class="d-block mt-1"><em>${f.info}</em></small>`;
@@ -235,6 +246,7 @@ function updatePreviewAndOutput() {
         wrapper.appendChild(deleteBtn);
 
         formPreviewEl.appendChild(wrapper);
+
     });
 
     jsonOutputEl.value = JSON.stringify(fields, null, 2);
@@ -246,20 +258,22 @@ function updatePreviewAndOutput() {
     optionListEl.innerHTML = '';
     typeEl.value = "text";
     addFieldBtn.textContent = "Add Field";
+    document.getElementById('input-status').innerHTML = '';        
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     updatePreviewAndOutput();
-    
+
     // Real-time removal of spaces in the name field
     nameEl.addEventListener('input', () => {
         nameEl.value = nameEl.value.replace(/\s+/g, ''); // Remove spaces in real-time
     });    
-        
+
     valueEl.addEventListener('input', () => {
         if (typeEl.value === 'select') {
             valueEl.value = valueEl.value.replace(/\s+/g, ''); // Remove spaces
         }
     });    
-    
+
 });

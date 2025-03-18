@@ -12,8 +12,9 @@ if (file_exists($field_file)) {
 <div id="form-preview"></div>  
 <br><br>
 <!-- Form Input Section -->
-<div class="form-group">
-    <label for="type">Field Type</label>
+<div class="form-group" id="form-input">
+    <label for="type">Form Input</label>
+    <span class="d-block mt-1" id="input-status"></span>
     <br>
     <select id="type">
         <option value="text">Text</option>
@@ -21,17 +22,18 @@ if (file_exists($field_file)) {
         <option value="checkbox">Checkbox</option>
         <option value="select">Select</option>
     </select>
-    <input type="text" id="name" placeholder="Name (required)">
     <input type="text" id="label" placeholder="Label (required)">
+    <input type="text" id="name" placeholder="Name (required)">
     <input type="text" id="value" placeholder="Value (optional)">
     <input type="text" id="info" placeholder="Field Info (optional)">
-
     <button id="add-field" class="btn btn-primary">Add Field</button>
+    <span class="d-block mt-1"><small><em>No spaces for <code>Name</code> input. Underscores and dashes allowed</em></small></span>
 
     <div id="options-container" style="display: none;">
         <strong>Options</strong>
         <div id="option-list"></div>
         <button id="add-option" class="btn btn-primary btn-xs">Add Option</button>
+        <span class="d-block mt-1"><small><em>No spaces for select <code>Value</code> input. Underscores and dashes allowed</em></small></span>
     </div>
 </div>
 
