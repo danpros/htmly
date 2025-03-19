@@ -163,7 +163,7 @@ if ($type == 'is_page') {
                             <hr>
                             <div class="form-group">
                                 <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
-                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif" />
+                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" />
                             </div>
                             <hr>
                             <div class="form-group">
