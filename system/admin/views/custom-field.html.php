@@ -3,7 +3,7 @@
 <br>
 <p>Custom fields enable users to add extra, specific data fields to their content, allowing for more detailed and flexible content management.</p>
 
-<p>Use <code>get_field()</code> function in your template. Example:
+<p>Use <code>get_field()</code> function in your template.
 <ul><li>Post, Page, Subpage: <code>&lt;?php echo get_field('field_name', $p-&gt;raw);?&gt;</code></code></li>
 <li>Profile: <code>&lt;?php echo get_field('field_name', $author-&gt;raw);?&gt;</code></code></li></ul>
 </p>

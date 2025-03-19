@@ -10,34 +10,58 @@ if (file_exists($field_file)) {
 ?>
 <!-- Preview Section -->
 <div id="form-preview"></div>  
-<br><br>
+<br>
 <!-- Form Input Section -->
 <div class="form-group" id="form-input">
-    <label for="type">Form Input</label>
     <span class="d-block mt-1" id="input-status"></span>
     <br>
-    <select id="type">
-        <option value="text">Text</option>
-        <option value="textarea">Textarea</option>
-        <option value="checkbox">Checkbox</option>
-        <option value="select">Select</option>
-    </select>
-    <input type="text" id="label" placeholder="Label (required)">
-    <input type="text" id="name" placeholder="Name (required)">
-    <input type="text" id="value" placeholder="Value (optional)">
-    <input type="text" id="info" placeholder="Field Info (optional)">
-    <button id="add-field" class="btn btn-primary">Add Field</button>
+    <div class="row">
+        <div class="col">
+            <label for="type">Form type</label>
+            <select id="type" class="form-control">
+                <option value="text">Text</option>
+                <option value="textarea">Textarea</option>
+                <option value="checkbox">Checkbox</option>
+                <option value="select">Select</option>
+            </select>
+        </div>
+        <div class="col">
+            <label for="label">Label</label>
+            <input type="text" class="form-control" id="label" placeholder="Label (required)">
+        </div>
+        <div class="col">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Name (required)">
+        </div>
+        <div class="col">
+            <label for="value">Value</label>
+            <input type="text" class="form-control" id="value" placeholder="Value (optional)">
+        </div>
+        <div class="col">
+            <label for="info">Info</label>
+            <input type="text" class="form-control" id="info" placeholder="Field Info (optional)">
+        </div>
+        <div class="col">
+            <label for="add-field">Operations</label>
+            <button id="add-field" class="btn btn-primary">Add Field</button>
+        </div>
+    </div>
+    
     <span class="d-block mt-1"><small><em>No spaces for <code>Name</code> input. Underscores and dashes allowed</em></small></span>
 
     <div id="options-container" style="display: none;">
-        <strong>Options</strong>
-        <div id="option-list"></div>
-        <button id="add-option" class="btn btn-primary btn-xs">Add Option</button>
-        <span class="d-block mt-1"><small><em>No spaces for select <code>Value</code> input. Underscores and dashes allowed</em></small></span>
-    </div>
-</div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h5 class="mt-2">Options</h5>
+                <div id="option-list"></div>
+                <button id="add-option" class="btn btn-primary btn-xs mt-1">Add Option</button>
+                <span class="d-block mt-1"><small><em>No spaces for select and option <code>Value</code> input. Underscores and dashes allowed</em></small></span>
+            </div>
 
-<br><br>
+        </div>
+    </div>    
+    
+</div>
 
 <!-- Form submit Section -->
 <button class="btn btn-primary" id="saveButton"><?php echo i18n('save');?></button>

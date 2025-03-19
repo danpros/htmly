@@ -32,17 +32,23 @@ typeEl.addEventListener('change', () => {
 // Add new option for select field
 addOptionBtn.addEventListener('click', () => {
     const optionDiv = document.createElement('div');
-    optionDiv.classList.add('option-item');
+    optionDiv.setAttribute('class', 'option-item row mt-1 mb-1');
 
+    const col1Div = document.createElement('div');
+    col1Div.classList.add('col');
+    
+    const col2Div = document.createElement('div');
+    col2Div.classList.add('col');
+    
     const labelInput = document.createElement('input');
     labelInput.type = 'text';
     labelInput.placeholder = 'Label (required)';
-    labelInput.classList.add('option-label');
+    labelInput.setAttribute('class', 'option-label form-control');
 
     const valueInput = document.createElement('input');
     valueInput.type = 'text';
     valueInput.placeholder = 'Value (required)';
-    valueInput.classList.add('option-value');
+    valueInput.setAttribute('class', 'option-value form-control');
     valueInput.addEventListener('input', () => {
         valueInput.value = valueInput.value.replace(/\s+/g, ''); // Remove spaces in real-time
     });
@@ -53,7 +59,10 @@ addOptionBtn.addEventListener('click', () => {
     removeBtn.setAttribute('class', 'btn btn-danger');
 
     optionDiv.appendChild(labelInput);
-    optionDiv.appendChild(valueInput);
+    optionDiv.appendChild(col1Div);
+    optionDiv.appendChild(col2Div);    
+    col1Div.appendChild(labelInput);
+    col2Div.appendChild(valueInput);
     optionDiv.appendChild(removeBtn);
     optionListEl.appendChild(optionDiv);
 });
@@ -131,19 +140,25 @@ function editField(index) {
         optionListEl.innerHTML = '';
         field.options.forEach(opt => {
             const optionDiv = document.createElement('div');
-            optionDiv.classList.add('option-item');
+            optionDiv.setAttribute('class', 'option-item row mt-1 mb-1');
+
+            const col1Div = document.createElement('div');
+            col1Div.classList.add('col');
+            
+            const col2Div = document.createElement('div');
+            col2Div.classList.add('col');
 
             const labelInput = document.createElement('input');
             labelInput.type = 'text';
             labelInput.placeholder = 'Label (required)';
             labelInput.value = opt.label;
-            labelInput.classList.add('option-label');
+            labelInput.setAttribute('class', 'option-label form-control');
 
             const valueInput = document.createElement('input');
             valueInput.type = 'text';
             valueInput.placeholder = 'Value (required)';
             valueInput.value = opt.value.replace(/\s+/g, ''); // Remove spaces
-            valueInput.classList.add('option-value');
+            valueInput.setAttribute('class', 'option-value form-control');
             valueInput.addEventListener('input', () => {
                 valueInput.value = valueInput.value.replace(/\s+/g, ''); // Remove spaces in real-time
             });
@@ -158,7 +173,10 @@ function editField(index) {
             });
 
             optionDiv.appendChild(labelInput);
-            optionDiv.appendChild(valueInput);
+            optionDiv.appendChild(col1Div);
+            optionDiv.appendChild(col2Div);    
+            col1Div.appendChild(labelInput);
+            col2Div.appendChild(valueInput);
             optionDiv.appendChild(removeBtn);
             optionListEl.appendChild(optionDiv);
         });
