@@ -17,10 +17,16 @@
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
 <header class="navbar fixed-top navbar-expand-md navbar-light">
-
+<?php $filename = "content/data/menu.json";
+if (file_exists($filename)) {
+    $json = json_decode(file_get_contents('content/data/menu.json', true));
+    $menus = json_decode($json);
+} ?>
     <div class="container">
         <input class="menu-btn order-0" type="checkbox" id="menu-btn">
+        <?php if (!empty($menus)):?>
         <label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+        <?php endif;?>
         <a class="navbar-brand order-1 order-md-0 me-auto" href="<?php echo site_url();?>">
             <?php echo blog_title();?>
         </a>
@@ -32,18 +38,7 @@
             <?php echo social();?>
         </nav>
         <div class="collapse navbar-collapse order-4 order-md-1 top-menu">
-
-            <?php
-            // just to make sure only print the content from custom menu 
-            $filename = "content/data/menu.json";
-            if (file_exists($filename)) {
-                $json = json_decode(file_get_contents('content/data/menu.json', true));
-                $menus = json_decode($json);
-                if (!empty($menus)) {
-                    echo menu();        
-                }
-            } ?>
-
+            <?php if (!empty($menus)) { echo menu();}?>
         </div>
     </div>
 
