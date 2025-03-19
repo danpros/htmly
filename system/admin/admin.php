@@ -218,9 +218,11 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
-    }    
+    }
     
     $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . $customField . "\n\n" . $content;
 
@@ -410,7 +412,9 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
     }
     
@@ -632,7 +636,9 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
     $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
     }
     
@@ -726,7 +732,9 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
     $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
     }
 
@@ -800,10 +808,12 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         $post_description = "";
     }
     
-    $customField = "";
+    $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
     }
     
@@ -1017,7 +1027,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
 }
 
 // Edit user profile
-function edit_profile($title, $content, $user, $description = null, $image = null, $field)
+function edit_profile($title, $content, $user, $description = null, $image = null, $field = null)
 {
     $description = safe_html($description);
     if ($description !== null) {
@@ -1038,7 +1048,9 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
     $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
     }
     
@@ -1068,7 +1080,9 @@ function edit_frontpage($title, $content, $field = null)
     $customField = "";    
     if (!empty($field)) {
         foreach ($field as $key => $val) {
-            $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+            }
         }
     }
     
