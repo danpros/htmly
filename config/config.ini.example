@@ -208,4 +208,4 @@ views.layout = "layout"
 admin.theme = "light"
 
 ; Fulltext search
-fulltext.search = "false"
+fulltext.search = "true"
