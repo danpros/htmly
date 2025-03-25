@@ -1428,7 +1428,12 @@ function get_categorycount($var)
 
     foreach ($posts as $index => $v) {
 
-        if (stripos($v['dirname'], '/' . $var . '/') !== false) {
+        // dirname string
+        $dirname = $v['dirname'];
+
+        $str = explode('/', $dirname);
+
+        if (strtolower($var) === strtolower($str[3])) {
             $tmp[] = $v;
         }
         
