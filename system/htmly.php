@@ -4925,8 +4925,14 @@ get('/:static/:sub', function ($static, $sub) {
     $lt = $vroot . '/layout--' . strtolower($static) . '--' . strtolower($sub) . '.html.php';
     $ls = $vroot . '/layout--' . strtolower($static) . '.html.php';
     $lf = $vroot . '/layout--static.html.php';
+    $lsp = $vroot . '/layout--' . strtolower($sub) . '.html.php';
+    $lsps = $vroot . '/layout--substatic.html.php';
     if (file_exists($lt)) {
         $layout = 'layout--' . strtolower($static) . '--' . strtolower($sub);
+    } else if (file_exists($lsp)) {
+        $layout = 'layout--' . strtolower($sub);
+    } else if (file_exists($lsps)) {
+        $layout = 'layout--substatic';
     } else if (file_exists($ls)) {
         $layout = 'layout--' . strtolower($static);
     } else if (file_exists($lf)) {
@@ -4937,8 +4943,14 @@ get('/:static/:sub', function ($static, $sub) {
     
     $pv = $vroot . '/static--' . strtolower($static) . '--' . strtolower($sub) . '.html.php';
     $ps = $vroot . '/static--' . strtolower($static) . '.html.php';
+    $psp = $vroot . '/substatic--' . strtolower($sub) . '.html.php';
+    $psps = $vroot . '/substatic.html.php';
     if (file_exists($pv)) {
         $pview = 'static--' . strtolower($static) . '--' . strtolower($sub);
+    } else if (file_exists($psp)) {
+        $pview = 'substatic--' . strtolower($sub);
+    } else if (file_exists($psps)) {
+        $pview = 'substatic';
     } else if (file_exists($ps)) {
         $pview = 'static--' . strtolower($static);
     } else {
