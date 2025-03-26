@@ -1086,7 +1086,9 @@ function get_type($type, $page, $perpage)
         // dirname string
         $dirname = $v['dirname'];
 
-        if (strpos($dirname, '/' . strtolower($type)) !== false) {
+        $str = explode('/', $dirname);
+
+        if (strtolower($type) === strtolower($str[4])) {
             $tmp[] = $v;
         }
     }
@@ -1451,7 +1453,35 @@ function get_typecount($var)
 
     foreach ($posts as $index => $v) {
 
-        if (stripos($v['dirname'], '/' . $var) !== false) {
+        // dirname string
+        $dirname = $v['dirname'];
+
+        $str = explode('/', $dirname);
+
+        if (strtolower($var) === strtolower($str[4])) {
+            $tmp[] = $v;
+        }
+        
+    }
+
+    return count($tmp);
+}
+
+// Return profile posts count. Matching $var
+function get_profilecount($var)
+{
+    $posts = get_blog_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+
+        // dirname string
+        $dirname = $v['dirname'];
+
+        $str = explode('/', $dirname);
+
+        if (strtolower($var) === strtolower($str[1])) {
             $tmp[] = $v;
         }
         
@@ -1558,128 +1588,37 @@ function keyword_count($keyword)
 
 }
 
-// Return recent posts lists
+// Return recent posts
 function recent_posts($custom = null, $count = null)
 {
-    if (empty($count)) {
-        $count = config('recent.count');
-        if (empty($count)) {
-            $count = 5;
-        }
-    }
-
-    $dir = "cache/widget";
-    $filename = "cache/widget/recent.cache";
-    $tmp = array();
-    $posts = array();
-    $recent = '';
-
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
-    if (file_exists($filename)) {
-        $posts = unserialize(file_get_contents($filename));
-        if (count($posts) < $count) {
-            $posts = get_posts(null, 1, $count);
-            $tmp = serialize($posts);
-            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-        }
-    } else {
-       $posts = get_posts(null, 1, $count);
-       $tmp = serialize($posts);
-       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-    }
-
-    if (!empty($custom)) {
-        $arr = array();
-        $i = 1;
-        foreach ($posts as $post) {
-            $arr[] = $post;
-            if ($i++ >= $count)
-                break;  
-        }
-        return $arr;
-    } else {
-        $i = 1;
-        $recent .= '<ul>';
-        foreach ($posts as $post) {
-            $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-            if ($i++ >= $count)
-                break;  
-        }
-        if (empty($posts)) {
-            $recent .= '<li>' . i18n('No_posts_found') . '</li>';
-        }
-        $recent .= '</ul>';
-        return $recent;
-    }
+    return get_recent('posts', 'list', $count, $custom);
 }
 
-// Return recent type lists
+// Return recent posts by category
+function recent_category($category, $count = null, $custom = null)
+{
+    return get_recent('category', $category, $count, $custom);
+}
+
+// Return recent posts by type
 function recent_type($type, $count = null, $custom = null)
 {
-    if (empty($count)) {
-        $count = config('recent.count');
-        if (empty($count)) {
-            $count = 5;
-        }
-    }
-
-    $dir = 'cache/widget';
-    $filename = 'cache/widget/recent.' . $type . '.cache';
-    $tmp = array();
-    $posts = array();
-    $recent = '';
-
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
-    if (file_exists($filename)) {
-        $posts = unserialize(file_get_contents($filename));
-        if (count($posts) < $count) {
-            $posts = get_type($type, 1, $count);
-            if (!empty($posts)) {
-                $tmp = serialize($posts);
-                file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-            }
-        }
-    } else {
-        $posts = get_type($type, 1, $count);
-        if (!empty($posts)) {
-            $tmp = serialize($posts);
-            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-        }
-    }
-
-    if (!empty($custom)) {
-        $arr = array();
-        $i = 1;
-        foreach ($posts as $post) {
-            $arr[] = $post;
-            if ($i++ >= $count)
-                break;  
-        }
-        return $arr;
-    } else {
-        $i = 1;
-        $recent .= '<ul>';
-        foreach ($posts as $post) {
-            $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-            if ($i++ >= $count)
-                break;
-        }
-        if (empty($posts)) {
-           $recent .= '<li>No recent ' . $type . ' found</li>';
-        }
-        $recent .= '</ul>';
-        return $recent;
-    }
+    return get_recent('type', $type, $count, $custom);
 }
 
-// Return recent tag posts list
+// Return recent posts by tag
 function recent_tag($tag, $count = null, $custom = null)
+{
+    return get_recent('tag', $tag, $count, $custom);
+}
+
+// Return recent posts by author
+function recent_profile_posts($name, $count = null, $custom = null)
+{
+    return get_recent('profile', $name, $count, $custom);
+}
+
+function get_recent($filter, $var, $count = null, $custom = null)
 {
     if (empty($count)) {
         $count = config('recent.count');
@@ -1689,7 +1628,7 @@ function recent_tag($tag, $count = null, $custom = null)
     }
 
     $dir = 'cache/widget';
-    $filename = 'cache/widget/recent.tag.' . $tag . '.cache';
+    $filename = 'cache/widget/recent.' . $filter . '.' . $var . '.cache';
     $tmp = array();
     $posts = array();
     $recent = '';
@@ -1701,14 +1640,34 @@ function recent_tag($tag, $count = null, $custom = null)
     if (file_exists($filename)) {
         $posts = unserialize(file_get_contents($filename));
         if (count($posts) < $count) {
-            $posts = get_tag($tag, 1, $count);
+            if ($filter == 'profile') {
+                $posts = get_profile_posts($var, 1, $count);
+            } elseif ($filter == 'category') {
+                $posts = get_category($var, 1, $count);
+            } elseif ($filter == 'type') {
+                $posts = get_type($var, 1, $count);
+            } elseif ($filter == 'posts') {
+                $posts = get_posts(null, 1, $count);
+            } elseif ($filter == 'tag') {
+                $posts = get_tag($var, 1, $count);
+            }
             if (!empty($posts)) {
                 $tmp = serialize($posts);
                 file_put_contents($filename, print_r($tmp, true), LOCK_EX);
             }
         }
     } else {
-        $posts = get_tag($tag, 1, $count);
+        if ($filter == 'profile') {
+            $posts = get_profile_posts($var, 1, $count);
+        } elseif ($filter == 'category') {
+            $posts = get_category($var, 1, $count);
+        } elseif ($filter == 'type') {
+            $posts = get_type($var, 1, $count);
+        } elseif ($filter == 'posts') {
+            $posts = get_posts(null, 1, $count);
+        } elseif ($filter == 'tag') {
+            $posts = get_tag($var, 1, $count);
+        }
         if (!empty($posts)) {
             $tmp = serialize($posts);
             file_put_contents($filename, print_r($tmp, true), LOCK_EX);
@@ -1733,11 +1692,12 @@ function recent_tag($tag, $count = null, $custom = null)
                 break;
         }
         if (empty($posts)) {
-           $recent .= '<li>No recent ' . $tag . ' found</li>';
+           $recent .= '<li>' . i18n('No_posts_found') . '</li>';
         }
         $recent .= '</ul>';
         return $recent;
-    }
+    }    
+
 }
 
 // Return popular posts lists
@@ -3710,7 +3670,7 @@ function add_view($page)
     if (file_exists($filename)) {
         $views = json_decode(file_get_data($filename), true);
     }
-	
+    
     if (isset($views[$page])) {
         $views[$page]++;
         save_json_pretty($filename, $views);

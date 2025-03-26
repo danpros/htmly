@@ -284,7 +284,7 @@ get('/author/:name', function ($name) {
 
     $posts = get_profile_posts($name, $page, $perpage);
 
-    $total = get_count('/'.$name.'/', 'dirname');
+    $total = get_profilecount($name);
 
     if ($total === 0) {
         not_found();
@@ -1362,7 +1362,7 @@ get('/admin/mine', function () {
 
         $posts = get_profile_posts($name, $page, $perpage);
 
-        $total = get_count('/'.$name.'/', 'dirname');
+        $total = get_profilecount($name);
 
         $author = get_author($name);
 
