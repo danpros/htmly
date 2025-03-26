@@ -94,6 +94,7 @@ if ($type == 'is_page') {
                     </div>
                     </details>
                     <br>
+                    <script>if(localStorage.getItem("custom-fields-state")==="open"){document.getElementById("custom-fields").setAttribute("open","")}document.getElementById("custom-fields-click").addEventListener("click",()=>{if(document.getElementById("custom-fields").open){localStorage.setItem("custom-fields-state",'close')}else{localStorage.setItem("custom-fields-state",'open')}})</script>
                     <?php endif;?>
                     <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input id="oldfile" type="hidden" name="oldfile" class="text"/>
@@ -247,17 +248,6 @@ $('.img-container').on("click", ".the-img", function(e) {
             document.getElementById("editor-col").classList.add('col-sm-6');
             document.getElementById("preview-col").style.display = '';
             localStorage.setItem("preview-state", 'open');
-        }
-    })
-    if (localStorage.getItem("custom-fields-state") === "open") {
-        document.getElementById("custom-fields").setAttribute("open", "");
-    }
-    
-    document.getElementById("custom-fields-click").addEventListener("click", () => {
-        if (document.getElementById("custom-fields").open) {
-            localStorage.setItem("custom-fields-state", 'close');
-        } else {
-            localStorage.setItem("custom-fields-state", 'open');
         }
     })    
 </script>

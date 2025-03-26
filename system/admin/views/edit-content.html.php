@@ -275,6 +275,7 @@ $( function() {
                         </div>
                         </details>
                         <br>
+                        <script>if(localStorage.getItem("custom-fields-state")==="open"){document.getElementById("custom-fields").setAttribute("open","")}document.getElementById("custom-fields-click").addEventListener("click",()=>{if(document.getElementById("custom-fields").open){localStorage.setItem("custom-fields-state",'close')}else{localStorage.setItem("custom-fields-state",'open')}})</script>
                         <?php endif;?>
 
                         <?php if ($isdraft[4] == 'draft') { ?>
@@ -471,16 +472,5 @@ $('.img-container').on("click", ".the-img", function(e) {
             document.getElementById("preview-col").style.display = '';
             localStorage.setItem("preview-state", 'open');
         }
-    })
-    if (localStorage.getItem("custom-fields-state") === "open") {
-        document.getElementById("custom-fields").setAttribute("open", "");
-    }
-    
-    document.getElementById("custom-fields-click").addEventListener("click", () => {
-        if (document.getElementById("custom-fields").open) {
-            localStorage.setItem("custom-fields-state", 'close');
-        } else {
-            localStorage.setItem("custom-fields-state", 'open');
-        }
-    })    
+    })   
 </script>

@@ -206,6 +206,7 @@ if ($type == 'is_page' || $type == 'is_frontpage') {
                     </div>
                     </details>
                     <br>
+                    <script>if(localStorage.getItem("custom-fields-state")==="open"){document.getElementById("custom-fields").setAttribute("open","")}document.getElementById("custom-fields-click").addEventListener("click",()=>{if(document.getElementById("custom-fields").open){localStorage.setItem("custom-fields-state",'close')}else{localStorage.setItem("custom-fields-state",'open')}})</script>
                     <?php endif;?>
                     <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
@@ -416,16 +417,5 @@ $('.img-container').on("click", ".the-img", function(e) {
             document.getElementById("preview-col").style.display = '';
             localStorage.setItem("preview-state", 'open');
         }
-    })
-    if (localStorage.getItem("custom-fields-state") === "open") {
-        document.getElementById("custom-fields").setAttribute("open", "");
-    }
-    
-    document.getElementById("custom-fields-click").addEventListener("click", () => {
-        if (document.getElementById("custom-fields").open) {
-            localStorage.setItem("custom-fields-state", 'close');
-        } else {
-            localStorage.setItem("custom-fields-state", 'open');
-        }
-    })    
+    })   
 </script>
