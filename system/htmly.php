@@ -71,7 +71,7 @@ get('/index', function () {
 
         $posts = get_posts(null, $page, $perpage);
 
-        $total = '';
+        $total = count(get_blog_posts());
         
         $pv = $vroot . '/main--front.html.php'; 
         if (file_exists($pv)) {
@@ -1235,7 +1235,7 @@ get('/admin/posts', function () {
 
             $posts = get_posts(null, $page, $perpage);
 
-            $total = '';
+            $total = count(get_blog_posts());
 
             if (empty($posts) || $page < 1) {
 
@@ -1426,6 +1426,7 @@ get('/admin/draft', function () {
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
+        $total = '';
 
         $posts = get_draft($name, $page, $perpage);
         
@@ -1433,7 +1434,9 @@ get('/admin/draft', function () {
         
         $draftSubpages = find_draft_subpage();
 
-        $total = get_draftcount($name);
+        if ($posts) { 
+            $total = $posts[1];
+        }
 
         $author = get_author($name);
 
@@ -1472,7 +1475,7 @@ get('/admin/draft', function () {
             'metatags' => generate_meta(null, null),
             'heading' => i18n('My_draft'),
             'page' => $page,
-            'posts' => $posts,
+            'posts' => $posts[0],
             'draftPages' => $draftPages,
             'draftSubpages' => $draftSubpages,
             'about' => $author->about,
@@ -1501,10 +1504,13 @@ get('/admin/scheduled', function () {
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
+        $total = '';
 
         $posts = get_scheduled($name, $page, $perpage);
 
-        $total = get_scheduledcount($name);
+        if ($posts) { 
+            $total = $posts[1];
+        }
 
         $author = get_author($name);
 
@@ -1541,7 +1547,7 @@ get('/admin/scheduled', function () {
             'metatags' => generate_meta(null, null),
             'heading' => i18n('Scheduled_posts'),
             'page' => $page,
-            'posts' => $posts,
+            'posts' => $posts[0],
             'about' => $author->about,
             'name' => $author->name,
             'type' => 'is_admin-scheduled',
@@ -4432,7 +4438,7 @@ get('/:static', function ($static) {
 
         $posts = get_posts(null, $page, $perpage);
 
-        $total = '';
+        $total = count(get_blog_posts());
         
         $vroot = rtrim(config('views.root'), '/');
         

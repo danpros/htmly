@@ -873,6 +873,9 @@ function find_subpage($static, $sub_static = null)
 // Return category page.
 function get_category($category, $page, $perpage, $random = null)
 {
+    
+    if (is_null($category)) return array();
+    
     $posts = get_blog_posts();
     
     if ($random === true) {
@@ -898,7 +901,7 @@ function get_category($category, $page, $perpage, $random = null)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
@@ -1073,6 +1076,8 @@ function category_list($custom = null)
 // Return type page.
 function get_type($type, $page, $perpage)
 {
+    if (is_null($type)) return array();
+
     $posts = get_blog_posts();
 
     $tmp = array();
@@ -1105,6 +1110,8 @@ function get_type($type, $page, $perpage)
 // Return tag page.
 function get_tag($tag, $page, $perpage, $random = null)
 {
+    if (is_null($tag)) return array();
+
     $posts = get_blog_posts();
 
     if ($random === true) {
@@ -1139,6 +1146,8 @@ function get_tag($tag, $page, $perpage, $random = null)
 // Return archive page.
 function get_archive($req, $page, $perpage)
 {
+    if (is_null($req)) return array();
+
     $posts = get_blog_posts();
 
     $tmp = array();
@@ -1151,7 +1160,7 @@ function get_archive($req, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -1160,6 +1169,8 @@ function get_archive($req, $page, $perpage)
 // Return posts list on profile.
 function get_profile_posts($name, $page, $perpage)
 {
+    if (is_null($name)) return array();
+
     $posts = get_blog_posts();
 
     $tmp = array();
@@ -1172,7 +1183,7 @@ function get_profile_posts($name, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     return $tmp = get_posts($tmp, $page, $perpage);
@@ -1181,6 +1192,8 @@ function get_profile_posts($name, $page, $perpage)
 // Return author info.
 function get_author($name)
 {
+    if (is_null($name)) return array();
+
     $names = get_author_name();
 
     $tmp = array();
@@ -1237,11 +1250,7 @@ function get_author($name)
         }
     }
 
-    if (!empty($tmp)) {
-        return $tmp;
-    } else {
-        return false;
-    }
+    return $tmp;
 }
 
 // Return default profile
@@ -1314,7 +1323,7 @@ function get_keyword($keyword, $page, $perpage)
 {
     
     if (strlen($keyword) < 3) {
-        return false;
+        return array();
     }
 
     $posts = get_blog_posts();
@@ -1347,7 +1356,7 @@ function get_keyword($keyword, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
@@ -1357,6 +1366,7 @@ function get_keyword($keyword, $page, $perpage)
 // Get related posts base on post category.
 function get_related($tag, $custom = null, $count = null)
 {
+
     if (empty($count)) {
         $count = config('related.count');
         if (empty($count)) {
@@ -1551,7 +1561,7 @@ function get_tagcount($var)
 function keyword_count($keyword)
 {
     if (strlen($keyword) < 3) {
-        return false;
+        return array();
     }
 
     $posts = get_blog_posts();
@@ -1620,6 +1630,8 @@ function recent_profile_posts($name, $count = null, $custom = null)
 
 function get_recent($filter, $var, $count = null, $custom = null)
 {
+    if (is_null($var)) return array();
+
     if (empty($count)) {
         $count = config('recent.count');
         if (empty($count)) {
@@ -2156,7 +2168,7 @@ function static_next($next)
 function has_pagination($total, $perpage, $page = 1)
 {
     if (!$total) {
-        $total = count(get_blog_posts());
+        return;
     }
     $totalPage = ceil($total / $perpage);
     $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;

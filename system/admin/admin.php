@@ -1264,16 +1264,16 @@ function get_draft($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'editor' || $role === 'admin') {
             $tmp[] = $v;
         }
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return draft static page.
@@ -1480,16 +1480,16 @@ function get_scheduled($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'editor' || $role === 'admin') {
             $tmp[] = $v;
         }
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Import RSS feed
