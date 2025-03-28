@@ -1676,6 +1676,7 @@ function get_recent($filter, $var, $count = null, $custom = null)
     } else {
         if ($filter == 'profile') {
             $posts = get_profile_posts($var, 1, $count);
+            if ($posts) $posts = $posts[0];
         } elseif ($filter == 'category') {
             $posts = get_category($var, 1, $count);
             if ($posts) $posts = $posts[0];
