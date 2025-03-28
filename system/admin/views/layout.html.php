@@ -43,7 +43,17 @@ if (isset($author[0])) {
     <form class="form-inline ml-3">
         <input type="search" name="search" class="form-control" placeholder="<?php echo i18n('Type_to_search')?>">
     </form>
-
+    
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+        <div class="user-panel d-flex">
+            <div class="image">
+                <a href="<?php echo $author->url; ?>" title="<?php echo i18n('profile_for')?> <?php echo $author->name; ?>" ><img src="<?php echo $author->avatar; ?>" class="img-circle elevation-1" alt="<?php echo $author->name; ?>"></a>
+            </div>
+        </div>
+        </li>
+    </ul>
 
   </nav>
   <!-- /.navbar -->
@@ -51,18 +61,14 @@ if (isset($author[0])) {
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
+    <!-- Brand Logo -->
+    <a href="<?php echo site_url();?>admin" class="brand-link">
+      <img src="<?php echo site_url();?>system/resources/images/logo.png" alt="HTMLy Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light"><?php echo i18n('Dashboard')?></span>
+    </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="<?php echo $author->avatar; ?>" class="img-circle elevation-2" alt="HTMLy logo">
-        </div>
-        <div class="info">
-          <a href="<?php echo site_url();?>admin" class="d-block"><?php echo i18n('Dashboard')?></a>
-        </div>
-      </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -94,7 +100,7 @@ if (isset($author[0])) {
                   </p>
                 </a>
               </li>
-			  <?php endif;?>
+              <?php endif;?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/mine" class="nav-link">
                   <p>
