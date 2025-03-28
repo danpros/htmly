@@ -906,7 +906,7 @@ function get_category($category, $page, $perpage, $random = null)
 
     $tmp = array_unique($tmp, SORT_REGULAR);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return category info.
@@ -1104,7 +1104,7 @@ function get_type($type, $page, $perpage)
 
     $tmp = array_unique($tmp, SORT_REGULAR);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return tag page.
@@ -1140,7 +1140,7 @@ function get_tag($tag, $page, $perpage, $random = null)
 
     $tmp = array_unique($tmp, SORT_REGULAR);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return archive page.
@@ -1163,7 +1163,7 @@ function get_archive($req, $page, $perpage)
         return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return posts list on profile.
@@ -1186,7 +1186,7 @@ function get_profile_posts($name, $page, $perpage)
         return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return author info.
@@ -1377,6 +1377,7 @@ function get_related($tag, $custom = null, $count = null)
     $tmp = array();
     $exp = explode(',', $tag);
     $posts = get_category($exp[0], 1, $count + 1, true);
+    if ($posts) $posts = $posts[0];
     $related = '';
 
     foreach ($posts as $post) {
@@ -1654,14 +1655,18 @@ function get_recent($filter, $var, $count = null, $custom = null)
         if (count($posts) < $count) {
             if ($filter == 'profile') {
                 $posts = get_profile_posts($var, 1, $count);
+                if ($posts) $posts = $posts[0];
             } elseif ($filter == 'category') {
                 $posts = get_category($var, 1, $count);
+                if ($posts) $posts = $posts[0];
             } elseif ($filter == 'type') {
                 $posts = get_type($var, 1, $count);
+                if ($posts) $posts = $posts[0];
             } elseif ($filter == 'posts') {
                 $posts = get_posts(null, 1, $count);
             } elseif ($filter == 'tag') {
                 $posts = get_tag($var, 1, $count);
+                if ($posts) $posts = $posts[0];
             }
             if (!empty($posts)) {
                 $tmp = serialize($posts);
@@ -1673,12 +1678,15 @@ function get_recent($filter, $var, $count = null, $custom = null)
             $posts = get_profile_posts($var, 1, $count);
         } elseif ($filter == 'category') {
             $posts = get_category($var, 1, $count);
+            if ($posts) $posts = $posts[0];
         } elseif ($filter == 'type') {
             $posts = get_type($var, 1, $count);
+            if ($posts) $posts = $posts[0];
         } elseif ($filter == 'posts') {
             $posts = get_posts(null, 1, $count);
         } elseif ($filter == 'tag') {
             $posts = get_tag($var, 1, $count);
+            if ($posts) $posts = $posts[0];
         }
         if (!empty($posts)) {
             $tmp = serialize($posts);
@@ -2168,7 +2176,7 @@ function static_next($next)
 function has_pagination($total, $perpage, $page = 1)
 {
     if (!$total) {
-        return;
+        return false;
     }
     $totalPage = ceil($total / $perpage);
     $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;

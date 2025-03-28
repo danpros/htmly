@@ -281,13 +281,13 @@ get('/author/:name', function ($name) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('profile.perpage');
+    $total = '';
 
     $posts = get_profile_posts($name, $page, $perpage);
 
-    $total = get_profilecount($name);
-
-    if ($total === 0) {
-        not_found();
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
     }
 
     $author = get_author($name);
@@ -366,7 +366,11 @@ get('/author/:name/feed', function ($name) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_profile_posts($name, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
 
     $author = get_author($name);
 
@@ -1359,10 +1363,14 @@ get('/admin/mine', function () {
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
+        $total = '';
 
         $posts = get_profile_posts($name, $page, $perpage);
-
-        $total = get_profilecount($name);
+        
+        if (!empty($posts)) {
+            $total = $posts[1];
+            $posts = $posts[0];
+        }
 
         $author = get_author($name);
 
@@ -1430,13 +1438,14 @@ get('/admin/draft', function () {
 
         $posts = get_draft($name, $page, $perpage);
         
+        if (!empty($posts)) {
+            $total = $posts[1];
+            $posts = $posts[0];
+        }
+        
         $draftPages = find_draft_page();
         
         $draftSubpages = find_draft_subpage();
-
-        if ($posts) { 
-            $total = $posts[1];
-        }
 
         $author = get_author($name);
 
@@ -1475,7 +1484,7 @@ get('/admin/draft', function () {
             'metatags' => generate_meta(null, null),
             'heading' => i18n('My_draft'),
             'page' => $page,
-            'posts' => $posts[0],
+            'posts' => $posts,
             'draftPages' => $draftPages,
             'draftSubpages' => $draftSubpages,
             'about' => $author->about,
@@ -1508,8 +1517,9 @@ get('/admin/scheduled', function () {
 
         $posts = get_scheduled($name, $page, $perpage);
 
-        if ($posts) { 
+        if (!empty($posts)) {
             $total = $posts[1];
+            $posts = $posts[0];
         }
 
         $author = get_author($name);
@@ -1547,7 +1557,7 @@ get('/admin/scheduled', function () {
             'metatags' => generate_meta(null, null),
             'heading' => i18n('Scheduled_posts'),
             'page' => $page,
-            'posts' => $posts[0],
+            'posts' => $posts,
             'about' => $author->about,
             'name' => $author->name,
             'type' => 'is_admin-scheduled',
@@ -3022,6 +3032,7 @@ get('/admin/categories/:category', function ($category) {
             $page = from($_GET, 'page');
             $page = $page ? (int)$page : 1;
             $perpage = config('category.perpage');
+            $total = '';
             
             if (empty($perpage)) {
                 $perpage = 10;    
@@ -3029,18 +3040,18 @@ get('/admin/categories/:category', function ($category) {
 
             $posts = get_category($category, $page, $perpage);
             
-            $desc = get_category_info($category);
-            
-            if(!empty($desc)) {
-                $desc = $desc[0];
+            if (!empty($posts)) {
+                $total = $posts[1];
+                $posts = $posts[0];
             }
             
+            $desc = get_category_info($category);
+
             if (empty($desc)) {
                 // a non-existing page
                 not_found();
             }
-    
-            $total = $desc->count;
+            $desc = $desc[0];
             
             render('category-list', array(
                 'title' => generate_title('is_default', $desc->title),
@@ -3259,6 +3270,7 @@ get('/category/:category', function ($category) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('category.perpage');
+    $total = '';
     
     if (empty($perpage)) {
         $perpage = 10;    
@@ -3266,11 +3278,9 @@ get('/category/:category', function ($category) {
 
     $posts = get_category($category, $page, $perpage);
     
-    $desc = get_category_info($category);
-    
-    
-    if(!empty($desc)) {
-        $desc = $desc[0];
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
     }
 
     if (empty($posts) || $page < 1) {
@@ -3278,7 +3288,11 @@ get('/category/:category', function ($category) {
         not_found();
     }
     
-    $total = $desc->count;
+    $desc = get_category_info($category);
+    
+    if(!empty($desc)) {
+        $desc = $desc[0];
+    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3330,7 +3344,11 @@ get('/category/:category/feed', function ($category) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_category($category, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     
     $data = get_category_info($category);
     
@@ -3519,14 +3537,23 @@ get('/type/:type', function ($type) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('type.perpage');
+    $total = '';
     
     if (empty($perpage)) {
         $perpage = 10;    
     }
 
     $posts = get_type($type, $page, $perpage);
-
-    $total = get_typecount($type);
+    
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
+    if (empty($posts) || $page < 1) {
+        // a non-existing page
+        not_found();
+    }
     
     $ttype = new stdClass;
     $ttype->title = ucfirst($type);
@@ -3536,11 +3563,6 @@ get('/type/:type', function ($type) {
     $ttype->body = $ttype->description;
     $ttype->rss = $ttype->url . '/feed';
     $ttype->slug = strtolower($type);
-
-    if (empty($posts) || $page < 1) {
-        // a non-existing page
-        not_found();
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3592,7 +3614,11 @@ get('/type/:type/feed', function ($type) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_type($type, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     $data = new stdClass;
     $data->title = ucfirst($type);
     $data->url = site_url() . 'type/' . strtolower($type);
@@ -3612,10 +3638,19 @@ get('/tag/:tag', function ($tag) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('tag.perpage');
+    $total = '';
 
     $posts = get_tag($tag, $page, $perpage);
-
-    $total = get_tagcount($tag);
+    
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
+    if (empty($posts) || $page < 1) {
+        // a non-existing page
+        not_found();
+    }
         
     $ttag = new stdClass;
     $ttag->title = tag_i18n($tag);
@@ -3625,11 +3660,6 @@ get('/tag/:tag', function ($tag) {
     $ttag->body = $ttag->description;
     $ttag->rss = $ttag->url . '/feed';
     $ttag->slug = strtolower($tag);
-
-    if (empty($posts) || $page < 1) {
-        // a non-existing page
-        not_found();
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3681,7 +3711,11 @@ get('/tag/:tag/feed', function ($tag) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_tag($tag, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     $data = new stdClass;
     $data->title = tag_i18n($tag);
     $data->url = site_url() . 'tag/' . strtolower($tag);
@@ -3701,11 +3735,15 @@ get('/archive/:req', function ($req) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('archive.perpage');
+    $total = '';
 
     $posts = get_archive($req, $page, $perpage);
-
-    $total = get_count($req, 'basename');
-
+    
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
     if (empty($posts) || $page < 1) {
         // a non-existing page
         not_found();
@@ -3713,6 +3751,11 @@ get('/archive/:req', function ($req) {
 
     $time = explode('-', $req);
     $date = strtotime($req);
+    
+    if (!$date) {
+        // a non-existing page
+        not_found();
+    }
 
     if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
         $timestamp = format_date($date, 'd F Y');
@@ -3730,11 +3773,6 @@ get('/archive/:req', function ($req) {
     $tarchive->body = $tarchive->description;
     $tarchive->rss = $tarchive->url . '/feed';
     $tarchive->slug = strtolower($req);
-
-    if (!$date) {
-        // a non-existing page
-        not_found();
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3780,7 +3818,11 @@ get('/archive/:req/feed', function ($req) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_archive($req, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     
     $time = explode('-', $req);
     $date = strtotime($req);
@@ -3815,21 +3857,13 @@ get('/search/:keyword', function ($keyword) {
     $total = '';
 
     $posts = get_keyword($keyword, $page, $perpage);
-    if ($posts) { 
-        $total = $posts[1];
-    }
-
-    $tsearch = new stdClass;
-    $tsearch->title = $keyword;
-    $tsearch->url = site_url() . 'search/' . strtolower($keyword);
-    $tsearch->count = $total;
-    $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
-    $tsearch->body = $tsearch->description;
-    $tsearch->rss = $tsearch->url . '/feed';
-    $tsearch->slug = strtolower($keyword);
-
-    $vroot = rtrim(config('views.root'), '/');
     
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
+    $vroot = rtrim(config('views.root'), '/');
     $lt = $vroot . '/layout--search.html.php'; 
     if (file_exists($lt)) {
         $layout = 'layout--search';
@@ -3844,7 +3878,7 @@ get('/search/:keyword', function ($keyword) {
             'description' => i18n('Search_results_not_found'),
             'canonical' => site_url(),
             'metatags' => generate_meta(null, null),
-            'search' => $tsearch,
+            'search' => '',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('No_search_results'),
             'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
@@ -3852,6 +3886,15 @@ get('/search/:keyword', function ($keyword) {
         ), $layout);
         die;
     }
+
+    $tsearch = new stdClass;
+    $tsearch->title = $keyword;
+    $tsearch->url = site_url() . 'search/' . strtolower($keyword);
+    $tsearch->count = $total;
+    $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
+    $tsearch->body = $tsearch->description;
+    $tsearch->rss = $tsearch->url . '/feed';
+    $tsearch->slug = strtolower($keyword);
     
     $pv = $vroot . '/main--search.html.php'; 
     if (file_exists($pv)) {
@@ -3872,7 +3915,7 @@ get('/search/:keyword', function ($keyword) {
         'canonical' => $tsearch->url . $CanonicalPageNum,
         'metatags' => generate_meta('is_search', $tsearch),
         'page' => $page,
-        'posts' => $posts[0],
+        'posts' => $posts,
         'search' => $tsearch,
         'taxonomy' => $tsearch,
         'bodyclass' => 'in-search search-' . strtolower($keyword),
