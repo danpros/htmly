@@ -199,7 +199,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -393,7 +393,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -611,7 +611,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -707,7 +707,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -802,7 +802,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -954,7 +954,7 @@ function add_category($title, $url, $content, $description = null)
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -991,7 +991,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -1034,7 +1034,7 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
         if (!empty($description)) {        
             $profile_description = "\n<!--d " . $description . " d-->";
         } else {
-            $profile_description = "\n<!--d " . get_description($content) . " d-->";
+            $profile_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $profile_description = "";
