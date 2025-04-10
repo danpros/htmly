@@ -244,7 +244,7 @@ $( function() {
 
                         <?php if(!empty($fields)):?>
                         <details id="custom-fields"  >
-                        <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong>Custom fields</strong></summary>
+                        <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; font-weight: bold; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><?php echo i18n('custom_fields');?></summary>
                         <div class="row">
                             <div class="col">
                                 <?php foreach ($fields as $fld):?>
