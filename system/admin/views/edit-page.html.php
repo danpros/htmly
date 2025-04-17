@@ -175,7 +175,7 @@ if ($type == 'is_page' || $type == 'is_frontpage') {
                     <br>
                     <?php if(!empty($fields) && $type != 'is_category'):?>
                     <details id="custom-fields"  >
-                    <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong>Custom fields</strong></summary>
+                    <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong><?php echo i18n('custom_fields');?></strong></summary>
                     <div class="row">
                         <div class="col">
                             <?php foreach ($fields as $fld):?>
