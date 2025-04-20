@@ -4073,17 +4073,24 @@ function generate_meta($type = null, $object = null)
     $facebook = config('social.facebook');
     $twitter = config('social.twitter');
     if (is_null($object)) {
+        if ($type == 'is_blog') {
+            $tags .= '<title>'. generate_title('is_blog', null) .'</title>' . "\n";
+            $tags .= '<link rel="canonical" href="'. site_url() . blog_path() .'" />' . "\n";
+            $tags .= '<meta name="description" content="'. blog_title() . ' ' . blog_string() .'"/>' . "\n";
+            $tags .= '<meta property="og:title" content="'. generate_title('is_blog', null) . '" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
+            $tags .= '<meta property="og:url" content="'. site_url() . blog_path() .'" />' . "\n";
+        } else {
+            $tags .= '<title>'. generate_title('is_front', null) .'</title>' . "\n";
+            $tags .= '<link rel="canonical" href="'. site_url() .'" />' . "\n";
+            $tags .= '<meta name="description" content="'. safe_html(strip_tags(blog_description())) .'"/>' . "\n";
+            $tags .= '<meta property="og:title" content="'. generate_title('is_front', null) . '" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
+            $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
+        }
         $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
         $tags .= '<meta property="og:type" content="website" />' . "\n";
         $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
-        if ($type == 'is_blog') {
-            $tags .= '<meta property="og:title" content="'. generate_title('is_blog', null) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
-        } else {
-            $tags .= '<meta property="og:title" content="'. generate_title('is_front', null) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
-        }
-        $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $defaultImg .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         if(!empty($twitter)) {
@@ -4102,20 +4109,21 @@ function generate_meta($type = null, $object = null)
                 $image = $defaultImg;
             }
         }
-        $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
-        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
-        $tags .= '<meta property="og:type" content="article" />' . "\n";
-        $tags .= '<meta property="og:title" content="'. $object->title .'" />' . "\n";
         if ($type == 'is_post') {
+            $tags .= '<title>'. generate_title('is_post',$object) .'</title>' . "\n";
             $tags .= '<meta name="author" content="'. $object->authorName .'" />' . "\n";
             $tags .= '<meta name="article:published_time" content="'. date('c', $object->date) .'" />' . "\n";
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
             $tags .= '<meta name="article:section" content="'. $object->categoryTitle .'" />' . "\n";
             $tags .= '<meta name="article:section_url" content="'. $object->categoryUrl .'" />' . "\n";    
-        }
-        if ($type == 'is_page' || $type == 'is_subpage') {
+        } elseif ($type == 'is_page' || $type == 'is_subpage') {
+            $tags .= '<title>'. generate_title('is_page',$object) .'</title>' . "\n";
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
+        } else {
+            $tags .= '<title>'. generate_title($type , $object) .'</title>' . "\n";
         }
+        $tags .= '<link rel="canonical" href="'. $object->url .'" />' . "\n";
+        $tags .= '<meta name="description" content="'. $object->description .'"/>' . "\n";
         if(!empty($facebook)) {
             $tags .= '<meta property="article:publisher" content="'. $facebook .'" />' . "\n";
         }
@@ -4124,6 +4132,10 @@ function generate_meta($type = null, $object = null)
             $tags .= '<meta name="twitter:creator" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
             $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
         }
+        $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
+        $tags .= '<meta property="og:type" content="article" />' . "\n";
+        $tags .= '<meta property="og:title" content="'. $object->title .'" />' . "\n";
         $tags .= '<meta property="og:url" content="'. $object->url .'" />' . "\n";
         $tags .= '<meta property="og:description" content="'. $object->description .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
