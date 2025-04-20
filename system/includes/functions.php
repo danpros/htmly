@@ -2773,7 +2773,7 @@ function parseNode($node, $child = null)
             }
         }
 
-        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
+        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
         if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
@@ -2898,7 +2898,7 @@ function get_menu($custom = null, $auto = null)
             $subPages = get_static_subpages($filename);
             if (!empty($subPages)) {
                 $menu .= '<li class="' . $class . $active .' dropdown">';
-                $menu .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
+                $menu .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 $menu .= '<ul class="subnav dropdown-menu" role="menu">';
                 $iSub = 0;
                 $countSub = count($subPages);
