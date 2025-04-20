@@ -3,9 +3,6 @@
 <html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
-    <title><?php echo $title;?></title>
-    <meta name="description" content="<?php echo $description; ?>"/>
-    <link rel="canonical" href="<?php echo $canonical; ?>" />
     <?php echo $metatags;?>
     <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">

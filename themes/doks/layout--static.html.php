@@ -3,9 +3,6 @@
 <html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
-    <title><?php echo $title;?></title>
-    <meta name="description" content="<?php echo $description; ?>"/>
-    <link rel="canonical" href="<?php echo $canonical; ?>" />
     <?php echo $metatags;?>
     <link rel="preload" as="font" href="<?php echo theme_path();?>fonts/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="<?php echo theme_path();?>fonts/jost/jost-v4-latin-700.woff2" type="font/woff2" crossorigin>
