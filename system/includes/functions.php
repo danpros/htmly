@@ -438,9 +438,9 @@ function get_posts($posts, $page = 1, $perpage = 0)
         } else {
             $post->authorName = $author;
             $post->authorDescription = i18n('Author_Description');
-            $post->authorAbout = $post->description;
+            $post->authorAbout = $post->authorDescription;
             $post->authorAvatar = site_url() . 'system/resources/images/logo-small.png';
-            $post->authorRaw = $post->description;
+            $post->authorRaw = $post->authorDescription;
         }
 
         $post->type = $type;
