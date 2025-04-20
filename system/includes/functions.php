@@ -434,11 +434,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->authorDescription = $profile[0]->description;
             $post->authorAbout = $profile[0]->about;
             $post->authorAvatar = $profile[0]->avatar;
+            $post->authorRaw = $profile[0]->raw;
         } else {
             $post->authorName = $author;
             $post->authorDescription = i18n('Author_Description');
-            $post->authorAbout = i18n('Author_Description');
+            $post->authorAbout = $post->description;
             $post->authorAvatar = site_url() . 'system/resources/images/logo-small.png';
+            $post->authorRaw = $post->description;
         }
 
         $post->type = $type;
@@ -1379,21 +1381,21 @@ function get_related($tag, $custom = null, $count = null)
     $posts = get_category($exp[0], 1, $count + 1, true);
     if ($posts) $posts = $posts[0];
     $related = '';
+    $i = 1;
 
     foreach ($posts as $post) {
         if ($post->url !== $exp[1]) {
             $tmp[] = $post;
+            if ($i++ >= $count)
+                break;
         }
     }
 
     if (empty($custom)) {
         if (!empty($tmp)) {
-            $i = 1;
             $related .= '<ul>';
             foreach ($tmp as $post) {
                 $related .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-                if ($i++ >= $count)
-                    break;
             }
             $related .= '</ul>';
             return $related;
