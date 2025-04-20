@@ -71,7 +71,7 @@ class URLify
      *
      * @psalm-param array<string, string> $map
      */
-    public static function add_chars(array $map, string $language = null)
+    public static function add_chars(array $map, ?string $language = null)
     {
         $language_key = $language ?? \uniqid('urlify', true);
 

@@ -798,7 +798,7 @@ final class ASCII
         bool $remove_unsupported_chars = true,
         bool $replace_extra_symbols = false,
         bool $use_transliterate = false,
-        bool $replace_single_chars_only = null
+        ?bool $replace_single_chars_only = null
     ): string {
         if ($str === '') {
             return '';
