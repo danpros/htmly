@@ -1626,9 +1626,9 @@ function toolbar()
     $toolbar = '';
 
     $toolbar .= <<<EOF
-    <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
+    <link href="{$base}system/resources/css/toolbar.css?v=1" rel="stylesheet" />
 EOF;
-    $toolbar .= '<div id="toolbar"><label for="menu-toggle" id="menu-button">☰ ' . i18n('Menu') . '</label><input type="checkbox" id="menu-toggle"><div id="menu"><ul>';
+    $toolbar .= '<div id="toolbar"><label for="htmly-menu-toggle" id="htmly-menu-button">☰ ' . i18n('Menu') . '</label><input type="checkbox" id="htmly-menu-toggle"><div id="htmly-menu"><ul>';
     $toolbar .= '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
     $toolbar .= '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
     if ($role === 'editor' || $role === 'admin') {

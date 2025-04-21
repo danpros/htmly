@@ -62,7 +62,7 @@ table#config input {
 table#config tr:last-child td {
     border-bottom: none
 }
-#menu-toggle {
+#htmly-menu-toggle {
     display: none;
     background: #666;
     color: white;
@@ -72,15 +72,15 @@ table#config tr:last-child td {
     font-size: 18px;
 }
 
-#menu {
+#htmly-menu {
     display: block;
 }
 
-#menu-toggle {
+#htmly-menu-toggle {
     display: none;
 }
 
-#menu-button {
+#htmly-menu-button {
     display: none;
     background: #666;
     color: white;
@@ -90,11 +90,11 @@ table#config tr:last-child td {
 }
 
 @media all and (max-width: 550px) {
-    #menu-button {
+    #htmly-menu-button {
         display: block;
     }
 
-    #menu {
+    #htmly-menu {
         display: none;
         background: #666;
         position: absolute;
@@ -104,13 +104,13 @@ table#config tr:last-child td {
         box-shadow: 0 5px 15px #000;
     }
 
-    #menu ul {
+    #htmly-menu ul {
         display: flex;
         flex-direction: column;
         text-align: center;
     }
 
-    #menu-toggle:checked + #menu {
+    #htmly-menu-toggle:checked + #htmly-menu {
         display: block;
     }
 }
