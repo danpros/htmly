@@ -41,6 +41,11 @@ body {
     padding: 0 10px;
 }
 
+#toolbar a:hover {
+    background: #333;
+    border-radius: 3px;
+}
+
 table#config td:first-child {
     width: 30%
 }
