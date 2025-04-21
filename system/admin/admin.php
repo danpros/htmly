@@ -1627,6 +1627,7 @@ function toolbar()
 
     $toolbar .= <<<EOF
     <link href="{$base}system/resources/css/toolbar.css?v=1" rel="stylesheet" />
+    <script src="{$base}system/resources/js/toolbar.js"></script>
 EOF;
     $toolbar .= '<div id="toolbar"><label for="htmly-menu-toggle" id="htmly-menu-button">☰ ' . i18n('Menu') . '</label><input type="checkbox" id="htmly-menu-toggle"><div id="htmly-menu"><ul>';
     $toolbar .= '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
@@ -1655,7 +1656,7 @@ EOF;
     $toolbar .= '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
     $toolbar .= '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
-    $toolbar .= '</ul></div></div><script>function adjustPaddingTop() {const toolbarHeight = document.getElementById("toolbar").offsetHeight;document.body.style.paddingTop = `${toolbarHeight}px`;}window.addEventListener("load", adjustPaddingTop);window.addEventListener("resize", adjustPaddingTop);</script>';
+    $toolbar .= '</ul></div></div>';
     echo $toolbar;
 }
 

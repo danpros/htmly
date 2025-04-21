@@ -13,6 +13,21 @@
 <div class="header-bar fixed-top"></div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
+<?php if (login()):?>
+<script>
+function updateContentPosition() {
+    const toolbarHeight = document.querySelector("#toolbar").offsetHeight; // Calculate #toolbar height
+	const contentDiv = document.querySelector("#content");
+	contentDiv.style.paddingTop = `${toolbarHeight}px`;
+}
+
+// Run once when the page loads
+window.addEventListener("DOMContentLoaded", updateContentPosition);
+
+// Update on window resize
+window.addEventListener("resize", updateContentPosition);
+</script>
+<?php endif;?>
 <header class="navbar fixed-top navbar-expand-md navbar-light">
 <?php $filename = "content/data/menu.json";
 if (file_exists($filename)) {
@@ -79,7 +94,7 @@ $front = get_frontpage(); ?>
 
 <?php } else {?>
 <div class="wrap container" role="document">
-    <div class="content">
+    <div id="content" class="content">
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10 col-xl-9">
             <?php echo content();?>
