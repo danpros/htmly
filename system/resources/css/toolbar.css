@@ -2,22 +2,6 @@ body {
     padding-top: 30px
 }
 
-.admin-front .tb-admin,
-.all-posts .tb-posts,
-.admin-popular .tb-popular,
-.admin-mine .tb-mine,
-.admin-draft .tb-draft,
-.admin-content .tb-addcontent,
-.admin-categories .tb-categories,
-.edit-profile .tb-editprofile,
-.admin-import .tb-import,
-.admin-backup .tb-backup,
-.admin-config .tb-config,
-.admin-clear-cache .tb-clearcache,
-.admin-update .tb-update {
-    background:#400;
-}
-
 #toolbar {
     background: #666;
     box-shadow: 0 5px 15px #000;
@@ -40,7 +24,6 @@ body {
 #toolbar ul {
     margin: 0;
     padding: 0;
-    padding-left: 30px;
 }
 
 #toolbar ul li, #toolbar ul li a {
@@ -55,14 +38,7 @@ body {
     color: #FFF;
     font-size: .846em;
     text-decoration: none;
-    border-radius: 10px;
     padding: 0 10px;
-}
-
-@media all and (max-width: 550px) {
-    body {
-        padding-top: 60px
-    }
 }
 
 table#config td:first-child {
@@ -80,4 +56,56 @@ table#config input {
 
 table#config tr:last-child td {
     border-bottom: none
+}
+#menu-toggle {
+    display: none;
+    background: #666;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#menu {
+    display: block;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+#menu-button {
+    display: none;
+    background: #666;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+@media all and (max-width: 550px) {
+    #menu-button {
+        display: block;
+    }
+
+    #menu {
+        display: none;
+        background: #666;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 5px 15px #000;
+    }
+
+    #menu ul {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #menu-toggle:checked + #menu {
+        display: block;
+    }
 }

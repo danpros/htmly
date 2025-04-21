@@ -1628,7 +1628,7 @@ function toolbar()
     $toolbar .= <<<EOF
     <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
 EOF;
-    $toolbar .= '<div id="toolbar"><ul>';
+    $toolbar .= '<div id="toolbar"><label for="menu-toggle" id="menu-button">☰ Menu</label><input type="checkbox" id="menu-toggle"><div id="menu"><ul>';
     $toolbar .= '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
     $toolbar .= '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
     if ($role === 'editor' || $role === 'admin') {
@@ -1655,7 +1655,7 @@ EOF;
     $toolbar .= '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
     $toolbar .= '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
-    $toolbar .= '</ul></div>';
+    $toolbar .= '</ul></div></div><script>function adjustPaddingTop() {const toolbarHeight = document.getElementById("toolbar").offsetHeight;document.body.style.paddingTop = `${toolbarHeight}px`;}window.addEventListener("load", adjustPaddingTop);window.addEventListener("resize", adjustPaddingTop);</script>';
     echo $toolbar;
 }
 
