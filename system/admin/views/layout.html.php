@@ -392,6 +392,10 @@ font-size:13px;
 .top-link:focus {
   outline: none;
 }
+table {
+  overflow: auto;
+  display: block;
+}
 </style>
 <a href="#top" aria-label="go to top" title="Go to Top" class="top-link" id="top-link">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
