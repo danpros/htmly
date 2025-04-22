@@ -69,7 +69,7 @@ table#config tr:last-child td {
     border: none;
     padding: 10px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 #htmly-menu {
@@ -86,7 +86,7 @@ table#config tr:last-child td {
     color: white;
     padding: 10px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 @media all and (max-width: 550px) {
