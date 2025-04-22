@@ -388,13 +388,14 @@ transition: visibility 0.5s, opacity 0.8s linear;
 border: none;
 font-size:13px;
 }
-
 .top-link:focus {
   outline: none;
 }
-table {
-  overflow: auto;
-  display: block;
+@media all and (max-width: 640px) {
+  table {
+    overflow: auto;
+    display: block;
+  }
 }
 </style>
 <a href="#top" aria-label="go to top" title="Go to Top" class="top-link" id="top-link">
