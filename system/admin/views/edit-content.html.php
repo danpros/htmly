@@ -88,11 +88,19 @@ if (file_exists($field_file)) {
 <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/jquery-ui.css">
 <script>
 $( function() {
+    // Decode HTML entities
+    function decodeHtml(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+    }
+
     var availableTags = [
 <?php foreach ($tags as $tag => $count):?>
     "<?php echo tag_i18n($tag) ?>",
 <?php endforeach;?>
-    ];
+    ].map(decodeHtml); // Decoding all tags
+
     function split( val ) {
       return val.split( /,\s*/ );
     }
