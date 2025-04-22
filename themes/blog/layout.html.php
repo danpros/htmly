@@ -94,15 +94,14 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="recent-posts">
                                 <h2 class="hide"><?php echo i18n("Recent_Posts");?></h2>
-                                <?php $lists = recent_posts(true);?>
-                                <?php $char = 60;?>
-                                <?php foreach ($lists as $l):?>
-                                    <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                                <?php $recent = recent_posts(true);?>
+                                <?php foreach ($recent as $rc):?>
+                                    <?php $recentTitle = (strlen(strip_tags($rc->title)) > 60) ? shorten($rc->title, 60) . '...' : $rc->title; ?>
                                     <div class="item">
-                                        <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                                        <h3 class="title"><a href="<?php echo $rc->url;?>"><?php echo $recentTitle;?></a></h3>
                                         <div class="content">
-                                        <p><?php echo shorten($l->body, 75); ?>...</p>
-                                        <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
+                                        <p><?php echo shorten($rc->body, 75); ?>...</p>
+                                        <a class="more-link" href="<?php echo $rc->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
                                         </div><!--//content-->
                                     </div>
                                 <?php endforeach;?>
@@ -110,15 +109,14 @@
                             <?php if (config('views.counter') === 'true') :?>
                             <div role="tabpanel" class="tab-pane" id="popular-posts">
                                 <h2 class="hide"><?php echo i18n("Popular_posts");?></h2>
-                                <?php $lists = popular_posts(true);?>
-                                <?php $char = 60;?>
-                                <?php foreach ($lists as $l):?>
-                                    <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                                <?php $popular = popular_posts(true);?>
+                                <?php foreach ($popular as $pp):?>
+                                    <?php $popularTitle = (strlen(strip_tags($pp->title)) > 60) ? shorten($pp->title, 60) . '...' : $pp->title; ?>
                                     <div class="item">
-                                        <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                                        <h3 class="title"><a href="<?php echo $pp->url;?>"><?php echo $popularTitle;?></a></h3>
                                         <div class="content">
-                                        <p><?php echo shorten($l->body, 75); ?>...</p>
-                                        <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
+                                        <p><?php echo shorten($pp->body, 75); ?>...</p>
+                                        <a class="more-link" href="<?php echo $pp->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
                                         </div><!--//content-->
                                     </div>
                                 <?php endforeach;?>
