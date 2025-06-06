@@ -53,6 +53,9 @@ fb.color = "light"
 ; Disqus comments
 disqus.shortname = ""
 
+; Bing Webmaster Tools ID verification
+bing.wmt.id = ""
+
 ; Google Web Master Tool ID verification
 google.wmt.id = ""
 

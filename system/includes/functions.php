@@ -3632,7 +3632,8 @@ function locale_language()
 function head_contents()
 {
     $output = '';
-    $wmt_id = config('google.wmt.id');
+    $google_wmt_id = config('google.wmt.id');
+    $bing_wmt_id = config('bing.wmt.id');
     if (config('show.version') !== 'false') {
         $version = 'HTMLy ' . constant('HTMLY_VERSION');
     } else {
@@ -3652,8 +3653,11 @@ function head_contents()
     $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
     $output .= '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
-    if (!empty($wmt_id)) {
-        $output .=  '<meta name="google-site-verification" content="' . $wmt_id . '" />' . "\n";
+    if (!empty($google_wmt_id)) {
+        $output .=  '<meta name="google-site-verification" content="' . $google_wmt_id . '" />' . "\n";
+    }
+    if (!empty($bing_wmt_id)) {
+        $output .= '<meta name="msvalidate.01" content="' . $bing_wmt_id . '" />' . "\n";
     }
 
     return $output;
