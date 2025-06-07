@@ -44,7 +44,14 @@ function updateData() {
       }, 6000);
     },
     error: function(response) {
-      $("#response-error").html("Error in Autosaving: " + response.statusText);
+      var httpError = "";
+      if (response.status !== 0) {
+        httpError += ": " + response.status;
+        if (response.responseText) {
+          httpError += " " + response.responseText;
+        }
+      }
+      $("#response-error").html("Error in Autosaving: " + response.statusText + httpError);
       $("#response-error").fadeIn(600, function() {
         $("#response-error").css("display", "block");
       });
