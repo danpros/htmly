@@ -182,3 +182,7 @@ pre code {
     align-items: center;
     display: none;
 }
+
+.notice.error {
+  background-color: #fdd;
+}

@@ -1132,6 +1132,8 @@ post('/admin/autosave', function () {
         }
         header('Content-Type: application/json');
         echo $response;
+    } else {
+        error(401, "Not logged in");
     }
 });
 
