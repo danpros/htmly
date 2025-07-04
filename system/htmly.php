@@ -295,7 +295,7 @@ get('/author/:name', function ($name) {
     if (isset($author[0])) {
         $author = $author[0];
     } else {
-        $author = default_profile($name);
+        not_found();
     }
     
     $vroot = rtrim(config('views.root'), '/');
