@@ -296,7 +296,7 @@ get('/author/:name', function ($name) {
         $author = $author[0];
     } else {
         $userConfig = 'config/users/' . $name . '.ini';
-        if (file_exists($userConfig)) {
+        if (file_exists($userConfig) || !empty($posts)) {
             $author = default_profile(safe_html(strip_tags($name)));
         } else {
             not_found();
@@ -382,7 +382,12 @@ get('/author/:name/feed', function ($name) {
     if (isset($author[0])) {
         $author = $author[0];
     } else {
-        $author = default_profile(safe_html(strip_tags($name)));
+        $userConfig = 'config/users/' . $name . '.ini';
+        if (file_exists($userConfig) || !empty($posts)) {
+            $author = default_profile(safe_html(strip_tags($name)));
+        } else {
+            not_found();
+        }
     }
 
     // Show an RSS feed
