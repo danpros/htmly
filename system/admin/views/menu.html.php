@@ -20,7 +20,8 @@ function parseMenus($menus) {
 }
 
 function parseMenu($menu) {
-    $li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" data-slug="'.htmlspecialchars($menu->slug, FILTER_SANITIZE_URL).'">';
+    $target = !empty($menu->target) ? 'data-target="'.$menu->target.'"' : null;
+    $li = '<li class="dd-item" data-class="'. $menu->class .'" data-id="'. $menu->id .'" data-name="'.$menu->name.'" '.$target.' data-slug="'.htmlspecialchars($menu->slug, FILTER_SANITIZE_URL).'">';
     $li .= '<div class="dd-handle">'.$menu->name.'</div>';
     $li .= '<span class="button-delete btn btn-danger btn-xs" style="margin-right:0.5rem" data-owner-id="'.$menu->id.'">'.i18n('Delete').'</span>';
     $li .= '<span class="button-edit btn btn-primary btn-xs" data-owner-id="'.$menu->id.'">'.i18n('Edit').'</span>';
@@ -50,6 +51,10 @@ function parseMenu($menu) {
             <input type="text" class="form-control" id="addInputSlug" placeholder="<?php echo i18n('item_slug');?>" required>
             </div>
             <div class="form-group">
+            <label for="addInputTarget">Target (<?php echo i18n('optional');?>)</label>
+            <input type="text" class="form-control" id="addInputTarget" placeholder="_blank, _self, _parent etc.">
+            </div>
+            <div class="form-group">
             <label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
             <input type="text" class="form-control" id="addInputClass" placeholder="<?php echo i18n('item_class');?>">
             </div>
@@ -58,15 +63,19 @@ function parseMenu($menu) {
         <form id="menu-editor" style="display: none;">
             <h4>Editing <span id="currentEditName"></span></h4>
             <div class="form-group">
-            <label for="addInputName"><?php echo i18n('Name')?></label>
+            <label for="editInputName"><?php echo i18n('Name')?></label>
             <input type="text" class="form-control" id="editInputName" placeholder="<?php echo i18n('Link_name')?>" required>
             </div>
             <div class="form-group">
-            <label for="addInputSlug"><?php echo i18n('Slug');?></label>
+            <label for="editInputSlug"><?php echo i18n('Slug');?></label>
             <input type="text" class="form-control" id="editInputSlug" placeholder="<?php echo i18n('item_slug');?>">
             </div>
             <div class="form-group">
-            <label for="addInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
+            <label for="editInputTarget">Target (<?php echo i18n('optional');?>)</label>
+            <input type="text" class="form-control" id="editInputTarget" placeholder="_blank, _self, _parent etc.">
+            </div>
+            <div class="form-group">
+            <label for="editInputClass"><?php echo i18n('CSS_Class_Optional');?></label>
             <input type="text" class="form-control" id="editInputClass" placeholder="<?php echo i18n('item_class');?>">
             </div>
             <button class="btn btn-primary btn-sm" id="editButton"><?php echo i18n('Save_Edit');?></button>

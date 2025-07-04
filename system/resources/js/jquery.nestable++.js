@@ -74,6 +74,7 @@ var menuEditor = $("#menu-editor");
 var editButton = $("#editButton");
 var editInputName = $("#editInputName");
 var editInputSlug = $("#editInputSlug");
+var editInputTarget = $("#editInputTarget");
 var editInputClass = $("#editInputClass");
 var currentEditName = $("#currentEditName");
 
@@ -84,6 +85,7 @@ var prepareEdit = function () {
 
   editInputName.val(target.data("name"));
   editInputSlug.val(target.data("slug"));
+  editInputTarget.val(target.data("target"));
   editInputClass.val(target.data("class"));
   currentEditName.html(target.data("name"));
   editButton.data("owner-id", target.data("id"));
@@ -101,10 +103,12 @@ var editMenuItem = function () {
 
   var newName = editInputName.val();
   var newSlug = editInputSlug.val();
+  var newTarget = editInputTarget.val();
   var newClass = editInputClass.val();
 
   target.data("name", newName);
   target.data("slug", newSlug);
+  target.data("target", newTarget);
   target.data("class", newClass);
 
   target.find("> .dd-handle").html(newName);
@@ -126,6 +130,7 @@ var newIdCount =  new Date().getTime();
 var addToMenu = function () {
   var newName = $("#addInputName").val();
   var newSlug = $("#addInputSlug").val();
+  var newTarget = $("#addInputTarget").val();
   var newClass = $("#addInputClass").val();
   var newId = newIdCount;
 
@@ -134,6 +139,7 @@ var addToMenu = function () {
     'data-class="' + newClass + '" ' +
     'data-id="' + newId + '" ' +
     'data-name="' + newName + '" ' +
+    'data-target="' + newTarget + '" ' +
     'data-slug="' + newSlug + '">' +
     '<div class="dd-handle">' + newName + '</div> ' +
     '<span class="button-delete button-delete-' + newId + ' btn btn-danger btn-xs" ' +
@@ -159,6 +165,7 @@ var addToMenu = function () {
   // clear input  
   $("#addInputName").val('');
   $("#addInputSlug").val('');
+  $("#addInputTarget").val('');
   $("#addInputClass").val('');
 
 };
