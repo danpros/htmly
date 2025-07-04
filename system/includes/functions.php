@@ -3647,8 +3647,7 @@ function head_contents()
     }
     $output .= '<meta charset="utf-8" />' . "\n";
     $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
-    $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
-    $output .= '<meta name="color-scheme" content="light dark" />' . "\n";    
+    $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";   
     $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
     $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
