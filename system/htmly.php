@@ -382,7 +382,7 @@ get('/author/:name/feed', function ($name) {
     if (isset($author[0])) {
         $author = $author[0];
     } else {
-        $author = default_profile($name);
+        $author = default_profile(safe_html(strip_tags($name)));
     }
 
     // Show an RSS feed
