@@ -295,7 +295,12 @@ get('/author/:name', function ($name) {
     if (isset($author[0])) {
         $author = $author[0];
     } else {
-        not_found();
+        $userConfig = 'config/users/' . $name . '.ini';
+        if (file_exists($userConfig)) {
+            $author = default_profile(safe_html(strip_tags($name)));
+        } else {
+            not_found();
+        }
     }
     
     $vroot = rtrim(config('views.root'), '/');
