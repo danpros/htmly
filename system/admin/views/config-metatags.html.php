@@ -116,6 +116,25 @@ Please install and enable the GD extension to use the thumbnail feature.
 	  <p class="title-format" style="margin-bottom:5px;"><code>post</code> <?php echo i18n('post_your_post_slug');?></p>
 	</div>
   </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Transliterate Slug</label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-transliterate.slug" id="transliterate.slug1" value="true" <?php if (config('transliterate.slug') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="transliterate.slug1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-transliterate.slug" id="transliterate.slug2" value="false" <?php if (config('transliterate.slug') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="transliterate.slug2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <br>
   <h4><?php echo i18n('Metatags');?></h4>
   <hr>

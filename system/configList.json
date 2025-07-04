@@ -97,5 +97,6 @@
     "thumbnail.width",
     "rss.description",
     "admin.theme",
-    "fulltext.search"
+    "fulltext.search",
+    "transliterate.slug"
 ]

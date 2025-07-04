@@ -211,4 +211,7 @@ views.layout = "layout"
 admin.theme = "light"
 
 ; Fulltext search
-fulltext.search = "true"
+fulltext.search = "false"
+
+; Transliterate Slug
+transliterate.slug = "true"

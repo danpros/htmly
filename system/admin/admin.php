@@ -116,7 +116,10 @@ function is_csrf_proper($csrf_token)
 // Clean URLs
 function remove_accent($str)
 {
-    return URLify::downcode($str);
+    if (is_null(config('transliterate.slug')) || config('transliterate.slug') !== 'false') {
+        return URLify::downcode($str);
+    }
+    return $str;
 }
 
 // Add content
