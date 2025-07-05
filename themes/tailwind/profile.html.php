@@ -11,6 +11,7 @@
 </div>
 
 <?php $teaserType = config('teaser.type'); $readMore = config('read.more');?>
+<?php if (!empty($posts)):?>
 <ul class="divide-y divide-gray-200 dark:divide-gray-700">
 	<?php foreach ($posts as $p):?>
 	<?php $img = get_image($p->body);?>
@@ -107,6 +108,7 @@
 	</li>
 	<?php endforeach;?>
 </ul>
+<?php endif;?>
 <?php if (!empty($pagination['prev']) || !empty($pagination['next'])): ?>
 <div class="space-y-2 pb-8 pt-6 md:space-y-5">
 	<nav class="flex justify-between">
