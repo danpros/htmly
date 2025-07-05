@@ -252,7 +252,7 @@ Please install and enable the GD extension to use the thumbnail feature.
   <br>
   <h4><?php echo i18n('Sitemap');?></h4>
   <hr>
-  <p><?php echo i18n('Valid_values_range_from_0_to_1.0._See');?> <a target="_blank" href="https://www.sitemaps.org/protocol.html">https://www.sitemaps.org/protocol.html</a></p>
+  <p><?php echo i18n('Valid_values_range_from_0_to_1.0._See');?> <a target="_blank" href="https://www.sitemaps.org/protocol.html">https://www.sitemaps.org/protocol.html</a>. Disable specific sitemap: <code>-1</code></p>
   <?php foreach($array as $key => $value) {?>
   <?php if (stripos($key, 'sitemap.priority') !== false):?>
   <?php if ($key !== 'sitemap.priority.archiveDay'):?>
