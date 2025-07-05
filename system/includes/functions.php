@@ -2729,6 +2729,7 @@ function parseNode($node, $child = null)
     $req = strtok($_SERVER["REQUEST_URI"],'?');
     $url = parse_url(slashUrl($node->slug));
     $su = parse_url(site_url());
+    $target = !empty($node->target) ? 'target="'.$node->target.'"' : null;
     if (empty($child)) {
 
         if (isset($url['host']) && isset($su['host'])) {
@@ -2749,7 +2750,7 @@ function parseNode($node, $child = null)
             }
         }
 
-        $li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
+        $li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'" '.$target.'>'.$node->name.'</a>';
         if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
@@ -2775,7 +2776,7 @@ function parseNode($node, $child = null)
             }
         }
 
-        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
+        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'" '.$target.'>'.$node->name.'<b class="caret"></b></a>';
         if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
