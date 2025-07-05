@@ -222,7 +222,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
@@ -416,7 +416,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
@@ -640,7 +640,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
@@ -736,7 +736,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
@@ -815,7 +815,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
@@ -1052,7 +1052,7 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
@@ -1084,7 +1084,7 @@ function edit_frontpage($title, $content, $field = null)
     if (!empty($field)) {
         foreach ($field as $key => $val) {
             if (!empty($val)) {
-                $customField .= "\n<!--" . $key . ' ' . $val . ' ' . $key . "-->";
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
             }
         }
     }
