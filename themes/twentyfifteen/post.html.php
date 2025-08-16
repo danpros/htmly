@@ -89,7 +89,7 @@
     <h2 class="screen-reader-text">Post navigation</h2>
     <div class="nav-links">
         <?php if (!empty($prev)): ?>
-            <div class="nav-previous" <?php if (!empty($prev['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(<?php echo($prev['image']); ?>);"<?php endif;?>>
+            <div class="nav-previous" <?php if (!empty($prev['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url('<?php echo($prev['image']); ?>');"<?php endif;?>>
                 <a <?php if (!empty($prev['image'])):?>style="color:#fff;"<?php endif;?> rel="prev" href="<?php echo($prev['url']); ?>">
                     <span <?php if (!empty($prev['image'])):?>style="color:#fff;"<?php endif;?> aria-hidden="true" class="meta-nav"><?php echo i18n('Prev');?></span> 
                     <span class="screen-reader-text">Previous post:</span> 
@@ -98,7 +98,7 @@
             </div>
         <?php endif; ?>
         <?php if (!empty($next)): ?>
-            <div class="nav-next" <?php if (!empty($next['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url(<?php echo($next['image']); ?>);"<?php endif;?>>
+            <div class="nav-next" <?php if (!empty($next['image'])):?>style="background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)), url('<?php echo($next['image']); ?>');"<?php endif;?>>
                 <a <?php if (!empty($next['image'])):?>style="color:#fff;"<?php endif;?> rel="next" href="<?php echo($next['url']); ?>">
                     <span <?php if (!empty($next['image'])):?>style="color:#fff;"<?php endif;?> aria-hidden="true" class="meta-nav"><?php echo i18n('Next');?></span> 
                     <span class="screen-reader-text">Next post:</span> 
