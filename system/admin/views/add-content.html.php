@@ -359,7 +359,7 @@ $( function() {
 <!-- Declare the base path. Important -->
 <script type="text/javascript">
     var base_path = '<?php echo site_url() ?>';
-    var initial_image = '<?php echo $images;?>';
+    var initial_image = <?php echo json_encode($images); ?>;
     var parent_page = '';
     var addEdit = 'add';
     var saveInterval = 60000;
