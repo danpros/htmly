@@ -28,7 +28,7 @@
 function htmlTableOfContents (id) {
     var documentRef = document;
     var toc = documentRef.getElementById('toc');
-    var headings = [].slice.call(documentRef.body.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5, #content h6'));
+    var headings = [].slice.call(documentRef.body.querySelectorAll('#content h2, #content h3, #content h4, #content h5, #content h6'));
     headings.forEach(function (heading, index) {
         heading.setAttribute('id', heading.textContent.replace(/\s+/g, '-').toLowerCase() + id);
 
