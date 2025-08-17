@@ -4,8 +4,8 @@
 <head>
     <?php echo head_contents() ?>
     <?php echo $metatags;?>
-    <link href="<?php echo theme_path() ?>css/style.css" rel="stylesheet"/>
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
+    <link href="<?php echo theme_path() ?>css/style.css?v=1" rel="stylesheet"/>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -13,7 +13,7 @@
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo strip_tags(blog_description()); ?>" itemprop="description"/>
+    <meta content="<?php echo safe_html(strip_tags(blog_description())); ?>" itemprop="description"/>
 </div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>

@@ -4,9 +4,10 @@
 <head>
     <?php echo head_contents();?>
     <?php echo $metatags;?>
-    <link rel="stylesheet" id="twentyfifteen-fonts-css" href="<?php echo theme_path();?>css/font.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-fonts-noto" href="<?php echo site_url();?>system/resources/css/noto-serif.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-fonts-sans" href="<?php echo site_url();?>system/resources/css/open-sans.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all"> 
-    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path();?>css/style_v2.css?v=1" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path();?>css/style_v2.css?v=2" type="text/css" media="all">
     <!--[if lt IE 9]>
     <link rel='stylesheet' id='twentyfifteen-ie-css'  href='<?php echo theme_path();?>css/ie.css' type='text/css' media='all' />
     <![endif]-->

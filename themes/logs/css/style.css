@@ -35,7 +35,7 @@ img {
 --------------------------*/
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     line-height: 1.3;
     margin: 0.5em 0;
     font-weight: 400;
@@ -151,7 +151,7 @@ a:hover {
     margin: 0 5px;
     font-size: 12px;
     font-weight: bold;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
 }
 
 .tags a {
@@ -299,7 +299,7 @@ ul li, ol li {
     width: 100%;
     position: relative;
     text-align: left;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     font-size: 15px;
     text-shadow: 0 1px 0 #ffffff;
     padding-bottom: 7px;
@@ -395,7 +395,7 @@ ul li, ol li {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
     color: #fff;
     display: inline-block;
-    font-family: "open sans", arial, sans-serif;
+    font-family: "Source Sans", arial, sans-serif;
     font-size: 13px;
     font-weight: 600;
     line-height: 1.54;
@@ -425,7 +425,7 @@ ul li, ol li {
     color: #999999;
     font-size: 15px;
     margin-bottom: 1em;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
 }
 
 .breadcrumb a {
@@ -455,7 +455,7 @@ ul li, ol li {
 .date {
     color: #999999;
     font-size: 13px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     margin: 1em 0;
 }
 
@@ -742,7 +742,7 @@ th, td {
 
 th.title {
     margin: 5px 0;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     font-size: 16px;
     font-weight: normal;
 }
@@ -750,14 +750,14 @@ th.title {
 td.title {
     font-weight: normal;
     background-color: #f6f6f6;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
 }
 
 th {
     background-color: #f6f6f6;
     border-bottom: 1px solid #E3E3E3;
     border-right: 1px solid #E3E3E3;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     font-size: 16px;
 }
 

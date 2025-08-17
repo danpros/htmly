@@ -4,25 +4,23 @@
 <head>
     <?php echo head_contents();?>
     <?php echo $metatags;?>
-    <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic" rel="stylesheet" type="text/css">     
     <!-- Global CSS -->
     <link rel="stylesheet" href="<?php echo theme_path();?>css/bootstrap.min.css">   
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="<?php echo theme_path();?>css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
+    <!-- Font CSS -->  
+    <link id="lato" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/lato.css">
+    <link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
+	<link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
     <!-- Theme CSS -->  
-    <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css?v=1">
 </head>
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo strip_tags(blog_description()); ?>" itemprop="description"/>
+    <meta content="<?php echo safe_html(strip_tags(blog_description())); ?>" itemprop="description"/>
 </div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
@@ -172,7 +170,7 @@
         </div><!--//container-->
     </footer><!--//footer-->
     <!-- Javascript -->          
-    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/jquery.min.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/bootstrap.min.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>    
 </body>

@@ -51,7 +51,7 @@ p {
 blockquote {
   margin:1em 0;
   font-size:20px;
-  font-family: "Crimson Text",sans-serif;
+  font-family: "Source Sans",sans-serif;
 }
 blockquote  p{
   margin: 0;
@@ -359,7 +359,7 @@ iframe {
   list-style: outside none none;
   margin-bottom: 20px;
   padding: 10px 30px;
-  font-family: "Crimson Text",sans-serif;
+  font-family: "Source Sans",sans-serif;
 }
 
 /* About Section */
@@ -389,7 +389,7 @@ iframe {
 }
 .post .item .meta{
   color: #778492;
-  font-family: "Crimson Text",sans-serif;
+  font-family: "Source Sans",sans-serif;
   font-size: 16px;
   font-weight: 400;
   margin:0;
@@ -427,7 +427,7 @@ iframe {
 }
 .featured-link {
   font-size:26px;
-  font-family: "Crimson Text",sans-serif;
+  font-family: "Source Sans",sans-serif;
 }
 .featured-link .fa {
   margin-right:5px;
