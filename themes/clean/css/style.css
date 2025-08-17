@@ -74,7 +74,7 @@ h1.blog-title a:hover, h2.blog-title a:hover {
 }
 
 h1.title-post, h2.title-index {
-    font: 28px 'Source Sans', sans-serif;
+    font: bold 28px 'Source Sans', sans-serif;
     line-height: 1.2;
     text-transform: normal;
     margin: 0 0 20px 0;
@@ -96,7 +96,7 @@ h2 {
 }
 
 h2.title-index {
-    font: 28px 'Source Sans', sans-serif;
+    font: bold 24px 'Source Sans', sans-serif;
     line-height: 1.2;
     text-transform: normal;
     margin: 0 0 20px 0;
@@ -109,7 +109,7 @@ h3 {
 }
 
 h4 {
-    font: 16px 'Source Sans', sans-serif;
+    font: bold 16px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
@@ -443,14 +443,15 @@ aside .menu {
 }
 
 aside h3 {
-    font: normal 16px 'Source Sans', sans-serif;
+    font: bold 16px 'Source Sans', sans-serif;
     text-transform: uppercase;
 }
 
 aside .menu ul {
-    font: bold 'Source Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     text-transform: uppercase;
     list-style: none;
+    font-weight: bold;
 }
 
 aside .menu ul li a {
