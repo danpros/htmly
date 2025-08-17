@@ -3578,7 +3578,7 @@ function blog_string()
 {
     $string = config('blog.string');
     if (!is_null($string) && !empty($string)) {
-        return $string;
+        return safe_html($string);
     }
     return 'Blog';
 }
@@ -3586,13 +3586,13 @@ function blog_string()
 // Return blog title
 function blog_title()
 {
-    return config('blog.title');
+    return safe_html(config('blog.title'));
 }
 
 // Return blog tagline
 function blog_tagline()
 {
-    return config('blog.tagline');
+    return safe_html(config('blog.tagline'));
 }
 
 // Return blog description
@@ -4081,9 +4081,9 @@ function generate_meta($type = null, $object = null)
         if ($type == 'is_blog') {
             $tags .= '<title>'. generate_title('is_blog', null) .'</title>' . "\n";
             $tags .= '<link rel="canonical" href="'. site_url() . blog_path() .'" />' . "\n";
-            $tags .= '<meta name="description" content="'. safe_html(blog_title()) . ' ' . safe_html(blog_string()) .'"/>' . "\n";
+            $tags .= '<meta name="description" content="'. blog_title() . ' ' . blog_string() .'"/>' . "\n";
             $tags .= '<meta property="og:title" content="'. safe_html(generate_title('is_blog', null)) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. safe_html(blog_title()) . ' ' . safe_html(blog_string()) .'" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
             $tags .= '<meta property="og:url" content="'. site_url() . blog_path() .'" />' . "\n";
         } else {
             $tags .= '<title>'. generate_title('is_front', null) .'</title>' . "\n";
@@ -4095,7 +4095,7 @@ function generate_meta($type = null, $object = null)
         }
         $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
         $tags .= '<meta property="og:type" content="website" />' . "\n";
-        $tags .= '<meta property="og:site_name" content="'. safe_html(blog_title()) . '" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $defaultImg .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         if(!empty($twitter)) {
@@ -4138,7 +4138,7 @@ function generate_meta($type = null, $object = null)
             $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
         }
         $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
-        $tags .= '<meta property="og:site_name" content="'. safe_html(blog_title()) . '" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
         $tags .= '<meta property="og:type" content="article" />' . "\n";
         $tags .= '<meta property="og:title" content="'. safe_html($object->title) .'" />' . "\n";
         $tags .= '<meta property="og:url" content="'. $object->url .'" />' . "\n";
