@@ -52,7 +52,7 @@ img {
 -----------------------------*/
 
 h1 {
-    font: 28px 'Source Sans', sans-serif;
+    font: bold 28px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
@@ -90,7 +90,7 @@ h1.title-post a:hover, h2.title-index a:hover {
 }
 
 h2 {
-    font: 22px 'Source Sans', sans-serif;
+    font: bold 22px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
@@ -103,7 +103,7 @@ h2.title-index {
 }
 
 h3 {
-    font: 18px 'Source Sans', sans-serif;
+    font: bold 18px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
@@ -115,13 +115,13 @@ h4 {
 }
 
 h5 {
-    font: 14px 'Source Sans', sans-serif;
+    font: bold 14px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
 
 h6 {
-    font: 12px 'Source Sans', sans-serif;
+    font: bold 12px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
