@@ -7,7 +7,7 @@
     <!-- Global CSS -->
     <link rel="stylesheet" href="<?php echo theme_path();?>css/bootstrap.min.css">   
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
     <!-- Font CSS -->  
