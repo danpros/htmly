@@ -6,9 +6,6 @@
     <?php echo $metatags;?>
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
     <link href="<?php echo theme_path() ?>css/style.css?v=1" rel="stylesheet"/>
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 </head>
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
