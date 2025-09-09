@@ -70,8 +70,8 @@
                        <span class="more"><a class="btn btn-cta-secondary" href="<?php echo $p->url;?>"><?php echo $readMore; ?></a></span>
                    <?php endif;?>
                     <span class="share pull-right">
-                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
-                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
+                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a> 
+                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fab fa-twitter"></i></a>
                     </span>
                 <div style="clear:both;"></div>
                 </div>

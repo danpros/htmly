@@ -196,6 +196,13 @@
       <small><em><?php echo i18n('For_google_site_verification_meta');?></em></small>
     </div>
   </div>
+  <div class="form-group row">
+    <label for="bing.wmt.id" class="col-sm-2 col-form-label"><?php echo i18n('Bing_Webmaster_Tools');?></label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-bing.wmt.id" class="form-control" id="bing.wmt.id" value="<?php echo valueMaker(config('bing.wmt.id'));?>" placeholder="<?php echo i18n('widget_key_placeholder');?>">
+      <small><em><?php echo i18n('For_msvalidate_01_meta');?></em></small>
+    </div>
+  </div>
   <br>
   <h4><?php echo i18n('Social_Media');?></h4>
   <hr>

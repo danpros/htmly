@@ -8,6 +8,7 @@
 if (isset($_SESSION[site_url()]['user'])) {
     $posts = get_profile_posts($_SESSION[site_url()]['user'], 1, 10);
     if (!empty($posts)) {
+        $posts = $posts[0];
         echo '<table class="table post-list">';
         echo '<tr class="head"><th>' . i18n('Title') . '</th><th>' . i18n('Published') . '</th>';
         if (config("views.counter") == "true")

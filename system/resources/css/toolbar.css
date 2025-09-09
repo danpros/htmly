@@ -2,22 +2,6 @@ body {
     padding-top: 30px
 }
 
-.admin-front .tb-admin,
-.all-posts .tb-posts,
-.admin-popular .tb-popular,
-.admin-mine .tb-mine,
-.admin-draft .tb-draft,
-.admin-content .tb-addcontent,
-.admin-categories .tb-categories,
-.edit-profile .tb-editprofile,
-.admin-import .tb-import,
-.admin-backup .tb-backup,
-.admin-config .tb-config,
-.admin-clear-cache .tb-clearcache,
-.admin-update .tb-update {
-    background:#400;
-}
-
 #toolbar {
     background: #666;
     box-shadow: 0 5px 15px #000;
@@ -25,7 +9,7 @@ body {
     font-family: Georgia, sans-serif;
     left: 0;
     margin: 0 -20px;
-    padding: 0 25px;
+    padding: 0 35px;
     position: fixed;
     right: 0;
     top: 0;
@@ -40,7 +24,6 @@ body {
 #toolbar ul {
     margin: 0;
     padding: 0;
-    padding-left: 30px;
 }
 
 #toolbar ul li, #toolbar ul li a {
@@ -55,14 +38,12 @@ body {
     color: #FFF;
     font-size: .846em;
     text-decoration: none;
-    border-radius: 10px;
     padding: 0 10px;
 }
 
-@media all and (max-width: 550px) {
-    body {
-        padding-top: 60px
-    }
+#toolbar a:hover {
+    background: #333;
+    border-radius: 3px;
 }
 
 table#config td:first-child {
@@ -80,4 +61,56 @@ table#config input {
 
 table#config tr:last-child td {
     border-bottom: none
+}
+#htmly-menu-toggle {
+    display: none;
+    background: #666;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#htmly-menu {
+    display: block;
+}
+
+#htmly-menu-toggle {
+    display: none;
+}
+
+#htmly-menu-button {
+    display: none;
+    background: #666;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+@media all and (max-width: 550px) {
+    #htmly-menu-button {
+        display: block;
+    }
+
+    #htmly-menu {
+        display: none;
+        background: #666;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 5px 15px #000;
+    }
+
+    #htmly-menu ul {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #htmly-menu-toggle:checked + #htmly-menu {
+        display: block;
+    }
 }

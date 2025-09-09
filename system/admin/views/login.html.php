@@ -21,11 +21,6 @@
         } ?>" name="password" placeholder="<?php echo i18n('Password'); ?>"/>
         <br>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-        <?php if (config('mfa.state') === 'true'): ?>
-            <label><?php echo i18n('MFACode');?></label>
-            <input type="text" class="form-control" name="mfacode" placeholder="<?php echo i18n('verify_code'); ?>"/>
-            <br>
-        <?php endif; ?>
         <?php if (config('login.protect.system') === 'google'): ?>
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <div class="g-recaptcha" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
@@ -33,7 +28,7 @@
         <?php endif; ?>
         <?php if (config('login.protect.system') === 'cloudflare'): ?>
             <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-			<div style="text-align:center;" class="cf-turnstile" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
+            <div style="text-align:center;" class="cf-turnstile" data-sitekey="<?php echo config("login.protect.public"); ?>"></div>
             <br/>
         <?php endif; ?>
         <input type="submit" class="btn btn-primary" name="submit" value="<?php echo i18n('Login');?>"/>

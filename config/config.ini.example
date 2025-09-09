@@ -53,6 +53,9 @@ fb.color = "light"
 ; Disqus comments
 disqus.shortname = ""
 
+; Bing Webmaster Tools ID verification
+bing.wmt.id = ""
+
 ; Google Web Master Tool ID verification
 google.wmt.id = ""
 
@@ -206,3 +209,9 @@ views.layout = "layout"
 
 ; Admin theme mode: light or dark
 admin.theme = "light"
+
+; Fulltext search
+fulltext.search = "false"
+
+; Transliterate Slug
+transliterate.slug = "true"

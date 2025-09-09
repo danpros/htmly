@@ -16,7 +16,7 @@ html {
 }
 
 body {
-    font: 16px/1.6 Georgia, Arial, sans-serif;
+    font: 16px/1.6 Georgia, Source Sans, sans-serif;
     color: #4f4f4f;
 }
 
@@ -52,14 +52,14 @@ img {
 -----------------------------*/
 
 h1 {
-    font: 28px 'Open Sans Condensed', sans-serif;
+    font: bold 28px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
 
 h1.blog-title, h2.blog-title {
     text-transform: uppercase;
-    font: 20px 'Open Sans Condensed', sans-serif;
+    font: bold 20px 'Source Sans', sans-serif;
     margin-bottom: 1em;
     line-height: 1.3;
 }
@@ -74,7 +74,7 @@ h1.blog-title a:hover, h2.blog-title a:hover {
 }
 
 h1.title-post, h2.title-index {
-    font: 28px 'Open Sans Condensed', sans-serif;
+    font: bold 28px 'Source Sans', sans-serif;
     line-height: 1.2;
     text-transform: normal;
     margin: 0 0 20px 0;
@@ -90,38 +90,38 @@ h1.title-post a:hover, h2.title-index a:hover {
 }
 
 h2 {
-    font: 22px 'Open Sans Condensed', sans-serif;
+    font: bold 22px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
 
 h2.title-index {
-    font: 28px 'Open Sans Condensed', sans-serif;
+    font: bold 24px 'Source Sans', sans-serif;
     line-height: 1.2;
     text-transform: normal;
     margin: 0 0 20px 0;
 }
 
 h3 {
-    font: 18px 'Open Sans Condensed', sans-serif;
+    font: bold 18px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
 
 h4 {
-    font: 16px 'Open Sans Condensed', sans-serif;
+    font: bold 16px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
 
 h5 {
-    font: 14px 'Open Sans Condensed', sans-serif;
+    font: bold 14px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
 
 h6 {
-    font: 12px 'Open Sans Condensed', sans-serif;
+    font: bold 12px 'Source Sans', sans-serif;
     line-height: 1.2;
     margin: 0.5em 0;
 }
@@ -158,7 +158,7 @@ h6 {
     margin: 0 5px;
     font-size: 12px;
     font-weight: bold;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans', sans-serif;
 }
 
 #content ul.nav, #content ul.nav li {
@@ -192,7 +192,7 @@ h6 {
 #content div.actions {
     margin-top: 25px;
     font-size: 14px;
-    font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Source Sans', sans-serif;
 }
 
 #content div.actions .readmore {
@@ -225,7 +225,7 @@ h6 {
 }
 
 .post .date {
-    font: bold 12px 'Open Sans Condensed', sans-serif;
+    font: bold 12px 'Source Sans', sans-serif;
     text-transform: uppercase;
     color: #a7a7a7;
     margin: 0 0 20px 20px;
@@ -299,7 +299,7 @@ pre code {
 .breadcrumb {
     padding-top: 50px;
     padding-bottom: 10px;
-    font: normal 14px 'Open Sans Condensed', sans-serif;
+    font: normal 14px 'Source Sans', sans-serif;
 }
 
 .thumbnail {
@@ -383,7 +383,7 @@ th, td {
 
 th.title {
     margin: 5px 0;
-    font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     font-size: 18px;
     font-weight: normal;
 }
@@ -391,14 +391,14 @@ th.title {
 td.title {
     font-weight: normal;
     background-color: #f6f6f6;
-    font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Source Sans', sans-serif;
 }
 
 th {
     background-color: #f6f6f6;
     border-bottom: 1px solid #E3E3E3;
     border-right: 1px solid #E3E3E3;
-    font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     font-size: 18px;
 }
 
@@ -443,14 +443,15 @@ aside .menu {
 }
 
 aside h3 {
-    font: normal 16px 'Open Sans Condensed', sans-serif;
+    font: bold 16px 'Source Sans', sans-serif;
     text-transform: uppercase;
 }
 
 aside .menu ul {
-    font: bold 18px 'Open Sans Condensed', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     text-transform: uppercase;
     list-style: none;
+    font-weight: bold;
 }
 
 aside .menu ul li a {
@@ -502,7 +503,7 @@ aside .copyright p {
 
 .related {
     font-size: 14px;
-    font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Source Sans', sans-serif;
     width: 100%;
     float: left;
 }
@@ -523,7 +524,7 @@ aside .copyright p {
 
 .postnav .pagination-arrow {
     display: inline-block;
-    font: bold 12px/1 'Open Sans Condensed', sans-serif;
+    font: bold 12px/1 'Source Sans', sans-serif;
     border: 1px solid #ccc;
     border-radius: 3px;
     color: #555 !important;
@@ -569,7 +570,7 @@ aside .copyright p {
 
 .pager .pagination-arrow {
     display: inline-block;
-    font: bold 16px/1 'Open Sans Condensed', sans-serif;
+    font: bold 16px/1 'Source Sans', sans-serif;
     border: 1px solid #ccc;
     border-radius: 3px;
     color: #555 !important;
@@ -642,7 +643,7 @@ aside .copyright p {
 .search-input {
     margin: 0;
     padding: 5px 15px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Source Sans, Helvetica, sans-serif;
     font-size: 14px;
     border: 1px solid #0076a3;
     border-top-left-radius: 5px 5px;
@@ -654,7 +655,7 @@ aside .copyright p {
 .search-button {
     margin: 0;
     padding: 5px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Source Sans, Helvetica, sans-serif;
     font-size: 14px;
     outline: none;
     cursor: pointer;

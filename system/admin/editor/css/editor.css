@@ -1,4 +1,4 @@
-body {
+body .form-control, .wmd-input, .wmd-preview {
     font-family: Georgia, sans-serif;
 }
 
@@ -181,4 +181,8 @@ pre code {
     display: flex;
     align-items: center;
     display: none;
+}
+
+.notice.error {
+  background-color: #fdd;
 }

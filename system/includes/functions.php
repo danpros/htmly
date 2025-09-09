@@ -11,13 +11,11 @@ function get_blog_posts()
 {
     static $_posts = array();
 
-    if (empty($_posts)) {
-        $url = 'cache/index/index-posts.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_posts = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-posts.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_posts = unserialize(file_get_contents($url));
     return $_posts;
 }
 
@@ -26,13 +24,11 @@ function get_static_pages()
 {
     static $_page = array();
 
-    if (empty($_page)) {
-        $url = 'cache/index/index-pages.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_page = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-pages.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_page = unserialize(file_get_contents($url));
     return $_page;
 }
 
@@ -41,13 +37,12 @@ function get_static_subpages($static = null)
 {
     static $_sub_page = array();
 
-    if (empty($_sub_page)) {
-        $url = 'cache/index/index-subpages.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_sub_page = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-subpages.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_sub_page = unserialize(file_get_contents($url));
+
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_sub_page, function ($sub_page) use ($static, $stringLen) {
@@ -72,13 +67,11 @@ function get_author_name()
 {
     static $_author = array();
 
-    if (empty($_author)) {
-        $url = 'cache/index/index-author.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_author = unserialize(file_get_contents($url));
+    $url = 'cache/index/index-author.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_author = unserialize(file_get_contents($url));
 
     return $_author;
 }
@@ -87,13 +80,13 @@ function get_author_name()
 function get_draft_posts()
 {
     static $_draft = array();
-    if (empty($_draft)) {
-        $url = 'cache/index/index-draft.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_draft = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-draft.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_draft = unserialize(file_get_contents($url));
+
     return $_draft;
 }
 
@@ -101,16 +94,16 @@ function get_draft_posts()
 function get_draft_pages()
 {
     static $_draftPage = array();
-    if (empty($_draftPage)) {
-        $tmp = array();
-        $tmp = glob('content/static/draft/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_draftPage[] = pathinfo($file);
-            }
+
+    $tmp = array();
+    $tmp = glob('content/static/draft/*.md', GLOB_NOSORT);
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $_draftPage[] = pathinfo($file);
         }
-        usort($_draftPage, "sortfile_a");
     }
+    usort($_draftPage, "sortfile_a");
+
     return $_draftPage;
 }
 
@@ -118,16 +111,16 @@ function get_draft_pages()
 function get_draft_subpages($static = null)
 {
     static $_draftSubpage = array();
-    if (empty($_draftSubpage)) {
-        $tmp = array();
-        $tmp = glob('content/static/*/draft/*.md', GLOB_NOSORT);
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_draftSubpage[] = pathinfo($file);
-            }
+
+    $tmp = array();
+    $tmp = glob('content/static/*/draft/*.md', GLOB_NOSORT);
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $_draftSubpage[] = pathinfo($file);
         }
-        usort($_draftSubpage, "sortfile_a");
     }
+    usort($_draftSubpage, "sortfile_a");
+
     if ($static != null) {
         $stringLen = strlen($static);
         return array_filter($_draftSubpage, function ($sub_page) use ($static, $stringLen) {
@@ -151,13 +144,13 @@ function get_draft_subpages($static = null)
 function get_scheduled_posts()
 {
     static $_scheduled = array();
-    if (empty($_scheduled)) {
-        $url = 'cache/index/index-scheduled.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_scheduled = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-scheduled.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_scheduled = unserialize(file_get_contents($url));
+
     return $_scheduled;
 }
 
@@ -165,13 +158,13 @@ function get_scheduled_posts()
 function get_category_files()
 {
     static $_desc = array();
-    if (empty($_desc)) {
-        $url = 'cache/index/index-category-files.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_desc = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-category-files.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_desc = unserialize(file_get_contents($url));
+
     return $_desc;
 }
 
@@ -179,15 +172,15 @@ function get_category_files()
 function get_category_folder()
 {
     static $_dfolder = array();
-    if (empty($_dfolder)) {
-        $tmp = array();
-        $tmp = glob('content/*/blog/*/', GLOB_ONLYDIR);
-        if (is_array($tmp)) {
-            foreach ($tmp as $dir) {
-                $_dfolder[] = $dir;
-            }
+
+    $tmp = array();
+    $tmp = glob('content/*/blog/*/', GLOB_ONLYDIR);
+    if (is_array($tmp)) {
+        foreach ($tmp as $dir) {
+            $_dfolder[] = $dir;
         }
     }
+
     return $_dfolder;
 }
 
@@ -195,13 +188,13 @@ function get_category_folder()
 function get_category_slug()
 {
     static $_cslug = array();
-    if (empty($_cslug)) {
-        $url = 'cache/index/index-category.txt';
-        if (!file_exists($url)) {
-            rebuilt_cache('all');
-        }
-        $_cslug = unserialize(file_get_contents($url));
+
+    $url = 'cache/index/index-category.txt';
+    if (!file_exists($url)) {
+        rebuilt_cache('all');
     }
+    $_cslug = unserialize(file_get_contents($url));
+
     return $_cslug;
 }
 
@@ -210,13 +203,7 @@ function get_zip_files()
 {
     static $_zip = array();
 
-    if (empty($_zip)) {
-
-        // Get the names of all the
-        // zip files.
-
-        $_zip = glob('backup/*.zip');
-    }
+    $_zip = glob('backup/*.zip');
 
     return $_zip;
 }
@@ -224,16 +211,16 @@ function get_zip_files()
 // Get images in content/images folder
 function scan_images() {
     static $_images = array();
-    if (empty($_images)) {
-        $tmp = array();
-        $tmp = array_filter(glob('content/images/*', GLOB_NOSORT), 'is_file');
-        if (is_array($tmp)) {
-            foreach ($tmp as $file) {
-                $_images[] = pathinfo($file);
-            }
+
+    $tmp = array();
+    $tmp = array_filter(glob('content/images/*', GLOB_NOSORT), 'is_file');
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            $_images[] = pathinfo($file);
         }
-        usort($_images, "sortfile_d");
     }
+    usort($_images, "sortfile_d");
+
     return $_images;
 }
 
@@ -338,6 +325,7 @@ function rebuilt_cache($type = null)
     // Rebuilt static page index
     $ptmp = array();
     $ptmp =  glob('content/static/*.md', GLOB_NOSORT);
+    natsort($ptmp);
     if (is_array($ptmp)) {
         foreach ($ptmp as $file) {
             if(strpos($file, '/draft/') === false) {
@@ -345,13 +333,13 @@ function rebuilt_cache($type = null)
             }
         }
     }
-    usort($page_cache, "sortfile_a");
     $page_string = serialize($page_cache);
     file_put_contents('cache/index/index-pages.txt', print_r($page_string, true), LOCK_EX);
 
     // Rebuilt subpage index
     $sptmp = array();
     $sptmp =  glob('content/static/*/*.md', GLOB_NOSORT);
+    natsort($sptmp);
     if (is_array($sptmp)) {
         foreach ($sptmp as $file) {
             if(strpos($file, '/draft/') === false) {
@@ -359,7 +347,6 @@ function rebuilt_cache($type = null)
             }
         }
     }
-    usort($subpage_cache, "sortfile_a");
     $subpage_string = serialize($subpage_cache);
     file_put_contents('cache/index/index-subpages.txt', print_r($subpage_string, true), LOCK_EX);
 
@@ -390,6 +377,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
     }
 
     $tmp = array();
+    $views = array();
 
     // Extract a specific page with results
     $posts = array_slice($posts, ($page - 1) * $perpage, $perpage);
@@ -398,15 +386,12 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
     $auto = config('toc.automatic');
     $counter = config('views.counter');
-    $caption = config('fig.captions');
 
-    if ($counter == 'true') {
-        $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
-        }
+    $viewsFile = "content/data/views.json";
+    if (file_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(file_get_contents($viewsFile), true);
     }
-
+        
     foreach ($posts as $index => $v) {
 
         $post = new stdClass;
@@ -449,11 +434,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
             $post->authorDescription = $profile[0]->description;
             $post->authorAbout = $profile[0]->about;
             $post->authorAvatar = $profile[0]->avatar;
+            $post->authorRaw = $profile[0]->raw;
         } else {
             $post->authorName = $author;
             $post->authorDescription = i18n('Author_Description');
-            $post->authorAbout = i18n('Author_Description');
+            $post->authorAbout = $post->authorDescription;
             $post->authorAvatar = site_url() . 'system/resources/images/logo-small.png';
+            $post->authorRaw = $post->authorDescription;
         }
 
         $post->type = $type;
@@ -550,16 +537,13 @@ function get_posts($posts, $page = 1, $perpage = 0)
             }
         }
 
-        // Convert image tags to figures
-        if ($caption == 'true') {
-            $post->body = preg_replace( '/<p>(<img .*?alt="(.*?)"\s*\/>)<\/p>/', '<figure>$1<figcaption>$2</figcaption></figure>', $post->body );
-        }
-
         if ($counter == 'true') {
-            $post->views = get_views('post_' . $post->slug, $post->file, $views);               
+            $post->views = get_views('post_' . $post->slug, $views);               
         } else {
             $post->views = null;
         }
+        
+        $post->raw = $content;
 
         $tmp[] = $post;
     }
@@ -578,11 +562,9 @@ function get_pages($pages, $page = 1, $perpage = 0)
     $auto = config('toc.automatic');
     $counter = config('views.counter');
 
-    if ($counter == 'true') {
-        $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
-        }
+    $viewsFile = "content/data/views.json";
+    if (file_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(file_get_contents($viewsFile), true);
     }
 
     // Extract a specific page with results
@@ -634,10 +616,12 @@ function get_pages($pages, $page = 1, $perpage = 0)
         }
 
         if ($counter == 'true') {
-            $post->views = get_views('page_' . $post->slug, $post->file, $views);               
+            $post->views = get_views('page_' . $post->slug, $views);               
         } else {
             $post->views = null;
         }
+        
+        $post->raw = $content;
 
         $tmp[] = $post;            
     }
@@ -657,11 +641,9 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     $auto = config('toc.automatic');
     $counter = config('views.counter');
 
-    if ($counter == 'true') {
-        $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
-        }
+    $viewsFile = "content/data/views.json";
+    if (file_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(file_get_contents($viewsFile), true);
     }
 
     // Extract a specific page with results
@@ -723,10 +705,12 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         }
         
         if ($counter == 'true') {
-            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);              
+            $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $views);              
         } else {
             $post->views = null;
         }
+        
+        $post->raw = $content;
 
         $tmp[] = $post;        
     }
@@ -891,6 +875,9 @@ function find_subpage($static, $sub_static = null)
 // Return category page.
 function get_category($category, $page, $perpage, $random = null)
 {
+    
+    if (is_null($category)) return array();
+    
     $posts = get_blog_posts();
     
     if ($random === true) {
@@ -916,12 +903,12 @@ function get_category($category, $page, $perpage, $random = null)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return category info.
@@ -966,7 +953,7 @@ function read_category_info($category)
 
     if (!empty($cFiles)) {
         foreach ($cFiles as $index => $v) {
-            if (stripos($v['basename'], $category . '.md') !== false) {
+            if ($v['basename'] == $category . '.md' ) {
 
                 $desc = new stdClass;
 
@@ -984,7 +971,7 @@ function read_category_info($category)
                 $desc->count = get_categorycount($url);
 
                 $desc->file = $filename;
-				
+
                 $desc->rss = $desc->url . '/feed';
 
                 // Get the contents and convert it to HTML
@@ -1002,6 +989,8 @@ function read_category_info($category)
                 if (isset($toc['1'])) {
                     $desc->body = insert_toc('taxonomy-' . $desc->slug, $toc['0'], $toc['1']);
                 }
+                
+                $desc->raw = $content;
 
                 $tmp[] = $desc;
             } 
@@ -1026,6 +1015,7 @@ function default_category($category = null)
         $desc->file = '';
         $desc->count = get_categorycount($desc->slug);
         $desc->rss = $desc->url . '/feed';
+        $desc->raw = $desc->body;
     } else{
         $desc->title = $category;
         $desc->url = site_url() . 'category/' . $category;
@@ -1035,7 +1025,8 @@ function default_category($category = null)
         $desc->description = i18n('All_blog_posts') . ': ' . $category;
         $desc->file = '';
         $desc->count = get_categorycount($category);
-        $desc->rss = $desc->url . '/feed';		
+        $desc->rss = $desc->url . '/feed';
+        $desc->raw = $desc->body;
     }
 
     return $tmp[] = $desc;
@@ -1060,7 +1051,7 @@ function category_list($custom = null)
     } else {
         $arr = get_category_info(null);
         foreach ($arr as $i => $a) {
-            $cat[] = array($a->slug, $a->title, $a->count, $a->description);
+            $cat[] = array($a->slug, $a->title, $a->count, $a->description, $a->body, $a->raw, $a->file, $a->rss);
         }
 
         $tmp = serialize($cat);
@@ -1087,6 +1078,8 @@ function category_list($custom = null)
 // Return type page.
 function get_type($type, $page, $perpage)
 {
+    if (is_null($type)) return array();
+
     $posts = get_blog_posts();
 
     $tmp = array();
@@ -1100,7 +1093,9 @@ function get_type($type, $page, $perpage)
         // dirname string
         $dirname = $v['dirname'];
 
-        if (strpos($dirname, '/' . strtolower($type)) !== false) {
+        $str = explode('/', $dirname);
+
+        if (strtolower($type) === strtolower($str[4])) {
             $tmp[] = $v;
         }
     }
@@ -1111,12 +1106,14 @@ function get_type($type, $page, $perpage)
 
     $tmp = array_unique($tmp, SORT_REGULAR);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return tag page.
 function get_tag($tag, $page, $perpage, $random = null)
 {
+    if (is_null($tag)) return array();
+
     $posts = get_blog_posts();
 
     if ($random === true) {
@@ -1145,12 +1142,14 @@ function get_tag($tag, $page, $perpage, $random = null)
 
     $tmp = array_unique($tmp, SORT_REGULAR);
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return archive page.
 function get_archive($req, $page, $perpage)
 {
+    if (is_null($req)) return array();
+
     $posts = get_blog_posts();
 
     $tmp = array();
@@ -1163,15 +1162,17 @@ function get_archive($req, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return posts list on profile.
 function get_profile_posts($name, $page, $perpage)
 {
+    if (is_null($name)) return array();
+
     $posts = get_blog_posts();
 
     $tmp = array();
@@ -1184,15 +1185,17 @@ function get_profile_posts($name, $page, $perpage)
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return author info.
 function get_author($name)
 {
+    if (is_null($name)) return array();
+
     $names = get_author_name();
 
     $tmp = array();
@@ -1229,9 +1232,9 @@ function get_author($name)
                 $author->about = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 $author->description = get_content_tag("d", $content, get_description($author->about));
-                
+
                 $author->avatar = get_content_tag("image", $content, site_url() . 'system/resources/images/logo-small.png');
-				
+
                 $author->rss = $author->url . '/feed';
 
                 $toc = explode('<!--toc-->', $author->about);
@@ -1241,17 +1244,15 @@ function get_author($name)
 
                 $author->body = $author->about;
                 $author->title = $author->name;
+                
+                $author->raw = $content;
 
                 $tmp[] = $author;
             }
         }
     }
 
-    if (!empty($tmp)) {
-        return $tmp;
-    } else {
-        return false;
-    }
+    return $tmp;
 }
 
 // Return default profile
@@ -1270,6 +1271,7 @@ function default_profile($name)
     $author->slug = $name;
     $author->file = '';
     $author->rss = $author->url . '/feed';
+    $author->raw = $author->about;
 
     return $tmp[] = $author;
 }
@@ -1299,6 +1301,7 @@ function get_frontpage()
         if (isset($toc['1'])) {
             $front->body = insert_toc('page-front', $toc['0'], $toc['1']);
         }
+        $front->raw = $content;
     } else {
         $front->title = 'Welcome';
         $front->url = site_url() . 'front';
@@ -1311,6 +1314,7 @@ function get_frontpage()
         $word_count = str_word_count(strip_tags($front->body));
         $front->readTime = ceil($word_count / 200);
         $front->views = null;
+        $front->raw = $front->body;
     }
 
     return $front;
@@ -1319,35 +1323,52 @@ function get_frontpage()
 // Return search page.
 function get_keyword($keyword, $page, $perpage)
 {
+    
+    if (strlen($keyword) < 3) {
+        return array();
+    }
+
     $posts = get_blog_posts();
 
     $tmp = array();
-
-    $words = explode(' ', $keyword);
+    $search = array();
+    
+    $searchFile = "content/data/search.json";
+    
+    if (file_exists($searchFile) && config('fulltext.search') == "true") {
+        $search = json_decode(file_get_contents($searchFile), true);
+    }
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
-        foreach ($words as $word) {
-            if (stripos($filter, $word) !== false) {
-                if (!in_array($v, $tmp)) {
-                    $tmp[] = $v;
-                }
+        $arr = explode('_', $v['filename']);
+        
+        if (isset($search['post_' . $arr[2]])) {
+            $filter = $search['post_' . $arr[2]];
+        } else {
+            $filter = $arr[1] . ' ' . $arr[2];
+            $keyword = remove_accent($keyword);
+        }
+
+        if (stripos($filter, trim($keyword)) !== false) {
+            if (!in_array($v, $tmp)) {
+                $tmp[] = $v;
             }
         }
+        
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 
 }
 
 // Get related posts base on post category.
 function get_related($tag, $custom = null, $count = null)
 {
+
     if (empty($count)) {
         $count = config('related.count');
         if (empty($count)) {
@@ -1358,22 +1379,23 @@ function get_related($tag, $custom = null, $count = null)
     $tmp = array();
     $exp = explode(',', $tag);
     $posts = get_category($exp[0], 1, $count + 1, true);
+    if ($posts) $posts = $posts[0];
     $related = '';
+    $i = 1;
 
     foreach ($posts as $post) {
         if ($post->url !== $exp[1]) {
             $tmp[] = $post;
+            if ($i++ >= $count)
+                break;
         }
     }
 
     if (empty($custom)) {
         if (!empty($tmp)) {
-            $i = 1;
             $related .= '<ul>';
             foreach ($tmp as $post) {
                 $related .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-                if ($i++ >= $count)
-                    break;
             }
             $related .= '</ul>';
             return $related;
@@ -1421,7 +1443,12 @@ function get_categorycount($var)
 
     foreach ($posts as $index => $v) {
 
-        if (stripos($v['dirname'], '/' . $var . '/') !== false) {
+        // dirname string
+        $dirname = $v['dirname'];
+
+        $str = explode('/', $dirname);
+
+        if (strtolower($var) === strtolower($str[3])) {
             $tmp[] = $v;
         }
         
@@ -1439,7 +1466,35 @@ function get_typecount($var)
 
     foreach ($posts as $index => $v) {
 
-        if (stripos($v['dirname'], '/' . $var) !== false) {
+        // dirname string
+        $dirname = $v['dirname'];
+
+        $str = explode('/', $dirname);
+
+        if (strtolower($var) === strtolower($str[4])) {
+            $tmp[] = $v;
+        }
+        
+    }
+
+    return count($tmp);
+}
+
+// Return profile posts count. Matching $var
+function get_profilecount($var)
+{
+    $posts = get_blog_posts();
+
+    $tmp = array();
+
+    foreach ($posts as $index => $v) {
+
+        // dirname string
+        $dirname = $v['dirname'];
+
+        $str = explode('/', $dirname);
+
+        if (strtolower($var) === strtolower($str[1])) {
             $tmp[] = $v;
         }
         
@@ -1508,150 +1563,78 @@ function get_tagcount($var)
 // Return search result count
 function keyword_count($keyword)
 {
+    if (strlen($keyword) < 3) {
+        return array();
+    }
+
     $posts = get_blog_posts();
 
     $tmp = array();
-
-    $words = explode(' ', $keyword);
+    $search = array();
+    
+    $searchFile = "content/data/search.json";
+    
+    if (file_exists($searchFile) && config('fulltext.search') == "true") {
+        $search = json_decode(file_get_contents($searchFile), true);
+    }
 
     foreach ($posts as $index => $v) {
-        $arr = explode('_', $v['basename']);
-        $filter = $arr[1] . ' ' . $arr[2];
-        foreach ($words as $word) {
-            if (stripos($filter, $word) !== false) {
+        $arr = explode('_', $v['filename']);
+        
+        if (isset($search['post_' . $arr[2]])) {
+            $filter = $search['post_' . $arr[2]];
+        } else {
+            $filter = $arr[1] . ' ' . $arr[2];
+            $keyword = remove_accent($keyword);
+        }
+
+        if (stripos($filter, trim($keyword)) !== false) {
+            if (!in_array($v, $tmp)) {
                 $tmp[] = $v;
             }
         }
+        
     }
 
     $tmp = array_unique($tmp, SORT_REGULAR);
-
     return count($tmp);
+
 }
 
-// Return recent posts lists
+// Return recent posts
 function recent_posts($custom = null, $count = null)
 {
-    if (empty($count)) {
-        $count = config('recent.count');
-        if (empty($count)) {
-            $count = 5;
-        }
-    }
-
-    $dir = "cache/widget";
-    $filename = "cache/widget/recent.cache";
-    $tmp = array();
-    $posts = array();
-    $recent = '';
-
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
-    if (file_exists($filename)) {
-        $posts = unserialize(file_get_contents($filename));
-        if (count($posts) < $count) {
-            $posts = get_posts(null, 1, $count);
-            $tmp = serialize($posts);
-            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-        }
-    } else {
-       $posts = get_posts(null, 1, $count);
-       $tmp = serialize($posts);
-       file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-    }
-
-    if (!empty($custom)) {
-        $arr = array();
-        $i = 1;
-        foreach ($posts as $post) {
-            $arr[] = $post;
-            if ($i++ >= $count)
-                break;  
-        }
-        return $arr;
-    } else {
-        $i = 1;
-        $recent .= '<ul>';
-        foreach ($posts as $post) {
-            $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-            if ($i++ >= $count)
-                break;  
-        }
-        if (empty($posts)) {
-            $recent .= '<li>' . i18n('No_posts_found') . '</li>';
-        }
-        $recent .= '</ul>';
-        return $recent;
-    }
+    return get_recent('posts', 'list', $count, $custom);
 }
 
-// Return recent type lists
+// Return recent posts by category
+function recent_category($category, $count = null, $custom = null)
+{
+    return get_recent('category', $category, $count, $custom);
+}
+
+// Return recent posts by type
 function recent_type($type, $count = null, $custom = null)
 {
-    if (empty($count)) {
-        $count = config('recent.count');
-        if (empty($count)) {
-            $count = 5;
-        }
-    }
-
-    $dir = 'cache/widget';
-    $filename = 'cache/widget/recent.' . $type . '.cache';
-    $tmp = array();
-    $posts = array();
-    $recent = '';
-
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
-    if (file_exists($filename)) {
-        $posts = unserialize(file_get_contents($filename));
-        if (count($posts) < $count) {
-            $posts = get_type($type, 1, $count);
-            if (!empty($posts)) {
-                $tmp = serialize($posts);
-                file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-            }
-        }
-    } else {
-        $posts = get_type($type, 1, $count);
-        if (!empty($posts)) {
-            $tmp = serialize($posts);
-            file_put_contents($filename, print_r($tmp, true), LOCK_EX);
-        }
-    }
-
-    if (!empty($custom)) {
-        $arr = array();
-        $i = 1;
-        foreach ($posts as $post) {
-            $arr[] = $post;
-            if ($i++ >= $count)
-                break;  
-        }
-        return $arr;
-    } else {
-        $i = 1;
-        $recent .= '<ul>';
-        foreach ($posts as $post) {
-            $recent .= '<li><a href="' . $post->url . '">' . $post->title . '</a></li>';
-            if ($i++ >= $count)
-                break;
-        }
-        if (empty($posts)) {
-           $recent .= '<li>No recent ' . $type . ' found</li>';
-        }
-        $recent .= '</ul>';
-        return $recent;
-    }
+    return get_recent('type', $type, $count, $custom);
 }
 
-// Return recent tag posts list
+// Return recent posts by tag
 function recent_tag($tag, $count = null, $custom = null)
 {
+    return get_recent('tag', $tag, $count, $custom);
+}
+
+// Return recent posts by author
+function recent_profile_posts($name, $count = null, $custom = null)
+{
+    return get_recent('profile', $name, $count, $custom);
+}
+
+function get_recent($filter, $var, $count = null, $custom = null)
+{
+    if (is_null($var)) return array();
+
     if (empty($count)) {
         $count = config('recent.count');
         if (empty($count)) {
@@ -1660,7 +1643,7 @@ function recent_tag($tag, $count = null, $custom = null)
     }
 
     $dir = 'cache/widget';
-    $filename = 'cache/widget/recent.tag.' . $tag . '.cache';
+    $filename = 'cache/widget/recent.' . $filter . '.' . $var . '.cache';
     $tmp = array();
     $posts = array();
     $recent = '';
@@ -1672,14 +1655,42 @@ function recent_tag($tag, $count = null, $custom = null)
     if (file_exists($filename)) {
         $posts = unserialize(file_get_contents($filename));
         if (count($posts) < $count) {
-            $posts = get_tag($tag, 1, $count);
+            if ($filter == 'profile') {
+                $posts = get_profile_posts($var, 1, $count);
+                if ($posts) $posts = $posts[0];
+            } elseif ($filter == 'category') {
+                $posts = get_category($var, 1, $count);
+                if ($posts) $posts = $posts[0];
+            } elseif ($filter == 'type') {
+                $posts = get_type($var, 1, $count);
+                if ($posts) $posts = $posts[0];
+            } elseif ($filter == 'posts') {
+                $posts = get_posts(null, 1, $count);
+            } elseif ($filter == 'tag') {
+                $posts = get_tag($var, 1, $count);
+                if ($posts) $posts = $posts[0];
+            }
             if (!empty($posts)) {
                 $tmp = serialize($posts);
                 file_put_contents($filename, print_r($tmp, true), LOCK_EX);
             }
         }
     } else {
-        $posts = get_tag($tag, 1, $count);
+        if ($filter == 'profile') {
+            $posts = get_profile_posts($var, 1, $count);
+            if ($posts) $posts = $posts[0];
+        } elseif ($filter == 'category') {
+            $posts = get_category($var, 1, $count);
+            if ($posts) $posts = $posts[0];
+        } elseif ($filter == 'type') {
+            $posts = get_type($var, 1, $count);
+            if ($posts) $posts = $posts[0];
+        } elseif ($filter == 'posts') {
+            $posts = get_posts(null, 1, $count);
+        } elseif ($filter == 'tag') {
+            $posts = get_tag($var, 1, $count);
+            if ($posts) $posts = $posts[0];
+        }
         if (!empty($posts)) {
             $tmp = serialize($posts);
             file_put_contents($filename, print_r($tmp, true), LOCK_EX);
@@ -1704,11 +1715,12 @@ function recent_tag($tag, $count = null, $custom = null)
                 break;
         }
         if (empty($posts)) {
-           $recent .= '<li>No recent ' . $tag . ' found</li>';
+           $recent .= '<li>' . i18n('No_posts_found') . '</li>';
         }
         $recent .= '</ul>';
         return $recent;
-    }
+    }    
+
 }
 
 // Return popular posts lists
@@ -2072,7 +2084,8 @@ function has_prev($prev)
             'categoryMd' => $prev->categoryMd,
             'categoryTitle' => $prev->categoryTitle,
             'readTime' => $prev->readTime,
-            'lastMod' => $prev->lastMod
+            'lastMod' => $prev->lastMod,
+            'raw' => $prev->raw
         );
     }
 }
@@ -2113,7 +2126,8 @@ function has_next($next)
             'categoryMd' => $next->categoryMd,
             'categoryTitle' => $next->categoryTitle,
             'readTime' => $next->readTime,
-            'lastMod' => $next->lastMod
+            'lastMod' => $next->lastMod,
+            'raw' => $next->raw
         );
     }
 }
@@ -2133,7 +2147,8 @@ function static_prev($prev)
             'parentSlug' => $prev->parentSlug,
             'file' => $prev->file,
             'readTime' => $prev->readTime,
-            'lastMod' => $prev->lastMod
+            'lastMod' => $prev->lastMod,
+            'raw' => $prev->raw
         );
     }    
 }
@@ -2153,7 +2168,8 @@ function static_next($next)
             'parentSlug' => $next->parentSlug,
             'file' => $next->file,
             'readTime' => $next->readTime,
-            'lastMod' => $next->lastMod
+            'lastMod' => $next->lastMod,
+            'raw' => $next->raw
         );
     }    
 }
@@ -2163,7 +2179,7 @@ function static_next($next)
 function has_pagination($total, $perpage, $page = 1)
 {
     if (!$total) {
-        $total = count(get_blog_posts());
+        return false;
     }
     $totalPage = ceil($total / $perpage);
     $number = i18n('Page') . ' ' . $page . ' ' . i18n('of') . ' ' . $totalPage;
@@ -2197,13 +2213,17 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
         We're actually saving the code to a variable in case we want to draw it more than once.
     */
     $pagination = '';
+    $curpage = strtok($_SERVER["REQUEST_URI"], '?');
+    
     if($lastpage > 1)
     {
         $pagination .= '<ul class="pagination">';
 
         //newer button
-        if ($page > 1)
+        if ($page > 2)
             $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $prev .'">« '. i18n('Newer') .'</a></li>';
+        else if ($page == 2)
+            $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">« '. i18n('Newer') .'</a></li>';            
         else
             $pagination .= '<li class="page-item disabled"><span class="page-link">« '. i18n('Newer') . '</span></li>';
 
@@ -2212,10 +2232,12 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
         {
             for ($counter = 1; $counter <= $lastpage; $counter++)
             {
-                if ($counter == $page)
+                if ($counter == 1 && $counter !== $page) // link 1st pagination page to parent page instead of ?page=1 for SEO
+                    $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
+                else if ($counter == $page)
                     $pagination .= '<li class="page-item active"><span class="page-link">'. $counter.'</span></li>';
                 else
-                    $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                    $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
             }
         }
         elseif($lastpage >= 7 + ($adjacents * 2))    //enough pages to hide some
@@ -2225,19 +2247,21 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
             {
                 for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
                 {
-                    if ($counter == $page)
+                    if ($counter == 1 && $counter !== $page) // link 1st pagination page to parent page instead of ?page=1 for SEO
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
+                    else if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
-                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lastpage .'">'. $lastpage .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lastpage .'">'. $lastpage .'</a></li>';
             }
             //in middle; hide some front and some back
             elseif($lastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2))
             {
-                $pagination .= '<li class="page-item"><a class="page-link" href="' . $pagestring .'1">1</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="' . $curpage .'">1</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'2">2</a></li>';
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++)
@@ -2245,16 +2269,16 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
                     if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
-                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $lastpage . '">'. $lastpage .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lpm1 .'">'. $lpm1 .'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $lastpage . '">'. $lastpage .'</a></li>';
             }
             //close to end; only hide early pages
             else
             {
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'1">1</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage .'">1</a></li>';
                 $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring .'2">2</a></li>';
                 $pagination .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 for ($counter = $lastpage - (1 + ($adjacents * 3)); $counter <= $lastpage; $counter++)
@@ -2262,14 +2286,14 @@ function get_pagination($totalitems, $page = 1, $perpage = 10, $adjacents = 1, $
                     if ($counter == $page)
                         $pagination .= '<li class="page-item active"><span class="page-link">'. $counter .'</span></li>';
                     else
-                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $counter .'">'. $counter .'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $counter .'">'. $counter .'</a></li>';
                 }
             }
         }
 
         //older button
         if ($page < $counter - 1)
-            $pagination .= '<li class="page-item"><a class="page-link" href="'. $pagestring . $next .'">'. i18n('Older') .' »</a></li>';
+            $pagination .= '<li class="page-item"><a class="page-link" href="'. $curpage . $pagestring . $next .'">'. i18n('Older') .' »</a></li>';
         else
             $pagination .= '<li class="page-item disabled"><span class="page-link">'. i18n('Older') .' »</span></li>';
         $pagination .= '</ul>';
@@ -2705,6 +2729,7 @@ function parseNode($node, $child = null)
     $req = strtok($_SERVER["REQUEST_URI"],'?');
     $url = parse_url(slashUrl($node->slug));
     $su = parse_url(site_url());
+    $target = !empty($node->target) ? 'target="'.$node->target.'"' : null;
     if (empty($child)) {
 
         if (isset($url['host']) && isset($su['host'])) {
@@ -2725,7 +2750,7 @@ function parseNode($node, $child = null)
             }
         }
 
-        $li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'</a>';
+        $li .= '<a class="nav-link" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'" '.$target.'>'.$node->name.'</a>';
         if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
@@ -2751,7 +2776,7 @@ function parseNode($node, $child = null)
             }
         }
 
-        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'">'.$node->name.'<b class="caret"></b></a>';
+        $li .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" href="'.htmlspecialchars(slashUrl($node->slug), FILTER_SANITIZE_URL).'" '.$target.'>'.$node->name.'<b class="caret"></b></a>';
         if (isset($node->children)) {
             $li .= parseNodes($node->children, true, null);
         }
@@ -2821,8 +2846,6 @@ function get_menu($custom = null, $auto = null)
 
     if (!empty($posts)) {
 
-        asort($posts);
-
         $menu .= '<ul class="nav ' . $custom . '">';
         
         if (is_null($auto)) {
@@ -2877,9 +2900,8 @@ function get_menu($custom = null, $auto = null)
 
             $subPages = get_static_subpages($filename);
             if (!empty($subPages)) {
-                asort($subPages);
                 $menu .= '<li class="' . $class . $active .' dropdown">';
-                $menu .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
+                $menu .= '<a class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" href="' . $url . '">' . ucwords($title) . '<b class="caret"></b></a>';
                 $menu .= '<ul class="subnav dropdown-menu" role="menu">';
                 $iSub = 0;
                 $countSub = count($subPages);
@@ -2981,7 +3003,8 @@ function not_found($request = null)
             if (file_exists($filename)) {
                 $views = json_decode(file_get_data($filename), true);
             }
-            if (isset($views[$request])) {
+
+            if (isset($views[$request]) && !isset($views['flock_fail'])) {
                 unset($views[$request]);
                 save_json_pretty($filename, $views);
             }
@@ -3555,7 +3578,7 @@ function blog_string()
 {
     $string = config('blog.string');
     if (!is_null($string) && !empty($string)) {
-        return $string;
+        return safe_html($string);
     }
     return 'Blog';
 }
@@ -3563,13 +3586,13 @@ function blog_string()
 // Return blog title
 function blog_title()
 {
-    return config('blog.title');
+    return safe_html(config('blog.title'));
 }
 
 // Return blog tagline
 function blog_tagline()
 {
-    return config('blog.tagline');
+    return safe_html(config('blog.tagline'));
 }
 
 // Return blog description
@@ -3610,7 +3633,8 @@ function locale_language()
 function head_contents()
 {
     $output = '';
-    $wmt_id = config('google.wmt.id');
+    $google_wmt_id = config('google.wmt.id');
+    $bing_wmt_id = config('bing.wmt.id');
     if (config('show.version') !== 'false') {
         $version = 'HTMLy ' . constant('HTMLY_VERSION');
     } else {
@@ -3624,13 +3648,16 @@ function head_contents()
     }
     $output .= '<meta charset="utf-8" />' . "\n";
     $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
-    $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
+    $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";   
     $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
     $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
-    $output .= '<link rel="alternate" type="application/rss+xml" title="' . blog_title() . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
-    if (!empty($wmt_id)) {
-        $output .=  '<meta name="google-site-verification" content="' . $wmt_id . '" />' . "\n";
+    $output .= '<link rel="alternate" type="application/rss+xml" title="' . safe_html(blog_title()) . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
+    if (!empty($google_wmt_id)) {
+        $output .=  '<meta name="google-site-verification" content="' . $google_wmt_id . '" />' . "\n";
+    }
+    if (!empty($bing_wmt_id)) {
+        $output .= '<meta name="msvalidate.01" content="' . $bing_wmt_id . '" />' . "\n";
     }
 
     return $output;
@@ -3671,6 +3698,7 @@ function add_view($page)
     if (file_exists($filename)) {
         $views = json_decode(file_get_data($filename), true);
     }
+    
     if (isset($views[$page])) {
         $views[$page]++;
         save_json_pretty($filename, $views);
@@ -3685,7 +3713,7 @@ function add_view($page)
 }
 
 // Get the page views count
-function get_views($page, $oldID = null, $views = null)
+function get_views($page, $views = null)
 {
     $filename = "content/data/views.json";
 
@@ -3693,24 +3721,8 @@ function get_views($page, $oldID = null, $views = null)
         if (file_exists($filename)) {
             $views = json_decode(file_get_contents($filename), true);
         }
-    }
-    
-    if (!is_null($oldID)) {
-        if (isset($views[$oldID])) {
-            if (file_exists($filename)) {
-                $views = json_decode(file_get_data($filename), true);
-            }
-            if (isset($views['flock_fail'])) {
-                return -1;
-            } else {
-                $arr = replace_key($views, $oldID, $page);
-                save_json_pretty($filename, $arr);
-            }
-            return $views[$oldID];
-        } else {
-            if (isset($views[$page])) {
-                return $views[$page];
-            }            
+        if (isset($views[$page])) {
+            return $views[$page];
         }
     } else {
         if (isset($views[$page])) {
@@ -3739,8 +3751,16 @@ function get_content_tag($tag, $string, $alt = null)
 // Strip html comment
 function remove_html_comments($content)
 {
-    $patterns = array('/(\s|)<!--t(.*)t-->(\s|)/', '/(\s|)<!--d(.*)d-->(\s|)/', '/(\s|)<!--tag(.*)tag-->(\s|)/', '/(\s|)<!--image(.*)image-->(\s|)/', '/(\s|)<!--video(.*)video-->(\s|)/', '/(\s|)<!--audio(.*)audio-->(\s|)/', '/(\s|)<!--link(.*)link-->(\s|)/', '/(\s|)<!--quote(.*)quote-->(\s|)/', '/(\s|)<!--post(.*)post-->(\s|)/');
+    $patterns = array('/(\s|)<!--(?!(toc|more)-->).*-->(\s|)/');
     return preg_replace($patterns, '', $content);
+}
+
+function get_field($key, $object = null) 
+{
+    if (is_null($object)) {
+       return false;
+    }
+    return (get_content_tag($key, $object));
 }
 
 // Google recaptcha
@@ -3826,11 +3846,9 @@ function tag_i18n($tag)
 {
     static $tags = array();
 
-    if (empty($tags)) {
-        $filename = "content/data/tags.lang";
-        if (file_exists($filename)) {
-            $tags = unserialize(file_get_contents($filename));
-        }
+    $filename = "content/data/tags.lang";
+    if (file_exists($filename)) {
+        $tags = unserialize(file_get_contents($filename));
     }
     if (isset($tags[$tag])) {
         return $tags[$tag];
@@ -4060,17 +4078,24 @@ function generate_meta($type = null, $object = null)
     $facebook = config('social.facebook');
     $twitter = config('social.twitter');
     if (is_null($object)) {
+        if ($type == 'is_blog') {
+            $tags .= '<title>'. generate_title('is_blog', null) .'</title>' . "\n";
+            $tags .= '<link rel="canonical" href="'. site_url() . blog_path() .'" />' . "\n";
+            $tags .= '<meta name="description" content="'. blog_title() . ' ' . blog_string() .'"/>' . "\n";
+            $tags .= '<meta property="og:title" content="'. safe_html(generate_title('is_blog', null)) . '" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
+            $tags .= '<meta property="og:url" content="'. site_url() . blog_path() .'" />' . "\n";
+        } else {
+            $tags .= '<title>'. generate_title('is_front', null) .'</title>' . "\n";
+            $tags .= '<link rel="canonical" href="'. site_url() .'" />' . "\n";
+            $tags .= '<meta name="description" content="'. safe_html(strip_tags(blog_description())) .'"/>' . "\n";
+            $tags .= '<meta property="og:title" content="'. safe_html(generate_title('is_front', null)) . '" />' . "\n";
+            $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
+            $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
+        }
         $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
         $tags .= '<meta property="og:type" content="website" />' . "\n";
         $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
-        if ($type == 'is_blog') {
-            $tags .= '<meta property="og:title" content="'. generate_title('is_blog', null) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
-        } else {
-            $tags .= '<meta property="og:title" content="'. generate_title('is_front', null) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
-        }
-        $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $defaultImg .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         if(!empty($twitter)) {
@@ -4089,20 +4114,21 @@ function generate_meta($type = null, $object = null)
                 $image = $defaultImg;
             }
         }
-        $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
-        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
-        $tags .= '<meta property="og:type" content="article" />' . "\n";
-        $tags .= '<meta property="og:title" content="'. $object->title .'" />' . "\n";
         if ($type == 'is_post') {
-            $tags .= '<meta name="author" content="'. $object->authorName .'" />' . "\n";
+            $tags .= '<title>'. generate_title('is_post',$object) .'</title>' . "\n";
+            $tags .= '<meta name="author" content="'. safe_html($object->authorName) .'" />' . "\n";
             $tags .= '<meta name="article:published_time" content="'. date('c', $object->date) .'" />' . "\n";
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
-            $tags .= '<meta name="article:section" content="'. $object->categoryTitle .'" />' . "\n";
+            $tags .= '<meta name="article:section" content="'. safe_html($object->categoryTitle) .'" />' . "\n";
             $tags .= '<meta name="article:section_url" content="'. $object->categoryUrl .'" />' . "\n";    
-        }
-        if ($type == 'is_page' || $type == 'is_subpage') {
+        } elseif ($type == 'is_page' || $type == 'is_subpage') {
+            $tags .= '<title>'. generate_title('is_page',$object) .'</title>' . "\n";
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
+        } else {
+            $tags .= '<title>'. generate_title($type , $object) .'</title>' . "\n";
         }
+        $tags .= '<link rel="canonical" href="'. $object->url .'" />' . "\n";
+        $tags .= '<meta name="description" content="'. safe_html($object->description) .'"/>' . "\n";
         if(!empty($facebook)) {
             $tags .= '<meta property="article:publisher" content="'. $facebook .'" />' . "\n";
         }
@@ -4111,8 +4137,12 @@ function generate_meta($type = null, $object = null)
             $tags .= '<meta name="twitter:creator" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
             $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
         }
+        $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
+        $tags .= '<meta property="og:type" content="article" />' . "\n";
+        $tags .= '<meta property="og:title" content="'. safe_html($object->title) .'" />' . "\n";
         $tags .= '<meta property="og:url" content="'. $object->url .'" />' . "\n";
-        $tags .= '<meta property="og:description" content="'. $object->description .'" />' . "\n";
+        $tags .= '<meta property="og:description" content="'. safe_html($object->description) .'" />' . "\n";
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $image .'" />' . "\n";
         if (!empty($fbApp)) {

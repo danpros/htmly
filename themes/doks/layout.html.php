@@ -3,9 +3,6 @@
 <html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
-    <title><?php echo $title;?></title>
-    <meta name="description" content="<?php echo $description; ?>"/>
-    <link rel="canonical" href="<?php echo $canonical; ?>" />
     <?php echo $metatags;?>
     <link rel="preload" as="font" href="<?php echo theme_path();?>fonts/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="<?php echo theme_path();?>fonts/jost/jost-v4-latin-700.woff2" type="font/woff2" crossorigin>
@@ -16,11 +13,32 @@
 <div class="header-bar fixed-top"></div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
-<header class="navbar fixed-top navbar-expand-md navbar-light">
+<?php if (login()):?>
+<script>
+function updateContentPosition() {
+    const toolbarHeight = document.querySelector("#toolbar").offsetHeight; // Calculate #toolbar height
+	const contentDiv = document.querySelector("#content");
+	contentDiv.style.paddingTop = `${toolbarHeight}px`;
+}
 
+// Run once when the page loads
+window.addEventListener("DOMContentLoaded", updateContentPosition);
+
+// Update on window resize
+window.addEventListener("resize", updateContentPosition);
+</script>
+<?php endif;?>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+<?php $filename = "content/data/menu.json";
+if (file_exists($filename)) {
+    $json = json_decode(file_get_contents('content/data/menu.json', true));
+    $menus = json_decode($json);
+} ?>
     <div class="container">
         <input class="menu-btn order-0" type="checkbox" id="menu-btn">
+        <?php if (!empty($menus)):?>
         <label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+        <?php endif;?>
         <a class="navbar-brand order-1 order-md-0 me-auto" href="<?php echo site_url();?>">
             <?php echo blog_title();?>
         </a>
@@ -32,18 +50,7 @@
             <?php echo social();?>
         </nav>
         <div class="collapse navbar-collapse order-4 order-md-1 top-menu">
-
-            <?php
-            // just to make sure only print the content from custom menu 
-            $filename = "content/data/menu.json";
-            if (file_exists($filename)) {
-                $json = json_decode(file_get_contents('content/data/menu.json', true));
-                $menus = json_decode($json);
-                if (!empty($menus)) {
-                    echo menu();        
-                }
-            } ?>
-
+            <?php if (!empty($menus)) { echo menu();}?>
         </div>
     </div>
 
@@ -87,7 +94,7 @@ $front = get_frontpage(); ?>
 
 <?php } else {?>
 <div class="wrap container" role="document">
-    <div class="content">
+    <div id="content" class="content">
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10 col-xl-9">
             <?php echo content();?>

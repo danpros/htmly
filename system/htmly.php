@@ -3,11 +3,11 @@ if (!defined('HTMLY')) die('HTMLy');
 
 use PragmaRX\Google2FA\Google2FA;
 
-// Get search query. Redir to /search/
-get_search_query();
-
 // Load the configuration file
 config('source', $config_file);
+
+// Get search query. Redir to /search/
+get_search_query();
 
 // Load the language file
 get_language();
@@ -71,7 +71,7 @@ get('/index', function () {
 
         $posts = get_posts(null, $page, $perpage);
 
-        $total = '';
+        $total = count(get_blog_posts());
         
         $pv = $vroot . '/main--front.html.php'; 
         if (file_exists($pv)) {
@@ -79,7 +79,7 @@ get('/index', function () {
         } else {
             $pview = 'main';
         }
-		
+        
         $tblog = new stdClass;
         $tblog->title = blog_tagline();
         $tblog->url = site_url();
@@ -147,49 +147,22 @@ post('/login', function () {
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
     $mfa_secret = user('mfa_secret', $user);
-    if ($proper && $captcha && !empty($user) && !empty($pass)) {    
-        if (!is_null($mfa_secret) && $mfa_secret !== "disabled") {
-            $mfacode = from($_REQUEST, 'mfacode');
-            $google2fa = new Google2FA();
-            if ($google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
-                session($user, $pass);
-                $log = session($user, $pass);
+    if ($proper && $captcha && !empty($user) && !empty($pass)) {
+        if (!is_null($mfa_secret) && $mfa_secret !== "disabled" && config('mfa.state') === 'true') {
+            config('views.root', 'system/admin/views');
 
-                if (!empty($log)) {
-
-                    config('views.root', 'system/admin/views');
-
-                    render('login', array(
-                        'title' => generate_title('is_default', i18n('Login')),
-                        'description' => i18n('Login') . ' ' . blog_title(),
-                        'canonical' => site_url(),
-                        'metatags' => generate_meta(null, null),
-                        'error' => '<ul>' . $log . '</ul>',
-                        'type' => 'is_login',
-                        'is_login' => true,
-                        'bodyclass' => 'in-login',
-                        'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
-                    ));
-                }
-            } else {
-                $message['error'] = '';
-                $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
-                config('views.root', 'system/admin/views');
-
-                render('login', array(
-                    'title' => generate_title('is_default', i18n('Login')),
-                    'description' => i18n('Login') . ' ' . blog_title(),
-                    'canonical' => site_url(),
-                    'metatags' => generate_meta(null, null),
-                    'error' => '<ul>' . $message['error'] . '</ul>',
-                    'username' => $user,
-                    'password' => $pass,
-                    'type' => 'is_login',
-                    'is_login' => true,
-                    'bodyclass' => 'in-login',
-                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
-                ));
-            }
+            render('login-mfa', array(
+                'title' => generate_title('is_default', i18n('Login')),
+                'description' => i18n('Login') . ' ' . blog_title(),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'username' => $user,
+                'password' => $pass,
+                'type' => 'is_login',
+                'is_login' => true,
+                'bodyclass' => 'in-login',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+            ));
         } else {
             session($user, $pass);
             $log = session($user, $pass);
@@ -244,6 +217,60 @@ post('/login', function () {
     }
 });
 
+// Verify MFA 
+post('/login-mfa', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $user = $_SESSION["mfa_uid"];
+    $pass = $_SESSION["mfa_pwd"];
+    $mfacode = from($_REQUEST, 'mfacode');
+    $mfa_secret = user('mfa_secret', $user);
+    $google2fa = new Google2FA();
+    if ($proper && $google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
+        session($user, $pass);
+        $log = session($user, $pass);
+
+        if (!empty($log)) {
+
+            config('views.root', 'system/admin/views');
+
+            render('login', array(
+                'title' => generate_title('is_default', i18n('Login')),
+                'description' => i18n('Login') . ' ' . blog_title(),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'error' => '<ul>' . $log . '</ul>',
+                'type' => 'is_login',
+                'is_login' => true,
+                'bodyclass' => 'in-login',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+            ));
+        }
+    } else {
+        $message['error'] = '';
+        if (!$proper) {
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('Token_Error') . '</li>';
+        } else {
+            $message['error'] .= '<li class="alert alert-danger">' . i18n('MFA_Error') . '</li>';
+        }
+        config('views.root', 'system/admin/views');
+
+        render('login-mfa', array(
+            'title' => generate_title('is_default', i18n('Login')),
+            'description' => i18n('Login') . ' ' . blog_title(),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'error' => '<ul>' . $message['error'] . '</ul>',
+            'username' => $user,
+            'password' => $pass,
+            'type' => 'is_login',
+            'is_login' => true,
+            'bodyclass' => 'in-login',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
+        ));
+    }
+});
+
 // Show the author page
 get('/author/:name', function ($name) {
 
@@ -254,13 +281,13 @@ get('/author/:name', function ($name) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('profile.perpage');
+    $total = '';
 
     $posts = get_profile_posts($name, $page, $perpage);
 
-    $total = get_count('/'.$name.'/', 'dirname');
-
-    if ($total === 0) {
-        not_found();
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
     }
 
     $author = get_author($name);
@@ -268,7 +295,12 @@ get('/author/:name', function ($name) {
     if (isset($author[0])) {
         $author = $author[0];
     } else {
-        $author = default_profile($name);
+        $userConfig = 'config/users/' . $name . '.ini';
+        if (file_exists($userConfig) || !empty($posts)) {
+            $author = default_profile(safe_html(strip_tags($name)));
+        } else {
+            not_found();
+        }
     }
     
     $vroot = rtrim(config('views.root'), '/');
@@ -339,14 +371,23 @@ get('/author/:name/feed', function ($name) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_profile_posts($name, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
 
     $author = get_author($name);
 
     if (isset($author[0])) {
         $author = $author[0];
     } else {
-        $author = default_profile($name);
+        $userConfig = 'config/users/' . $name . '.ini';
+        if (file_exists($userConfig) || !empty($posts)) {
+            $author = default_profile(safe_html(strip_tags($name)));
+        } else {
+            not_found();
+        }
     }
 
     // Show an RSS feed
@@ -379,6 +420,23 @@ post('/edit/profile', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/profile.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $user = $_SESSION[site_url()]['user'];
     $title = from($_REQUEST, 'title');
@@ -386,7 +444,7 @@ post('/edit/profile', function () {
     $image = from($_REQUEST, 'image');
     $content = from($_REQUEST, 'content');
     if ($proper && !empty($title) && !empty($content)) {
-        edit_profile($title, $content, $user, $description, $image);
+        edit_profile($title, $content, $user, $description, $image, $field);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -594,6 +652,23 @@ post('/edit/frontpage', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
@@ -601,7 +676,7 @@ post('/edit/frontpage', function () {
     $content = from($_REQUEST, 'content');
     if ($role === 'editor' || $role === 'admin') {    
         if ($proper && !empty($title) && !empty($content)) {
-            edit_frontpage($title, $content);
+            edit_frontpage($title, $content, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -685,6 +760,23 @@ post('/add/content', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/post.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }    
+    
     $is_image = from($_REQUEST, 'is_image');
     $is_audio = from($_REQUEST, 'is_audio');
     $is_video = from($_REQUEST, 'is_video');
@@ -738,17 +830,17 @@ post('/add/content', function () {
     }
     
     if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'post', $description, null, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'image', $description, $image, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'video', $description, $video, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'audio', $description, $audio, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'quote', $description, $quote, $dateTime, null, null, $field);
     } elseif ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
-        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime);
+        add_content($title, $tag, $url, $content, $user, $draft, $category, 'link', $description, $link, $dateTime, null, null, $field);
     } else {
         $message['error'] = '';
         if (empty($title)) {
@@ -855,6 +947,23 @@ post('/add/page', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }    
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
@@ -868,7 +977,7 @@ post('/add/page', function () {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content) && login()) {
-            add_page($title, $url, $content, $draft, $description);
+            add_page($title, $url, $content, $draft, $description, null, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -905,7 +1014,8 @@ post('/add/page', function () {
 // Autosave
 post('/admin/autosave', function () {
 
-    if (login()) {
+    if (login()) {    
+        
         $title = $_REQUEST['title'];
         $url = $_REQUEST['url'];
         $content = $_REQUEST['content'];
@@ -917,6 +1027,34 @@ post('/admin/autosave', function () {
         $addEdit = $_REQUEST['addEdit'];
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        
+        $field = array();
+        $aField = array();
+        if ($posttype == 'is_post') {
+            $field_file = 'content/data/field/post.json';
+            if (file_exists($field_file)) {
+                $aField = json_decode(file_get_contents($field_file, true));
+            }
+        } elseif ($posttype == 'is_page') {
+            $field_file = 'content/data/field/page.json';
+            if (file_exists($field_file)) {
+                $aField = json_decode(file_get_contents($field_file, true));
+            }
+        } elseif ($posttype == 'is_subpage') {
+            $field_file = 'content/data/field/subpage.json';
+            if (file_exists($field_file)) {
+                $aField = json_decode(file_get_contents($field_file, true));
+            }
+        }
+        if(!empty($aField)) {
+            foreach ($aField as $af) {
+                if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                    $field[$af->name] = !empty($_REQUEST[$af->name]) ? "checked" : '';
+                } else {
+                    $field[$af->name] = from($_REQUEST, $af->name);
+                }
+            }
+        }    
 
         if (empty($url)) {
             $url = $title;
@@ -933,18 +1071,18 @@ post('/admin/autosave', function () {
             if ($posttype == 'is_page') {
                 if ($role === 'editor' || $role === 'admin') {
                     if ($addEdit == 'add') {
-                        $response = add_page($title, $url, $content, $draft, $description, $autoSave, $oldfile);
+                        $response = add_page($title, $url, $content, $draft, $description, $autoSave, $oldfile, $field);
                     } else {
-                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave);
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, $autoSave, $field);
                     }
                 }
             } elseif ($posttype == 'is_subpage') {
                 if ($role === 'editor' || $role === 'admin') {
                     $static = $_REQUEST['parent_page'];
                     if ($addEdit == 'add') {
-                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave, $oldfile);
+                        $response = add_sub_page($title, $url, $content, $static, $draft, $description, $autoSave, $oldfile, $field);
                     } else {
-                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave);
+                        $response = edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, $autoSave, $field);
                     }
                 }
             } else {
@@ -971,22 +1109,41 @@ post('/admin/autosave', function () {
                     $media = null;
                 }
                 
-                if (!empty($title) && !empty($tag) && !empty($content)) {
-                    if ($addEdit == 'add') {
-                        $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile);
-                    } else {
-                        $arr = explode('/', $oldfile);
-                        if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-                            $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave);
+                if ($type == 'post') {
+                    if (!empty($title) && !empty($tag) && !empty($content)) {
+                        if ($addEdit == 'add') {
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile, $field);
+                        } else {
+                            $arr = explode('/', $oldfile);
+                            if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave, $field);
+                            }
                         }
+                    } else {
+                        $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));
                     }
+                } else {
+                    if (!empty($title) && !empty($tag) && !empty($content) && !empty($media)) {
+                        if ($addEdit == 'add') {
+                            $response = add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description, $media, $dateTime, $autoSave,  $oldfile, $field);
+                        } else {
+                            $arr = explode('/', $oldfile);
+                            if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+                                $response = edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination, $description, $dateTime, $media, $autoSave, $field);
+                            }
+                        }
+                    } else {
+                        $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));
+                    }                        
                 }
             }
         } else {
-            $response = json_encode(array('message' => 'No content to save.', 'file'  => ''));            
+            $response = json_encode(array('message' => '<strong>Cannot save draft!</strong><br>Please fill in all required fields', 'file'  => ''));            
         }
         header('Content-Type: application/json');
         echo $response;
+    } else {
+        error(401, "Not logged in");
     }
 });
 
@@ -1094,7 +1251,7 @@ get('/admin/posts', function () {
 
             $posts = get_posts(null, $page, $perpage);
 
-            $total = '';
+            $total = count(get_blog_posts());
 
             if (empty($posts) || $page < 1) {
 
@@ -1218,10 +1375,14 @@ get('/admin/mine', function () {
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
+        $total = '';
 
         $posts = get_profile_posts($name, $page, $perpage);
-
-        $total = get_count('/'.$name.'/', 'dirname');
+        
+        if (!empty($posts)) {
+            $total = $posts[1];
+            $posts = $posts[0];
+        }
 
         $author = get_author($name);
 
@@ -1285,14 +1446,18 @@ get('/admin/draft', function () {
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
+        $total = '';
 
         $posts = get_draft($name, $page, $perpage);
+        
+        if (!empty($posts)) {
+            $total = $posts[1];
+            $posts = $posts[0];
+        }
         
         $draftPages = find_draft_page();
         
         $draftSubpages = find_draft_subpage();
-
-        $total = get_draftcount($name);
 
         $author = get_author($name);
 
@@ -1360,10 +1525,14 @@ get('/admin/scheduled', function () {
         $page = from($_GET, 'page');
         $page = $page ? (int)$page : 1;
         $perpage = config('profile.perpage');
+        $total = '';
 
         $posts = get_scheduled($name, $page, $perpage);
 
-        $total = get_scheduledcount($name);
+        if (!empty($posts)) {
+            $total = $posts[1];
+            $posts = $posts[0];
+        }
 
         $author = get_author($name);
 
@@ -1656,6 +1825,129 @@ post('/admin/import', function () {
     } else {
         $redir = site_url();
         header("location: $redir");            
+    }
+});
+
+// Show admin/search 
+get('/admin/search', function () {
+
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    config('views.root', 'system/admin/views');
+    if (login()) {
+        if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
+            $page = from($_GET, 'page');
+            $page = $page ? (int)$page : 1;
+            $perpage = 40;
+
+            $tmp = array();
+            $search = array();
+            $total = '';
+
+            $searchFile = "content/data/search.json";
+
+            if (file_exists($searchFile)) {
+                $search = json_decode(file_get_contents($searchFile), true);
+            }
+
+            $posts = get_blog_posts();
+            foreach ($posts as $index => $v) {
+                $arr = explode('_', $v['filename']);
+                if (!isset($search['post_' . $arr[2]])) {
+                    $tmp[] = $v;
+                }
+            }
+
+            if (!empty($tmp)) {
+                $posts = get_posts($tmp, $page, $perpage);
+                $total = count($tmp);
+            }
+
+            if (empty($tmp) || $page < 1) {
+
+                render('search', array(
+                    'title' => generate_title('is_default', i18n('search_index')),
+                    'heading' => i18n('search_index'),
+                    'description' => safe_html(strip_tags(blog_description())),
+                    'canonical' => site_url(),
+                    'metatags' => generate_meta(null, null),
+                    'bodyclass' => 'no-posts',
+                    'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index')
+                ));
+
+                die;
+            }
+
+            render('search', array(
+                'title' => generate_title('is_default', i18n('search_index')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'heading' => i18n('search_index'),
+                'page' => $page,
+                'posts' => $posts,
+                'bodyclass' => 'all-index-posts',
+                'type' => 'is_admin-index-posts',
+                'is_admin' => true,
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index'),
+                'pagination' => has_pagination($total, $perpage, $page)
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('search_index')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-index-posts',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/search', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $json = $_REQUEST['json'];
+            if ($json == 'content/data/search.json') {
+                unlink($json);
+            }
+            echo json_encode(array(
+                'message' => 'Search Index cleared successfully!',
+            ));
+        }
+    }
+});
+
+post('/admin/search/reindex', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        $search = json_decode(htmlspecialchars_decode($_POST['search_index']));
+        config('views.root', 'system/admin/views');
+        if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
+            render('search-reindex', array(
+                'title' => generate_title('is_default', i18n('search_index')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-search',
+                'search' => $search,
+                'is_admin' => true,
+                'bodyclass' => 'admin-search',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('search_index')
+            ));
+        }
+        
     }
 });
 
@@ -2752,6 +3044,7 @@ get('/admin/categories/:category', function ($category) {
             $page = from($_GET, 'page');
             $page = $page ? (int)$page : 1;
             $perpage = config('category.perpage');
+            $total = '';
             
             if (empty($perpage)) {
                 $perpage = 10;    
@@ -2759,18 +3052,18 @@ get('/admin/categories/:category', function ($category) {
 
             $posts = get_category($category, $page, $perpage);
             
-            $desc = get_category_info($category);
-            
-            if(!empty($desc)) {
-                $desc = $desc[0];
+            if (!empty($posts)) {
+                $total = $posts[1];
+                $posts = $posts[0];
             }
             
+            $desc = get_category_info($category);
+
             if (empty($desc)) {
                 // a non-existing page
                 not_found();
             }
-    
-            $total = $desc->count;
+            $desc = $desc[0];
             
             render('category-list', array(
                 'title' => generate_title('is_default', $desc->title),
@@ -2802,6 +3095,183 @@ get('/admin/categories/:category', function ($category) {
     }   
 });
 
+// Show admin/field
+get('/admin/field', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field', array(
+            'title' => generate_title('is_default', i18n('custom_fields')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('custom_fields')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/field/post
+get('/admin/field/post', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-post', array(
+            'title' => generate_title('is_default', i18n('post')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' . i18n('post')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/post', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/post.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Post fields saved successfully!',
+            ));
+        }
+    }
+});
+
+// Show admin/field/page
+get('/admin/field/page', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-page', array(
+            'title' => generate_title('is_default', i18n('page')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' .i18n('page')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/page', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/page.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Page fields saved successfully!',
+            ));
+        }
+    }
+});
+
+// Show admin/field/subpage
+get('/admin/field/subpage', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-subpage', array(
+            'title' => generate_title('is_default', i18n('subpage')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' .i18n('subpage')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/subpage', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/subpage.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Subpage fields saved successfully!',
+            ));
+        }
+    }
+});
+
+// Show admin/field/profile
+get('/admin/field/profile', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('custom-field-profile', array(
+            'title' => generate_title('is_default', i18n('profile')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . '<a href="'. site_url() .'admin/field">' .i18n('custom_fields').'</a> &#187; ' .i18n('profile')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/field/profile', function () {
+
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'editor' || $role === 'admin') {
+            $dir = 'content/data/field/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            $json = $_REQUEST['json'];
+            save_json_pretty('content/data/field/profile.json', json_decode($json));
+            echo json_encode(array(
+                'message' => 'Profile fields saved successfully!',
+            ));
+        }
+    }
+});
+
 // Show the category page
 get('/category/:category', function ($category) {
 
@@ -2812,6 +3282,7 @@ get('/category/:category', function ($category) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('category.perpage');
+    $total = '';
     
     if (empty($perpage)) {
         $perpage = 10;    
@@ -2819,11 +3290,9 @@ get('/category/:category', function ($category) {
 
     $posts = get_category($category, $page, $perpage);
     
-    $desc = get_category_info($category);
-    
-    
-    if(!empty($desc)) {
-        $desc = $desc[0];
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
     }
 
     if (empty($posts) || $page < 1) {
@@ -2831,7 +3300,11 @@ get('/category/:category', function ($category) {
         not_found();
     }
     
-    $total = $desc->count;
+    $desc = get_category_info($category);
+    
+    if(!empty($desc)) {
+        $desc = $desc[0];
+    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -2883,7 +3356,11 @@ get('/category/:category/feed', function ($category) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_category($category, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     
     $data = get_category_info($category);
     
@@ -3072,14 +3549,23 @@ get('/type/:type', function ($type) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('type.perpage');
+    $total = '';
     
     if (empty($perpage)) {
         $perpage = 10;    
     }
 
     $posts = get_type($type, $page, $perpage);
-
-    $total = get_typecount($type);
+    
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
+    if (empty($posts) || $page < 1) {
+        // a non-existing page
+        not_found();
+    }
     
     $ttype = new stdClass;
     $ttype->title = ucfirst($type);
@@ -3089,11 +3575,6 @@ get('/type/:type', function ($type) {
     $ttype->body = $ttype->description;
     $ttype->rss = $ttype->url . '/feed';
     $ttype->slug = strtolower($type);
-
-    if (empty($posts) || $page < 1) {
-        // a non-existing page
-        not_found();
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3145,7 +3626,11 @@ get('/type/:type/feed', function ($type) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_type($type, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     $data = new stdClass;
     $data->title = ucfirst($type);
     $data->url = site_url() . 'type/' . strtolower($type);
@@ -3165,10 +3650,19 @@ get('/tag/:tag', function ($tag) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('tag.perpage');
+    $total = '';
 
     $posts = get_tag($tag, $page, $perpage);
-
-    $total = get_tagcount($tag);
+    
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
+    if (empty($posts) || $page < 1) {
+        // a non-existing page
+        not_found();
+    }
         
     $ttag = new stdClass;
     $ttag->title = tag_i18n($tag);
@@ -3178,11 +3672,6 @@ get('/tag/:tag', function ($tag) {
     $ttag->body = $ttag->description;
     $ttag->rss = $ttag->url . '/feed';
     $ttag->slug = strtolower($tag);
-
-    if (empty($posts) || $page < 1) {
-        // a non-existing page
-        not_found();
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3234,7 +3723,11 @@ get('/tag/:tag/feed', function ($tag) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_tag($tag, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     $data = new stdClass;
     $data->title = tag_i18n($tag);
     $data->url = site_url() . 'tag/' . strtolower($tag);
@@ -3254,11 +3747,15 @@ get('/archive/:req', function ($req) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('archive.perpage');
+    $total = '';
 
     $posts = get_archive($req, $page, $perpage);
-
-    $total = get_count($req, 'basename');
-
+    
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
     if (empty($posts) || $page < 1) {
         // a non-existing page
         not_found();
@@ -3266,6 +3763,11 @@ get('/archive/:req', function ($req) {
 
     $time = explode('-', $req);
     $date = strtotime($req);
+    
+    if (!$date) {
+        // a non-existing page
+        not_found();
+    }
 
     if (isset($time[0]) && isset($time[1]) && isset($time[2])) {
         $timestamp = format_date($date, 'd F Y');
@@ -3283,11 +3785,6 @@ get('/archive/:req', function ($req) {
     $tarchive->body = $tarchive->description;
     $tarchive->rss = $tarchive->url . '/feed';
     $tarchive->slug = strtolower($req);
-
-    if (!$date) {
-        // a non-existing page
-        not_found();
-    }
     
     $vroot = rtrim(config('views.root'), '/');
     
@@ -3333,7 +3830,11 @@ get('/archive/:req/feed', function ($req) {
 
     header('Content-Type: application/rss+xml');
     
+    $posts = array();
     $posts = get_archive($req, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
     
     $time = explode('-', $req);
     $date = strtotime($req);
@@ -3365,21 +3866,16 @@ get('/search/:keyword', function ($keyword) {
     $page = from($_GET, 'page');
     $page = $page ? (int)$page : 1;
     $perpage = config('search.perpage');
+    $total = '';
 
     $posts = get_keyword($keyword, $page, $perpage);
-    $total = keyword_count($keyword);
-
-    $tsearch = new stdClass;
-    $tsearch->title = $keyword;
-    $tsearch->url = site_url() . 'search/' . strtolower($keyword);
-    $tsearch->count = $total;
-    $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
-    $tsearch->body = $tsearch->description;
-    $tsearch->rss = $tsearch->url . '/feed';
-    $tsearch->slug = strtolower($keyword);
-
-    $vroot = rtrim(config('views.root'), '/');
     
+    if (!empty($posts)) {
+        $total = $posts[1];
+        $posts = $posts[0];
+    }
+    
+    $vroot = rtrim(config('views.root'), '/');
     $lt = $vroot . '/layout--search.html.php'; 
     if (file_exists($lt)) {
         $layout = 'layout--search';
@@ -3394,7 +3890,7 @@ get('/search/:keyword', function ($keyword) {
             'description' => i18n('Search_results_not_found'),
             'canonical' => site_url(),
             'metatags' => generate_meta(null, null),
-            'search' => $tsearch,
+            'search' => '',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('No_search_results'),
             'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
@@ -3402,6 +3898,15 @@ get('/search/:keyword', function ($keyword) {
         ), $layout);
         die;
     }
+
+    $tsearch = new stdClass;
+    $tsearch->title = $keyword;
+    $tsearch->url = site_url() . 'search/' . strtolower($keyword);
+    $tsearch->count = $total;
+    $tsearch->description = i18n('Search_results_for') . ' ' . $keyword . ' ' . i18n('by') . ' ' . blog_title();
+    $tsearch->body = $tsearch->description;
+    $tsearch->rss = $tsearch->url . '/feed';
+    $tsearch->slug = strtolower($keyword);
     
     $pv = $vroot . '/main--search.html.php'; 
     if (file_exists($pv)) {
@@ -3437,8 +3942,12 @@ get('/search/:keyword', function ($keyword) {
 get('/search/:keyword/feed', function ($keyword) {
 
     header('Content-Type: application/rss+xml');
-    
+
+    $posts = array();
     $posts = get_keyword($keyword, 1, config('rss.count'));
+    if ($posts) { 
+        $posts = $posts[0];
+    }
 
     $data = new stdClass;
     $data->title = $keyword;
@@ -3672,6 +4181,23 @@ post('/'. permalink_type() .'/:name/edit', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/post.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $is_post = from($_REQUEST, 'is_post');
@@ -3725,27 +4251,27 @@ post('/'. permalink_type() .'/:name/edit', function () {
     if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio,null, $field);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null,null, $field);
             
         } else {
             $message['error'] = '';
@@ -3967,7 +4493,7 @@ get('/:static', function ($static) {
 
         $posts = get_posts(null, $page, $perpage);
 
-        $total = '';
+        $total = count(get_blog_posts());
         
         $vroot = rtrim(config('views.root'), '/');
         
@@ -3984,7 +4510,7 @@ get('/:static', function ($static) {
         } else {
             $pview = 'main';
         }
-		
+        
         $tblog = new stdClass;
         $tblog->title = blog_string();
         $tblog->url = site_url() . blog_path();
@@ -4153,6 +4679,23 @@ post('/:static/add', function ($static) {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file= 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
@@ -4166,7 +4709,7 @@ post('/:static/add', function ($static) {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            add_sub_page($title, $url, $content, $static, $draft, $description);
+            add_sub_page($title, $url, $content, $static, $draft, $description, null, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4258,6 +4801,23 @@ post('/:static/edit', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -4273,7 +4833,7 @@ post('/:static/edit', function () {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, null, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4288,7 +4848,7 @@ post('/:static/edit', function () {
             config('views.root', 'system/admin/views');
 
             render('edit-page', array(
-                'title' => generate_title('is_default', i18n('Edit') .  ': ' . $post->title),
+                'title' => generate_title('is_default', i18n('Edit') .  ': ' . $title),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
@@ -4426,8 +4986,14 @@ get('/:static/:sub', function ($static, $sub) {
     $lt = $vroot . '/layout--' . strtolower($static) . '--' . strtolower($sub) . '.html.php';
     $ls = $vroot . '/layout--' . strtolower($static) . '.html.php';
     $lf = $vroot . '/layout--static.html.php';
+    $lsp = $vroot . '/layout--' . strtolower($sub) . '.html.php';
+    $lsps = $vroot . '/layout--substatic.html.php';
     if (file_exists($lt)) {
         $layout = 'layout--' . strtolower($static) . '--' . strtolower($sub);
+    } else if (file_exists($lsp)) {
+        $layout = 'layout--' . strtolower($sub);
+    } else if (file_exists($lsps)) {
+        $layout = 'layout--substatic';
     } else if (file_exists($ls)) {
         $layout = 'layout--' . strtolower($static);
     } else if (file_exists($lf)) {
@@ -4438,8 +5004,14 @@ get('/:static/:sub', function ($static, $sub) {
     
     $pv = $vroot . '/static--' . strtolower($static) . '--' . strtolower($sub) . '.html.php';
     $ps = $vroot . '/static--' . strtolower($static) . '.html.php';
+    $psp = $vroot . '/substatic--' . strtolower($sub) . '.html.php';
+    $psps = $vroot . '/substatic.html.php';
     if (file_exists($pv)) {
         $pview = 'static--' . strtolower($static) . '--' . strtolower($sub);
+    } else if (file_exists($psp)) {
+        $pview = 'substatic--' . strtolower($sub);
+    } else if (file_exists($psps)) {
+        $pview = 'substatic';
     } else if (file_exists($ps)) {
         $pview = 'static--' . strtolower($static);
     } else {
@@ -4529,6 +5101,23 @@ post('/:static/:sub/edit', function ($static, $sub) {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $title = from($_REQUEST, 'title');
     $url = from($_REQUEST, 'url');
     $content = from($_REQUEST, 'content');
@@ -4547,7 +5136,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
     }
     if ($role === 'editor' || $role === 'admin') {
         if ($proper && !empty($title) && !empty($content)) {
-            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static);
+            edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination, $description, $static, null, $field);
         } else {
             $message['error'] = '';
             if (empty($title)) {
@@ -4562,7 +5151,7 @@ post('/:static/:sub/edit', function ($static, $sub) {
             config('views.root', 'system/admin/views');
 
             render('edit-page', array(
-                'title' => generate_title('is_default', i18n('Edit') . ': ' . $page->title),
+                'title' => generate_title('is_default', i18n('Edit') . ': ' . $title),
                 'description' => safe_html(strip_tags(blog_description())),
                 'canonical' => site_url(),
                 'metatags' => generate_meta(null, null),
@@ -4850,6 +5439,23 @@ post('/:year/:month/:name/edit', function () {
         $login = site_url() . 'login';
         header("location: $login");
     }
+    
+    $field = array();
+    $aField = array();
+    $field_file = 'content/data/field/post.json';
+    if (file_exists($field_file)) {
+        $aField = json_decode(file_get_contents($field_file, true));
+    }
+    if(!empty($aField)) {
+        foreach ($aField as $af) {
+            if ($af->type == 'checkbox' && isset($_REQUEST[$af->name])) {
+                $field[$af->name] = isset($_REQUEST[$af->name]) ? "checked" : 0;
+            } else {
+                $field[$af->name] = from($_REQUEST, $af->name);
+            }
+        }
+    }
+    
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $title = from($_REQUEST, 'title');
     $is_post = from($_REQUEST, 'is_post');
@@ -4904,27 +5510,27 @@ post('/:year/:month/:name/edit', function () {
 
         if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($image)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'image', $destination, $description, $dateTime, $image, null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($video)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'video', $destination, $description, $dateTime, $video,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($link)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'link', $destination, $description, $dateTime, $link,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($quote)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'quote', $destination, $description, $dateTime, $quote,null, $field);
             
         } else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($audio)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'audio', $destination, $description, $dateTime, $audio,null, $field);
             
         }  else if ($proper && !empty($title) && !empty($tag) && !empty($content) && !empty($is_post)) {
 
-            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null);
+            edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, 'post', $destination, $description, $dateTime, null,null, $field);
             
         } else {
             $message['error'] = '';

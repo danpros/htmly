@@ -116,11 +116,14 @@ function is_csrf_proper($csrf_token)
 // Clean URLs
 function remove_accent($str)
 {
-    return URLify::downcode($str);
+    if (is_null(config('transliterate.slug')) || config('transliterate.slug') !== 'false') {
+        return URLify::downcode($str);
+    }
+    return $str;
 }
 
 // Add content
-function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null, $oldfile = null)
+function add_content($title, $tag, $url, $content, $user, $draft, $category, $type, $description = null, $media = null, $dateTime = null, $autoSave = null, $oldfile = null, $field = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -175,11 +178,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         if (array_key_exists($v, $tags)) {
             foreach ($inter as $in => $i){
                 if($v == $in) {
-                    if (strtolower($tag) == strtolower(tag_i18n($in))) {
-                        $newtag[$v]= $tag;
-                    } else {
-                        $newtag[$v.'-'. $timestamp]= $tag;
-                    }
+                    $newtag[$v]= $tag;
                 }
             }
         } else {
@@ -203,7 +202,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -218,7 +217,17 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     } else {
         $post_media = "";
     }
-    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
+    
+    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . $customField . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_tag) && !empty($post_url) && !empty($post_content)) {
 
@@ -238,12 +247,47 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
             mkdir($dir, 0775, true);
 
         }
+        
+        $searchFile = "content/data/search.json";
+        $search = array();
 
         $oldfile = $oldfile;
         $newfile = $dir . $filename;
         if ($oldfile !== $newfile && !is_null($autoSave)) {
             if (file_exists($oldfile)) {
+                
                 rename($oldfile, $newfile);
+                
+                if (config('fulltext.search') == "true") {
+                
+                    if (file_exists($searchFile)) {
+                        $search = json_decode(file_get_data($searchFile), true);
+                    }
+                    $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
+                    $old_ex = explode('_', $old_filename);
+                    $old_url = $old_ex[2];
+                    $oKey = 'post_' . $old_url;
+                    $nKey = 'post_' . $post_url;
+                    if ($old_url != $post_url) {
+                        if (isset($search[$oKey])) {
+                            $arr = replace_key($search, $oKey, $nKey);
+                            $arr[$nKey] = $post_content;
+                            save_json_pretty($searchFile, $arr);
+                        }
+                    }
+                
+                }
+                
+            }
+        } else {
+            if (config('fulltext.search') == "true") {
+                if (file_exists($searchFile)) {
+                    $search = json_decode(file_get_data($searchFile), true);
+                }
+                if (!isset($search['flock_fail'])) {
+                    $search['post_' . $post_url] = $post_content;
+                    save_json_pretty($searchFile, $search);
+                }
             }
         }
 
@@ -281,7 +325,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
 }
 
 // Edit content
-function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null, $autoSave = null)
+function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publishDraft, $category, $type, $destination = null, $description = null, $date = null, $media = null, $autoSave = null, $field = null)
 {
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
@@ -338,11 +382,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         if (array_key_exists($v, $tags)) {
             foreach ($inter as $in => $i){
                 if($v == $in) {
-                    if (strtolower($tag) == strtolower(tag_i18n($in))) {
-                        $newtag[$v]= $tag;
-                    } else {
-                        $newtag[$v.'-'. $timestamp]= $tag;
-                    }
+                    $newtag[$v]= $tag;
                 }
             }
         } else {
@@ -356,7 +396,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -371,7 +411,17 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     } else {
         $post_media = "";
     }
-    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . "\n\n" . $content;
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
+    
+    $post_content = "<!--t " . $post_title . " t-->" . $post_description . $tagmd . $post_media . $customField . "\n\n" . $content;
     
     $dirBlog = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/' . $type . '/';
     $dirDraft = $dir[0] . '/' . $dir[1] . '/' . $dir[2] . '/' . $category . '/draft/';
@@ -472,22 +522,48 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
         rebuilt_cache('all');
         clear_post_cache($dt, $post_tag, $post_url, $oldfile, $category, $type);
+        
+        $searchFile = "content/data/search.json";
+        $search = array();
 
         $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
         $old_ex = explode('_', $old_filename);
         $old_url = $old_ex[2];
         
         if ($old_url != $post_url) {
+            $oKey = 'post_' . $old_url;
+            $nKey = 'post_' . $post_url;
             if (file_exists($viewsFile)) {
                 $views = json_decode(file_get_data($viewsFile), true);
-                $oKey = 'post_' . $old_url;
-                $nKey = 'post_' . $post_url;
+
                 if (isset($views[$oKey])) {
                     $arr = replace_key($views, $oKey, $nKey);
                     save_json_pretty($viewsFile, $arr);
                 }
             }
-        }
+            if (config('fulltext.search') == "true") {
+                if (file_exists($searchFile)) {
+                    $search = json_decode(file_get_data($searchFile), true);
+                    if (isset($search[$oKey])) {
+                        $arr = replace_key($search, $oKey, $nKey);
+                        $arr[$nKey] = $post_content;
+                        save_json_pretty($searchFile, $arr);
+                    }
+                }
+            }
+            
+        } else {
+            if (config('fulltext.search') == "true") {
+                if (file_exists($searchFile)) {
+                    $search = json_decode(file_get_data($searchFile), true);
+                }
+                if (!isset($search['flock_fail'])) {
+                    $search['post_' . $post_url] = $post_content;
+                    save_json_pretty($searchFile, $search);
+                }
+            }
+
+        }    
         
         if (!is_null($autoSave)) {
             return json_encode(array('message' => 'Auto Saved', 'file'  => $newfile));
@@ -525,7 +601,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 }
 
 // Add static page
-function add_page($title, $url, $content, $draft, $description = null, $autoSave = null, $oldfile = null)
+function add_page($title, $url, $content, $draft, $description = null, $autoSave = null, $oldfile = null, $field = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -538,7 +614,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -560,7 +636,16 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
         }
     }
     
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
+    
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $customField . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
@@ -610,7 +695,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
 }
 
 // Add static sub page
-function add_sub_page($title, $url, $content, $static, $draft, $description = null, $autoSave = null, $oldfile = null)
+function add_sub_page($title, $url, $content, $static, $draft, $description = null, $autoSave = null, $oldfile = null, $field = null)
 {
     if (!is_null($autoSave)) {
         $draft = 'draft';
@@ -625,7 +710,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -645,9 +730,18 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
         } else {
             $post_url = $post_url;
         }
-    }   
+    }
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
 
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $customField . "\n\n" . $content;
 
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {
 
@@ -691,7 +785,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
 }
 
 // Edit static page and sub page
-function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null, $autoSave = null)
+function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft, $destination = null, $description = null, $static = null, $autoSave = null, $field = null)
 {
     $dir = pathinfo($oldfile, PATHINFO_DIRNAME);
     $fn = explode('.', pathinfo($oldfile, PATHINFO_FILENAME));
@@ -711,13 +805,22 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
     }
     
-    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . "\n\n" . $content;
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
+    
+    $post_content = '<!--t ' . $post_title . ' t-->' . $post_description . $customField  . "\n\n" . $content;
     
     if (!empty($post_title) && !empty($post_url) && !empty($post_content)) {  
         
@@ -854,7 +957,7 @@ function add_category($title, $url, $content, $description = null)
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -891,7 +994,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
         if (!empty($description)) {        
             $post_description = "\n<!--d " . $description . " d-->";
         } else {
-            $post_description = "\n<!--d " . get_description($content) . " d-->";
+            $post_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $post_description = "";
@@ -927,14 +1030,14 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
 }
 
 // Edit user profile
-function edit_profile($title, $content, $user, $description = null, $image = null)
+function edit_profile($title, $content, $user, $description = null, $image = null, $field = null)
 {
     $description = safe_html($description);
     if ($description !== null) {
         if (!empty($description)) {        
             $profile_description = "\n<!--d " . $description . " d-->";
         } else {
-            $profile_description = "\n<!--d " . get_description($content) . " d-->";
+            $profile_description = "\n<!--d " . get_description(MarkdownExtra::defaultTransform($content)) . " d-->";
         }            
     } else {
         $profile_description = "";
@@ -944,8 +1047,18 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
     } else {
         $avatar = "";
     }
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
+    
     $user_title = safe_html($title);
-    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . $avatar . "\n\n" . $content;
+    $user_content = '<!--t ' . $user_title . ' t-->' . $profile_description . $avatar . $customField . "\n\n" . $content;
 
     if (!empty($user_title) && !empty($user_content)) {
 
@@ -964,10 +1077,20 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
 }
 
 // Edit homepage
-function edit_frontpage($title, $content)
+function edit_frontpage($title, $content, $field = null)
 {
+    
+    $customField = "";    
+    if (!empty($field)) {
+        foreach ($field as $key => $val) {
+            if (!empty($val)) {
+                $customField .= "\n<!--" . $key . ' ' . preg_replace('/\s+/', ' ', trim($val)) . ' ' . $key . "-->";
+            }
+        }
+    }
+    
     $front_title = safe_html($title);
-    $front_content = '<!--t ' . $front_title . ' t-->' . "\n\n" . $content;
+    $front_content = '<!--t ' . $front_title . ' t-->' . $customField . "\n\n" . $content;
 
     if (!empty($front_title) && !empty($front_content)) {
 
@@ -1144,16 +1267,16 @@ function get_draft($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'editor' || $role === 'admin') {
             $tmp[] = $v;
         }
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Return draft static page.
@@ -1208,7 +1331,7 @@ function find_draft_page($static = null)
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if ($counter == 'true') {
-                    $post->views = get_views('page_' . $post->slug, $post->file, $views);
+                    $post->views = get_views('page_' . $post->slug, $views);
                 } else {
                     $post->views = null;
                 }
@@ -1287,7 +1410,7 @@ function find_draft_subpage($static = null, $sub_static = null)
                 $post->body = MarkdownExtra::defaultTransform(remove_html_comments($content));
 
                 if ($counter == 'true') {
-                    $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $post->file, $views);
+                    $post->views = get_views('subpage_' . $post->parentSlug .'.'. $post->slug, $views);
                 } else {
                     $post->views = null;
                 }
@@ -1360,16 +1483,16 @@ function get_scheduled($profile, $page, $perpage)
 
     foreach ($posts as $index => $v) {
         $str = explode('/', $v['dirname']);
-        if (strtolower($profile) === strtolower($str[1]) || $role === 'admin') {
+        if (strtolower($profile) === strtolower($str[1]) || $role === 'editor' || $role === 'admin') {
             $tmp[] = $v;
         }
     }
 
     if (empty($tmp)) {
-        return false;
+        return $tmp;
     }
 
-    return $tmp = get_posts($tmp, $page, $perpage);
+    return $tmp = array(get_posts($tmp, $page, $perpage), count($tmp));
 }
 
 // Import RSS feed
@@ -1506,9 +1629,10 @@ function toolbar()
     $toolbar = '';
 
     $toolbar .= <<<EOF
-    <link href="{$base}system/resources/css/toolbar.css" rel="stylesheet" />
+    <link href="{$base}system/resources/css/toolbar.css?v=1" rel="stylesheet" />
+    <script src="{$base}system/resources/js/toolbar.js"></script>
 EOF;
-    $toolbar .= '<div id="toolbar"><ul>';
+    $toolbar .= '<div id="toolbar"><label for="htmly-menu-toggle" id="htmly-menu-button">☰ ' . i18n('Menu') . '</label><input type="checkbox" id="htmly-menu-toggle"><div id="htmly-menu"><ul>';
     $toolbar .= '<li class="tb-admin"><a href="' . $base . 'admin">' . i18n('Admin') . '</a></li>';
     $toolbar .= '<li class="tb-addcontent"><a href="' . $base . 'admin/content">' . i18n('Add_content') . '</a></li>';
     if ($role === 'editor' || $role === 'admin') {
@@ -1535,7 +1659,7 @@ EOF;
     $toolbar .= '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
     $toolbar .= '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';
 
-    $toolbar .= '</ul></div>';
+    $toolbar .= '</ul></div></div>';
     echo $toolbar;
 }
 
@@ -1828,6 +1952,28 @@ function authorized ($data = null)
             } else {
                 return false;
             }
+        }
+    }
+}
+
+// Add search index
+function add_search_index($id, $content)
+{
+    $dir = 'content/data/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+    $filename = "content/data/search.json";
+    $search = array();
+    if (file_exists($filename)) {
+        $search = json_decode(file_get_data($filename), true);
+    }
+    if (isset($search['flock_fail'])) {
+        return;
+    } else {
+        if (!isset($search[$id])) {
+            $search[$id] = $content;
+            save_json_pretty($filename, $search);
         }
     }
 }

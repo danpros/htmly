@@ -50,8 +50,8 @@
                         <i class="fa fa-comments"></i> <a href="<?php echo $p->url ?>#comments"><span><fb:comments-count href=<?php echo $p->url ?>></fb:comments-count> <?php echo i18n("Comments");?></span></a>
                     <?php } ?>
                     <span class="share pull-right">
-                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fa fa-facebook"></i></a> 
-                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fa fa-twitter"></i></a>
+                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a> 
+                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fab fa-twitter"></i></a>
                     </span>
                 <div style="clear:both;"></div>
                 </div>
@@ -71,24 +71,23 @@
                 <?php if (disqus_count()): ?>
                     <?php echo disqus_count() ?>
                 <?php endif; ?>
-                <?php $tags = get_related($p->related, true, config('related.count'));?>
-                <?php $char = 30; $total = count($tags); $i = 1; if ($total >= 1) { ?>
+                <?php $related = get_related($p->related, true, config('related.count'));?>
+                <?php if (!empty($related)): ?>
                     <div class="related related-posts" style="margin-top:30px;position:relative;">
                         <hr>
                         <h2 class="heading"><?php echo i18n("Related_posts");?></h2>
-                        <?php foreach ($tags as $t):?>
+                        <?php foreach ($related as $rl):?>
                             <div class="item col-md-4">
-                                <?php if (strlen(strip_tags($t->title)) > $char) { $relatedTitle = shorten($t->title, $char) . '...';} else {$relatedTitle = $t->title;}?>
-                                <h3 class="title"><a href="<?php echo $t->url;?>"><?php echo $relatedTitle;?></a></h3>
+                                <?php $relatedTitle = (strlen(strip_tags($rl->title)) > 30) ? shorten($rl->title, 30) . '...' : $rl->title; ?>
+                                <h3 class="title"><a href="<?php echo $rl->url;?>"><?php echo $relatedTitle;?></a></h3>
                                 <div class="content">
-                                    <p><?php echo shorten($t->body, 60); ?>... <a class="more-link" href="<?php echo $t->url;?>"><?php echo i18n("read_more");?></a></p>
+                                    <p><?php echo shorten($rl->body, 60); ?>... <a class="more-link" href="<?php echo $rl->url;?>"><?php echo i18n("read_more");?></a></p>
                                 </div><!--//content-->
                             </div>
-                            <?php if ($i++ >= config('related.count')) break; ?>
                         <?php endforeach;?>
                         <div style="clear:both;"></div>
                     </div>
-                <?php }?>
+                <?php endif; ?>
             </div><!--//item-->                       
         </div><!--//content-->  
     </div><!--//section-inner-->                 

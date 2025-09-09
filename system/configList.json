@@ -27,6 +27,7 @@
     "fb.num",
     "fb.color",
     "disqus.shortname",
+    "bing.wmt.id",
     "google.wmt.id",
     "google.analytics.id",
     "google.gtag.id",
@@ -95,5 +96,7 @@
     "show.version",
     "thumbnail.width",
     "rss.description",
-    "admin.theme"
+    "admin.theme",
+    "fulltext.search",
+    "transliterate.slug"
 ]

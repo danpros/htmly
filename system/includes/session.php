@@ -1,7 +1,7 @@
 <?php
 $samesite = 'strict';
 if(PHP_VERSION_ID < 70300) {
-    session_set_cookie_params('samesite='.$samesite);	
+    session_set_cookie_params('samesite='.$samesite);
 } else {
     session_set_cookie_params(['samesite' => $samesite]);
 }
@@ -16,5 +16,11 @@ function login()
     } else {
         return false;
     }
+}
 
+if (rtrim($_SERVER['REQUEST_URI'], '/') != site_path() . '/login-mfa') {
+    if (isset($_SESSION['mfa_pwd']) && isset($_SESSION['mfa_uid'])) {
+        unset($_SESSION['mfa_pwd']);
+        unset($_SESSION['mfa_uid']);
+    }
 }

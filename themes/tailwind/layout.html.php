@@ -3,9 +3,6 @@
 <html lang="<?php echo blog_language();?>" class="__variable_space scroll-smooth light" id="html-id">
 <head>
 	<?php echo head_contents();?>
-	<title><?php echo $title;?></title>
-	<meta name="description" content="<?php echo $description; ?>"/>
-	<link rel="canonical" href="<?php echo $canonical; ?>" />
 	<?php echo $metatags;?>
 	<link rel="stylesheet" href="<?php echo theme_path();?>css/typography.css" data-precedence="next" />
 	<link rel="stylesheet" href="<?php echo theme_path();?>css/tailwind.css" data-precedence="next" />
@@ -28,7 +25,7 @@
 		<div class="flex h-screen flex-col justify-between font-sans">
 			<header class="flex items-center justify-between py-10">
 				<div>
-					<a aria-label="Quasilinear Musings" href="<?php  echo site_url();?>">
+					<a aria-label="<?php echo blog_title();?>" href="<?php  echo site_url();?>">
 						<div class="flex items-center justify-between">
 							<div class="mr-3">
 								<img width="45" src="<?php echo theme_path();?>logo.png" alt="<?php echo blog_title();?>"/>

@@ -9,6 +9,7 @@ if ($type == 'is_frontpage') {
         $oldtitle = get_content_tag('t', $content, 'Welcome');
         $oldcontent = remove_html_comments($content);
     } else {
+        $content = 'Welcome to our website.';
         $oldtitle = 'Welcome';
         $oldcontent = 'Welcome to our website.';
     }
@@ -27,6 +28,7 @@ if ($type == 'is_frontpage') {
         $oldcontent = remove_html_comments($content);
         $oldimage = get_content_tag('image', $content);
     } else {
+        $content = i18n('Author_Description');
         $oldtitle = $user;
         $olddescription = i18n('Author_Description');
         $oldcontent = i18n('Author_Description');
@@ -34,12 +36,20 @@ if ($type == 'is_frontpage') {
     }
 
 } elseif ($type == 'is_category') {
-    $content = $p->body;
-    $oldtitle = $p->title;
-    $olddescription = $p->description;
-    $oldcontent = $p->body;
-    $oldmd = $p->slug;
     $url = 'content/data/category/'. $p->slug . '.md';
+    if (file_exists($url)) {
+        $content = file_get_contents($url);
+        $oldtitle = get_content_tag('t', $content, $p->slug);
+        $olddescription = get_content_tag('d', $content, remove_html_comments($content));
+        $oldcontent = remove_html_comments($content);
+        $oldmd = $p->slug;
+    } else {
+        $content = $p->body;
+        $oldtitle = $p->title;
+        $olddescription = $p->description;
+        $oldcontent = $p->body;
+        $oldmd = $p->slug;
+    }
 } else {
 
     if (isset($p->file)) {
@@ -82,6 +92,24 @@ if ($type == 'is_frontpage') {
 
 $images = image_gallery(null, 1, 40);
 
+$fields = array();
+if ($type == 'is_page' || $type == 'is_frontpage') {
+    $field_file = 'content/data/field/page.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+} elseif ($type == 'is_subpage') {
+    $field_file = 'content/data/field/subpage.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+} elseif ($type == 'is_profile') {
+    $field_file = 'content/data/field/profile.json';
+    if (file_exists($field_file)) {
+        $fields = json_decode(file_get_contents($field_file, true));
+    }
+}
+
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>system/admin/editor/css/editor.css"/>
 <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
@@ -95,6 +123,7 @@ $images = image_gallery(null, 1, 40);
 <?php if (isset($error)) { ?>
     <div class="error-message"><?php echo $error ?></div>
 <?php } ?>
+<div class="notice error" id="response-error"></div>
 <div class="notice" id="response"></div>
 <div class="row">
     <div class="hide-button" style="margin-bottom:1em;width:100%;text-align:right;"><button type="button" title="<?php echo i18n('Focus_mode');?>" id="hideButton" class="note-btn btn btn-sm <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "btn-light" : "btn-dark");?>" style="width:38px;height:38px;font-size:18px;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>
@@ -132,7 +161,6 @@ $images = image_gallery(null, 1, 40);
                     <input type="hidden" name="is_image" value="is_image">
                     <br>
                     <?php endif;?>
-
                 </div>
             </div>
              <div class="row">
@@ -146,6 +174,41 @@ $images = image_gallery(null, 1, 40);
                     <div id="wmd-button-bar" class="wmd-button-bar"></div>
                     <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php echo $oldcontent ?></textarea>
                     <br>
+                    <?php if(!empty($fields) && $type != 'is_category'):?>
+                    <details id="custom-fields"  >
+                    <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong><?php echo i18n('custom_fields');?></strong></summary>
+                    <div class="row">
+                        <div class="col">
+                            <?php foreach ($fields as $fld):?>
+                                <?php if ($fld->type == 'text'):?>
+                                <label><?php echo $fld->label;?></label>
+                                <input type="<?php echo $fld->type;?>" placeholder="<?php echo $fld->info;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value="<?php echo get_field($fld->name, $content);?>"/>
+                                <br>
+                                <?php elseif ($fld->type == 'textarea'):?>
+                                <label><?php echo $fld->label;?></label>
+                                <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" placeholder="<?php echo $fld->info;?>" name="<?php echo $fld->name;?>"><?php echo get_field($fld->name, $content);?></textarea>
+                                <br>
+                                <?php elseif ($fld->type == 'checkbox'):?>
+                                <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" <?php echo get_field($fld->name, $content);?>>
+                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                <br>
+                                <?php elseif ($fld->type == 'select'):?>
+                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
+                                <?php foreach ($fld->options as $val):?>
+                                    <option value="<?php echo $val->value;?>" <?php if (get_field($fld->name, $content) === $val->value) { echo 'selected="selected"';} ?>><?php echo $val->label;?></option>
+                                <?php endforeach;?>
+                                </select>
+                                <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                <?php endif;?>        
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                    </details>
+                    <br>
+                    <script>if(localStorage.getItem("custom-fields-state")==="open"){document.getElementById("custom-fields").setAttribute("open","")}document.getElementById("custom-fields-click").addEventListener("click",()=>{if(document.getElementById("custom-fields").open){localStorage.setItem("custom-fields-state",'close')}else{localStorage.setItem("custom-fields-state",'open')}})</script>
+                    <?php endif;?>
                     <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
                     <?php if($type == 'is_frontpage' || $type == 'is_profile') { ?>
@@ -178,104 +241,115 @@ $images = image_gallery(null, 1, 40);
 .wmd-prompt-background {z-index:10!important;}
 #wmd-preview img {max-width:100%;}
 .cover-container {
-    height: 200px;
+    overflow: auto;
+    max-height: 65vh;
     width: 100%;
     white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
 }
 .cover-item {
     position: relative;
-    display: inline-block;
     margin: 2px 2px;
     border-top-right-radius: 2px;
-    width: 200px;
-    height: 150px;
+    width: 190px;
+    height: 140px;
     vertical-align: top;
     background-position: top left;
     background-repeat: no-repeat;
     background-size: cover;
+    float:left;
 }
 </style>
 
     <div class="modal fade" id="insertImageDialog" tabindex="-1" role="dialog" aria-labelledby="insertImageDialogTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insertImageDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+                    <p class="modal-title" id="insertImageDialogTitle"><?php echo i18n('Insert_Image');?></p>
                     <button type="button" class="close" id="insertImageDialogClose" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row-fluid img-container" id="gallery-1">
-                            <?php echo $images;?>
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="form-group">
+                                <div class="row-fluid img-container" id="gallery-1">
+                                    <?php echo $images;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="insertImageDialogURL">URL</label>
+                                <textarea class="form-control" id="insertImageDialogURL" rows="5" placeholder="<?php echo i18n('Enter_image_URL');?>" ></textarea>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
+                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" />
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="insertImageDialogInsert"><?php echo i18n('Insert_Image');?></button>    
+                                <button type="button" class="btn btn-secondary"  id="insertImageDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertImageDialogURL">URL</label>
-                        <input type="text" class="form-control" id="insertImageDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
-                        <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="insertImageDialogInsert"><?php echo i18n('Insert_Image');?></button>    
-                    <button type="button" class="btn btn-secondary"  id="insertImageDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
                 </div>
             </div>
         </div>
-    </div>
-	
+    </div>   
     <?php if ($type == 'is_profile'):?>
     <div class="modal fade" id="insertMediaDialog" tabindex="-1" role="dialog" aria-labelledby="insertMediaDialogTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></h5>
+                    <p class="modal-title" id="insertMediaDialogTitle"><?php echo i18n('Insert_Image');?></p>
                     <button type="button" class="close" id="insertMediaDialogClose" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row-fluid img-container" id="gallery-2">
-                            <?php echo $images;?>
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="form-group">
+                                <div class="row-fluid img-container" id="gallery-2">
+                                    <?php echo $images;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="insertMediaDialogURL">URL</label>
+                                <textarea class="form-control" id="insertMediaDialogURL" rows="5" placeholder="<?php echo i18n('Enter_image_URL');?>"></textarea>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
+                                <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
+                                <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertMediaDialogURL">URL</label>
-                        <input type="text" class="form-control" id="insertMediaDialogURL" size="48" placeholder="<?php echo i18n('Enter_image_URL');?>" />
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
-                        <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="insertMediaDialogInsert"><?php echo i18n('Insert_Image');?></button>    
-                    <button type="button" class="btn btn-secondary"  id="insertMediaDialogCancel" data-dismiss="modal"><?php echo i18n('Cancel');?></button>
                 </div>
             </div>
         </div>
     </div>
-    <?php endif;?>	
-	
+    <?php endif;?>
+    
 </div>
 <!-- Declare the base path. Important -->
 <script type="text/javascript">
     var base_path = '<?php echo site_url() ?>';
-    var initial_image = '<?php echo $images;?>';
+    var initial_image = <?php echo json_encode($images); ?>;
     var parent_page = '<?php echo isset($parent) ? $parent : '';?>';
     var addEdit = 'edit';
     var saveInterval = 60000;
+    const field = [<?php foreach ($fields as $f){ echo '"' . $f->name . '", ';}?>];
 </script>
 <script type="text/javascript" src="<?php echo site_url() ?>system/admin/editor/js/editor.js"></script>
 <?php if ($type == 'is_profile'):?>
@@ -344,5 +418,5 @@ $('.img-container').on("click", ".the-img", function(e) {
             document.getElementById("preview-col").style.display = '';
             localStorage.setItem("preview-state", 'open');
         }
-    })
+    })   
 </script>

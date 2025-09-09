@@ -135,7 +135,7 @@ function get_search_query()
 {
     if (isset($_GET['search'])) {
         $search = _h($_GET['search']);
-        $url = site_url() . 'search/' . remove_accent($search);
+        $url = site_url() . 'search/' . trim($search);
         header("Location: $url");
         die;
     }
@@ -407,7 +407,9 @@ function render($view, $locals = null, $layout = null)
             $layout = ($layout == null) ? 'layout' : $layout;
         }
         $layout = "{$view_root}/{$layout}.html.php";
-        header('Content-type: text/html; charset=utf-8');
+        if ($view != 'search-reindex') {
+            header('Content-type: text/html; charset=utf-8');
+        }
         if (config('generation.time') == 'true') {
             ob_start();
             require $layout;
@@ -418,7 +420,7 @@ function render($view, $locals = null, $layout = null)
             ob_start();
             require $layout;
         }
-        if (!login() && $view != '404' && $view != '404-search' && config('cache.off') == "false") {
+        if (!login() && $view != '404' && $view != '404-search' && $view != 'login-mfa' && config('cache.off') == "false") {
             if (config('cache.timestamp') == 'true') {
                 echo "\n" . '<!-- Cached page generated on '.date('Y-m-d H:i:s').' -->';
             }

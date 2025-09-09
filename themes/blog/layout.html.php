@@ -3,29 +3,24 @@
 <html lang="<?php echo blog_language();?>">
 <head>
     <?php echo head_contents();?>
-    <title><?php echo $title;?></title>
-    <meta name="description" content="<?php echo $description; ?>"/>
-    <link rel="canonical" href="<?php echo $canonical; ?>" />
     <?php echo $metatags;?>
-    <link href="//fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic" rel="stylesheet" type="text/css">     
     <!-- Global CSS -->
     <link rel="stylesheet" href="<?php echo theme_path();?>css/bootstrap.min.css">   
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="<?php echo theme_path();?>css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
+    <!-- Font CSS -->  
+    <link id="lato" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/lato.css">
+    <link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
+	<link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
     <!-- Theme CSS -->  
-    <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css?v=1">
 </head>
 <body class="<?php echo $bodyclass; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 <div class="hide">
     <meta content="<?php echo blog_title() ?>" itemprop="name"/>
-    <meta content="<?php echo strip_tags(blog_description()); ?>" itemprop="description"/>
+    <meta content="<?php echo safe_html(strip_tags(blog_description())); ?>" itemprop="description"/>
 </div>
 <?php if (facebook()) { echo facebook(); } ?>
 <?php if (login()) { toolbar(); } ?>
@@ -97,15 +92,14 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="recent-posts">
                                 <h2 class="hide"><?php echo i18n("Recent_Posts");?></h2>
-                                <?php $lists = recent_posts(true);?>
-                                <?php $char = 60;?>
-                                <?php foreach ($lists as $l):?>
-                                    <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                                <?php $recent = recent_posts(true);?>
+                                <?php foreach ($recent as $rc):?>
+                                    <?php $recentTitle = (strlen(strip_tags($rc->title)) > 60) ? shorten($rc->title, 60) . '...' : $rc->title; ?>
                                     <div class="item">
-                                        <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                                        <h3 class="title"><a href="<?php echo $rc->url;?>"><?php echo $recentTitle;?></a></h3>
                                         <div class="content">
-                                        <p><?php echo shorten($l->body, 75); ?>...</p>
-                                        <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
+                                        <p><?php echo shorten($rc->body, 75); ?>...</p>
+                                        <a class="more-link" href="<?php echo $rc->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
                                         </div><!--//content-->
                                     </div>
                                 <?php endforeach;?>
@@ -113,15 +107,14 @@
                             <?php if (config('views.counter') === 'true') :?>
                             <div role="tabpanel" class="tab-pane" id="popular-posts">
                                 <h2 class="hide"><?php echo i18n("Popular_posts");?></h2>
-                                <?php $lists = popular_posts(true);?>
-                                <?php $char = 60;?>
-                                <?php foreach ($lists as $l):?>
-                                    <?php if (strlen(strip_tags($l->title)) > $char) { $recentTitle = shorten($l->title, $char) . '...';} else {$recentTitle = $l->title;}?>
+                                <?php $popular = popular_posts(true);?>
+                                <?php foreach ($popular as $pp):?>
+                                    <?php $popularTitle = (strlen(strip_tags($pp->title)) > 60) ? shorten($pp->title, 60) . '...' : $pp->title; ?>
                                     <div class="item">
-                                        <h3 class="title"><a href="<?php echo $l->url;?>"><?php echo $recentTitle;?></a></h3>
+                                        <h3 class="title"><a href="<?php echo $pp->url;?>"><?php echo $popularTitle;?></a></h3>
                                         <div class="content">
-                                        <p><?php echo shorten($l->body, 75); ?>...</p>
-                                        <a class="more-link" href="<?php echo $l->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
+                                        <p><?php echo shorten($pp->body, 75); ?>...</p>
+                                        <a class="more-link" href="<?php echo $pp->url;?>"><i class="fa fa-link"></i> <?php echo i18n("read_more");?></a>
                                         </div><!--//content-->
                                     </div>
                                 <?php endforeach;?>
@@ -177,7 +170,7 @@
         </div><!--//container-->
     </footer><!--//footer-->
     <!-- Javascript -->          
-    <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/jquery.min.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/bootstrap.min.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>    
 </body>
