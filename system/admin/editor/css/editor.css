@@ -186,3 +186,21 @@ pre code {
 .notice.error {
   background-color: #fdd;
 }
+
+/* drag and drop uploading */
+/*btn blue #007bff, hover darker #0069d9*/
+.vs-dropzone {
+  border: 2px dashed #007bff;
+  border-radius: .5rem;
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+  margin-bottom: 1rem;
+}
+.vs-dropzone.dragover {
+  background: #e9f5ff;
+  border-color: #0069d9;
+  color: #0069d9;
+}

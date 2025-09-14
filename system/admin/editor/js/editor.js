@@ -70,4 +70,50 @@
     //=====end image uploader=====
     editor.run();
 
+    //=====drag and drop uploading=====
+    function initDropZone(dropZoneId, fileInputId) {
+      const dropZone = document.getElementById(dropZoneId);
+      const fileInput = document.getElementById(fileInputId);
+      if (!dropZone || !fileInput) return; // fail gracefully
+
+      // Clicking the drop zone triggers the file picker
+      dropZone.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent button form submit
+        fileInput.click();
+      });
+
+      // Highlight on dragover (styles in css file)
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      // Remove highlight on dragleave
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+      });
+
+      // Handle drop
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          fileInput.files = files;
+
+          // Fire both 'change' and 'input' to simulate a real user selection
+          ['change', 'input'].forEach(eventType => {
+            const event = new Event(eventType, { bubbles: true });
+            fileInput.dispatchEvent(event);
+          });
+        }
+      });
+    }
+
+    // Initialize dropZones
+    initDropZone('dropZoneIMDF', 'insertMediaDialogFile');  // Featured image
+    initDropZone('dropZoneIIDF', 'insertImageDialogFile');  // Content image
+    //=====end drag and drop uploading=====
+
 })();

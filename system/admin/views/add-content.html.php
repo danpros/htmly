@@ -299,7 +299,8 @@ $( function() {
                             <hr>
                             <div class="form-group">
                                 <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
-                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" />
+                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" style="display:none;" />
+                                <button id="dropZoneIIDF" class="vs-dropzone" type="button">Drag &amp; Drop image here, or click to browse</button>
                             </div>
                             <hr>
                             <div class="form-group">
@@ -339,7 +340,8 @@ $( function() {
                             <hr>
                             <div class="form-group">
                                 <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
-                                <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" />
+                                <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" style="display:none;" />
+                                <button id="dropZoneIMDF" class="vs-dropzone" type="button">Drag &amp; Drop image here, or click to browse</button>
                             </div>
                             <hr>
                             <div class="form-group">
