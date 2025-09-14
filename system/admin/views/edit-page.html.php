@@ -325,8 +325,9 @@ if ($type == 'is_page' || $type == 'is_frontpage') {
                             </div>
                             <hr>
                             <div class="form-group">
-                                <label for="insertMediaDialogFile"><?php echo i18n('Upload');?></label>
-                                <input type="file" class="form-control-file" name="file" id="insertMediaDialogFile" accept="image/png,image/jpeg,image/gif" />
+                                <label for="insertImageDialogFile"><?php echo i18n('Upload');?></label>
+                                <input type="file" class="form-control-file" name="file" id="insertImageDialogFile" accept="image/png,image/jpeg,image/gif, image/webp" style="display:none;" />
+                                <button id="dropZoneIIDF" class="vs-dropzone" type="button">Drag &amp; Drop image here, or click to browse</button>
                             </div>
                             <hr>
                             <div class="form-group">

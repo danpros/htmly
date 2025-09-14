@@ -112,8 +112,8 @@
     }
 
     // Initialize dropZones
-    initDropZone('vs_dropZoneF', 'insertMediaDialogFile');  // Featured image
-    initDropZone('vs_dropZoneC', 'insertImageDialogFile');  // Content image
+    initDropZone('dropZoneIMDF', 'insertMediaDialogFile');  // Featured image
+    initDropZone('dropZoneIIDF', 'insertImageDialogFile');  // Content image
     //=====end drag and drop uploading=====
 
 })();
