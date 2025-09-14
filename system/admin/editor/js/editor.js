@@ -3,6 +3,11 @@
     Markdown.Extra.init(converter);
     var editor = new Markdown.Editor(converter);
 
+    // Run once on DOM ready
+    $('#insertImageDialog').on('hidden.bs.modal', function () {
+      $('.wmd-prompt-background, .wmd-prompt-dialog').remove();
+    });
+
     //======Image Uploader=====
     var callbackFunc;
     var dialogClose = function() {
@@ -12,7 +17,10 @@
         $('#insertMediaDialogURL').val('');
         $('#insertMediaDialogFile').val('');
         $('#gallery-1').html(initial_image);
-        $('#gallery-2').html(initial_image);		
+        $('#gallery-2').html(initial_image);
+        // Also remove the PageDown/WMD overlay, if present
+        $('.wmd-prompt-background').remove();
+        $('.wmd-prompt-dialog').remove(); // WMD often spawns a paired dialog
     };
     $('#insertImageDialogInsert').click( function() {
         callbackFunc( $('#insertImageDialogURL').val().length > 0 ? $('#insertImageDialogURL').val() : null );
