@@ -190,17 +190,49 @@ pre code {
 /* drag and drop uploading */
 /*btn blue #007bff, hover darker #0069d9*/
 .vs-dropzone {
-  border: 2px dashed #007bff;
-  border-radius: .5rem;
-  padding: 2rem;
-  text-align: center;
-  color: #6c757d;
-  cursor: pointer;
-  transition: background .2s ease-in-out;
-  margin-bottom: 1rem;
+    border: 2px dashed #007bff;
+    border-radius: .5rem;
+    padding: 2rem;
+    text-align: center;
+    color: #6c757d;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    margin-bottom: 1rem;
 }
 .vs-dropzone.dragover {
-  background: #e9f5ff;
-  border-color: #0069d9;
-  color: #0069d9;
+    background: #e9f5ff;
+    border-color: #0069d9;
+    color: #0069d9;
+}
+/* image uploader modal gallery */
+.cover-container {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-auto-rows: 140px;
+    grid-auto-flow: row dense;
+    max-height: 65vh;
+    overflow: auto;
+}
+.cover-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #e0e0e0;
+    background: #eee url('data:image/svg+xml,\ <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"         fill-opacity=".125" >\ <rect x="200" width="200" height="200" />\ <rect y="200" width="200" height="200" />\ </svg>');
+    background-size: 16px 16px;
+    grid-column-start: auto;
+    grid-row-start: auto;
+    border-top-right-radius: 2px;
+    border: 1px solid #bbb;
+}
+.img-thumbnail{
+    max-height: 100%;
+    /* unset other things from adminlte.min.css */
+    background-color: unset;
+    border: unset;
+    border-radius: unset;
+    box-shadow: unset;
 }
