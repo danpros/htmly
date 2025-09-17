@@ -119,24 +119,6 @@ if ($type == 'is_page') {
 <style>
 .wmd-prompt-background {z-index:10!important;}
 #wmd-preview img {max-width:100%;}
-.cover-container {
-    overflow: auto;
-    max-height: 65vh;
-    width: 100%;
-    white-space: nowrap;
-}
-.cover-item {
-    position: relative;
-    margin: 2px 2px;
-    border-top-right-radius: 2px;
-    width: 190px;
-    height: 140px;
-    vertical-align: top;
-    background-position: top left;
-    background-repeat: no-repeat;
-    background-size: cover;
-    float:left;
-}
 </style>
 
     <div class="modal fade" id="insertImageDialog" tabindex="-1" role="dialog" aria-labelledby="insertImageDialogTitle" aria-hidden="true">
