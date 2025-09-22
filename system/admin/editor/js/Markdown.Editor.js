@@ -56,6 +56,9 @@
 		
         table: "Table - Ctrl+J",
 
+        maximize: "Maximize CTRL+P",
+        minimize: "Minimize CTRL+P",
+
         undo: "Undo - Ctrl+Z",
         redo: "Redo - Ctrl+Y",
         redomac: "Redo - Ctrl+Shift+Z",
@@ -1317,6 +1320,9 @@
                     case "j":
                         doClick(buttons.table);
                         break;
+                    case "p":
+                        doClick(buttons.maximize);
+                        break;
                     // case "y":
                     //     doClick(buttons.redo);
                     //     break;
@@ -1523,6 +1529,11 @@
             buttons.hr = makeButton("wmd-hr-button", getString("hr"), "fa fa-ellipsis-h", bindCommand("doHorizontalRule"));
             buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
             buttons.toc = makeButton("wmd-toc-button", getString("toc"), "fa fa-list-alt", bindCommand("doTOC"));
+
+            buttons.maximize = makeButton("wmd-maximize-button", getString("maximize"), "fa-solid fa-maximize", toggleFullscreen);
+            buttons.minimize = makeButton("wmd-minimize-button", getString("minimize"), "fa-solid fa-minimize", toggleFullscreen);
+            buttons.minimize.hidden = true;
+
             //makeSpacer(3);
             buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa-solid fa-rotate-left", null);
             buttons.undo.execute = function (manager) {
@@ -1556,6 +1567,20 @@
             }
 
             setUndoRedoButtonStates();
+        }
+
+        function toggleFullscreen() {
+            var parent = panels.input.parentElement;
+            if (!parent.style.backgroundColor) {
+                parent.style.backgroundColor = getComputedStyle(document.body).backgroundColor;
+            }
+            var fullscreen = parent.classList.toggle('fullscreen-editor');
+            parent.parentElement.parentElement.classList.toggle('fullscreen-wrapper', fullscreen);
+            buttons.maximize.hidden = fullscreen;
+            buttons.minimize.hidden = !fullscreen;
+            document.body.style.overflowY = fullscreen ? 'hidden' : null;
+            document.body.querySelector('aside.main-sidebar').style.display =
+            document.body.querySelector('nav.main-header').style.display = fullscreen ? 'none' : null;
         }
 
         function setUndoRedoButtonStates() {
@@ -2487,5 +2512,11 @@
 	  }
     };
 
+    // better fullscreen editing on mobile by letting the browser resize viewport when keyboard is open
+    var metaViewport = document.querySelector("meta[name=viewport]");
+    var mobileFix = 'interactive-widget=resizes-content';
+    if (!metaViewport.content.split(',').includes(mobileFix)) {
+        metaViewport.content += ',' + mobileFix;
+    }
 
 })();
