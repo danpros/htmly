@@ -3649,15 +3649,23 @@ function head_contents()
     $output .= '<meta charset="utf-8" />' . "\n";
     $output .= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' . "\n";
     $output .= '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";   
-    $output .= '<meta name="generator" content="' . $version . '" />' . "\n";
+    $version_html = safe_html($version);
+    $version_html = str_replace(array('&#039;', '&apos;'), "'", $version_html);
+    $output .= '<meta name="generator" content="' . $version_html . '" />' . "\n";
     $output .= $favicon;
     $output .= '<link rel="sitemap" href="' . site_url() . 'sitemap.xml" />' . "\n";
-    $output .= '<link rel="alternate" type="application/rss+xml" title="' . safe_html(blog_title()) . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
+    $rss_title = safe_html(blog_title());
+    $rss_title = str_replace(array('&#039;', '&apos;'), "'", $rss_title);
+    $output .= '<link rel="alternate" type="application/rss+xml" title="' . $rss_title . ' Feed" href="' . site_url() . 'feed/rss" />' . "\n";
     if (!empty($google_wmt_id)) {
-        $output .=  '<meta name="google-site-verification" content="' . $google_wmt_id . '" />' . "\n";
+        $gw_html = safe_html($google_wmt_id);
+        $gw_html = str_replace(array('&#039;', '&apos;'), "'", $gw_html);
+        $output .=  '<meta name="google-site-verification" content="' . $gw_html . '" />' . "\n";
     }
     if (!empty($bing_wmt_id)) {
-        $output .= '<meta name="msvalidate.01" content="' . $bing_wmt_id . '" />' . "\n";
+        $bw_html = safe_html($bing_wmt_id);
+        $bw_html = str_replace(array('&#039;', '&apos;'), "'", $bw_html);
+        $output .= '<meta name="msvalidate.01" content="' . $bw_html . '" />' . "\n";
     }
 
     return $output;
@@ -4079,18 +4087,52 @@ function generate_meta($type = null, $object = null)
     $twitter = config('social.twitter');
     if (is_null($object)) {
         if ($type == 'is_blog') {
-            $tags .= '<title>'. generate_title('is_blog', null) .'</title>' . "\n";
+            $t = html_entity_decode(generate_title('is_blog', null), ENT_QUOTES, 'UTF-8');
+            $t = safe_html($t);
+            $t = str_replace(array('&#039;', '&apos;'), "'", $t);
+            $tags .= '<title>'. $t .'</title>' . "\n";
+
             $tags .= '<link rel="canonical" href="'. site_url() . blog_path() .'" />' . "\n";
-            $tags .= '<meta name="description" content="'. blog_title() . ' ' . blog_string() .'"/>' . "\n";
-            $tags .= '<meta property="og:title" content="'. safe_html(generate_title('is_blog', null)) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. blog_title() . ' ' . blog_string() .'" />' . "\n";
+
+            $desc = html_entity_decode(blog_title() . ' ' . blog_string(), ENT_QUOTES, 'UTF-8');
+            $desc = safe_html($desc);
+            $desc = str_replace(array('&#039;', '&apos;'), "'", $desc);
+            $tags .= '<meta name="description" content="'. $desc .'"/>' . "\n";
+
+            $ogt = html_entity_decode(generate_title('is_blog', null), ENT_QUOTES, 'UTF-8');
+            $ogt = safe_html($ogt);
+            $ogt = str_replace(array('&#039;', '&apos;'), "'", $ogt);
+            $tags .= '<meta property="og:title" content="'. $ogt . '" />' . "\n";
+
+            $ogd = html_entity_decode(blog_title() . ' ' . blog_string(), ENT_QUOTES, 'UTF-8');
+            $ogd = safe_html($ogd);
+            $ogd = str_replace(array('&#039;', '&apos;'), "'", $ogd);
+            $tags .= '<meta property="og:description" content="'. $ogd .'" />' . "\n";
+
             $tags .= '<meta property="og:url" content="'. site_url() . blog_path() .'" />' . "\n";
         } else {
-            $tags .= '<title>'. generate_title('is_front', null) .'</title>' . "\n";
+            $t = html_entity_decode(generate_title('is_front', null), ENT_QUOTES, 'UTF-8');
+            $t = safe_html($t);
+            $t = str_replace(array('&#039;', '&apos;'), "'", $t);
+            $tags .= '<title>'. $t .'</title>' . "\n";
+
             $tags .= '<link rel="canonical" href="'. site_url() .'" />' . "\n";
-            $tags .= '<meta name="description" content="'. safe_html(strip_tags(blog_description())) .'"/>' . "\n";
-            $tags .= '<meta property="og:title" content="'. safe_html(generate_title('is_front', null)) . '" />' . "\n";
-            $tags .= '<meta property="og:description" content="'. safe_html(strip_tags(blog_description())) .'" />' . "\n";
+
+            $desc = html_entity_decode(strip_tags(blog_description()), ENT_QUOTES, 'UTF-8');
+            $desc = safe_html($desc);
+            $desc = str_replace(array('&#039;', '&apos;'), "'", $desc);
+            $tags .= '<meta name="description" content="'. $desc .'"/>' . "\n";
+
+            $ogt = html_entity_decode(generate_title('is_front', null), ENT_QUOTES, 'UTF-8');
+            $ogt = safe_html($ogt);
+            $ogt = str_replace(array('&#039;', '&apos;'), "'", $ogt);
+            $tags .= '<meta property="og:title" content="'. $ogt . '" />' . "\n";
+
+            $ogd = html_entity_decode(strip_tags(blog_description()), ENT_QUOTES, 'UTF-8');
+            $ogd = safe_html($ogd);
+            $ogd = str_replace(array('&#039;', '&apos;'), "'", $ogd);
+            $tags .= '<meta property="og:description" content="'. $ogd .'" />' . "\n";
+
             $tags .= '<meta property="og:url" content="'. site_url() .'" />' . "\n";
         }
         $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
@@ -4115,20 +4157,45 @@ function generate_meta($type = null, $object = null)
             }
         }
         if ($type == 'is_post') {
-            $tags .= '<title>'. generate_title('is_post',$object) .'</title>' . "\n";
-            $tags .= '<meta name="author" content="'. safe_html($object->authorName) .'" />' . "\n";
+            $t = html_entity_decode(generate_title('is_post',$object), ENT_QUOTES, 'UTF-8');
+            $t = safe_html($t);
+            $t = str_replace(array('&#039;', '&apos;'), "'", $t);
+            $tags .= '<title>'. $t .'</title>' . "\n";
+
+            $author = html_entity_decode($object->authorName, ENT_QUOTES, 'UTF-8');
+            $author = safe_html($author);
+            $author = str_replace(array('&#039;', '&apos;'), "'", $author);
+            $tags .= '<meta name="author" content="'. $author .'" />' . "\n";
+
             $tags .= '<meta name="article:published_time" content="'. date('c', $object->date) .'" />' . "\n";
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
-            $tags .= '<meta name="article:section" content="'. safe_html($object->categoryTitle) .'" />' . "\n";
+
+            $section = html_entity_decode($object->categoryTitle, ENT_QUOTES, 'UTF-8');
+            $section = safe_html($section);
+            $section = str_replace(array('&#039;', '&apos;'), "'", $section);
+            $tags .= '<meta name="article:section" content="'. $section .'" />' . "\n";
+
             $tags .= '<meta name="article:section_url" content="'. $object->categoryUrl .'" />' . "\n";    
         } elseif ($type == 'is_page' || $type == 'is_subpage') {
-            $tags .= '<title>'. generate_title('is_page',$object) .'</title>' . "\n";
+            $t = html_entity_decode(generate_title('is_page',$object), ENT_QUOTES, 'UTF-8');
+            $t = safe_html($t);
+            $t = str_replace(array('&#039;', '&apos;'), "'", $t);
+            $tags .= '<title>'. $t .'</title>' . "\n";
             $tags .= '<meta name="article:modified_time" content="'. date('c', $object->lastMod) .'" />' . "\n";
         } else {
-            $tags .= '<title>'. generate_title($type , $object) .'</title>' . "\n";
+            $t = html_entity_decode(generate_title($type , $object), ENT_QUOTES, 'UTF-8');
+            $t = safe_html($t);
+            $t = str_replace(array('&#039;', '&apos;'), "'", $t);
+            $tags .= '<title>'. $t .'</title>' . "\n";
         }
+
         $tags .= '<link rel="canonical" href="'. $object->url .'" />' . "\n";
-        $tags .= '<meta name="description" content="'. safe_html($object->description) .'"/>' . "\n";
+
+        $desc = html_entity_decode($object->description, ENT_QUOTES, 'UTF-8');
+        $desc = safe_html($desc);
+        $desc = str_replace(array('&#039;', '&apos;'), "'", $desc);
+        $tags .= '<meta name="description" content="'. $desc .'"/>' . "\n";
+
         if(!empty($facebook)) {
             $tags .= '<meta property="article:publisher" content="'. $facebook .'" />' . "\n";
         }
@@ -4137,12 +4204,26 @@ function generate_meta($type = null, $object = null)
             $tags .= '<meta name="twitter:creator" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
             $tags .= '<meta name="twitter:site" content="'. str_replace('/', '@', $twitter['path']) .'" />' . "\n";
         }
+
+        $site_name = html_entity_decode(blog_title(), ENT_QUOTES, 'UTF-8');
+        $site_name = safe_html($site_name);
+        $site_name = str_replace(array('&#039;', '&apos;'), "'", $site_name);
         $tags .= '<meta property="og:locale" content="'. locale_language() .'" />' . "\n";
-        $tags .= '<meta property="og:site_name" content="'. blog_title() . '" />' . "\n";
+        $tags .= '<meta property="og:site_name" content="'. $site_name . '" />' . "\n";
         $tags .= '<meta property="og:type" content="article" />' . "\n";
-        $tags .= '<meta property="og:title" content="'. safe_html($object->title) .'" />' . "\n";
+
+        $ogt = html_entity_decode($object->title, ENT_QUOTES, 'UTF-8');
+        $ogt = safe_html($ogt);
+        $ogt = str_replace(array('&#039;', '&apos;'), "'", $ogt);
+        $tags .= '<meta property="og:title" content="'. $ogt .'" />' . "\n";
+
         $tags .= '<meta property="og:url" content="'. $object->url .'" />' . "\n";
-        $tags .= '<meta property="og:description" content="'. safe_html($object->description) .'" />' . "\n";
+
+        $ogd = html_entity_decode($object->description, ENT_QUOTES, 'UTF-8');
+        $ogd = safe_html($ogd);
+        $ogd = str_replace(array('&#039;', '&apos;'), "'", $ogd);
+        $tags .= '<meta property="og:description" content="'. $ogd .'" />' . "\n";
+
         $tags .= '<meta name="twitter:card" content="summary_large_image" />' . "\n";
         $tags .= '<meta property="og:image" content="'. $image .'" />' . "\n";
         if (!empty($fbApp)) {
