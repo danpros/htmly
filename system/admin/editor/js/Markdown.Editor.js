@@ -1530,10 +1530,6 @@
             buttons.readmore = makeButton("wmd-readmore-button", getString("readmore"), "fa fa-arrow-right", bindCommand("doReadMore"));
             buttons.toc = makeButton("wmd-toc-button", getString("toc"), "fa fa-list-alt", bindCommand("doTOC"));
 
-            buttons.maximize = makeButton("wmd-maximize-button", getString("maximize"), "fa-solid fa-maximize", toggleFullscreen);
-            buttons.minimize = makeButton("wmd-minimize-button", getString("minimize"), "fa-solid fa-minimize", toggleFullscreen);
-            buttons.minimize.hidden = true;
-
             //makeSpacer(3);
             buttons.undo = makeButton("wmd-undo-button", getString("undo"), "fa-solid fa-rotate-left", null);
             buttons.undo.execute = function (manager) {
@@ -1548,6 +1544,10 @@
             buttons.redo.execute = function (manager) {
                 if (manager) manager.redo();
             };
+			
+            buttons.maximize = makeButton("wmd-maximize-button", getString("maximize"), "fa-solid fa-maximize", toggleFullscreen);
+            buttons.minimize = makeButton("wmd-minimize-button", getString("minimize"), "fa-solid fa-minimize", toggleFullscreen);
+            buttons.minimize.hidden = true;
 
             if (helpOptions) {
                 var helpButton = document.createElement("li");
