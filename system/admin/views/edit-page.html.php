@@ -197,10 +197,11 @@ if ($type == 'is_page' || $type == 'is_frontpage') {
                                 <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
                                 <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
                                 <?php foreach ($fld->options as $val):?>
-                                    <option value="<?php echo $val->value;?>" <?php if (get_field($fld->name, $content) === $val->value) { echo 'selected="selected"';} ?>><?php echo $val->label;?></option>
+                                    <option value="<?php echo $val;?>" <?php if (get_field($fld->name, $content) === $val) { echo 'selected="selected"';} ?>><?php echo $val;?></option>
                                 <?php endforeach;?>
                                 </select>
                                 <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                <br>
                                 <?php endif;?>        
                             <?php endforeach;?>
                         </div>

@@ -225,10 +225,11 @@ $( function() {
                                     <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
                                     <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
                                     <?php foreach ($fld->options as $val):?>
-                                        <option value="<?php echo $val->value;?>" ><?php echo $val->label;?></option>
+                                        <option value="<?php echo $val;?>" ><?php echo $val;?></option>
                                     <?php endforeach;?>
                                     </select>
 									<span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                    <br>
                                     <?php endif;?>        
                                 <?php endforeach;?>
                             </div>
