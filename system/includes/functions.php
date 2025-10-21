@@ -2995,21 +2995,6 @@ function not_found($request = null)
     } else {
         $layout = '';
     }
-    
-    if (config('views.counter') == 'true') {    
-        if (!is_null($request)) {
-            $filename = "content/data/views.json";
-            $views = array();
-            if (file_exists($filename)) {
-                $views = json_decode(file_get_data($filename), true);
-            }
-
-            if (isset($views[$request]) && !isset($views['flock_fail'])) {
-                unset($views[$request]);
-                save_json_pretty($filename, $views);
-            }
-        }
-    }
 
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     render('404', array(
@@ -3698,13 +3683,13 @@ function add_view($page)
     if (file_exists($filename)) {
         $views = json_decode(file_get_data($filename), true);
     }
-    
-    if (isset($views[$page])) {
-        $views[$page]++;
-        save_json_pretty($filename, $views);
+
+    if (isset($views['flock_fail'])) {
+        return;
     } else {
-        if (isset($views['flock_fail'])) {
-            return;
+        if (isset($views[$page])) {
+            $views[$page]++;
+            save_json_pretty($filename, $views);
         } else {
             $views[$page] = 1;
             save_json_pretty($filename, $views);
