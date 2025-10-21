@@ -58,55 +58,57 @@ if ($type == 'is_page') {
             </div>           
             <div class="row">
                 <div class="col-sm-6" id="editor-col">
-                    <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
-                    <div id="wmd-button-bar" class="wmd-button-bar"></div>
-                    <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
-                    <br>
-                    <?php if(!empty($fields) && $type != 'is_category'):?>
-                    <details id="custom-fields"  >
-                    <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong><?php echo i18n('custom_fields');?></strong></summary>
-                    <div class="row">
-                        <div class="col">
-                            <?php foreach ($fields as $fld):?>
-                                <?php if ($fld->type == 'text'):?>
-                                <label><?php echo $fld->label;?></label>
-                                <input type="<?php echo $fld->type;?>" placeholder="<?php echo $fld->info;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
-                                <br>
-                                <?php elseif ($fld->type == 'textarea'):?>
-                                <label><?php echo $fld->label;?></label>
-                                <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" placeholder="<?php echo $fld->info;?>" name="<?php echo $fld->name;?>"></textarea>
-                                <br>
-                                <?php elseif ($fld->type == 'checkbox'):?>
-                                <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" >
-                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
-                                <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
-                                <br>
-                                <?php elseif ($fld->type == 'select'):?>
-                                <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
-                                <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
-                                <?php foreach ($fld->options as $val):?>
-                                    <option value="<?php echo $val;?>" ><?php echo $val;?></option>
+                    <div>
+                        <label for="wmd-input"><?php echo i18n('Content');?> <span class="required">*</span></label>
+                        <div id="wmd-button-bar" class="wmd-button-bar"></div>
+                        <textarea id="wmd-input" class="form-control wmd-input <?php if (isset($postContent)) {if (empty($postContent)) {echo 'error';}} ?>" name="content" cols="20" rows="10"><?php if (isset($postContent)) {echo $postContent;} ?></textarea>
+                        <br>
+                        <?php if(!empty($fields) && $type != 'is_category'):?>
+                        <details id="custom-fields"  >
+                        <summary id="custom-fields-click" style="padding:10px; margin-bottom:10px; <?php echo ((config('admin.theme') === 'light' || is_null(config('admin.theme'))) ? "background-color: #E4EBF1;" : "background-color: rgba(255,255,255,.1);");?>"><strong><?php echo i18n('custom_fields');?></strong></summary>
+                        <div class="row">
+                            <div class="col">
+                                <?php foreach ($fields as $fld):?>
+                                    <?php if ($fld->type == 'text'):?>
+                                    <label><?php echo $fld->label;?></label>
+                                    <input type="<?php echo $fld->type;?>" placeholder="<?php echo $fld->info;?>" class="form-control text" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" value=""/>
+                                    <br>
+                                    <?php elseif ($fld->type == 'textarea'):?>
+                                    <label><?php echo $fld->label;?></label>
+                                    <textarea class="form-control text" id="<?php echo $fld->name;?>" rows="3" placeholder="<?php echo $fld->info;?>" name="<?php echo $fld->name;?>"></textarea>
+                                    <br>
+                                    <?php elseif ($fld->type == 'checkbox'):?>
+                                    <input type="<?php echo $fld->type;?>" id="<?php echo $fld->name;?>" name="<?php echo $fld->name;?>" >
+                                    <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                    <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                    <br>
+                                    <?php elseif ($fld->type == 'select'):?>
+                                    <label for="<?php echo $fld->name;?>"><?php echo $fld->label;?></label>
+                                    <select id="<?php echo $fld->name;?>" class="form-control" name="<?php echo $fld->name;?>">
+                                    <?php foreach ($fld->options as $val):?>
+                                        <option value="<?php echo $val;?>" ><?php echo $val;?></option>
+                                    <?php endforeach;?>
+                                    </select>
+                                    <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
+                                    <br>
+                                    <?php endif;?>        
                                 <?php endforeach;?>
-                                </select>
-                                <span class="d-block mt-1"><small><em><?php echo $fld->info;?></em></small></span>
-                                <br>
-                                <?php endif;?>        
-                            <?php endforeach;?>
+                            </div>
                         </div>
+                        </details>
+                        <br>
+                        <script>if(localStorage.getItem("custom-fields-state")==="open"){document.getElementById("custom-fields").setAttribute("open","")}document.getElementById("custom-fields-click").addEventListener("click",()=>{if(document.getElementById("custom-fields").open){localStorage.setItem("custom-fields-state",'close')}else{localStorage.setItem("custom-fields-state",'open')}})</script>
+                        <?php endif;?>
+                        <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
+                        <input id="oldfile" type="hidden" name="oldfile" class="text"/>
+                        <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
+                        <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
+                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
+                        <?php endif;?>
+                        <?php if ($type == 'is_category') :?>
+                            <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_category');?>"/>
+                        <?php endif;?>
                     </div>
-                    </details>
-                    <br>
-                    <script>if(localStorage.getItem("custom-fields-state")==="open"){document.getElementById("custom-fields").setAttribute("open","")}document.getElementById("custom-fields-click").addEventListener("click",()=>{if(document.getElementById("custom-fields").open){localStorage.setItem("custom-fields-state",'close')}else{localStorage.setItem("custom-fields-state",'open')}})</script>
-                    <?php endif;?>
-                    <input type="hidden" id="pType" name="posttype" value="<?php echo $type; ?>">
-                    <input id="oldfile" type="hidden" name="oldfile" class="text"/>
-                    <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
-                    <?php if ($type == 'is_page' || $type == 'is_subpage') :?>
-                    <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Publish');?>"/> <input type="submit" name="draft" class="btn btn-primary draft" value="<?php echo i18n('Save_as_draft');?>"/>
-                    <?php endif;?>
-                    <?php if ($type == 'is_category') :?>
-                        <input type="submit" name="submit" class="btn btn-primary submit" value="<?php echo i18n('Add_category');?>"/>
-                    <?php endif;?>
                 </div>
                 <div class="col-sm-6" id="preview-col">
                     <label><?php echo i18n('Preview');?></label>
