@@ -1,0 +1,16 @@
+{
+  "name": "Twenty Fifteen",
+  "version": "",
+  "author": "WordPress.org & Automattic.com",
+  "homepage": "https://wordpress.org",
+  "description": "Twenty Fifteen theme ported to HTMLy.",
+  "settings": [
+    {
+      "type": "checkbox",
+      "name": "left_sidebar",
+      "label": "Left Sidebar",
+      "value": "",
+      "info": "Move the sidebar to the left"
+    }
+  ]
+}
