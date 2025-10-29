@@ -1650,6 +1650,7 @@ EOF;
     }
     if ($role === 'admin') {
         $toolbar .= '<li class="tb-config"><a href="' . $base . 'admin/config">' . i18n('Config') . '</a></li>';
+        $toolbar .= '<li class="tb-config"><a href="' . $base . 'admin/themes">' . i18n('blog_theme') . '</a></li>';
         $toolbar .= '<li class="tb-backup"><a href="' . $base . 'admin/backup">' . i18n('Backup') . '</a></li>';
         $toolbar .= '<li class="tb-update"><a href="' . $base . 'admin/update">' . i18n('Update') . '</a></li>';
     }
