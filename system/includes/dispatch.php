@@ -131,6 +131,56 @@ function save_config($data = array(), $new = array())
     return file_put_contents($config_file, $string, LOCK_EX);
 }
 
+// Set the theme settings
+function theme_settings()
+{
+    $exp = explode('/', config('views.root'));
+    $settings = 'config/themes/' . $exp[1] . '.ini';
+
+    if (file_exists($settings)) {
+        theme_config('source', $settings);
+    }
+}
+
+function theme_config($key, $value = null)
+{
+    static $_config = array();
+
+    if ($key === 'source' && file_exists($value))
+        $_config = parse_ini_file($value, true);
+    elseif ($value == null)
+        return (isset($_config[$key]) ? $_config[$key] : null);
+    else
+        $_config[$key] = $value;
+}
+
+function save_theme_config($data = array(), $new = array(), $theme = null)
+{
+    $dir = 'config/themes/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
+    $config_file = $dir . $theme . '.ini';
+
+    $string = file_get_contents($config_file) . "\n";
+
+    foreach ($data as $word => $value) {
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string = preg_replace("/^" . $word . " = .+$/m", $word . ' = ' . $value, $string);
+    }
+    $string = rtrim($string);
+    foreach ($new as $word => $value) {
+        $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
+        $value = trim(strtr($value, $map));
+        $string .= "\n" . $word . ' = ' . $value . "\n";
+    }
+    $string = rtrim($string);
+    return file_put_contents($config_file, $string, LOCK_EX);
+}
+
 function get_search_query()
 {
     if (isset($_GET['search'])) {

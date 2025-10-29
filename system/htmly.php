@@ -22,6 +22,9 @@ if (config('timezone')) {
 // Publish scheduled post
 publish_scheduled();
 
+// Load theme settings
+theme_settings();
+
 // The front page of the blog
 get('/index', function () {
 
@@ -3269,6 +3272,107 @@ post('/admin/field/profile', function () {
                 'message' => 'Profile fields saved successfully!',
             ));
         }
+    }
+});
+
+// Show admin/themes
+get('/admin/themes', function () {
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('theme', array(
+            'title' => generate_title('is_default', i18n('blog_theme')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('blog_theme')
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+post('/admin/themes', function () {
+    if (login()) {
+        $new_config = array();
+        $new_Keys = array();        
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin') {
+            $json = $_REQUEST['json'];
+            $new_config['views.root'] = $json;
+            save_config($new_config, $new_Keys);
+            echo json_encode(array(
+                'message' => 'Theme activated!',
+            ));
+        }
+    }
+});
+
+// Show admin/themes/:theme
+get('/admin/themes/:theme', function ($theme) {
+    
+    $exp = explode('/', config('views.root'));
+    if ($theme !== $exp[1]) {
+        $redir = site_url() . 'admin/themes';
+        header("location: $redir");
+    }
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        render('theme-settings', array(
+            'title' => generate_title('is_default', $theme),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-content',
+            'theme' => $theme,
+            'is_admin' => true,
+            'bodyclass' => 'admin-content',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="'. site_url() .'admin/themes">' . i18n('blog_theme') . '</a> &#187; ' . $theme
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted theme settings data
+post('/admin/themes/:theme', function ($theme) {
+    $exp = explode('/', config('views.root'));
+    if ($theme !== $exp[1]) {
+        $redir = site_url() . 'admin/themes';
+        header("location: $redir");
+    }
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $new_config = array();
+        $new_Keys = array();
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin') {
+            foreach ($_POST as $name => $value) {
+                if (substr($name, 0, 8) == "-config-") {
+                    $name = substr($name, 8);
+                    if(!is_null(theme_config($name))) {
+                        $new_config[$name] = $value;
+                    } else {
+                        $new_Keys[$name] = $value;    
+                    }
+                }
+            }
+            save_theme_config($new_config, $new_Keys, $theme);
+            $redir = site_url() . 'admin/themes/' . $theme;
+            header("location: $redir");
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
     }
 });
 

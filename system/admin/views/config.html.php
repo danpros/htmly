@@ -132,17 +132,6 @@ Please install and enable the INTL extension to format the date format to your l
     </div>
   </div>
   <div class="form-group row">
-    <label for="views.root" class="col-sm-2 col-form-label"><?php echo i18n('Blog_Theme');?></label>
-    <div class="col-sm-10">
-    <select class="form-control" id="views.root" name="-config-views.root">
-    <?php foreach (glob('themes/*/layout.html.php') as $folder) { ?>
-       <?php $theme = explode('/',pathinfo($folder)['dirname']); global $config_file; $this_config = parse_ini_file($config_file, true);?>
-       <option value="<?php echo pathinfo($folder)['dirname'];?>" <?php if ($this_config['views.root'] === pathinfo($folder)['dirname']):?>selected<?php endif;?>><?php echo $theme['1'];?></option>
-    <?php } ?>
-    </select> 
-    </div>
-  </div>
-  <div class="form-group row">
     <label for="blog.copyright" class="col-sm-2 col-form-label"><?php echo i18n('Copyright_Line');?></label>
     <div class="col-sm-10">
       <input type="text" name="-config-blog.copyright" class="form-control" id="blog.copyright" value="<?php echo valueMaker(config('blog.copyright'));?>" placeholder="<?php echo i18n('Copyright_Line_Placeholder');?>">

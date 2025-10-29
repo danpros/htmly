@@ -2388,9 +2388,9 @@ function shorten($string = null, $char = null)
     $string = ltrim(rtrim($string));
     $string = str_replace('<span class="dom-charset"><meta charset="utf8"></span>', '', $string);
     if (!empty($char)) {
-        if (strlen($string) > $char) {
-            $string = substr($string, 0, $char);
-            $string = substr($string, 0, strrpos($string, ' '));
+        if (mb_strlen($string) > $char) {
+            $string = mb_substr($string, 0, $char);
+            $string = mb_substr($string, 0, mb_strrpos($string, ' '));
         }
     }
     return $string;
