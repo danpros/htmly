@@ -134,8 +134,12 @@ function save_config($data = array(), $new = array())
 // Set the theme settings
 function theme_settings()
 {
-    $exp = explode('/', config('views.root'));
-    $settings = 'config/themes/' . $exp[1] . '.ini';
+    $views_root = config('views.root');
+    $settings = '';
+    if (!empty($views_root)) {
+        $exp = explode('/', $views_root);
+        $settings = 'config/themes/' . $exp[1] . '.ini';
+    }
 
     if (file_exists($settings)) {
         theme_config('source', $settings);

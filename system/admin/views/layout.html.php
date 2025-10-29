@@ -168,6 +168,13 @@ if (isset($author[0])) {
                 </a>
               </li>
               <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/themes" class="nav-link">
+                  <p>
+                      <?php echo i18n('blog_theme'); ?>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/users" class="nav-link">
                   <p>
                       <?php echo i18n('Manage_users'); ?>
