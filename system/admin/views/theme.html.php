@@ -8,10 +8,10 @@ $this_config = parse_ini_file($config_file, true);
 <?php $exp = explode('/',pathinfo($folder)['dirname']); $theme = $exp['1']; $theme_path = pathinfo($folder)['dirname'];?>
 <?php $image = ($m = glob($theme_path . '/screenshot.*')) ? site_url() . $m[0] : site_url() . 'system/resources/images/default-screenshot.jpg';?>
     <div class="col-lg-4 col-md-6">
-        <div class="card">
+        <div class="card <?php echo $this_config['views.root'] === $theme_path ? 'card-primary': '';?>">
             <div class="card-header"><img class="card-img-top" height="200px" style="object-fit: cover;" src="<?php echo $image;?>"/></div>
             <div class="card-body">
-                <h1><?php echo $theme;?></h1>
+                <h3><?php echo $theme;?></h3>
                 <?php if ($this_config['views.root'] === $theme_path ):?>
                     <button class="btn btn-secondary disabled"><?php echo i18n('enable');?></button>
                 <?php else:?>
