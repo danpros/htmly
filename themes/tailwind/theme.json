@@ -7,13 +7,6 @@
   "settings": [
     {
       "type": "checkbox",
-      "name": "recent_posts",
-      "label": "Recent Posts",
-      "value": "",
-      "info": "Enable Recent Posts widget"
-    },
-    {
-      "type": "checkbox",
       "name": "post_navigation",
       "label": "Post Navigation",
       "value": "",
