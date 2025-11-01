@@ -2562,7 +2562,7 @@ function social($class = null)
 function copyright()
 {
     $blogcp = blog_copyright();
-    $credit = 'Powered by <a href="http://www.htmly.com" target="_blank" rel="nofollow">HTMLy</a>';
+    $credit = i18n('proudly_powered_by') . ' ' . '<a href="http://www.htmly.com" target="_blank" rel="nofollow">HTMLy</a>';
 
     if (!empty($blogcp)) {
         return $copyright = '<span class="copyright">' . $blogcp . '</span> <span class="credit">' . $credit . '</span>';
