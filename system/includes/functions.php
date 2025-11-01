@@ -764,9 +764,11 @@ function find_post($year, $month, $name)
 }
 
 // Return static page.
-function find_page($static = null)
+function find_page($static = null, $pages = null)
 {
-    $pages = get_static_pages();
+    if (empty($pages)) {
+        $pages = get_static_pages();
+    }
     
     $tmp = array();
 
@@ -818,9 +820,11 @@ function find_page($static = null)
 }
 
 // Return static subpage.
-function find_subpage($static, $sub_static = null)
+function find_subpage($static, $sub_static = null, $sub_pages = null)
 {
-    $sub_pages = array_values(get_static_subpages($static));
+    if (empty($sub_pages)) {
+        $sub_pages = array_values(get_static_subpages($static));
+    }
 
     $tmp = array();
 

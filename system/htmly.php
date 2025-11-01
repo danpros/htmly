@@ -4666,18 +4666,26 @@ get('/:static', function ($static) {
 
     } else {
 
+        $pages = '';
         if (config("views.counter") != "true") {
             if (!login()) {
                 file_cache($_SERVER['REQUEST_URI']);
             }
         } else {
-            add_view('page_' . $static);
+            $pages = get_static_pages();
+            if (!empty($pages)) {
+                foreach ($pages as $index => $v) {
+                    if (stripos($v['basename'], $static . '.md') !== false) {
+                        add_view('page_' . $static);
+                    }
+                }
+            }
             if (!login()) {
                 file_cache($_SERVER['REQUEST_URI']);
             }        
         }
 
-        $post = find_page($static);
+        $post = find_page($static, $pages);
 
         if (!$post) {
             not_found('page_' . $static);
@@ -5049,13 +5057,21 @@ get('/:static/:sub', function ($static, $sub) {
         $redir = site_url();
         header("location: $redir", TRUE, 301);
     }
-    
+
+    $sub_pages = '';
     if (config("views.counter") != "true") {
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
         }
     } else {
-        add_view('subpage_' . $static.'.'.$sub);
+        $sub_pages = array_values(get_static_subpages($static));
+        if (!empty($sub_pages)) {
+            foreach ($sub_pages as $index => $v) {
+                if (stripos($v['basename'], $sub . '.md') !== false) {
+                    add_view('subpage_' . $static.'.'.$sub);
+                }
+            }
+        }
         if (!login()) {
             file_cache($_SERVER['REQUEST_URI']);
         }        
@@ -5065,8 +5081,8 @@ get('/:static/:sub', function ($static, $sub) {
     if (!$parent_post) {
         not_found('subpage_' . $static.'.'.$sub);
     }
-    $post = find_subpage($static, $sub);
-    
+
+    $post = find_subpage($static, $sub, $sub_pages);
     if (!$post) {
         not_found('subpage_' . $static.'.'.$sub);
     }
