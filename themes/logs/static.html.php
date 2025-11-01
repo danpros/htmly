@@ -11,7 +11,8 @@
             <?php echo $p->body; ?>
         </div>
     </div>
-	<div class="border"></div>
+    <?php if(!isset($is_front)):?>
+    <div class="border"></div>
     <div class="postnav">
         <?php if (!empty($next)): ?>
             <span class="newer">&laquo; <a href="<?php echo($next['url']); ?>" rel="next"><?php echo($next['title']); ?></a></span>
@@ -20,4 +21,5 @@
             <span class="older"><a href="<?php echo($prev['url']); ?>" rel="prev"><?php echo($prev['title']); ?></a> &raquo;</span>
         <?php endif; ?>
     </div>
+    <?php endif;?>
 </div>
