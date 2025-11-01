@@ -3,5 +3,35 @@
   "version": "",
   "author": "Timothy Lin",
   "homepage": "https://www.timlrx.com",
-  "description": "Tailwind Nextjs Starter Blog ported to HTMLy."
+  "description": "Tailwind Nextjs Starter Blog ported to HTMLy.",
+  "settings": [
+    {
+      "type": "checkbox",
+      "name": "recent_posts",
+      "label": "Recent Posts",
+      "value": "",
+      "info": "Enable Recent Posts widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "post_navigation",
+      "label": "Post Navigation",
+      "value": "",
+      "info": "Enable post navigation"
+    },
+    {
+      "type": "checkbox",
+      "name": "tagcloud",
+      "label": "TagCloud",
+      "value": "",
+      "info": "Enable TagCloud widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "frontpage_posts",
+      "label": "Static Frontpage Posts",
+      "value": "",
+      "info": "Show recent posts on static frontpage"
+    }
+  ]
 }

@@ -82,12 +82,16 @@
                 </div>
                 <footer>
                     <div class="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
+						<?php if (theme_config('recent_posts')):?>
                         <div class="py-4 xl:py-8">
                             <h2 class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><?php echo i18n('tags');?></h2>
                             <div class="flex flex-wrap">
 								<span class="mr-3 text-sm font-medium uppercase text-primary-500" ><span class="tags"><?php echo $p->tag;?></span></span>
                             </div>
                         </div>
+						<?php endif;?>
+
+                        <?php if (theme_config('post_navigation')):?>
                         <div class="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
 							<?php if (!empty($prev)): ?>
                             <div>
@@ -102,12 +106,17 @@
                             </div>
 							<?php endif;?>
                         </div>
+						<?php endif;?>
+
+						<?php if (theme_config('tagcloud')):?>
                         <div class="py-4 xl:py-8">
                             <h2 class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Tag Cloud</h2>
                             <div class="flex flex-wrap">
 								<span class="mr-3 text-sm font-medium uppercase text-primary-500"><span class="tags"><?php echo tag_cloud();?></span></span>
                             </div>
-                        </div>		
+                        </div>
+						<?php endif;?>
+
                     </div>
 					<?php if (config('blog.enable') === 'true') {?>
                     <div class="pt-4 xl:pt-8"><a class="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400" aria-label="Back to the blog" href="<?php echo site_url() . blog_path();?>">← <?php echo i18n('back_to');?> <?php echo blog_string();?></a></div>

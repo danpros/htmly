@@ -50,36 +50,51 @@
                     <aside class="widget search">
                         <form><input type="search" name="search" class="form-control" placeholder="<?php echo i18n('Type_to_search');?>"></form>
                     </aside>
+
+                    <?php if (theme_config('recent_posts')):?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>
                         <?php echo recent_posts() ?>
                     </aside>
+                    <?php endif;?>
+
                     <?php if (config('views.counter') === 'true') :?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Popular_posts");?></h2>
                         <?php echo popular_posts() ?>
                     </aside>
                     <?php endif;?>
+
                     <?php if (disqus()): ?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title">Recent comments</h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;}</style>
                     </aside>
                     <?php endif;?>
+
+                    <?php if (theme_config('archive')):?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Archives");?></h2>
                         <?php echo archive_list() ?>
                     </aside>
+                    <?php endif;?>
+
+                    <?php if (theme_config('category_list')):?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n('Category');?></h2>
                         <?php echo category_list() ?>
                     </aside>
+                    <?php endif;?>
+
+                    <?php if (theme_config('tagcloud')):?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Tags");?></h2>
                         <div class="tag-cloud">
                             <?php echo tag_cloud();?>
                         </div>
                     </aside>
+                    <?php endif;?>
+
                 </div>
             </div>
         </div>

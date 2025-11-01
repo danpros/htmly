@@ -3,5 +3,35 @@
   "version": "",
   "author": "WordPress.org & Automattic.com",
   "homepage": "https://wordpress.org",
-  "description": "Twenty Sixteen theme ported to HTMLy."
+  "description": "Twenty Sixteen theme ported to HTMLy.",
+  "settings": [
+    {
+      "type": "checkbox",
+      "name": "recent_posts",
+      "label": "Recent Posts",
+      "value": "",
+      "info": "Enable Recent Posts widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "archive",
+      "label": "Archive",
+      "value": "",
+      "info": "Enable Archive widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "category_list",
+      "label": "Category List",
+      "value": "",
+      "info": "Enable Category List widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "tagcloud",
+      "label": "TagCloud",
+      "value": "",
+      "info": "Enable TagCloud widget"
+    }
+  ]
 }

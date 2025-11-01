@@ -25,15 +25,28 @@
     </div>
     <div class="social"><?php echo social() ?></div>
     <div class="menu"><?php echo menu() ?></div>
+    
+    <?php if (theme_config('recent_posts')):?>
     <div class="recent"><h3><?php echo i18n('Recent_posts');?></h3><?php echo recent_posts() ?></div>
+    <?php endif;?>
+    
+    <?php if (theme_config('archive')):?>
     <div class="archive"><h3><?php echo i18n('Archives');?></h3><?php echo archive_list() ?></div>
+    <?php endif;?>
+    
+    <?php if (theme_config('category_list')):?>
     <div class="category-list"><h3><?php echo i18n('Category');?></h3><?php echo category_list() ?></div>
+    <?php endif;?>
+    
+    <?php if (theme_config('tagcloud')):?>
     <div class="tagcloud">
         <h3><?php echo i18n('Tags');?></h3>
         <div class="tag-cloud">
             <?php echo tag_cloud();?>
-        </div>			
+        </div>            
     </div>
+    <?php endif;?>
+    
     <div class="copyright"><?php echo copyright() ?></div>
 </aside>
 <section id="content">

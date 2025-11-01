@@ -3,5 +3,35 @@
   "version": "",
   "author": "",
   "homepage": "https://www.htmly.com",
-  "description": "Logs HTMLy theme."
+  "description": "Logs HTMLy theme.",
+  "settings": [
+    {
+      "type": "checkbox",
+      "name": "recent_posts",
+      "label": "Recent Posts",
+      "value": "",
+      "info": "Enable Recent Posts widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "archive",
+      "label": "Archive",
+      "value": "",
+      "info": "Enable Archive widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "category_list",
+      "label": "Category List",
+      "value": "",
+      "info": "Enable Category List widget"
+    },
+    {
+      "type": "checkbox",
+      "name": "tagcloud",
+      "label": "TagCloud",
+      "value": "",
+      "info": "Enable TagCloud widget"
+    }
+  ]
 }

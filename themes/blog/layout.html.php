@@ -79,6 +79,8 @@
                         </div><!--//content-->  
                     </div><!--//section-inner-->                 
                 </aside><!--//section-->
+
+                <?php if (theme_config('recent_posts')):?>
                 <aside class="recent-posts aside section">
                     <div class="section-inner">
                         <!-- Tab nav -->
@@ -123,6 +125,8 @@
                         </div>
                     </div><!--//section-inner-->
                 </aside><!--//section-->
+                <?php endif;?>
+
                 <?php if (disqus()): ?>
                 <aside class="comments aside section">
                     <div class="section-inner">
@@ -134,6 +138,8 @@
                     </div><!--//section-inner-->
                 </aside><!--//section-->
                 <?php endif; ?>
+
+                <?php if (theme_config('archive')):?>
                 <aside class="archive aside section">
                     <div class="section-inner">
                         <h2 class="heading"><?php echo i18n("Archives");?></h2>
@@ -142,6 +148,9 @@
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
+                <?php endif;?>
+
+                <?php if (theme_config('category_list')):?>			
                 <aside class="category-list aside section">
                     <div class="section-inner">
                         <h2 class="heading"><?php echo i18n('Category');?></h2>
@@ -150,6 +159,9 @@
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
+                <?php endif;?>
+
+                <?php if (theme_config('tagcloud')):?>
                 <aside class="category-list aside section">
                     <div class="section-inner">
                         <h2 class="heading"><?php echo i18n("Tags");?></h2>
@@ -160,6 +172,8 @@
                         </div><!--//content-->
                     </div><!--//section-inner-->
                 </aside><!--//section-->
+                <?php endif;?>
+
             </div><!--//secondary-->    
         </div><!--//row-->
     </div><!--//masonry-->

@@ -54,14 +54,13 @@
                     </main><!-- .site-main -->
                 </div><!-- .content-area -->
 
-
                 <aside id="secondary" class="sidebar widget-area" role="complementary">
                     <section class="widget widget_text">
                         <h2 class="widget-title"><?php echo i18n("About");?></h2>
                         <div class="textwidget"><p><?php echo blog_description();?></p>
                         </div>
                     </section>
-                    
+
                     <section id="search" class="widget widget_search">
                         <form role="search" class="search-form">
                         <label>
@@ -71,12 +70,14 @@
                         <button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
                         </form>
                     </section>    
-                    
+
+					<?php if(theme_config('recent_posts')):?>
                     <section id="recent-posts" class="widget widget_recent_entries">        
                         <h2 class="widget-title"><?php echo i18n("Recent_posts");?></h2>
                         <?php echo recent_posts();?>
                     </section>
-                    
+					<?php endif;?>
+
                     <?php if (config('views.counter') === 'true') :?>
                     <section id="popular-posts" class="widget widget_popular_entries">        
                         <h2 class="widget-title"><?php echo i18n('Popular_posts');?></h2>
@@ -91,22 +92,28 @@
                     </section>
                     <?php endif;?>
 
+					<?php if(theme_config('archive')):?>
                     <section id="archives" class="widget widget_archive">
                     <h2 class="widget-title"><?php echo i18n("Archives");?></h2>        
                         <?php echo archive_list() ?>
                     </section>
-                    
+					<?php endif;?>
+
+					<?php if(theme_config('category_list')):?>
                     <section id="category" class="widget widget_category">
                     <h2 class="widget-title"><?php echo i18n("Categories");?></h2>        
                         <?php echo category_list() ?>
                     </section>
-                    
+					<?php endif;?>
+
+					<?php if(theme_config('tagcloud')):?>
                     <section id="popular-tags" class="widget widget_popular_tags">
                     <h2 class="widget-title"><?php echo i18n("Tags");?></h2>
                     <div class="tag-cloud">
-                    <?php echo tag_cloud();?>
+						<?php echo tag_cloud();?>
                     </div>					
                     </section>
+					<?php endif;?>
                     
                 </aside><!-- .sidebar .widget-area -->
 
