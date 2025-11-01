@@ -1754,7 +1754,8 @@ function popular_posts($custom = null, $count = null)
                         $arr = explode('post_', $key);
                         if (isset($arr[1])) {
                             foreach($posts_list as $in => $f) {
-                                if (strpos($f['basename'], $arr[1] . '.md') !== false )  {
+                                $ex = explode('_', $f['basename']);
+                                if ($ex[2] == $arr[1] . '.md')  {
                                     $tmp[] = $f;
                                     if ($i++ >= $count)
                                         break;    
