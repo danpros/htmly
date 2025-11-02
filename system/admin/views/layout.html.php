@@ -170,7 +170,7 @@ if (isset($author[0])) {
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/themes" class="nav-link">
                   <p>
-                      <?php echo i18n('blog_theme'); ?>
+                      <?php echo i18n('themes'); ?>
                   </p>
                 </a>
               </li>

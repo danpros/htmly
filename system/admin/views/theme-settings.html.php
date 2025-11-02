@@ -20,27 +20,27 @@ if (file_exists($configPath)) {
     </div>
     <div class="col">
         <div class="mb-3">
-            <strong>Theme:</strong>
+            <strong><?php echo i18n('name');?>:</strong>
             <div><?php echo $themeConfig['name'] ?: $theme; ?></div>
         </div>
 
         <div class="mb-3">
-            <strong>Version:</strong>
+            <strong><?php echo i18n('version');?>:</strong>
             <div><?php echo $themeConfig['version'] ?: HTMLY_VERSION; ?></div>
         </div>
 
         <div class="mb-3">
-            <strong>Author:</strong>
+            <strong><?php echo i18n('author');?>:</strong>
             <div><?php echo $themeConfig['author'] ?: 'Contributor'; ?></div>
         </div>
         
         <div class="mb-3">
-            <strong>Homepage:</strong>
+            <strong><?php echo i18n('homepage');?>:</strong>
             <div><a target="_blank" href="<?php echo $themeConfig['homepage'] ?: site_url(); ?>"><?php echo $themeConfig['homepage'] ?: site_url(); ?></a></div>
         </div>
         
         <div class="mb-3">
-            <strong>Description:</strong>
+            <strong><?php echo i18n('description');?>:</strong>
             <div><?php echo $themeConfig['description'] ?: 'HTMLy ' . $theme; ?></div>
         </div>
         

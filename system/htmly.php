@@ -3280,14 +3280,14 @@ get('/admin/themes', function () {
     if (login()) {
         config('views.root', 'system/admin/views');
         render('theme', array(
-            'title' => generate_title('is_default', i18n('blog_theme')),
+            'title' => generate_title('is_default', i18n('themes')),
             'description' => safe_html(strip_tags(blog_description())),
             'canonical' => site_url(),
             'metatags' => generate_meta(null, null),
             'type' => 'is_admin-content',
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('blog_theme')
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('themes')
         ));
     } else {
         $login = site_url() . 'login';
@@ -3331,7 +3331,7 @@ get('/admin/themes/:theme', function ($theme) {
             'theme' => $theme,
             'is_admin' => true,
             'bodyclass' => 'admin-content',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="'. site_url() .'admin/themes">' . i18n('blog_theme') . '</a> &#187; ' . $theme
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="'. site_url() .'admin/themes">' . i18n('themes') . '</a> &#187; ' . $theme
         ));
     } else {
         $login = site_url() . 'login';
