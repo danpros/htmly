@@ -70,7 +70,7 @@ if (file_exists($configPath)) {
                 <?php else: ?>
                     <input class="form-control" type="<?php echo $setting['type'];?>" name="-config-<?php echo $setting['name'];?>" value="<?php echo theme_config($setting['name']);?>"/>
                 <?php endif;?>
-                <small><em><?php echo $setting['info'];?></em></small>
+                <small><?php echo $setting['info'];?></small>
             </div>
         </div>
         <?php endforeach;?>
