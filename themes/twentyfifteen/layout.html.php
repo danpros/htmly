@@ -4,7 +4,7 @@
 <head>
     <?php echo head_contents();?>
     <?php echo $metatags;?>
-    <link rel="stylesheet" id="twentyfifteen-fonts-noto" href="<?php echo site_url();?>system/resources/css/noto-serif.css" type="text/css" media="all">
+    <link rel="stylesheet" id="twentyfifteen-fonts-noto" href="<?php echo site_url();?>system/resources/css/noto-serif.css?v=1" type="text/css" media="all">
     <link rel="stylesheet" id="twentyfifteen-fonts-sans" href="<?php echo site_url();?>system/resources/css/open-sans.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all">
     <link rel="stylesheet" id="twentyfifteen-style-css" href="<?php echo theme_path() . 'css/' . (theme_config('left_sidebar') ? 'style.css' : 'style_v2.css') . '?v=2'; ?>" type="text/css" media="all">
