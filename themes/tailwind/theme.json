@@ -28,6 +28,13 @@
     },
     {
       "type": "checkbox",
+      "name": "popular_posts",
+      "label": "Popular Posts",
+      "value": "",
+      "info": "Enable Popular Posts widget. The views counter need to be enabled first."
+    },
+    {
+      "type": "checkbox",
       "name": "tagcloud",
       "label": "TagCloud",
       "value": "",

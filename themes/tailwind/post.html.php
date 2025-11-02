@@ -115,6 +115,13 @@
                                 <?php echo recent_posts();?>
                             </div>
                         <?php endif;?>
+						
+                        <?php if (theme_config('popular_posts')):?>
+                            <div class="prose max-w-none pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300 recent-posts">
+                                <h2 class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><?php echo i18n('popular_posts');?></h2>
+                                <?php echo popular_posts();?>
+                            </div>
+                        <?php endif;?>
 
                         <?php if (theme_config('tagcloud')):?>
                         <div class="py-4 xl:py-8">

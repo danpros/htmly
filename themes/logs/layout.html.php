@@ -55,7 +55,7 @@
                 </div>
                 <?php endif;?>
                 
-                <?php if(config('views.counter') === 'true') :?>
+                <?php if(theme_config('popular_posts')) :?>
                 <div class="popular">
                     <h3><?php echo i18n('Popular_posts');?></h3>
                     <?php echo popular_posts() ?>

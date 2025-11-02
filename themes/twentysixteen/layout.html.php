@@ -78,7 +78,7 @@
                     </section>
 					<?php endif;?>
 
-                    <?php if (config('views.counter') === 'true') :?>
+                    <?php if (theme_config('popular_posts')) :?>
                     <section id="popular-posts" class="widget widget_popular_entries">        
                         <h2 class="widget-title"><?php echo i18n('Popular_posts');?></h2>
                         <?php echo popular_posts();?>

@@ -13,7 +13,7 @@
     <!-- Font CSS -->  
     <link id="lato" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/lato.css">
     <link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
-	<link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
+    <link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css?v=1">
 </head>
@@ -80,18 +80,21 @@
                     </div><!--//section-inner-->                 
                 </aside><!--//section-->
 
-                <?php if (theme_config('recent_posts')):?>
+                <?php if (theme_config('recent_posts') || theme_config('popular_posts')):?>
                 <aside class="recent-posts aside section">
                     <div class="section-inner">
                         <!-- Tab nav -->
                         <ul class="nav nav-tabs" role="tablist">
+                            <?php if (theme_config('recent_posts')) :?>
                             <li role="presentation" class="active"><a href="#recent-posts" aria-controls="recent-posts" role="tab" data-toggle="tab"><?php echo i18n("Recent_posts");?></a></li>
-                            <?php if (config('views.counter') === 'true') :?>
-                            <li role="presentation"><a href="#popular-posts" aria-controls="popular-posts" role="tab" data-toggle="tab"><?php echo i18n("Popular_posts");?></a></li>
+                            <?php endif;?>
+                            <?php if (theme_config('popular_posts')) :?>
+                            <li role="presentation" class="<?php echo theme_config('recent_posts') ? '' : 'active';?>"><a href="#popular-posts" aria-controls="popular-posts" role="tab" data-toggle="tab"><?php echo i18n("Popular_posts");?></a></li>
                             <?php endif;?>
                         </ul>
                         <!-- Tab content -->
                         <div class="tab-content">
+                            <?php if (theme_config('recent_posts')) :?>
                             <div role="tabpanel" class="tab-pane active" id="recent-posts">
                                 <h2 class="hide"><?php echo i18n("Recent_Posts");?></h2>
                                 <?php $recent = recent_posts(true);?>
@@ -106,8 +109,9 @@
                                     </div>
                                 <?php endforeach;?>
                             </div>
-                            <?php if (config('views.counter') === 'true') :?>
-                            <div role="tabpanel" class="tab-pane" id="popular-posts">
+                            <?php endif;?>
+                            <?php if (theme_config('popular_posts')) :?>
+                            <div role="tabpanel" class="tab-pane active" id="popular-posts">
                                 <h2 class="hide"><?php echo i18n("Popular_posts");?></h2>
                                 <?php $popular = popular_posts(true);?>
                                 <?php foreach ($popular as $pp):?>
@@ -150,7 +154,7 @@
                 </aside><!--//section-->
                 <?php endif;?>
 
-                <?php if (theme_config('category_list')):?>			
+                <?php if (theme_config('category_list')):?>            
                 <aside class="category-list aside section">
                     <div class="section-inner">
                         <h2 class="heading"><?php echo i18n('Category');?></h2>

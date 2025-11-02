@@ -58,7 +58,7 @@
                     </aside>
                     <?php endif;?>
 
-                    <?php if (config('views.counter') === 'true') :?>
+                    <?php if (theme_config('popular_posts')) :?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title"><?php echo i18n("Popular_posts");?></h2>
                         <?php echo popular_posts() ?>

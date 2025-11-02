@@ -29,6 +29,10 @@
     <?php if (theme_config('recent_posts')):?>
     <div class="recent"><h3><?php echo i18n('Recent_posts');?></h3><?php echo recent_posts() ?></div>
     <?php endif;?>
+	
+    <?php if (theme_config('popular_posts')):?>
+    <div class="recent"><h3><?php echo i18n('popular_posts');?></h3><?php echo popular_posts() ?></div>
+    <?php endif;?>
     
     <?php if (theme_config('archive')):?>
     <div class="archive"><h3><?php echo i18n('Archives');?></h3><?php echo archive_list() ?></div>
