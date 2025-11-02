@@ -111,7 +111,7 @@
                             </div>
                             <?php endif;?>
                             <?php if (theme_config('popular_posts')) :?>
-                            <div role="tabpanel" class="tab-pane active" id="popular-posts">
+                            <div role="tabpanel" class="tab-pane <?php echo theme_config('recent_posts') ? '' : 'active';?>" id="popular-posts">
                                 <h2 class="hide"><?php echo i18n("Popular_posts");?></h2>
                                 <?php $popular = popular_posts(true);?>
                                 <?php foreach ($popular as $pp):?>
