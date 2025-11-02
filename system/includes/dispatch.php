@@ -164,9 +164,11 @@ function save_theme_config($data = array(), $new = array(), $theme = null)
     if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
+    $string = '';
     $config_file = $dir . $theme . '.ini';
-
-    $string = file_get_contents($config_file) . "\n";
+    if (file_exists($config_file)) {
+        $string = file_get_contents($config_file) . "\n";
+    }
 
     foreach ($data as $word => $value) {
         $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
