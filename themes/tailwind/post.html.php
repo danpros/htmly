@@ -82,7 +82,8 @@
                 </div>
                 <footer>
                     <div class="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
-                        <?php if (theme_config('recent_posts')):?>
+                    
+                        <?php if (theme_config('post_tag')):?>
                         <div class="py-4 xl:py-8">
                             <h2 class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><?php echo i18n('tags');?></h2>
                             <div class="flex flex-wrap">
@@ -106,6 +107,13 @@
                             </div>
                             <?php endif;?>
                         </div>
+                        <?php endif;?>
+                        
+                        <?php if (theme_config('recent_posts')):?>
+                            <div class="prose max-w-none pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300 recent-posts">
+                                <h2 class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><?php echo i18n('recent_posts');?></h2>
+                                <?php echo recent_posts();?>
+                            </div>
                         <?php endif;?>
 
                         <?php if (theme_config('tagcloud')):?>

@@ -7,10 +7,24 @@
   "settings": [
     {
       "type": "checkbox",
+      "name": "post_tag",
+      "label": "Post Tag",
+      "value": "",
+      "info": "Show post tag"
+    },
+    {
+      "type": "checkbox",
       "name": "post_navigation",
       "label": "Post Navigation",
       "value": "",
       "info": "Enable post navigation"
+    },
+    {
+      "type": "checkbox",
+      "name": "recent_posts",
+      "label": "Recent Posts",
+      "value": "",
+      "info": "Show Recent Posts"
     },
     {
       "type": "checkbox",

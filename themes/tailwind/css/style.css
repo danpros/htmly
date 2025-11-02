@@ -15,7 +15,9 @@
 	border-color: rgb(229 231 235/var(--tw-divide-opacity))!important;
 }
 
-.toc-wrapper a, .related-posts a {
+.toc-wrapper a, 
+.related-posts a,
+.recent-posts a {
 	text-decoration: none;
 }
 
@@ -141,4 +143,8 @@
 .thumbnail:hover .thumb-icon { 
 	background: #fff; 
 	color: #333; 
+}
+
+.recent-posts > ul {
+	padding-left: 12px;
 }
