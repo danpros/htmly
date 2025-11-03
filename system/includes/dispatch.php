@@ -720,8 +720,8 @@ function create_thumb($src, $desired_width = null, $desired_height = null) {
         $h = null;
     }
 
-    $path = parse_url($src, PHP_URL_PATH);
-    $fileName = rawurldecode(basename($path));
+    $path = pathinfo($src, PATHINFO_FILENAME);
+    $fileName = rawurldecode($path);
     $thumbFile = $dir . '/' . $fileName  . '-' . $desired_width . $h .'.webp';
 
     if (file_exists($thumbFile)) {
