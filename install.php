@@ -411,6 +411,7 @@ span.required {
 			   <option value="disable">disable</option>
 			   <option value="facebook">facebook</option>
 			   <option value="disqus">disqus</option>
+			   <option value="local">local</option>
 			</select>
 			<div id="facebook" style="display:none">
 					<br/>

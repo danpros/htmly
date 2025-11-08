@@ -13,6 +13,8 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
         '8432047aca7938f88a2098a2f7770228' => __DIR__ . '/../../..' . '/system/admin/admin.php',
         '1b9bf2d9d029f1364c3d7262b5375c41' => __DIR__ . '/../../..' . '/system/includes/session.php',
         '62f038defb1b29aab3998eb437e01df9' => __DIR__ . '/../../..' . '/system/includes/opml.php',
+        '7d7ae14f7bb933ac50b7f6e42f6a7d60' => __DIR__ . '/../../..' . '/system/includes/comments.php',
+        '2591226a04118e81824e40ae6712427b' => __DIR__ . '/../../..' . '/system/includes/comments-frontend.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -24,6 +26,7 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
         array (
             'PragmaRX\\Google2FA\\' => 19,
             'ParagonIE\\ConstantTime\\' => 23,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -60,6 +63,10 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
         'ParagonIE\\ConstantTime\\' => 
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'Michelf\\' => 
         array (
@@ -181,6 +188,13 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
         'Michelf\\Markdown' => __DIR__ . '/..' . '/michelf/php-markdown/Michelf/Markdown.php',
         'Michelf\\MarkdownExtra' => __DIR__ . '/..' . '/michelf/php-markdown/Michelf/MarkdownExtra.php',
         'Michelf\\MarkdownInterface' => __DIR__ . '/..' . '/michelf/php-markdown/Michelf/MarkdownInterface.php',
+        'PHPMailer\\PHPMailer\\DSNConfigurator' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/DSNConfigurator.php',
+        'PHPMailer\\PHPMailer\\Exception' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/Exception.php',
+        'PHPMailer\\PHPMailer\\OAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/OAuth.php',
+        'PHPMailer\\PHPMailer\\OAuthTokenProvider' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/OAuthTokenProvider.php',
+        'PHPMailer\\PHPMailer\\PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/PHPMailer.php',
+        'PHPMailer\\PHPMailer\\POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/POP3.php',
+        'PHPMailer\\PHPMailer\\SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/SMTP.php',
         'ParagonIE\\ConstantTime\\Base32' => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src/Base32.php',
         'ParagonIE\\ConstantTime\\Base32Hex' => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src/Base32Hex.php',
         'ParagonIE\\ConstantTime\\Base64' => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src/Base64.php',

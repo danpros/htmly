@@ -158,6 +158,12 @@
             Facebook
           </label>
         </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-comment.system" id="comment.system3" value="local" <?php if (config('comment.system') === 'local'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="comment.system3">
+             Local
+          </label>
+        </div>
       </div>
     </div>
   </div>

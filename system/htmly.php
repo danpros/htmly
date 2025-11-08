@@ -3095,7 +3095,255 @@ get('/admin/categories/:category', function ($category) {
         }
     } else {
         $login = site_url() . 'login';
-    }   
+    }
+});
+
+// Show admin/comments - All comments
+get('/admin/comments', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login() && ($role === 'admin' || $role === 'editor')) {
+        config('views.root', 'system/admin/views');
+
+        $comments = getAllComments();
+        $pendingCount = getPendingCommentsCount();
+
+        render('comments', array(
+            'title' => generate_title('is_default', i18n('Comments_Management')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-comments',
+            'is_admin' => true,
+            'bodyclass' => 'admin-comments',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments'),
+            'tab' => 'all',
+            'comments' => $comments,
+            'pendingCount' => $pendingCount
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/comments/pending - Pending comments
+get('/admin/comments/pending', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login() && ($role === 'admin' || $role === 'editor')) {
+        config('views.root', 'system/admin/views');
+
+        $allComments = getAllComments();
+        $comments = array_filter($allComments, function($comment) {
+            return !$comment['published'];
+        });
+        $pendingCount = count($comments);
+
+        render('comments', array(
+            'title' => generate_title('is_default', i18n('Pending_Comments')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-comments',
+            'is_admin' => true,
+            'bodyclass' => 'admin-comments',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments') . ' &#187; ' . i18n('Pending'),
+            'tab' => 'pending',
+            'comments' => $comments,
+            'pendingCount' => $pendingCount
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show admin/comments/settings - Settings page
+get('/admin/comments/settings', function () {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login() && $role === 'admin') {
+        config('views.root', 'system/admin/views');
+
+        $pendingCount = getPendingCommentsCount();
+
+        render('comments', array(
+            'title' => generate_title('is_default', i18n('Comments_Settings')),
+            'description' => safe_html(strip_tags(blog_description())),
+            'canonical' => site_url(),
+            'metatags' => generate_meta(null, null),
+            'type' => 'is_admin-comments',
+            'is_admin' => true,
+            'bodyclass' => 'admin-comments',
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments') . ' &#187; ' . i18n('Settings'),
+            'tab' => 'settings',
+            'pendingCount' => $pendingCount
+        ));
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Save comments settings
+post('/admin/comments/settings', function () {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin') {
+            $config = array();
+
+            // Get checkbox values (they are not sent if unchecked)
+            // Note: HTML forms convert dots to underscores in POST data
+            $config['comments.moderation'] = isset($_POST['comments_moderation']) ? 'true' : 'false';
+            $config['comments.honeypot'] = isset($_POST['comments_honeypot']) ? 'true' : 'false';
+            $config['comments.notify'] = isset($_POST['comments_notify']) ? 'true' : 'false';
+            $config['comments.mail.enabled'] = isset($_POST['comments_mail_enabled']) ? 'true' : 'false';
+
+            // Get text fields (using underscores because HTML forms convert dots)
+            $config['comments.admin.email'] = from($_POST, 'comments_admin_email');
+            $config['comments.mail.host'] = from($_POST, 'comments_mail_host');
+            $config['comments.mail.port'] = from($_POST, 'comments_mail_port');
+            $config['comments.mail.username'] = from($_POST, 'comments_mail_username');
+            $config['comments.mail.encryption'] = from($_POST, 'comments_mail_encryption');
+            $config['comments.mail.from.email'] = from($_POST, 'comments_mail_from_email');
+            $config['comments.mail.from.name'] = from($_POST, 'comments_mail_from_name');
+
+            // Only update password if provided
+            $password = from($_POST, 'comments_mail_password');
+            if (!empty($password)) {
+                $config['comments.mail.password'] = $password;
+            }
+
+            // Debug: log to file (remove after debugging)
+            file_put_contents('content/comments-debug.log',
+                date('Y-m-d H:i:s') . "\n" .
+                "POST data: " . print_r($_POST, true) . "\n" .
+                "Config array: " . print_r($config, true) . "\n\n",
+                FILE_APPEND
+            );
+
+            $result = save_comments_config($config);
+
+            // Log result
+            file_put_contents('content/comments-debug.log',
+                "Save result: " . ($result ? "SUCCESS ($result bytes)" : "FAILED") . "\n" .
+                "File content after save:\n" . file_get_contents('config/comments.ini') . "\n\n",
+                FILE_APPEND
+            );
+
+            $redir = site_url() . 'admin/comments/settings';
+            header("location: $redir");
+        } else {
+            $redir = site_url();
+            header("location: $redir");
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Show edit comment form
+get('/admin/comments/edit/:postid/:commentid', function ($postid, $commentid) {
+    $user = $_SESSION[site_url()]['user'];
+    $role = user('role', $user);
+    if (login() && ($role === 'admin' || $role === 'editor')) {
+        config('views.root', 'system/admin/views');
+
+        $comments = getComments($postid, true);
+        $editComment = null;
+
+        foreach ($comments as $comment) {
+            if ($comment['id'] === $commentid) {
+                $comment['post_id'] = $postid;
+                $editComment = $comment;
+                break;
+            }
+        }
+
+        if ($editComment) {
+            $pendingCount = getPendingCommentsCount();
+
+            render('comments', array(
+                'title' => generate_title('is_default', i18n('Edit_Comment')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-comments',
+                'is_admin' => true,
+                'bodyclass' => 'admin-comments',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/comments">' . i18n('Comments') . '</a> &#187; ' . i18n('Edit'),
+                'editComment' => $editComment,
+                'pendingCount' => $pendingCount
+            ));
+        } else {
+            $redir = site_url() . 'admin/comments';
+            header("location: $redir");
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Update comment
+post('/admin/comments/update/:postid/:commentid', function ($postid, $commentid) {
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    if (login() && $proper) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin' || $role === 'editor') {
+            $data = array(
+                'name' => from($_POST, 'name'),
+                'email' => from($_POST, 'email'),
+                'comment' => from($_POST, 'comment'),
+                'published' => isset($_POST['published'])
+            );
+
+            if (commentModify($postid, $commentid, $data)) {
+                $redir = site_url() . 'admin/comments';
+                header("location: $redir");
+            } else {
+                $redir = site_url() . 'admin/comments/edit/' . $postid . '/' . $commentid;
+                header("location: $redir");
+            }
+        } else {
+            $redir = site_url();
+            header("location: $redir");
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Publish comment
+get('/admin/comments/publish/:postid/:commentid', function ($postid, $commentid) {
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin' || $role === 'editor') {
+            commentPublish($postid, $commentid);
+        }
+    }
+    $redir = site_url() . 'admin/comments';
+    header("location: $redir");
+});
+
+// Delete comment
+get('/admin/comments/delete/:postid/:commentid', function ($postid, $commentid) {
+    if (login()) {
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin' || $role === 'editor') {
+            commentDelete($postid, $commentid);
+        }
+    }
+    $redir = site_url() . 'admin/comments';
+    header("location: $redir");
 });
 
 // Show admin/field
@@ -5788,6 +6036,45 @@ post('/:year/:month/:name/delete', function () {
             delete_post($file, $destination);
         }
     }
+});
+
+// Submit comment from public form
+post('/comments/submit', function () {
+    if (!local()) {
+        $redir = site_url();
+        header("location: $redir");
+        return;
+    }
+
+    $postId = from($_POST, 'post_id');
+    $name = from($_POST, 'name');
+    $email = from($_POST, 'email');
+    $comment = from($_POST, 'comment');
+    $parentId = from($_POST, 'parent_id');
+    $notify = from($_POST, 'notify');
+    $website = from($_POST, 'website'); // honeypot field
+
+    $data = array(
+        'name' => $name,
+        'email' => $email,
+        'comment' => $comment,
+        'parent_id' => $parentId,
+        'notify' => $notify,
+        'website' => $website
+    );
+
+    $result = commentInsert($postId, $data);
+
+    // Kept separate for future use
+    if ($result['success']) {
+        // Redirect back to post with success anchor
+        $redir = site_url() . $postId . '#comment-status+' . $result['message'];
+    } else {
+        // Redirect back to post with error
+        $redir = site_url() . $postId . '#comment-status+' . $result['message'][0];
+    }
+
+    header("location: $redir");
 });
 
 // If we get here, it means that
