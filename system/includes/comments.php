@@ -239,23 +239,23 @@ function validateComment($data)
 
     // Validate name
     if (empty($data['name']) || strlen(trim($data['name'])) < 2) {
-        $errors[] = 'Name is required and must be at least 2 characters';
+        $errors[] = 'comment_submission_error_shortname';
     }
 
     // Validate email
     if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Valid email is required';
+        $errors[] = 'comment_submission_error_email';
     }
 
     // Validate comment text
     if (empty($data['comment']) || strlen(trim($data['comment'])) < 3) {
-        $errors[] = 'Comment is required and must be at least 3 characters';
+        $errors[] = 'comment_submission_error_short';
     }
 
     // Validate honeypot (if enabled)
     if (comments_config('comments.honeypot') === 'true') {
         if (!empty($data['website'])) {
-            $errors[] = 'Spam detected';
+            $errors[] = 'comment_submission_error_spam';
         }
     }
 
@@ -319,7 +319,7 @@ function commentInsert($postId, $data)
     if (file_put_contents($file, $json, LOCK_EX) === false) {
         return array(
             'success' => false,
-            'message' => 'Failed to save comment'
+            'message' => 'comment_submission_error'
         );
     }
 
@@ -329,7 +329,7 @@ function commentInsert($postId, $data)
     return array(
         'success' => true,
         'comment_id' => $commentId,
-        'message' => $comment['published'] ? 'Comment published successfully' : 'Comment submitted for moderation'
+        'message' => $comment['published'] ? 'comment_submission_success' : 'comment_submission_moderation'
     );
 }
 

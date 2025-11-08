@@ -6065,14 +6065,13 @@ post('/comments/submit', function () {
 
     $result = commentInsert($postId, $data);
 
+    // Kept separate for future use
     if ($result['success']) {
         // Redirect back to post with success anchor
-        $redir = site_url() . $postId . '#comment-success';
-        // $redir = site_url() . $postId . '#comment-' . $result['comment_id'];
+        $redir = site_url() . $postId . '#comment-status+' . $result['message'];
     } else {
         // Redirect back to post with error
-        $redir = site_url() . $postId . '#comment-error';
-        // $redir = site_url() . $postId . '#comment-error?' . $result['message'];
+        $redir = site_url() . $postId . '#comment-status+' . $result['message'][0];
     }
 
     header("location: $redir");

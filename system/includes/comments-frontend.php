@@ -167,26 +167,8 @@ function displayCommentsSection($postId)
             <h3><?php echo i18n("Comments"); ?></h3>
         </div>
         --->
-
-        <?php
-        // Show success/error messages
-        $hash = isset($_SERVER['REQUEST_URI']) ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_FRAGMENT) : '';
-        if ($hash === 'comment-success'):
-        ?>
-        <div class="alert alert-success">
-            <?php
-            if (comments_config('comments.moderation') === 'true') {
-                echo i18n('Comment_submitted_moderation');
-            } else {
-                echo i18n('Comment_submitted_success');
-            }
-            ?>
+        <div class="comment-alert-status" id="comment-alert-status" style="display:none;">
         </div>
-        <?php elseif ($hash === 'comment-error'): ?>
-        <div class="alert alert-danger">
-            <?php echo i18n('Comment_submission_error'); ?>
-        </div>
-        <?php endif; ?>
 
         <?php displayComments($postId); ?>
 
@@ -256,6 +238,66 @@ function displayCommentsSection($postId)
             container.innerHTML = '';
         }
     }
+
+    function handleCommentStatus() {
+        // Setting messages
+        const messages = {
+            comment_submission_success: "<?php echo i18n('comment_submission_success'); ?>",
+            comment_submission_moderation: "<?php echo i18n('comment_submission_moderation'); ?>",
+            comment_submission_error: "<?php echo i18n('comment_submission_error'); ?>",
+            comment_submission_error_shortname: "<?php echo i18n('comment_submission_error_shortname'); ?>",
+            comment_submission_error_email: "<?php echo i18n('comment_submission_error_email'); ?>",
+            comment_submission_error_short: "<?php echo i18n('comment_submission_error_short'); ?>",
+            comment_submission_error_spam: "<?php echo i18n('comment_submission_error_spam'); ?>"
+        };
+
+        // Get the hash in the URL
+        const hash = window.location.hash;
+
+        // Check if there's #comment-status
+        if (hash.startsWith('#comment-status')) {
+            // Get the part after +
+            const parts = hash.split('+');
+
+            if (parts.length > 1) {
+                const statusKey = parts[1];
+                const alertDiv = document.querySelector('.comment-alert-status');
+
+                if (alertDiv && messages[statusKey]) {
+                    // Set message to display
+                    alertDiv.textContent = messages[statusKey];
+
+                    // Set div colors (classes) based on message type
+                    if (statusKey.includes('error')) {
+                        alertDiv.className = 'comment-alert-status comment-alert-status-error'
+                    } else if (statusKey.includes('success')) {
+                        alertDiv.className = 'comment-alert-status comment-alert-status-success'
+                    } else if (statusKey.includes('moderation')) {
+                        alertDiv.className = 'comment-alert-status comment-alert-status-warning'
+                    }
+
+                    // Showing status message div
+                    alertDiv.style.display = 'block';
+
+                    // Scroll to status message
+                    document.getElementById('comments').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                }
+            }
+        }
+    }
+
+
+
+    // Esegui la funzione quando il DOM è caricato
+    document.addEventListener('DOMContentLoaded', handleCommentStatus);
+
+    // Esegui anche quando l'hash cambia (se navighi sulla stessa pagina)
+    window.addEventListener('hashchange', handleCommentStatus);
+
     </script>
     <?php
 }
