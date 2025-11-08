@@ -3535,7 +3535,7 @@ function is_index()
         }
     } else {
         $req = strtok($_SERVER["REQUEST_URI"], '?');
-        if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/' . blog_path()) !== false || $req == site_path() . '/') {
+        if (stripos($req, '/category/') !== false || stripos($req, '/archive/') !== false || stripos($req, '/tag/') !== false || stripos($req, '/search/') !== false || stripos($req, '/type/') !== false || stripos($req, '/' . blog_path()) !== false || $req == site_path() . '/' || $req == '/') {
             return true;
         } else {
             return false;

@@ -150,6 +150,50 @@ if (isset($author[0])) {
             </ul>
           </li>
           <?php if ($role === 'editor' || $role === 'admin'):?>
+          <?php if (local()): ?>
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-comments"></i>
+              <p>
+                <?php echo i18n('Comments'); ?>
+                <?php
+                $pendingCount = getPendingCommentsCount();
+                if ($pendingCount > 0): ?>
+                <span class="badge badge-warning right"><?php echo $pendingCount; ?></span>
+                <?php endif; ?>
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/comments" class="nav-link">
+                  <p>
+                    <?php echo i18n('All_Comments'); ?>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/comments/pending" class="nav-link">
+                  <p>
+                    <?php echo i18n('Pending_Moderation'); ?>
+                    <?php if ($pendingCount > 0): ?>
+                    <span class="badge badge-warning right"><?php echo $pendingCount; ?></span>
+                    <?php endif; ?>
+                  </p>
+                </a>
+              </li>
+              <?php if ($role === 'admin'):?>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/comments/settings" class="nav-link">
+                  <p>
+                    <?php echo i18n('Settings'); ?>
+                  </p>
+                </a>
+              </li>
+              <?php endif;?>
+            </ul>
+          </li>
+          <?php endif;?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cogs"></i>

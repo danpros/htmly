@@ -13,6 +13,8 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
         '8432047aca7938f88a2098a2f7770228' => __DIR__ . '/../../..' . '/system/admin/admin.php',
         '1b9bf2d9d029f1364c3d7262b5375c41' => __DIR__ . '/../../..' . '/system/includes/session.php',
         '62f038defb1b29aab3998eb437e01df9' => __DIR__ . '/../../..' . '/system/includes/opml.php',
+        '7d7ae14f7bb933ac50b7f6e42f6a7d60' => __DIR__ . '/../../..' . '/system/includes/comments.php',
+        '2591226a04118e81824e40ae6712427b' => __DIR__ . '/../../..' . '/system/includes/comments-frontend.php',
     );
 
     public static $prefixLengthsPsr4 = array (
