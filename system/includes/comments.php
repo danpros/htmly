@@ -643,7 +643,7 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
 
     // Send emails
     foreach ($recipients as $email => $info) {
-        sendCommentEmail($email, $info['name'], $postId, $newComment, $info['type']);
+        sendCommentEmail($email, $info['name'], $url, $newComment, $info['type']);
     }
 }
 
@@ -657,7 +657,7 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
  * @param string $type Notification type (admin, parent, thread)
  * @return bool Success status
  */
-function sendCommentEmail($to, $toName, $postId, $comment, $type = 'admin')
+function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
 {
     try {
         $mail = new PHPMailer(true);
@@ -691,7 +691,7 @@ function sendCommentEmail($to, $toName, $postId, $comment, $type = 'admin')
         if ($type === 'admin') {
             $mail->Subject = 'New comment awaiting moderation';
             $mail->Body = "
-                <h3>New comment on: $postId</h3>
+                <h3>New comment on: {$url}</h3>
                 <p><strong>From:</strong> {$comment['name']} ({$comment['email']})</p>
                 <p><strong>Comment:</strong></p>
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
@@ -700,11 +700,11 @@ function sendCommentEmail($to, $toName, $postId, $comment, $type = 'admin')
         } else {
             $mail->Subject = 'New reply to your comment';
             $mail->Body = "
-                <h3>Someone replied to your comment on: $postId</h3>
+                <h3>Someone replied to your comment on: {$url}</h3>
                 <p><strong>From:</strong> {$comment['name']}</p>
                 <p><strong>Comment:</strong></p>
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
-                <p><a href='" . site_url() . "$postId#comment-{$comment['id']}'>View comment</a></p>
+                <p><a href='" . site_url() . "{$url}#comment-{$comment['id']}'>View comment</a></p>
             ";
         }
 
