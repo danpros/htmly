@@ -98,29 +98,123 @@ function save_comments_config($data = array())
 
 /**
  * Get comments file path for a post/page
+ * Replicates content file path inside comments folder
  *
- * @param string $postId Post or page ID
- * @return string File path
+ * @param string $url is the page url (e.g., "post/htmly-simple-comment-system" or "author/emidio")
+ * @param string $file is the content markdown file (optional)
+ * @return string File path (e.g., "content/comments/post/htmly-simple-comment-system.json")
  */
-function get_comments_file($postId)
+
+function get_comments_file($url, $mdfile = null)
 {
-    $dir = 'content/comments/';
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
+    // $view -> static/main/post/profile
+    if ($mdfile) {
+        if (preg_match('#comments[/\\\\].+\.json#', $mdfile)) {
+            if (is_file($mdfile)) {
+                return $mdfile;
     }
-    return $dir . sanitize_filename($postId) . '.json';
+    }
+        else {
+            $comments_file =  get_comments_file_from_md($mdfile);
+    }
+    }
+    else {
+        $comments_file = get_comments_file_from_url($url);
+    }
+    return $comments_file;
 }
 
-/**
- * Sanitize filename
- *
- * @param string $filename
- * @return string Sanitized filename
- */
-function sanitize_filename($filename)
-{
-    return preg_replace('/[^a-z0-9\-_]/i', '_', $filename);
+
+function get_comments_file_from_md($mdfile) {
+    $file_parts = explode('_', pathinfo($mdfile, PATHINFO_FILENAME));
+
+    if (count($file_parts) > 1) {
+        $file = reset($file_parts) . '_' . end($file_parts) . '.json';
+    }
+    else {
+        $file = reset($file_parts) . '.json';
+    }
+
+    $path = preg_replace('/content/', 'content/comments', pathinfo($mdfile, PATHINFO_DIRNAME), 1);
+    return $path . '/' . $file;
 }
+
+function get_comments_file_from_url($url) {
+    // not using $view actually
+
+    // strip site_url prefix and query string if present
+    $url = trim(parse_url($url, PHP_URL_PATH), '/');
+
+    // 0. test pattern: author
+    if (preg_match('#^author/([^/]+)$#', $url, $matches)) {
+        $authorfile = 'content/' . $matches[1] . '/author.md';
+        $file = pathinfo($authorfile, PATHINFO_FILENAME) . '.json';
+        $path = preg_replace('/content/', 'content/comments', pathinfo($authorfile, PATHINFO_DIRNAME), 1);
+        return $path . '/' . $file;
+    }
+
+    // 1. test pattern: /YYYY/MM/name (post with default permalink)
+    if (preg_match('#^(\d{4})/(\d{2})/(.+)$#', $url, $matches)) {
+        $post = find_post($matches[1], $matches[2], $matches[3]);
+        if ($post && isset($post['current']->file)) {
+
+            $file_parts = explode('_', pathinfo($post['current']->file, PATHINFO_FILENAME));
+
+            $file = reset($file_parts) . '_' . end($file_parts) . '.json';
+            $path = preg_replace('/content/', 'content/comments', pathinfo($post['current']->file, PATHINFO_DIRNAME), 1);
+
+            return $path . '/' . $file;        }
+    }
+
+    // 2. test pattern with custom permalink /[prefix]/name
+    $permalink_prefix = permalink_type();
+    if ($permalink_prefix != 'default' && strpos($url, $permalink_prefix . '/') === 0) {
+        $name = substr($url, strlen($permalink_prefix) + 1);
+        $post = find_post(null, null, $name);
+        if ($post && isset($post['current']->file)) {
+
+            $file_parts = explode('_', pathinfo($post['current']->file, PATHINFO_FILENAME));
+
+            $file = reset($file_parts) . '_' . end($file_parts) . '.json';
+            $path = preg_replace('/content/', 'content/comments', pathinfo($post['current']->file, PATHINFO_DIRNAME), 1);
+
+            return $path . '/' . $file;
+        }
+    }
+
+    // 4. test pattern static page: /slug
+    if (strpos($url, '/') === false) {
+        $page = find_page($url);
+        if ($page && isset($page['current']->file)) {
+
+            $file = pathinfo($page['current']->file, PATHINFO_FILENAME) . '.json';
+            $path = preg_replace('/content/', 'content/comments', pathinfo($page['current']->file, PATHINFO_DIRNAME), 1);
+
+            return $path . '/' . $file;
+        }
+    }
+
+    // 2. test pattern sub page: /parent/sub
+    if (substr_count($url, '/') == 1) {
+        list($parent, $sub) = explode('/', $url, 2);
+        $subpage = find_subpage($parent, $sub);
+        if ($subpage && isset($subpage['current']->file)) {
+            
+            $file = pathinfo($subpage['current']->file, PATHINFO_FILENAME) . '.json';
+            $path = preg_replace('/content/', 'content/comments', pathinfo($subpage['current']->file, PATHINFO_DIRNAME), 1);
+
+            return $path . '/' . $file;
+        }
+    }
+
+    // not found
+    return null;
+
+}
+
+
+
+
 
 /**
  * Get all comments for a post/page
@@ -129,9 +223,9 @@ function sanitize_filename($filename)
  * @param bool $includeUnpublished Include unpublished comments (for admin)
  * @return array Comments array
  */
-function getComments($postId, $includeUnpublished = false)
+function getComments($url, $mdfile = null, $includeUnpublished = false)
 {
-    $file = get_comments_file($postId);
+    $file = get_comments_file($url, $mdfile);
 
     if (!file_exists($file)) {
         return array();
@@ -162,24 +256,38 @@ function getComments($postId, $includeUnpublished = false)
 /**
  * Get all comments across all posts (for admin)
  *
- * @return array All comments with post info
+ * @param int $page Page number (default: null for all comments)
+ * @param int $perpage Comments per page (default: null for all comments)
+ * @return array All comments with post info, or array with paginated comments and total count
  */
-function getAllComments()
+
+function getAllComments($page = null, $perpage = null)
 {
     $commentsDir = 'content/comments/';
     if (!is_dir($commentsDir)) {
         return array();
     }
 
-    $files = glob($commentsDir . '*.json');
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($commentsDir, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::SELF_FIRST
+    );
+
+    $files = array();
+    foreach ($iterator as $file) {
+        if ($file->isFile() && strtolower($file->getExtension()) === 'json') {
+            // $files[] = $file->getPathname();
+            $files[] = str_replace('\\', '/', $file->getPathname());
+        }
+    }
+
     $allComments = array();
 
-    foreach ($files as $file) {
-        $postId = basename($file, '.json');
-        $comments = getComments($postId, true);
 
+    foreach ($files as $file) {
+        $comments = getComments('', $file, true);
         foreach ($comments as $comment) {
-            $comment['post_id'] = $postId;
+            $comment['file'] = $file;
             $allComments[] = $comment;
         }
     }
@@ -188,6 +296,14 @@ function getAllComments()
     usort($allComments, function($a, $b) {
         return $b['timestamp'] - $a['timestamp'];
     });
+
+    // If pagination parameters are provided, return paginated results
+    if ($page !== null && $perpage !== null) {
+        $total = count($allComments);
+        $offset = ($page - 1) * $perpage;
+        $paginatedComments = array_slice($allComments, $offset, $perpage);
+        return array($paginatedComments, $total);
+    }
 
     return $allComments;
 }
@@ -272,7 +388,7 @@ function validateComment($data)
  * @param array $data Comment data (name, email, comment, parent_id, notify)
  * @return array Result with 'success' boolean and 'message' or 'comment_id'
  */
-function commentInsert($postId, $data)
+function commentInsert($data, $url, $mdfile = null)
 {
     // Validate comment
     $validation = validateComment($data);
@@ -284,7 +400,7 @@ function commentInsert($postId, $data)
     }
 
     // Get existing comments
-    $file = get_comments_file($postId);
+    $file = get_comments_file($url, $mdfile = null);
     $comments = array();
     if (file_exists($file)) {
         $content = file_get_contents($file);
@@ -316,6 +432,10 @@ function commentInsert($postId, $data)
 
     // Save to file
     $json = json_encode($comments, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    // Create path if not exists
+    if (!is_dir(dirname($file))) {
+        mkdir(dirname($file), 0755, true); // true = recursively
+    }
     if (file_put_contents($file, $json, LOCK_EX) === false) {
         return array(
             'success' => false,
@@ -324,7 +444,7 @@ function commentInsert($postId, $data)
     }
 
     // Send notifications
-    sendCommentNotifications($postId, $comment, $comments);
+    sendCommentNotifications($url, $comment, $comments);
 
     return array(
         'success' => true,
@@ -340,9 +460,9 @@ function commentInsert($postId, $data)
  * @param string $commentId Comment ID
  * @return bool Success status
  */
-function commentPublish($postId, $commentId)
+function commentPublish($file, $commentId)
 {
-    $file = get_comments_file($postId);
+
     if (!file_exists($file)) {
         return false;
     }
@@ -361,7 +481,7 @@ function commentPublish($postId, $commentId)
             $updated = true;
 
             // Send notifications to other commenters
-            sendCommentNotifications($postId, $comment, $comments, false);
+            sendCommentNotifications($comment, $comments, false);
             break;
         }
     }
@@ -381,9 +501,9 @@ function commentPublish($postId, $commentId)
  * @param string $commentId Comment ID
  * @return bool Success status
  */
-function commentDelete($postId, $commentId)
+function commentDelete($url, $mdfile=null, $commentId)
 {
-    $file = get_comments_file($postId);
+    $file = get_comments_file($url, $mdfile=null);
     if (!file_exists($file)) {
         return false;
     }
@@ -416,9 +536,8 @@ function commentDelete($postId, $commentId)
  * @param array $data New comment data
  * @return bool Success status
  */
-function commentModify($postId, $commentId, $data)
+function commentModify($file, $commentId, $data)
 {
-    $file = get_comments_file($postId);
     if (!file_exists($file)) {
         return false;
     }
@@ -470,8 +589,10 @@ function commentModify($postId, $commentId, $data)
  * @param bool $notifyAdmin Notify admin (default true)
  * @return void
  */
-function sendCommentNotifications($postId, $newComment, $allComments, $notifyAdmin = true)
+function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin = true)
 {
+    // TODO: function to be fixed, still using postId variable
+    
     // Check if notifications are enabled
     if (comments_config('comments.notify') !== 'true' ||
         comments_config('comments.mail.enabled') !== 'true') {
@@ -602,9 +723,9 @@ function sendCommentEmail($to, $toName, $postId, $comment, $type = 'admin')
  * @param bool $includeUnpublished Include unpublished comments
  * @return int Comment count
  */
-function getCommentCount($postId, $includeUnpublished = false)
+function getCommentsCount($url, $mdfile = null, $includeUnpublished = false)
 {
-    $comments = getComments($postId, $includeUnpublished);
+    $comments = getComments($url, $mdfile, $includeUnpublished);
     return count($comments);
 }
 

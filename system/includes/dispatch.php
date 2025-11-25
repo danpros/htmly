@@ -599,7 +599,7 @@ function route($method, $pattern, $callback = null)
     if (!in_array($method, array('GET', 'POST')))
         error(500, 'Only GET and POST are supported');
 
-    // a callback was passed, so we create a route defiition
+    // a callback was passed, so we create a route definition
     if ($callback !== null) {
 
         // create a route entry for this pattern
@@ -611,7 +611,7 @@ function route($method, $pattern, $callback = null)
     } else {
 
 
-        // callback is null, so this is a route invokation. look up the callback.
+        // callback is null, so this is a route invocation. look up the callback.
         foreach ($route_map[$method] as $pat => $obj) {
 
             // if the requested uri ($pat) has a matching route, let's invoke the cb

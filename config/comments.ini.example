@@ -1,0 +1,33 @@
+; HTMLy Local Comments System Configuration
+; To enable local comments, set comment.system = "local" in config/config.ini
+
+; Require admin moderation before publishing comments
+comments.moderation = "true"
+
+; Enable honeypot anti-spam protection
+comments.honeypot = "true"
+
+; Enable email notifications
+comments.notify = "true"
+
+; Show comments section in posts
+comments.show.posts = "true"
+
+; Show comments section in static pages
+comments.show.static = "false"
+
+; Show comments section in authors pages
+comments.show.author = "false"
+
+; Admin email for comment notifications
+comments.admin.email = "your@email.here"
+
+; Email notification settings (using PHPMailer)
+comments.mail.enabled = "true"
+comments.mail.host = "mail.host.com"
+comments.mail.port = "587"
+comments.mail.username = "your_username"
+comments.mail.password = "your_password*"
+comments.mail.encryption = "tls"
+comments.mail.from.email = "your@email.here"
+comments.mail.from.name = "Your From Name"
