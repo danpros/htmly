@@ -501,9 +501,9 @@ function commentPublish($file, $commentId)
  * @param string $commentId Comment ID
  * @return bool Success status
  */
-function commentDelete($url, $mdfile=null, $commentId)
+function commentDelete($mdfile, $commentId)
 {
-    $file = get_comments_file($url, $mdfile=null);
+    $file = get_comments_file(null, $mdfile);
     if (!file_exists($file)) {
         return false;
     }
