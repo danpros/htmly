@@ -159,7 +159,7 @@ if (isset($author[0])) {
                 <?php
                 $pendingCount = getPendingCommentsCount();
                 if ($pendingCount > 0): ?>
-                <span class="badge badge-warning right"><?php echo $pendingCount; ?></span>
+                <span class="badge badge-warning right" style="margin-right: 15px;"><?php echo $pendingCount; ?></span><br>
                 <?php endif; ?>
                 <i class="right fa fa-angle-left"></i>
               </p>
@@ -177,7 +177,7 @@ if (isset($author[0])) {
                   <p>
                     <?php echo i18n('Pending_Moderation'); ?>
                     <?php if ($pendingCount > 0): ?>
-                    <span class="badge badge-warning right"><?php echo $pendingCount; ?></span>
+                    <span class="badge badge-warning right" style="margin-right: 15px;"><?php echo $pendingCount; ?></span>
                     <?php endif; ?>
                   </p>
                 </a>

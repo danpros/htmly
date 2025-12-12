@@ -255,9 +255,10 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         $newfile = $dir . $filename;
         if ($oldfile !== $newfile && !is_null($autoSave)) {
             if (file_exists($oldfile)) {
-                
+
                 rename($oldfile, $newfile);
-                
+                rename_comments($oldfile, $newfile);
+
                 if (config('fulltext.search') == "true") {
                 
                     if (file_exists($searchFile)) {
@@ -455,6 +456,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
             file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             unlink($oldfile);
+            rename_comments($oldfile, $newfile);
 
         } else {
 
@@ -474,7 +476,14 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                     file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
                 } else {
                     rename($oldfile, $newfile);
+                    rename_comments($oldfile, $newfile);
                     file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+                    
+                    $oldcommentsfile = get_comments_file_from_md($oldfile);
+                    if (file_exists($oldcommentsfile)) {
+                        $newcommentsfile = get_comments_file_from_md($newfile);
+                        rename($oldcommentsfile, $newcommentsfile);
+                    }
                 }
             } else {
 
@@ -490,10 +499,9 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
 
                 file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
                 unlink($oldfile);
-
+                rename_comments($oldfile, $newfile);
+                }
             }
-
-        }
 
         if(!empty($publishDraft)) {
             $dt = $olddate;
@@ -672,6 +680,7 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
             if ($oldfile !== $newfile && !is_null($autoSave)) {
                 if (file_exists($oldfile)) {
                     rename($oldfile, $newfile);
+                    rename_comments($oldfile, $newfile);
                 }
             }
             file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
@@ -768,6 +777,7 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
             if ($oldfile !== $newfile && !is_null($autoSave)) {
                 if (file_exists($oldfile)) {
                     rename($oldfile, $newfile);
+                    rename_comments($oldfile, $newfile);
                 }
             }
             file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
@@ -838,6 +848,8 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                 }
             }
             unlink($oldfile);
+            rename_comments($oldfile, $newfile);
+            
         } elseif (!empty($publishDraft)) {
             $newfile = dirname($dir) . '/' . $post_url . '.md';
             file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
@@ -848,12 +860,15 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                 }
             }
             unlink($oldfile);
+            rename_comments($oldfile, $newfile);
+
         } else { 
             $newfile = $dir . '/' . $post_url . '.md';
             if ($oldfile === $newfile) {
                 file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
             } else {
                 rename($oldfile, $newfile);
+                rename_comments($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
                 if (empty($static)) {
                     $old = pathinfo($oldfile, PATHINFO_FILENAME);
@@ -1011,6 +1026,7 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
         } else {
             if (file_exists($oldfile)) {
                 rename($oldfile, $newfile);
+                rename_comments($oldfile, $newfile);
                 file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
             } else {
                 file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
@@ -1147,6 +1163,7 @@ function delete_post($file, $destination)
     if (!empty($deleted_content)) {
         if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
             unlink($deleted_content);
+            delete_comments($deleted_content);
             rebuilt_cache('all');
             if ($destination == 'post') {
                 $redirect = site_url();
@@ -1199,6 +1216,7 @@ function delete_page($file, $destination)
     if (!empty($deleted_content)) {
         if ($role === 'editor' || $role === 'admin') {
             unlink($deleted_content);
+            delete_comments($deleted_content);
             rebuilt_cache('all');
             if ($destination == 'post') {
                 $redirect = site_url();
@@ -1977,4 +1995,137 @@ function add_search_index($id, $content)
             save_json_pretty($filename, $search);
         }
     }
+}
+
+function rename_comments($oldfile, $newfile) {
+    $oldfile_comments = get_comments_file_from_md($oldfile);
+    $newfile_comments = get_comments_file_from_md($newfile);
+    
+    if (is_file($oldfile_comments) && $oldfile_comments != $newfile_comments) {
+        if (!is_dir(dirname($newfile_comments))) {
+            mkdir(dirname($newfile_comments), 0755, true); // true = recursively
+        }
+        return rename($oldfile_comments, $newfile_comments);
+    }
+    return true;
+}
+
+
+function delete_comments($mdfile) {
+    $file_comments = get_comments_file_from_md($mdfile);
+    if (is_file($file_comments)) {
+        unlink($file_comments);
+        return true;
+    }
+    return true;
+}
+
+// Get URL from markdown file path
+// Supports: blog posts, static pages, static subpages, and author profiles
+//           regardless if file is content .md file or comments .json file
+function get_url_from_file($file)
+{
+    
+    // Normalize path separators (Windows/Linux))
+    $file = str_replace('\\', '/', $file);
+
+    if (preg_match('#^content/comments/#', $file)) {
+        $filetype = 'comments';
+        $post_filename_parts = 2;
+        $file = preg_replace('#^content/comments/#', '', $file);
+    } elseif (preg_match('#^content/#', $file)) {
+        $filetype = 'content';
+        $post_filename_parts = 3;
+        $file = preg_replace('#^content/#', '', $file);
+    } else {
+        $filetype = 'none';
+        return null;
+    }
+    
+    // Split path into parts
+    $parts = explode('/', $file);
+    $basename = basename($file);
+
+    // Check if it's an author profile: {username}/author.md
+    if (count($parts) == 2 && ($basename == 'author.md' || $basename == 'author.json')) {
+        $username = $parts[0];
+        return 'author/' . $username;
+        // return site_url() . 'author/' . $username;
+    }
+
+    // Check if it's a static page: static/{page}.md
+    if (count($parts) >= 2 && $parts[0] == 'static' && $basename != 'author.md' && $basename != 'author.json') {
+        $filename = pathinfo($basename, PATHINFO_FILENAME);
+
+        // Check if it's a subpage: static/{parent}/[draft/]{subpage}.md
+        if (count($parts) >= 3) {
+            // Handle draft subpages: static/{parent}/draft/{subpage}.md
+            if ($parts[count($parts) - 2] == 'draft') {
+                // This is a draft subpage, extract parent and subpage slug
+                $parent = pathinfo($parts[count($parts) - 3], PATHINFO_FILENAME);
+
+                // Remove number prefix if present (e.g., "01.about" -> "about")
+                $parent_parts = explode('.', $parent);
+                $parent_slug = isset($parent_parts[1]) ? $parent_parts[1] : $parent;
+
+                $subpage_parts = explode('.', $filename);
+                $subpage_slug = isset($subpage_parts[1]) ? $subpage_parts[1] : $filename;
+
+                return $parent_slug . '/' . $subpage_slug;
+                // return site_url() . $parent_slug . '/' . $subpage_slug;
+            } else {
+                // Regular subpage: static/{parent}/{subpage}.md
+                $parent = pathinfo($parts[1], PATHINFO_FILENAME);
+
+                // Remove number prefix if present
+                $parent_parts = explode('.', $parent);
+                $parent_slug = isset($parent_parts[1]) ? $parent_parts[1] : $parent;
+
+                $subpage_parts = explode('.', $filename);
+                $subpage_slug = isset($subpage_parts[1]) ? $subpage_parts[1] : $filename;
+                return $parent_slug . '/' . $subpage_slug;
+                // return site_url() . $parent_slug . '/' . $subpage_slug;
+            }
+        }
+
+        // It's a regular static page
+        // Remove number prefix if present (e.g., "01.about" -> "about")
+        $page_parts = explode('.', $filename);
+        $slug = isset($page_parts[1]) ? $page_parts[1] : $filename;
+        return $slug;
+        // return site_url() . $slug;
+    }
+
+    
+
+
+    // Check if it's a blog post: {username}/blog/{category}/{type}/[scheduled/]{date}_{tags}_{slug}.md
+    if (count($parts) >= 5 && $parts[1] == 'blog') {
+        $filename_parts = explode('_', pathinfo($basename, PATHINFO_FILENAME));
+
+        // Blog post filename format: {date}_{tags}_{slug} - 
+        if (count($filename_parts) >= $post_filename_parts) {
+            $post_date = reset($filename_parts);
+            $post_slug = end($filename_parts);
+
+            // Parse date from filename (format: Y-m-d-H-i-s)
+            $date_parts = explode('-', $post_date);
+            if (count($date_parts) >= 2) {
+                $year = $date_parts[0];
+                $month = $date_parts[1];
+
+                // Check permalink type
+                if (permalink_type() == 'default') {
+                    return $year . '/' . $month . '/' . $post_slug;
+                    // return site_url() . $year . '/' . $month . '/' . $post_slug;
+                } else {
+                    return permalink_type() . '/' . $post_slug;
+                    // return site_url() . permalink_type() . '/' . $post_slug;
+                }
+            }
+        }
+    }
+
+    // If none of the above patterns match, return null
+    return null;
 }

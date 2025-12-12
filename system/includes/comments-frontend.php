@@ -8,7 +8,7 @@ if (!defined('HTMLY')) die('HTMLy');
  * @param string $parentId Parent comment ID for replies (optional)
  * @return void
  */
-function displayCommentsForm($postId, $parentId = null)
+function displayCommentsForm($url, $mdfile = null, $parentId = null)
 {
     if (!local()) {
         return;
@@ -18,7 +18,7 @@ function displayCommentsForm($postId, $parentId = null)
     $submitUrl = site_url() . 'comments/submit';
     ?>
     <form id="<?php echo $formId; ?>" method="POST" action="<?php echo $submitUrl; ?>" class="comment-form">
-        <input type="hidden" name="post_id" value="<?php echo _h($postId); ?>">
+        <input type="hidden" name="url" value="<?php echo _h($url); ?>">
         <?php if ($parentId): ?>
         <input type="hidden" name="parent_id" value="<?php echo _h($parentId); ?>">
         <?php endif; ?>
@@ -94,7 +94,7 @@ function displayComment($comment, $postId)
             <?php echo formatCommentText($comment['comment']); ?>
         </div>
         <div class="comment-footer">
-            <button class="btn btn-sm btn-link reply-button" onclick="showReplyForm('<?php echo $comment['id']; ?>', '<?php echo $postId; ?>')">
+            <button class="btn btn-sm btn-link reply-button" onclick="showReplyForm('<?php echo $comment['id']; ?>', '<?php echo ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'); ?>')">
                 <i class="fa fa-reply"></i> <?php echo i18n('Reply'); ?>
             </button>
         </div>
@@ -122,13 +122,13 @@ function displayComment($comment, $postId)
  * @param string $postId Post or page ID
  * @return void
  */
-function displayComments($postId)
+function displayComments($url, $file = null)
 {
     if (!local()) {
         return;
     }
 
-    $comments = getComments($postId);
+    $comments = getComments($url, $file = null);
 
     if (empty($comments)) {
         return;
@@ -142,7 +142,7 @@ function displayComments($postId)
         <!--- <h4><?php echo i18n('Comments'); ?> (<?php echo count($comments); ?>)</h4> --->
         <?php
         foreach ($commentTree as $comment) {
-            displayComment($comment, $postId);
+            displayComment($comment, $url, $file = null);
         }
         ?>
     </div>
@@ -154,12 +154,20 @@ function displayComments($postId)
  *
  * @param string $postId Post or page ID
  * @return void
+
+ * type can be post, author, page, subpage (same a view variable)
+
  */
-function displayCommentsSection($postId)
+
+
+function displayCommentsSection($url, $file = null)
 {
     if (!local()) {
         return;
     }
+
+    $urlpath = ltrim(parse_url($url, PHP_URL_PATH), '/');
+
     ?>
     <section class="comments comment-box" id="comments">
         <!---
@@ -170,16 +178,16 @@ function displayCommentsSection($postId)
         <div class="comment-alert-status" id="comment-alert-status" style="display:none;">
         </div>
 
-        <?php displayComments($postId); ?>
+        <?php displayComments($urlpath, $file = null); ?>
 
         <div class="comment-form-section">
             <h4><?php echo i18n('Leave_a_comment'); ?></h4>
-            <?php displayCommentsForm($postId); ?>
+            <?php displayCommentsForm($urlpath, $file = null); ?>
         </div>
     </section>
 
     <script>
-    function showReplyForm(commentId, postId) {
+    function showReplyForm(commentId, commentUrl) {
         // Hide all other reply forms
         document.querySelectorAll('.reply-container').forEach(function(el) {
             el.style.display = 'none';
@@ -196,7 +204,7 @@ function displayCommentsSection($postId)
             var formId = 'reply-form-' + commentId;
 
             var formHtml = '<form id="' + formId + '" method="POST" action="' + submitUrl + '" class="comment-form">' +
-                '<input type="hidden" name="post_id" value="' + postId + '">' +
+                '<input type="hidden" name="url" value="' + commentUrl + '">' +
                 '<input type="hidden" name="parent_id" value="' + commentId + '">' +
                 '<div style="position:absolute;left:-5000px;" aria-hidden="true">' +
                 '<input type="text" name="website" tabindex="-1" value="" autocomplete="off">' +

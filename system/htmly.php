@@ -2982,6 +2982,7 @@ post('/admin/users/:username/delete', function () {
         if ($role === 'admin') {
             if ($user_role !== 'admin') {
                 unlink($file);
+                delete_comments($file);
             }
         }
         $redir = site_url() . 'admin/users';
@@ -3105,7 +3106,14 @@ get('/admin/comments', function () {
     if (login() && ($role === 'admin' || $role === 'editor')) {
         config('views.root', 'system/admin/views');
 
-        $comments = getAllComments();
+        $page = from($_GET, 'page');
+        $page = $page ? (int)$page : 1;
+        $perpage = config('comments.perpage');
+
+        $result = getAllComments($page, $perpage);
+        $comments = $result[0];
+        $total = $result[1];
+
         $pendingCount = getPendingCommentsCount();
 
         render('comments', array(
@@ -3118,8 +3126,10 @@ get('/admin/comments', function () {
             'bodyclass' => 'admin-comments',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments'),
             'tab' => 'all',
+            'page' => $page,
             'comments' => $comments,
-            'pendingCount' => $pendingCount
+            'pendingCount' => $pendingCount,
+            'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
         $login = site_url() . 'login';
@@ -3134,11 +3144,25 @@ get('/admin/comments/pending', function () {
     if (login() && ($role === 'admin' || $role === 'editor')) {
         config('views.root', 'system/admin/views');
 
+        $page = from($_GET, 'page');
+        $page = $page ? (int)$page : 1;
+        $perpage = 20;
+
+        // Get all comments first to filter pending ones
         $allComments = getAllComments();
-        $comments = array_filter($allComments, function($comment) {
+        $pendingComments = array_filter($allComments, function($comment) {
             return !$comment['published'];
         });
-        $pendingCount = count($comments);
+
+        // Reindex array after filtering
+        $pendingComments = array_values($pendingComments);
+        $total = count($pendingComments);
+
+        // Paginate the pending comments
+        $offset = ($page - 1) * $perpage;
+        $comments = array_slice($pendingComments, $offset, $perpage);
+
+        $pendingCount = $total;
 
         render('comments', array(
             'title' => generate_title('is_default', i18n('Pending_Comments')),
@@ -3150,8 +3174,10 @@ get('/admin/comments/pending', function () {
             'bodyclass' => 'admin-comments',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments') . ' &#187; ' . i18n('Pending'),
             'tab' => 'pending',
+            'page' => $page,
             'comments' => $comments,
-            'pendingCount' => $pendingCount
+            'pendingCount' => $pendingCount,
+            'pagination' => has_pagination($total, $perpage, $page)
         ));
     } else {
         $login = site_url() . 'login';
@@ -3247,18 +3273,21 @@ post('/admin/comments/settings', function () {
 });
 
 // Show edit comment form
-get('/admin/comments/edit/:postid/:commentid', function ($postid, $commentid) {
+get('/admin/comments/edit/:commentfile/:commentid', function ($commentfile, $commentid) {
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     if (login() && ($role === 'admin' || $role === 'editor')) {
+        
         config('views.root', 'system/admin/views');
 
-        $comments = getComments($postid, true);
+        $file = base64_decode(strtr($commentfile, '-_', '+/'));
+        $comments = getComments('', $file, true);
         $editComment = null;
 
         foreach ($comments as $comment) {
             if ($comment['id'] === $commentid) {
-                $comment['post_id'] = $postid;
+                $comment['file'] = $file;
+                $comment['file_encoded'] = $commentfile;
                 $editComment = $comment;
                 break;
             }
@@ -3290,12 +3319,13 @@ get('/admin/comments/edit/:postid/:commentid', function ($postid, $commentid) {
 });
 
 // Update comment
-post('/admin/comments/update/:postid/:commentid', function ($postid, $commentid) {
+post('/admin/comments/update/:commentfile/:commentid', function ($commentfile, $commentid) {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'admin' || $role === 'editor') {
+            $file = base64_decode(strtr($commentfile, '-_', '+/'));
             $data = array(
                 'name' => from($_POST, 'name'),
                 'email' => from($_POST, 'email'),
@@ -3303,11 +3333,11 @@ post('/admin/comments/update/:postid/:commentid', function ($postid, $commentid)
                 'published' => isset($_POST['published'])
             );
 
-            if (commentModify($postid, $commentid, $data)) {
+            if (commentModify($file, $commentid, $data)) {
                 $redir = site_url() . 'admin/comments';
                 header("location: $redir");
             } else {
-                $redir = site_url() . 'admin/comments/edit/' . $postid . '/' . $commentid;
+                $redir = site_url() . 'admin/comments/edit/' . $commentfile . '/' . $commentid;
                 header("location: $redir");
             }
         } else {
@@ -3321,12 +3351,13 @@ post('/admin/comments/update/:postid/:commentid', function ($postid, $commentid)
 });
 
 // Publish comment
-get('/admin/comments/publish/:postid/:commentid', function ($postid, $commentid) {
+get('/admin/comments/publish/:commentfile/:commentid', function ($commentfile, $commentid) {
     if (login()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'admin' || $role === 'editor') {
-            commentPublish($postid, $commentid);
+            $file = base64_decode(strtr($commentfile, '-_', '+/'));
+            commentPublish($file, $commentid);
         }
     }
     $redir = site_url() . 'admin/comments';
@@ -3334,12 +3365,13 @@ get('/admin/comments/publish/:postid/:commentid', function ($postid, $commentid)
 });
 
 // Delete comment
-get('/admin/comments/delete/:postid/:commentid', function ($postid, $commentid) {
+get('/admin/comments/delete/:commentfile/:commentid', function ($commentfile, $commentid) {
     if (login()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
         if ($role === 'admin' || $role === 'editor') {
-            commentDelete($postid, $commentid);
+            $file = base64_decode(strtr($commentfile, '-_', '+/'));
+            commentDelete($file, $commentid);
         }
     }
     $redir = site_url() . 'admin/comments';
@@ -6046,13 +6078,16 @@ post('/comments/submit', function () {
         return;
     }
 
-    $postId = from($_POST, 'post_id');
+    $url = from($_POST, 'url'); // used to set redirect and in commentInsert to set the .json file name
     $name = from($_POST, 'name');
     $email = from($_POST, 'email');
     $comment = from($_POST, 'comment');
     $parentId = from($_POST, 'parent_id');
     $notify = from($_POST, 'notify');
     $website = from($_POST, 'website'); // honeypot field
+
+    // Note: $url was also set in json file single comment block, but then it is hard to manage if .md file changes name or path
+    //       introduced instead function get_url_from_file that handle both .md (content) and .json (content/comments)
 
     $data = array(
         'name' => $name,
@@ -6063,15 +6098,15 @@ post('/comments/submit', function () {
         'website' => $website
     );
 
-    $result = commentInsert($postId, $data);
+    $result = commentInsert($data, $url, null);
 
     // Kept separate for future use
     if ($result['success']) {
         // Redirect back to post with success anchor
-        $redir = site_url() . $postId . '#comment-status+' . $result['message'];
+        $redir = site_url() . $url . '#comment-status+' . $result['message'];
     } else {
         // Redirect back to post with error
-        $redir = site_url() . $postId . '#comment-status+' . $result['message'][0];
+        $redir = site_url() . $url . '#comment-status+' . $result['message'];
     }
 
     header("location: $redir");

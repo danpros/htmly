@@ -61,8 +61,8 @@
                 <?php endif; ?>
             </td>
             <td>
-                <a href="<?php echo site_url() . $comment['post_id']; ?>" target="_blank">
-                    <?php echo _h($comment['post_id']); ?>
+                <a href="<?php echo site_url() . get_url_from_file($comment['file']); ?>" target="_blank">
+                    <?php echo _h(get_url_from_file($comment['file'])); ?>
                 </a>
             </td>
             <td>
@@ -81,17 +81,17 @@
             <td>
                 <?php if (!$comment['published']): ?>
                 <a class="btn btn-success btn-xs"
-                   href="<?php echo site_url(); ?>admin/comments/publish/<?php echo $comment['post_id']; ?>/<?php echo $comment['id']; ?>"
+                   href="<?php echo site_url(); ?>admin/comments/publish/<?php echo rtrim(strtr(base64_encode($comment['file']), '+/', '-_'), '='); ?>/<?php echo $comment['id']; ?>"
                    onclick="return confirm('<?php echo i18n('Confirm_publish_comment'); ?>');">
                     <?php echo i18n('Publish');?>
                 </a>
                 <?php endif; ?>
                 <a class="btn btn-primary btn-xs"
-                   href="<?php echo site_url(); ?>admin/comments/edit/<?php echo $comment['post_id']; ?>/<?php echo $comment['id']; ?>">
+                   href="<?php echo site_url(); ?>admin/comments/edit/<?php echo rtrim(strtr(base64_encode($comment['file']), '+/', '-_'), '='); ?>/<?php echo $comment['id']; ?>">
                     <?php echo i18n('Edit');?>
                 </a>
                 <a class="btn btn-danger btn-xs"
-                   href="<?php echo site_url(); ?>admin/comments/delete/<?php echo $comment['post_id']; ?>/<?php echo $comment['id']; ?>"
+                   href="<?php echo site_url(); ?>admin/comments/delete/<?php echo rtrim(strtr(base64_encode($comment['file']), '+/', '-_'), '='); ?>/<?php echo $comment['id']; ?>"
                    onclick="return confirm('<?php echo i18n('Confirm_delete_comment'); ?>');">
                     <?php echo i18n('Delete');?>
                 </a>
@@ -101,7 +101,28 @@
     </tbody>
 </table>
 <?php else: ?>
+<?php if (!isset($editComment)): ?>
 <p><?php echo i18n('No_comments_found'); ?>.</p>
+<?php endif; ?>
+<?php endif; ?>
+
+<?php if (!empty($comments) && (!empty($pagination['prev']) || !empty($pagination['next']))): ?>
+<br>
+    <div class="pager">
+    <ul class="pagination">
+        <?php if (!empty($pagination['prev'])) { ?>
+            <li class="newer page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>" rel="prev">&#8592; <?php echo i18n('Newer');?></a></li>
+        <?php } else { ?>
+        <li class="page-item disabled" ><span class="page-link">&#8592; <?php echo i18n('Newer');?></span></li>
+        <?php } ?>
+        <li class="page-number page-item disabled"><span class="page-link"><?php echo $pagination['pagenum'];?></span></li>
+        <?php if (!empty($pagination['next'])) { ?>
+            <li class="older page-item" ><a class="page-link" href="?page=<?php echo $page + 1 ?>" rel="next"><?php echo i18n('Older');?> &#8594;</a></li>
+        <?php } else { ?>
+            <li class="page-item disabled" ><span class="page-link"><?php echo i18n('Older');?> &#8594;</span></li>
+        <?php } ?>
+        </ul>
+    </div>
 <?php endif; ?>
 
 <?php elseif ($tab === 'settings'): ?>
@@ -260,8 +281,11 @@
 <!-- Edit Comment Modal/Page -->
 <h3><?php echo i18n('Edit_Comment');?></h3>
 <hr>
-<form method="POST" action="<?php echo site_url(); ?>admin/comments/update/<?php echo $editComment['post_id']; ?>/<?php echo $editComment['id']; ?>">
+<form method="POST" action="<?php echo site_url(); ?>admin/comments/update/<?php echo $editComment['file_encoded']; ?>/<?php echo $editComment['id']; ?>">
 <input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
+
+<input type="hidden" name="url" value="<?php echo $editComment['url']; ?>">
+<input type="hidden" name="file" value="<?php echo $editComment['file_encoded']; ?>">
 
 <div class="form-group">
     <label for="edit-name"><?php echo i18n('Name');?></label>
