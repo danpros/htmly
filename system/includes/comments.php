@@ -384,7 +384,7 @@ function validateComment($data)
 /**
  * Insert a new comment
  *
- * @param string $postId Post or page ID
+ * @param string $url or $mdfile (the content md file) - if mdfile not provided falls back using url
  * @param array $data Comment data (name, email, comment, parent_id, notify)
  * @return array Result with 'success' boolean and 'message' or 'comment_id'
  */
@@ -456,7 +456,7 @@ function commentInsert($data, $url, $mdfile = null)
 /**
  * Publish a comment (approve from moderation)
  *
- * @param string $postId Post or page ID
+ * @param string $file comment file
  * @param string $commentId Comment ID
  * @return bool Success status
  */
@@ -497,7 +497,7 @@ function commentPublish($file, $commentId)
 /**
  * Delete a comment
  *
- * @param string $postId Post or page ID
+ * @param string $mdfile (content md file)
  * @param string $commentId Comment ID
  * @return bool Success status
  */
@@ -531,7 +531,7 @@ function commentDelete($mdfile, $commentId)
 /**
  * Modify a comment
  *
- * @param string $postId Post or page ID
+ * @param string $file (comments json file)
  * @param string $commentId Comment ID
  * @param array $data New comment data
  * @return bool Success status
@@ -583,7 +583,7 @@ function commentModify($file, $commentId, $data)
 /**
  * Send comment notifications
  *
- * @param string $postId Post or page ID
+ * @param string $url Post or page url
  * @param array $newComment The new comment
  * @param array $allComments All comments for this post
  * @param bool $notifyAdmin Notify admin (default true)
@@ -611,7 +611,10 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
             );
         }
     }
+/*
 
+    // TODO: this part is disabled until a spam-secured way for comment subscription is implemented
+    
     // Add parent comment author (if replying)
     if (!empty($newComment['parent_id'])) {
         foreach ($allComments as $comment) {
@@ -640,7 +643,7 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
             }
         }
     }
-
+*/
     // Send emails
     foreach ($recipients as $email => $info) {
         sendCommentEmail($email, $info['name'], $url, $newComment, $info['type']);
@@ -719,7 +722,7 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
 /**
  * Get comment count for a post
  *
- * @param string $postId Post or page ID
+ * @param string $url Post or page url
  * @param bool $includeUnpublished Include unpublished comments
  * @return int Comment count
  */
