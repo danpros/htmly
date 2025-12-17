@@ -3735,6 +3735,58 @@ get('/category/:category', function ($category) {
     ), $layout);
 });
 
+// Show categories with descriptions on /category page 
+get('/category', function () {
+
+    if (!login()) {
+        file_cache($_SERVER['REQUEST_URI']);
+    }
+
+    $categories = get_category_info();
+
+	$categoriesData = array(
+		'title' => generate_title('is_default', i18n('Categories')),
+		'description' => i18n('Categories').' '.i18n('of').' '.safe_html(strip_tags(blog_tagline())),
+		'metatags' => generate_meta(null, null),
+		'canonical' => site_url() . 'category',
+		'is_categories' => true
+	);
+
+    $vroot = rtrim(config('views.root'), '/');
+    
+    $lt = $vroot . '/layout--categories.html.php'; 
+    if (file_exists($lt)) {
+        $layout = 'layout--categories';
+    } else {
+        $layout = '';
+    }
+    
+    $pv = $vroot . '/main--categories.html.php';
+	if (file_exists($pv)) {
+        $pview = 'main--categories';
+		$categoriesData['categories'] = $categories;
+    } else {
+        $pview = 'main';
+		$categoriesData['posts'] = $categories;
+		//fallback for custom themes lacking main--categories.html.php
+		foreach ($categories as $category) {
+			$category->category = i18n('Categories');
+			$category->tag = NULL;
+			$category->readTime = "0";
+			$category->authorName = "Admin";
+			if (!empty(config('default.image'))) {
+				$category->authorAvatar = config('default.image');
+			} else $category->authorAvatar = NULL;
+			$category->authorUrl = '#';
+			if (file_exists($category->file)) {
+				$category->date = filemtime($category->file) ;
+			} else $category->date = NULL;
+		}		
+    }
+
+	render($pview, $categoriesData);
+});
+
 // Show the RSS feed
 get('/category/:category/feed', function ($category) {
 
