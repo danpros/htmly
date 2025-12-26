@@ -3225,6 +3225,7 @@ post('/admin/comments/settings', function () {
             // Note: HTML forms convert dots to underscores in POST data
             $config['comments.moderation'] = isset($_POST['comments_moderation']) ? 'true' : 'false';
             $config['comments.honeypot'] = isset($_POST['comments_honeypot']) ? 'true' : 'false';
+            $config['comments.jstime'] = isset($_POST['comments_jstime']) ? 'true' : 'false';
             $config['comments.notify'] = isset($_POST['comments_notify']) ? 'true' : 'false';
             $config['comments.mail.enabled'] = isset($_POST['comments_mail_enabled']) ? 'true' : 'false';
 
@@ -6085,6 +6086,7 @@ post('/comments/submit', function () {
     $parentId = from($_POST, 'parent_id');
     $notify = from($_POST, 'notify');
     $website = from($_POST, 'website'); // honeypot field
+    $company = from($_POST, 'company'); // antispam js and timestamp field
 
     // Note: $url was also set in json file single comment block, but then it is hard to manage if .md file changes name or path
     //       introduced instead function get_url_from_file that handle both .md (content) and .json (content/comments)
@@ -6095,7 +6097,8 @@ post('/comments/submit', function () {
         'comment' => $comment,
         'parent_id' => $parentId,
         'notify' => $notify,
-        'website' => $website
+        'website' => $website,
+        'company' => $company
     );
 
     $result = commentInsert($data, $url, null);

@@ -162,6 +162,13 @@
             <label class="form-check-label"><?php echo i18n('Enable_honeypot');?></label>
         </div>
         <small class="form-text text-muted"><?php echo i18n('Honeypot_desc');?></small>
+            
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="comments.jstime" value="true"
+                   <?php echo comments_config('comments.jstime') === 'true' ? 'checked' : ''; ?>>
+            <label class="form-check-label"><?php echo i18n('Enable_jstime');?></label>
+        </div>
+        <small class="form-text text-muted"><?php echo i18n('Jstime_desc');?></small>
     </div>
 </div>
 
