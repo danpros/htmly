@@ -1,0 +1,134 @@
+{
+  "name": "UCAGG Pixel",
+  "description": "Retro pixel / space theme with UCAGG hub buttons + optional petals overlay.",
+  "version": "1.0.12",
+  "author": "ucagg.me",
+  "settings": [
+    {
+      "name": "linkedin_url",
+      "label": "LinkedIn URL",
+      "type": "url",
+      "info": "Link for the LinkedIn icon in the header."
+    },
+    {
+      "name": "github_url",
+      "label": "GitHub URL",
+      "type": "url",
+      "info": "Link for the GitHub icon in the header."
+    },
+    {
+      "name": "footer_text",
+      "label": "Footer text",
+      "type": "text",
+      "info": "Shown in the footer if you have not set a global blog copyright."
+    },
+    {
+      "name": "petals",
+      "label": "Enable petals overlay",
+      "type": "checkbox",
+      "info": "Toggle the pink pixel-dots overlay (stars stay on)."
+    },
+    {
+      "name": "hub_blog",
+      "label": "Hub: Blog URL",
+      "type": "url",
+      "info": "URL used by the BLOG button."
+    },
+    {
+      "name": "hub_cloud",
+      "label": "Hub: Cloud URL",
+      "type": "url",
+      "info": "URL used by the CLOUD button."
+    },
+    {
+      "name": "hub_files",
+      "label": "Hub: Files URL",
+      "type": "url",
+      "info": "URL used by the FILES button."
+    },
+    {
+      "name": "hub_games",
+      "label": "Hub: Games URL",
+      "type": "url",
+      "info": "URL used by the GAMES button."
+    },
+    {
+      "name": "hub_projects",
+      "label": "Hub: Projects URL",
+      "type": "url",
+      "info": "URL used by the PROJECTS button."
+    },
+    {
+      "name": "show_hub",
+      "label": "Show HUB menu",
+      "type": "checkbox",
+      "info": "Show/hide the HUB button menu in the sidebar."
+    },
+    {
+      "name": "hub_title",
+      "label": "HUB title",
+      "type": "text",
+      "info": "Title displayed above the HUB buttons."
+    },
+    {
+      "name": "hub_blog_label",
+      "label": "Button label: Blog",
+      "type": "text",
+      "info": "Label text for the Blog button."
+    },
+    {
+      "name": "hub_blog_icon",
+      "label": "Button icon file: Blog",
+      "type": "text",
+      "info": "Icon filename under themes/ucaggpixel/images/ for Blog (PNG)."
+    },
+    {
+      "name": "hub_cloud_label",
+      "label": "Button label: Cloud",
+      "type": "text",
+      "info": "Label text for the Cloud button."
+    },
+    {
+      "name": "hub_cloud_icon",
+      "label": "Button icon file: Cloud",
+      "type": "text",
+      "info": "Icon filename under themes/ucaggpixel/images/ for Cloud (PNG)."
+    },
+    {
+      "name": "hub_files_label",
+      "label": "Button label: Files",
+      "type": "text",
+      "info": "Label text for the Files button."
+    },
+    {
+      "name": "hub_files_icon",
+      "label": "Button icon file: Files",
+      "type": "text",
+      "info": "Icon filename under themes/ucaggpixel/images/ for Files (PNG)."
+    },
+    {
+      "name": "hub_games_label",
+      "label": "Button label: Games",
+      "type": "text",
+      "info": "Label text for the Games button."
+    },
+    {
+      "name": "hub_games_icon",
+      "label": "Button icon file: Games",
+      "type": "text",
+      "info": "Icon filename under themes/ucaggpixel/images/ for Games (PNG)."
+    },
+    {
+      "name": "hub_projects_label",
+      "label": "Button label: Projects",
+      "type": "text",
+      "info": "Label text for the Projects button."
+    },
+    {
+      "name": "hub_projects_icon",
+      "label": "Button icon file: Projects",
+      "type": "text",
+      "info": "Icon filename under themes/ucaggpixel/images/ for Projects (PNG)."
+    }
+  ]
+}
