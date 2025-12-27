@@ -397,7 +397,7 @@ function validateComment($data)
 
     // Validate js and time (if enabled) - minimum 2 seconds, maximum 600 seconds
     if (comments_config('comments.jstime') === 'true') {
-        if (!$data['company'] || secondsGenerationSubmit($data['company']) < 3 || secondsGenerationSubmit($data['company']) > 600) {
+        if (!$data['company'] || secondsGenerationSubmit($data['company']) < 3 || secondsGenerationSubmit($data['company']) > 3600) {
             $errors[] = 'comment_submission_error_spam';
         }
     }
@@ -497,6 +497,9 @@ function commentInsert($data, $url, $mdfile = null)
 // action can be subscribe, confirm, unsubscribe
 function setSubscription($email, $action) {
     $subscriptions_dir = 'content/comments/.subscriptions';
+    if (!is_dir($subscriptions_dir)) {
+        mkdir($subscriptions_dir);
+    }
     $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
     
     $subscription = getSubscription($email);
