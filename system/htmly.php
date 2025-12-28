@@ -3101,8 +3101,8 @@ get('/admin/categories/:category', function ($category) {
 
 // Show admin/comments - All comments
 get('/admin/comments', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && ($role === 'admin' || $role === 'editor')) {
         config('views.root', 'system/admin/views');
 
@@ -3139,8 +3139,8 @@ get('/admin/comments', function () {
 
 // Show admin/comments/pending - Pending comments
 get('/admin/comments/pending', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && ($role === 'admin' || $role === 'editor')) {
         config('views.root', 'system/admin/views');
 
@@ -3187,8 +3187,8 @@ get('/admin/comments/pending', function () {
 
 // Show admin/comments/settings - Settings page
 get('/admin/comments/settings', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && $role === 'admin') {
         config('views.root', 'system/admin/views');
 
@@ -3214,7 +3214,7 @@ get('/admin/comments/settings', function () {
 
 // Save comments settings
 post('/admin/comments/settings', function () {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -3275,8 +3275,8 @@ post('/admin/comments/settings', function () {
 
 // Show edit comment form
 get('/admin/comments/edit/:commentfile/:commentid', function ($commentfile, $commentid) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && ($role === 'admin' || $role === 'editor')) {
         
         config('views.root', 'system/admin/views');
@@ -3321,7 +3321,7 @@ get('/admin/comments/edit/:commentfile/:commentid', function ($commentfile, $com
 
 // Update comment
 post('/admin/comments/update/:commentfile/:commentid', function ($commentfile, $commentid) {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);

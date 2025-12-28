@@ -931,7 +931,12 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
         $mail->CharSet = 'UTF-8';
 
         if ($type === 'admin') {
-            $mail->Subject = i18n('comment_email_admin_subject') . " - " . config('blog.title');
+            if (comments_config('comments.moderation') === 'true') {
+                $mail->Subject = i18n('comment_email_admin_awaiting') . " - " . config('blog.title');
+            }
+            else {
+                $mail->Subject = i18n('comment_email_admin_new') . " - " . config('blog.title');    
+            }
             $mail->Body = "
                 <h3>".i18n('comment_email_new').": {$url}</h3>
                 <p><strong>" . i18n('comment_email_from') . ":</strong> {$comment['name']} ({$comment['email']})</p>
@@ -948,7 +953,7 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
                 <p><a href='" . site_url() . "{$url}#comment-{$comment['id']}'>" . i18n('comment_email_view_comment') . "</a></p>
                 <p>&nbsp;</p>
-                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($to, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
                 <p>&nbsp;</p>
             ";
         }
@@ -1014,7 +1019,7 @@ if (isset($_GET['subscribe'])) {
 }
 
 if (isset($_GET['unsubscribe'])) {
-    confirmSubscription($_GET['subscribe']);
+    deleteSubscription($_GET['unsubscribe']);
 }
 
 
