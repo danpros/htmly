@@ -188,7 +188,7 @@ function displayCommentsSection($url, $file = null)
         </div>
     </section>
 
-    <script>
+    <script type="text/javascript">
     function showReplyForm(commentId, commentUrl) {
         // Hide all other reply forms
         document.querySelectorAll('.reply-container').forEach(function(el) {
