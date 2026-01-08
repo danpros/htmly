@@ -3,7 +3,7 @@
     <div class="page-links">
         <p class="h3">On this page</p>
         <nav id="toc"></nav>
-        <p class="link-to-top"><a href="#main-top-link"><span aria-hidden="true">↑︎</span> Back to top</a></p>
+        <p class="link-to-top"><a href="#main-top-link"><span aria-hidden="true">↑︎</span><?php echo i18n('backtotop');?></a></p>
     </div>
 </nav>
 
