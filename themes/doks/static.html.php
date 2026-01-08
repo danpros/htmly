@@ -29,7 +29,7 @@
         <?php $subpages = find_subpage($static->slug);?>
         <?php if (!empty($subpages)):?>
             <div class="card-list">
-            <h2 class="h4">Sub <?php echo i18n('pages');?></h2>
+            <h2 class="h4"><?php echo i18n('subpages');?></h2>
             <?php foreach ($subpages as $sp):?>
                 <div class="card my-3">
                     <div class="card-body">
