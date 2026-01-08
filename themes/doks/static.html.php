@@ -1,9 +1,9 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
     <div class="page-links">
-        <p class="h3">On this page</p>
+        <p class="h3"><?php echo i18n('onthispage');?></p>
         <nav id="toc"></nav>
-        <p class="link-to-top"><a href="#main-top-link"><span aria-hidden="true">↑︎</span> Back to top</a></p>
+        <p class="link-to-top"><a href="#main-top-link"><span aria-hidden="true">↑︎</span><?php echo i18n('backtotop');?></a></p>
     </div>
 </nav>
 
@@ -29,7 +29,7 @@
         <?php $subpages = find_subpage($static->slug);?>
         <?php if (!empty($subpages)):?>
             <div class="card-list">
-            <h2 class="h4">Sub <?php echo i18n('pages');?></h2>
+            <h2 class="h4"><?php echo i18n('subpages');?></h2>
             <?php foreach ($subpages as $sp):?>
                 <div class="card my-3">
                     <div class="card-body">

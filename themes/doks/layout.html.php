@@ -70,7 +70,7 @@ $front = get_frontpage(); ?>
                 </div>
                 <div class="col-lg-9 col-xl-8 text-center">
                     <div class="lead"><?php echo $front->body;?></div>
-                    <?php if (!empty($pages[0])):?><a class="btn btn-primary btn-lg px-4 mb-2" href="<?php echo $pages[0]->url;?>" role="button">Get Started</a><?php endif;?>
+                    <?php if (!empty($pages[0])):?><a class="btn btn-primary btn-lg px-4 mb-2" href="<?php echo $pages[0]->url;?>" role="button"><?php echo i18n('getstarted');?></a><?php endif;?>
                 </div>
             </div>
         </section>
