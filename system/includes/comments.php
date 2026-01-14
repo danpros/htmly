@@ -213,9 +213,6 @@ function get_comments_file_from_url($url) {
 }
 
 
-
-
-
 /**
  * Get all comments for a post/page
  *
@@ -283,11 +280,12 @@ function getAllComments($page = null, $perpage = null)
 
     $allComments = array();
 
-
     foreach ($files as $file) {
         $comments = getComments('', $file, true);
+        $url = get_url_from_file($file);
         foreach ($comments as $comment) {
             $comment['file'] = $file;
+            $comment['url'] = $url;
             $allComments[] = $comment;
         }
     }
@@ -307,6 +305,22 @@ function getAllComments($page = null, $perpage = null)
 
     return $allComments;
 }
+
+
+function getPublishedComments($limit = 5)
+{
+    $comments = array();
+    $counter = 0;
+    $allComments = getAllComments();
+    foreach ($allComments as $comment) {
+        if ($comment['published'] == 1) {
+            $comments[] = $comment;
+        }
+        if (count($comments) >= $limit) break;
+    }
+    return $comments;
+}
+
 
 /**
  * Generate unique comment ID
@@ -702,7 +716,7 @@ function commentPublish($file, $commentId)
         if ($comment['id'] === $commentId) {
             $comment['published'] = true;
             $updated = true;
-            
+
             $url = get_url_from_file($file);
 
             // Send notifications only to subscribers when publishing (admin already saw it in moderation)

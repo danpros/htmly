@@ -61,8 +61,8 @@
                 <?php endif; ?>
             </td>
             <td>
-                <a href="<?php echo site_url() . get_url_from_file($comment['file']); ?>" target="_blank">
-                    <?php echo _h(get_url_from_file($comment['file'])); ?>
+                <a href="<?php echo site_url() . $comment['url']; ?>" target="_blank">
+                    <?php echo _h($comment['url']); ?>
                 </a>
             </td>
             <td>
