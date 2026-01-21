@@ -2025,6 +2025,13 @@ function delete_comments($mdfile) {
 //           regardless if file is content .md file or comments .json file
 function get_url_from_file($file)
 {
+      // Ensure config is loaded - if not loads it
+      $config_loaded = config('permalink.type');
+      if (!$config_loaded) {
+          if (file_exists('config/config.ini')) {
+              config('source', 'config/config.ini');
+          }
+      }
     
     // Normalize path separators (Windows/Linux))
     $file = str_replace('\\', '/', $file);
@@ -2095,9 +2102,6 @@ function get_url_from_file($file)
         return $slug;
         // return site_url() . $slug;
     }
-
-    
-
 
     // Check if it's a blog post: {username}/blog/{category}/{type}/[scheduled/]{date}_{tags}_{slug}.md
     if (count($parts) >= 5 && $parts[1] == 'blog') {

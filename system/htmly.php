@@ -498,7 +498,7 @@ get('/edit/password', function () {
 });
 
 post('/edit/password', function() {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $username = from($_REQUEST, 'username');
         $new_password = from($_REQUEST, 'password');
@@ -545,7 +545,7 @@ get('/edit/mfa', function () {
 });
 
 post('/edit/mfa', function() {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $username = from($_REQUEST, 'username');
         $mfa_secret = from($_REQUEST, 'mfa_secret');
@@ -613,8 +613,8 @@ post('/edit/mfa', function() {
 // Edit the frontpage
 get('/edit/frontpage', function () {
     
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
 
@@ -909,8 +909,8 @@ post('/add/content', function () {
 // Show the static add page
 get('/add/page', function () {
     
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -1152,8 +1152,8 @@ post('/admin/autosave', function () {
 
 // Show the add category
 get('/add/category', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -1242,8 +1242,8 @@ post('/add/category', function () {
 // Show admin/posts 
 get('/admin/posts', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -1306,8 +1306,8 @@ get('/admin/posts', function () {
 // Show admin/popular 
 get('/admin/popular', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -1609,8 +1609,8 @@ get('/admin/content', function () {
 
 // Show admin/pages
 get('/admin/pages', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -1660,8 +1660,8 @@ post('/admin/pages', function () {
 // Show admin/pages
 get('/admin/pages/:static', function ($static) 
 {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -1734,8 +1734,8 @@ post('/admin/pages/:static', function ($static) {
 
 // Show import page
 get('/admin/import', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -1834,8 +1834,8 @@ post('/admin/import', function () {
 // Show admin/search 
 get('/admin/search', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     config('views.root', 'system/admin/views');
     if (login()) {
         if ($role === 'editor' || $role === 'admin' && config('fulltext.search') == "true") {
@@ -1957,8 +1957,8 @@ post('/admin/search/reindex', function () {
 // Show Config page
 get('/admin/config', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -1995,7 +1995,7 @@ get('/admin/config', function () {
 // Submitted Config page data
 post('/admin/config', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -2031,8 +2031,8 @@ post('/admin/config', function () {
 // Show Config page
 get('/admin/config/custom', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -2068,7 +2068,7 @@ get('/admin/config/custom', function () {
 // Submitted Config page data
 post('/admin/config/custom', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -2103,8 +2103,8 @@ post('/admin/config/custom', function () {
 // Show Config page
 get('/admin/config/reading', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -2140,7 +2140,7 @@ get('/admin/config/reading', function () {
 // Submitted Config page data
 post('/admin/config/reading', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -2173,8 +2173,8 @@ post('/admin/config/reading', function () {
 // Show Config page
 get('/admin/config/writing', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -2210,7 +2210,7 @@ get('/admin/config/writing', function () {
 // Submitted Config page data
 post('/admin/config/writing', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -2243,8 +2243,8 @@ post('/admin/config/writing', function () {
 // Show Config page
 get('/admin/config/widget', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -2280,7 +2280,7 @@ get('/admin/config/widget', function () {
 // Submitted Config page data
 post('/admin/config/widget', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -2316,8 +2316,8 @@ post('/admin/config/widget', function () {
 // Show Config page
 get('/admin/config/metatags', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -2354,7 +2354,7 @@ get('/admin/config/metatags', function () {
 // Submitted Config page data
 post('/admin/config/metatags', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -2390,8 +2390,8 @@ post('/admin/config/metatags', function () {
 // Show Config page
 get('/admin/config/security', function () {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
 
     if (login()) {
         config('views.root', 'system/admin/views');
@@ -2427,7 +2427,7 @@ get('/admin/config/security', function () {
 // Submitted Config page data
 post('/admin/config/security', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -2499,7 +2499,7 @@ get('/admin/config/performance', function () {
 // Submitted Config page data
 post('/admin/config/performance', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -2531,8 +2531,8 @@ post('/admin/config/performance', function () {
 
 // Show Backup page
 get('/admin/backup', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -2593,8 +2593,8 @@ get('/admin/backup-start', function () {
 
 // Show clear cache page
 get('/admin/clear-cache', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -2628,8 +2628,8 @@ get('/admin/clear-cache', function () {
 
 // Show Update page
 get('/admin/update', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -2663,11 +2663,11 @@ get('/admin/update', function () {
 
 // Show the update now link
 get('/admin/update/now/:csrf', function ($CSRF) {
-    $proper = is_csrf_proper($CSRF);
+    $proper = is_csrf_proper($CSRF) ?? null;
     $updater = new \Kanti\HubUpdater(array(
         'name' => 'danpros/htmly',
         'prerelease' => !!config("prerelease"),
-    ));
+    )) ?? null;
     if (login() && $proper && $updater->able()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -2697,8 +2697,8 @@ get('/admin/update/now/:csrf', function ($CSRF) {
 
 // Show Menu builder
 get('/admin/menu', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -2733,8 +2733,8 @@ get('/admin/menu', function () {
 post('/admin/menu', function () {
 
     if (login()) {
-        $user = $_SESSION[site_url()]['user'];
-        $role = user('role', $user);
+        $user = $_SESSION[site_url()]['user'] ?? null;
+        $role = user('role', $user) ?? null;
         if ($role === 'editor' || $role === 'admin') {
             $json = from($_REQUEST, 'json');
             file_put_contents('content/data/menu.json', json_encode($json, JSON_UNESCAPED_UNICODE));
@@ -2750,8 +2750,8 @@ post('/admin/menu', function () {
 
 // Manage users page
 get('/admin/users', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -2784,8 +2784,8 @@ get('/admin/users', function () {
 });
 
 get('/admin/add/user', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -2818,9 +2818,9 @@ get('/admin/add/user', function () {
 });
 
 post('/admin/add/user', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     $username = from($_REQUEST, 'username');
     $user_role = from($_REQUEST, 'user-role');
     $password = from($_REQUEST, 'password');
@@ -2868,8 +2868,8 @@ post('/admin/add/user', function () {
 });
 
 get('/admin/users/:username/edit', function ($username) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -2905,7 +2905,7 @@ get('/admin/users/:username/edit', function ($username) {
 // Submitted Config page data
 post('/admin/users/:username/edit', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $username = from($_REQUEST, 'username');
         $user_role = from($_REQUEST, 'role-name');
@@ -2937,8 +2937,8 @@ post('/admin/users/:username/edit', function () {
 });
 
 get('/admin/users/:username/delete', function ($username) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'admin') {
@@ -2972,12 +2972,12 @@ get('/admin/users/:username/delete', function ($username) {
 });
 
 post('/admin/users/:username/delete', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
-    $file = from($_REQUEST, 'file');
-    $username = from($_REQUEST, 'username');
-    $user_role = user('role', $username);
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
+    $file = from($_REQUEST, 'file') ?? null;
+    $username = from($_REQUEST, 'username') ?? null;
+    $user_role = user('role', $username) ?? null;
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if ($proper && login()) {
         if ($role === 'admin') {
             if ($user_role !== 'admin') {
@@ -2994,7 +2994,6 @@ post('/admin/users/:username/delete', function () {
 });
 
 post('/admin/gallery', function () {
-
     if (login()) {
         $page = from($_REQUEST, 'page');
         $images = image_gallery(null, $page, 40);
@@ -3004,8 +3003,8 @@ post('/admin/gallery', function () {
 
 // Show category page
 get('/admin/categories', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -3040,8 +3039,8 @@ get('/admin/categories', function () {
 // Show the category page
 get('/admin/categories/:category', function ($category) {
 
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -3101,8 +3100,8 @@ get('/admin/categories/:category', function ($category) {
 
 // Show admin/comments - All comments
 get('/admin/comments', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && ($role === 'admin' || $role === 'editor')) {
         config('views.root', 'system/admin/views');
 
@@ -3139,8 +3138,8 @@ get('/admin/comments', function () {
 
 // Show admin/comments/pending - Pending comments
 get('/admin/comments/pending', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && ($role === 'admin' || $role === 'editor')) {
         config('views.root', 'system/admin/views');
 
@@ -3187,8 +3186,8 @@ get('/admin/comments/pending', function () {
 
 // Show admin/comments/settings - Settings page
 get('/admin/comments/settings', function () {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && $role === 'admin') {
         config('views.root', 'system/admin/views');
 
@@ -3214,7 +3213,7 @@ get('/admin/comments/settings', function () {
 
 // Save comments settings
 post('/admin/comments/settings', function () {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -3225,6 +3224,7 @@ post('/admin/comments/settings', function () {
             // Note: HTML forms convert dots to underscores in POST data
             $config['comments.moderation'] = isset($_POST['comments_moderation']) ? 'true' : 'false';
             $config['comments.honeypot'] = isset($_POST['comments_honeypot']) ? 'true' : 'false';
+            $config['comments.jstime'] = isset($_POST['comments_jstime']) ? 'true' : 'false';
             $config['comments.notify'] = isset($_POST['comments_notify']) ? 'true' : 'false';
             $config['comments.mail.enabled'] = isset($_POST['comments_mail_enabled']) ? 'true' : 'false';
 
@@ -3274,8 +3274,8 @@ post('/admin/comments/settings', function () {
 
 // Show edit comment form
 get('/admin/comments/edit/:commentfile/:commentid', function ($commentfile, $commentid) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login() && ($role === 'admin' || $role === 'editor')) {
         
         config('views.root', 'system/admin/views');
@@ -3320,7 +3320,7 @@ get('/admin/comments/edit/:commentfile/:commentid', function ($commentfile, $com
 
 // Update comment
 post('/admin/comments/update/:commentfile/:commentid', function ($commentfile, $commentid) {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -3626,7 +3626,7 @@ post('/admin/themes/:theme', function ($theme) {
         $redir = site_url() . 'admin/themes';
         header("location: $redir");
     }
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if (login() && $proper) {
         $new_config = array();
         $new_Keys = array();
@@ -3758,8 +3758,8 @@ get('/category/:category/feed', function ($category) {
 
 // Show edit the category page
 get('/category/:category/edit', function ($category) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -3804,7 +3804,7 @@ get('/category/:category/edit', function ($category) {
 // Get edited data from category page
 post('/category/:category/edit', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
 
     if(!login()) {
         $login = site_url() . 'login';
@@ -3862,8 +3862,8 @@ post('/category/:category/edit', function () {
 
 // Delete category
 get('/category/:category/delete', function ($category) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -3908,7 +3908,7 @@ get('/category/:category/delete', function ($category) {
 
 // Get deleted category data
 post('/category/:category/delete', function () {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if ($proper && login()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -4788,7 +4788,7 @@ get('/'. permalink_type() .'/:name/delete', function ($name) {
 // Get deleted data from blog post
 post('/'. permalink_type() .'/:name/delete', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if ($proper && login()) {
         $file = from($_REQUEST, 'file');
         $destination = from($_GET, 'destination');
@@ -5023,8 +5023,8 @@ get('/:static', function ($static) {
 
 // Show the add sub static page
 get('/:static/add', function ($static) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -5137,8 +5137,8 @@ post('/:static/add', function ($static) {
 
 // Show edit the static page
 get('/:static/edit', function ($static) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -5188,7 +5188,7 @@ get('/:static/edit', function ($static) {
 
 // Get edited data from static page
 post('/:static/edit', function () {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if(!login()) {
         $login = site_url() . 'login';
         header("location: $login");
@@ -5264,8 +5264,8 @@ post('/:static/edit', function () {
 
 // Deleted the static page
 get('/:static/delete', function ($static) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -5315,7 +5315,7 @@ get('/:static/delete', function ($static) {
 // Get deleted data for static page
 post('/:static/delete', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if ($proper && login()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -5437,8 +5437,8 @@ get('/:static/:sub', function ($static, $sub) {
 
 // Edit the sub static page
 get('/:static/:sub/edit', function ($static, $sub) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -5496,7 +5496,7 @@ get('/:static/:sub/edit', function ($static, $sub) {
 
 // Submitted data from edit sub static page
 post('/:static/:sub/edit', function ($static, $sub) {
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if(!login()) {
         $login = site_url() . 'login';
         header("location: $login");
@@ -5577,8 +5577,8 @@ post('/:static/:sub/edit', function ($static, $sub) {
 
 // Delete sub static page
 get('/:static/:sub/delete', function ($static, $sub) {
-    $user = $_SESSION[site_url()]['user'];
-    $role = user('role', $user);
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
     if (login()) {
         config('views.root', 'system/admin/views');
         if ($role === 'editor' || $role === 'admin') {
@@ -5636,7 +5636,7 @@ get('/:static/:sub/delete', function ($static, $sub) {
 // Submitted data from delete sub static page
 post('/:static/:sub/delete', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if ($proper && login()) {
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
@@ -6057,7 +6057,7 @@ get('/:year/:month/:name/delete', function ($year, $month, $name) {
 // Get deleted data from blog post
 post('/:year/:month/:name/delete', function () {
 
-    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
     if ($proper && login()) {
         $file = from($_REQUEST, 'file');
         $destination = from($_GET, 'destination');
@@ -6085,6 +6085,7 @@ post('/comments/submit', function () {
     $parentId = from($_POST, 'parent_id');
     $notify = from($_POST, 'notify');
     $website = from($_POST, 'website'); // honeypot field
+    $company = from($_POST, 'company'); // antispam js and timestamp field
 
     // Note: $url was also set in json file single comment block, but then it is hard to manage if .md file changes name or path
     //       introduced instead function get_url_from_file that handle both .md (content) and .json (content/comments)
@@ -6095,7 +6096,8 @@ post('/comments/submit', function () {
         'comment' => $comment,
         'parent_id' => $parentId,
         'notify' => $notify,
-        'website' => $website
+        'website' => $website,
+        'company' => $company
     );
 
     $result = commentInsert($data, $url, null);

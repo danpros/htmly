@@ -61,8 +61,8 @@
                 <?php endif; ?>
             </td>
             <td>
-                <a href="<?php echo site_url() . get_url_from_file($comment['file']); ?>" target="_blank">
-                    <?php echo _h(get_url_from_file($comment['file'])); ?>
+                <a href="<?php echo site_url() . $comment['url']; ?>" target="_blank">
+                    <?php echo _h($comment['url']); ?>
                 </a>
             </td>
             <td>
@@ -162,6 +162,13 @@
             <label class="form-check-label"><?php echo i18n('Enable_honeypot');?></label>
         </div>
         <small class="form-text text-muted"><?php echo i18n('Honeypot_desc');?></small>
+            
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="comments.jstime" value="true"
+                   <?php echo comments_config('comments.jstime') === 'true' ? 'checked' : ''; ?>>
+            <label class="form-check-label"><?php echo i18n('Enable_jstime');?></label>
+        </div>
+        <small class="form-text text-muted"><?php echo i18n('Jstime_desc');?></small>
     </div>
 </div>
 

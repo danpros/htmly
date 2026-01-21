@@ -90,6 +90,13 @@ function i18n($key, $value = null)
         $_i18n = parse_ini_file($value, true);
       else
         $_i18n = parse_ini_file('lang/en_US.ini', true);
+      $theme_path = parse_url(theme_path(), PHP_URL_PATH);
+      $theme_lang_file = $_SERVER['DOCUMENT_ROOT'] . $theme_path . 'lang/en_US.ini';
+      $_i18n_local = array();
+      if (file_exists($theme_lang_file)) {
+        $_i18n_local = parse_ini_file($theme_lang_file, true);
+      }
+      $_i18n = array_replace($_i18n, $_i18n_local);
     } elseif ($value == null)
         return (isset($_i18n[$key]) ? $_i18n[$key] : $key);
     else

@@ -28,6 +28,10 @@ function displayCommentsForm($url, $mdfile = null, $parentId = null)
             <input type="text" name="website" tabindex="-1" value="" autocomplete="off">
         </div>
 
+        <!-- JS check & time check field (hidden from users) -->
+        <div style="position:absolute;left:-6000px;" aria-hidden="true">
+            <input type="text" name="company" tabindex="-2" value="" autocomplete="off">
+        </div>
 
         <div class="form-group" style="width: 100%">
             <label for="name-<?php echo $formId; ?>"><?php echo i18n('Name'); ?> <span class="required">*</span></label>
@@ -43,14 +47,12 @@ function displayCommentsForm($url, $mdfile = null, $parentId = null)
             <textarea class="form-control" id="comment-<?php echo $formId; ?>" name="comment" rows="5" required></textarea>
             <small class="form-text text-muted"><?php echo i18n('Comment_formatting_help'); ?></small>
         </div>
-<!-- Emidio 20251105 - temporarily disabled
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="notify-<?php echo $formId; ?>" name="notify" value="1">
             <label class="form-check-label" for="notify-<?php echo $formId; ?>">
                 <?php echo i18n('Notify_new_comments'); ?>
             </label>
         </div>
--->
         <br>
         <div class="form-group">
             <button type="submit" class="btn btn-primary submit-comment"><?php echo $parentId ? i18n('Post_Reply') : i18n('Post_Comment'); ?></button>
@@ -186,7 +188,7 @@ function displayCommentsSection($url, $file = null)
         </div>
     </section>
 
-    <script>
+    <script type="text/javascript">
     function showReplyForm(commentId, commentUrl) {
         // Hide all other reply forms
         document.querySelectorAll('.reply-container').forEach(function(el) {
@@ -209,6 +211,9 @@ function displayCommentsSection($url, $file = null)
                 '<div style="position:absolute;left:-5000px;" aria-hidden="true">' +
                 '<input type="text" name="website" tabindex="-1" value="" autocomplete="off">' +
                 '</div>' +
+                '<div style="position:absolute;left:-6000px;" aria-hidden="true">' +
+                '<input type="text" name="company" tabindex="-2" value="" autocomplete="off">' +
+                '</div>' +
                 '<div class="form-group">' +
                 '<label for="name-' + formId + '"><?php echo i18n("Name"); ?> <span class="required">*</span></label>' +
                 '<input type="text" class="form-control" id="name-' + formId + '" name="name" required>' +
@@ -223,12 +228,10 @@ function displayCommentsSection($url, $file = null)
                 '<textarea class="form-control" id="comment-' + formId + '" name="comment" rows="5" required></textarea>' +
                 '<small class="form-text text-muted"><?php echo i18n("Comment_formatting_help"); ?></small>' +
                 '</div>' +
-                '<!-- Emidio 20251105 - temporarily disabled ' +
                 '<div class="form-group form-check">' +
                 '<input type="checkbox" class="form-check-input" id="notify-' + formId + '" name="notify" value="1">' +
                 '<label class="form-check-label" for="notify-' + formId + '"><?php echo i18n("Notify_new_comments"); ?></label>' +
                 '</div>' +
-                ' -->' +
                 '<br><div class="form-group">' +
                 '<button type="submit" class="btn btn-primary submit-reply"><?php echo i18n("Post_Reply"); ?></button> ' +
                 '<button type="button" class="btn btn-secondary cancel-reply" onclick="cancelReply(\'' + commentId + '\')"><?php echo i18n("Cancel"); ?></button>' +
@@ -236,6 +239,13 @@ function displayCommentsSection($url, $file = null)
                 '</form>';
 
             container.innerHTML = formHtml;
+
+            // Populate antispam company field with current timestamp
+            const timestampSeconds = Math.floor(Date.now() / 1000);
+            const companyField = container.querySelector('[name="company"]');
+            if (companyField) {
+                companyField.value = timestampSeconds;
+            }
         }
     }
 
@@ -299,11 +309,24 @@ function displayCommentsSection($url, $file = null)
     }
 
 
+    // Antispam protection, executed when page is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        const timestampSeconds = Math.floor(Date.now() / 1000);
 
-    // Esegui la funzione quando il DOM è caricato
+        // Select all forms in page
+        document.querySelectorAll('form').forEach(function (form) {
+            // Finds all fields named "company"
+            form.querySelectorAll('[name="company"]').forEach(function (field) {
+                field.value = timestampSeconds;
+            });
+        });
+    });
+
+
+    // Executed when page is loaded
     document.addEventListener('DOMContentLoaded', handleCommentStatus);
 
-    // Esegui anche quando l'hash cambia (se navighi sulla stessa pagina)
+    // Executed also when page hash changes (navigating in same page)
     window.addEventListener('hashchange', handleCommentStatus);
 
     </script>

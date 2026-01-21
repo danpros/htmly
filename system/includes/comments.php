@@ -213,9 +213,6 @@ function get_comments_file_from_url($url) {
 }
 
 
-
-
-
 /**
  * Get all comments for a post/page
  *
@@ -283,11 +280,12 @@ function getAllComments($page = null, $perpage = null)
 
     $allComments = array();
 
-
     foreach ($files as $file) {
         $comments = getComments('', $file, true);
+        $url = get_url_from_file($file);
         foreach ($comments as $comment) {
             $comment['file'] = $file;
+            $comment['url'] = $url;
             $allComments[] = $comment;
         }
     }
@@ -307,6 +305,22 @@ function getAllComments($page = null, $perpage = null)
 
     return $allComments;
 }
+
+
+function getPublishedComments($limit = 5)
+{
+    $comments = array();
+    $counter = 0;
+    $allComments = getAllComments();
+    foreach ($allComments as $comment) {
+        if ($comment['published'] == 1) {
+            $comments[] = $comment;
+        }
+        if (count($comments) >= $limit) break;
+    }
+    return $comments;
+}
+
 
 /**
  * Generate unique comment ID
@@ -343,6 +357,26 @@ function buildCommentTree($comments, $parentId = null, $level = 0)
     return $tree;
 }
 
+
+/**
+ * Calculate seconds difference from now
+ *
+ * @param int/string $timestamp
+ * @return difference in seconds
+ */
+function secondsGenerationSubmit($timestamp) {
+    if (!is_numeric($timestamp)) {
+        return null; // invalid value
+    }
+
+    $timestampJS = (int) $timestamp;
+    $timestampServer = time();
+
+    return $timestampServer - $timestampJS;
+}
+
+
+
 /**
  * Validate comment data
  *
@@ -375,6 +409,13 @@ function validateComment($data)
         }
     }
 
+    // Validate js and time (if enabled) - minimum 2 seconds, maximum 600 seconds
+    if (comments_config('comments.jstime') === 'true') {
+        if (!$data['company'] || secondsGenerationSubmit($data['company']) < 3 || secondsGenerationSubmit($data['company']) > 3600) {
+            $errors[] = 'comment_submission_error_spam';
+        }
+    }
+    
     return array(
         'valid' => empty($errors),
         'errors' => $errors
@@ -442,9 +483,21 @@ function commentInsert($data, $url, $mdfile = null)
             'message' => 'comment_submission_error'
         );
     }
+    
+    // Subscription handling
+    if ($comment['notify']) {
+        setSubscription($comment['email'], 'subscribe');
+    }
 
-    // Send notifications
-    sendCommentNotifications($url, $comment, $comments);
+    // Clearing cache if comment is published, otherwise doesn't display on page
+    if ($comment['published']) {
+        rebuilt_cache('all');
+        clear_cache();
+    }
+
+
+    // Send notifications - notify admin always, notify subscribers only if published
+    sendCommentNotifications($url, $comment, $comments, true, $comment['published']);
 
     return array(
         'success' => true,
@@ -452,6 +505,190 @@ function commentInsert($data, $url, $mdfile = null)
         'message' => $comment['published'] ? 'comment_submission_success' : 'comment_submission_moderation'
     );
 }
+
+
+
+// action can be subscribe, confirm, unsubscribe
+function setSubscription($email, $action) {
+    $subscriptions_dir = 'content/comments/.subscriptions';
+    if (!is_dir($subscriptions_dir)) {
+        mkdir($subscriptions_dir);
+    }
+    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
+    
+    $subscription = getSubscription($email);
+
+    if ($action == 'subscribe') {
+        if ($subscription['status'] == 'subscribed') {
+            return true;
+        }
+        elseif ($subscription['status'] == 'waiting') {
+            sendSubscriptionEmail($email);
+        }
+        else {
+            $subscription['status'] = 'waiting';
+            $json = json_encode($subscription, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            file_put_contents($subscription_file, $json);
+            sendSubscriptionEmail($email);
+            return true;
+        }
+
+    }
+    elseif ($action == 'confirm' && $subscription['status'] == 'waiting') {
+        $subscription['status'] = 'subscribed';
+        $json = json_encode($subscription, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        file_put_contents($subscription_file, $json);
+        return true;
+    }
+    elseif ($action == 'unsubscribe') {
+        @unlink($subscription_file);
+        return true;
+    }
+    else {
+        // nothing here
+        return false;
+    }    
+}
+
+
+// returns array
+function getSubscription($email) {
+    $subscriptions_dir = 'content/comments/.subscriptions';
+    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
+    if (!file_exists($subscription_file)) {
+        $subscription['status'] = 'no';
+        $subscription['date'] = date('Y-m-d H:i:s');
+        $subscription['email'] = $email;
+        return $subscription;
+    }
+    else {
+        $subscription = json_decode(file_get_data($subscription_file), true);
+        return $subscription;
+    }
+}
+
+
+
+function confirmSubscription($filename) {
+    $subscriptions_dir = 'content/comments/.subscriptions';
+    $subscription_file = $subscriptions_dir . '/' . $filename;
+    if (sanitizedSubscriptionFile($filename) && file_exists($subscription_file)) {
+        $subscription = json_decode(file_get_data($subscription_file), true);
+        setSubscription($subscription['email'], 'confirm');
+        return true;
+    }
+    return false;
+}
+
+
+function sanitizedSubscriptionFile($filename) {
+    // no path traversal, sanitizing filename
+    $filename = basename($filename);
+    if (!preg_match('/^[a-zA-Z0-9._-]+$/', $filename)) {
+        return false;
+    }
+
+    $subscriptions_dir = 'content/comments/.subscriptions';
+    $subscription_file = $subscriptions_dir . '/' . $filename;
+
+    // check if path is invalid
+    $real_file = realpath($subscription_file);
+    $real_dir = realpath($subscriptions_dir);
+    
+    if ($real_file === false || $real_dir === false) {
+        return false;
+    }
+    
+    // check if path outside .subscriptions dir (we are DELETING files!)
+    if (strpos($real_file, $real_dir . DIRECTORY_SEPARATOR) !== 0) {
+        return false; 
+    }
+
+    return true;
+    
+}
+
+
+
+function deleteSubscription($filename) {
+    $subscriptions_dir = 'content/comments/.subscriptions';
+    $subscription_file = $subscriptions_dir . '/' . $filename;
+
+    if (sanitizedSubscriptionFile($filename) && file_exists($subscription_file)) {
+        @unlink($subscription_file);
+        return true;
+    }
+    return false;
+}
+
+
+
+
+function encryptEmailForFilename(string $email, string $secretKey) {
+    // Normalize email
+    $email = strtolower(trim($email));
+    // Create HMAC hash
+    $hash = hash_hmac('sha256', $email, $secretKey, true);
+
+    // URL-safe Base64 (filename-safe)
+    $safe = rtrim(strtr(base64_encode($hash), '+/', '-_'), '=');
+    return $safe;
+}
+
+
+
+function sendSubscriptionEmail($email) {
+    try {
+        $mail = new PHPMailer(true);
+
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host = comments_config('comments.mail.host');
+        $mail->SMTPAuth = true;
+        $mail->Username = comments_config('comments.mail.username');
+        $mail->Password = comments_config('comments.mail.password');
+        $mail->Port = comments_config('comments.mail.port');
+
+        $encryption = comments_config('comments.mail.encryption');
+        if ($encryption === 'tls') {
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        } elseif ($encryption === 'ssl') {
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        }
+
+        // Recipients
+        $mail->setFrom(
+            comments_config('comments.mail.from.email'),
+            comments_config('comments.mail.from.name')
+        );
+        $mail->addAddress($email);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->CharSet = 'UTF-8';
+
+        $mail->Subject = i18n('comment_subscribe_confirmation') . ' '.config('blog.title');
+        $mail->Body = "
+            <h3>" . i18n('comment_subscribe_thread') . ": ".config('site.url')."</h3>
+            <p>" . i18n('comment_subscribe_request') . " ".config('blog.title')."</p>
+            <p>" . i18n('comment_subscribe_never_requested') . "</p>
+            <p>" . i18n('comment_subscribe_click') . " <a href=\"".config('site.url')."?subscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" . i18n('comment_subscribe_here') . "</b></a> " . i18n('comment_subscribe_confirm_message') . "</p>
+            <p>&nbsp;</p>
+            <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+            <p>&nbsp;</p>
+        ";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Subscription notification email failed: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+
+
+
 
 /**
  * Publish a comment (approve from moderation)
@@ -480,8 +717,10 @@ function commentPublish($file, $commentId)
             $comment['published'] = true;
             $updated = true;
 
-            // Send notifications to other commenters
-            sendCommentNotifications($comment, $comments, false);
+            $url = get_url_from_file($file);
+
+            // Send notifications only to subscribers when publishing (admin already saw it in moderation)
+            sendCommentNotifications($url, $comment, $comments, false, true);
             break;
         }
     }
@@ -491,6 +730,10 @@ function commentPublish($file, $commentId)
     }
 
     $json = json_encode($comments, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    
+    rebuilt_cache('all');
+    clear_cache();
+    
     return file_put_contents($file, $json, LOCK_EX) !== false;
 }
 
@@ -525,6 +768,10 @@ function commentDelete($mdfile, $commentId)
     $comments = array_values($comments);
 
     $json = json_encode($comments, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    rebuilt_cache('all');
+    clear_cache();
+
     return file_put_contents($file, $json, LOCK_EX) !== false;
 }
 
@@ -587,22 +834,24 @@ function commentModify($file, $commentId, $data)
  * @param array $newComment The new comment
  * @param array $allComments All comments for this post
  * @param bool $notifyAdmin Notify admin (default true)
+ * @param bool $notifySubscribers Notify subscribers (default true)
  * @return void
  */
-function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin = true)
+function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin = true, $notifySubscribers = true)
 {
-    // TODO: function to be fixed, still using postId variable
-    
-    // Check if notifications are enabled
-    if (comments_config('comments.notify') !== 'true' ||
-        comments_config('comments.mail.enabled') !== 'true') {
+    // Check if mail is enabled
+    if (comments_config('comments.mail.enabled') !== 'true') {
         return;
     }
 
     $recipients = array();
 
-    // Add admin email
+    // Add admin email - notify if comments.notifyadmin = "true" OR comments.moderation = "true"
     if ($notifyAdmin) {
+        $shouldNotifyAdmin = (comments_config('comments.notifyadmin') === 'true') ||
+                            (comments_config('comments.moderation') === 'true');
+
+        if ($shouldNotifyAdmin) {
         $adminEmail = comments_config('comments.admin.email');
         if (!empty($adminEmail) && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
             $recipients[$adminEmail] = array(
@@ -611,16 +860,18 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
             );
         }
     }
-/*
+    }
 
-    // TODO: this part is disabled until a spam-secured way for comment subscription is implemented
-    
+    // Add subscribers only if notifySubscribers is true AND comments.notify is enabled
+    if ($notifySubscribers && comments_config('comments.notify') === 'true') {
     // Add parent comment author (if replying)
     if (!empty($newComment['parent_id'])) {
         foreach ($allComments as $comment) {
             if ($comment['id'] === $newComment['parent_id'] &&
                 $comment['notify'] &&
                 $comment['email'] !== $newComment['email']) {
+                    $subscrition = getSubscription($comment['email']);
+                    if ($subscrition['status'] == 'subscribed') {
                 $recipients[$comment['email']] = array(
                     'name' => $comment['name'],
                     'type' => 'parent'
@@ -628,14 +879,15 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
             }
         }
     }
+        }
 
-    // Add other commenters in same thread who want notifications
+        // Add all commenters in same thread (same JSON file) who want notifications
     foreach ($allComments as $comment) {
         if ($comment['notify'] &&
             $comment['email'] !== $newComment['email'] &&
             $comment['id'] !== $newComment['id']) {
-            // Same thread = same parent or no parent
-            if ($comment['parent_id'] === $newComment['parent_id']) {
+                $subscrition = getSubscription($comment['email']);
+                if ($subscrition['status'] == 'subscribed') {
                 $recipients[$comment['email']] = array(
                     'name' => $comment['name'],
                     'type' => 'thread'
@@ -643,7 +895,8 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
             }
         }
     }
-*/
+    }
+
     // Send emails
     foreach ($recipients as $email => $info) {
         sendCommentEmail($email, $info['name'], $url, $newComment, $info['type']);
@@ -692,22 +945,30 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
         $mail->CharSet = 'UTF-8';
 
         if ($type === 'admin') {
-            $mail->Subject = 'New comment awaiting moderation';
+            if (comments_config('comments.moderation') === 'true') {
+                $mail->Subject = i18n('comment_email_admin_awaiting') . " - " . config('blog.title');
+            }
+            else {
+                $mail->Subject = i18n('comment_email_admin_new') . " - " . config('blog.title');    
+            }
             $mail->Body = "
-                <h3>New comment on: {$url}</h3>
-                <p><strong>From:</strong> {$comment['name']} ({$comment['email']})</p>
-                <p><strong>Comment:</strong></p>
+                <h3>".i18n('comment_email_new').": {$url}</h3>
+                <p><strong>" . i18n('comment_email_from') . ":</strong> {$comment['name']} ({$comment['email']})</p>
+                <p><strong>" . i18n('comment') . ":</strong></p>
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
-                <p><a href='" . site_url() . "admin/comments'>Moderate comments</a></p>
+                <p><a href='" . site_url() . "admin/comments'>" . i18n('comment_email_moderate'). "</a></p>
             ";
         } else {
-            $mail->Subject = 'New reply to your comment';
+            $mail->Subject = i18n('comment_email_new_subscribed') . " - " . config('blog.title');
             $mail->Body = "
-                <h3>Someone replied to your comment on: {$url}</h3>
-                <p><strong>From:</strong> {$comment['name']}</p>
-                <p><strong>Comment:</strong></p>
+                <h3>" . i18n('comment_email_new_replied') .": " . site_url() . "{$url}</h3>
+                <p><strong>" . i18n('comment_email_from') . ":</strong> {$comment['name']}</p>
+                <p><strong>" . i18n('comment') . ":</strong></p>
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
-                <p><a href='" . site_url() . "{$url}#comment-{$comment['id']}'>View comment</a></p>
+                <p><a href='" . site_url() . "{$url}#comment-{$comment['id']}'>" . i18n('comment_email_view_comment') . "</a></p>
+                <p>&nbsp;</p>
+                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($to, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+                <p>&nbsp;</p>
             ";
         }
 
@@ -763,5 +1024,18 @@ function formatCommentText($text)
 
     return $text;
 }
+
+
+
+
+if (isset($_GET['subscribe'])) {
+    confirmSubscription($_GET['subscribe']);
+}
+
+if (isset($_GET['unsubscribe'])) {
+    deleteSubscription($_GET['unsubscribe']);
+}
+
+
 
 ?>
