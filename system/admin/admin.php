@@ -1129,39 +1129,52 @@ function delete_post($file, $destination)
 {
     if (!login())
         return null;
-    $deleted_content = $file;
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
-    $arr = explode('/', $file);
-    
-    // realpath resolves all traversal operations like ../
-    $realFilePath = realpath($file);
 
-    // realpath returns an empty string if the file does not exist
-    if ($realFilePath == '') {
+    // Resolve user-supplied path and content root to canonical paths.
+    $realFilePath = realpath($file);
+    $realContentDir = realpath('content');
+    if ($realFilePath === false || $realContentDir === false) {
         return;
     }
 
-    // get the current project working directory
-    $cwd = getcwd();
-
-    // content directory relative to the current project working directory
-    $contentDir = $cwd . DIRECTORY_SEPARATOR . 'content';
-
-    // if the file path does not start with $contentDir, it means its accessing
-    // files in folders other than content
+    // Ensure file is inside content/ (with directory boundary protection).
+    $contentDir = rtrim($realContentDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     if (strpos($realFilePath, $contentDir) !== 0) {
         return;
     }
 
+    if (strtolower(pathinfo($realFilePath, PATHINFO_EXTENSION)) !== 'md') {
+        return;
+    }
+
+    $deleted_content = $realFilePath;
+    $relativePath = str_replace('\\', '/', substr($realFilePath, strlen($contentDir)));
+    $pathParts = explode('/', $relativePath);
+    $postOwner = isset($pathParts[0]) ? $pathParts[0] : null;
+
+    if (count($pathParts) < 5 || $pathParts[1] !== 'blog') {
+        return;
+    }
+
     // Get cache file
-    $info = pathinfo($file);
+    $info = pathinfo($relativePath);
     $fn = explode('_', $info['basename']);
-    $dr = explode('/', $info['dirname']);
-    clear_post_cache($fn[0], $fn[1], str_replace('.md', '', $fn[2]), $file, $dr[3], $dr[4]);
+    if (count($fn) < 3) {
+        return;
+    }
+
+    $category = isset($pathParts[2]) ? $pathParts[2] : null;
+    $type = isset($pathParts[3]) ? $pathParts[3] : null;
+    if ($category === null || $type === null) {
+        return;
+    }
+
+    clear_post_cache($fn[0], $fn[1], str_replace('.md', '', $fn[2]), $deleted_content, $category, $type);
 
     if (!empty($deleted_content)) {
-        if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
+        if ($user === $postOwner || $role === 'editor' || $role === 'admin') {
             unlink($deleted_content);
             delete_comments($deleted_content);
             rebuilt_cache('all');
@@ -1181,7 +1194,6 @@ function delete_page($file, $destination)
 {
     if (!login())
         return null;
-    $deleted_content = $file;
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     
@@ -1204,6 +1216,12 @@ function delete_page($file, $destination)
     if (strpos($realFilePath, $contentDir) !== 0) {
         return;
     }
+
+    if (strtolower(pathinfo($realFilePath, PATHINFO_EXTENSION)) !== 'md') {
+        return;
+    }
+
+    $deleted_content = $realFilePath;
 
     if (!empty($menu)) {
         foreach (glob('cache/page/*.cache', GLOB_NOSORT) as $file) {
@@ -2012,7 +2030,23 @@ function rename_comments($oldfile, $newfile) {
 
 
 function delete_comments($mdfile) {
-    $file_comments = get_comments_file_from_md($mdfile);
+    if (strtolower(pathinfo($mdfile, PATHINFO_EXTENSION)) !== 'md') {
+        return false;
+    }
+
+    $realContentDir = realpath('content');
+    $realTargetDir = realpath(dirname($mdfile));
+    if ($realContentDir === false || $realTargetDir === false) {
+        return false;
+    }
+
+    $targetFile = $realTargetDir . DIRECTORY_SEPARATOR . basename($mdfile);
+    $contentDir = rtrim($realContentDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    if (strpos($targetFile, $contentDir) !== 0) {
+        return false;
+    }
+
+    $file_comments = get_comments_file_from_md($targetFile);
     if (is_file($file_comments)) {
         unlink($file_comments);
         return true;
