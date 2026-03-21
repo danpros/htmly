@@ -4093,3 +4093,18 @@ ul.month {
 .social-logo a:before {
 	line-height: 33px!important;
 }
+
+/* share section */
+.share{
+  padding-top:1px;
+  width: 200px;
+  float: right;
+}
+.share a{
+  color: #479fc8;
+  padding:4px;
+  vertical-align: middle;
+  display:inline-block;
+  line-height: 1.42857;
+  margin-bottom: 0;
+}

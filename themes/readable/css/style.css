@@ -585,39 +585,18 @@ h1.title-post a:hover, h2.title-index a:hover {
 }
 
 .share {
-    width: 140px;
+    width: 180px;
     margin-right: 1em;
     float: right;
 }
 
-.share a {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    padding: 0 5px;
-    vertical-align: middle;
-    -o-transition: all .3s;
-    -moz-transition: all .3s;
-    -webkit-transition: all .3s;
-    -ms-transition: all .3s;
-    text-indent: -9999em;
-}
-
-.share a.twitter {
-    background: url(../img/share-twitter.png) left top no-repeat;
-}
-
-.share a.facebook {
-    background: url(../img/share-facebook.png) left top no-repeat;
-}
-
-.share a.googleplus {
-    background: url(../img/share-googleplus.png) left top no-repeat;
-}
-
-.share a:hover {
-    background-position: left -26px;
+.share a{
+  color: #479fc8;
+  padding:4px;
+  vertical-align: middle;
+  display:inline-block;
+  line-height: 1.42857;
+  margin-bottom: 0
 }
 
 /*-------------------------

@@ -50,6 +50,14 @@
         <?php echo $post->body;?>
         <p class="post-footer">
             <small>
+                <div class="share">
+                    <a href="#" class="first" onclick='return copyPermalink(<?php echo json_encode($p->url); ?>);'><i class="fa fa-link"></i></a>
+                    <a target="_blank" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a> 
+                    <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fab fa-twitter"></i></a>
+                    <a target="_blank" href="https://bsky.app/intent/compose?text=<?php echo rawurlencode($p->title . ' ' . $p->url); ?>"><i class="fab fa-bluesky"></i></a>
+                    <a target="_blank" href="#" onclick="return shareToFediverse('Mastodon', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fab fa-mastodon"></i></a>
+                    <a target="_blank" href="#" onclick="return shareToFediverse('GoToSocial', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fa-solid fa-g"></i></a>
+                </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="icon bi bi-folder" viewBox="0 0 18 18"><path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/></svg>
                 <span class="cat-meta"><?php echo $post->category;?></span>
                 

@@ -4,6 +4,9 @@
 <head>
     <?php echo head_contents();?>
     <?php echo $metatags;?>
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
     <link rel="stylesheet" id="twentyfifteen-fonts-noto" href="<?php echo site_url();?>system/resources/css/noto-serif.css?v=1" type="text/css" media="all">
     <link rel="stylesheet" id="twentyfifteen-fonts-sans" href="<?php echo site_url();?>system/resources/css/open-sans.css" type="text/css" media="all">
     <link rel="stylesheet" id="genericons-css" href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all">
@@ -117,6 +120,8 @@
     /* ]]> */
     </script>
     <!--[if lte IE 8]><script type='text/javascript' src='<?php echo theme_path();?>js/html5.js'></script><![endif]-->
+    <!-- Javascript -->          
+    <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/share-post.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-migrate.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/theia-sticky-sidebar.min.js"></script>

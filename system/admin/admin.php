@@ -1674,6 +1674,7 @@ EOF;
     }
     if ($role === 'editor' || $role === 'admin') {
         $toolbar .= '<li class="tb-clearcache"><a href="' . $base . 'admin/clear-cache">' . i18n('Clear_cache') . '</a></li>';
+        $toolbar .= '<li class="tb-health"><a href="' . $base . 'admin/health">' . i18n('health_check') . '</a></li>';
     }
     $toolbar .= '<li class="tb-editprofile"><a href="' . $base . 'edit/profile">' . i18n('Edit_profile') . '</a></li>';
     $toolbar .= '<li class="tb-logout"><a href="' . $base . 'logout">' . i18n('Logout') . '</a></li>';

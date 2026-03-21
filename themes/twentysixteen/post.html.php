@@ -28,7 +28,16 @@
                         <span class="embed-soundcloud"><iframe width="100%" height="200px" class="embed-responsive-item" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $p->audio;?>&amp;auto_play=false&amp;visual=true"></iframe></span>
                     <?php endif; ?>
                     <?php echo $p->body;?>
+
                     <hr>
+                    <div class="share">
+                        <a href="#" class="first" onclick='return copyPermalink(<?php echo json_encode($p->url); ?>);'><i class="fa fa-link"></i></a>
+                        <a target="_blank" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a> 
+                        <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fab fa-twitter"></i></a>
+                        <a target="_blank" href="https://bsky.app/intent/compose?text=<?php echo rawurlencode($p->title . ' ' . $p->url); ?>"><i class="fab fa-bluesky"></i></a>
+                        <a target="_blank" href="#" onclick="return shareToFediverse('Mastodon', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fab fa-mastodon"></i></a>
+                        <a target="_blank" href="#" onclick="return shareToFediverse('GoToSocial', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fa-solid fa-g"></i></a>
+                    </div>
                     <style>.related p {margin-top:0;margin-bottom:0.5em;} .related ul {margin-left:1em;}</style>
                     <div class="related">
                         <p><strong><?php echo i18n("Related_posts");?></strong></p>

@@ -4,6 +4,9 @@
 <head>
     <?php echo head_contents() ?>
     <?php echo $metatags;?>
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
     <link href="<?php echo theme_path() ?>css/style.css?v=1" rel="stylesheet"/>
 </head>
@@ -52,6 +55,8 @@
         </div>
     </div>
 </div>
+<!-- Javascript -->          
+<script type="text/javascript" src="<?php echo site_url();?>system/resources/js/share-post.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

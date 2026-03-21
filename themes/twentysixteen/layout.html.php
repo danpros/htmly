@@ -4,6 +4,9 @@
 <head>
     <?php echo head_contents();?>
     <?php echo $metatags;?>
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/merriweather.css">
 	<link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
     <link rel="stylesheet" id="genericons-css"  href="<?php echo theme_path();?>genericons/genericons.css" type="text/css" media="all" />
@@ -141,6 +144,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="<?php echo theme_path();?>js/html5.js"></script>
     <![endif]-->
+    <!-- Javascript -->          
+    <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/share-post.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/jquery-migrate.js"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/skip-link-focus-fix.js"></script>

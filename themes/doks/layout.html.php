@@ -6,6 +6,9 @@
     <?php echo $metatags;?>
     <link rel="preload" as="font" href="<?php echo theme_path();?>fonts/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="<?php echo theme_path();?>fonts/jost/jost-v4-latin-700.woff2" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css">
+    <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
     <link rel="stylesheet" href="<?php echo theme_path();?>css/style.css">
     <meta name="theme-color" content="#fff">
 </head>
@@ -122,7 +125,8 @@ $front = get_frontpage(); ?>
         </div>
     </div>
 </footer>
-
+<!-- Javascript -->          
+<script type="text/javascript" src="<?php echo site_url();?>system/resources/js/share-post.js"></script>
 <script src="<?php echo theme_path();?>js/main.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>

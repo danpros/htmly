@@ -532,37 +532,18 @@ ul li, ol li {
 }
 
 .share {
-    width: 140px;
+    width: 240px;
     margin-left: 1em;
     float: right;
 }
 
-.share a {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    padding: 0 5px;
-    vertical-align: middle;
-    -o-transition: all .3s;
-    -moz-transition: all .3s;
-    -webkit-transition: all .3s;
-    -ms-transition: all .3s;
-    text-indent: -9999em;
-    border: none;
-}
-
-.share a.twitter {
-    background: url(../../../system/resources/images/share-twitter.png) left top no-repeat;
-}
-
-.share a.facebook {
-    background: url(../../../system/resources/images/share-facebook.png) left top no-repeat;
-}
-
-.share a:hover {
-    background-position: left -26px;
-    border: none;
+.share a{
+  color: #479fc8;
+  padding:4px;
+  vertical-align: middle;
+  display:inline-block;
+  line-height: 1.42857;
+  margin-bottom: 0
 }
 
 .related {

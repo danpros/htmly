@@ -148,3 +148,18 @@
 .recent-posts > ul {
 	padding-left: 15px;
 }
+
+/* share section */
+.share{
+  padding-top:0;
+  width: 180px;
+  float: right;
+}
+.share a{
+  color: #479fc8;
+  padding:4px;
+  vertical-align: middle;
+  display:inline-block;
+  line-height: 1.42857;
+  margin-bottom: 0
+}

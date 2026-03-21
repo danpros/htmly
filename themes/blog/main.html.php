@@ -70,8 +70,12 @@
                        <span class="more"><a class="btn btn-cta-secondary" href="<?php echo $p->url;?>"><?php echo $readMore; ?></a></span>
                    <?php endif;?>
                     <span class="share pull-right">
-                        <a target="_blank" class="first" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a> 
+                        <a href="#" class="first" onclick='return copyPermalink(<?php echo json_encode($p->url); ?>);'><i class="fa fa-link"></i></a>
+                        <a target="_blank" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a>
                         <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fab fa-twitter"></i></a>
+                        <a target="_blank" href="https://bsky.app/intent/compose?text=<?php echo rawurlencode($p->title . ' ' . $p->url); ?>"><i class="fab fa-bluesky"></i></a>
+                        <a target="_blank" href="#" onclick="return shareToFediverse('Mastodon', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fab fa-mastodon"></i></a>
+                        <a target="_blank" href="#" onclick="return shareToFediverse('GoToSocial', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fa-solid fa-g"></i></a>
                     </span>
                 <div style="clear:both;"></div>
                 </div>

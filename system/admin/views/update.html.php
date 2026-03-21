@@ -14,6 +14,11 @@ $dir = 'cache/';
 if (!is_dir($dir)) {
     mkdir($dir, 0775, true);
 }
+if (!is_writable($dir)) {
+    echo '<h2>'.i18n('Update').'</h2><hr>';
+    echo i18n('cache_folder_not_writable');
+    return;
+}
 if (defined("JSON_PRETTY_PRINT")) {
     file_put_contents(
         'cache/installedVersion.json',

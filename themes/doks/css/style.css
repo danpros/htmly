@@ -3581,3 +3581,18 @@ body.dark .social-logo a:hover, .dark .toc-wrapper a:hover {
 .list-unstyled li {
   margin: 0;
 }
+
+/* share section */
+.share{
+  padding-top:0;
+  width: 200px;
+  float: right;
+}
+.share a{
+  color: #479fc8;
+  padding:4px;
+  vertical-align: middle;
+  display:inline-block;
+  line-height: 1.42857;
+  margin-bottom: 0
+}

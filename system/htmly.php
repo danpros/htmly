@@ -2626,6 +2626,41 @@ get('/admin/clear-cache', function () {
     }
 });
 
+// Show health status page
+get('/admin/health', function () {
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'editor' || $role === 'admin') {
+            render('health', array(
+                'title' => generate_title('is_default', i18n('Health_check')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-health',
+                'is_admin' => true,
+                'bodyclass' => 'admin-health',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Health_check')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Denied')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-health',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
 // Show Update page
 get('/admin/update', function () {
     $user = $_SESSION[site_url()]['user'] ?? null;

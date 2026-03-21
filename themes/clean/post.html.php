@@ -45,15 +45,17 @@
     </div>
     <div class="separator">&rarr;</div>
     <div class="share-box">
+        <div class="share">
+            <a href="#" class="first" onclick='return copyPermalink(<?php echo json_encode($p->url); ?>);'><i class="fa fa-link"></i></a>
+            <a target="_blank" href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>"><i class="fab fa-facebook"></i></a> 
+            <a target="_blank" href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>"><i class="fab fa-twitter"></i></a>
+            <a target="_blank" href="https://bsky.app/intent/compose?text=<?php echo rawurlencode($p->title . ' ' . $p->url); ?>"><i class="fab fa-bluesky"></i></a>
+            <a target="_blank" href="#" onclick="return shareToFediverse('Mastodon', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fab fa-mastodon"></i></a>
+            <a target="_blank" href="#" onclick="return shareToFediverse('GoToSocial', '<?php echo rawurlencode($p->title . ' ' . $p->url); ?>');"><i class="fa-solid fa-g"></i></a>
+        </div>
         <div class="author-info">
             <h4><?php echo i18n('Posts_by'); ?> <strong><?php echo $author->name ?></strong></h4>
             <?php echo $author->about ?>
-        </div>
-        <div class="share">
-            <a class="twitter" target="_blank"
-               href="https://twitter.com/share?url=<?php echo $p->url ?>&text=<?php echo $p->title ?>">Twitter</a>
-            <a class="facebook" target="_blank"
-               href="https://www.facebook.com/sharer.php?u=<?php echo $p->url ?>&t=<?php echo $p->title ?>">Facebook</a>
         </div>
     </div>
     <div class="related">
