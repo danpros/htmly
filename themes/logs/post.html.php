@@ -67,6 +67,9 @@
         <?php if (disqus()): ?>
             <div id="disqus_thread"></div>
         <?php endif; ?>
+        <?php if (comments()): ?>
+            <?php comments($p); ?>
+        <?php endif; ?>
     </div>
     <div class="postnav">
         <?php if (!empty($next)): ?>

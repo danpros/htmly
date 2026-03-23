@@ -25,6 +25,11 @@ publish_scheduled();
 // Load theme settings
 theme_settings();
 
+
+// Handle comments subscribe/unsubscribe
+handle_comments_subscription();
+
+
 // The front page of the blog
 get('/index', function () {
 
@@ -3243,22 +3248,7 @@ post('/admin/comments/settings', function () {
                 $config['comments.mail.password'] = $password;
             }
 
-            // Debug: log to file (remove after debugging)
-            file_put_contents('content/comments-debug.log',
-                date('Y-m-d H:i:s') . "\n" .
-                "POST data: " . print_r($_POST, true) . "\n" .
-                "Config array: " . print_r($config, true) . "\n\n",
-                FILE_APPEND
-            );
-
             $result = save_comments_config($config);
-
-            // Log result
-            file_put_contents('content/comments-debug.log',
-                "Save result: " . ($result ? "SUCCESS ($result bytes)" : "FAILED") . "\n" .
-                "File content after save:\n" . file_get_contents('config/comments.ini') . "\n\n",
-                FILE_APPEND
-            );
 
             $redir = site_url() . 'admin/comments/settings';
             header("location: $redir");
@@ -6072,7 +6062,7 @@ post('/:year/:month/:name/delete', function () {
 
 // Submit comment from public form
 post('/comments/submit', function () {
-    if (!local()) {
+    if (!comments()) {
         $redir = site_url();
         header("location: $redir");
         return;

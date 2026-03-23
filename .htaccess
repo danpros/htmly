@@ -68,7 +68,10 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
 
   RewriteEngine on
-  
+
+# rule needed for sysmessages
+RewriteRule ^(.*/)?system/resources/js/sysmessages-set\.js$ $1system/resources/php/sysmessages.php [L]
+
 # Uncomment the following to redirect all visitors to the https version
 # RewriteCond %{HTTPS} off
 # RewriteRUle (.*) https://www.example.com/$1 [R=301,L]

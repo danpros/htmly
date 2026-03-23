@@ -6160,3 +6160,68 @@ ul.month {
 	height:35px;
 	width:35px;
 }
+
+
+
+
+/*--------------------------------------------------------------
+## - CSS comments
+--------------------------------------------------------------*/
+.widget.widget_meta span {
+    font-style: italic;
+    font-size: small;
+}
+
+.comment-item {
+    padding-left: 10px;
+    font-size: small;
+    border-left: 3px solid #555 !important;
+    margin-top: 5px;
+    
+}
+
+
+.comments input:not([type="checkbox"]) {
+    width: 100%;
+}
+
+.comments .form-check-input {
+    margin-right: 5px;
+    width: 5%;
+}
+
+.comments textarea {
+    width: 100%;
+}
+
+.comments .btn {
+  font-size: small;
+
+}
+
+.comment-form label {
+    display: inline;    
+}
+
+
+
+#messages-div {
+    display: none;
+}
+
+#messages-text {
+    padding: 5px 10px 5px 10px;
+}
+
+.message-alert-success {
+    background-color: rgba(0, 128, 0, 0.2) !important;
+}
+
+.message-alert-warning {
+    background-color: rgba(255, 204, 0, 0.2) !important;
+}
+
+.message-alert-error {
+    background-color: rgba(191, 0, 0, 0.2) !important;
+}
+

@@ -68,6 +68,16 @@
     <div class="container sections-wrapper">
         <div class="row">
             <div class="primary col-md-8 col-sm-12 col-xs-12">
+
+            <!--//sysmessages div-->
+            <div class="post section" id="messages-div">
+                <div class="section-inner message-alert">
+                    <div class="content">
+                        <div id="messages-text">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+
             <?php echo content();?>
             </div><!--//primary-->
             <div class="secondary col-md-4 col-sm-12 col-xs-12">
@@ -131,6 +141,7 @@
                 </aside><!--//section-->
                 <?php endif;?>
 
+                <?php if (disqus() || comments()): ?>
                 <?php if (disqus()): ?>
                 <aside class="comments aside section">
                     <div class="section-inner">
@@ -142,6 +153,17 @@
                     </div><!--//section-inner-->
                 </aside><!--//section-->
                 <?php endif; ?>
+                    <?php if (comments()): ?>
+                    <aside class="comments aside section">
+                        <div class="section-inner">
+                            <h2 class="heading"><?php echo i18n("Comments");?></h2>
+                            <div class="content">
+                                <?php echo last_comments() ?>
+                            </div><!--//content-->
+                        </div><!--//section-inner-->
+                    </aside><!--//section-->
+                    <?php endif; ?>
+                <?php endif;?>
 
                 <?php if (theme_config('archive')):?>
                 <aside class="archive aside section">
@@ -189,6 +211,7 @@
     </footer><!--//footer-->
     <!-- Javascript -->          
     <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/sysmessages.js" data-base="<?= base_url() ?>"></script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/bootstrap.min.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>    
 </body>

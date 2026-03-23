@@ -65,6 +65,14 @@ $front = get_frontpage(); ?>
         <section class="section container-fluid mt-n3 pb-3">
             <div class="row justify-content-center">
                 <div class="col-lg-12 text-center">
+                    
+                    <!--//sysmessages div-->
+                    <div id="messages-div">
+                        <div  class="message-alert">
+                            <div id="messages-text">&nbsp;</div>
+                        </div>
+                    </div>
+                    
                     <h1 class="mt-0"><?php echo $front->title;?></h1>
                     <?php if(login()):?><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828.0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <a href="<?php echo $front->url;?>/edit?destination=front"><?php echo i18n('edit');?></a></small><?php endif;?>
                 </div>
@@ -97,6 +105,14 @@ $front = get_frontpage(); ?>
     <div id="content" class="content">
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10 col-xl-9">
+                
+            <!--//sysmessages div-->
+            <div id="messages-div">
+                <div  class="message-alert">
+                    <div id="messages-text">&nbsp;</div>
+                </div>
+            </div>
+                
             <?php echo content();?>
             </div>
         </div>
@@ -123,6 +139,7 @@ $front = get_frontpage(); ?>
     </div>
 </footer>
 
+<script type="text/javascript" src="<?php echo site_url();?>system/resources/js/sysmessages.js" data-base="<?php echo site_url(); ?>"></script>
 <script src="<?php echo theme_path();?>js/main.js"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>

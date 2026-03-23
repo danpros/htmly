@@ -267,6 +267,12 @@
     </div>
   </div>
   <div class="form-group row">
+    <label for="social.whatsapp" class="col-sm-2 col-form-label">WhatsApp</label>
+    <div class="col-sm-10">
+      <input type="text" name="-config-social.whatsapp" class="form-control" id="social.whatsapp" value="<?php echo config('social.whatsapp');?>" placeholder="https://whatsapp.com/channel/id or https://wa.me/number">
+    </div>
+  </div>
+  <div class="form-group row">
     <div class="col-sm-10">
       <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>
     </div>

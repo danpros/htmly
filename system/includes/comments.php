@@ -1,6 +1,4 @@
 <?php
-if (!defined('HTMLY')) die('HTMLy');
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -9,92 +7,67 @@ use PHPMailer\PHPMailer\Exception;
  *
  * @return bool
  */
-function local()
+function comments($a = null)
 {
-    return config('comment.system') === 'local';
+    if ($a === null) {
+            return config('comment.system') === 'local';
+    }
+    else {
+        displayCommentsSection($a);
+    }
 }
 
-/**
- * Get comments configuration value
- *
- * @param string $key Configuration key (use 'reload' to force cache reload)
- * @return mixed Configuration value or null
- */
-function comments_config($key)
-{
-    static $_config = array();
 
-    $config_file = 'config/comments.ini';
 
-    // Allow cache reload
-    if ($key === 'reload') {
-        $_config = array();
-        return null;
+function last_comments($num = 5) {
+    if (!filter_var($num, FILTER_VALIDATE_INT) !== false || (int)$num <= 0) {
+        $num = 5;
     }
-
-    if (empty($_config) && file_exists($config_file)) {
-        $_config = parse_ini_file($config_file, false);
+    $comments = getPublishedComments($num);
+    $recent_comments = '<ul>';
+    foreach ($comments as $comment) {
+        $recent_comments  .= "<li><a href=\"" . site_url() . $comment['url'] . "#comment-" . $comment['id'] . "\">" . $comment['name'] . "</a>";
+        $recent_comments  .= "<span><br>" . date(config('date.format'), $comment['timestamp']) . "</span>";
+        $recent_comments  .= "<br>" . $comment['comment'] . "</li>";
     }
-
-    return isset($_config[$key]) ? $_config[$key] : null;
+    $recent_comments .= '</ul>';
+    return $recent_comments;
 }
 
-/**
- * Save comments configuration
- *
- * @param array $data Configuration data to save
- * @return bool Success status
- */
-function save_comments_config($data = array())
-{
-    $config_file = 'config/comments.ini';
 
-    if (!file_exists($config_file)) {
-        return false;
-    }
 
-    $string = file_get_contents($config_file);
-
-    foreach ($data as $word => $value) {
-        // Ensure null and empty values are saved as empty strings
-        if ($value === null || $value === '') {
-            $value = '""';
-        } else {
-            // Encode value
-            $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+function handle_comments_subscription() {
+    $subscription = null;
+    if (isset($_GET['unsubscribe'])) {
+        $subscription = getSubscription($_GET['unsubscribe']);
+        if ($subscription['status'] == 'no') {
+            $response['message'] = i18n('sysmsg_unsubscribe_success');
+            $response['class'] = 'success';
         }
-
-        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
-        $value = trim(strtr($value, $map));
-
-        // Escape dots in the key for regex
-        $escapedWord = str_replace('.', '\.', $word);
-
-        // Try to replace existing line
-        $pattern = "/^" . $escapedWord . " = .*/m";
-        if (preg_match($pattern, $string)) {
-            $string = preg_replace($pattern, $word . ' = ' . $value, $string);
-        } else {
-            // If line doesn't exist, add it at the end
-            $string = rtrim($string) . "\n" . $word . ' = ' . $value . "\n";
+        else {
+            $response['message'] = i18n('sysmsg_unsubscribe_fail');
+            $response['class'] = 'error';
         }
+        $_SESSION['sysmessages'][] = $response;
+        // stash('subscription', $subscription);
+    } elseif (isset($_GET['subscribe'])) {
+        $subscription = setSubscription($_GET['subscribe'], 'confirm');
+        if ($subscription['status'] == 'subscribed') {
+            $response['message'] = i18n('sysmsg_subscribe_success');
+            $response['class'] = 'success';
+        }
+        else {
+            $response['message'] = i18n('sysmsg_subscribe_fail');
+            $response['class'] = 'error';
+        }
+        $_SESSION['sysmessages'][] = $response;
     }
-
-    $string = rtrim($string) . "\n";
-    $result = file_put_contents($config_file, $string, LOCK_EX);
-
-    // Clear PHP opcache for this file
-    if (function_exists('opcache_invalidate')) {
-        opcache_invalidate($config_file, true);
-    }
-
-    // Clear cache after saving
-    if ($result !== false) {
-        comments_config('reload');
-    }
-
-    return $result;
 }
+
+
+
+
+
 
 /**
  * Get comments file path for a post/page
@@ -403,14 +376,14 @@ function validateComment($data)
     }
 
     // Validate honeypot (if enabled)
-    if (comments_config('comments.honeypot') === 'true') {
+    if (config('comments.honeypot') === 'true') {
         if (!empty($data['website'])) {
             $errors[] = 'comment_submission_error_spam';
         }
     }
 
     // Validate js and time (if enabled) - minimum 2 seconds, maximum 600 seconds
-    if (comments_config('comments.jstime') === 'true') {
+    if (config('comments.jstime') === 'true') {
         if (!$data['company'] || secondsGenerationSubmit($data['company']) < 3 || secondsGenerationSubmit($data['company']) > 3600) {
             $errors[] = 'comment_submission_error_spam';
         }
@@ -464,7 +437,7 @@ function commentInsert($data, $url, $mdfile = null)
         'date' => date('Y-m-d H:i:s', $timestamp),
         'parent_id' => isset($data['parent_id']) && !empty($data['parent_id']) ? $data['parent_id'] : null,
         'notify' => isset($data['notify']) && $data['notify'] === '1',
-        'published' => comments_config('comments.moderation') !== 'true', // Auto-publish if moderation disabled
+        'published' => config('comments.moderation') !== 'true', // Auto-publish if moderation disabled
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown'
     );
 
@@ -506,21 +479,29 @@ function commentInsert($data, $url, $mdfile = null)
     );
 }
 
-
-
 // action can be subscribe, confirm, unsubscribe
 function setSubscription($email, $action) {
     $subscriptions_dir = 'content/comments/.subscriptions';
     if (!is_dir($subscriptions_dir)) {
         mkdir($subscriptions_dir);
     }
-    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
+    
+    
+    // Ensure config is loaded - if not loads it
+    $config_loaded = config('permalink.type');
+    if (!$config_loaded) {
+      if (file_exists('config/config.ini')) {
+          config('source', 'config/config.ini');
+      }
+    }
+    
+    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, config('comments.salt'));
     
     $subscription = getSubscription($email);
 
     if ($action == 'subscribe') {
         if ($subscription['status'] == 'subscribed') {
-            return true;
+            return $subscription;
         }
         elseif ($subscription['status'] == 'waiting') {
             sendSubscriptionEmail($email);
@@ -530,7 +511,7 @@ function setSubscription($email, $action) {
             $json = json_encode($subscription, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             file_put_contents($subscription_file, $json);
             sendSubscriptionEmail($email);
-            return true;
+            return $subscription;
         }
 
     }
@@ -538,15 +519,16 @@ function setSubscription($email, $action) {
         $subscription['status'] = 'subscribed';
         $json = json_encode($subscription, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         file_put_contents($subscription_file, $json);
-        return true;
+        return $subscription;
     }
     elseif ($action == 'unsubscribe') {
         @unlink($subscription_file);
-        return true;
+        $subscription['status'] = 'no';
+        return $subscription;
     }
     else {
         // nothing here
-        return false;
+        return $subscription;
     }    
 }
 
@@ -554,7 +536,7 @@ function setSubscription($email, $action) {
 // returns array
 function getSubscription($email) {
     $subscriptions_dir = 'content/comments/.subscriptions';
-    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
+    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, config('comments.salt'));
     if (!file_exists($subscription_file)) {
         $subscription['status'] = 'no';
         $subscription['date'] = date('Y-m-d H:i:s');
@@ -643,13 +625,13 @@ function sendSubscriptionEmail($email) {
 
         // Server settings
         $mail->isSMTP();
-        $mail->Host = comments_config('comments.mail.host');
+        $mail->Host = config('comments.mail.host');
         $mail->SMTPAuth = true;
-        $mail->Username = comments_config('comments.mail.username');
-        $mail->Password = comments_config('comments.mail.password');
-        $mail->Port = comments_config('comments.mail.port');
+        $mail->Username = config('comments.mail.username');
+        $mail->Password = config('comments.mail.password');
+        $mail->Port = config('comments.mail.port');
 
-        $encryption = comments_config('comments.mail.encryption');
+        $encryption = config('comments.mail.encryption');
         if ($encryption === 'tls') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         } elseif ($encryption === 'ssl') {
@@ -658,8 +640,8 @@ function sendSubscriptionEmail($email) {
 
         // Recipients
         $mail->setFrom(
-            comments_config('comments.mail.from.email'),
-            comments_config('comments.mail.from.name')
+            config('comments.mail.from.email'),
+            config('comments.mail.from.name')
         );
         $mail->addAddress($email);
 
@@ -672,9 +654,9 @@ function sendSubscriptionEmail($email) {
             <h3>" . i18n('comment_subscribe_thread') . ": ".config('site.url')."</h3>
             <p>" . i18n('comment_subscribe_request') . " ".config('blog.title')."</p>
             <p>" . i18n('comment_subscribe_never_requested') . "</p>
-            <p>" . i18n('comment_subscribe_click') . " <a href=\"".config('site.url')."?subscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" . i18n('comment_subscribe_here') . "</b></a> " . i18n('comment_subscribe_confirm_message') . "</p>
+            <p>" . i18n('comment_subscribe_click') . " <a href=\"".config('site.url')."?subscribe=".encryptEmailForFilename($email, config('comments.salt'))."\"><b>" . i18n('comment_subscribe_here') . "</b></a> " . i18n('comment_subscribe_confirm_message') . "</p>
             <p>&nbsp;</p>
-            <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+            <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($email, config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
             <p>&nbsp;</p>
         ";
 
@@ -840,7 +822,7 @@ function commentModify($file, $commentId, $data)
 function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin = true, $notifySubscribers = true)
 {
     // Check if mail is enabled
-    if (comments_config('comments.mail.enabled') !== 'true') {
+    if (config('comments.mail.enabled') !== 'true') {
         return;
     }
 
@@ -848,11 +830,11 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
 
     // Add admin email - notify if comments.notifyadmin = "true" OR comments.moderation = "true"
     if ($notifyAdmin) {
-        $shouldNotifyAdmin = (comments_config('comments.notifyadmin') === 'true') ||
-                            (comments_config('comments.moderation') === 'true');
+        $shouldNotifyAdmin = (config('comments.notifyadmin') === 'true') ||
+                            (config('comments.moderation') === 'true');
 
         if ($shouldNotifyAdmin) {
-        $adminEmail = comments_config('comments.admin.email');
+        $adminEmail = config('comments.admin.email');
         if (!empty($adminEmail) && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
             $recipients[$adminEmail] = array(
                 'name' => 'Administrator',
@@ -863,7 +845,7 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
     }
 
     // Add subscribers only if notifySubscribers is true AND comments.notify is enabled
-    if ($notifySubscribers && comments_config('comments.notify') === 'true') {
+    if ($notifySubscribers && config('comments.notify') === 'true') {
     // Add parent comment author (if replying)
     if (!empty($newComment['parent_id'])) {
         foreach ($allComments as $comment) {
@@ -920,13 +902,13 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
 
         // Server settings
         $mail->isSMTP();
-        $mail->Host = comments_config('comments.mail.host');
+        $mail->Host = config('comments.mail.host');
         $mail->SMTPAuth = true;
-        $mail->Username = comments_config('comments.mail.username');
-        $mail->Password = comments_config('comments.mail.password');
-        $mail->Port = comments_config('comments.mail.port');
+        $mail->Username = config('comments.mail.username');
+        $mail->Password = config('comments.mail.password');
+        $mail->Port = config('comments.mail.port');
 
-        $encryption = comments_config('comments.mail.encryption');
+        $encryption = config('comments.mail.encryption');
         if ($encryption === 'tls') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         } elseif ($encryption === 'ssl') {
@@ -935,8 +917,8 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
 
         // Recipients
         $mail->setFrom(
-            comments_config('comments.mail.from.email'),
-            comments_config('comments.mail.from.name')
+            config('comments.mail.from.email'),
+            config('comments.mail.from.name')
         );
         $mail->addAddress($to, $toName);
 
@@ -945,7 +927,7 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
         $mail->CharSet = 'UTF-8';
 
         if ($type === 'admin') {
-            if (comments_config('comments.moderation') === 'true') {
+            if (config('comments.moderation') === 'true') {
                 $mail->Subject = i18n('comment_email_admin_awaiting') . " - " . config('blog.title');
             }
             else {
@@ -967,7 +949,7 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
                 <p><a href='" . site_url() . "{$url}#comment-{$comment['id']}'>" . i18n('comment_email_view_comment') . "</a></p>
                 <p>&nbsp;</p>
-                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($to, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($to, config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
                 <p>&nbsp;</p>
             ";
         }
@@ -1024,6 +1006,364 @@ function formatCommentText($text)
 
     return $text;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Display comments form
+ *
+ * @param string $postId Post or page ID
+ * @param string $parentId Parent comment ID for replies (optional)
+ * @return void
+ */
+function displayCommentsForm($url, $mdfile = null, $parentId = null)
+{
+    if (!comments()) {
+        return;
+    }
+
+    $formId = $parentId ? 'reply-form-' . $parentId : 'comment-form';
+    $submitUrl = site_url() . 'comments/submit';
+    ?>
+    <form id="<?php echo $formId; ?>" method="POST" action="<?php echo $submitUrl; ?>" class="comment-form">
+        <input type="hidden" name="url" value="<?php echo _h($url); ?>">
+        <?php if ($parentId): ?>
+        <input type="hidden" name="parent_id" value="<?php echo _h($parentId); ?>">
+        <?php endif; ?>
+
+        <!-- Honeypot field (hidden from users) -->
+        <div style="position:absolute;left:-5000px;" aria-hidden="true">
+            <input type="text" name="website" tabindex="-1" value="" autocomplete="off">
+        </div>
+
+        <!-- JS check & time check field (hidden from users) -->
+        <div style="position:absolute;left:-6000px;" aria-hidden="true">
+            <input type="text" name="company" tabindex="-2" value="" autocomplete="off">
+        </div>
+
+        <div class="form-group" style="width: 100%">
+            <label for="name-<?php echo $formId; ?>"><?php echo i18n('Name'); ?> <span class="required">*</span></label>
+            <input type="text" class="form-control" id="name-<?php echo $formId; ?>" name="name" required>
+
+            <label for="email-<?php echo $formId; ?>"><?php echo i18n('Email'); ?> <span class="required">*</span></label>
+            <input type="email" class="form-control" id="email-<?php echo $formId; ?>" name="email" required>
+            <br><small class="form-text text-muted"><?php echo i18n('Email_not_published'); ?></small>
+        </div>
+<br clear="all">
+        <div class="form-group">
+            <label for="comment-<?php echo $formId; ?>"><?php echo i18n('Comment'); ?> <span class="required">*</span></label>
+            <textarea class="form-control" id="comment-<?php echo $formId; ?>" name="comment" rows="5" required></textarea>
+            <small class="form-text text-muted"><?php echo i18n('Comment_formatting_help'); ?></small>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="notify-<?php echo $formId; ?>" name="notify" value="1">
+            <label class="form-check-label" for="notify-<?php echo $formId; ?>">
+                <?php echo i18n('Notify_new_comments'); ?>
+            </label>
+        </div>
+        <br>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary submit-comment"><?php echo $parentId ? i18n('Post_Reply') : i18n('Post_Comment'); ?></button>
+            <?php if ($parentId): ?>
+            <button type="button" class="btn btn-secondary cancel-reply" onclick="cancelReply('<?php echo $parentId; ?>')"><?php echo i18n('Cancel'); ?></button>
+            <?php endif; ?>
+        </div>
+    </form>
+    <?php
+}
+
+/**
+ * Display single comment
+ *
+ * @param array $comment Comment data
+ * @param string $postId Post ID
+ * @return void
+ */
+function displayComment($comment, $postId)
+{
+    $indent = isset($comment['level']) ? $comment['level'] : 0;
+    $marginLeft = $indent * 0; // 40px per level - changed to 0 Emidio 20251106
+
+    // Add visual depth indicator
+    $depthClass = 'comment-level-' . min($indent, 5); // Max 5 for styling
+    $borderColor = $indent > 0 ? '#ddd' : '#007bff';
+    ?>
+    <div id="comment-<?php echo $comment['id']; ?>" class="comment-item <?php echo $depthClass; ?>"
+         style="margin-left: <?php echo $marginLeft; ?>px; border-left: 3px solid <?php echo $borderColor; ?>;"
+         data-level="<?php echo $indent; ?>">
+        <div class="comment-header">
+            <strong class="comment-author"><?php echo _h($comment['name']); ?></strong>
+            <span class="comment-date"><?php echo format_date($comment['timestamp']); ?></span>
+            <!---
+            <?php if ($indent > 0): ?>
+            <span class="comment-level-badge"><?php echo i18n('Level'); ?> <?php echo $indent; ?></span>
+            <?php endif; ?>
+            --->
+        </div>
+        <div class="comment-body">
+            <?php echo formatCommentText($comment['comment']); ?>
+        </div>
+        <div class="comment-footer">
+            <button class="btn btn-sm btn-link reply-button" onclick="showReplyForm('<?php echo $comment['id']; ?>', '<?php echo ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'); ?>')">
+                <i class="fa fa-reply"></i> <?php echo i18n('Reply'); ?>
+            </button>
+        </div>
+        <div id="reply-container-<?php echo $comment['id']; ?>" class="reply-container" style="display:none; margin-top:15px;">
+            <!-- Reply form will be inserted here via JavaScript -->
+        </div>
+
+        <?php
+        // Display child comments (recursive - unlimited depth)
+        if (!empty($comment['children'])) {
+            echo '<div class="comment-children">';
+            foreach ($comment['children'] as $child) {
+                displayComment($child, $postId);
+            }
+            echo '</div>';
+        }
+        ?>
+    </div>
+    <?php
+}
+
+/**
+ * Display all comments for a post
+ *
+ * @param string $postId Post or page ID
+ * @return void
+ */
+function displayComments($url, $file = null)
+{
+    if (!comments()) {
+        return;
+    }
+
+    $comments = getComments($url, $file = null);
+
+    if (empty($comments)) {
+        return;
+    }
+
+    // Build comment tree
+    $commentTree = buildCommentTree($comments);
+
+    ?>
+    <div class="comments-list">
+        <!--- <h4><?php echo i18n('Comments'); ?> (<?php echo count($comments); ?>)</h4> --->
+        <?php
+        foreach ($commentTree as $comment) {
+            displayComment($comment, $url, $file = null);
+        }
+        ?>
+    </div>
+    <?php
+}
+
+/**
+ * Display complete comments section (list + form)
+ *
+ * @param string $postId Post or page ID
+ * @return void
+
+ * type can be post, author, page, subpage (same a view variable)
+
+ */
+
+
+function displayCommentsSection($a)
+{
+    if (!comments()) {
+        return;
+    }
+    
+    $url = $a->url;
+    $file = $a->file;
+
+    $urlpath = ltrim(parse_url($url, PHP_URL_PATH), '/');
+
+    ?>
+    <section class="comments comment-box" id="comments">
+        <!---
+        <div class="comments-number">
+            <h3><?php echo i18n("Comments"); ?></h3>
+        </div>
+        --->
+        <div class="comment-alert-status" id="comment-alert-status" style="display:none;">
+        </div>
+
+        <?php displayComments($urlpath, $file = null); ?>
+
+        <div class="comment-form-section">
+            <h4><?php echo i18n('Leave_a_comment'); ?></h4>
+            <?php displayCommentsForm($urlpath, $file = null); ?>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+    function showReplyForm(commentId, commentUrl) {
+        // Hide all other reply forms
+        document.querySelectorAll('.reply-container').forEach(function(el) {
+            el.style.display = 'none';
+            el.innerHTML = '';
+        });
+
+        // Show this reply form
+        var container = document.getElementById('reply-container-' + commentId);
+        if (container) {
+            container.style.display = 'block';
+
+            // Build form HTML
+            var submitUrl = '<?php echo site_url(); ?>comments/submit';
+            var formId = 'reply-form-' + commentId;
+
+            var formHtml = '<form id="' + formId + '" method="POST" action="' + submitUrl + '" class="comment-form">' +
+                '<input type="hidden" name="url" value="' + commentUrl + '">' +
+                '<input type="hidden" name="parent_id" value="' + commentId + '">' +
+                '<div style="position:absolute;left:-5000px;" aria-hidden="true">' +
+                '<input type="text" name="website" tabindex="-1" value="" autocomplete="off">' +
+                '</div>' +
+                '<div style="position:absolute;left:-6000px;" aria-hidden="true">' +
+                '<input type="text" name="company" tabindex="-2" value="" autocomplete="off">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="name-' + formId + '"><?php echo i18n("Name"); ?> <span class="required">*</span></label>' +
+                '<input type="text" class="form-control" id="name-' + formId + '" name="name" required>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="email-' + formId + '"><?php echo i18n("Email"); ?> <span class="required">*</span></label>' +
+                '<input type="email" class="form-control" id="email-' + formId + '" name="email" required>' +
+                '<small class="form-text text-muted"><?php echo i18n("Email_not_published"); ?></small>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="comment-' + formId + '"><?php echo i18n("Comment"); ?> <span class="required">*</span></label>' +
+                '<textarea class="form-control" id="comment-' + formId + '" name="comment" rows="5" required></textarea>' +
+                '<small class="form-text text-muted"><?php echo i18n("Comment_formatting_help"); ?></small>' +
+                '</div>' +
+                '<div class="form-group form-check">' +
+                '<input type="checkbox" class="form-check-input" id="notify-' + formId + '" name="notify" value="1">' +
+                '<label class="form-check-label" for="notify-' + formId + '"><?php echo i18n("Notify_new_comments"); ?></label>' +
+                '</div>' +
+                '<br><div class="form-group">' +
+                '<button type="submit" class="btn btn-primary submit-reply"><?php echo i18n("Post_Reply"); ?></button> ' +
+                '<button type="button" class="btn btn-secondary cancel-reply" onclick="cancelReply(\'' + commentId + '\')"><?php echo i18n("Cancel"); ?></button>' +
+                '</div>' +
+                '</form>';
+
+            container.innerHTML = formHtml;
+
+            // Populate antispam company field with current timestamp
+            const timestampSeconds = Math.floor(Date.now() / 1000);
+            const companyField = container.querySelector('[name="company"]');
+            if (companyField) {
+                companyField.value = timestampSeconds;
+            }
+        }
+    }
+
+    function cancelReply(commentId) {
+        var container = document.getElementById('reply-container-' + commentId);
+        if (container) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+        }
+    }
+
+    function handleCommentStatus() {
+        // Setting messages
+        const messages = {
+            comment_submission_success: "<?php echo i18n('comment_submission_success'); ?>",
+            comment_submission_moderation: "<?php echo i18n('comment_submission_moderation'); ?>",
+            comment_submission_error: "<?php echo i18n('comment_submission_error'); ?>",
+            comment_submission_error_shortname: "<?php echo i18n('comment_submission_error_shortname'); ?>",
+            comment_submission_error_email: "<?php echo i18n('comment_submission_error_email'); ?>",
+            comment_submission_error_short: "<?php echo i18n('comment_submission_error_short'); ?>",
+            comment_submission_error_spam: "<?php echo i18n('comment_submission_error_spam'); ?>"
+        };
+        // Get the hash in the URL
+        const hash = window.location.hash;
+        // Check if there's #comment-status
+        if (hash.startsWith('#comment-status')) {
+            // Get the part after +
+            const parts = hash.split('+');
+            if (parts.length > 1) {
+                const statusKey = parts[1];
+                const alertDiv = document.querySelector('.comment-alert-status');
+                if (alertDiv && messages[statusKey]) {
+                    // Set message to display
+                    alertDiv.textContent = messages[statusKey];
+                    // Set div colors (classes) based on message type
+                    if (statusKey.includes('error')) {
+                        alertDiv.className = 'comment-alert-status comment-alert-status-error'
+                    } else if (statusKey.includes('success')) {
+                        alertDiv.className = 'comment-alert-status comment-alert-status-success'
+                    } else if (statusKey.includes('moderation')) {
+                        alertDiv.className = 'comment-alert-status comment-alert-status-warning'
+                    }
+                    // Reset opacity and show status message div
+                    alertDiv.style.opacity = '1';
+                    alertDiv.style.transition = 'none';
+                    alertDiv.style.display = 'block';
+                    // Scroll to status message
+                    document.getElementById('comments').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Hide div after 3 seconds with fade-out effect
+                    setTimeout(() => {
+                        alertDiv.style.transition = 'opacity 0.8s ease';
+                        alertDiv.style.opacity = '0';
+                        // After the fade completes, hide the element completely
+                        alertDiv.addEventListener('transitionend', () => {
+                            alertDiv.style.display = 'none';
+                        }, { once: true });
+                    }, 3000);
+                }
+            }
+        }
+    }
+
+
+    // Antispam protection, executed when page is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        const timestampSeconds = Math.floor(Date.now() / 1000);
+
+        // Select all forms in page
+        document.querySelectorAll('form').forEach(function (form) {
+            // Finds all fields named "company"
+            form.querySelectorAll('[name="company"]').forEach(function (field) {
+                field.value = timestampSeconds;
+            });
+        });
+    });
+
+
+    // Executed when page is loaded
+    document.addEventListener('DOMContentLoaded', handleCommentStatus);
+
+    // Executed also when page hash changes (navigating in same page)
+    window.addEventListener('hashchange', handleCommentStatus);
+
+    </script>
+    <?php
+}
+
+
+
+
+
+
+
+
 
 
 

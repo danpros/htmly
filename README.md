@@ -42,6 +42,7 @@ e.g. `www.yoursite.com/login`
 
  - Homepage: [HTMLy Homepage](https://www.htmly.com/)
  - Documentation: [HTMLy Docs](https://docs.htmly.com/)
+ - Comment system: [HTMLy Comment System Docs](https://github.com/danpros/htmly/blob/master/system/includes/comments_readme.md)
  - Themes: [HTMLy Themes](https://www.htmly.com/theme/)
  - Demo: [HTMLy Demo](http://demo.htmly.com/)
  - Repository: [Github](https://github.com/danpros/htmly/)

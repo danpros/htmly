@@ -68,7 +68,7 @@
                         <h2 class="text-xl text-gray-700 dark:text-gray-300"><?php echo i18n('related_posts');?></h2>
                         <?php echo get_related($p->related);?>
                     </div>
-                    <?php if (facebook() || disqus()): ?>
+                    <?php if (facebook() || disqus() || comments()): ?>
                     <div class="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300" id="comment">
                         <?php if (facebook()): ?>
                             <div class="fb-comments" data-href="<?php echo $p->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
@@ -76,6 +76,9 @@
                         <?php if (disqus()): ?>
                             <?php echo disqus($p->title, $p->url) ?>
                             <div id="disqus_thread"></div>
+                        <?php endif; ?>
+                        <?php if (comments()): ?>
+                            <?php comments($p); ?>
                         <?php endif; ?>
                     </div>
                     <?php endif;?>

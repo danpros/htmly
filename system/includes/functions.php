@@ -2513,6 +2513,7 @@ function social($class = null)
     $youtube = config('social.youtube');
     $mastodon = config('social.mastodon');
     $tiktok = config('social.tiktok');
+    $whatsapp = config('social.whatsapp');
     $rss = site_url() . 'feed/rss';
     $social = '';
 
@@ -2552,6 +2553,10 @@ function social($class = null)
     if (!empty($tiktok)) {
         $social .= '<a class="social-logo-tiktok" href="' . $tiktok . '" target="_blank" rel="nofollow"><span class="screen-reader-text">TikTok</span></a>';
     }    
+
+    if (!empty($whatsapp)) {
+        $social .= '<a class="social-logo-whatsapp" href="' . $whatsapp . '" target="_blank" rel="nofollow"><span class="screen-reader-text">WhatsApp</span></a>';
+    }
 
     $social .= '<a class="social-logo-feed" href="' . $rss . '" target="_blank"><span class="screen-reader-text">RSS</span></a>';
     $social .= '</div>';

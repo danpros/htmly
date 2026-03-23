@@ -79,7 +79,7 @@
         <?php echo disqus_count() ?>
     <?php endif; ?>
     
-    <?php if (facebook() || disqus()): ?>
+    <?php if (facebook() || disqus() || comments()): ?>
         <div class="comments-area" id="comments">
         
             <h2 class="comments-title"><?php echo i18n('Comments');?> “<?php echo $p->title;?>”</h2>
@@ -92,6 +92,10 @@
                 <div id="disqus_thread"></div>
             <?php endif; ?>
             
+            <?php if (comments()): ?>
+                <?php comments($p); ?>
+            <?php endif; ?>
+
         </div>
     <?php endif; ?>
 

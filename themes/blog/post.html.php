@@ -92,7 +92,7 @@
         </div><!--//content-->  
     </div><!--//section-inner-->                 
 </section><!--//section-->
-<?php if (facebook() || disqus()): ?>
+<?php if (facebook() || disqus() || comments()): ?>
     <section class="comment-wrapper post section">
         <div class="section-inner">
             <div class="content">
@@ -103,6 +103,9 @@
                     <?php endif; ?>
                     <?php if (disqus()): ?>
                         <div id="disqus_thread"></div>
+                    <?php endif; ?>
+                    <?php if (comments()): ?>
+                        <?php comments($p); ?>
                     <?php endif; ?>
                 </div>
             </div><!--//content-->  

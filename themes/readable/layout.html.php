@@ -40,6 +40,16 @@
     <div id="content-wrapper">
         <div class="container">
             <section id="content">
+                
+                <!--//sysmessages div-->
+                <div class="main" id="messages-div">
+                <div class="section-inner message-alert">
+                    <div class="content">
+                        <div id="messages-text">&nbsp;</div>
+                    </div>
+                </div>
+                </div>
+                
                 <?php echo content() ?>
             </section>
         </div>
@@ -52,6 +62,8 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="<?php echo site_url();?>system/resources/js/sysmessages.js" data-base="<?php echo site_url(); ?>"></script>
+
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

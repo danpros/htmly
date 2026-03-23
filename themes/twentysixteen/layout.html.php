@@ -50,6 +50,16 @@
 
                 <div id="primary" class="content-area">
                     <main id="main" class="site-main" role="main">
+                        
+                        <!--//sysmessages div-->
+                        <div class="main" id="messages-div">
+                        <div class="section-inner message-alert">
+                            <div class="content">
+                                <div id="messages-text">&nbsp;</div>
+                            </div>
+                        </div>
+                        </div>
+                        
                         <?php echo content();?>
                     </main><!-- .site-main -->
                 </div><!-- .content-area -->
@@ -85,11 +95,19 @@
                     </section>
                     <?php endif;?>
 
+                    <?php if (disqus() || comments()): ?>
                     <?php if (disqus()): ?>
                     <section id="recent-comments" class="widget widget_recent_comments">
                         <h2 class="widget-title"><?php echo i18n('Comments');?></h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;} .dsq-widget-list {margin-left:0;}</style>
                     </section>
+                    <?php endif;?>
+                        <?php if (comments()): ?>
+                        <section id="recent-comments" class="widget widget_recent_comments">
+                            <h2 class="widget-title"><?php echo i18n('Comments');?></h2>
+                            <?php echo last_comments(3); ?>
+                        </section>
+                        <?php endif;?>
                     <?php endif;?>
 
 					<?php if(theme_config('archive')):?>
@@ -150,6 +168,8 @@
     /* ]]> */
     </script>
     <script type="text/javascript" src="<?php echo theme_path();?>js/functions.js"></script>
+    <script type="text/javascript" src="<?php echo site_url();?>system/resources/js/sysmessages.js" data-base="<?php echo site_url(); ?>"></script>
+
     <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

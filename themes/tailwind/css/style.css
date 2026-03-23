@@ -148,3 +148,96 @@
 .recent-posts > ul {
 	padding-left: 15px;
 }
+
+/*--------------------------------------------------------------
+## - CSS comments
+--------------------------------------------------------------*/
+.comment-alert-status {
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.comment-alert-status-success {
+    background-color: rgba(0, 128, 0, 0.2);
+    border-left: 3px solid rgba(0, 128, 0);
+}
+
+.comment-alert-status-warning {
+    background-color: rgba(255, 204, 0, 0.2);
+    border-left: 3px solid rgba(255, 204, 0);
+}
+
+.comment-alert-status-error {
+    background-color: rgba(191, 0, 0, 0.2);
+    border-left: 3px solid rgba(191, 0, 0);
+}
+
+
+.comment-form-section {
+    text-align: left;
+}
+
+
+.comment-form-section > h4 {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.comment-body {
+    font-style: italic;
+}
+
+.comment-item {
+    padding-left: 10px;
+    font-size: small;
+    border-left: 3px solid #555 !important;
+    text-align: left;
+}
+
+
+.comments input:not([type="checkbox"]) {
+    width: 100%;
+}
+
+.comments .form-check-input {
+    margin-right: 5px;
+}
+
+.comments textarea {
+    width: 100%;
+}
+
+
+.comments .btn {
+color: #ec4899;
+  text-decoration: underline;
+  font-weight: 500;
+  border: none;
+}
+
+
+
+#messages-div {
+    display: none;
+    width: 100%;
+}
+
+#messages-text {
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+}
+
+.message-alert-success {
+    background-color: rgba(0, 128, 0, 0.2) !important;
+}
+
+.message-alert-warning {
+    background-color: rgba(255, 204, 0, 0.2) !important;
+}
+
+.message-alert-error {
+    background-color: rgba(191, 0, 0, 0.2) !important;
+}
+
+

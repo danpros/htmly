@@ -150,7 +150,7 @@ if (isset($author[0])) {
             </ul>
           </li>
           <?php if ($role === 'editor' || $role === 'admin'):?>
-          <?php if (local()): ?>
+          <?php if (comments()): ?>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-comments"></i>

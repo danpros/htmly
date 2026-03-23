@@ -36,6 +36,14 @@
     <div id="main-wrapper">
         <div id="main" class="responsive">
             <section id="content">
+                
+                <!--//sysmessages div-->
+                <div id="messages-div">
+                    <div  class="message-alert">
+                        <div id="messages-text">&nbsp;</div>
+                    </div>
+                </div>
+                
                 <?php echo content() ?>
             </section>
             <aside id="sidebar">
@@ -69,12 +77,22 @@
                 </div>
                 <?php endif;?>
 
+                <?php if (disqus() || comments()): ?>
                 <?php if (disqus()): ?>
                     <div class="comments">
                         <h3><?php echo i18n('Comments');?></h3>                    
                         <?php echo recent_comments() ?>
                         <style>li.dsq-widget-item {border-bottom: 1px solid #ebebeb;margin:0;margin-bottom:10px;padding:0;padding-bottom:10px;}a.dsq-widget-user {font-weight:normal;}img.dsq-widget-avatar {margin-right:10px; }.dsq-widget-comment {display:block;padding-top:5px;}.dsq-widget-comment p {display:block;margin:0;}p.dsq-widget-meta {padding-top:5px;margin:0;}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box {background: transparent;}#dsq-combo-widget.grey #dsq-combo-tabs li {background: none repeat scroll 0 0 #DDDDDD;}</style>
                     </div>
+                <?php endif; ?>
+
+                    <?php if (comments()): ?>
+                        <div class="comments">
+                            <h3><?php echo i18n('Comments');?></h3>                    
+                            <?php echo recent_comments() ?>
+                            <?php echo last_comments(); ?>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <?php if (theme_config('category_list')):?>
@@ -102,6 +120,7 @@
         </footer>
     </div>
 </div>
+<script type="text/javascript" src="<?php echo site_url();?>system/resources/js/sysmessages.js" data-base="<?php echo site_url(); ?>"></script>
 <?php if (analytics()): ?><?php echo analytics() ?><?php endif; ?>
 </body>
 </html>

@@ -73,13 +73,16 @@
     <?php echo disqus($post->title, $post->url) ?>
 <?php endif; ?>
 
-<?php if (facebook() || disqus()): ?>
+<?php if (facebook() || disqus() || comments()): ?>
 <div class="comments-area" id="comments">
     <?php if (facebook()): ?>
         <div class="fb-comments" data-href="<?php echo $post->url ?>" data-numposts="<?php echo config('fb.num') ?>" data-colorscheme="<?php echo config('fb.color') ?>"></div>
     <?php endif; ?>
     <?php if (disqus()): ?>
         <div id="disqus_thread"></div>
+    <?php endif; ?>
+    <?php if (comments()): ?>
+        <?php comments($p); ?>
     <?php endif; ?>
 </div>
 <?php endif; ?>

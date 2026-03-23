@@ -65,11 +65,19 @@
                     </aside>
                     <?php endif;?>
 
+                    <?php if (disqus() || comments()): ?>
                     <?php if (disqus()): ?>
                     <aside class="widget widget_meta">
                         <h2 class="widget-title">Recent comments</h2>
                         <script src="//<?php echo config('disqus.shortname');?>.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=48&amp;excerpt_length=200&amp;hide_mods=0" type="text/javascript"></script><style>li.dsq-widget-item {padding-top:15px;} img.dsq-widget-avatar {margin-right:5px;}</style>
                     </aside>
+                    <?php endif;?>
+                        <?php if (comments()): ?>
+                        <aside class="widget widget_meta">
+                            <h2 class="widget-title">Recent comments</h2>
+                            <?php echo last_comments(3); ?>
+                        </aside>
+                        <?php endif;?>
                     <?php endif;?>
 
                     <?php if (theme_config('archive')):?>

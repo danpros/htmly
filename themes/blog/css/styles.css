@@ -641,3 +641,73 @@ ul.month {
 .social-logo a:before {
   padding-top:6px;
 }
+
+
+/*--------------------------------------------------------------
+## - CSS comments
+--------------------------------------------------------------*/
+.comment-alert-status {
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.comment-alert-status-success {
+    background-color: rgba(0, 128, 0, 0.2);
+    border-left: 3px solid rgba(0, 128, 0);
+}
+
+.comment-alert-status-warning {
+    background-color: rgba(255, 204, 0, 0.2);
+    border-left: 3px solid rgba(255, 204, 0);
+}
+
+.comment-alert-status-error {
+    background-color: rgba(191, 0, 0, 0.2);
+    border-left: 3px solid rgba(191, 0, 0);
+}
+
+
+.comments.aside.section li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.comments.aside.section ul {
+    padding-left: 0px;
+}
+
+.comments.aside.section a {
+    color: #5f6b77;
+    font-size: 16px;
+    line-height: 1.3;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.comments.aside.section span {
+    font-style: italic;
+    font-size: small;
+}
+
+.comment-item {
+    padding-left: 10px;
+}
+
+
+#messages-div {
+    display: none;    
+}
+
+.message-alert-success {
+    background-color: rgba(0, 128, 0, 0.2) !important;
+}
+
+.message-alert-warning {
+    background-color: rgba(255, 204, 0, 0.2) !important;
+}
+
+.message-alert-error {
+    background-color: rgba(191, 0, 0, 0.2) !important;
+}

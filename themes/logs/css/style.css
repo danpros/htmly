@@ -984,3 +984,87 @@ ul.archivegroup {
     box-shadow: none;
     border: none;
 }
+
+/*--------------------------------------------------------------
+## - CSS comments
+--------------------------------------------------------------*/
+.comment-alert-status {
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.comment-alert-status-success {
+    background-color: rgba(0, 128, 0, 0.2);
+    border-left: 3px solid rgba(0, 128, 0);
+}
+
+.comment-alert-status-warning {
+    background-color: rgba(255, 204, 0, 0.2);
+    border-left: 3px solid rgba(255, 204, 0);
+}
+
+.comment-alert-status-error {
+    background-color: rgba(191, 0, 0, 0.2);
+    border-left: 3px solid rgba(191, 0, 0);
+}
+
+
+#comments {
+    width: 90%;
+}
+
+.comments .btn {
+    background-color: white;
+    border: none;
+    font-family: Georgia, sans-serif;
+    font-size: 15px;
+    color: #21759B;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.comments .btn:hover {
+    text-decoration: underline;
+      color: #D54E21;
+}
+
+.comments input:not([type="checkbox"]) {
+    width: 100%;
+}
+
+.comment-item {
+    padding-left: 10px;
+    border-left: 3px solid #21759B !important;
+}
+
+.comments .form-check-input {
+    margin-right: 5px;
+}
+
+.comments textarea {
+    width: 100%;
+}
+
+#messages-div {
+    display: none;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#messages-text {
+    padding: 5px 10px 5px 10px;
+}
+
+.message-alert-success {
+    background-color: rgba(0, 128, 0, 0.2);
+}
+
+.message-alert-warning {
+    background-color: rgba(255, 204, 0, 0.2);
+}
+
+.message-alert-error {
+    background-color: rgba(191, 0, 0, 0.2);
+}
+
