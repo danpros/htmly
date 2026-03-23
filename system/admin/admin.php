@@ -46,7 +46,7 @@ function create_user($userName, $password, $role)
 }
 
 // Create a session
-function session($user, $pass)
+function session($user, $pass, $remember = false)
 {
     $user_file = 'config/users/' . $user . '.ini';
     if (!file_exists($user_file)) {
@@ -65,18 +65,24 @@ function session($user, $pass)
     if ($user_enc == "password_hash") {
         if (password_verify($pass, $user_pass)) {
             if (session_status() == PHP_SESSION_NONE) session_start();
+            session_regenerate_id(true);
             if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
                 update_user($user, $pass, $user_role, $mfa);
             }
             $_SESSION[site_url()]['user'] = $user;
+            $_SESSION[site_url()]['ip'] = current_session_ip();
+            set_session_cookie_lifetime($remember ? time() + (86400 * 30) : 0);
             header('location: admin');
         } else {
             return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
         if (session_status() == PHP_SESSION_NONE) session_start();
+        session_regenerate_id(true);
         update_user($user, $pass, $user_role, $mfa);
         $_SESSION[site_url()]['user'] = $user;
+        $_SESSION[site_url()]['ip'] = current_session_ip();
+        set_session_cookie_lifetime($remember ? time() + (86400 * 30) : 0);
         header('location: admin');
     } else {
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';

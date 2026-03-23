@@ -80,6 +80,29 @@
 	  <small><em><?php echo i18n('explain_mfa');?></em></small>
     </div>
   </div>
+  <br>
+  <h4><?php echo i18n('session_security');?></h4>
+  <hr>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><?php echo i18n('ip_session_validation');?></label>
+    <div class="col-sm-10">
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-session.ip.validation" id="session.ip.validation1" value="true" <?php if (is_null(config('session.ip.validation')) || config('session.ip.validation') === 'true'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="session.ip.validation1">
+            <?php echo i18n('Enable');?>
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="-config-session.ip.validation" id="session.ip.validation2" value="false" <?php if (config('session.ip.validation') === 'false'):?>checked<?php endif;?>>
+          <label class="form-check-label" for="session.ip.validation2">
+            <?php echo i18n('Disable');?>
+          </label>
+        </div>
+      </div>
+      <small><em><?php echo i18n('ip_session_validation_explain');?></em></small>
+    </div>
+  </div>
   <div class="form-group row">
     <div class="col-sm-10">
       <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Config');?></button>

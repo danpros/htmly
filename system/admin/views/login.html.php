@@ -20,6 +20,10 @@
             }
         } ?>" name="password" placeholder="<?php echo i18n('Password'); ?>"/>
         <br>
+        <div class="form-check" style="margin-bottom:1rem;">
+            <input type="checkbox" class="form-check-input" id="remember" name="remember" value="1" <?php if (!empty($remember)) { echo 'checked'; } ?>>
+            <label class="form-check-label" for="remember"><?php echo i18n('Keep_me_logged_in'); ?></label>
+        </div>
         <input type="hidden" name="csrf_token" value="<?php echo get_csrf() ?>">
         <?php if (config('login.protect.system') === 'google'): ?>
             <script src='https://www.google.com/recaptcha/api.js'></script>

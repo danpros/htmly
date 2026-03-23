@@ -149,9 +149,11 @@ post('/login', function () {
 
     $user = from($_REQUEST, 'user');
     $pass = from($_REQUEST, 'password');
+    $remember = from($_REQUEST, 'remember') === '1';
     $mfa_secret = user('mfa_secret', $user);
     if ($proper && $captcha && !empty($user) && !empty($pass)) {
         if (!is_null($mfa_secret) && $mfa_secret !== "disabled" && config('mfa.state') === 'true') {
+            $_SESSION['mfa_remember'] = $remember ? '1' : '0';
             config('views.root', 'system/admin/views');
 
             render('login-mfa', array(
@@ -161,14 +163,14 @@ post('/login', function () {
                 'metatags' => generate_meta(null, null),
                 'username' => $user,
                 'password' => $pass,
+                'remember' => $remember,
                 'type' => 'is_login',
                 'is_login' => true,
                 'bodyclass' => 'in-login',
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Login')
             ));
         } else {
-            session($user, $pass);
-            $log = session($user, $pass);
+            $log = session($user, $pass, $remember);
 
             if (!empty($log)) {
 
@@ -180,6 +182,7 @@ post('/login', function () {
                     'canonical' => site_url(),
                     'metatags' => generate_meta(null, null),
                     'error' => '<ul>' . $log . '</ul>',
+                    'remember' => $remember,
                     'type' => 'is_login',
                     'is_login' => true,
                     'bodyclass' => 'in-login',
@@ -212,6 +215,7 @@ post('/login', function () {
             'error' => '<ul>' . $message['error'] . '</ul>',
             'username' => $user,
             'password' => $pass,
+            'remember' => $remember,
             'type' => 'is_login',
             'is_login' => true,
             'bodyclass' => 'in-login',
@@ -226,12 +230,12 @@ post('/login-mfa', function () {
     $proper = is_csrf_proper(from($_REQUEST, 'csrf_token'));
     $user = $_SESSION["mfa_uid"];
     $pass = $_SESSION["mfa_pwd"];
+    $remember = isset($_SESSION['mfa_remember']) && $_SESSION['mfa_remember'] === '1';
     $mfacode = from($_REQUEST, 'mfacode');
     $mfa_secret = user('mfa_secret', $user);
     $google2fa = new Google2FA();
     if ($proper && $google2fa->verifyKey($mfa_secret, $mfacode, '1')) {
-        session($user, $pass);
-        $log = session($user, $pass);
+        $log = session($user, $pass, $remember);
 
         if (!empty($log)) {
 

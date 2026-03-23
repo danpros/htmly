@@ -76,6 +76,9 @@ login.protect.private = ""
 ; Multi-factor authentication
 mfa.state = "false"
 
+; Validate admin session against client IP address. Options "true" and "false"
+session.ip.validation = "true"
+
 ; Pagination, RSS, and JSON
 posts.perpage = "10"
 category.perpage = "10"
