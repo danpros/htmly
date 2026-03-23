@@ -19,8 +19,6 @@
        <span class="badge badge-warning"><?php echo $pendingCount; ?></span>
        <?php endif; ?>
     </a>
-    <a class="nav-item nav-link <?php echo (isset($tab) && $tab === 'settings') ? 'active' : ''; ?>"
-       href="<?php echo site_url();?>admin/comments/settings"><?php echo i18n('Settings');?></a>
   </div>
 </nav>
 <br><br>
@@ -125,165 +123,6 @@
     </div>
 <?php endif; ?>
 
-<?php elseif ($tab === 'settings'): ?>
-<!-- Settings Form -->
-<form method="POST" action="<?php echo site_url(); ?>admin/comments/settings">
-<input type="hidden" name="csrf_token" value="<?php echo get_csrf(); ?>">
-
-<!-- // removed by Emidio 20251105
-<div class="alert alert-info">
-    <strong><?php echo i18n('Note'); ?>:</strong> <?php echo i18n('Enable_comments_in_main_config'); ?>
-    <br>
-    <code>config/config.ini</code> → <code>comment.system = "local"</code>
-</div>
--->
-
-<h4><?php echo i18n('General_Settings');?></h4>
-<hr>
-
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label"><?php echo i18n('Comment_Moderation');?></label>
-    <div class="col-sm-9">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="comments.moderation" value="true"
-                   <?php echo comments_config('comments.moderation') === 'true' ? 'checked' : ''; ?>>
-            <label class="form-check-label"><?php echo i18n('Require_admin_approval');?></label>
-        </div>
-        <small class="form-text text-muted"><?php echo i18n('Comments_moderation_desc');?></small>
-    </div>
-</div>
-
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label"><?php echo i18n('Anti_Spam_Protection');?></label>
-    <div class="col-sm-9">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="comments.honeypot" value="true"
-                   <?php echo comments_config('comments.honeypot') === 'true' ? 'checked' : ''; ?>>
-            <label class="form-check-label"><?php echo i18n('Enable_honeypot');?></label>
-        </div>
-        <small class="form-text text-muted"><?php echo i18n('Honeypot_desc');?></small>
-            
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="comments.jstime" value="true"
-                   <?php echo comments_config('comments.jstime') === 'true' ? 'checked' : ''; ?>>
-            <label class="form-check-label"><?php echo i18n('Enable_jstime');?></label>
-        </div>
-        <small class="form-text text-muted"><?php echo i18n('Jstime_desc');?></small>
-    </div>
-</div>
-
-<h4><?php echo i18n('Email_Notifications');?></h4>
-<hr>
-
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label"><?php echo i18n('Enable_Notifications');?></label>
-    <div class="col-sm-9">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="comments.notify" value="true"
-                   <?php echo comments_config('comments.notify') === 'true' ? 'checked' : ''; ?>>
-            <label class="form-check-label"><?php echo i18n('Send_email_notifications');?></label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="admin-email" class="col-sm-3 col-form-label"><?php echo i18n('Admin_Email');?></label>
-    <div class="col-sm-9">
-        <input type="email" class="form-control" id="admin-email" name="comments.admin.email"
-               value="<?php echo _h(comments_config('comments.admin.email')); ?>"
-               placeholder="admin@example.com">
-        <small class="form-text text-muted"><?php echo i18n('Admin_email_desc');?></small>
-    </div>
-</div>
-
-<h4><?php echo i18n('SMTP_Settings');?></h4>
-<hr>
-
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label"><?php echo i18n('Enable_SMTP');?></label>
-    <div class="col-sm-9">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="comments.mail.enabled" value="true"
-                   <?php echo comments_config('comments.mail.enabled') === 'true' ? 'checked' : ''; ?>>
-            <label class="form-check-label"><?php echo i18n('Enable_SMTP_for_emails');?></label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-host" class="col-sm-3 col-form-label"><?php echo i18n('SMTP_Host');?></label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="mail-host" name="comments.mail.host"
-               value="<?php echo _h(comments_config('comments.mail.host')); ?>"
-               placeholder="smtp.gmail.com">
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-port" class="col-sm-3 col-form-label"><?php echo i18n('SMTP_Port');?></label>
-    <div class="col-sm-9">
-        <input type="number" class="form-control" id="mail-port" name="comments.mail.port"
-               value="<?php echo _h(comments_config('comments.mail.port')); ?>"
-               placeholder="587">
-        <small class="form-text text-muted">587 (TLS) or 465 (SSL)</small>
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-encryption" class="col-sm-3 col-form-label"><?php echo i18n('Encryption');?></label>
-    <div class="col-sm-9">
-        <select class="form-control" id="mail-encryption" name="comments.mail.encryption">
-            <option value="tls" <?php echo comments_config('comments.mail.encryption') === 'tls' ? 'selected' : ''; ?>>TLS</option>
-            <option value="ssl" <?php echo comments_config('comments.mail.encryption') === 'ssl' ? 'selected' : ''; ?>>SSL</option>
-        </select>
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-username" class="col-sm-3 col-form-label"><?php echo i18n('SMTP_Username');?></label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="mail-username" name="comments.mail.username"
-               value="<?php echo _h(comments_config('comments.mail.username')); ?>"
-               placeholder="your-email@gmail.com">
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-password" class="col-sm-3 col-form-label"><?php echo i18n('SMTP_Password');?></label>
-    <div class="col-sm-9">
-        <input type="password" class="form-control" id="mail-password" name="comments.mail.password"
-               value="<?php echo _h(comments_config('comments.mail.password')); ?>"
-               placeholder="<?php echo i18n('Enter_password');?>">
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-from-email" class="col-sm-3 col-form-label"><?php echo i18n('From_Email');?></label>
-    <div class="col-sm-9">
-        <input type="email" class="form-control" id="mail-from-email" name="comments.mail.from.email"
-               value="<?php echo _h(comments_config('comments.mail.from.email')); ?>"
-               placeholder="noreply@example.com">
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="mail-from-name" class="col-sm-3 col-form-label"><?php echo i18n('From_Name');?></label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="mail-from-name" name="comments.mail.from.name"
-               value="<?php echo _h(comments_config('comments.mail.from.name')); ?>"
-               placeholder="<?php echo config('blog.title'); ?>">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-9 offset-sm-3">
-        <button type="submit" class="btn btn-primary"><?php echo i18n('Save_Settings');?></button>
-    </div>
-</div>
-
-</form>
-<?php endif; ?>
-
 <?php if (isset($editComment)): ?>
 <!-- Edit Comment Modal/Page -->
 <h3><?php echo i18n('Edit_Comment');?></h3>
@@ -325,4 +164,5 @@
 </div>
 
 </form>
+<?php endif; ?>
 <?php endif; ?>

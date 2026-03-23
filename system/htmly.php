@@ -2457,6 +2457,75 @@ post('/admin/config/security', function () {
     }
 });
 
+// Show Config page
+get('/admin/config/comments', function () {
+
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
+
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'admin') {
+            render('config-comments', array(
+                'title' => generate_title('is_default', i18n('Config')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'admin-config',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Config')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-config',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Config')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
+// Submitted Config page data
+post('/admin/config/comments', function () {
+
+    $proper = is_csrf_proper(from($_REQUEST, 'csrf_token')) ?? null;
+    if (login() && $proper) {
+        $new_config = array();
+        $new_Keys = array();
+        $user = $_SESSION[site_url()]['user'];
+        $role = user('role', $user);
+        if ($role === 'admin') {
+            foreach ($_POST as $name => $value) {
+                if (substr($name, 0, 8) == "-config-") {
+                    $name = str_replace("_", ".", substr($name, 8));
+                    if(!is_null(config($name))) {
+                        $new_config[$name] = $value;
+                    } else {
+                        $new_Keys[$name] = $value;    
+                    }
+                }
+            }
+            save_config($new_config, $new_Keys);
+            $redir = site_url() . 'admin/config/comments';
+            header("location: $redir");
+        } else {
+            $redir = site_url();
+            header("location: $redir");    
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
 
 // Show Config page
 get('/admin/config/performance', function () {
@@ -3123,7 +3192,7 @@ get('/admin/comments', function () {
             'type' => 'is_admin-comments',
             'is_admin' => true,
             'bodyclass' => 'admin-comments',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments'),
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('comments'),
             'tab' => 'all',
             'page' => $page,
             'comments' => $comments,
@@ -3171,7 +3240,7 @@ get('/admin/comments/pending', function () {
             'type' => 'is_admin-comments',
             'is_admin' => true,
             'bodyclass' => 'admin-comments',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments') . ' &#187; ' . i18n('Pending'),
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('comments') . ' &#187; ' . i18n('Pending'),
             'tab' => 'pending',
             'page' => $page,
             'comments' => $comments,
@@ -3201,7 +3270,7 @@ get('/admin/comments/settings', function () {
             'type' => 'is_admin-comments',
             'is_admin' => true,
             'bodyclass' => 'admin-comments',
-            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Comments') . ' &#187; ' . i18n('Settings'),
+            'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('comments') . ' &#187; ' . i18n('Settings'),
             'tab' => 'settings',
             'pendingCount' => $pendingCount
         ));
@@ -3304,7 +3373,7 @@ get('/admin/comments/edit/:commentfile/:commentid', function ($commentfile, $com
                 'type' => 'is_admin-comments',
                 'is_admin' => true,
                 'bodyclass' => 'admin-comments',
-                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/comments">' . i18n('Comments') . '</a> &#187; ' . i18n('Edit'),
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; <a href="' . site_url() . 'admin/comments">' . i18n('comments') . '</a> &#187; ' . i18n('Edit'),
                 'editComment' => $editComment,
                 'pendingCount' => $pendingCount
             ));

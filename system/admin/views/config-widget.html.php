@@ -9,6 +9,9 @@
     <a class="nav-item nav-link active" id="nav-widget-tab" href="<?php echo site_url();?>admin/config/widget"><?php echo i18n('Widget');?></a>
     <a class="nav-item nav-link" id="nav-metatags-tab" href="<?php echo site_url();?>admin/config/metatags"><?php echo i18n('Metatags');?></a>
     <a class="nav-item nav-link" id="nav-security-tab" href="<?php echo site_url();?>admin/config/security"><?php echo i18n('Security');?></a>
+    <?php if(config('comment.system') === 'local') { ?>
+    <a class="nav-item nav-link" id="nav-comments-tab" href="<?php echo site_url();?>admin/config/comments"><?php echo i18n('comments');?></a>
+    <?php } ?>
     <a class="nav-item nav-link" id="nav-performance-tab" href="<?php echo site_url();?>admin/config/performance"><?php echo i18n('Performance');?></a>
     <a class="nav-item nav-link" id="nav-custom-tab" href="<?php echo site_url();?>admin/config/custom"><?php echo i18n('Custom');?></a>
   </div>  
@@ -133,7 +136,7 @@
     </div>
   </div>
   <br>
-  <h4><?php echo i18n('Comments');?></h4>
+  <h4><?php echo i18n('comments');?></h4>
   <hr>
   <p><?php echo i18n('To_use_Disqus_or_Facebook_comment_you_need_to_provide_Disqus_shortname_or_Facebook_App_ID');?></p>
   <div class="form-group row">

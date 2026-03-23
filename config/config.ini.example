@@ -45,6 +45,25 @@ breadcrumb.home = "Home"
 ; Comment system. Choose "facebook", "disqus", or "disable".
 comment.system = "disable"
 
+; Local comments settings
+comments.moderation = "false"
+comments.honeypot = "true"
+comments.jstime = "true"
+comments.notify = "true"
+comments.notifyadmin = "true"
+comments.admin.email = ""
+comments.salt = ""
+
+; Local comments SMTP settings
+comments.mail.enabled = "false"
+comments.mail.host = ""
+comments.mail.username = ""
+comments.mail.password = ""
+comments.mail.port = "587"
+comments.mail.encryption = "tls"
+comments.mail.from.email = ""
+comments.mail.from.name = ""
+
 ; Facebook comments
 fb.appid = ""
 fb.num = "5"

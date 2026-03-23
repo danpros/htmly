@@ -141,7 +141,7 @@ function displayComments($url, $file = null)
 
     ?>
     <div class="comments-list">
-        <!--- <h4><?php echo i18n('Comments'); ?> (<?php echo count($comments); ?>)</h4> --->
+        <!--- <h4><?php echo i18n('comments'); ?> (<?php echo count($comments); ?>)</h4> --->
         <?php
         foreach ($commentTree as $comment) {
             displayComment($comment, $url, $file = null);

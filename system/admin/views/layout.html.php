@@ -155,7 +155,7 @@ if (isset($author[0])) {
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-comments"></i>
               <p>
-                <?php echo i18n('Comments'); ?>
+                <?php echo i18n('comments'); ?>
                 <?php
                 $pendingCount = getPendingCommentsCount();
                 if ($pendingCount > 0): ?>
@@ -182,15 +182,6 @@ if (isset($author[0])) {
                   </p>
                 </a>
               </li>
-              <?php if ($role === 'admin'):?>
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>admin/comments/settings" class="nav-link">
-                  <p>
-                    <?php echo i18n('Settings'); ?>
-                  </p>
-                </a>
-              </li>
-              <?php endif;?>
             </ul>
           </li>
           <?php endif;?>

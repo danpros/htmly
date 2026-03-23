@@ -15,88 +15,6 @@ function local()
 }
 
 /**
- * Get comments configuration value
- *
- * @param string $key Configuration key (use 'reload' to force cache reload)
- * @return mixed Configuration value or null
- */
-function comments_config($key)
-{
-    static $_config = array();
-
-    $config_file = 'config/comments.ini';
-
-    // Allow cache reload
-    if ($key === 'reload') {
-        $_config = array();
-        return null;
-    }
-
-    if (empty($_config) && file_exists($config_file)) {
-        $_config = parse_ini_file($config_file, false);
-    }
-
-    return isset($_config[$key]) ? $_config[$key] : null;
-}
-
-/**
- * Save comments configuration
- *
- * @param array $data Configuration data to save
- * @return bool Success status
- */
-function save_comments_config($data = array())
-{
-    $config_file = 'config/comments.ini';
-
-    if (!file_exists($config_file)) {
-        return false;
-    }
-
-    $string = file_get_contents($config_file);
-
-    foreach ($data as $word => $value) {
-        // Ensure null and empty values are saved as empty strings
-        if ($value === null || $value === '') {
-            $value = '""';
-        } else {
-            // Encode value
-            $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        }
-
-        $map = array('\r\n' => ' \n ', '\r' => ' \n ');
-        $value = trim(strtr($value, $map));
-
-        // Escape dots in the key for regex
-        $escapedWord = str_replace('.', '\.', $word);
-
-        // Try to replace existing line
-        $pattern = "/^" . $escapedWord . " = .*/m";
-        if (preg_match($pattern, $string)) {
-            $string = preg_replace($pattern, $word . ' = ' . $value, $string);
-        } else {
-            // If line doesn't exist, add it at the end
-            $string = rtrim($string) . "\n" . $word . ' = ' . $value . "\n";
-        }
-    }
-
-    $string = rtrim($string) . "\n";
-    $result = file_put_contents($config_file, $string, LOCK_EX);
-
-    // Clear PHP opcache for this file
-    if (function_exists('opcache_invalidate')) {
-        opcache_invalidate($config_file, true);
-    }
-
-    // Clear cache after saving
-    if ($result !== false) {
-        comments_config('reload');
-    }
-
-    return $result;
-}
-
-/**
  * Get comments file path for a post/page
  * Replicates content file path inside comments folder
  *
@@ -403,14 +321,14 @@ function validateComment($data)
     }
 
     // Validate honeypot (if enabled)
-    if (comments_config('comments.honeypot') === 'true') {
+    if (config('comments.honeypot') === 'true') {
         if (!empty($data['website'])) {
             $errors[] = 'comment_submission_error_spam';
         }
     }
 
     // Validate js and time (if enabled) - minimum 2 seconds, maximum 600 seconds
-    if (comments_config('comments.jstime') === 'true') {
+    if (config('comments.jstime') === 'true') {
         if (!$data['company'] || secondsGenerationSubmit($data['company']) < 3 || secondsGenerationSubmit($data['company']) > 3600) {
             $errors[] = 'comment_submission_error_spam';
         }
@@ -464,7 +382,7 @@ function commentInsert($data, $url, $mdfile = null)
         'date' => date('Y-m-d H:i:s', $timestamp),
         'parent_id' => isset($data['parent_id']) && !empty($data['parent_id']) ? $data['parent_id'] : null,
         'notify' => isset($data['notify']) && $data['notify'] === '1',
-        'published' => comments_config('comments.moderation') !== 'true', // Auto-publish if moderation disabled
+        'published' => config('comments.moderation') !== 'true', // Auto-publish if moderation disabled
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown'
     );
 
@@ -514,7 +432,7 @@ function setSubscription($email, $action) {
     if (!is_dir($subscriptions_dir)) {
         mkdir($subscriptions_dir);
     }
-    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
+    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, config('comments.salt'));
     
     $subscription = getSubscription($email);
 
@@ -554,7 +472,7 @@ function setSubscription($email, $action) {
 // returns array
 function getSubscription($email) {
     $subscriptions_dir = 'content/comments/.subscriptions';
-    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, comments_config('comments.salt'));
+    $subscription_file = $subscriptions_dir . '/' . encryptEmailForFilename($email, config('comments.salt'));
     if (!file_exists($subscription_file)) {
         $subscription['status'] = 'no';
         $subscription['date'] = date('Y-m-d H:i:s');
@@ -643,13 +561,13 @@ function sendSubscriptionEmail($email) {
 
         // Server settings
         $mail->isSMTP();
-        $mail->Host = comments_config('comments.mail.host');
+        $mail->Host = config('comments.mail.host');
         $mail->SMTPAuth = true;
-        $mail->Username = comments_config('comments.mail.username');
-        $mail->Password = comments_config('comments.mail.password');
-        $mail->Port = comments_config('comments.mail.port');
+        $mail->Username = config('comments.mail.username');
+        $mail->Password = config('comments.mail.password');
+        $mail->Port = config('comments.mail.port');
 
-        $encryption = comments_config('comments.mail.encryption');
+        $encryption = config('comments.mail.encryption');
         if ($encryption === 'tls') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         } elseif ($encryption === 'ssl') {
@@ -658,8 +576,8 @@ function sendSubscriptionEmail($email) {
 
         // Recipients
         $mail->setFrom(
-            comments_config('comments.mail.from.email'),
-            comments_config('comments.mail.from.name')
+            config('comments.mail.from.email'),
+            config('comments.mail.from.name')
         );
         $mail->addAddress($email);
 
@@ -672,9 +590,9 @@ function sendSubscriptionEmail($email) {
             <h3>" . i18n('comment_subscribe_thread') . ": ".config('site.url')."</h3>
             <p>" . i18n('comment_subscribe_request') . " ".config('blog.title')."</p>
             <p>" . i18n('comment_subscribe_never_requested') . "</p>
-            <p>" . i18n('comment_subscribe_click') . " <a href=\"".config('site.url')."?subscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" . i18n('comment_subscribe_here') . "</b></a> " . i18n('comment_subscribe_confirm_message') . "</p>
+            <p>" . i18n('comment_subscribe_click') . " <a href=\"".config('site.url')."?subscribe=".encryptEmailForFilename($email, config('comments.salt'))."\"><b>" . i18n('comment_subscribe_here') . "</b></a> " . i18n('comment_subscribe_confirm_message') . "</p>
             <p>&nbsp;</p>
-            <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($email, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+            <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($email, config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
             <p>&nbsp;</p>
         ";
 
@@ -840,7 +758,7 @@ function commentModify($file, $commentId, $data)
 function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin = true, $notifySubscribers = true)
 {
     // Check if mail is enabled
-    if (comments_config('comments.mail.enabled') !== 'true') {
+    if (config('comments.mail.enabled') !== 'true') {
         return;
     }
 
@@ -848,11 +766,11 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
 
     // Add admin email - notify if comments.notifyadmin = "true" OR comments.moderation = "true"
     if ($notifyAdmin) {
-        $shouldNotifyAdmin = (comments_config('comments.notifyadmin') === 'true') ||
-                            (comments_config('comments.moderation') === 'true');
+        $shouldNotifyAdmin = (config('comments.notifyadmin') === 'true') ||
+                            (config('comments.moderation') === 'true');
 
         if ($shouldNotifyAdmin) {
-        $adminEmail = comments_config('comments.admin.email');
+        $adminEmail = config('comments.admin.email');
         if (!empty($adminEmail) && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
             $recipients[$adminEmail] = array(
                 'name' => 'Administrator',
@@ -863,7 +781,7 @@ function sendCommentNotifications($url, $newComment, $allComments, $notifyAdmin 
     }
 
     // Add subscribers only if notifySubscribers is true AND comments.notify is enabled
-    if ($notifySubscribers && comments_config('comments.notify') === 'true') {
+    if ($notifySubscribers && config('comments.notify') === 'true') {
     // Add parent comment author (if replying)
     if (!empty($newComment['parent_id'])) {
         foreach ($allComments as $comment) {
@@ -920,13 +838,13 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
 
         // Server settings
         $mail->isSMTP();
-        $mail->Host = comments_config('comments.mail.host');
+        $mail->Host = config('comments.mail.host');
         $mail->SMTPAuth = true;
-        $mail->Username = comments_config('comments.mail.username');
-        $mail->Password = comments_config('comments.mail.password');
-        $mail->Port = comments_config('comments.mail.port');
+        $mail->Username = config('comments.mail.username');
+        $mail->Password = config('comments.mail.password');
+        $mail->Port = config('comments.mail.port');
 
-        $encryption = comments_config('comments.mail.encryption');
+        $encryption = config('comments.mail.encryption');
         if ($encryption === 'tls') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         } elseif ($encryption === 'ssl') {
@@ -935,8 +853,8 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
 
         // Recipients
         $mail->setFrom(
-            comments_config('comments.mail.from.email'),
-            comments_config('comments.mail.from.name')
+            config('comments.mail.from.email'),
+            config('comments.mail.from.name')
         );
         $mail->addAddress($to, $toName);
 
@@ -945,7 +863,7 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
         $mail->CharSet = 'UTF-8';
 
         if ($type === 'admin') {
-            if (comments_config('comments.moderation') === 'true') {
+            if (config('comments.moderation') === 'true') {
                 $mail->Subject = i18n('comment_email_admin_awaiting') . " - " . config('blog.title');
             }
             else {
@@ -967,7 +885,7 @@ function sendCommentEmail($to, $toName, $url, $comment, $type = 'admin')
                 <p>" . nl2br(htmlspecialchars($comment['comment'])) . "</p>
                 <p><a href='" . site_url() . "{$url}#comment-{$comment['id']}'>" . i18n('comment_email_view_comment') . "</a></p>
                 <p>&nbsp;</p>
-                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($to, comments_config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
+                <p>" . i18n('comment_subscribe_unsubscribe_message') . " ".config('blog.title')." " . i18n('comment_subscribe_unsubscribe_anytime') . ": <a href=\"".config('site.url')."?unsubscribe=".encryptEmailForFilename($to, config('comments.salt'))."\"><b>" .  i18n('comment_unsubscribe') . "</b></a>.</p>
                 <p>&nbsp;</p>
             ";
         }
