@@ -1,0 +1,28 @@
+{
+  "name": "htmly",
+  "version": "3.2.0",
+  "description": "Fast, Light, Databaseless & AI-Native Flat-File CMS",
+  "main": "index.php",
+  "type": "module",
+  "scripts": {
+    "start:mcp": "node mcp-server/index.js",
+    "test:php": "php -l index.php"
+  },
+  "keywords": [
+    "htmly",
+    "flat-file-cms",
+    "cms",
+    "php",
+    "markdown",
+    "rest-api",
+    "mcp",
+    "n8n",
+    "ai-native"
+  ],
+  "author": "Danang Probo Sayekti & Contributors",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/danpros/htmly/issues"
+  },
+  "homepage": "https://www.htmly.com"
+}

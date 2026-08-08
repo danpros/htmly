@@ -8,7 +8,13 @@ Github: https://github.com/Kanti
 Weblog: https://kanti.de
 Location: Stuttgart - Germany
 
-Full contributor: https://github.com/danpros/htmly/graphs/contributors
+Contributor: lightnet19
+Github: https://github.com/lightnet19
 
-/* SITE */
-Software: HTMLy
+Full contributor list: https://github.com/danpros/htmly/graphs/contributors
+
+/* SITE & TECH */
+Software: HTMLy (Flat-File CMS)
+Standards: HTML5, CSS3 (HSL Custom Properties), PHP 8.1+, REST API v1, OpenAPI 3.0, MCP (Model Context Protocol)
+Automation: n8n Webhook Integration & Agentic AI Readiness
+Components: PHP Markdown, Suin RSSWriter, Google2FA, Command Palette JS

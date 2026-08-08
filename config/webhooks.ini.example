@@ -1,0 +1,10 @@
+; HTMLy Webhooks Configuration Template
+; Save as config/webhooks.ini to enable automated webhook event dispatching.
+; Integrates seamlessly with n8n, Zapier, Make, and custom HTTP listeners.
+
+[webhooks]
+; Triggered when a new post is published
+; post_published = "https://n8n.example.com/webhook/htmly-post-published"
+
+; Triggered when a post is deleted
+; post_deleted = "https://n8n.example.com/webhook/htmly-post-deleted"

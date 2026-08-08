@@ -36,7 +36,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                if (response.error == '0')
+                if (!response.error)
                 {
                     $('.media-uploader').val('');
                     $('.imgPrev > img').remove();
@@ -46,21 +46,18 @@
                 }
                 else
                 {
-                    if (response.error !== '') alert(response.error);
-                    else alert("An unknown error has occurred");
-                    console.error("Bad Response");
-                    console.error(response);
+                    alert(response.error || "An unknown error has occurred");
+                    console.error("Upload error response:", response);
                     $('#insertMediaDialogFile').val('');
                 }
             },
-            failure: function (response) {
-                if (response.error !== '') alert(response.error);
-                else alert("An unknown error has occurred");
-                console.error("Unable to Upload");
-                console.error(response);
+            error: function (xhr, status, error) {
+                alert("Upload failed. Please check network connection or file size limit.");
+                console.error("AJAX Upload Failure:", status, error);
                 $('#insertMediaDialogFile').val('');
             }
         });//ajax
+
     });//oninput
     
     $('#insertButton').click(function() {

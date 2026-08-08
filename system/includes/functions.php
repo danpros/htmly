@@ -6,6 +6,29 @@ use \Suin\RSSWriter\Feed;
 use \Suin\RSSWriter\Channel;
 use \Suin\RSSWriter\Item;
 
+// Safe session starter with proper cookie path and security params (Issue #1045)
+function htmly_session_start()
+{
+    if (session_status() == PHP_SESSION_NONE) {
+        $path = parse_url(site_url(), PHP_URL_PATH);
+        $cookiePath = !empty($path) ? rtrim($path, '/') . '/' : '/';
+        $isSecure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+        
+        if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
+            session_set_cookie_params(array(
+                'lifetime' => 0,
+                'path' => $cookiePath,
+                'secure' => $isSecure,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ));
+        } else {
+            session_set_cookie_params(0, $cookiePath . '; SameSite=Strict', '', $isSecure, true);
+        }
+        session_start();
+    }
+}
+
 // Get blog post with more info about the path. Sorted by filename.
 function get_blog_posts()
 {
@@ -3060,6 +3083,7 @@ function generate_rss($posts, $data = null)
                 ->pubDate($p->date)
                 ->description($body)
                 ->url($p->url)
+                ->guid($p->url, true)
                 ->appendTo($channel);
 
             if (!empty($p->image)) {

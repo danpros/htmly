@@ -1,0 +1,8 @@
+; HTMLy REST API Keys Configuration Template
+; Save as config/api_keys.ini to activate API access.
+; Protected automatically from web access via .htaccess.
+
+[api_keys]
+; Format: secret_bearer_token = "role"
+; Example:
+; htmly_live_secret_key_9f8e7d6c5b4a = "admin"

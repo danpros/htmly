@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/fontawesome.min.css?v=1">
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/solid.min.css?v=1">
     <link href="<?php echo site_url() ?>system/resources/css/adminlte.min.css?v=2" rel="stylesheet">
+    <link href="<?php echo site_url() ?>system/resources/css/admin-2026.css?v=1" rel="stylesheet">
     <script src="<?php echo site_url() ?>system/resources/js/jquery.min.js"></script>
     <script src="<?php echo site_url() ?>system/resources/js/jquery-ui.min.js"></script>
 </head>
@@ -36,6 +37,11 @@ if (isset($author[0])) {
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="<?php echo site_url();?>" class="nav-link"><i class="fa fa-globe"></i> <?php echo config('breadcrumb.home')?></a>
+      </li>
+      <li class="nav-item">
+        <a href="#" onclick="window.htmlyToggleCommandPalette(true); return false;" class="nav-link" title="Command Palette (Ctrl+K)">
+          <i class="fa fa-search"></i> <span class="d-none d-md-inline" style="background:rgba(120,120,120,0.2);padding:2px 6px;border-radius:4px;font-size:12px;">Ctrl+K</span>
+        </a>
       </li>
     </ul>
 
@@ -467,5 +473,6 @@ font-size:13px;
 </script>
 <script src="<?php echo site_url() ?>system/resources/js/bootstrap.min.js"></script>
 <script src="<?php echo site_url() ?>system/resources/js/adminlte.min.js"></script>
+<script src="<?php echo site_url() ?>system/resources/js/command-palette.js?v=1"></script>
 </body>
 </html>

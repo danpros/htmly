@@ -7,74 +7,77 @@ ErrorDocument 404 /index.php
 # Set the default handler.
 DirectoryIndex index.php
 
+# Protect sensitive directories and configuration files
+<FilesMatch "\.(ini|json|log|sh|md|gitkeep)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Block direct web access to sensitive directories
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^config/ - [F,L]
+    RewriteRule ^content/data/ - [F,L]
+</IfModule>
+
+# Security Headers (Protect against Clickjacking, MIME Sniffing, and XSS)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
 # Requires mod_expires to be enabled.
 <IfModule mod_expires.c>
 
-  # to activate mode_expires
-  # ExpiresActive on
-  
-  # ExpiresDefault                                      "access plus 1 month"
+  # Activate mod_expires
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
 
-  # For CSS
-  # ExpiresByType text/css                              "access plus 1 month"
+  # For CSS and JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
 
   # For Data interchange
-  # ExpiresByType application/json                      "access plus 0 seconds"
-  # ExpiresByType application/xml                       "access plus 0 seconds"
-  # ExpiresByType text/xml                              "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 0 seconds"
+  ExpiresByType text/xml "access plus 0 seconds"
 
-  # For Favicon
-  # ExpiresByType image/x-icon                          "access plus 1 year"
-
-  # For HTML components (HTCs)
-  # ExpiresByType text/x-component                      "access plus 1 month"
-
-  # For HTML
-  # ExpiresByType text/html                             "access plus 1 month"
-
-  # For JavaScript
-  # ExpiresByType text/js                               "access plus 1 month"
-  # ExpiresByType text/javascript                       "access plus 1 month"
-  # ExpiresByType application/javascript                "access plus 1 month"
-  # ExpiresByType application/x-javascript              "access plus 1 month"
-
-  # For Manifest files
-  # ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
-  # ExpiresByType text/cache-manifest                   "access plus 0 seconds"
-
-  # For Media
-  # ExpiresByType audio/ogg                             "access plus 1 month"
-  # ExpiresByType image/gif                             "access plus 1 month"
-  # ExpiresByType image/jpeg                            "access plus 1 month"
-  # ExpiresByType image/png                             "access plus 1 month"
-  # ExpiresByType video/mp4                             "access plus 1 month"
-  # ExpiresByType video/ogg                             "access plus 1 month"
-  # ExpiresByType video/webm                            "access plus 1 month"
-
-  # For Web feeds
-  # ExpiresByType application/atom+xml                  "access plus 1 day"
-  # ExpiresByType application/rss+xml                   "access plus 1 day"
+  # For Favicon and Images
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/avif "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
 
   # For Web fonts
-  # ExpiresByType application/font-woff                 "access plus 1 month"
-  # ExpiresByType application/vnd.ms-fontobject         "access plus 1 month"
-  # ExpiresByType application/x-font-ttf                "access plus 1 month"
-  # ExpiresByType font/opentype                         "access plus 1 month"
-  # ExpiresByType image/svg+xml                         "access plus 1 month"
+  ExpiresByType font/woff "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+  ExpiresByType font/ttf "access plus 1 month"
+  ExpiresByType font/opentype "access plus 1 month"
 
 </IfModule>
 
 # Various rewrite rules.
 <IfModule mod_rewrite.c>
 
-  RewriteEngine on
+  RewriteEngine On
+
+  # Preserve HTTP Authorization Header for REST API (Bearer Tokens) in Apache / FastCGI / PHP-FPM
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
   
 # Uncomment the following to redirect all visitors to the https version
 # RewriteCond %{HTTPS} off
-# RewriteRUle (.*) https://www.example.com/$1 [R=301,L]
-# RewriteCond %{HTTPS} on
-# RewriteCond %{HTTP_HOST} ^example\.com$ [NC]
-# RewriteRUle (.*) https://www.example.com/$1 [R=301,L]
+# RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
 
 # Uncomment the following to redirect all visitors to the www version
 # RewriteCond %{HTTP_HOST} !^www\. [NC]
@@ -99,7 +102,6 @@ DirectoryIndex index.php
 <IfModule mod_deflate.c>
 
     # Force compression for mangled headers.
-    # http://developer.yahoo.com/blogs/ydn/posts/2010/12/pushing-beyond-gzipping
     <IfModule mod_setenvif.c>
         <IfModule mod_headers.c>
             SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
@@ -108,19 +110,15 @@ DirectoryIndex index.php
     </IfModule>
 
     # Compress all output labeled with one of the following MIME-types
-    # (for Apache versions below 2.3.7, you don't need to enable `mod_filter`
-    #  and can remove the `<IfModule mod_filter.c>` and `</IfModule>` lines
-    #  as `AddOutputFilterByType` is still in the core directives).
     AddOutputFilterByType DEFLATE application/atom+xml \
-                                  text/js \
                                   text/javascript \
                                   application/javascript \
-                                  application/x-javascript \
                                   application/json \
                                   application/rss+xml \
                                   application/vnd.ms-fontobject \
-                                  application/x-font-ttf \
-                                  application/x-web-app-manifest+json \
+                                  font/ttf \
+                                  font/woff \
+                                  font/woff2 \
                                   application/xhtml+xml \
                                   application/xml \
                                   font/opentype \
@@ -129,7 +127,6 @@ DirectoryIndex index.php
                                   text/css \
                                   text/html \
                                   text/plain \
-                                  text/x-component \
                                   text/xml
 
 </IfModule>

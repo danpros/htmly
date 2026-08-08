@@ -1,3 +1,4 @@
 favicon.ico
 favicon.png
 .htaccess
+config/api_keys.ini

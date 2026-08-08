@@ -1,20 +1,32 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: "[FEATURE REQUEST]"
+name: 🚀 Feature Request
+about: Suggest a new feature, enhancement, or integration for HTMLy CMS
+title: "[FEATURE] "
 labels: enhancement
 assignees: ''
-
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+### 🎯 Feature Overview
+*A clear and concise description of the feature or enhancement you would like to see added to HTMLy.*
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen and how you'd like to see this handled/implemented/fixed.
+### 🏷️ Category
+*Select the relevant area:*
+- [ ] Core CMS Engine & Performance
+- [ ] REST API & Webhooks
+- [ ] MCP Server & AI Agent Integration (Hermes, OpenClaw, Antigravity)
+- [ ] Modern Admin UI & Themes
+- [ ] Automation & Workflow (n8n, Zapier, Make)
+- [ ] Developer Tools & CLI
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+### 💡 Problem / Use Case
+*Is your feature request related to a problem or a specific workflow requirement? (e.g. "I want to automatically cross-post articles via AI automation...").*
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+### 🛠️ Proposed Solution / Implementation Idea
+*Describe how you envision this working or how it should be built.*
+
+### 🔄 Alternatives Considered
+*A clear and concise description of any alternative solutions or workarounds you've considered.*
+
+### 📸 Additional Context / Mockups
+*Add any diagrams, screenshots, or extra context here.*
+

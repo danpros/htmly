@@ -64,7 +64,7 @@ function session($user, $pass)
 
     if ($user_enc == "password_hash") {
         if (password_verify($pass, $user_pass)) {
-            if (session_status() == PHP_SESSION_NONE) session_start();
+            htmly_session_start();
             if (password_needs_rehash($user_pass, PASSWORD_DEFAULT)) {
                 update_user($user, $pass, $user_role, $mfa);
             }
@@ -74,7 +74,7 @@ function session($user, $pass)
             return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
         }
     } else if (old_password_verify($pass, $user_enc, $user_pass)) {
-        if (session_status() == PHP_SESSION_NONE) session_start();
+        htmly_session_start();
         update_user($user, $pass, $user_role, $mfa);
         $_SESSION[site_url()]['user'] = $user;
         header('location: admin');
@@ -1125,7 +1125,10 @@ function edit_frontpage($title, $content, $field = null)
 }
 
 // Delete blog post
-function delete_post($file, $destination)
+// $is_draft: when true, enforces that the file must reside inside a /draft/
+// directory. This prevents a stale draft (sharing a filename with a published
+// post) from accidentally deleting the published article. See issue #1058.
+function delete_post($file, $destination, $is_draft = false)
 {
     if (!login())
         return null;
@@ -1133,7 +1136,12 @@ function delete_post($file, $destination)
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     $arr = explode('/', $file);
-    
+
+    // Only allow deletion of Markdown content files
+    if (pathinfo($file, PATHINFO_EXTENSION) !== 'md') {
+        return;
+    }
+
     // realpath resolves all traversal operations like ../
     $realFilePath = realpath($file);
 
@@ -1152,6 +1160,16 @@ function delete_post($file, $destination)
     // files in folders other than content
     if (strpos($realFilePath, $contentDir) !== 0) {
         return;
+    }
+
+    // When called from a draft-deletion context, verify the file is actually
+    // inside a /draft/ folder to avoid deleting an already-published post that
+    // happens to share the same filename as a stale draft entry.
+    if ($is_draft) {
+        $normalizedPath = str_replace('\\', '/', $realFilePath);
+        if (strpos($normalizedPath, '/draft/') === false) {
+            return;
+        }
     }
 
     // Get cache file

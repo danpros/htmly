@@ -139,21 +139,12 @@ class Settings
 
         //save users/[Username].ini
         $userFile = file_get_contents("config/users/username.ini.example");
-        $parsed = parse_ini_string($userFile);
-        if (isset($parsed['encryption'])) {
-            $userFile = $this->overwriteINI(array(
-                'encryption' => 'sha512',
-                'password' => hash('sha512', $this->userPassword),
-                'role' => 'admin',
-                'mfa_secret' => 'disabled',
-            ), $userFile);
-        } else {
-            $userFile = $this->overwriteINI(array(
-                "password" => $this->userPassword,
-                'role' => 'admin',
-                'mfa_secret' => 'disabled',
-            ), $userFile);
-        }
+        $userFile = $this->overwriteINI(array(
+            'encryption' => 'password_hash',
+            'password' => password_hash($this->userPassword, PASSWORD_DEFAULT),
+            'role' => 'admin',
+            'mfa_secret' => 'disabled',
+        ), $userFile);
         file_put_contents("config/users/" . $this->user . ".ini", $userFile, LOCK_EX);
     }
 
@@ -161,8 +152,8 @@ class Settings
     {
         $message = new Message;
 
-        if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300) {
-            $message->error('HTMLy requires at least PHP 5.3 to run.');
+        if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70400) {
+            $message->error('HTMLy requires at least PHP 7.4 to run.');
         }
         if (!in_array('https', stream_get_wrappers())) {
             $message->error('Installer needs the https wrapper, please install openssl.');
@@ -193,16 +184,28 @@ class Settings
     protected function getTimeZone()
     {
         static $ip;
+        $context = stream_context_create(array(
+            'http' => array(
+                'timeout' => 2,
+                'ignore_errors' => true
+            )
+        ));
+
         if (empty($ip)) {
-            $ip = @file_get_contents("http://ipecho.net/plain");
-            if (!is_string($ip)) {
-                $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = @file_get_contents("https://api.ipify.org", false, $context);
+            if (!is_string($ip) || empty($ip)) {
+                $ip = $_SERVER['REMOTE_ADDR'] ?? '';
             }
         }
-        $json = @json_decode(@file_get_contents("http://ip-api.com/json/" . $ip), true);
-        if (isset($json['timezone']))
-            return $json['timezone'];
-        return 'Europe/Berlin';
+
+        if (!empty($ip) && $ip !== '127.0.0.1' && $ip !== '::1') {
+            $json = @json_decode(@file_get_contents("https://ip-api.com/json/" . $ip, false, $context), true);
+            if (isset($json['timezone']) && !empty($json['timezone'])) {
+                return $json['timezone'];
+            }
+        }
+
+        return 'Asia/Jakarta';
     }
 
     protected function runForm()
@@ -225,17 +228,27 @@ if(from($_SERVER,'QUERY_STRING') == "rewriteRule.html")
     die();
 }
 
-$samesite = 'strict';
-if(PHP_VERSION_ID < 70300) {
-    session_set_cookie_params('samesite='.$samesite);	
+$samesite = 'Strict';
+$isSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+if (PHP_VERSION_ID < 70300) {
+    session_set_cookie_params(0, '/; samesite=' . $samesite, '', $isSecure, true);
 } else {
-    session_set_cookie_params(['samesite' => $samesite]);
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $isSecure,
+        'httponly' => true,
+        'samesite' => $samesite
+    ]);
 }
 
 session_start();
 new Settings;
 
 ?>
+
 
 <!DOCTYPE html>
 <html>

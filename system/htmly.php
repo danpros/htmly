@@ -25,6 +25,13 @@ publish_scheduled();
 // Load theme settings
 theme_settings();
 
+// REST API v1 Router Interceptor
+$requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+if (strpos($requestUri, '/api/v1') !== false) {
+    require_once __DIR__ . '/api/v1/router.php';
+    handle_api_v1_request($requestUri, $_SERVER['REQUEST_METHOD'] ?? 'GET');
+}
+
 // The front page of the blog
 get('/index', function () {
 
@@ -2921,8 +2928,10 @@ post('/admin/users/:username/edit', function () {
                         "encryption = password_hash\n" .
                         "role = " . $user_role . "\n", LOCK_EX);
                 } else {
-                    update_user($username, $new_password, $user_role);
+                    $mfa_secret = user('mfa_secret', $username) ?? 'disabled';
+                    update_user($username, $new_password, $user_role, $mfa_secret);
                 }
+
             }
             $redir = site_url() . 'admin/users';
             header("location: $redir");  
@@ -3886,8 +3895,8 @@ get('/category/:category/delete', function ($category) {
                 'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Category') . ': ' . $post->title,
                 'p' => $post,
                 'static' => $post,
-                'type' => 'categoryPage',
             ));
+
         } else {
             render('denied', array(
                 'title' => generate_title('is_default', i18n('Denied')),
@@ -4276,9 +4285,9 @@ get('/search/:keyword', function ($keyword) {
             'metatags' => generate_meta(null, null),
             'search' => '',
             'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('No_search_results'),
-            'canonical' => site_url(),
             'bodyclass' => 'error-404-search',
             'is_404search' => true,
+
         ), $layout);
         die;
     }
@@ -4795,8 +4804,12 @@ post('/'. permalink_type() .'/:name/delete', function () {
         $arr = explode('/', $file); 
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        // Detect whether the file being deleted lives in a /draft/ folder so
+        // delete_post() can enforce that only actual draft files are removed
+        // when the request originates from the draft list. (Issue #1058)
+        $is_draft = (strpos(str_replace('\\', '/', $file), '/draft/') !== false);
         if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-            delete_post($file, $destination);
+            delete_post($file, $destination, $is_draft);
         } else {
             $redir = site_url();
             header("location: $redir");    
@@ -4833,7 +4846,7 @@ get('/:static', function ($static) {
         }
         die;
     } elseif ($static === 'login') {
-        if (session_status() == PHP_SESSION_NONE) session_start();
+        htmly_session_start();
         config('views.root', 'system/admin/views');
         render('login', array(
             'title' => generate_title('is_default', i18n('Login')),
@@ -6064,8 +6077,12 @@ post('/:year/:month/:name/delete', function () {
         $arr = explode('/', $file); 
         $user = $_SESSION[site_url()]['user'];
         $role = user('role', $user);
+        // Detect whether the file being deleted lives in a /draft/ folder so
+        // delete_post() can enforce that only actual draft files are removed
+        // when the request originates from the draft list. (Issue #1058)
+        $is_draft = (strpos(str_replace('\\', '/', $file), '/draft/') !== false);
         if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-            delete_post($file, $destination);
+            delete_post($file, $destination, $is_draft);
         }
     }
 });

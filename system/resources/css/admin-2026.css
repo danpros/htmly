@@ -1,0 +1,182 @@
+/**
+ * HTMLy Admin Modern 2026 Design System
+ * Features: HSL Color Variables, Auto Dark/Light Mode, Glassmorphism, Command Palette
+ */
+
+:root {
+  /* HSL Color Palette (Light Mode) */
+  --primary-h: 220;
+  --primary-s: 90%;
+  --primary-l: 56%;
+  --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --primary-hover: hsl(var(--primary-h), var(--primary-s), 48%);
+  
+  --bg-main: hsl(210, 20%, 98%);
+  --bg-surface: hsl(0, 0%, 100%);
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --border-color: hsl(210, 14%, 90%);
+  
+  --text-main: hsl(215, 25%, 15%);
+  --text-muted: hsl(215, 12%, 48%);
+  
+  --status-published: hsl(145, 65%, 42%);
+  --status-draft: hsl(38, 92%, 50%);
+  --status-scheduled: hsl(200, 85%, 45%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* HSL Color Palette (Dark Mode) */
+    --bg-main: hsl(220, 18%, 10%);
+    --bg-surface: hsl(220, 16%, 14%);
+    --bg-glass: rgba(22, 27, 34, 0.85);
+    --border-color: hsl(220, 14%, 22%);
+    
+    --text-main: hsl(210, 20%, 94%);
+    --text-muted: hsl(215, 14%, 65%);
+  }
+}
+
+/* Base Body Styles */
+body.in-admin,
+body.admin-front,
+body.in-login {
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Navbar & Header */
+.main-header, 
+.navbar {
+  background: var(--bg-glass) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* Modern Card Surfaces */
+.card, 
+.box, 
+.well,
+.login-box {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* Status Badges */
+.badge-published, .label-success {
+  background-color: var(--status-published) !important;
+  color: #fff !important;
+  border-radius: 9999px !important;
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+}
+
+.badge-draft, .label-warning {
+  background-color: var(--status-draft) !important;
+  color: #fff !important;
+  border-radius: 9999px !important;
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+}
+
+/* Command Palette Overlay Styles */
+.htmly-cmd-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.htmly-cmd-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.htmly-cmd-modal {
+  width: 100%;
+  max-width: 580px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: transform 0.2s ease;
+}
+
+.htmly-cmd-overlay.active .htmly-cmd-modal {
+  transform: translateY(0);
+}
+
+.htmly-cmd-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 16px;
+  outline: none;
+}
+
+.htmly-cmd-list {
+  max-height: 320px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.htmly-cmd-item {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+
+.htmly-cmd-item:hover,
+.htmly-cmd-item.selected {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.htmly-cmd-badge {
+  font-size: 11px;
+  opacity: 0.7;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}

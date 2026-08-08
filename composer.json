@@ -1,30 +1,36 @@
 {
-	"config": {
-		"vendor-dir": "system/vendor/",
-		"optimize-autoloader": true,
-		"platform": {
-			"php": "7.2"
-		}
-	},
-    "require": {
-		"ircmaxell/password-compat": "1.*",
-		"michelf/php-markdown": "1.*",
-		"suin/php-rss-writer": "1.*",
-		"kanti/hub-updater": "0.*",
-		"jbroadway/urlify": "^1.0",
-		"pragmarx/google2fa": "^8.0",
-		"bacon/bacon-qr-code": "^3.0",
-		"phpmailer/phpmailer": "^6.5"
+    "name": "danpros/htmly",
+    "description": "HTMLy is an open-source PHP flat-file blog engine and CMS focused on simplicity, speed, and modern API/MCP integration.",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "version": "3.2.0",
+    "config": {
+        "vendor-dir": "system/vendor/",
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "8.1.0"
+        }
     },
-	"autoload": {
-		"files": [
-			"system/includes/dispatch.php",
-			"system/includes/functions.php",
-			"system/admin/admin.php",
-			"system/includes/session.php",
-			"system/includes/opml.php",
-			"system/includes/comments.php",
-			"system/includes/comments-frontend.php"
-		]
-	}
+    "require": {
+        "ircmaxell/password-compat": "1.*",
+        "michelf/php-markdown": "1.*",
+        "suin/php-rss-writer": "1.*",
+        "kanti/hub-updater": "0.*",
+        "jbroadway/urlify": "^1.0",
+        "pragmarx/google2fa": "^8.0",
+        "bacon/bacon-qr-code": "^3.0",
+        "phpmailer/phpmailer": "^6.5"
+    },
+    "autoload": {
+        "files": [
+            "system/includes/dispatch.php",
+            "system/includes/functions.php",
+            "system/admin/admin.php",
+            "system/includes/session.php",
+            "system/includes/opml.php",
+            "system/includes/comments.php",
+            "system/includes/comments-frontend.php"
+        ]
+    }
 }
+

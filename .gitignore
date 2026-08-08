@@ -1,7 +1,13 @@
 /cache/*
 /content/*
+!/content/.gitkeep
 /config/config.ini
 /config/users/*.ini
+/config/api_keys.ini
 /backup
 /.htaccess
 .DS_Store
+node_modules/
+*.log
+.env
+.env.local

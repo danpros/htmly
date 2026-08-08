@@ -1,11 +1,15 @@
-;Password
+; HTMLy User Account Configuration Template
+; Rename this file to <your_username>.ini (e.g., admin.ini) in config/users/
+
+; Plaintext initial password. Will be auto-hashed on first successful login.
 password = yourpassword
 
-;Encryption. Set to clear, and later it will changed to password_hash automatically during login
+; Encryption mode: 'clear' for initial setup. Automatically changes to 'password_hash' upon login.
 encryption = clear
 
-;Role
+; User Role: 'admin' (full access), 'editor' (manage content), or 'author' (publish own posts).
 role = admin
 
-;MFA Secret - This is generated inside of the admin area, set to "disabled" to turn off MFA for a user.
-mfa_secret = disabled
+; Multi-Factor Authentication (2FA/MFA) Secret key.
+; Managed automatically in Admin -> Profile, or set to "disabled" to turn off.
+mfa_secret = disabled

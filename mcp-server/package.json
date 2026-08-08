@@ -1,0 +1,21 @@
+{
+  "name": "htmly-mcp-server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) Server for HTMLy Flat-File CMS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "htmly",
+    "cms",
+    "ai-agent",
+    "hermes",
+    "openclaw"
+  ],
+  "author": "lightnet19",
+  "license": "GPL-3.0"
+}

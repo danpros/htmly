@@ -29,38 +29,49 @@ if (login()) {
     if (is_null($width) || empty($width)) {
         $width = 500;
     }
+    
     if (isset($_FILES) && isset($_FILES['file'])) {
-        $tmp_name = $_FILES['file']['tmp_name'];
-        $name     = basename($_FILES['file']['name']);
-        $error    = $_FILES['file']['error'];
-        $path     = $dir . $timestamp . '-' . $name;
+        $uploadError = $_FILES['file']['error'];
+        $tmp_name    = $_FILES['file']['tmp_name'];
 
-        $check = getimagesize($tmp_name);
-
-        if($check !== false) {
-            if ($error === UPLOAD_ERR_OK) {
-                $extension = pathinfo($name, PATHINFO_EXTENSION);
-                if (!in_array(strtolower($extension), $whitelist)) {
-                    $error = 'Invalid file type uploaded.';
-                } else {
-                    move_uploaded_file($tmp_name, $path);
-                }
-
-               $imageFile = pathinfo($path, PATHINFO_FILENAME);
-               $thumbFile = $dirThumb . $imageFile. '-' . $width . '.webp';
-               if (!file_exists($thumbFile)) {
-                   create_thumb($path, $width);
-               }
-
-            }
+        if ($uploadError !== UPLOAD_ERR_OK || empty($tmp_name) || !is_uploaded_file($tmp_name)) {
+            $error = 'Upload failed or file not received.';
         } else {
-            $error = "File is not an image.";
+            // Sanitize file name to prevent path traversal and special character issues
+            $rawName   = basename($_FILES['file']['name']);
+            $extension = strtolower(pathinfo($rawName, PATHINFO_EXTENSION));
+
+            if (!in_array($extension, $whitelist, true)) {
+                $error = 'Invalid file type uploaded.';
+            } else {
+                // Check if file is a valid image
+                $check = @getimagesize($tmp_name);
+                if ($check === false) {
+                    $error = 'File is not a valid image.';
+                } else {
+                    $cleanName = preg_replace('/[^a-zA-Z0-9\._-]/', '', $rawName);
+                    $name      = $cleanName;
+                    $path      = $dir . $timestamp . '-' . $cleanName;
+
+                    if (move_uploaded_file($tmp_name, $path)) {
+                        $imageFile = pathinfo($path, PATHINFO_FILENAME);
+                        $thumbFile = $dirThumb . $imageFile . '-' . $width . '.webp';
+                        if (!file_exists($thumbFile)) {
+                            create_thumb($path, $width);
+                        }
+                    } else {
+                        $error = 'Failed to save uploaded file.';
+                    }
+                }
+            }
         }
+    } else {
+        $error = 'No file attached.';
     }
 
-    header('Content-Type: application/json');
+    header('Content-Type: application/json; charset=utf-8');
     echo json_encode(array(
-        'path' => $path,
+        'path'  => $path,
         'name'  => $name,
         'error' => $error,
     ));
@@ -71,3 +82,4 @@ if (login()) {
     $login = site_url() . 'login';
     header("location: $login");
 }
+

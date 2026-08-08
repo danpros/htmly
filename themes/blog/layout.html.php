@@ -12,8 +12,9 @@
     <link rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/brands.min.css">
     <!-- Font CSS -->  
     <link id="lato" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/lato.css">
-    <link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
-    <link id="open-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
+    <link id="source-sans" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/source-sans.css">
+    <link id="montserrat" rel="stylesheet" href="<?php echo site_url() ?>system/resources/css/montserrat.css">
+
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="<?php echo theme_path();?>css/styles.css?v=1">
 </head>

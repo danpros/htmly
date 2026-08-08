@@ -1,10 +1,20 @@
 <?php
-$samesite = 'strict';
-if(PHP_VERSION_ID < 70300) {
-    session_set_cookie_params('samesite='.$samesite);
+$samesite = 'Strict';
+$isSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+if (PHP_VERSION_ID < 70300) {
+    session_set_cookie_params(0, '/; samesite=' . $samesite, '', $isSecure, true);
 } else {
-    session_set_cookie_params(['samesite' => $samesite]);
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $isSecure,
+        'httponly' => true,
+        'samesite' => $samesite
+    ]);
 }
+
 
 session_start();
 
