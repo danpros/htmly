@@ -8,8 +8,8 @@ function user($key, $user = null)
 {
     $value = 'config/users/' . $user . '.ini';
     static $_config = array();
-    if (file_exists($value)) {
-        $_config = parse_ini_file($value, true);
+    if (vfs_exists($value)) {
+        $_config = vfs_parse_ini($value, true);
         if (!empty($_config[$key])) {
             return $_config[$key];
         }
@@ -20,11 +20,11 @@ function user($key, $user = null)
 function update_user($userName, $password, $role, $mfa_secret)
 {
     $file = 'config/users/' . $userName . '.ini';
-    if (file_exists($file)) {
-        file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
+    if (vfs_exists($file)) {
+        vfs_put($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
             "role = " . $role . "\n" .
-            "mfa_secret = " . $mfa_secret . "\n", LOCK_EX);
+            "mfa_secret = " . $mfa_secret . "\n");
         return true;
     }
     return false;
@@ -34,13 +34,13 @@ function update_user($userName, $password, $role, $mfa_secret)
 function create_user($userName, $password, $role)
 {
     $file = 'config/users/' . $userName . '.ini';
-    if (file_exists($file)) {
+    if (vfs_exists($file)) {
         return false;
     } else {
-        file_put_contents($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
+        vfs_put($file, "password = " . password_hash($password, PASSWORD_DEFAULT) . "\n" .
             "encryption = password_hash\n" .
             "role = " . $role . "\n" .
-            "mfa_secret = disabled\n", LOCK_EX);
+            "mfa_secret = disabled\n");
         return true;
     }
 }
@@ -49,7 +49,7 @@ function create_user($userName, $password, $role)
 function session($user, $pass)
 {
     $user_file = 'config/users/' . $user . '.ini';
-    if (!file_exists($user_file)) {
+    if (!vfs_exists($user_file)) {
         return $str = '<div class="error-message"><ul><li class="alert alert-danger">' . i18n('Invalid_Error') . '</li></ul></div>';
     }
 
@@ -131,8 +131,8 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
     $tag = explode(',', preg_replace("/\s*,\s*/", ",", rtrim($tag, ',')));
     $tag = array_filter(array_unique($tag));
     $tagslang = "content/data/tags.lang";
-    if (file_exists($tagslang)) {
-        $taglang = array_flip(unserialize(file_get_contents($tagslang)));
+    if (vfs_exists($tagslang)) {
+        $taglang = array_flip(unserialize(vfs_get($tagslang)));
         $tflip = array_intersect_key($taglang, array_flip($tag));
         $post_tag = array();
         $post_tagmd = array();
@@ -254,14 +254,14 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
         $oldfile = $oldfile;
         $newfile = $dir . $filename;
         if ($oldfile !== $newfile && !is_null($autoSave)) {
-            if (file_exists($oldfile)) {
+            if (vfs_exists($oldfile)) {
 
-                rename($oldfile, $newfile);
+                vfs_rename($oldfile, $newfile);
                 rename_comments($oldfile, $newfile);
 
                 if (config('fulltext.search') == "true") {
                 
-                    if (file_exists($searchFile)) {
+                    if (vfs_exists($searchFile)) {
                         $search = json_decode(file_get_data($searchFile), true);
                     }
                     $old_filename = pathinfo($oldfile, PATHINFO_FILENAME);
@@ -282,7 +282,7 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
             }
         } else {
             if (config('fulltext.search') == "true") {
-                if (file_exists($searchFile)) {
+                if (vfs_exists($searchFile)) {
                     $search = json_decode(file_get_data($searchFile), true);
                 }
                 if (!isset($search['flock_fail'])) {
@@ -292,12 +292,12 @@ function add_content($title, $tag, $url, $content, $user, $draft, $category, $ty
             }
         }
 
-        file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+        vfs_put($newfile, print_r($post_content, true));
         
         if (empty($draft)) {
             $draftFile = 'content/' . $user . '/blog/' . $category. '/draft/' . $filename;
-            if (file_exists($draftFile)) {
-                unlink($draftFile);
+            if (vfs_exists($draftFile)) {
+                vfs_delete($draftFile);
             }
         }
         
@@ -334,8 +334,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
     $newfile = '';
     $views = array();
     $viewsFile = "content/data/views.json";
-    if (file_exists($tagslang)) {
-        $taglang = array_flip(unserialize(file_get_contents($tagslang)));
+    if (vfs_exists($tagslang)) {
+        $taglang = array_flip(unserialize(vfs_get($tagslang)));
         $tflip = array_intersect_key($taglang, array_flip($tag));
         $post_tag = array();
         $post_tagmd = array();
@@ -454,8 +454,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 $newfile = $dirDraft . $olddate . '_' . $post_tag . '_' . $post_url . '.md';
             }
 
-            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
-            unlink($oldfile);
+            vfs_put($newfile, print_r($post_content, true));
+            vfs_delete($oldfile);
             rename_comments($oldfile, $newfile);
 
         } else {
@@ -473,11 +473,11 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 }
                                     
                 if ($oldfile === $newfile) {
-                    file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
+                    vfs_put($oldfile, print_r($post_content, true));
                 } else {
-                    rename($oldfile, $newfile);
+                    vfs_rename($oldfile, $newfile);
                     rename_comments($oldfile, $newfile);
-                    file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+                    vfs_put($newfile, print_r($post_content, true));
                     
                     $oldcommentsfile = get_comments_file_from_md($oldfile);
                     if (file_exists($oldcommentsfile)) {
@@ -497,8 +497,8 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                     }
                 }
 
-                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
-                unlink($oldfile);
+                vfs_put($newfile, print_r($post_content, true));
+                vfs_delete($oldfile);
                 rename_comments($oldfile, $newfile);
                 }
             }
@@ -541,7 +541,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
         if ($old_url != $post_url) {
             $oKey = 'post_' . $old_url;
             $nKey = 'post_' . $post_url;
-            if (file_exists($viewsFile)) {
+            if (vfs_exists($viewsFile)) {
                 $views = json_decode(file_get_data($viewsFile), true);
 
                 if (isset($views[$oKey])) {
@@ -550,7 +550,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
                 }
             }
             if (config('fulltext.search') == "true") {
-                if (file_exists($searchFile)) {
+                if (vfs_exists($searchFile)) {
                     $search = json_decode(file_get_data($searchFile), true);
                     if (isset($search[$oKey])) {
                         $arr = replace_key($search, $oKey, $nKey);
@@ -562,7 +562,7 @@ function edit_content($title, $tag, $url, $content, $oldfile, $revertPost, $publ
             
         } else {
             if (config('fulltext.search') == "true") {
-                if (file_exists($searchFile)) {
+                if (vfs_exists($searchFile)) {
                     $search = json_decode(file_get_data($searchFile), true);
                 }
                 if (!isset($search['flock_fail'])) {
@@ -665,10 +665,10 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
             if (!is_dir($dir)) {
                 mkdir($dir, 0775, true);
             }
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+            vfs_put($dir . $filename, print_r($post_content, true));
             $draftFile = $dirDraft . $filename;
-            if (file_exists($draftFile)) {
-                unlink($draftFile);
+            if (vfs_exists($draftFile)) {
+                vfs_delete($draftFile);
             }
         } else {
             if (!is_dir($dirDraft)) {
@@ -678,12 +678,12 @@ function add_page($title, $url, $content, $draft, $description = null, $autoSave
             $oldfile = $oldfile;
             $newfile = $dirDraft . $filename;
             if ($oldfile !== $newfile && !is_null($autoSave)) {
-                if (file_exists($oldfile)) {
-                    rename($oldfile, $newfile);
+                if (vfs_exists($oldfile)) {
+                    vfs_rename($oldfile, $newfile);
                     rename_comments($oldfile, $newfile);
                 }
             }
-            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+            vfs_put($newfile, print_r($post_content, true));
         }
 
         rebuilt_cache('all');
@@ -762,10 +762,10 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
             if (!is_dir($dir)) {
                 mkdir($dir, 0775, true);
             }
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+            vfs_put($dir . $filename, print_r($post_content, true));
             $draftFile = $dirDraft . $filename;
-            if (file_exists($draftFile)) {
-                unlink($draftFile);
+            if (vfs_exists($draftFile)) {
+                vfs_delete($draftFile);
             }
         } else {
             if (!is_dir($dirDraft)) {
@@ -775,12 +775,12 @@ function add_sub_page($title, $url, $content, $static, $draft, $description = nu
             $oldfile = $oldfile;
             $newfile = $dirDraft . $filename;
             if ($oldfile !== $newfile && !is_null($autoSave)) {
-                if (file_exists($oldfile)) {
-                    rename($oldfile, $newfile);
+                if (vfs_exists($oldfile)) {
+                    vfs_rename($oldfile, $newfile);
                     rename_comments($oldfile, $newfile);
                 }
             }
-            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+            vfs_put($newfile, print_r($post_content, true));
         }
         
         if (!is_null($autoSave)) {
@@ -840,40 +840,40 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                 mkdir($dirDraft, 0775, true);
             }
             $newfile = $dirDraft . '/' . $post_url . '.md';
-            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+            vfs_put($newfile, print_r($post_content, true));
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
                 if(is_dir($dir . '/' . $old)) {
-                    rename($dir . '/' . $old, $dir . '/' . $post_url);
+                    vfs_rename($dir . '/' . $old, $dir . '/' . $post_url);
                 }
             }
-            unlink($oldfile);
+            vfs_delete($oldfile);
             rename_comments($oldfile, $newfile);
             
         } elseif (!empty($publishDraft)) {
             $newfile = dirname($dir) . '/' . $post_url . '.md';
-            file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+            vfs_put($newfile, print_r($post_content, true));
             if (empty($static)) {
                 $old = pathinfo($oldfile, PATHINFO_FILENAME);
                 if(is_dir(dirname($dir) . '/' . $old)) {
-                    rename(dirname($dir) . '/' . $old, dirname($dir) . '/' . $post_url);
+                    vfs_rename(dirname($dir) . '/' . $old, dirname($dir) . '/' . $post_url);
                 }
             }
-            unlink($oldfile);
+            vfs_delete($oldfile);
             rename_comments($oldfile, $newfile);
 
         } else { 
             $newfile = $dir . '/' . $post_url . '.md';
             if ($oldfile === $newfile) {
-                file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
+                vfs_put($oldfile, print_r($post_content, true));
             } else {
-                rename($oldfile, $newfile);
+                vfs_rename($oldfile, $newfile);
                 rename_comments($oldfile, $newfile);
-                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+                vfs_put($newfile, print_r($post_content, true));
                 if (empty($static)) {
                     $old = pathinfo($oldfile, PATHINFO_FILENAME);
                     if(is_dir($dir . '/' . $old)) {
-                        rename($dir . '/' . $old, $dir . '/' . $post_url);
+                        vfs_rename($dir . '/' . $old, $dir . '/' . $post_url);
                     } 
                 }
             }
@@ -901,7 +901,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             $posturl = site_url() . $static .'/'. $pu;
             
             if ($old_url != $pu) {
-                if (file_exists($viewsFile)) {
+                if (vfs_exists($viewsFile)) {
                     $views = json_decode(file_get_data($viewsFile), true);
                     $oKey = 'subpage_' . $static . '.' . $old_url;
                     $nKey = 'subpage_' . $static . '.' . $pu;
@@ -916,7 +916,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
             $posturl = site_url() . $pu;
 
             if ($old_url != $pu) {
-                if (file_exists($viewsFile)) {
+                if (vfs_exists($viewsFile)) {
                     $views = json_decode(file_get_data($viewsFile), true);
                     $oKey = 'page_' . $old_url;
                     $nKey = 'page_' . $pu;
@@ -929,7 +929,7 @@ function edit_page($title, $url, $content, $oldfile, $revertPage, $publishDraft,
                 $sPage = find_subpage($pu);
                 if (!empty($sPage)) {
                     foreach ($sPage as $sp) {
-                        if (file_exists($viewsFile)) {
+                        if (vfs_exists($viewsFile)) {
                             $views = json_decode(file_get_data($viewsFile), true);
                             $oKey = 'subpage_' . $old_url . '.' . $sp->slug;
                             $nKey = 'subpage_' . $pu . '.' . $sp->slug;
@@ -984,10 +984,10 @@ function add_category($title, $url, $content, $description = null)
         $filename = $post_url . '.md';
         $dir = 'content/data/category/';
         if (is_dir($dir)) {
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+            vfs_put($dir . $filename, print_r($post_content, true));
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+            vfs_put($dir . $filename, print_r($post_content, true));
         }
 
         rebuilt_cache('all');
@@ -1022,14 +1022,14 @@ function edit_category($title, $url, $content, $oldfile, $destination = null, $d
             mkdir($dir, 0775, true);
         }
         if ($oldfile === $newfile) {
-            file_put_contents($oldfile, print_r($post_content, true), LOCK_EX);
+            vfs_put($oldfile, print_r($post_content, true));
         } else {
-            if (file_exists($oldfile)) {
-                rename($oldfile, $newfile);
+            if (vfs_exists($oldfile)) {
+                vfs_rename($oldfile, $newfile);
                 rename_comments($oldfile, $newfile);
-                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+                vfs_put($newfile, print_r($post_content, true));
             } else {
-                file_put_contents($newfile, print_r($post_content, true), LOCK_EX);
+                vfs_put($newfile, print_r($post_content, true));
             }
         }
 
@@ -1081,10 +1081,10 @@ function edit_profile($title, $content, $user, $description = null, $image = nul
         $dir = 'content/' . $user . '/';
         $filename = 'content/' . $user . '/author.md';
         if (is_dir($dir)) {
-            file_put_contents($filename, print_r($user_content, true), LOCK_EX);
+            vfs_put($filename, print_r($user_content, true));
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($filename, print_r($user_content, true), LOCK_EX);
+            vfs_put($filename, print_r($user_content, true));
         }
         rebuilt_cache('all');
         $redirect = site_url() . 'author/' . $user;
@@ -1113,10 +1113,10 @@ function edit_frontpage($title, $content, $field = null)
         $dir = 'content/data/frontpage';
         $filename = 'content/data/frontpage/frontpage.md';
         if (is_dir($dir)) {
-            file_put_contents($filename, print_r($front_content, true), LOCK_EX);
+            vfs_put($filename, print_r($front_content, true));
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($filename, print_r($front_content, true), LOCK_EX);
+            vfs_put($filename, print_r($front_content, true));
         }
         rebuilt_cache('all');
         $redirect = site_url();
@@ -1133,24 +1133,10 @@ function delete_post($file, $destination)
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     $arr = explode('/', $file);
-    
-    // realpath resolves all traversal operations like ../
-    $realFilePath = realpath($file);
 
-    // realpath returns an empty string if the file does not exist
-    if ($realFilePath == '') {
-        return;
-    }
-
-    // get the current project working directory
-    $cwd = getcwd();
-
-    // content directory relative to the current project working directory
-    $contentDir = $cwd . DIRECTORY_SEPARATOR . 'content';
-
-    // if the file path does not start with $contentDir, it means its accessing
-    // files in folders other than content
-    if (strpos($realFilePath, $contentDir) !== 0) {
+    // realpath() can't be used here since virtual content has no real file and
+    // would fail closed; guard against traversal with a string-based check instead.
+    if (!vfs_is_safe_content_path($file, 'content')) {
         return;
     }
 
@@ -1162,7 +1148,7 @@ function delete_post($file, $destination)
 
     if (!empty($deleted_content)) {
         if ($user === $arr[1] || $role === 'editor' || $role === 'admin') {
-            unlink($deleted_content);
+            vfs_delete($deleted_content);
             delete_comments($deleted_content);
             rebuilt_cache('all');
             if ($destination == 'post') {
@@ -1185,23 +1171,9 @@ function delete_page($file, $destination)
     $user = $_SESSION[site_url()]['user'];
     $role = user('role', $user);
     
-    // realpath resolves all traversal operations like ../
-    $realFilePath = realpath($file);
-
-    // realpath returns an empty string if the file does not exist
-    if ($realFilePath == '') {
-        return;
-    }
-
-    // get the current project working directory
-    $cwd = getcwd();
-
-    // content directory relative to the current project working directory
-    $contentDir = $cwd . DIRECTORY_SEPARATOR . 'content';
-
-    // if the file path does not start with $contentDir, it means its accessing
-    // files in folders other than content
-    if (strpos($realFilePath, $contentDir) !== 0) {
+    // realpath() can't be used here since virtual content has no real file and
+    // would fail closed; guard against traversal with a string-based check instead.
+    if (!vfs_is_safe_content_path($file, 'content')) {
         return;
     }
 
@@ -1215,7 +1187,7 @@ function delete_page($file, $destination)
 
     if (!empty($deleted_content)) {
         if ($role === 'editor' || $role === 'admin') {
-            unlink($deleted_content);
+            vfs_delete($deleted_content);
             delete_comments($deleted_content);
             rebuilt_cache('all');
             if ($destination == 'post') {
@@ -1308,8 +1280,8 @@ function find_draft_page($static = null)
 
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
+        if (vfs_exists($viewsFile)) {
+            $views = json_decode(vfs_get($viewsFile), true);
         }
     }
 
@@ -1332,7 +1304,7 @@ function find_draft_page($static = null)
                 $post->url = site_url() . $url;
 
                 $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($post->file)));
                 
                 $post->md = $v['basename'];
                 $post->slug = $url;
@@ -1340,7 +1312,7 @@ function find_draft_page($static = null)
                 $post->parentSlug = null;
 
                 // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
+                $content = vfs_get($post->file);
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
@@ -1378,8 +1350,8 @@ function find_draft_subpage($static = null, $sub_static = null)
 
     if ($counter == 'true') {
         $viewsFile = "content/data/views.json";
-        if (file_exists($viewsFile)) {
-            $views = json_decode(file_get_contents($viewsFile), true);
+        if (vfs_exists($viewsFile)) {
+            $views = json_decode(vfs_get($viewsFile), true);
         }
     }
 
@@ -1413,13 +1385,13 @@ function find_draft_subpage($static = null, $sub_static = null)
                 $post->url = site_url() . $ps . "/" . $url;
 
                 $post->file = $v['dirname'] . '/' . $v['basename'];
-                $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+                $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($post->file)));
 
                 $post->md = $v['basename'];
                 $post->slug = $url;
 
                 // Get the contents and convert it to HTML
-                $content = file_get_contents($post->file);
+                $content = vfs_get($post->file);
 
                 // Extract the title and body
                 $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
@@ -1534,10 +1506,10 @@ function migrate($title, $time, $tags, $content, $url, $user, $source)
         $filename = $post_date . '_' . $post_tag . '_' . $post_url . '.md';
         $dir = 'content/' . $user . '/blog/uncategorized/post/';
         if (is_dir($dir)) {
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+            vfs_put($dir . $filename, print_r($post_content, true));
         } else {
             mkdir($dir, 0775, true);
-            file_put_contents($dir . $filename, print_r($post_content, true), LOCK_EX);
+            vfs_put($dir . $filename, print_r($post_content, true));
         }
         save_tag_i18n($post_tag, $post_tagmd);
         $redirect = site_url() . 'admin/clear-cache';
@@ -1700,8 +1672,8 @@ function save_tag_i18n($tag,$tagDisplay)
     $tl = explode(',', rtrim($tagDisplay, ','));
     $tags = array_combine($tt,$tl);
 
-    if (file_exists($filename)) {
-        $views = unserialize(file_get_contents($filename));
+    if (vfs_exists($filename)) {
+        $views = unserialize(vfs_get($filename));
         foreach ($tags as $key => $val) {
             if (isset($views[$key])) {
                 $views[$key] = $val;
@@ -1714,7 +1686,7 @@ function save_tag_i18n($tag,$tagDisplay)
     }
 
     $tmp = serialize($views);
-    file_put_contents($filename, print_r($tmp, true), LOCK_EX);
+    vfs_put($filename, print_r($tmp, true));
 
 }
 
@@ -1870,7 +1842,7 @@ function rename_category_folder($new_name, $old_file)
             $str = explode('/', $v);
             $old_folder = $str[0] . '/' . $str[1] . '/' . $str[2] . '/' . $old_name . '/';
             $new_folder = $str[0] . '/' . $str[1] . '/' . $str[2] . '/' . $new_name . '/';
-            rename($old_folder, $new_folder);
+            vfs_rename($old_folder, $new_folder);
         }
     }
 }
@@ -1886,14 +1858,14 @@ function reorder_pages($pages = null)
         $num = str_pad($i, 2, 0, STR_PAD_LEFT);
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
-            rename ($dir . $p, $dir . $num . '.' . $arr[1] . '.md');
+            vfs_rename($dir . $p, $dir . $num . '.' . $arr[1] . '.md');
             if (is_dir($dir . $fn)) {
-                rename($dir . $fn, $dir . $num . '.' . $arr[1]);
+                vfs_rename($dir . $fn, $dir . $num . '.' . $arr[1]);
             }
         } else {
-            rename($dir . $p, $dir . $num . '.' . $fn . '.md');
+            vfs_rename($dir . $p, $dir . $num . '.' . $fn . '.md');
             if (is_dir($dir . $fn)) {
-                rename($dir . $fn, $dir . $num . '.' . $fn);            
+                vfs_rename($dir . $fn, $dir . $num . '.' . $fn);            
             }
         }
         $i++;
@@ -1914,9 +1886,9 @@ function reorder_subpages($subpages = null)
         $num = str_pad($i, 2, 0, STR_PAD_LEFT);
         $arr = explode('.' , $fn);
         if (isset($arr[1])) {
-            rename ($dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
+            vfs_rename($dir . $sp, $dn . $num . '.' . $arr[1] . '.md');
         } else {
-            rename($dir . $sp, $dn . $num . '.' . $fn . '.md');
+            vfs_rename($dir . $sp, $dn . $num . '.' . $fn . '.md');
         }
 
         $i++;
@@ -1985,7 +1957,7 @@ function add_search_index($id, $content)
     }
     $filename = "content/data/search.json";
     $search = array();
-    if (file_exists($filename)) {
+    if (vfs_exists($filename)) {
         $search = json_decode(file_get_data($filename), true);
     }
     if (isset($search['flock_fail'])) {
@@ -2029,7 +2001,7 @@ function get_url_from_file($file)
       // Ensure config is loaded - if not loads it
       $config_loaded = config('permalink.type');
       if (!$config_loaded) {
-          if (file_exists('config/config.ini')) {
+          if (vfs_exists('config/config.ini')) {
               config('source', 'config/config.ini');
           }
       }

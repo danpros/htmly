@@ -9,39 +9,48 @@ use \Suin\RSSWriter\Item;
 // Get blog post with more info about the path. Sorted by filename.
 function get_blog_posts()
 {
-    static $_posts = array();
-
-    $url = 'cache/index/index-posts.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $tmp = vfs_glob('content/*/blog/*/*/*.md');
+    $_posts = array();
+    if (is_array($tmp)) {
+        foreach ($tmp as $file) {
+            if (strpos($file, '/draft/') === false) {
+                $_posts[] = pathinfo($file);
+            }
+        }
     }
-    $_posts = unserialize(file_get_contents($url));
+    usort($_posts, "sortfile_d");
     return $_posts;
 }
 
 // Get static page path.
 function get_static_pages()
 {
-    static $_page = array();
-
-    $url = 'cache/index/index-pages.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $ptmp = vfs_glob('content/static/*.md');
+    natsort($ptmp);
+    $_page = array();
+    if (is_array($ptmp)) {
+        foreach ($ptmp as $file) {
+            if (strpos($file, '/draft/') === false) {
+                $_page[] = pathinfo($file);
+            }
+        }
     }
-    $_page = unserialize(file_get_contents($url));
     return $_page;
 }
 
 // Get static subpage path.
 function get_static_subpages($static = null)
 {
-    static $_sub_page = array();
-
-    $url = 'cache/index/index-subpages.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $sptmp = vfs_glob('content/static/*/*.md');
+    natsort($sptmp);
+    $_sub_page = array();
+    if (is_array($sptmp)) {
+        foreach ($sptmp as $file) {
+            if (strpos($file, '/draft/') === false) {
+                $_sub_page[] = pathinfo($file);
+            }
+        }
     }
-    $_sub_page = unserialize(file_get_contents($url));
 
     if ($static != null) {
         $stringLen = strlen($static);
@@ -65,13 +74,14 @@ function get_static_subpages($static = null)
 // Get author name.
 function get_author_name()
 {
-    static $_author = array();
-
-    $url = 'cache/index/index-author.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $atmp = vfs_glob('content/*/author.md');
+    $_author = array();
+    if (is_array($atmp)) {
+        foreach ($atmp as $file) {
+            $_author[] = pathinfo($file);
+        }
     }
-    $_author = unserialize(file_get_contents($url));
+    usort($_author, "sortfile_a");
 
     return $_author;
 }
@@ -79,13 +89,14 @@ function get_author_name()
 // Get posts draft.
 function get_draft_posts()
 {
-    static $_draft = array();
-
-    $url = 'cache/index/index-draft.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $drf = vfs_glob('content/*/*/*/draft/*.md');
+    $_draft = array();
+    if (is_array($drf)) {
+        foreach ($drf as $file) {
+            $_draft[] = pathinfo($file);
+        }
     }
-    $_draft = unserialize(file_get_contents($url));
+    usort($_draft, "sortfile_d");
 
     return $_draft;
 }
@@ -96,7 +107,7 @@ function get_draft_pages()
     static $_draftPage = array();
 
     $tmp = array();
-    $tmp = glob('content/static/draft/*.md', GLOB_NOSORT);
+    $tmp = vfs_glob('content/static/draft/*.md');
     if (is_array($tmp)) {
         foreach ($tmp as $file) {
             $_draftPage[] = pathinfo($file);
@@ -113,7 +124,7 @@ function get_draft_subpages($static = null)
     static $_draftSubpage = array();
 
     $tmp = array();
-    $tmp = glob('content/static/*/draft/*.md', GLOB_NOSORT);
+    $tmp = vfs_glob('content/static/*/draft/*.md');
     if (is_array($tmp)) {
         foreach ($tmp as $file) {
             $_draftSubpage[] = pathinfo($file);
@@ -143,13 +154,14 @@ function get_draft_subpages($static = null)
 // Get scheduled posts.
 function get_scheduled_posts()
 {
-    static $_scheduled = array();
-
-    $url = 'cache/index/index-scheduled.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $stmp = vfs_glob('content/*/*/*/*/scheduled/*.md');
+    $_scheduled = array();
+    if (is_array($stmp)) {
+        foreach ($stmp as $file) {
+            $_scheduled[] = pathinfo($file);
+        }
     }
-    $_scheduled = unserialize(file_get_contents($url));
+    usort($_scheduled, "sortfile_d");
 
     return $_scheduled;
 }
@@ -157,13 +169,14 @@ function get_scheduled_posts()
 // Get category info files.
 function get_category_files()
 {
-    static $_desc = array();
-
-    $url = 'cache/index/index-category-files.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $ftmp = vfs_glob('content/data/category/*.md');
+    $_desc = array();
+    if (is_array($ftmp)) {
+        foreach ($ftmp as $file) {
+            $_desc[] = pathinfo($file);
+        }
     }
-    $_desc = unserialize(file_get_contents($url));
+    usort($_desc, "sortfile_a");
 
     return $_desc;
 }
@@ -187,13 +200,26 @@ function get_category_folder()
 // Get category slug.
 function get_category_slug()
 {
-    static $_cslug = array();
-
-    $url = 'cache/index/index-category.txt';
-    if (!file_exists($url)) {
-        rebuilt_cache('all');
+    $ctmp = array();
+    foreach (vfs_glob('content/*/blog/*/*/*.md') as $file) {
+        if (strpos($file, '/draft/') === false) {
+            $pc = explode('/', $file);
+            $ctmp[] = $pc[3];
+        }
     }
-    $_cslug = unserialize(file_get_contents($url));
+    foreach (vfs_glob('content/*/*/*/*/scheduled/*.md') as $file) {
+        $ss = explode('/', $file);
+        $ctmp[] = $ss[3];
+    }
+    foreach (vfs_glob('content/*/*/*/draft/*.md') as $file) {
+        $dd = explode('/', $file);
+        $ctmp[] = $dd[3];
+    }
+    foreach (vfs_glob('content/data/category/*.md') as $file) {
+        $ctmp[] = pathinfo($file, PATHINFO_FILENAME);
+    }
+    array_push($ctmp, 'uncategorized');
+    $_cslug = array_unique($ctmp, SORT_REGULAR);
 
     return $_cslug;
 }
@@ -242,131 +268,13 @@ function sortdate($a, $b)
     return $a->date == $b->date ? 0 : (($a->date < $b->date) ? 1 : -1);
 }
 
-// Rebuilt cache index
+// Index caches are eliminated: get_blog_posts()/get_static_pages()/etc. now query
+// content directly via vfs_glob(). This only clears the widget render cache.
 function rebuilt_cache($type = null)
 {
-    $dir = 'cache/index';
-    $posts_cache = array();
-    $page_cache = array();
-    $subpage_cache = array();
-    $author_cache = array();
-    $scheduled_cache = array();
-    $category_cache = array();
-    $draft_cache = array();
-
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-
-    // Rebuilt posts index
-    $tmp = array();
-    $ctmp = array();
-    $tmp = glob('content/*/blog/*/*/*.md', GLOB_NOSORT);
-    if (is_array($tmp)) {
-        foreach ($tmp as $file) {
-            if(strpos($file, '/draft/') === false) {
-                $posts_cache[] = pathinfo($file);
-                $pc = explode('/', $file);
-                $ctmp[] = $pc[3];
-            }
-        }
-    }
-    usort($posts_cache, "sortfile_d");
-    $posts_string = serialize($posts_cache);
-    file_put_contents('cache/index/index-posts.txt', print_r($posts_string, true), LOCK_EX);   
-
-    // Rebuilt scheduled posts index
-    $stmp = array();
-    $stmp = glob('content/*/*/*/*/scheduled/*.md', GLOB_NOSORT);
-    if (is_array($stmp)) {
-        foreach ($stmp as $file) {
-            $scheduled_cache[] = pathinfo($file);
-            $ss = explode('/', $file);
-            $ctmp[] = $ss[3];
-        }
-    }
-    usort($scheduled_cache, "sortfile_d");
-    $scheduled_string = serialize($scheduled_cache);
-    file_put_contents('cache/index/index-scheduled.txt', print_r($scheduled_string, true), LOCK_EX);
-    
-    // Rebuilt draft posts index
-    $drf = array();
-    $drf = glob('content/*/*/*/draft/*.md', GLOB_NOSORT);
-    if (is_array($drf)) {
-        foreach ($drf as $file) {
-            $draft_cache[] = pathinfo($file);
-            $dd = explode('/', $file);
-            $ctmp[] = $dd[3];
-        }
-    }
-    usort($draft_cache, "sortfile_d");
-    $draft_string = serialize($draft_cache);
-    file_put_contents('cache/index/index-draft.txt', print_r($draft_string, true), LOCK_EX);
-    
-    // Rebuilt category files index
-    $ftmp = array();
-    $ftmp =  glob('content/data/category/*.md', GLOB_NOSORT);
-    if (is_array($ftmp)) {
-        foreach ($ftmp as $file) {
-            $category_cache[] = pathinfo($file);
-            $ctmp[] = pathinfo($file, PATHINFO_FILENAME);            
-        }
-    }
-    usort($category_cache, "sortfile_a");
-    $category_string = serialize($category_cache);
-    file_put_contents('cache/index/index-category-files.txt', print_r($category_string, true), LOCK_EX);
-    
-    // Rebuilt category slug index
-    $dirc = array();
-    $dirc = array_push($ctmp, 'uncategorized');
-    $dirc = array_unique($ctmp, SORT_REGULAR); 
-    file_put_contents('cache/index/index-category.txt', print_r(serialize($dirc), true), LOCK_EX);
-    
-    // Rebuilt static page index
-    $ptmp = array();
-    $ptmp =  glob('content/static/*.md', GLOB_NOSORT);
-    natsort($ptmp);
-    if (is_array($ptmp)) {
-        foreach ($ptmp as $file) {
-            if(strpos($file, '/draft/') === false) {
-                $page_cache[] = pathinfo($file);
-            }
-        }
-    }
-    $page_string = serialize($page_cache);
-    file_put_contents('cache/index/index-pages.txt', print_r($page_string, true), LOCK_EX);
-
-    // Rebuilt subpage index
-    $sptmp = array();
-    $sptmp =  glob('content/static/*/*.md', GLOB_NOSORT);
-    natsort($sptmp);
-    if (is_array($sptmp)) {
-        foreach ($sptmp as $file) {
-            if(strpos($file, '/draft/') === false) {
-                $subpage_cache[] = pathinfo($file);
-            }
-        }
-    }
-    $subpage_string = serialize($subpage_cache);
-    file_put_contents('cache/index/index-subpages.txt', print_r($subpage_string, true), LOCK_EX);
-
-    // Rebuilt user profile index
-    $atmp = array();
-    $atmp =  glob('content/*/author.md', GLOB_NOSORT);
-    if (is_array($atmp)) {
-        foreach ($atmp as $file) {
-            $author_cache[] = pathinfo($file);
-        }
-    }
-    usort($author_cache, "sortfile_a");
-    $author_string = serialize($author_cache);
-    file_put_contents('cache/index/index-author.txt', print_r($author_string, true), LOCK_EX);
-
-    // Remove the widget cache
     foreach (glob('cache/widget/*.cache', GLOB_NOSORT) as $file) {
         unlink($file);
     }
-
 }
 
 // Return blog posts.
@@ -388,8 +296,8 @@ function get_posts($posts, $page = 1, $perpage = 0)
     $counter = config('views.counter');
 
     $viewsFile = "content/data/views.json";
-    if (file_exists($viewsFile) && $counter == 'true') {
-        $views = json_decode(file_get_contents($viewsFile), true);
+    if (vfs_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(vfs_get($viewsFile), true);
     }
         
     foreach ($posts as $index => $v) {
@@ -451,7 +359,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         // The post date
         $post->date = strtotime($timestamp);
-        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($filepath)));
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($filepath)));
 
         // The archive per day
         $post->archive = site_url() . 'archive/' . date('Y-m', $post->date);
@@ -466,7 +374,7 @@ function get_posts($posts, $page = 1, $perpage = 0)
 
         $post->file = $filepath;
 
-        $content = file_get_contents($filepath);
+        $content = vfs_get($filepath);
 
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled post: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
@@ -563,8 +471,8 @@ function get_pages($pages, $page = 1, $perpage = 0)
     $counter = config('views.counter');
 
     $viewsFile = "content/data/views.json";
-    if (file_exists($viewsFile) && $counter == 'true') {
-        $views = json_decode(file_get_contents($viewsFile), true);
+    if (vfs_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(vfs_get($viewsFile), true);
     }
 
     // Extract a specific page with results
@@ -585,7 +493,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
         $post->url = site_url() . $url;
 
         $post->file = $v['dirname'] . '/' . $v['basename'];
-        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($post->file)));
         
         $post->md = $v['basename'];
         $post->slug = $url;
@@ -593,7 +501,7 @@ function get_pages($pages, $page = 1, $perpage = 0)
         $post->parentSlug = null;
 
         // Get the contents and convert it to HTML
-        $content = file_get_contents($post->file);
+        $content = vfs_get($post->file);
 
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled static page: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
@@ -642,8 +550,8 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
     $counter = config('views.counter');
 
     $viewsFile = "content/data/views.json";
-    if (file_exists($viewsFile) && $counter == 'true') {
-        $views = json_decode(file_get_contents($viewsFile), true);
+    if (vfs_exists($viewsFile) && $counter == 'true') {
+        $views = json_decode(vfs_get($viewsFile), true);
     }
 
     // Extract a specific page with results
@@ -674,7 +582,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         $post->url = site_url() . $static . "/" . $url;
 
         $post->file = $v['dirname'] . '/' . $v['basename'];
-        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($post->file)));
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($post->file)));
         
         $post->md = $v['basename'];
         $post->slug = $url;
@@ -682,7 +590,7 @@ function get_subpages($sub_pages, $page = 1, $perpage = 0)
         $post->parentSlug = $static;
 
         // Get the contents and convert it to HTML
-        $content = file_get_contents($post->file);
+        $content = vfs_get($post->file);
 
         // Extract the title and body
         $post->title = get_content_tag('t', $content, 'Untitled static subpage: ' . format_date($post->lastMod, 'l, j F Y, H:i'));
@@ -979,7 +887,7 @@ function read_category_info($category)
                 $desc->rss = $desc->url . '/feed';
 
                 // Get the contents and convert it to HTML
-                $content = file_get_contents($desc->file);
+                $content = vfs_get($desc->file);
 
                 // Extract the title and body
                 $desc->title = get_content_tag('t', $content, $category);
@@ -1227,7 +1135,7 @@ function get_author($name)
                 $author->slug = $profile;
 
                 // Get the contents and convert it to HTML
-                $content = file_get_contents($author->file);
+                $content = vfs_get($author->file);
 
                 // Extract the title and body
                 $author->name = get_content_tag('t', $content, $author);
@@ -1287,8 +1195,8 @@ function get_frontpage()
 
     $filename = 'content/data/frontpage/frontpage.md';
 
-    if (file_exists($filename)) {
-        $content = file_get_contents($filename);
+    if (vfs_exists($filename)) {
+        $content = vfs_get($filename);
         $front->file = $filename;
         $front->title = get_content_tag('t', $content, 'Welcome');
         $front->url = site_url() . 'front';
@@ -1339,8 +1247,8 @@ function get_keyword($keyword, $page, $perpage)
     
     $searchFile = "content/data/search.json";
     
-    if (file_exists($searchFile) && config('fulltext.search') == "true") {
-        $search = json_decode(file_get_contents($searchFile), true);
+    if (vfs_exists($searchFile) && config('fulltext.search') == "true") {
+        $search = json_decode(vfs_get($searchFile), true);
     }
 
     foreach ($posts as $index => $v) {
@@ -1578,8 +1486,8 @@ function keyword_count($keyword)
     
     $searchFile = "content/data/search.json";
     
-    if (file_exists($searchFile) && config('fulltext.search') == "true") {
-        $search = json_decode(file_get_contents($searchFile), true);
+    if (vfs_exists($searchFile) && config('fulltext.search') == "true") {
+        $search = json_decode(vfs_get($searchFile), true);
     }
 
     foreach ($posts as $index => $v) {
@@ -1745,8 +1653,8 @@ function popular_posts($custom = null, $count = null)
     if (config('views.counter') == 'true') {
         if (empty($_views)) {
             $filename = 'content/data/views.json';
-            if (file_exists($filename)) {
-                $_views = json_decode(file_get_contents($filename), true);
+            if (vfs_exists($filename)) {
+                $_views = json_decode(vfs_get($filename), true);
                 if(is_array($_views)) {
                     arsort($_views);
                     $i = 1;
@@ -2794,8 +2702,8 @@ function parseNode($node, $child = null)
 function menu($class = null)
 {
     $filename = "content/data/menu.json";
-    if (file_exists($filename)) {
-        $json = json_decode(file_get_contents('content/data/menu.json', true));
+    if (vfs_exists($filename)) {
+        $json = json_decode(vfs_get($filename));
         $nodes = json_decode($json);
         if (empty($nodes)) {
             return get_menu($class);
@@ -2834,7 +2742,7 @@ function menu($class = null)
 function get_title_from_file($v)
 {
     // Get the contents and convert it to HTML
-    $content = MarkdownExtra::defaultTransform(file_get_contents($v));
+    $content = MarkdownExtra::defaultTransform(vfs_get($v));
 
     $filename= pathinfo($v, PATHINFO_FILENAME);
 
@@ -3112,7 +3020,7 @@ function sitemap_post_path($posts, $page = 1, $perpage = 0)
 
         // The post date
         $post->date = strtotime($timestamp);
-        $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($filepath)));
+        $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($filepath)));
 
         // The archive per month
         $post->archivemonth = site_url() . 'archive/' . date('Y-m', $post->date);
@@ -3156,7 +3064,7 @@ function sitemap_page_path()
 
             $file = $v['dirname'] . '/' . $v['basename'];
             $post->url = site_url() . $filename;
-            $post->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($file)));
+            $post->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($file)));
 
             $tmp[] = $post;
 
@@ -3177,7 +3085,7 @@ function sitemap_page_path()
                 $urlSub = $filename . '/' . $baseSub;
                 $subfile  = $sp['dirname'] . '/' . $sp['basename'];
                 $subpost->url =  site_url() .  $urlSub;
-                $subpost->lastMod = strtotime(date('Y-m-d H:i:s', filemtime($subfile)));
+                $subpost->lastMod = strtotime(date('Y-m-d H:i:s', vfs_mtime($subfile)));
 
                 $tmp[] = $subpost;
             }
@@ -3685,7 +3593,7 @@ function add_view($page)
     }
     $filename = "content/data/views.json";
     $views = array();
-    if (file_exists($filename)) {
+    if (vfs_exists($filename)) {
         $views = json_decode(file_get_data($filename), true);
     }
 
@@ -3708,8 +3616,8 @@ function get_views($page, $views = null)
     $filename = "content/data/views.json";
 
     if (is_null($views)) {
-        if (file_exists($filename)) {
-            $views = json_decode(file_get_contents($filename), true);
+        if (vfs_exists($filename)) {
+            $views = json_decode(vfs_get($filename), true);
         }
         if (isset($views[$page])) {
             return $views[$page];
@@ -3837,8 +3745,8 @@ function tag_i18n($tag)
     static $tags = array();
 
     $filename = "content/data/tags.lang";
-    if (file_exists($filename)) {
-        $tags = unserialize(file_get_contents($filename));
+    if (vfs_exists($filename)) {
+        $tags = unserialize(vfs_get($filename));
     }
     if (isset($tags[$tag])) {
         return $tags[$tag];
@@ -3910,7 +3818,7 @@ function publish_scheduled()
             $time = new DateTime($t);
             $timestamp = $time->format("Y m d H:i:s");
             if (date('Y m d H:i:s') >= $timestamp) {
-                rename($old, $new);
+                vfs_rename($old, $new);
                 rebuilt_cache('all');
                 clear_cache();
             }

@@ -2,8 +2,8 @@
 <?php
 $menu = '';
 $filename = "content/data/menu.json";
-if (file_exists($filename)) {
-    $json = json_decode(file_get_contents('content/data/menu.json', true));
+if (vfs_exists($filename)) {
+    $json = json_decode(vfs_get($filename));
     $menus = json_decode($json);
     if (!empty($menus)) {
         $menu = parseMenus($menus);        

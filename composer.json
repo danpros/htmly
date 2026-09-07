@@ -18,6 +18,7 @@
     },
 	"autoload": {
 		"files": [
+			"system/includes/db.php",
 			"system/includes/dispatch.php",
 			"system/includes/functions.php",
 			"system/admin/admin.php",

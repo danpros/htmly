@@ -107,8 +107,8 @@ function config($key, $value = null)
 {
     static $_config = array();
 
-    if ($key === 'source' && file_exists($value))
-        $_config = parse_ini_file($value, true);
+    if ($key === 'source' && vfs_exists($value))
+        $_config = vfs_parse_ini($value, true);
     elseif ($value == null)
         return (isset($_config[$key]) ? $_config[$key] : null);
     else
@@ -119,7 +119,7 @@ function save_config($data = array(), $new = array())
 {
     global $config_file;
 
-    $string = file_get_contents($config_file) . "\n";
+    $string = vfs_get($config_file) . "\n";
 
     foreach ($data as $word => $value) {
         $value = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -135,7 +135,7 @@ function save_config($data = array(), $new = array())
         $string .= "\n" . $word . ' = ' . $value . "\n";
     }
     $string = rtrim($string);
-    return file_put_contents($config_file, $string, LOCK_EX);
+    return vfs_put($config_file, $string);
 }
 
 // Set the theme settings
@@ -148,7 +148,7 @@ function theme_settings()
         $settings = 'config/themes/' . $exp[1] . '.ini';
     }
 
-    if (file_exists($settings)) {
+    if (vfs_exists($settings)) {
         theme_config('source', $settings);
     }
 }
@@ -157,8 +157,8 @@ function theme_config($key, $value = null)
 {
     static $_config = array();
 
-    if ($key === 'source' && file_exists($value))
-        $_config = parse_ini_file($value, true);
+    if ($key === 'source' && vfs_exists($value))
+        $_config = vfs_parse_ini($value, true);
     elseif ($value == null)
         return (isset($_config[$key]) ? $_config[$key] : null);
     else
@@ -173,8 +173,8 @@ function save_theme_config($data = array(), $new = array(), $theme = null)
     }
     $string = '';
     $config_file = $dir . $theme . '.ini';
-    if (file_exists($config_file)) {
-        $string = file_get_contents($config_file) . "\n";
+    if (vfs_exists($config_file)) {
+        $string = vfs_get($config_file) . "\n";
     }
 
     foreach ($data as $word => $value) {
@@ -191,7 +191,7 @@ function save_theme_config($data = array(), $new = array(), $theme = null)
         $string .= "\n" . $word . ' = ' . $value . "\n";
     }
     $string = rtrim($string);
-    return file_put_contents($config_file, $string, LOCK_EX);
+    return vfs_put($config_file, $string);
 }
 
 function get_search_query()
@@ -506,22 +506,18 @@ function json($obj, $code = 200)
 function save_json_pretty($filename, $arr)
 {
     if (defined("JSON_PRETTY_PRINT")) {    
-        file_put_contents($filename, json_encode($arr, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
+        vfs_put($filename, json_encode($arr, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     } else {
-        file_put_contents($filename, json_encode($arr, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        vfs_put($filename, json_encode($arr, JSON_UNESCAPED_UNICODE));
     }
 }
 
 function file_get_data($filename) 
 {
-    $thisFile = fopen($filename, 'r');
-    if (flock($thisFile, LOCK_SH)) {
-        $fileData = file_get_contents($filename);
-        flock($thisFile, LOCK_UN);
-    } else {
+    $fileData = vfs_get($filename);
+    if ($fileData === false) {
         $fileData = json_encode(array('flock_fail' => 'reading'));
     }
-    fclose($thisFile);
     return $fileData;
 }
 

@@ -1,7 +1,7 @@
 <?php if (!defined('HTMLY')) die('HTMLy'); ?>
 <?php 
 global $config_file; 
-$this_config = parse_ini_file($config_file, true);
+$this_config = vfs_parse_ini($config_file, true);
 ?>    
 <div class="row">
 <?php foreach (glob('themes/*/layout.html.php') as $folder) : ?>

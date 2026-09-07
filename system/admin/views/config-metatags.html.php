@@ -2,8 +2,8 @@
 <?php
 global $config_file;
 $array = array();
-if (file_exists($config_file)) {
-  $array = parse_ini_file($config_file, true);
+if (vfs_exists($config_file)) {
+  $array = vfs_parse_ini($config_file, true);
 }
 
 $homeFormat = config('home.title.format');

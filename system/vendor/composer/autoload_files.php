@@ -7,6 +7,7 @@ $baseDir = dirname(dirname($vendorDir));
 
 return array(
     'e40631d46120a9c38ea139981f8dab26' => $vendorDir . '/ircmaxell/password-compat/lib/password.php',
+    'e4dc08c5449ba167638e0bb50cfa942d' => $baseDir . '/system/includes/db.php',
     '3abd73be56f01e9aafc62d31c7e15d91' => $baseDir . '/system/includes/dispatch.php',
     'f770a6f41af7b4285303bdcc4ff87ba7' => $baseDir . '/system/includes/functions.php',
     '8432047aca7938f88a2098a2f7770228' => $baseDir . '/system/admin/admin.php',
