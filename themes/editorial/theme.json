@@ -1,0 +1,37 @@
+{
+  "name": "Editorial",
+  "version": "1.1.0",
+  "author": "Custom build for htmly.edil.pro",
+  "homepage": "https://htmly.edil.pro",
+  "description": "A fast, magazine-style HTMLy theme with dark mode, no external requests, and optional ad/sponsor slots.",
+  "settings": [
+    { "type": "checkbox", "name": "hide_post_tags", "label": "Post Tags", "value": "", "info": "Hide the tag list on single posts" },
+    { "type": "checkbox", "name": "hide_post_nav", "label": "Post Navigation", "value": "", "info": "Hide the previous/next post links at the end of a post" },
+    { "type": "checkbox", "name": "hide_related_posts", "label": "Related Posts", "value": "", "info": "Hide the related posts section at the end of a post" },
+    { "type": "checkbox", "name": "hide_widget_recent", "label": "Sidebar: Recent Posts", "value": "", "info": "Hide the Recent Posts widget in the sidebar" },
+    { "type": "checkbox", "name": "hide_widget_popular", "label": "Sidebar: Popular Posts", "value": "", "info": "Hide the Popular Posts widget in the sidebar" },
+    { "type": "checkbox", "name": "hide_widget_categories", "label": "Sidebar: Categories", "value": "", "info": "Hide the Categories widget in the sidebar" },
+    { "type": "checkbox", "name": "hide_widget_tags", "label": "Sidebar: Tags", "value": "", "info": "Hide the Tags widget in the sidebar" },
+    { "type": "checkbox", "name": "hide_widget_archive", "label": "Sidebar: Archive", "value": "", "info": "Hide the Archive widget in the sidebar" },
+
+    { "type": "checkbox", "name": "ads_enabled", "label": "Enable Ads", "value": "", "info": "Master switch — turns every ad slot below on or off at once" },
+    { "type": "textarea", "name": "ads_sidebar_code", "label": "Sidebar Ad Code", "value": "", "info": "Full ad snippet (e.g. AdSense unit code). Shown as its own widget in the sidebar." },
+    { "type": "textarea", "name": "ads_post_top_code", "label": "In-Post Ad Code (top)", "value": "", "info": "Shown once, near the top of every single post, above the article text" },
+    { "type": "textarea", "name": "ads_post_bottom_code", "label": "In-Post Ad Code (bottom)", "value": "", "info": "Shown once, after the article text, before related posts" },
+
+    { "type": "checkbox", "name": "sponsor1_enabled", "label": "Sponsor Slot 1", "value": "", "info": "Show this sponsor in the sidebar" },
+    { "type": "text", "name": "sponsor1_name", "label": "Sponsor 1: Name", "value": "", "info": "Used as the image's alt text and link title" },
+    { "type": "text", "name": "sponsor1_logo", "label": "Sponsor 1: Logo URL", "value": "", "info": "Full URL to the logo image (upload it via the media library first, then paste its URL here)" },
+    { "type": "text", "name": "sponsor1_link", "label": "Sponsor 1: Link URL", "value": "", "info": "Where the logo should link to" },
+
+    { "type": "checkbox", "name": "sponsor2_enabled", "label": "Sponsor Slot 2", "value": "", "info": "Show this sponsor in the sidebar" },
+    { "type": "text", "name": "sponsor2_name", "label": "Sponsor 2: Name", "value": "", "info": "Used as the image's alt text and link title" },
+    { "type": "text", "name": "sponsor2_logo", "label": "Sponsor 2: Logo URL", "value": "", "info": "Full URL to the logo image" },
+    { "type": "text", "name": "sponsor2_link", "label": "Sponsor 2: Link URL", "value": "", "info": "Where the logo should link to" },
+
+    { "type": "checkbox", "name": "sponsor3_enabled", "label": "Sponsor Slot 3", "value": "", "info": "Show this sponsor in the sidebar" },
+    { "type": "text", "name": "sponsor3_name", "label": "Sponsor 3: Name", "value": "", "info": "Used as the image's alt text and link title" },
+    { "type": "text", "name": "sponsor3_logo", "label": "Sponsor 3: Logo URL", "value": "", "info": "Full URL to the logo image" },
+    { "type": "text", "name": "sponsor3_link", "label": "Sponsor 3: Link URL", "value": "", "info": "Where the logo should link to" }
+  ]
+}
