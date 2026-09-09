@@ -1,0 +1,909 @@
+name: Apply native multilingual implementation
+
+on:
+  push:
+    branches:
+      - feature/native-multilingual
+    paths:
+      - .github/workflows/apply-native-multilingual.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/native-multilingual
+          fetch-depth: 0
+
+      - name: Apply multilingual patch
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, text):
+              p = Path(path)
+              p.parent.mkdir(parents=True, exist_ok=True)
+              p.write_text(text, encoding='utf-8')
+
+          def replace_once(path, old, new):
+              text = read(path)
+              if old not in text:
+                  raise SystemExit(f'Expected text not found in {path}: {old[:100]!r}')
+              write(path, text.replace(old, new, 1))
+
+          module = r'''<?php
+          if (!defined('HTMLY')) die('HTMLy');
+
+          /**
+           * Native-like multilingual layer for HTMLy.
+           *
+           * Content metadata:
+           *   <!--lang en lang-->
+           *   <!--translation stable-group-id translation-->
+           *
+           * The default language has no URL prefix. Other languages use
+           * /{language}/. Missing <!--lang--> metadata means default language,
+           * preserving all existing content without migration.
+           */
+
+          if (!function_exists('multilingual_enabled')) {
+              function multilingual_enabled()
+              {
+                  $value = config('multilingual.enabled');
+                  if ($value === null || $value === '') {
+                      return true;
+                  }
+                  return !in_array(strtolower(trim((string) $value)), array('0', 'false', 'off', 'disabled'), true);
+              }
+          }
+
+          if (!function_exists('multilingual_languages')) {
+              function multilingual_languages()
+              {
+                  static $languages = null;
+                  if ($languages !== null) {
+                      return $languages;
+                  }
+
+                  $raw = trim((string) config('multilingual.languages'));
+                  if ($raw === '') {
+                      $raw = 'el:el_GR,en:en_US';
+                  }
+
+                  $languages = array();
+                  foreach (preg_split('/\s*,\s*/', $raw, -1, PREG_SPLIT_NO_EMPTY) as $pair) {
+                      $parts = array_map('trim', explode(':', $pair, 2));
+                      if (count($parts) !== 2 || $parts[0] === '' || $parts[1] === '') {
+                          continue;
+                      }
+                      $languages[strtolower($parts[0])] = $parts[1];
+                  }
+
+                  if (empty($languages)) {
+                      $languages = array('el' => 'el_GR', 'en' => 'en_US');
+                  }
+                  return $languages;
+              }
+          }
+
+          if (!function_exists('multilingual_default_language')) {
+              function multilingual_default_language()
+              {
+                  $languages = multilingual_languages();
+                  $default = strtolower(trim((string) config('multilingual.default')));
+                  if ($default === '' || !isset($languages[$default])) {
+                      $default = array_key_first($languages);
+                  }
+                  return $default;
+              }
+          }
+
+          if (!function_exists('multilingual_language_names')) {
+              function multilingual_language_names()
+              {
+                  $fallback = array(
+                      'el' => 'Ελληνικά', 'en' => 'English', 'it' => 'Italiano',
+                      'de' => 'Deutsch', 'fr' => 'Français', 'es' => 'Español',
+                      'pt' => 'Português', 'ru' => 'Русский', 'zh' => '中文'
+                  );
+                  $raw = trim((string) config('multilingual.language_names'));
+                  if ($raw !== '') {
+                      foreach (preg_split('/\s*,\s*/', $raw, -1, PREG_SPLIT_NO_EMPTY) as $pair) {
+                          $parts = array_map('trim', explode(':', $pair, 2));
+                          if (count($parts) === 2 && $parts[0] !== '' && $parts[1] !== '') {
+                              $fallback[strtolower($parts[0])] = $parts[1];
+                          }
+                      }
+                  }
+                  return $fallback;
+              }
+          }
+
+          if (!function_exists('multilingual_base_url')) {
+              function multilingual_base_url()
+              {
+                  static $base = null;
+                  if ($base !== null) {
+                      return $base;
+                  }
+                  $configured = config('site.url');
+                  $base = !empty($configured) ? $configured : generateSiteUrl();
+                  return rtrim($base, '/') . '/';
+              }
+          }
+
+          if (!function_exists('multilingual_language_root')) {
+              function multilingual_language_root($language)
+              {
+                  $language = strtolower((string) $language);
+                  $base = multilingual_base_url();
+                  if ($language === multilingual_default_language()) {
+                      return $base;
+                  }
+                  return rtrim($base, '/') . '/' . rawurlencode($language) . '/';
+              }
+          }
+
+          if (!function_exists('multilingual_request_relative_path')) {
+              function multilingual_request_relative_path()
+              {
+                  $path = parse_url(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/', PHP_URL_PATH);
+                  $path = $path === null ? '/' : $path;
+                  $basePath = parse_url(multilingual_base_url(), PHP_URL_PATH);
+                  $basePath = rtrim((string) $basePath, '/');
+                  if ($basePath !== '' && ($path === $basePath || strpos($path, $basePath . '/') === 0)) {
+                      $path = substr($path, strlen($basePath));
+                  }
+                  return trim($path, '/');
+              }
+          }
+
+          if (!function_exists('multilingual_current_language')) {
+              function multilingual_current_language()
+              {
+                  if (!empty($GLOBALS['htmly_multilingual_language'])) {
+                      return $GLOBALS['htmly_multilingual_language'];
+                  }
+                  return multilingual_default_language();
+              }
+          }
+
+          if (!function_exists('multilingual_bootstrap_request')) {
+              function multilingual_bootstrap_request()
+              {
+                  static $done = false;
+                  if ($done || !multilingual_enabled()) {
+                      return;
+                  }
+                  $done = true;
+
+                  $languages = multilingual_languages();
+                  $default = multilingual_default_language();
+                  $relative = multilingual_request_relative_path();
+                  $segments = $relative === '' ? array() : explode('/', $relative);
+                  $first = isset($segments[0]) ? strtolower($segments[0]) : '';
+                  $active = (isset($languages[$first]) ? $first : $default);
+
+                  // The default language is canonical at the root, never /el/.
+                  if ($first === $default && $relative !== '') {
+                      array_shift($segments);
+                      $target = multilingual_base_url() . implode('/', $segments);
+                      $query = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] !== ''
+                          ? '?' . $_SERVER['QUERY_STRING'] : '';
+                      header('Location: ' . $target . $query, true, 301);
+                      exit;
+                  }
+
+                  $GLOBALS['htmly_multilingual_language'] = $active;
+                  config('language', $languages[$active]);
+                  config('site.url', multilingual_language_root($active));
+
+                  // Optional per-language site identity. Existing global values remain fallbacks.
+                  foreach (array('blog.title', 'blog.tagline', 'blog.description', 'blog.copyright', 'breadcrumb.home') as $key) {
+                      $localized = config($key . '.' . $active);
+                      if ($localized !== null && $localized !== '') {
+                          config($key, $localized);
+                      }
+                  }
+              }
+          }
+
+          if (!function_exists('multilingual_should_filter_content')) {
+              function multilingual_should_filter_content()
+              {
+                  if (!multilingual_enabled()) {
+                      return false;
+                  }
+                  $relative = multilingual_request_relative_path();
+                  $parts = $relative === '' ? array() : explode('/', $relative);
+                  if (!empty($parts) && isset(multilingual_languages()[strtolower($parts[0])])) {
+                      array_shift($parts);
+                  }
+                  $route = strtolower(implode('/', $parts));
+                  return !preg_match('@^(admin|edit|add|delete|backup|update|config|login|logout|clear-cache|rebuild|import|export)(/|$)@', $route);
+              }
+          }
+
+          if (!function_exists('multilingual_content_metadata')) {
+              function multilingual_content_metadata($file)
+              {
+                  static $cache = array();
+                  if (isset($cache[$file])) {
+                      return $cache[$file];
+                  }
+                  $meta = array('language' => multilingual_default_language(), 'translation' => '', 'raw' => '');
+                  if (!is_file($file) || !is_readable($file)) {
+                      return $cache[$file] = $meta;
+                  }
+                  $raw = file_get_contents($file);
+                  $language = trim((string) get_content_tag('lang', $raw));
+                  $translation = trim((string) get_content_tag('translation', $raw));
+                  if ($language !== '') {
+                      $meta['language'] = strtolower($language);
+                  }
+                  $meta['translation'] = $translation;
+                  $meta['raw'] = $raw;
+                  return $cache[$file] = $meta;
+              }
+          }
+
+          if (!function_exists('multilingual_filter_index')) {
+              function multilingual_filter_index($items)
+              {
+                  if (!is_array($items) || !multilingual_should_filter_content()) {
+                      return $items;
+                  }
+                  $active = multilingual_current_language();
+                  $filtered = array();
+                  foreach ($items as $item) {
+                      if (!isset($item['dirname'], $item['basename'])) {
+                          continue;
+                      }
+                      $file = $item['dirname'] . '/' . $item['basename'];
+                      $meta = multilingual_content_metadata($file);
+                      if ($meta['language'] === $active) {
+                          $filtered[] = $item;
+                      }
+                  }
+                  return $filtered;
+              }
+          }
+
+          if (!function_exists('multilingual_cache_file')) {
+              function multilingual_cache_file($path)
+              {
+                  if (!multilingual_enabled() || !multilingual_should_filter_content()) {
+                      return $path;
+                  }
+                  $language = preg_replace('/[^a-z0-9_-]/i', '', multilingual_current_language());
+                  if (substr($path, -6) === '.cache') {
+                      return substr($path, 0, -6) . '.' . $language . '.cache';
+                  }
+                  return $path . '.' . $language;
+              }
+          }
+
+          if (!function_exists('multilingual_frontpage_file')) {
+              function multilingual_frontpage_file($defaultFile)
+              {
+                  if (!multilingual_enabled() || multilingual_current_language() === multilingual_default_language()) {
+                      return $defaultFile;
+                  }
+                  $info = pathinfo($defaultFile);
+                  return $info['dirname'] . '/' . $info['filename'] . '.' . multilingual_current_language() . '.md';
+              }
+          }
+
+          if (!function_exists('multilingual_asset_site_url')) {
+              function multilingual_asset_site_url()
+              {
+                  return multilingual_enabled() ? multilingual_base_url() : site_url();
+              }
+          }
+
+          if (!function_exists('multilingual_entry_url')) {
+              function multilingual_entry_url($entry, $kind, $language)
+              {
+                  $root = multilingual_language_root($language);
+                  if ($kind === 'post') {
+                      $parts = explode('_', $entry['basename']);
+                      if (count($parts) < 3) {
+                          return $root;
+                      }
+                      $digits = preg_replace('/\D/', '', $parts[0]);
+                      $year = substr($digits, 0, 4);
+                      $month = substr($digits, 4, 2);
+                      $slug = str_replace('.md', '', $parts[2]);
+                      if (permalink_type() === 'default') {
+                          return $root . $year . '/' . $month . '/' . $slug;
+                      }
+                      return $root . trim(permalink_type(), '/') . '/' . $slug;
+                  }
+
+                  if ($kind === 'page') {
+                      $parts = explode('.', $entry['filename']);
+                      $slug = isset($parts[1]) ? $parts[1] : $entry['filename'];
+                      return $root . $slug;
+                  }
+
+                  if ($kind === 'subpage') {
+                      $parentParts = explode('.', basename($entry['dirname']));
+                      $parent = isset($parentParts[1]) ? $parentParts[1] : $parentParts[0];
+                      $parts = explode('.', $entry['filename']);
+                      $slug = isset($parts[1]) ? $parts[1] : $entry['filename'];
+                      return $root . $parent . '/' . $slug;
+                  }
+
+                  return $root;
+              }
+          }
+
+          if (!function_exists('multilingual_raw_index')) {
+              function multilingual_raw_index($path)
+              {
+                  if (!file_exists($path)) {
+                      return array();
+                  }
+                  $items = @unserialize(file_get_contents($path));
+                  return is_array($items) ? $items : array();
+              }
+          }
+
+          if (!function_exists('multilingual_translation_registry')) {
+              function multilingual_translation_registry()
+              {
+                  static $registry = null;
+                  if ($registry !== null) {
+                      return $registry;
+                  }
+                  $registry = array();
+                  $sources = array(
+                      array('cache/index/index-posts.txt', 'post'),
+                      array('cache/index/index-pages.txt', 'page'),
+                      array('cache/index/index-subpages.txt', 'subpage'),
+                  );
+                  $enabled = multilingual_languages();
+                  foreach ($sources as $source) {
+                      foreach (multilingual_raw_index($source[0]) as $entry) {
+                          if (!isset($entry['dirname'], $entry['basename'])) {
+                              continue;
+                          }
+                          $file = $entry['dirname'] . '/' . $entry['basename'];
+                          $meta = multilingual_content_metadata($file);
+                          $lang = $meta['language'];
+                          $group = $meta['translation'];
+                          if ($group === '' || !isset($enabled[$lang])) {
+                              continue;
+                          }
+                          if (!isset($registry[$group])) {
+                              $registry[$group] = array();
+                          }
+                          if (!isset($registry[$group][$lang])) {
+                              $registry[$group][$lang] = multilingual_entry_url($entry, $source[1], $lang);
+                          }
+                      }
+                  }
+                  return $registry;
+              }
+          }
+
+          if (!function_exists('multilingual_context_translation_id')) {
+              function multilingual_context_translation_id($context)
+              {
+                  if (!is_object($context) || empty($context->raw)) {
+                      return '';
+                  }
+                  return trim((string) get_content_tag('translation', $context->raw));
+              }
+          }
+
+          if (!function_exists('multilingual_translation_urls')) {
+              function multilingual_translation_urls($context)
+              {
+                  $group = multilingual_context_translation_id($context);
+                  if ($group === '') {
+                      return array();
+                  }
+                  $registry = multilingual_translation_registry();
+                  return isset($registry[$group]) ? $registry[$group] : array();
+              }
+          }
+
+          if (!function_exists('multilingual_switcher_urls')) {
+              function multilingual_switcher_urls($context = null)
+              {
+                  $translations = multilingual_translation_urls($context);
+                  $links = array();
+                  foreach (multilingual_languages() as $language => $locale) {
+                      $links[$language] = isset($translations[$language])
+                          ? $translations[$language]
+                          : multilingual_language_root($language);
+                  }
+                  if (is_object($context) && !empty($context->url)) {
+                      $links[multilingual_current_language()] = $context->url;
+                  }
+                  return $links;
+              }
+          }
+
+          if (!function_exists('multilingual_hreflang_html')) {
+              function multilingual_hreflang_html($context = null)
+              {
+                  if (!multilingual_enabled()) {
+                      return '';
+                  }
+                  if (is_object($context)) {
+                      $links = multilingual_translation_urls($context);
+                      if (empty($links) && !empty($context->url)) {
+                          $links = array(multilingual_current_language() => $context->url);
+                      }
+                  } else {
+                      $links = array();
+                      foreach (multilingual_languages() as $language => $locale) {
+                          $links[$language] = multilingual_language_root($language);
+                      }
+                  }
+
+                  $out = '';
+                  foreach ($links as $language => $url) {
+                      $out .= '<link rel="alternate" hreflang="' . htmlspecialchars($language, ENT_QUOTES, 'UTF-8')
+                          . '" href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '">' . "\n";
+                  }
+                  $default = multilingual_default_language();
+                  if (isset($links[$default])) {
+                      $out .= '<link rel="alternate" hreflang="x-default" href="'
+                          . htmlspecialchars($links[$default], ENT_QUOTES, 'UTF-8') . '">' . "\n";
+                  }
+                  return $out;
+              }
+          }
+
+          if (!function_exists('multilingual_language_name')) {
+              function multilingual_language_name($language)
+              {
+                  $names = multilingual_language_names();
+                  return isset($names[$language]) ? $names[$language] : strtoupper($language);
+              }
+          }
+          '''
+          # Remove indentation introduced by the YAML/Python block.
+          module = re.sub(r'^          ', '', module, flags=re.M)
+          write('system/custom/multilingual.php', module)
+
+          # Load the custom layer after HTMLy's normal autoloaded functions and before htmly.php executes.
+          replace_once(
+              'index.php',
+              "require 'system/vendor/autoload.php';\nrequire 'system/htmly.php';",
+              "require 'system/vendor/autoload.php';\nrequire 'system/custom/multilingual.php';\nrequire 'system/htmly.php';"
+          )
+
+          # Core dispatcher: bootstrap language before get_search_query redirects, use the
+          # active theme-language file, and keep theme assets on the unprefixed base URL.
+          replace_once(
+              'system/includes/dispatch.php',
+              "function get_search_query()\n{\n    if (isset($_GET['search'])) {",
+              "function get_search_query()\n{\n    if (function_exists('multilingual_bootstrap_request')) {\n        multilingual_bootstrap_request();\n    }\n    if (isset($_GET['search'])) {"
+          )
+          replace_once(
+              'system/includes/dispatch.php',
+              "    return site_url() . rtrim(config('views.root'), '/') . '/';",
+              "    $base = function_exists('multilingual_asset_site_url') ? multilingual_asset_site_url() : site_url();\n    return $base . rtrim(config('views.root'), '/') . '/';"
+          )
+          replace_once(
+              'system/includes/dispatch.php',
+              "      $theme_path = parse_url(theme_path(), PHP_URL_PATH);\n      $theme_lang_file = $_SERVER['DOCUMENT_ROOT'] . $theme_path . 'lang/en_US.ini';\n      $_i18n_local = array();\n      if (file_exists($theme_lang_file)) {\n        $_i18n_local = parse_ini_file($theme_lang_file, true);\n      }",
+              "      $theme_path = parse_url(theme_path(), PHP_URL_PATH);\n      $theme_lang_name = basename($value);\n      $theme_lang_file = $_SERVER['DOCUMENT_ROOT'] . $theme_path . 'lang/' . $theme_lang_name;\n      if (!file_exists($theme_lang_file)) {\n        $theme_lang_file = $_SERVER['DOCUMENT_ROOT'] . $theme_path . 'lang/en_US.ini';\n      }\n      $_i18n_local = array();\n      if (file_exists($theme_lang_file)) {\n        $_i18n_local = parse_ini_file($theme_lang_file, true);\n      }"
+          )
+
+          # Filter content indexes before pagination, route lookup, counts, RSS and sitemap generation.
+          functions_path = 'system/includes/functions.php'
+          f = read(functions_path)
+          old = """function get_blog_posts()\n{\n    static $_posts = array();\n\n    $url = 'cache/index/index-posts.txt';\n    if (!file_exists($url)) {\n        rebuilt_cache('all');\n    }\n    $_posts = unserialize(file_get_contents($url));\n    return $_posts;\n}"""
+          new = """function get_blog_posts()\n{\n    static $_posts = array();\n\n    $url = 'cache/index/index-posts.txt';\n    if (!file_exists($url)) {\n        rebuilt_cache('all');\n    }\n    $_posts = unserialize(file_get_contents($url));\n    if (function_exists('multilingual_filter_index')) {\n        return multilingual_filter_index($_posts);\n    }\n    return $_posts;\n}"""
+          if old not in f: raise SystemExit('get_blog_posts block not found')
+          f = f.replace(old, new, 1)
+
+          old = """function get_static_pages()\n{\n    static $_page = array();\n\n    $url = 'cache/index/index-pages.txt';\n    if (!file_exists($url)) {\n        rebuilt_cache('all');\n    }\n    $_page = unserialize(file_get_contents($url));\n    return $_page;\n}"""
+          new = """function get_static_pages()\n{\n    static $_page = array();\n\n    $url = 'cache/index/index-pages.txt';\n    if (!file_exists($url)) {\n        rebuilt_cache('all');\n    }\n    $_page = unserialize(file_get_contents($url));\n    if (function_exists('multilingual_filter_index')) {\n        return multilingual_filter_index($_page);\n    }\n    return $_page;\n}"""
+          if old not in f: raise SystemExit('get_static_pages block not found')
+          f = f.replace(old, new, 1)
+
+          old = "    $_sub_page = unserialize(file_get_contents($url));\n\n    if ($static != null) {"
+          new = "    $_sub_page = unserialize(file_get_contents($url));\n    if (function_exists('multilingual_filter_index')) {\n        $_sub_page = multilingual_filter_index($_sub_page);\n    }\n\n    if ($static != null) {"
+          if old not in f: raise SystemExit('get_static_subpages hook point not found')
+          f = f.replace(old, new, 1)
+
+          old = "$filename = 'content/data/frontpage/frontpage.md';"
+          new = "$filename = function_exists('multilingual_frontpage_file') ? multilingual_frontpage_file('content/data/frontpage/frontpage.md') : 'content/data/frontpage/frontpage.md';"
+          if old not in f: raise SystemExit('frontpage filename not found')
+          f = f.replace(old, new, 1)
+
+          # Publicly generated system/thumbnail assets must stay on the base URL rather than /en/.
+          f = re.sub(r"site_url\(\)\s*\.\s*('system/resources/)", r"multilingual_asset_site_url() . \1", f)
+          f = f.replace('return site_url() . $thumbFile;', 'return multilingual_asset_site_url() . $thumbFile;')
+
+          # Widget caches can otherwise leak Greek recent/category/tag lists into English pages.
+          out = []
+          wrapped = 0
+          for line in f.splitlines(True):
+              stripped = line.rstrip('\r\n')
+              m = re.match(r'^(\s*\$\w+\s*=\s*)(.+[\'\"]cache/widget/.+)(;\s*)$', stripped)
+              if m and 'multilingual_cache_file(' not in stripped and 'glob(' not in stripped:
+                  newline = '\n' if line.endswith('\n') else ''
+                  line = m.group(1) + 'multilingual_cache_file(' + m.group(2) + ')' + m.group(3) + newline
+                  wrapped += 1
+              out.append(line)
+          f = ''.join(out)
+          if wrapped < 3:
+              raise SystemExit(f'Expected at least 3 widget cache assignments, wrapped {wrapped}')
+          write(functions_path, f)
+
+          # Optional configuration keys for installations that want explicit values.
+          cfg = read('config/config.ini.example')
+          if 'multilingual.enabled' not in cfg:
+              cfg += '''\n\n; Native-like multilingual content\nmultilingual.enabled = \"true\"\nmultilingual.default = \"el\"\nmultilingual.languages = \"el:el_GR,en:en_US\"\nmultilingual.language_names = \"el:Ελληνικά,en:English\"\n; Optional localized site identity (global blog.* remains the fallback)\n; blog.title.el = \"\"\n; blog.title.en = \"\"\n; blog.tagline.el = \"\"\n; blog.tagline.en = \"\"\n; blog.description.el = \"\"\n; blog.description.en = \"\"\n; breadcrumb.home.el = \"Αρχική\"\n; breadcrumb.home.en = \"Home\"\n'''
+              write('config/config.ini.example', cfg)
+
+          # Editorial theme helpers.
+          tf = read('themes/editorial/functions.php')
+          if 'editorial_set_translation_context' not in tf:
+              tf += r'''
+
+          /** Multilingual presentation helpers. */
+          if (!function_exists('editorial_set_translation_context')) {
+              function editorial_set_translation_context($context)
+              {
+                  if (function_exists('stash')) {
+                      stash('editorial.translation.context', $context);
+                  }
+              }
+          }
+
+          if (!function_exists('editorial_translation_context')) {
+              function editorial_translation_context()
+              {
+                  return function_exists('stash') ? stash('editorial.translation.context') : null;
+              }
+          }
+
+          if (!function_exists('editorial_html_lang')) {
+              function editorial_html_lang()
+              {
+                  return function_exists('multilingual_current_language') ? multilingual_current_language() : 'en';
+              }
+          }
+
+          if (!function_exists('editorial_hreflang')) {
+              function editorial_hreflang($context = null)
+              {
+                  return function_exists('multilingual_hreflang_html') ? multilingual_hreflang_html($context) : '';
+              }
+          }
+
+          if (!function_exists('editorial_language_switcher')) {
+              function editorial_language_switcher($context = null)
+              {
+                  if (!function_exists('multilingual_switcher_urls') || !function_exists('multilingual_languages')) {
+                      return '';
+                  }
+                  $links = multilingual_switcher_urls($context);
+                  $current = multilingual_current_language();
+                  $out = '<nav class="language-switcher" aria-label="' . htmlspecialchars(i18n('editorial_language'), ENT_QUOTES, 'UTF-8') . '">';
+                  foreach (multilingual_languages() as $language => $locale) {
+                      $active = $language === $current;
+                      $name = function_exists('multilingual_language_name') ? multilingual_language_name($language) : strtoupper($language);
+                      $out .= '<a href="' . htmlspecialchars($links[$language], ENT_QUOTES, 'UTF-8') . '" lang="' . htmlspecialchars($language, ENT_QUOTES, 'UTF-8') . '" hreflang="' . htmlspecialchars($language, ENT_QUOTES, 'UTF-8') . '" title="' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . '"' . ($active ? ' class="is-active" aria-current="page"' : '') . '>' . strtoupper(htmlspecialchars($language, ENT_QUOTES, 'UTF-8')) . '</a>';
+                  }
+                  $out .= '</nav>';
+                  return $out;
+              }
+          }
+          '''
+              tf = re.sub(r'^          ', '', tf, flags=re.M)
+              write('themes/editorial/functions.php', tf)
+
+          # Editorial layout: dynamic html language, hreflang and localized chrome.
+          p = 'themes/editorial/layout.html.php'
+          t = read(p)
+          replacements = {
+              '<html lang="el">': '<html lang="<?php echo htmlspecialchars(editorial_html_lang(), ENT_QUOTES, \'UTF-8\'); ?>">',
+              '<link rel="canonical" href="<?php echo $canonical; ?>">': '<link rel="canonical" href="<?php echo $canonical; ?>">\n<?php echo editorial_hreflang(editorial_translation_context()); ?>',
+              '<a class="skip-link" href="#main">Skip to content</a>': '<a class="skip-link" href="#main"><?php echo i18n(\'editorial_skip_to_content\'); ?></a>',
+              'aria-label="Toggle menu"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_toggle_menu\')); ?>"',
+              'aria-label="Primary"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_primary_navigation\')); ?>"',
+              'aria-label="Toggle dark mode"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_toggle_dark_mode\')); ?>"',
+              'aria-label="Toggle search"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_toggle_search\')); ?>"',
+              '<p class="footer-col-title">Explore</p>': '<p class="footer-col-title"><?php echo i18n(\'editorial_explore\'); ?></p>',
+              '>Home</a></li>': '><?php echo i18n(\'editorial_home\'); ?></a></li>',
+              '>RSS Feed</a></li>': '><?php echo i18n(\'editorial_rss_feed\'); ?></a></li>',
+              '<p class="footer-col-title">Categories</p>': '<p class="footer-col-title"><?php echo i18n(\'editorial_categories\'); ?></p>',
+              '<span>Theme: <strong>Editorial</strong></span>': '<span><?php echo i18n(\'editorial_theme\'); ?>: <strong>Editorial</strong></span>',
+              'aria-label="Back to top"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_back_to_top\')); ?>"',
+          }
+          for old, new in replacements.items():
+              if old not in t: raise SystemExit(f'layout replacement missing: {old}')
+              t = t.replace(old, new, 1)
+          marker = '    <div class="header-actions">\n'
+          if marker not in t: raise SystemExit('header-actions marker missing')
+          t = t.replace(marker, marker + '      <?php echo editorial_language_switcher(editorial_translation_context()); ?>\n', 1)
+          write(p, t)
+
+          # Main listing.
+          replace_once('themes/editorial/main.html.php', '<span class="eyebrow">Browsing</span>', '<span class="eyebrow"><?php echo i18n(\'editorial_browsing\'); ?></span>')
+
+          # Post cards.
+          p = 'themes/editorial/partials/post-card.html.php'
+          t = read(p)
+          old = '      Read more<span class="visually-hidden"> about <?php echo strip_tags($p->title); ?></span>'
+          new = '      <?php echo i18n(\'editorial_read_more\'); ?><span class="visually-hidden"> <?php echo i18n(\'editorial_about\'); ?> <?php echo strip_tags($p->title); ?></span>'
+          if old not in t: raise SystemExit('post-card read more missing')
+          write(p, t.replace(old, new, 1))
+
+          # Sidebar chrome.
+          p = 'themes/editorial/partials/sidebar.html.php'
+          t = read(p)
+          side_repl = {
+              'aria-label="Sidebar"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_sidebar\')); ?>"',
+              '      Search\n': '      <?php echo i18n(\'editorial_search\'); ?>\n',
+              "editorial_search('Go')": "editorial_search(i18n('editorial_go'))",
+              '      Recent Posts\n': '      <?php echo i18n(\'editorial_recent_posts\'); ?>\n',
+              '      Popular\n': '      <?php echo i18n(\'editorial_popular\'); ?>\n',
+              " . ' views'": " . ' ' . i18n('editorial_views')",
+              '<span class="ad-label">Advertisement</span>': '<span class="ad-label"><?php echo i18n(\'editorial_advertisement\'); ?></span>',
+              '      Categories\n': '      <?php echo i18n(\'editorial_categories\'); ?>\n',
+              '      Tags\n': '      <?php echo i18n(\'editorial_tags\'); ?>\n',
+              '      Sponsors\n': '      <?php echo i18n(\'editorial_sponsors\'); ?>\n',
+              '<span class="sponsor-badge">Sponsored</span>': '<span class="sponsor-badge"><?php echo i18n(\'editorial_sponsored\'); ?></span>',
+              '        Archive\n': '        <?php echo i18n(\'editorial_archive\'); ?>\n',
+          }
+          for old, new in side_repl.items():
+              if old not in t: raise SystemExit(f'sidebar replacement missing: {old!r}')
+              t = t.replace(old, new)
+          write(p, t)
+
+          # Single post translations + translation context.
+          p = 'themes/editorial/post.html.php'
+          t = read(p)
+          t = t.replace("<?php if (!defined('HTMLY')) die('HTMLy'); ?>", "<?php if (!defined('HTMLY')) die('HTMLy'); ?>\n<?php editorial_set_translation_context($p); ?>", 1)
+          post_repl = {
+              'aria-label="Breadcrumb"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_breadcrumb\')); ?>"',
+              '        Edit post\n': '        <?php echo i18n(\'editorial_edit_post\'); ?>\n',
+              " . ' views'": " . ' ' . i18n('editorial_views')",
+              ' · updated <?php echo format_date($p->lastMod); ?>': ' · <?php echo i18n(\'editorial_updated\'); ?> <?php echo format_date($p->lastMod); ?>',
+              '>Visit link ↗</a>': '><?php echo i18n(\'editorial_visit_link\'); ?> ↗</a>',
+              '<span class="ad-label">Advertisement</span>': '<span class="ad-label"><?php echo i18n(\'editorial_advertisement\'); ?></span>',
+              '<span class="label">Filed under</span>': '<span class="label"><?php echo i18n(\'editorial_filed_under\'); ?></span>',
+              '<span class="label">Tagged</span>': '<span class="label"><?php echo i18n(\'editorial_tagged\'); ?></span>',
+              'aria-label="Share this post"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_share_this_post\')); ?>"',
+              'aria-label="Share on X"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_share_on_x\')); ?>"',
+              'aria-label="Share on Facebook"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_share_on_facebook\')); ?>"',
+              'aria-label="Share via email"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_share_via_email\')); ?>"',
+              'aria-label="Related posts"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_related_posts\')); ?>"',
+              '        Related posts\n': '        <?php echo i18n(\'editorial_related_posts\'); ?>\n',
+              'Read more<span class="visually-hidden"> about <?php echo strip_tags($r->title); ?></span>': '<?php echo i18n(\'editorial_read_more\'); ?><span class="visually-hidden"> <?php echo i18n(\'editorial_about\'); ?> <?php echo strip_tags($r->title); ?></span>',
+              'aria-label="Post navigation"': 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_post_navigation\')); ?>"',
+              '<span class="nav-dir">← Previous</span>': '<span class="nav-dir">← <?php echo i18n(\'editorial_previous\'); ?></span>',
+              '<span class="nav-dir">Next →</span>': '<span class="nav-dir"><?php echo i18n(\'editorial_next\'); ?> →</span>',
+          }
+          for old, new in post_repl.items():
+              if old not in t: raise SystemExit(f'post replacement missing: {old!r}')
+              t = t.replace(old, new)
+          write(p, t)
+
+          # Static pages context + chrome.
+          p = 'themes/editorial/static.html.php'
+          t = read(p)
+          t = t.replace("<?php if (!defined('HTMLY')) die('HTMLy'); ?>", "<?php if (!defined('HTMLY')) die('HTMLy'); ?>\n<?php editorial_set_translation_context($static); ?>", 1)
+          t = t.replace('aria-label="Breadcrumb"', 'aria-label="<?php echo htmlspecialchars(i18n(\'editorial_breadcrumb\')); ?>"')
+          t = t.replace('        Edit page\n', '        <?php echo i18n(\'editorial_edit_page\'); ?>\n')
+          write(p, t)
+
+          # Language switcher styling.
+          css_path = 'themes/editorial/css/style.css'
+          css = read(css_path)
+          if '.language-switcher' not in css:
+              css += r'''
+
+          /* Native multilingual switcher */
+          .language-switcher {
+            display: inline-flex;
+            align-items: center;
+            gap: .2rem;
+            padding: .18rem;
+            border: 1px solid currentColor;
+            border-radius: 999px;
+            line-height: 1;
+          }
+          .language-switcher a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2rem;
+            min-height: 2rem;
+            padding: .35rem .45rem;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-decoration: none;
+            opacity: .72;
+          }
+          .language-switcher a:hover,
+          .language-switcher a:focus-visible,
+          .language-switcher a.is-active {
+            opacity: 1;
+            text-decoration: underline;
+            text-underline-offset: .18em;
+          }
+          '''
+              css = re.sub(r'^          ', '', css, flags=re.M)
+              write(css_path, css)
+
+          en = '''editorial_language = "Language"\neditorial_skip_to_content = "Skip to content"\neditorial_primary_navigation = "Primary navigation"\neditorial_toggle_menu = "Toggle menu"\neditorial_toggle_dark_mode = "Toggle dark mode"\neditorial_toggle_search = "Toggle search"\neditorial_explore = "Explore"\neditorial_home = "Home"\neditorial_rss_feed = "RSS Feed"\neditorial_categories = "Categories"\neditorial_theme = "Theme"\neditorial_back_to_top = "Back to top"\neditorial_browsing = "Browsing"\neditorial_read_more = "Read more"\neditorial_about = "about"\neditorial_sidebar = "Sidebar"\neditorial_search = "Search"\neditorial_go = "Go"\neditorial_recent_posts = "Recent Posts"\neditorial_popular = "Popular"\neditorial_views = "views"\neditorial_advertisement = "Advertisement"\neditorial_tags = "Tags"\neditorial_sponsors = "Sponsors"\neditorial_sponsored = "Sponsored"\neditorial_archive = "Archive"\neditorial_breadcrumb = "Breadcrumb"\neditorial_edit_post = "Edit post"\neditorial_updated = "updated"\neditorial_visit_link = "Visit link"\neditorial_filed_under = "Filed under"\neditorial_tagged = "Tagged"\neditorial_share_this_post = "Share this post"\neditorial_share_on_x = "Share on X"\neditorial_share_on_facebook = "Share on Facebook"\neditorial_share_via_email = "Share via email"\neditorial_related_posts = "Related posts"\neditorial_post_navigation = "Post navigation"\neditorial_previous = "Previous"\neditorial_next = "Next"\neditorial_edit_page = "Edit page"\n'''
+          el = '''editorial_language = "Γλώσσα"\neditorial_skip_to_content = "Μετάβαση στο περιεχόμενο"\neditorial_primary_navigation = "Κύρια πλοήγηση"\neditorial_toggle_menu = "Εναλλαγή μενού"\neditorial_toggle_dark_mode = "Εναλλαγή σκοτεινής λειτουργίας"\neditorial_toggle_search = "Εναλλαγή αναζήτησης"\neditorial_explore = "Περιήγηση"\neditorial_home = "Αρχική"\neditorial_rss_feed = "Ροή RSS"\neditorial_categories = "Κατηγορίες"\neditorial_theme = "Θέμα"\neditorial_back_to_top = "Επιστροφή στην κορυφή"\neditorial_browsing = "Περιήγηση"\neditorial_read_more = "Διαβάστε περισσότερα"\neditorial_about = "για"\neditorial_sidebar = "Πλευρική στήλη"\neditorial_search = "Αναζήτηση"\neditorial_go = "Αναζήτηση"\neditorial_recent_posts = "Πρόσφατα άρθρα"\neditorial_popular = "Δημοφιλή"\neditorial_views = "προβολές"\neditorial_advertisement = "Διαφήμιση"\neditorial_tags = "Ετικέτες"\neditorial_sponsors = "Χορηγοί"\neditorial_sponsored = "Χορηγούμενο"\neditorial_archive = "Αρχείο"\neditorial_breadcrumb = "Διαδρομή πλοήγησης"\neditorial_edit_post = "Επεξεργασία άρθρου"\neditorial_updated = "ενημερώθηκε"\neditorial_visit_link = "Επίσκεψη συνδέσμου"\neditorial_filed_under = "Κατηγορία"\neditorial_tagged = "Ετικέτες"\neditorial_share_this_post = "Κοινοποίηση άρθρου"\neditorial_share_on_x = "Κοινοποίηση στο X"\neditorial_share_on_facebook = "Κοινοποίηση στο Facebook"\neditorial_share_via_email = "Κοινοποίηση μέσω email"\neditorial_related_posts = "Σχετικά άρθρα"\neditorial_post_navigation = "Πλοήγηση άρθρων"\neditorial_previous = "Προηγούμενο"\neditorial_next = "Επόμενο"\neditorial_edit_page = "Επεξεργασία σελίδας"\n'''
+          write('themes/editorial/lang/en_US.ini', en)
+          write('themes/editorial/lang/el_GR.ini', el)
+
+          docs = r'''# Native-like multilingual HTMLy
+
+          This fork supports language-prefixed content without cookies or query strings.
+
+          ## URL model
+
+          - Greek is the default language and stays at the root: `/`, `/category/...`, `/2026/09/...`.
+          - English uses `/en/`: `/en/`, `/en/category/...`, `/en/2026/09/...`.
+          - A request under `/el/...` is permanently redirected to the equivalent root URL.
+          - Additional languages are enabled by configuration; the mechanism is not hard-coded to two languages.
+
+          ## Content metadata
+
+          Existing files without a language tag remain Greek automatically.
+
+          English article or static page:
+
+          ```markdown
+          <!--lang en lang-->
+          <!--translation olympus-development translation-->
+          <!--t English title t-->
+          <!--d English meta description d-->
+
+          Content...
+          ```
+
+          Greek counterpart:
+
+          ```markdown
+          <!--lang el lang-->
+          <!--translation olympus-development translation-->
+          <!--t Ελληνικός τίτλος t-->
+          <!--d Ελληνική meta description d-->
+
+          Περιεχόμενο...
+          ```
+
+          `translation` is a stable group ID. Every translation of the same logical page/article uses the same ID. Adding a third language does not require editing the older files.
+
+          ## Static pages
+
+          HTMLy keeps static pages in `content/static/`. Different files can have different localized slugs, for example:
+
+          - `01.sxetika.md` -> `/sxetika`
+          - `02.about.md` with `<!--lang en lang-->` -> `/en/about`
+
+          The language filter runs before page lookup and before automatic static-page menus are built.
+
+          ## Posts, categories and tags
+
+          The language filter is applied to the raw post index before pagination, category/tag/archive/search counts, related posts, RSS and sitemap generation. English posts may live in localized category folders (recommended), e.g. `epikairotita` for Greek and `current-affairs` for English.
+
+          ## SEO
+
+          Editorial emits:
+
+          - localized canonical URLs,
+          - `hreflang` alternates for translations that actually exist,
+          - `x-default` pointing to the default-language translation,
+          - a dynamic `<html lang="...">`.
+
+          The language switcher sends the visitor directly to the translated sibling when a matching `translation` ID exists. If that translation does not exist, it sends the visitor to that language's homepage rather than inventing a non-existent URL.
+
+          ## Configuration
+
+          The feature defaults to Greek + English even when an older `config/config.ini` has no multilingual keys. To make it explicit, add:
+
+          ```ini
+          multilingual.enabled = "true"
+          multilingual.default = "el"
+          multilingual.languages = "el:el_GR,en:en_US"
+          multilingual.language_names = "el:Ελληνικά,en:English"
+          ```
+
+          To add Italian later:
+
+          ```ini
+          multilingual.languages = "el:el_GR,en:en_US,it:it_IT"
+          multilingual.language_names = "el:Ελληνικά,en:English,it:Italiano"
+          ```
+
+          Add `themes/editorial/lang/it_IT.ini` for Editorial UI strings and mark Italian content with `<!--lang it lang-->`.
+
+          Optional localized site identity values use language suffixes and fall back to the existing global HTMLy setting:
+
+          ```ini
+          blog.title.en = "English site title"
+          blog.tagline.en = "English tagline"
+          blog.description.en = "English site description"
+          breadcrumb.home.en = "Home"
+          ```
+
+          ## Cache behavior
+
+          Full-page cache remains naturally language-safe because `/...` and `/en/...` have different request URIs. Widget caches (recent posts, categories, tags, archives, popular posts) receive a language suffix so content cannot leak across languages.
+
+          ## Core footprint
+
+          The multilingual logic lives in `system/custom/multilingual.php`. Core changes are deliberately limited to small hooks in the index getters and dispatcher. This keeps future upstream HTMLy merges reviewable.
+          '''
+          docs = re.sub(r'^          ', '', docs, flags=re.M)
+          write('MULTILINGUAL.md', docs)
+          PY
+
+      - name: Validate PHP and patch invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -l system/custom/multilingual.php
+          php -l system/includes/dispatch.php
+          php -l system/includes/functions.php
+          php -l themes/editorial/functions.php
+          php -l themes/editorial/layout.html.php
+          php -l themes/editorial/post.html.php
+          php -l themes/editorial/static.html.php
+          php -l themes/editorial/partials/sidebar.html.php
+          php -l themes/editorial/partials/post-card.html.php
+          git diff --check
+          grep -q "multilingual_filter_index" system/includes/functions.php
+          grep -q "multilingual_bootstrap_request" system/includes/dispatch.php
+          grep -q "hreflang" themes/editorial/layout.html.php
+
+      - name: Smoke test language bootstrap
+        shell: bash
+        run: |
+          php <<'PHP'
+          <?php
+          define('HTMLY', true);
+          $cfg = array('site.url' => 'https://example.test/', 'multilingual.enabled' => 'true');
+          function config($key, $value = null) { global $cfg; if ($value === null) return $cfg[$key] ?? null; $cfg[$key] = $value; return $value; }
+          function generateSiteUrl() { return 'https://example.test/'; }
+          function get_content_tag($tag, $content, $alt = null) { if (preg_match('/<!--' . preg_quote($tag, '/') . '(.+)' . preg_quote($tag, '/') . '-->/', $content, $m)) return trim($m[1]); return $alt; }
+          function permalink_type() { return 'default'; }
+          $_SERVER['REQUEST_URI'] = '/en/2026/09/example';
+          $_SERVER['QUERY_STRING'] = '';
+          require 'system/custom/multilingual.php';
+          multilingual_bootstrap_request();
+          if (multilingual_current_language() !== 'en') exit(10);
+          if (config('language') !== 'en_US') exit(11);
+          if (config('site.url') !== 'https://example.test/en/') exit(12);
+          if (multilingual_asset_site_url() !== 'https://example.test/') exit(13);
+          echo "multilingual smoke test: OK\n";
+          PHP
+
+      - name: Commit implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "ChatGPT"
+          git config user.email "chatgpt@users.noreply.github.com"
+          git rm .github/workflows/apply-native-multilingual.yml
+          git add -A
+          git commit -m "Add native-like multilingual HTMLy support"
+          git push origin HEAD:feature/native-multilingual
