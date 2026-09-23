@@ -5,13 +5,13 @@
 $fields = array();
 if ($type == 'is_page') {
     $field_file = 'content/data/field/page.json';
-    if (file_exists($field_file)) {
-        $fields = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $fields = json_decode(vfs_get($field_file));
     }
 } elseif ($type == 'is_subpage') {
     $field_file = 'content/data/field/subpage.json';
-    if (file_exists($field_file)) {
-        $fields = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $fields = json_decode(vfs_get($field_file));
     }
 }
 

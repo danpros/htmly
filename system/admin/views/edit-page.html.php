@@ -4,8 +4,8 @@
 if ($type == 'is_frontpage') {
     $filename = 'content/data/frontpage/frontpage.md';
 
-    if (file_exists($filename)) {
-        $content = file_get_contents($filename);
+    if (vfs_exists($filename)) {
+        $content = vfs_get($filename);
         $oldtitle = get_content_tag('t', $content, 'Welcome');
         $oldcontent = remove_html_comments($content);
     } else {
@@ -21,8 +21,8 @@ if ($type == 'is_frontpage') {
 
     $filename = 'content/' . $user . '/author.md';
 
-    if (file_exists($filename)) {
-        $content = file_get_contents($filename);
+    if (vfs_exists($filename)) {
+        $content = vfs_get($filename);
         $oldtitle = get_content_tag('t', $content, 'user');
         $olddescription = get_content_tag('d', $content, remove_html_comments($content));
         $oldcontent = remove_html_comments($content);
@@ -37,8 +37,8 @@ if ($type == 'is_frontpage') {
 
 } elseif ($type == 'is_category') {
     $url = 'content/data/category/'. $p->slug . '.md';
-    if (file_exists($url)) {
-        $content = file_get_contents($url);
+    if (vfs_exists($url)) {
+        $content = vfs_get($url);
         $oldtitle = get_content_tag('t', $content, $p->slug);
         $olddescription = get_content_tag('d', $content, remove_html_comments($content));
         $oldcontent = remove_html_comments($content);
@@ -57,7 +57,7 @@ if ($type == 'is_frontpage') {
     } else {
         $url = $oldfile;
     }
-    $content = file_get_contents($url);
+    $content = vfs_get($url);
     $oldtitle = get_content_tag('t', $content, 'Untitled');
     $olddescription = get_content_tag('d', $content);
     $oldcontent = remove_html_comments($content);
@@ -95,18 +95,18 @@ $images = image_gallery(null, 1, 40);
 $fields = array();
 if ($type == 'is_page' || $type == 'is_frontpage') {
     $field_file = 'content/data/field/page.json';
-    if (file_exists($field_file)) {
-        $fields = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $fields = json_decode(vfs_get($field_file));
     }
 } elseif ($type == 'is_subpage') {
     $field_file = 'content/data/field/subpage.json';
-    if (file_exists($field_file)) {
-        $fields = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $fields = json_decode(vfs_get($field_file));
     }
 } elseif ($type == 'is_profile') {
     $field_file = 'content/data/field/profile.json';
-    if (file_exists($field_file)) {
-        $fields = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $fields = json_decode(vfs_get($field_file));
     }
 }
 

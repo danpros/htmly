@@ -22,7 +22,7 @@ foreach ($search as $k => $v) {
 // Loop through process
 for($i = 0, $size = count($tmp); $i < $size; ++$i) {
     
-    $content = file_get_contents($tmp[$i][1]);
+    $content = vfs_get($tmp[$i][1]);
 
     add_search_index('post_' . $tmp[$i][0], $content);
 

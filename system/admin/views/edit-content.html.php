@@ -10,7 +10,7 @@ $filename = $file_path['dirname'] . '/' . $file_path['basename'];
 
 $desc = get_category_info(null);
 
-$content = file_get_contents($filename);
+$content = vfs_get($filename);
 $oldtitle = get_content_tag('t', $content, 'Untitled');
 $olddescription = get_content_tag('d', $content);
 $oldtag = get_content_tag('tag', $content);
@@ -57,8 +57,8 @@ if (permalink_type() == 'default') {
 
 $tags = tag_cloud(true);
 $tagslang = "content/data/tags.lang";
-if (file_exists($tagslang)) {
-    $ptags = unserialize(file_get_contents($tagslang));
+if (vfs_exists($tagslang)) {
+    $ptags = unserialize(vfs_get($tagslang));
     $tkey = array_keys($tags);
     if (!empty($ptags)) {
         $newlang = array_intersect_key($ptags, array_flip($tkey));
@@ -66,15 +66,15 @@ if (file_exists($tagslang)) {
         $newlang = array_combine($tkey, $tkey);
     }
     $tmp = serialize($newlang);
-    file_put_contents($tagslang, print_r($tmp, true), LOCK_EX);
+    vfs_put($tagslang, print_r($tmp, true));
 }
 
 $images = image_gallery(null, 1, 40);
 
 $fields = array();
 $field_file = 'content/data/field/post.json';
-if (file_exists($field_file)) {
-    $fields = json_decode(file_get_contents($field_file, true));
+if (vfs_exists($field_file)) {
+    $fields = json_decode(vfs_get($field_file));
 }
 
 ?>

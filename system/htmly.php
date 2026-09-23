@@ -299,7 +299,7 @@ get('/author/:name', function ($name) {
         $author = $author[0];
     } else {
         $userConfig = 'config/users/' . $name . '.ini';
-        if (file_exists($userConfig) || !empty($posts)) {
+        if (vfs_exists($userConfig) || !empty($posts)) {
             $author = default_profile(safe_html(strip_tags($name)));
         } else {
             not_found();
@@ -386,7 +386,7 @@ get('/author/:name/feed', function ($name) {
         $author = $author[0];
     } else {
         $userConfig = 'config/users/' . $name . '.ini';
-        if (file_exists($userConfig) || !empty($posts)) {
+        if (vfs_exists($userConfig) || !empty($posts)) {
             $author = default_profile(safe_html(strip_tags($name)));
         } else {
             not_found();
@@ -427,8 +427,8 @@ post('/edit/profile', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/profile.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -508,7 +508,7 @@ post('/edit/password', function() {
         $old_password = user('password', $username);
         if ($user === $username) {
             $file = 'config/users/' . $user . '.ini';
-            if (file_exists($file)) {
+            if (vfs_exists($file)) {
                 if (!empty($new_password)) {
                     update_user($user, $new_password, $role, $mfa);
                 }
@@ -659,8 +659,8 @@ post('/edit/frontpage', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/page.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -767,8 +767,8 @@ post('/add/content', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/post.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -954,8 +954,8 @@ post('/add/page', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/page.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -1035,18 +1035,18 @@ post('/admin/autosave', function () {
         $aField = array();
         if ($posttype == 'is_post') {
             $field_file = 'content/data/field/post.json';
-            if (file_exists($field_file)) {
-                $aField = json_decode(file_get_contents($field_file, true));
+            if (vfs_exists($field_file)) {
+                $aField = json_decode(vfs_get($field_file));
             }
         } elseif ($posttype == 'is_page') {
             $field_file = 'content/data/field/page.json';
-            if (file_exists($field_file)) {
-                $aField = json_decode(file_get_contents($field_file, true));
+            if (vfs_exists($field_file)) {
+                $aField = json_decode(vfs_get($field_file));
             }
         } elseif ($posttype == 'is_subpage') {
             $field_file = 'content/data/field/subpage.json';
-            if (file_exists($field_file)) {
-                $aField = json_decode(file_get_contents($field_file, true));
+            if (vfs_exists($field_file)) {
+                $aField = json_decode(vfs_get($field_file));
             }
         }
         if(!empty($aField)) {
@@ -1849,8 +1849,8 @@ get('/admin/search', function () {
 
             $searchFile = "content/data/search.json";
 
-            if (file_exists($searchFile)) {
-                $search = json_decode(file_get_contents($searchFile), true);
+            if (vfs_exists($searchFile)) {
+                $search = json_decode(vfs_get($searchFile), true);
             }
 
             $posts = get_blog_posts();
@@ -1921,7 +1921,7 @@ post('/admin/search', function () {
         if ($role === 'editor' || $role === 'admin') {
             $json = $_REQUEST['json'];
             if ($json == 'content/data/search.json') {
-                unlink($json);
+                vfs_delete($json);
             }
             echo json_encode(array(
                 'message' => 'Search Index cleared successfully!',
@@ -2626,6 +2626,41 @@ get('/admin/clear-cache', function () {
     }
 });
 
+// Show health status page
+get('/admin/health', function () {
+    $user = $_SESSION[site_url()]['user'] ?? null;
+    $role = user('role', $user) ?? null;
+    if (login()) {
+        config('views.root', 'system/admin/views');
+        if ($role === 'editor' || $role === 'admin') {
+            render('health', array(
+                'title' => generate_title('is_default', i18n('Health_check')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-health',
+                'is_admin' => true,
+                'bodyclass' => 'admin-health',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Health_check')
+            ));
+        } else {
+            render('denied', array(
+                'title' => generate_title('is_default', i18n('Denied')),
+                'description' => safe_html(strip_tags(blog_description())),
+                'canonical' => site_url(),
+                'metatags' => generate_meta(null, null),
+                'type' => 'is_admin-health',
+                'is_admin' => true,
+                'bodyclass' => 'denied',
+                'breadcrumb' => '<a href="' . site_url() . '">' . config('breadcrumb.home') . '</a> &#187; ' . i18n('Denied')
+            ));
+        }
+    } else {
+        $login = site_url() . 'login';
+        header("location: $login");
+    }
+});
+
 // Show Update page
 get('/admin/update', function () {
     $user = $_SESSION[site_url()]['user'] ?? null;
@@ -2737,7 +2772,7 @@ post('/admin/menu', function () {
         $role = user('role', $user) ?? null;
         if ($role === 'editor' || $role === 'admin') {
             $json = from($_REQUEST, 'json');
-            file_put_contents('content/data/menu.json', json_encode($json, JSON_UNESCAPED_UNICODE));
+            vfs_put('content/data/menu.json', json_encode($json, JSON_UNESCAPED_UNICODE));
             echo json_encode(array(
                 'message' => 'Menu saved successfully!',
             ));
@@ -2915,11 +2950,11 @@ post('/admin/users/:username/edit', function () {
         $old_password = user('password', $username);
         if ($role === 'admin') {
             $file = 'config/users/' . $username . '.ini';
-            if (file_exists($file)) {
+            if (vfs_exists($file)) {
                 if (empty($new_password)) {
-                    file_put_contents($file, "password = " . $old_password . "\n" .
+                    vfs_put($file, "password = " . $old_password . "\n" .
                         "encryption = password_hash\n" .
-                        "role = " . $user_role . "\n", LOCK_EX);
+                        "role = " . $user_role . "\n");
                 } else {
                     update_user($username, $new_password, $user_role);
                 }
@@ -2981,7 +3016,7 @@ post('/admin/users/:username/delete', function () {
     if ($proper && login()) {
         if ($role === 'admin') {
             if ($user_role !== 'admin') {
-                unlink($file);
+                vfs_delete($file);
                 delete_comments($file);
             }
         }
@@ -4569,8 +4604,8 @@ post('/'. permalink_type() .'/:name/edit', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/post.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -5075,8 +5110,8 @@ post('/:static/add', function ($static) {
     $field = array();
     $aField = array();
     $field_file= 'content/data/field/subpage.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -5197,8 +5232,8 @@ post('/:static/edit', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/page.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -5505,8 +5540,8 @@ post('/:static/:sub/edit', function ($static, $sub) {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/subpage.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {
@@ -5843,8 +5878,8 @@ post('/:year/:month/:name/edit', function () {
     $field = array();
     $aField = array();
     $field_file = 'content/data/field/post.json';
-    if (file_exists($field_file)) {
-        $aField = json_decode(file_get_contents($field_file, true));
+    if (vfs_exists($field_file)) {
+        $aField = json_decode(vfs_get($field_file));
     }
     if(!empty($aField)) {
         foreach ($aField as $af) {

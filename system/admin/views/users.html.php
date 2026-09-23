@@ -4,7 +4,7 @@
 <a class="btn btn-primary right" href="<?php echo site_url();?>admin/add/user"><?php echo i18n('Add_user');?></a>
 <br><br>
 <?php 
-$users = glob('config/users/*.ini', GLOB_NOSORT);
+$users = vfs_glob('config/users/*.ini');
 ksort($users);
 ?>
 

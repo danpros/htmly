@@ -8,6 +8,7 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
 {
     public static $files = array (
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
+        'e4dc08c5449ba167638e0bb50cfa942d' => __DIR__ . '/../../..' . '/system/includes/db.php',
         '3abd73be56f01e9aafc62d31c7e15d91' => __DIR__ . '/../../..' . '/system/includes/dispatch.php',
         'f770a6f41af7b4285303bdcc4ff87ba7' => __DIR__ . '/../../..' . '/system/includes/functions.php',
         '8432047aca7938f88a2098a2f7770228' => __DIR__ . '/../../..' . '/system/admin/admin.php',
@@ -18,89 +19,89 @@ class ComposerStaticInitd88c6c25320034df85dd42f1462fbda7
     );
 
     public static $prefixLengthsPsr4 = array (
-        'v' => 
+        'v' =>
         array (
             'voku\\' => 5,
         ),
-        'P' => 
+        'P' =>
         array (
             'PragmaRX\\Google2FA\\' => 19,
             'ParagonIE\\ConstantTime\\' => 23,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
-        'M' => 
+        'M' =>
         array (
             'Michelf\\' => 8,
         ),
-        'K' => 
+        'K' =>
         array (
             'Kanti\\' => 6,
         ),
-        'D' => 
+        'D' =>
         array (
             'DASPRiD\\Enum\\' => 13,
         ),
-        'C' => 
+        'C' =>
         array (
             'Composer\\CaBundle\\' => 18,
         ),
-        'B' => 
+        'B' =>
         array (
             'BaconQrCode\\' => 12,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'voku\\' => 
+        'voku\\' =>
         array (
-            0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
-            1 => __DIR__ . '/..' . '/voku/stop-words/src/voku',
+            0 => __DIR__ . '/..' . '/voku/stop-words/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
         ),
-        'PragmaRX\\Google2FA\\' => 
+        'PragmaRX\\Google2FA\\' =>
         array (
             0 => __DIR__ . '/..' . '/pragmarx/google2fa/src',
         ),
-        'ParagonIE\\ConstantTime\\' => 
+        'ParagonIE\\ConstantTime\\' =>
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
         ),
-        'PHPMailer\\PHPMailer\\' => 
+        'PHPMailer\\PHPMailer\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
-        'Michelf\\' => 
+        'Michelf\\' =>
         array (
             0 => __DIR__ . '/..' . '/michelf/php-markdown/Michelf',
         ),
-        'Kanti\\' => 
+        'Kanti\\' =>
         array (
             0 => __DIR__ . '/..' . '/kanti/hub-updater/src',
         ),
-        'DASPRiD\\Enum\\' => 
+        'DASPRiD\\Enum\\' =>
         array (
             0 => __DIR__ . '/..' . '/dasprid/enum/src',
         ),
-        'Composer\\CaBundle\\' => 
+        'Composer\\CaBundle\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
         ),
-        'BaconQrCode\\' => 
+        'BaconQrCode\\' =>
         array (
             0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'U' => 
+        'U' =>
         array (
-            'URLify' => 
+            'URLify' =>
             array (
                 0 => __DIR__ . '/..' . '/jbroadway/urlify',
             ),
         ),
-        'S' => 
+        'S' =>
         array (
-            'Suin\\RSSWriter' => 
+            'Suin\\RSSWriter' =>
             array (
                 0 => __DIR__ . '/..' . '/suin/php-rss-writer/src',
             ),

@@ -4,8 +4,8 @@
 <?php 
 $field = array();
 $field_file = 'content/data/field/post.json';
-if (file_exists($field_file)) {
-    $field = file_get_contents($field_file, true);
+if (vfs_exists($field_file)) {
+    $field = vfs_get($field_file);
 }
 ?>
 <!-- Preview Section -->

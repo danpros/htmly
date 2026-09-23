@@ -262,6 +262,13 @@ if (isset($author[0])) {
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo site_url();?>admin/health" class="nav-link">
+                  <p>
+                    <?php echo i18n('health_check');?>
+                  </p>
+                </a>
+              </li>
               <?php if (config('fulltext.search') == 'true') : ?>
               <li class="nav-item">
                 <a href="<?php echo site_url();?>admin/search" class="nav-link">
