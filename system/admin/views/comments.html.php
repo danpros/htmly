@@ -61,7 +61,7 @@
                 <?php endif; ?>
             </td>
             <td>
-                <a href="<?php echo site_url() . $comment['url']; ?>" target="_blank">
+                <a href="<?php echo _h(site_url() . $comment['url']); ?>" target="_blank">
                     <?php echo _h($comment['url']); ?>
                 </a>
             </td>
